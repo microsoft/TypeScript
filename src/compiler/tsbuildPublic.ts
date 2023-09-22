@@ -347,8 +347,10 @@ export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBu
     return createSolutionBuilderWorker(/*watch*/ false, host, rootNames, defaultOptions);
 }
 
-export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T> {
-    return createSolutionBuilderWorker(/*watch*/ true, host, rootNames, defaultOptions, baseWatchOptions);
+export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T>;
+/** @internal */ export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions, threadPoolLifetime?: DisposableStack): SolutionBuilder<T>;
+export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions, threadPoolLifetime?: DisposableStack): SolutionBuilder<T> {
+    return createSolutionBuilderWorker(/*watch*/ true, host, rootNames, defaultOptions, baseWatchOptions, threadPoolLifetime);
 }
 
 type ConfigFileCacheEntry = ParsedCommandLine | Diagnostic;
@@ -430,9 +432,11 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     timerToBuildInvalidatedProject: any;
     reportFileChangeDetected: boolean;
     writeLog: (s: string) => void;
+
+    readonly threadPoolLifetime: DisposableStack | undefined;
 }
 
-function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions: WatchOptions | undefined): SolutionBuilderState<T> {
+function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions: WatchOptions | undefined, threadPoolLifetime: DisposableStack | undefined): SolutionBuilderState<T> {
     const host = hostOrHostWithWatch as SolutionBuilderHost<T>;
     const hostWithWatch = hostOrHostWithWatch as SolutionBuilderWithWatchHost<T>;
 
@@ -546,6 +550,9 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
         watchFile,
         watchDirectory,
         writeLog,
+
+        // once we've reached this point we can take ownership of the threadPool's lifetime
+        threadPoolLifetime: threadPoolLifetime?.move(),
     };
 
     return state;
@@ -2455,6 +2462,7 @@ function startWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>,
 }
 
 function stopWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
+    using _ = state.threadPoolLifetime;
     clearMap(state.allWatchedConfigFiles, closeFileWatcher);
     clearMap(state.allWatchedExtendedConfigFiles, closeFileWatcherOf);
     clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
@@ -2467,9 +2475,9 @@ function stopWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>) 
  * can dynamically add/remove other projects based on changes on the rootNames' references
  */
 function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
-function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T>;
-function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T> {
-    const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options, baseWatchOptions);
+function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions, threadPoolLifetime?: DisposableStack): SolutionBuilder<T>;
+function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions?: WatchOptions, threadPoolLifetime?: DisposableStack): SolutionBuilder<T> {
+    const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options, baseWatchOptions, threadPoolLifetime);
     return {
         build: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers),
         clean: project => clean(state, project),

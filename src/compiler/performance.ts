@@ -1,3 +1,5 @@
+import "./symbolDisposeShim";
+
 import {
     Debug,
     noop,
@@ -63,6 +65,48 @@ let timeorigin = timestamp();
 const marks = new Map<string, number>();
 const counts = new Map<string, number>();
 const durations = new Map<string, number>();
+
+class MeasureActivity implements Disposable {
+    active = false;
+    measureName!: string;
+    startMarkName!: string;
+    endMarkName: string | undefined;
+
+    [Symbol.dispose](): void {
+        if (this.active) {
+            this.active = false;
+            if (this.endMarkName) {
+                mark(this.endMarkName);
+            }
+            measure(this.measureName, this.startMarkName, this.endMarkName);
+            if (measureActivityPool.length < measureActivityPoolSize) {
+                measureActivityPool.push(this);
+            }
+        }
+    }
+}
+
+const measureActivityPoolSize = 3;
+const measureActivityPool: MeasureActivity[] = [];
+
+/**
+ * Marks a performance event when called, and measures the performance event when the result is disposed.
+ * @internal
+ */
+export function measureActivity(measureName: string, startMarkName?: string, endMarkName?: string): Disposable | undefined {
+    if (!enabled) {
+        return undefined;
+    }
+
+    const activity = measureActivityPool.pop() ?? new MeasureActivity();
+    Debug.assert(!activity.active);
+    activity.measureName = measureName;
+    activity.startMarkName = startMarkName ?? `${measureName}-start-${Date.now()}`;
+    activity.endMarkName = endMarkName;
+    activity.active = true;
+    mark(activity.startMarkName);
+    return activity;
+}
 
 /**
  * Marks a performance event.

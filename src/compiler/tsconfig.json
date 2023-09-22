@@ -2,7 +2,8 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "types": ["node"],
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "strictBindCallApply": true
     },
 
     "references": [

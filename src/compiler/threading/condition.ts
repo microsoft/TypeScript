@@ -25,10 +25,10 @@ export class Condition extends Tagged(SharedStructBase, Tag.Condition) {
      * @param self The condition to wait for.
      * @param lock A {@link UniqueLock} taken for a {@link Mutex}.
      * @param timeout The number of milliseconds to wait before returning.
-     * @returns `"no-timeout"` if the condition was notified before the timeout elapsed, or `"timeout"` to indicate the
+     * @returns `"ok"` if the condition was notified before the timeout elapsed, or `"timed-out"` to indicate the
      * timeout elapsed before the condition was notified.
      */
-    static waitFor(self: Condition, lock: UniqueLock<Mutex>, timeout: number): "no-timeout" | "timeout";
+    static waitFor(self: Condition, lock: UniqueLock<Mutex>, timeout: number): "ok" | "timed-out";
     /**
      * Waits until a Condition is signaled via a call to {@link notify|`Condition.notify`}, or until a timeout period
      * has elapsed.
@@ -40,7 +40,7 @@ export class Condition extends Tagged(SharedStructBase, Tag.Condition) {
      * `false` to indicate that the timeout elapsed before the condition was ready.
      */
     static waitFor(self: Condition, lock: UniqueLock<Mutex>, timeout: number, stopWaiting: () => boolean): boolean;
-    static waitFor(self: Condition, lock: UniqueLock<Mutex>, timeout: number, stopWaiting?: () => boolean): "no-timeout" | "timeout" | boolean {
+    static waitFor(self: Condition, lock: UniqueLock<Mutex>, timeout: number, stopWaiting?: () => boolean): "ok" | "timed-out" | boolean {
         return Condition.waitUntil(self, lock, Date.now() + timeout, stopWaiting!);
     }
 
@@ -49,10 +49,10 @@ export class Condition extends Tagged(SharedStructBase, Tag.Condition) {
      * @param self The condition to wait for.
      * @param lock A {@link UniqueLock} taken for a {@link Mutex}.
      * @param absoluteTimeout The number of milliseconds since the UNIX epoch.
-     * @returns `"no-timeout"` if the condition was notified before the timeout elapsed, or `"timeout"` to indicate the
+     * @returns `"ok"` if the condition was notified before the timeout elapsed, or `"timed-out"` to indicate the
      * timeout elapsed before the condition was notified.
      */
-    static waitUntil(self: Condition, lock: UniqueLock<Mutex>, absoluteTimeout: number): "no-timeout" | "timeout";
+    static waitUntil(self: Condition, lock: UniqueLock<Mutex>, absoluteTimeout: number): "ok" | "timed-out";
     /**
      * Waits until a Condition is signaled via a call to {@link notify|`Condition.notify`}, or until a specific time has been reached.
      * @param self The condition to wait for.
@@ -63,7 +63,7 @@ export class Condition extends Tagged(SharedStructBase, Tag.Condition) {
      * `false` to indicate that the timeout elapsed before the condition was ready.
      */
     static waitUntil(self: Condition, lock: UniqueLock<Mutex>, absoluteTimeout: number, stopWaiting: () => boolean): boolean;
-    static waitUntil(self: Condition, lock: UniqueLock<Mutex>, absoluteTimeout: number, stopWaiting?: () => boolean): "no-timeout" | "timeout" | boolean {
+    static waitUntil(self: Condition, lock: UniqueLock<Mutex>, absoluteTimeout: number, stopWaiting?: () => boolean): "ok" | "timed-out" | boolean {
         const mutex = lock.mutex;
         Debug.assert(mutex);
         Debug.assert(mutex["_locked"]); // eslint-disable-line dot-notation -- declared `private`
@@ -75,12 +75,12 @@ export class Condition extends Tagged(SharedStructBase, Tag.Condition) {
                 Atomics.Condition.notify(nativeCondition);
                 try {
                     const remainingTimeout = isFinite(absoluteTimeout) ? Date.now() - absoluteTimeout : undefined;
-                    const result = Atomics.Condition.wait(self._condition, nativeMutex, remainingTimeout) ? "no-timeout" : "timeout";
-                    if (result === "timeout") {
+                    const result = Atomics.Condition.wait(self._condition, nativeMutex, remainingTimeout) ? "ok" : "timed-out";
+                    if (result === "timed-out") {
                         return stopWaiting ? stopWaiting() : result;
                     }
                     if (!stopWaiting) {
-                        return "no-timeout";
+                        return "ok";
                     }
                 }
                 finally {

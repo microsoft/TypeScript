@@ -44,7 +44,9 @@ declare global {
 
     interface SharedStructTypeConstructor {
         new <T extends SharedStruct & { readonly [P in keyof T]: Shareable }>(fields: readonly (keyof T & string)[]): SharedStructType<T>;
-        new (fields: readonly string[]): SharedStructType<SharedStruct>;
+        new <K extends string>(fields: readonly K[]): SharedStructType<SharedStruct> & Record<K, Shareable>;
+        <T extends SharedStruct & { readonly [P in keyof T]: Shareable }>(fields: readonly (keyof T & string)[]): SharedStructType<T>;
+        <K extends string>(fields: readonly K[]): SharedStructType<SharedStruct> & Record<K, Shareable>;
         isSharedStruct(value: unknown): value is SharedStruct;
     }
 
@@ -55,6 +57,11 @@ declare global {
         [index: number]: T;
         readonly length: number;
     }
+
+    type SharedTuple<T extends Shareable[]> = 
+        & SharedArray<T[number]>
+        & { readonly length: T["length"] }
+        & { [P in keyof T as P extends `${bigint}` ? P : never]: T[P] };
 
     interface ReadonlySharedArray<T extends Shareable> extends SharedArray<T> {
         readonly [index: number]: T;
@@ -120,5 +127,13 @@ declare global {
     interface Atomics {
         readonly Mutex: Atomics.MutexConstructor;
         readonly Condition: Atomics.ConditionConstructor;
+        compareExchange<T extends Shareable>(sharedArray: SharedArray<T>, index: number, expectedValue: T, replacementValue: T): T;
+        compareExchange<T extends SharedStruct, K extends keyof T & string>(sharedStruct: T, key: K, expectedValue: T[K], replacementValue: T[K]): T[K];
+        exchange<T extends Shareable>(sharedArray: SharedArray<T>, index: number, value: T): T;
+        exchange<T extends SharedStruct, K extends keyof T & string>(sharedStruct: T, key: K, value: T[K]): T[K];
+        load<T extends Shareable>(sharedArray: SharedArray<T>, index: number): T;
+        load<T extends SharedStruct, K extends keyof T & string>(sharedStruct: T, key: K): T[K];
+        store<T extends Shareable>(sharedArray: SharedArray<T>, index: number, value: T): T;
+        store<T extends SharedStruct, K extends keyof T & string, V extends T[K]>(sharedStruct: T, key: K, value: V): V;
     }
 }

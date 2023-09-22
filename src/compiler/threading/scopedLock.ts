@@ -1,5 +1,5 @@
-import { Debug } from "../debug";
 import "../symbolDisposeShim";
+import { createSuppressedError } from "../symbolDisposeShim";
 
 import { Lockable } from "./lockable";
 import { Mutex } from "./mutex";
@@ -9,13 +9,13 @@ import { SharedMutex } from "./sharedMutex";
 export class ScopedLock {
     private _mutexes: readonly Lockable[] | undefined;
 
-    constructor(mutexes: Iterable<Lockable | Mutex | SharedMutex>) {
+    constructor(mutexes: ArrayLike<Mutex | SharedMutex> | Iterable<Lockable | Mutex | SharedMutex>) {
         const array: Lockable[] = [];
-        for (const mutex of mutexes) {
+        for (const mutex of Array.from(mutexes)) {
             array.push(
                 mutex instanceof Mutex ? Mutex.asLockable(mutex) :
-                mutex instanceof SharedMutex ? SharedMutex.asLockable(mutex) :
-                mutex);
+                    mutex instanceof SharedMutex ? SharedMutex.asLockable(mutex) :
+                        mutex);
         }
 
         let remaining = array.length;
@@ -36,30 +36,28 @@ export class ScopedLock {
                     // always wait for the first lock
                     lockable.lock();
                 }
-                else {
-                    if (lockable.tryLock()) {
-                        // this lock was taken. move to the next lock
-                        index = (index + 1) % array.length;
-                        remaining--;
-                    }
-                    else {
-                        // if we fail to take a lock, unlock each lock taken so far so that we start over at the current
-                        // index.
-                        let i = (index + array.length - 1) % array.length;
-                        while (remaining < array.length) {
-                            // always unlock all locks taken, even if one unlock fails for some reason.
-                            try {
-                                array[i].unlock();
-                            }
-                            catch (e) {
-                                error = error ? createSuppressedError(e, error) : e;
-                                hasError = true;
-                            }
-                            i = (index + array.length - 1) % array.length;
-                            remaining++;
+                else if (!lockable.tryLock()) {
+                    // if we fail to take a lock, unlock each lock taken so far so that we start over at the current
+                    // index.
+                    let i = (index + array.length - 1) % array.length;
+                    while (remaining < array.length) {
+                        // always unlock all locks taken, even if one unlock fails for some reason.
+                        try {
+                            array[i].unlock();
                         }
+                        catch (e) {
+                            error = error ? createSuppressedError(e, error) : e;
+                            hasError = true;
+                        }
+                        i = (index + array.length - 1) % array.length;
+                        remaining++;
                     }
+                    continue;
                 }
+
+                // this lock was taken. move to the next lock
+                index = (index + 1) % array.length;
+                remaining--;
             }
             catch (e) {
                 error = error ? createSuppressedError(e, error) : e;
@@ -93,16 +91,4 @@ export class ScopedLock {
             }
         }
     }
-}
-
-function createSuppressedError(error: unknown, suppressed: unknown) {
-    if (typeof SuppressedError === "function") {
-        return Debug.captureStackTrace(new SuppressedError(error, suppressed), createSuppressedError);
-    }
-
-    const e = new Error("An error suppression occurred.") as SuppressedError;
-    e.error = error;
-    e.suppressed = suppressed;
-    e.name = "SuppressedError";
-    return Debug.captureStackTrace(e, createSuppressedError);
 }

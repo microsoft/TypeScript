@@ -342,11 +342,10 @@ import {
     zipToModeAwareCache
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
-import { SharedMap } from "./sharing/collections/sharedMap";
+import { ConcurrentMap } from "./sharing/collections/concurrentMap";
 import { adoptSharedSourceFile } from "./sharing/sharedNodeAdapter";
 import { SharedParserState, SharedSourceFileEntry } from "./sharing/sharedParserState";
 import { Condition } from "./threading/condition";
-import { SharedLock } from "./threading/sharedLock";
 import { UniqueLock } from "./threading/uniqueLock";
 
 export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
@@ -410,6 +409,101 @@ export function computeCommonSourceDirectoryOfFilenames(fileNames: readonly stri
 
 export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
     return createCompilerHostWorker(options, setParentNodes);
+}
+
+/** @internal */
+export function makeCompilerHostParallel(
+    host: CompilerHost,
+    threadPool: ThreadPool,
+    setParentNodes: boolean | undefined,
+): CompilerHost {
+    Debug.assert(!host.threadPool && !host.requestSourceFile, "Compiler host may already be parallelized.");
+
+    const sharedEntryMap = new Map<SharedSourceFileEntry, SourceFile | false>();
+    const parserState = new SharedParserState();
+    const savedGetSourceFile = host.getSourceFile;
+    host.threadPool = threadPool;
+    host.requestSourceFile = (fileName, languageVersionOrOptions, shouldCreateNewSourceFile) => {
+        using _measure = performance.measureActivity("Parallel: Request Source File", "beforeParserPausedRequest", "afterParserPausedRequest");
+
+        if (!ConcurrentMap.has(parserState.files, fileName)) {
+            const entry = new SharedSourceFileEntry(
+                parserState,
+                !!host.createHash,
+                !!setParentNodes,
+                fileName,
+                typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.languageVersion : languageVersionOrOptions,
+                typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined,
+                shouldCreateNewSourceFile);
+            if (ConcurrentMap.insert(parserState.files, fileName, entry)) {
+                // we inserted the entry, queue a task to parse it
+                threadPool.queueWorkItem("Program.requestSourceFile", entry);
+            }
+        }
+
+        // // quick check before allocating an entry
+        // {
+        //     using _ = new SharedLock(parserState.sharedMutex);
+        //     if (SharedMap.has(parserState.files, fileName)) {
+        //         return;
+        //     }
+        // }
+
+        // const entry = new SharedSourceFileEntry(
+        //     parserState,
+        //     !!host.createHash,
+        //     !!setParentNodes,
+        //     fileName,
+        //     typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.languageVersion : languageVersionOrOptions,
+        //     typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined,
+        //     shouldCreateNewSourceFile);
+
+        // using _ = new UniqueLock(parserState.sharedMutex);
+        // if (!SharedMap.has(parserState.files, fileName)) {
+        //     SharedMap.set(parserState.files, fileName, entry);
+        //     // we inserted the entry, queue a task to parse it
+        //     threadPool.queueWorkItem("Program.requestSourceFile", entry);
+        // }
+    };
+    host.getSourceFile = (fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile) => {
+        using _ = performance.measureActivity("Parallel: Get Source File", "beforeParserPausedRead", "afterParserPausedRead");
+
+        const sharedFileEntry = ConcurrentMap.get(parserState.files, fileName);
+
+        // let sharedFileEntry: SharedSourceFileEntry | undefined;
+        // {
+        //     using _ = new SharedLock(parserState.sharedMutex);
+        //     sharedFileEntry = SharedMap.get(parserState.files, fileName);
+        // }
+
+        if (sharedFileEntry) {
+            let file = sharedEntryMap.get(sharedFileEntry);
+            if (file !== undefined) {
+                return file || undefined;
+            }
+
+            // wait until the file has actually been parsed before we proceed.
+            {
+                using lck = new UniqueLock(sharedFileEntry.fileMutex);
+                Condition.wait(sharedFileEntry.fileCondition, lck, () => sharedFileEntry!.done || sharedFileEntry!.error);
+            }
+
+            // if the worker thread reported a crash, we should crash the main thread.
+            if (sharedFileEntry.error) {
+                host.threadPool?.abort();
+                sys.exit(-1);
+            }
+
+            file = sharedFileEntry.file && adoptSharedSourceFile(sharedFileEntry.file, parseNodeFactory);
+            if (file) {
+                file.bindDiagnostics = [];
+            }
+            return file;
+        }
+
+        return savedGetSourceFile.call(host, fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile);
+    };
+    return host;
 }
 
 /** @internal */
@@ -484,25 +578,6 @@ export function createWriteFileMeasuringIO(
 }
 
 /** @internal */
-export function createRequestSourceFile(threadPool: ThreadPool, setParentNodes: boolean | undefined): CompilerHost["requestSourceFile"] {
-    return (parserState, fileName, languageVersionOrOptions, shouldCreateNewSourceFile, setFileVersion = false) => {
-        using _ = new UniqueLock(parserState.sharedMutex);
-        if (!SharedMap.has(parserState.files, fileName)) {
-            const entry = new SharedSourceFileEntry(
-                parserState,
-                setFileVersion,
-                !!setParentNodes,
-                fileName,
-                typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.languageVersion : languageVersionOrOptions,
-                typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined,
-                shouldCreateNewSourceFile);
-            SharedMap.set(parserState.files, fileName, entry);
-            threadPool.queueWorkItem("Program.requestSourceFile", entry);
-        }
-    };
-}
-
-/** @internal */
 export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system: System = sys, workerThreads?: WorkerThreadsHost, threadPool?: ThreadPool, overideObjectAllocator?: ObjectAllocator): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
     const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
@@ -525,7 +600,6 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
     const newLine = getNewLineCharacter(options);
     const realpath = system.realpath && ((path: string) => system.realpath!(path));
     const compilerHost: CompilerHost = {
-        requestSourceFile: threadPool && createRequestSourceFile(threadPool, setParentNodes),
         getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes, overideObjectAllocator),
         getDefaultLibLocation,
         getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
@@ -549,8 +623,10 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
         createDirectory: d => system.createDirectory(d),
         createHash: maybeBind(system, system.createHash),
         workerThreads,
-        threadPool,
     };
+    if (threadPool) {
+        makeCompilerHostParallel(compilerHost, threadPool, setParentNodes);
+    }
     return compilerHost;
 }
 
@@ -3613,18 +3689,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return redirect;
     }
 
-    // Get source file from normalized fileName
-    function* findSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined, currentNodeModulesDepth: number): Generator<undefined, SourceFile | undefined> {
-        tracing?.push(tracing.Phase.Program, "findSourceFile", {
-            fileName,
-            isDefaultLib: isDefaultLib || undefined,
-            fileIncludeKind: (FileIncludeKind as any)[reason.kind],
-        });
-        const result = yield* findSourceFileWorker(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId, currentNodeModulesDepth);
-        tracing?.pop();
-        return result;
-    }
-
     function getCreateSourceFileOptions(fileName: string, moduleResolutionCache: ModuleResolutionCache | undefined, host: CompilerHost, options: CompilerOptions): CreateSourceFileOptions {
         // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
         // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
@@ -3637,7 +3701,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             { languageVersion, impliedNodeFormat: result, setExternalModuleIndicator };
     }
 
-    function* findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined, currentNodeModulesDepth: number): Generator<undefined, SourceFile | undefined> {
+    // Get source file from normalized fileName
+    function* findSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined, currentNodeModulesDepth: number): Generator<undefined, SourceFile | undefined> {
+        using _ = tracing?.traceActivity(tracing.Phase.Program, "findSourceFile", {
+            fileName,
+            isDefaultLib: isDefaultLib || undefined,
+            fileIncludeKind: (FileIncludeKind as any)[reason.kind],
+        });
+
         const path = toPath(fileName);
         if (useSourceOfProjectReferenceRedirect) {
             let source = getSourceOfProjectReferenceRedirect(path);
@@ -3736,38 +3807,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // We haven't looked for this file, do so now and cache result
         const sourceFileOptions = getCreateSourceFileOptions(fileName, moduleResolutionCache, host, options);
 
-        let fileParsedInBackground = false;
-        let file: SourceFile | undefined;
-        if (parserState) {
-            let sharedFileEntry: SharedSourceFileEntry | undefined;
-            {
-                using _ = new SharedLock(parserState.sharedMutex);
-                sharedFileEntry = SharedMap.get(parserState.files, fileName);
-            }
-            if (sharedFileEntry) {
-                using lck = new UniqueLock(sharedFileEntry.fileMutex);
-                Condition.wait(sharedFileEntry.fileCondition, lck, () => sharedFileEntry!.done || sharedFileEntry!.error);
-                if (sharedFileEntry.error) {
-                    host.threadPool?.abort();
-                    sys.exit(-1);
-                }
-                file = sharedFileEntry.file && adoptSharedSourceFile(sharedFileEntry.file, parseNodeFactory);
-                if (file) {
-                    file.bindDiagnostics = [];
-                }
-                fileParsedInBackground = true;
-            }
-        }
-
-        if (!fileParsedInBackground) {
-            file = host.getSourceFile(
-                fileName,
-                sourceFileOptions,
-                hostErrorMessage => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, Diagnostics.Cannot_read_file_0_Colon_1, [fileName, hostErrorMessage]),
-                shouldCreateNewSourceFile,
-            );
-        }
-
+        const file = host.getSourceFile(
+            fileName,
+            sourceFileOptions,
+            hostErrorMessage => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, Diagnostics.Cannot_read_file_0_Colon_1, [fileName, hostErrorMessage]),
+            shouldCreateNewSourceFile,
+        );
 
         if (packageId) {
             const packageIdKey = packageIdToString(packageId);
@@ -5152,7 +5197,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function* requestFile(fileName: string) {
         if (parserState && host.requestSourceFile) {
-            host.requestSourceFile?.(parserState, fileName, getEmitScriptTarget(options));
+            host.requestSourceFile?.(fileName, getEmitScriptTarget(options));
             yield;
         }
     }

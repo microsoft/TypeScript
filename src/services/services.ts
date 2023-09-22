@@ -603,7 +603,7 @@ class TokenOrIdentifierObject implements Node {
     }
 
     public getChildren(): Node[] {
-        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc?.slice() || [] : [];
     }
 
     public getFirstToken(): Node | undefined {

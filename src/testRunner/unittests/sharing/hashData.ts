@@ -1,6 +1,6 @@
 import { HashData } from "../../../compiler/sharing/collections/hashData";
 
-describe("unittests:: hashData", () => {
+describe("unittests:: sharing:: hashData", () => {
     describe("findEntryIndex", () => {
         it("when empty", () => {
             const hashData = new HashData(0);

@@ -1,10 +1,9 @@
 import "../symbolDisposeShim";
 
-import { hasProperty } from "../core";
 import { Debug } from "../debug";
 import { Identifiable } from "../sharing/structs/identifiableStruct";
 import { Shared, SharedStructBase } from "../sharing/structs/sharedStruct";
-import { Tag, Tagged, TaggedStruct } from "../sharing/structs/taggedStruct";
+import { isTaggedStruct, Tag, Tagged } from "../sharing/structs/taggedStruct";
 import { Lockable } from "./lockable";
 import { SharedLockable } from "./sharedLockable";
 
@@ -216,9 +215,7 @@ export class SharedMutex extends Identifiable(Tagged(SharedStructBase, Tag.Share
     }
 
     static [Symbol.hasInstance](value: unknown): value is SharedMutex {
-        return typeof value === "object" && value !== null && // eslint-disable-line no-null/no-null -- necessary for comparision
-            hasProperty(value, "__tag__") &&
-            (value as TaggedStruct<Tag>).__tag__ === Tag.SharedMutex;
+        return isTaggedStruct(value, Tag.SharedMutex);
     }
 }
 

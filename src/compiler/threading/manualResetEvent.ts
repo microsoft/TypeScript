@@ -1,5 +1,5 @@
 import { Shared, SharedStructBase } from "../sharing/structs/sharedStruct";
-import { Tag, Tagged } from "../sharing/structs/taggedStruct";
+import { isTaggedStruct, Tag, Tagged } from "../sharing/structs/taggedStruct";
 
 /** @internal */
 @Shared()
@@ -37,5 +37,9 @@ export class ManualResetEvent extends Tagged(SharedStructBase, Tag.ManualResetEv
 
     static wait(self: ManualResetEvent, timeout?: number) {
         return Atomics.Mutex.lock(self.mutex, () => Atomics.Condition.wait(self.condition, self.mutex, timeout));
+    }
+
+    static [Symbol.hasInstance](value: unknown): value is ManualResetEvent {
+        return isTaggedStruct(value, Tag.ManualResetEvent);
     }
 }

@@ -475,7 +475,7 @@ import {
     WithStatement,
     YieldExpression,
 } from "../_namespaces/ts";
-import { SharedNodeBase } from "../sharing/sharedNode";
+import { SharedNode } from "../sharing/sharedNode";
 import { SharedNodeArray } from "../sharing/sharedNodeArray";
 import { isShareableNonPrimitive } from "../sharing/structs/shareable";
 
@@ -7182,7 +7182,7 @@ function propagateChildrenFlags(children: NodeArray<Node> | undefined): Transfor
     return children ? children.transformFlags : TransformFlags.None;
 }
 
-function aggregateChildrenFlags(children: MutableNodeArray<Node> | SharedNodeArray<SharedNodeBase>) {
+function aggregateChildrenFlags(children: MutableNodeArray<Node> | SharedNodeArray<SharedNode>) {
     let subtreeFlags = TransformFlags.None;
     const values = children instanceof SharedNodeArray ? Array.from(children.items) : children;
     for (const child of values) {

@@ -170,6 +170,18 @@ export namespace tracingEnabled {
         }
         eventStack.length = 0;
     }
+
+    const popActivity = {
+        [Symbol.dispose]() {
+            pop();
+        }
+    };
+
+    export function traceActivity(phase: Phase, name: string, args?: Args, separateBeginAndEnd?: boolean): Disposable {
+        push(phase, name, args, separateBeginAndEnd);
+        return popActivity;
+    }
+
     // sample every 10ms
     const sampleInterval = 1000 * 10;
     function writeStackEvent(index: number, endTime: number, results?: Args) {

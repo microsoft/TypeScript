@@ -1,4 +1,5 @@
 import * as performance from "../compiler/performance";
+import { createDisposableStack } from "../compiler/symbolDisposeShim";
 import {
     arrayFrom,
     BuilderProgram,
@@ -34,6 +35,7 @@ import {
     DiagnosticMessage,
     DiagnosticReporter,
     Diagnostics,
+    dispose,
     dumpTracingLegend,
     EmitAndSemanticDiagnosticsBuilderProgram,
     emitFilesAndReportErrorsAndGetExitStatus,
@@ -638,12 +640,8 @@ function executeCommandLineWorker(
         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
-    let threadPool: ThreadPool | undefined;
-    const maxCpuCount = getMaxCpuCount(commandLine.options);
-    if (maxCpuCount > 1 && workerThreads?.isMainThread()) {
-        threadPool = new ThreadPool(maxCpuCount, workerThreads);
-        threadPool.start();
-    }
+    using threadPoolLifetime = createDisposableStack();
+    const threadPool = threadPoolLifetime.use(tryCreateThreadPool(commandLine.options, workerThreads));
 
     const currentDirectory = sys.getCurrentDirectory();
     const commandLineOptions = convertToOptionsWithAbsolutePaths(
@@ -661,10 +659,12 @@ function executeCommandLineWorker(
                     configParseResult.options
                 );
                 configParseResult.errors.forEach(reportDiagnostic);
+                dispose(threadPoolLifetime);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             // eslint-disable-next-line no-null/no-null
             sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
+            dispose(threadPoolLifetime);
             return sys.exit(ExitStatus.Success);
         }
         reportDiagnostic = updateReportDiagnostic(
@@ -684,6 +684,7 @@ function executeCommandLineWorker(
                 extendedConfigCache,
                 workerThreads,
                 threadPool,
+                threadPoolLifetime, // hand off the lifetime of the thread pool
             );
         }
         else if (isIncrementalCompilation(configParseResult.options)) {
@@ -694,6 +695,7 @@ function executeCommandLineWorker(
                 configParseResult,
                 workerThreads,
                 threadPool,
+                threadPoolLifetime,
             );
         }
         else {
@@ -704,6 +706,7 @@ function executeCommandLineWorker(
                 configParseResult,
                 workerThreads,
                 threadPool,
+                threadPoolLifetime,
             );
         }
     }
@@ -711,6 +714,7 @@ function executeCommandLineWorker(
         if (commandLineOptions.showConfig) {
             // eslint-disable-next-line no-null/no-null
             sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(currentDirectory, "tsconfig.json"), sys), null, 4) + sys.newLine);
+            dispose(threadPoolLifetime);
             return sys.exit(ExitStatus.Success);
         }
         reportDiagnostic = updateReportDiagnostic(
@@ -729,6 +733,7 @@ function executeCommandLineWorker(
                 commandLine.watchOptions,
                 workerThreads,
                 threadPool,
+                threadPoolLifetime // hand off the lifetime of the thread pool
             );
         }
         else if (isIncrementalCompilation(commandLineOptions)) {
@@ -739,6 +744,7 @@ function executeCommandLineWorker(
                 { ...commandLine, options: commandLineOptions },
                 workerThreads,
                 threadPool,
+                threadPoolLifetime,
             );
         }
         else {
@@ -749,6 +755,7 @@ function executeCommandLineWorker(
                 { ...commandLine, options: commandLineOptions },
                 workerThreads,
                 threadPool,
+                threadPoolLifetime,
             );
         }
     }
@@ -818,6 +825,15 @@ function reportWatchModeWithoutSysSupport(sys: System, reportDiagnostic: Diagnos
     return false;
 }
 
+function tryCreateThreadPool(options: BuildOptions | CompilerOptions, workerThreads: WorkerThreadsHost | undefined) {
+    const maxCpuCount = getMaxCpuCount(options);
+    if (maxCpuCount > 1 && workerThreads?.isMainThread()) {
+        const threadPool = new ThreadPool(maxCpuCount, workerThreads, options.generateCpuProfile);
+        threadPool.start();
+        return threadPool;
+    }
+}
+
 function performBuild(
     sys: System,
     cb: ExecuteCommandLineCallbacks,
@@ -860,15 +876,10 @@ function performBuild(
         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
-    let threadPool: ThreadPool | undefined;
-    const maxCpuCount = getMaxCpuCount(buildOptions);
-    if (maxCpuCount > 1 && workerThreads?.isMainThread()) {
-        threadPool = new ThreadPool(maxCpuCount, workerThreads);
-    }
-
     if (buildOptions.watch) {
         if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
-        threadPool?.start();
+        using threadPoolLifetime = createDisposableStack();
+        const threadPool = threadPoolLifetime.use(tryCreateThreadPool(buildOptions, workerThreads));
         const buildHost = createSolutionBuilderWithWatchHost(
             sys,
             /*createProgram*/ undefined,
@@ -891,14 +902,15 @@ function performBuild(
                 reportSolutionBuilderTimes(builder, solutionPerformance);
             }
         };
-        const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
+        const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions, threadPoolLifetime);
         builder.build();
         reportSolutionBuilderTimes(builder, solutionPerformance);
         reportBuildStatistics = true;
         return builder;
     }
 
-    threadPool?.start();
+    using threadPoolLifetime = createDisposableStack();
+    const threadPool = threadPoolLifetime.use(tryCreateThreadPool(buildOptions, workerThreads));
     const buildHost = createSolutionBuilderHost(
         sys,
         /*createProgram*/ undefined,
@@ -914,7 +926,7 @@ function performBuild(
     const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
     reportSolutionBuilderTimes(builder, solutionPerformance);
     dumpTracingLegend(); // Will no-op if there hasn't been any tracing
-    threadPool?.stop();
+    dispose(threadPoolLifetime);
     return sys.exit(exitStatus);
 }
 
@@ -931,6 +943,7 @@ function performCompilation(
     config: ParsedCommandLine,
     workerThreads: WorkerThreadsHost | undefined,
     threadPool: ThreadPool | undefined,
+    threadPoolLifetime: DisposableStack | undefined,
 ) {
     const { fileNames, options, projectReferences } = config;
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys, workerThreads, threadPool);
@@ -955,7 +968,7 @@ function performCompilation(
     );
     reportStatistics(sys, program, /*solutionPerformance*/ undefined);
     cb(program);
-    threadPool?.stop();
+    dispose(threadPoolLifetime);
     return sys.exit(exitStatus);
 }
 
@@ -966,6 +979,7 @@ function performIncrementalCompilation(
     config: ParsedCommandLine,
     workerThreads: WorkerThreadsHost | undefined,
     threadPool: ThreadPool | undefined,
+    threadPoolLifetime: DisposableStack | undefined,
 ) {
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
@@ -984,7 +998,7 @@ function performIncrementalCompilation(
             cb(builderProgram);
         }
     });
-    threadPool?.stop();
+    dispose(threadPoolLifetime);
     return sys.exit(exitStatus);
 }
 
@@ -1045,6 +1059,7 @@ function createWatchOfConfigFile(
     extendedConfigCache: Map<string, ExtendedConfigCacheEntry>,
     workerThreads: WorkerThreadsHost | undefined,
     threadPool: ThreadPool | undefined,
+    threadPoolLifetime: DisposableStack | undefined,
 ) {
     const watchCompilerHost = createWatchCompilerHostOfConfigFile({
         configFileName: configParseResult.options.configFilePath!,
@@ -1059,7 +1074,7 @@ function createWatchOfConfigFile(
     updateWatchCompilationHost(system, cb, watchCompilerHost);
     watchCompilerHost.configFileParsingResult = configParseResult;
     watchCompilerHost.extendedConfigCache = extendedConfigCache;
-    return createWatchProgram(watchCompilerHost);
+    return createWatchProgram(watchCompilerHost, threadPoolLifetime);
 }
 
 function createWatchOfFilesAndCompilerOptions(
@@ -1071,6 +1086,7 @@ function createWatchOfFilesAndCompilerOptions(
     watchOptions: WatchOptions | undefined,
     workerThreads: WorkerThreadsHost | undefined,
     threadPool: ThreadPool | undefined,
+    threadPoolLifetime: DisposableStack | undefined,
 ) {
     const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions({
         rootFiles,
@@ -1083,7 +1099,7 @@ function createWatchOfFilesAndCompilerOptions(
         threadPool,
     });
     updateWatchCompilationHost(system, cb, watchCompilerHost);
-    return createWatchProgram(watchCompilerHost);
+    return createWatchProgram(watchCompilerHost, threadPoolLifetime);
 }
 
 interface SolutionPerformance {

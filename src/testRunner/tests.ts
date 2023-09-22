@@ -20,7 +20,7 @@ import "./unittests/publicApi";
 import "./unittests/reuseProgramStructure";
 import "./unittests/semver";
 import "./unittests/sharing/hashData";
-import "./unittests/sharing/resizableArray";
+import "./unittests/sharing/concurrentMap";
 import "./unittests/transform";
 import "./unittests/typeParameterIsPossiblyReferenced";
 import "./unittests/config/commandLineParsing";

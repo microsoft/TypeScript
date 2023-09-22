@@ -123,7 +123,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     if (structs) {
         args.unshift("--harmony-struct");
         args.unshift("--shared-string-table");
-        args.unshift("--enable-source-map");
+        args.unshift("--enable-source-maps");
     }
 
     /** @type {number | undefined} */

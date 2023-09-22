@@ -18,7 +18,6 @@ import {
     createIncrementalCompilerHost,
     createIncrementalProgram,
     CreateProgram,
-    createRequestSourceFile,
     createWriteFileMeasuringIO,
     CustomTransformers,
     Debug,
@@ -73,6 +72,7 @@ import {
     isReferenceFileLocation,
     isString,
     last,
+    makeCompilerHostParallel,
     maybeBind,
     memoize,
     ModuleKind,
@@ -108,7 +108,7 @@ import {
     WatchStatusReporter,
     whitespaceOrMapCommentRegExp,
     WorkerThreadsHost,
-    WriteFileCallback,
+    WriteFileCallback
 } from "./_namespaces/ts";
 
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
@@ -744,7 +744,6 @@ export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { tra
 export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
     const compilerHost: CompilerHost = {
-        requestSourceFile: host.threadPool && createRequestSourceFile(host.threadPool, /*setParentNodes*/ undefined),
         getSourceFile: createGetSourceFile(
             (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
             getCompilerOptions,
@@ -773,8 +772,10 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         readDirectory: maybeBind(host, host.readDirectory),
         storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
         workerThreads: host.workerThreads,
-        threadPool: host.threadPool,
     };
+    if (host.threadPool) {
+        makeCompilerHostParallel(compilerHost, host.threadPool, /*setParentNodes*/ undefined);
+    }
     return compilerHost;
 }
 
@@ -821,18 +822,12 @@ export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "cre
 export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
     const originalGetSourceFile = compilerHost.getSourceFile;
     compilerHost.getSourceFile = (...args) => {
-        const result = originalGetSourceFile.call(compilerHost, ...args);
+        const result = originalGetSourceFile.call(compilerHost, ...args) as SourceFile | undefined;
         if (result) {
-            result.version = getSourceFileVersionAsHashFromText(compilerHost, result.text);
+            result.version ??= getSourceFileVersionAsHashFromText(compilerHost, result.text);
         }
         return result;
     };
-    const originalRequestSourceFile = compilerHost.requestSourceFile;
-    if (originalRequestSourceFile) {
-        compilerHost.requestSourceFile = (parserState, fileName, languageVersionOrOptions, shouldCreateNewSourceFile) => {
-            originalRequestSourceFile.call(compilerHost, parserState, fileName, languageVersionOrOptions, shouldCreateNewSourceFile, /*setFileVersion*/ true);
-        };
-    }
 }
 
 /**

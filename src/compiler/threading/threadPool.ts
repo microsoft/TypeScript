@@ -1,15 +1,19 @@
-import { WorkerThreadsHost, Worker, workerThreads } from "../workerThreads";
-import { SharedLinkedList } from "../sharing/collections/sharedLinkedList";
-import { Shared, SharedStructBase } from "../sharing/structs/sharedStruct";
-import { Mutex } from "./mutex";
-import { Condition } from "./condition";
-import { UniqueLock } from "./uniqueLock";
+import { combinePaths, getAnyExtensionFromPath, getBaseFileName, getDirectoryPath, isTaggedStruct, removeExtension, sys, Tag, Tagged } from "../_namespaces/ts";
+import { isNodeLikeSystem, noop } from "../core";
 import { Debug } from "../debug";
-import { isNodeLikeSystem } from "../core";
-import { CountdownEvent } from "./countdownEvent";
+import { Deque } from "../sharing/collections/deque";
+import { Shared, SharedStructBase } from "../sharing/structs/sharedStruct";
+import { Worker, workerThreads, WorkerThreadsHost } from "../workerThreads";
+import { Condition } from "./condition";
+import { Mutex } from "./mutex";
+import { SpinWait } from "./spinWait";
+import { UniqueLock } from "./uniqueLock";
+
+const WORK_STEALING = true;
+const PER_THREAD_QUEUE = true;
 
 @Shared()
-class ThreadPoolWorkItem extends SharedStructBase {
+class Task extends SharedStructBase {
     @Shared() readonly name: string;
     @Shared() readonly arg: Shareable;
 
@@ -20,40 +24,145 @@ class ThreadPoolWorkItem extends SharedStructBase {
     }
 }
 
-/** @internal */
 @Shared()
-export class ThreadPoolState extends SharedStructBase {
-    @Shared() mutex = new Mutex();
-    @Shared() condition = new Condition();
-    @Shared() countdown = new CountdownEvent(1);
-    @Shared() queue = new SharedLinkedList<ThreadPoolWorkItem>();
-    @Shared() active = 0;
+class TaskQueue extends SharedStructBase {
+    @Shared() private mutex = new Mutex();
+    @Shared() private condition = new Condition();
+    @Shared() private dequeue = new Deque<Task>();
     @Shared() done = false;
-    @Shared() error: string | undefined;
+
+    static tryDequeue(self: TaskQueue) {
+        return Deque.popBottom(self.dequeue);
+    }
+
+    static dequeue(self: TaskQueue) {
+        const done = self.done;
+        const task = TaskQueue.tryDequeue(self);
+        if (task || done) {
+            return task;
+        }
+
+        using lck = new UniqueLock(self.mutex);
+        while (true) {
+            const done = self.done;
+            const task = TaskQueue.tryDequeue(self);
+            if (task || done) {
+                return task;
+            }
+            Condition.wait(self.condition, lck);
+        }
+    }
+
+    static steal(self: TaskQueue) {
+        return Deque.steal(self.dequeue);
+    }
+
+    static enqueue(self: TaskQueue, task: Task) {
+        Debug.assert(!self.done);
+        Deque.pushBottom(self.dequeue, task);
+        Condition.notify(self.condition, 1);
+    }
+
+    static done(self: TaskQueue) {
+        self.done = true;
+        Condition.notify(self.condition);
+    }
+}
+
+@Shared()
+class TaskScheduler extends SharedStructBase {
+    @Shared() queues: SharedArray<TaskQueue>;
+    @Shared() nextTaskId = 0;
+    @Shared() mutex = new Mutex();
+
+    constructor(poolSize: number) {
+        super();
+        this.queues = new SharedArray(PER_THREAD_QUEUE ? poolSize : 1);
+        const queueCount = this.queues.length;
+        for (let i = 0; i < queueCount; i++) {
+            this.queues[i] = new TaskQueue();
+        }
+    }
+
+    static shutdown(self: TaskScheduler) {
+        const queueCount = self.queues.length;
+        for (let i = 0; i < queueCount; i++) {
+            TaskQueue.done(self.queues[i]);
+        }
+    }
+
+    static scheduleTask(self: TaskScheduler, task: Task) {
+        const queueCount = self.queues.length;
+        const spin = new SpinWait();
+
+        let queueId: number;
+        while (true) {
+            const previousValue = Atomics.load(self, "nextTaskId");
+            const nextValue = (previousValue + 1) >>> 0;
+            if (Atomics.compareExchange(self, "nextTaskId", previousValue, nextValue) === previousValue) {
+                queueId = previousValue % queueCount;
+                break;
+            }
+            spin.spinOnce();
+        }
+
+        TaskQueue.enqueue(self.queues[queueId], task);
+        // TODO: wake all queues to steal work?
+    }
+
+    static takeTask(self: TaskScheduler, queueId: number) {
+        const queues = self.queues;
+
+        // first, try to take work from our queue
+        const done = queues[queueId].done;
+        const task = TaskQueue.tryDequeue(queues[queueId]);
+        if (task || done) {
+            return task;
+        }
+
+        if (WORK_STEALING && PER_THREAD_QUEUE) {
+            // next, try to steal work from an open queue
+            const queueCount = queues.length;
+            for (let i = 1; i < queueCount; i++) {
+                const queue = queues[(queueId + i) % queueCount];
+                const task = TaskQueue.steal(queue);
+                if (task) {
+                    return task;
+                }
+            }
+        }
+
+        // finally, if that fails, perform a blocking dequeue on our queue
+        return TaskQueue.dequeue(queues[queueId]);
+    }
 }
 
 /**
  * Creates a thread pool of one or more worker threads. A {@link ThreadPool} can only be created on the main thread.
  * @internal
  */
-export class ThreadPool {
+export class ThreadPool implements Disposable {
     readonly poolSize: number;
 
     private readonly _host: WorkerThreadsHost;
+    private readonly _generateCpuProfile: string | undefined;
     private _workers: Worker[] = [];
-    private _state = new ThreadPoolState();
+    private _threads: Thread[] = [];
+    private _scheduler: TaskScheduler | undefined;
 
     private _listening = false;
     private _onUncaughtException = () => {
-        if (!this._state.done) {
+        if (this._scheduler) {
             this.abort();
         }
     };
 
-    constructor(poolSize: number, host = workerThreads ?? Debug.fail("Worker threads not available.")) {
+    constructor(poolSize: number, host = workerThreads ?? Debug.fail("Worker threads not available."), generateCpuProfile?: string) {
         Debug.assert(poolSize >= 1);
         Debug.assert(host.isMainThread(), "A new thread pool can only be created on the main thread.");
         this.poolSize = poolSize;
+        this._generateCpuProfile = generateCpuProfile;
+        this._scheduler = new TaskScheduler(poolSize);
         this._host = host;
     }
 
@@ -61,31 +170,71 @@ export class ThreadPool {
      * Starts all threads in the thread pool.
      */
     start(): void {
+        Debug.assert(this._scheduler, "Object is disposed");
+
         if (this._workers.length < this.poolSize) {
             this._startListening();
         }
+
+        const queueCount = this._scheduler.queues.length;
         for (let i = this._workers.length; i < this.poolSize; i++) {
-            this._workers.push(this._host.createWorker({
-                name: "ThreadPool Thread",
-                workerData: { type: "ThreadPoolThread", state: this._state }
-            }));
+            const thread = new Thread(this._scheduler, i % queueCount, this._generateCpuProfile);
+            this._threads[i] = thread;
+
+            const worker = this._host.createWorker({ name: "ThreadPool Thread", workerData: thread });
+            this._workers[i] = worker;
         }
     }
 
     /**
      * Disable the addition of new work items in the thread pool and wait for threads to terminate gracefully.
      */
-    stop(timeout?: number) {
-        this._shutdown();
-        return CountdownEvent.wait(this._state.countdown, timeout);
+    shutdown() {
+        if (!this._scheduler) {
+            return;
+        }
+
+        this._stopListening();
+
+        const scheduler = this._scheduler;
+        const threads = this._threads.slice();
+
+        this._scheduler = undefined;
+        this._threads.length = 0;
+        this._workers.length = 0;
+
+        // mark all queues as done
+        TaskScheduler.shutdown(scheduler);
+
+        // join all threads
+        for (const thread of threads) {
+            Thread.join(thread);
+        }
+
+        Debug.log.trace("Thread pool shut down.");
     }
 
     /**
      * Immediately stop all threads in the thread pool and wait for them to terminate.
      */
     async abort() {
-        this._shutdown();
-        const workers = this._workers.splice(0, this._workers.length);
+        if (!this._scheduler) {
+            return;
+        }
+
+        this._stopListening();
+
+        const scheduler = this._scheduler;
+        const workers = this._workers.slice();
+
+        this._scheduler = undefined;
+        this._threads.length = 0;
+        this._workers.length = 0;
+
+        // mark all queues as done
+        TaskScheduler.shutdown(scheduler);
+
+        // terminate all workers
         await Promise.all(workers.map(worker => worker.terminate()));
     }
 
@@ -96,24 +245,8 @@ export class ThreadPool {
      * thread.
      */
     queueWorkItem(name: string, arg?: Shareable) {
-        {
-            using _ = new UniqueLock(this._state.mutex);
-            SharedLinkedList.push(this._state.queue, new ThreadPoolWorkItem(name, arg));
-        }
-
-        Condition.notify(this._state.condition, 1);
-    }
-
-    private _shutdown() {
-        this._stopListening();
-
-        Debug.log.trace("Shutting down thread pool");
-        if (!this._state.done) {
-            using _ = new UniqueLock(this._state.mutex);
-            this._state.done = true;
-            Condition.notify(this._state.condition);
-            CountdownEvent.signal(this._state.countdown, 1);
-        }
+        Debug.assert(this._scheduler, "Object is disposed");
+        TaskScheduler.scheduleTask(this._scheduler, new Task(name, arg));
     }
 
     private _startListening() {
@@ -134,98 +267,102 @@ export class ThreadPool {
             process.off("uncaughtExceptionMonitor", this._onUncaughtException);
         }
     }
+
+    [Symbol.dispose]() {
+        this.shutdown();
+    }
 }
 
 /**
- * Represents a thread in a {@link ThreadPool} and can be used to process work items. A {@link ThreadPoolThread} should
- * only be used in a worker thread.
- * @internal
+ * Entrypoint method for a thread pool thread, invoking the `processTask` callback whenever a task is available. This
+ * function only exits once its associated queue is done adding new tasks and is empty. This function is only available
+ * from a worker thread.
  */
-export class ThreadPoolThread {
-    private _state: ThreadPoolState;
-    private _processWorkItem: (name: string, arg: Shareable) => void;
+export let runThread: (processTask: (name: string, arg: Shareable) => void) => void;
 
-    constructor(state: ThreadPoolState, processWorkItem: (name: string, arg: Shareable) => void) {
-        this._state = state;
-        this._processWorkItem = processWorkItem;
+/**
+ * Queue a new task in a background thread in the thread pool. This function is only available from a worker thread.
+ */
+export let queueWorkItem: (name: string, arg?: Shareable) => void;
+
+const enum ThreadState {
+    NotStarted,
+    Running,
+    Exited,
+}
+
+@Shared()
+class Thread extends Tagged(SharedStructBase, Tag.Thread) {
+    @Shared() private mutex = new Mutex();
+    @Shared() private condition = new Condition();
+    @Shared() private scheduler: TaskScheduler;
+    @Shared() private queueId: number;
+    @Shared() private generateCpuProfile: string | undefined;
+    @Shared() state = ThreadState.NotStarted;
+
+    constructor(scheduler: TaskScheduler, queueId: number, generateCpuProfile?: string) {
+        super();
+        this.scheduler = scheduler;
+        this.queueId = queueId;
+        this.generateCpuProfile = generateCpuProfile;
     }
 
-    /**
-     * Runs the thread pool thread until the {@link ThreadPool} signals the thread should shut down.
-     */
-    run() {
-        let running = true;
-        let started = false;
-        try {
-            const processWorkItem = this._processWorkItem;
-            if (!CountdownEvent.tryAdd(this._state.countdown, 1)) {
-                Debug.log.trace("thread pool is already shut down");
-                return;
+    static join(self: Thread) {
+        using lck = new UniqueLock(self.mutex);
+        Condition.wait(self.condition, lck, () => self.state === ThreadState.Exited);
+    }
+
+    static [Symbol.hasInstance](value: unknown) {
+        return isTaggedStruct(value, Tag.Thread);
+    }
+
+    static {
+        function runLoop(thread: Thread, processTask: (name: string, arg: Shareable) => void) {
+            let task: Task | undefined;
+            while (task = TaskScheduler.takeTask(thread.scheduler, thread.queueId)) {
+                processTask(task.name, task.arg);
             }
+        }
 
-            while (running) {
-                let workItem: ThreadPoolWorkItem | undefined;
-                {
-                    using lck = new UniqueLock(this._state.mutex);
+        runThread = function (processTask) {
+            Debug.assert(workerThreads?.isWorkerThread() && workerThreads.workerData instanceof Thread, "This function may only be called from a thread pool thread.");
+            const thread = workerThreads.workerData;
 
-                    // decrement the active thread counter before we start waiting for work
-                    if (started) {
-                        this._state.active--;
-                    }
-
-                    // wait until we have work to do
-                    Condition.wait(this._state.condition, lck, () => this._state.queue.size > 0 || this._state.done);
-
-                    // stop the thread if the thread pool is closed
-                    if (this._state.done) {
-                        if (started) {
-                            this._state.active--;
-                        }
-                        running = false;
-                        break;
-                    }
-
-                    // increment the active thread counter before we start processing a work item
-                    this._state.active++;
-                    started = true;
-                    workItem = SharedLinkedList.shift(this._state.queue);
-                }
-
-                // process the workitem
-                if (workItem) {
+            const state = thread.state;
+            Debug.assert(state === ThreadState.NotStarted);
+            Debug.assert(state === Atomics.compareExchange(thread, "state", state, ThreadState.Running));
+            try {
+                if (thread.generateCpuProfile && sys.enableCPUProfiler && sys.disableCPUProfiler) {
+                    const dirname = getDirectoryPath(thread.generateCpuProfile);
+                    const basename = getBaseFileName(thread.generateCpuProfile);
+                    const extname = getAnyExtensionFromPath(basename);
+                    const basenameNoExtension = removeExtension(basename, extname);
+                    const cpuProfilePath = combinePaths(dirname, `${basenameNoExtension}-${workerThreads.threadId}${extname}`);
+                    sys.enableCPUProfiler(cpuProfilePath, noop);
                     try {
-                        processWorkItem(workItem.name, workItem.arg);
+                        runLoop(thread, processTask);
                     }
-                    catch (e) {
-                        Debug.log.trace(e);
-                        running = false;
-                        using _ = new UniqueLock(this._state.mutex);
-                        this._state.active--;
-                        break;
+                    finally {
+                        sys.disableCPUProfiler(noop);
                     }
                 }
+                else {
+                    runLoop(thread, processTask);
+                }
             }
-        }
-        catch (e) {
-            Debug.log.trace(e);
-        }
+            catch (e) {
+                Debug.log.trace(e);
+            }
+            finally {
+                thread.state = ThreadState.Exited;
+                Condition.notify(thread.condition);
+            }
+        };
 
-        // Debug.log.trace(`shutting down.`);
-        CountdownEvent.signal(this._state.countdown);
-    }
-
-    /**
-     * Queue additional work to be performed in another thread.
-     */
-    queueWorkItem(name: string, arg?: Shareable) {
-        Debug.assert(!this._state.done);
-
-        {
-            using _ = new UniqueLock(this._state.mutex);
-            Debug.assert(!this._state.done);
-            SharedLinkedList.push(this._state.queue, new ThreadPoolWorkItem(name, arg));
-        }
-
-        Condition.notify(this._state.condition, 1);
+        queueWorkItem = function (name, arg) {
+            Debug.assert(workerThreads?.isWorkerThread() && workerThreads.workerData instanceof Thread, "This function may only be called from a thread pool thread.");
+            const thread = workerThreads.workerData;
+            TaskScheduler.scheduleTask(thread.scheduler, new Task(name, arg));
+        };
     }
 }

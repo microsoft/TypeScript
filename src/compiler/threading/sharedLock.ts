@@ -10,9 +10,7 @@ export class SharedLock<T extends SharedLockable | SharedMutex> {
     private _lockable: SharedLockable | undefined;
     private _ownsLock = false;
 
-    constructor();
-    constructor(mutex: T, t?: "defer-lock" | "try-to-lock" | "adopt-lock");
-    constructor(mutex?: T, t?: "defer-lock" | "try-to-lock" | "adopt-lock") {
+    constructor(mutex?: T, t?: "lock" | "defer-lock" | "try-to-lock" | "adopt-lock") {
         this._mutex = mutex;
         this._lockable =
             mutex instanceof SharedMutex ? SharedMutex.asSharedLockable(mutex) :
@@ -27,6 +25,7 @@ export class SharedLock<T extends SharedLockable | SharedMutex> {
                 case "adopt-lock":
                     this._ownsLock = true;
                     break;
+                case "lock":
                 case undefined:
                     this._lockable.lockShared();
                     this._ownsLock = true;
@@ -72,10 +71,10 @@ export class SharedLock<T extends SharedLockable | SharedMutex> {
 
     swap(other: SharedLock<T>) {
         const mutex = other._mutex;
-        other._mutex = this._mutex;
         const lockable = other._lockable;
-        other._lockable = this._lockable;
         const ownsLock = other._ownsLock;
+        other._mutex = this._mutex;
+        other._lockable = this._lockable;
         other._ownsLock = this._ownsLock;
         this._mutex = mutex;
         this._lockable = lockable;
@@ -84,12 +83,7 @@ export class SharedLock<T extends SharedLockable | SharedMutex> {
 
     move() {
         const other = new SharedLock<T>();
-        other._mutex = this._mutex;
-        other._lockable = this._lockable;
-        other._ownsLock = this._ownsLock;
-        this._mutex = undefined;
-        this._lockable = undefined;
-        this._ownsLock = false;
+        this.swap(other);
         return other;
     }
 

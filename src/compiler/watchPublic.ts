@@ -410,9 +410,11 @@ type WatchCompilerHostOfFilesAndCompilerOptionsOrConfigFile<T extends BuilderPro
 export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions<T>): WatchOfFilesAndCompilerOptions<T>;
 /**
  * Creates the watch from the host for config file
- */
+*/
 export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
-export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptionsOrConfigFile<T>): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
+/** @internal */ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions<T>, threadPoolLifetime?: DisposableStack): WatchOfFilesAndCompilerOptions<T>;
+/** @internal */ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>, threadPoolLifetime?: DisposableStack): WatchOfConfigFile<T>;
+export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptionsOrConfigFile<T>, _threadPoolLifetime?: DisposableStack): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
     interface FilePresentOnHost {
         version: string;
         sourceFile: SourceFile;
@@ -549,11 +551,15 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     // Update extended config file watch
     if (configFileName) updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
 
+    // once we've reached this point we can take ownership of the thread pool's lifetime
+    const threadPoolLifetime = _threadPoolLifetime?.move();
+
     return configFileName ?
         { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
         { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
 
     function close() {
+        using _ = threadPoolLifetime;
         clearInvalidateResolutionsOfFailedLookupLocations();
         resolutionCache.clear();
         clearMap(sourceFilesCache, value => {

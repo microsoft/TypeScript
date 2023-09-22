@@ -1,23 +1,19 @@
 import {
-    __String,
     CharacterCodes,
     Comparer,
     Comparison,
     Debug,
     EqualityComparer,
-    isTaggedStruct,
     isWhiteSpaceLike,
     MapLike,
-    Queue,
-    SharedNodeArray,
+    Queue, SharedNodeArray,
     SortedArray,
     SortedReadonlyArray,
-    TextSpan,
+    TextSpan
 } from "./_namespaces/ts";
-import { SharedNodeBase } from "./sharing/sharedNode";
+import { SharedNode } from "./sharing/sharedNode";
 import { isShareableNonPrimitive, isSharedArray } from "./sharing/structs/shareable";
-import { Tag } from "./sharing/structs/taggedStruct";
-
+import { isTaggedStruct, Tag } from "./sharing/structs/taggedStruct";
 
 /** @internal */
 export const emptyArray: never[] = [] as never[];
@@ -27,7 +23,23 @@ export const emptyMap: ReadonlyMap<never, never> = new Map<never, never>();
 export const emptySet: ReadonlySet<never> = new Set<never>();
 
 /** @internal */
-export function length(array: readonly any[] | undefined): number {
+export type Sequence<T> =
+    | readonly T[]
+    | (T extends Shareable ? SharedArray<T> : never)
+    | (T extends SharedNode ? SharedNodeArray<T> : never)
+    ;
+
+function getArrayLike<T>(sequence: Sequence<T>): ArrayLike<T>;
+function getArrayLike<T>(sequence: Sequence<T> | undefined): ArrayLike<T> | undefined;
+function getArrayLike<T>(sequence: Sequence<T> | undefined): ArrayLike<T> | undefined {
+    return !sequence || isArray(sequence) || isSharedArray(sequence) ? sequence :
+        sequence instanceof SharedNodeArray ? sequence.items :
+        undefined;
+}
+
+/** @internal */
+export function length(sequence: Sequence<any> | undefined): number {
+    const array = getArrayLike(sequence);
     return array ? array.length : 0;
 }
 
@@ -38,9 +50,11 @@ export function length(array: readonly any[] | undefined): number {
  *
  * @internal
  */
-export function forEach<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+export function forEach<T, U>(sequence: Sequence<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+    const array = getArrayLike(sequence);
     if (array) {
-        for (let i = 0; i < array.length; i++) {
+        const length = array.length;
+        for (let i = 0; i < length; i++) {
             const result = callback(array[i], i);
             if (result) {
                 return result;
@@ -55,7 +69,8 @@ export function forEach<T, U>(array: readonly T[] | undefined, callback: (elemen
  *
  * @internal
  */
-export function forEachRight<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+export function forEachRight<T, U>(sequence: Sequence<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+    const array = getArrayLike(sequence);
     if (array) {
         for (let i = array.length - 1; i >= 0; i--) {
             const result = callback(array[i], i);
@@ -72,12 +87,14 @@ export function forEachRight<T, U>(array: readonly T[] | undefined, callback: (e
  *
  * @internal
  */
-export function firstDefined<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+export function firstDefined<T, U>(sequence: Sequence<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+    const array = getArrayLike(sequence);
     if (array === undefined) {
         return undefined;
     }
 
-    for (let i = 0; i < array.length; i++) {
+    const length = array.length;
+    for (let i = 0; i < length; i++) {
         const result = callback(array[i], i);
         if (result !== undefined) {
             return result;
@@ -111,8 +128,10 @@ export function reduceLeftIterator<T, U>(iterator: Iterable<T> | undefined, f: (
 }
 
 /** @internal */
-export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], callback: (a: T, b: U, index: number) => V): V[] {
+export function zipWith<T, U, V>(sequenceA: Sequence<T>, sequenceB: Sequence<U>, callback: (a: T, b: U, index: number) => V): V[] {
     const result: V[] = [];
+    const arrayA = getArrayLike(sequenceA);
+    const arrayB = getArrayLike(sequenceB);
     Debug.assertEqual(arrayA.length, arrayB.length);
     for (let i = 0; i < arrayA.length; i++) {
         result.push(callback(arrayA[i], arrayB[i], i));
@@ -149,10 +168,14 @@ export function every<T, U extends T>(array: readonly T[], callback: (element: T
 /** @internal */
 export function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
 /** @internal */
-export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
-export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean {
+export function every<T, U extends T>(sequence: Sequence<T> | undefined, callback: (element: T, index: number) => element is U): sequence is Sequence<U> | undefined;
+/** @internal */
+export function every<T>(sequence: Sequence<T> | undefined, callback: (element: T, index: number) => boolean): boolean;
+export function every<T>(sequence: Sequence<T> | undefined, callback: (element: T, index: number) => boolean): boolean {
+    const array = getArrayLike(sequence);
     if (array) {
-        for (let i = 0; i < array.length; i++) {
+        const length = array.length;
+        for (let i = 0; i < length; i++) {
             if (!callback(array[i], i)) {
                 return false;
             }
@@ -167,13 +190,15 @@ export function every<T>(array: readonly T[] | undefined, callback: (element: T,
  *
  * @internal
  */
-export function find<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
+export function find<T, U extends T>(sequence: Sequence<T> | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
 /** @internal */
-export function find<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
+export function find<T>(sequence: Sequence<T> | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
 /** @internal */
-export function find<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined {
+export function find<T>(sequence: Sequence<T> | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined {
+    const array = getArrayLike(sequence);
     if (array === undefined) return undefined;
-    for (let i = startIndex ?? 0; i < array.length; i++) {
+    const length = array.length;
+    for (let i = startIndex ?? 0; i < length; i++) {
         const value = array[i];
         if (predicate(value, i)) {
             return value;
@@ -183,11 +208,12 @@ export function find<T>(array: readonly T[] | undefined, predicate: (element: T,
 }
 
 /** @internal */
-export function findLast<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
+export function findLast<T, U extends T>(sequence: Sequence<T> | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
 /** @internal */
-export function findLast<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
+export function findLast<T>(sequence: Sequence<T> | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
 /** @internal */
-export function findLast<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined {
+export function findLast<T>(sequence: Sequence<T> | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined {
+    const array = getArrayLike(sequence);
     if (array === undefined) return undefined;
     for (let i = startIndex ?? array.length - 1; i >= 0; i--) {
         const value = array[i];
@@ -203,9 +229,11 @@ export function findLast<T>(array: readonly T[] | undefined, predicate: (element
  *
  * @internal
  */
-export function findIndex<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+export function findIndex<T>(sequence: Sequence<T> | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+    const array = getArrayLike(sequence);
     if (array === undefined) return -1;
-    for (let i = startIndex ?? 0; i < array.length; i++) {
+    const length = array.length;
+    for (let i = startIndex ?? 0; i < length; i++) {
         if (predicate(array[i], i)) {
             return i;
         }
@@ -214,7 +242,8 @@ export function findIndex<T>(array: readonly T[] | undefined, predicate: (elemen
 }
 
 /** @internal */
-export function findLastIndex<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+export function findLastIndex<T>(sequence: Sequence<T> | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+    const array = getArrayLike(sequence);
     if (array === undefined) return -1;
     for (let i = startIndex ?? array.length - 1; i >= 0; i--) {
         if (predicate(array[i], i)) {
@@ -230,8 +259,10 @@ export function findLastIndex<T>(array: readonly T[] | undefined, predicate: (el
  *
  * @internal
  */
-export function findMap<T, U>(array: readonly T[], callback: (element: T, index: number) => U | undefined): U {
-    for (let i = 0; i < array.length; i++) {
+export function findMap<T, U>(sequence: Sequence<T>, callback: (element: T, index: number) => U | undefined): U {
+    const array = getArrayLike(sequence)!;
+    const length = array.length;
+    for (let i = 0; i < length; i++) {
         const result = callback(array[i], i);
         if (result) {
             return result;
@@ -241,10 +272,12 @@ export function findMap<T, U>(array: readonly T[], callback: (element: T, index:
 }
 
 /** @internal */
-export function contains<T>(array: readonly T[] | undefined, value: T, equalityComparer: EqualityComparer<T> = equateValues): boolean {
+export function contains<T>(sequence: Sequence<T> | undefined, value: T, equalityComparer: EqualityComparer<T> = equateValues): boolean {
+    const array = getArrayLike(sequence);
     if (array) {
-        for (const v of array) {
-            if (equalityComparer(v, value)) {
+        const length = array.length;
+        for (let i = 0; i < length; i++) {
+            if (equalityComparer(array[i], value)) {
                 return true;
             }
         }
@@ -253,8 +286,10 @@ export function contains<T>(array: readonly T[] | undefined, value: T, equalityC
 }
 
 /** @internal */
-export function arraysEqual<T>(a: readonly T[], b: readonly T[], equalityComparer: EqualityComparer<T> = equateValues): boolean {
-    return a.length === b.length && a.every((x, i) => equalityComparer(x, b[i]));
+export function arraysEqual<T>(sequenceA: Sequence<T>, sequenceB: Sequence<T>, equalityComparer: EqualityComparer<T> = equateValues): boolean {
+    const arrayA = getArrayLike(sequenceA);
+    const arrayB = getArrayLike(sequenceB);
+    return arrayA.length === arrayB.length && Array.prototype.every.call(arrayA, (x: T, i: number) => equalityComparer(x, arrayB[i]));
 }
 
 /** @internal */
@@ -268,10 +303,12 @@ export function indexOfAnyCharCode(text: string, charCodes: readonly number[], s
 }
 
 /** @internal */
-export function countWhere<T>(array: readonly T[] | undefined, predicate: (x: T, i: number) => boolean): number {
+export function countWhere<T>(sequence: Sequence<T> | undefined, predicate: (x: T, i: number) => boolean): number {
     let count = 0;
+    const array = getArrayLike(sequence);
     if (array) {
-        for (let i = 0; i < array.length; i++) {
+        const length = array.length;
+        for (let i = 0; i < length; i++) {
             const v = array[i];
             if (predicate(v, i)) {
                 count++;
@@ -665,22 +702,23 @@ export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined,
 }
 
 /** @internal */
-export function some<T>(array: readonly T[] | SharedNodeArray<Extract<T, SharedNodeBase>> | undefined): array is readonly T[] | SharedNodeArray<Extract<T, SharedNodeBase>>;
+export function some<T>(array: readonly T[] | SharedNodeArray<Extract<T, SharedNode>> | undefined): array is readonly T[] | SharedNodeArray<Extract<T, SharedNode>>;
 /** @internal */
-export function some<T>(array: readonly T[] | SharedNodeArray<Extract<T, SharedNodeBase>> | undefined, predicate: (value: T) => boolean): boolean;
+export function some<T>(array: readonly T[] | SharedNodeArray<Extract<T, SharedNode>> | undefined, predicate: (value: T) => boolean): boolean;
 /** @internal */
-export function some<T>(array: readonly T[] | SharedNodeArray<Extract<T, SharedNodeBase>> | undefined, predicate?: (value: T) => boolean): boolean {
+export function some<T>(array: readonly T[] | SharedNodeArray<Extract<T, SharedNode>> | undefined, predicate?: (value: T) => boolean): boolean {
     if (array) {
         if (predicate) {
-            const iterable = isTaggedStruct(array, Tag.NodeArray) ? SharedNodeArray.values(array) : array;
-            for (const v of iterable) {
-                if (predicate(v)) {
+            const arrayLike = isTaggedStruct(array, Tag.NodeArray) ? (array as SharedNodeArray<any>).items : array;
+            const length = arrayLike.length;
+            for (let i = 0; i < length; i++) {
+                if (predicate(arrayLike[i])) {
                     return true;
                 }
             }
         }
         else {
-            return (array instanceof SharedNodeArray ? array.items.length : array.length) > 0;
+            return (isTaggedStruct(array, Tag.NodeArray) ? (array as SharedNodeArray<any>).items.length : array.length) > 0;
         }
     }
     return false;
@@ -1846,6 +1884,13 @@ export function isArray(value: any): value is readonly unknown[] {
     return Array.isArray(value);
 }
 
+/**
+ * @internal
+ */
+export function isIterable(value: any): value is Iterable<any> {
+    return value !== undefined && !isNull(value) && Symbol.iterator in value
+}
+
 /** @internal */
 export function toArray<T>(value: T | T[] | SharedArray<Extract<T, Shareable>>): T[];
 /** @internal */
@@ -1853,6 +1898,11 @@ export function toArray<T>(value: T | readonly T[] | SharedArray<Extract<T, Shar
 /** @internal */
 export function toArray<T>(value: T | T[] | SharedArray<Extract<T, Shareable>>): T[] {
     return isSharedArray(value) ? Array.from(value) : isArray(value) ? value : [value];
+}
+
+/** @internal */
+export function iterateValues<T>(values: ArrayLike<T>): IterableIterator<T> {
+    return Array.prototype.values.call(values);
 }
 
 /**
@@ -1888,7 +1938,7 @@ export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: 
         if ("__tag__" in valueArg) {
             const tag = valueArg.__tag__ as Tag;
             if (tag === Tag.Node) {
-                const kind = (valueArg as SharedNodeBase).kind;
+                const kind = (valueArg as SharedNode).kind;
                 valueArg = `[object SharedNodeBase(${Debug.formatSyntaxKind(kind)})]`;
             }
             else {
@@ -2946,4 +2996,9 @@ export class Lazy<T> {
             }
         }
     }
+}
+
+/** @internal */
+export function dispose(obj: Disposable | undefined) {
+    obj?.[Symbol.dispose]();
 }

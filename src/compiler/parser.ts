@@ -408,7 +408,7 @@ import {
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import { SharedDiagnostic, SharedDiagnosticMessageChain, SharedDiagnosticRelatedInformation, SharedDiagnosticWithLocation } from "./sharing/sharedDiagnostics";
-import { SharedAmdDependency, SharedCheckJsDirective, SharedCommentDirective, SharedCommentRange, SharedFileReference, SharedNodeBase, SharedPragma, SharedPragmaArguments, SharedPragmaSpan, SharedSourceFile, SharedTextRange } from "./sharing/sharedNode";
+import { SharedAmdDependency, SharedCheckJsDirective, SharedCommentDirective, SharedCommentRange, SharedFileReference, SharedNode, SharedPragma, SharedPragmaArguments, SharedPragmaSpan, SharedSourceFile, SharedTextRange } from "./sharing/sharedNode";
 import { SharedNodeArray } from "./sharing/sharedNodeArray";
 import { isShareableNonPrimitive } from "./sharing/structs/shareable";
 import { Tag, TaggedStruct } from "./sharing/structs/taggedStruct";
@@ -461,8 +461,10 @@ function visitNodes<T>(cbNode: (node: Node) => T, cbNodes: ((node: NodeArray<Nod
         if (cbNodes) {
             return cbNodes(nodes);
         }
-        for (const node of nodes) {
-            const result = cbNode(node);
+        const array = nodes instanceof SharedNodeArray ? nodes.items : nodes;
+        const length = array.length;
+        for (let i = 0; i < length; i++) {
+            const result = cbNode(array[i]);
             if (result) {
                 return result;
             }
@@ -1912,8 +1914,8 @@ namespace Parser {
         Debug.assert(!node.jsDoc); // Should only be called once per node
         const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
         if (jsDoc.length) {
-            if (node instanceof SharedNodeBase) {
-                node.jsDoc = shareArray(jsDoc, n => n as unknown as SharedNodeBase) as unknown as JSDoc[];
+            if (node instanceof SharedNode) {
+                node.jsDoc = shareArray(jsDoc, n => n as unknown as SharedNode) as unknown as JSDoc[];
             }
             else {
                 node.jsDoc = jsDoc;

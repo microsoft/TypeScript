@@ -20,8 +20,7 @@ import {
     ThreadPool,
     WorkerThreadsHost,
 } from "./_namespaces/ts";
-import { SharedNodeBase } from "./sharing/sharedNode";
-import { SharedParserState } from "./sharing/sharedParserState";
+import { SharedNode } from "./sharing/sharedNode";
 
 // branded string type used to store absolute, normalized and canonicalized paths
 // arbitrary file name can be converted to Path via toPath function
@@ -931,7 +930,7 @@ export interface Node extends ReadonlyTextRange {
     //       `locals` and `nextContainer` have been moved to `LocalsContainer`
     //       `flowNode` has been moved to `FlowContainer`
     //       see: https://github.com/microsoft/TypeScript/pull/51682
-    /** @internal */ __shared__?: SharedNodeBase;
+    /** @internal */ __shared__?: SharedNode;
 }
 
 export interface JSDocContainer extends Node {
@@ -7772,7 +7771,7 @@ export type HasInvalidatedLibResolutions = (libFileName: string) => boolean;
 export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
 export interface CompilerHost extends ModuleResolutionHost {
-    /** @internal */ requestSourceFile?(parserState: SharedParserState, fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, shouldCreateNewSourceFile?: boolean, setFileVersion?: boolean): void;
+    /** @internal */ requestSourceFile?(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, shouldCreateNewSourceFile?: boolean, setFileVersion?: boolean): void;
     getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
     getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
     getCancellationToken?(): CancellationToken;

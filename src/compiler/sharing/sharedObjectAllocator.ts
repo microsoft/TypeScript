@@ -1,6 +1,6 @@
 import { Identifier, Node, NodeArray, PrivateIdentifier, SourceFile, SyntaxKind, Token } from "../types";
 import { ObjectAllocator, objectAllocator } from "../utilities";
-import { getSharedConstructorForKind, SharedNodeBase } from "./sharedNode";
+import { getSharedConstructorForKind } from "./sharedNode";
 import { SharedNodeArray } from "./sharedNodeArray";
 
 function NodeArray(items: readonly any[], hasTrailingComma?: boolean) {
@@ -15,7 +15,7 @@ function NodeArray(items: readonly any[], hasTrailingComma?: boolean) {
 
 function Node(kind: SyntaxKind, pos: number, end: number) {
     const SharedNode = getSharedConstructorForKind(kind);
-    const node = new SharedNode() as SharedNodeBase;
+    const node = new SharedNode();
     node.kind = kind;
     node.pos = pos;
     node.end = end;

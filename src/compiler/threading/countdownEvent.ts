@@ -99,7 +99,7 @@ export class CountdownEvent extends Tagged(SharedStructBase, Tag.CountdownEvent)
 
         using lck = new UniqueLock(self._mutex);
         if (timeout !== undefined) {
-            return Condition.waitFor(self._condition, lck, timeout) !== "timeout";
+            return Condition.waitFor(self._condition, lck, timeout) !== "timed-out";
         }
         else {
             Condition.wait(self._condition, lck);

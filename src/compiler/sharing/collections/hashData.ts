@@ -1,32 +1,6 @@
-import { hasProperty } from "../../core";
-import { Debug } from "../../debug";
-import { sys } from "../../sys";
-import { IdentifiableStruct } from "../structs/identifiableStruct";
 import { Shared, SharedStructBase } from "../structs/sharedStruct";
-import { xxh32string } from "./xxhash32";
+import { identityHash } from "./hash";
 
-const seed = sys.stringSeed ?? Math.floor(Math.random() * 0xffffffff) >>> 0;
-
-function hash(value: Shareable) {
-    if (value === undefined || value === null) { // eslint-disable-line no-null/no-null -- necessary comparison
-        return 0;
-    }
-    switch (typeof value) {
-        case "number":
-            return value >> 0;
-        case "boolean":
-            return value ? 1 : 0;
-        case "string":
-            return xxh32string(value, seed);
-        case "object":
-            if (hasProperty(value, "__hash__")) {
-                return (value as IdentifiableStruct).__hash__ >> 0;
-            }
-            return 0;
-        default:
-            Debug.assertNever(value);
-    }
-}
 
 // Portions of the following are derived from esfx and .NET Core. See ThirdPartyNoticeText.txt in the root of this
 // repository for their respective license notices.
@@ -80,7 +54,8 @@ function isPrime(candidate: number) {
     return candidate === 2;
 }
 
-function getPrime(min: number) {
+/** @internal */
+export function getPrime(min: number) {
     if (min < 0) throw new RangeError();
     for (const prime of primes) {
         if (prime >= min) return prime;
@@ -171,7 +146,7 @@ export class HashData<K extends Shareable, V extends Shareable> extends SharedSt
     }
 
     static findEntryIndex<K extends Shareable, V extends Shareable>(hashData: HashData<K, V>, key: K) {
-        const hashCode = hash(key) & MAX_INT32;
+        const hashCode = identityHash(key);
         // Value in _buckets is 1-based
         let i = hashData.buckets[hashCode % hashData.buckets.length] - 1;
         const length = hashData.entries.length;
@@ -191,7 +166,7 @@ export class HashData<K extends Shareable, V extends Shareable> extends SharedSt
     }
 
     static insertEntry<K extends Shareable, V extends Shareable>(hashData: HashData<K, V>, key: K, value: V) {
-        const hashCode = hash(key) & MAX_INT32;
+        const hashCode = identityHash(key) & MAX_INT32;
         let bucket = hashCode % hashData.buckets.length;
         // Value in _buckets is 1-based
         let i = hashData.buckets[bucket] - 1;
@@ -236,7 +211,7 @@ export class HashData<K extends Shareable, V extends Shareable> extends SharedSt
     }
 
     static deleteEntry<K extends Shareable, V extends Shareable>(hashData: HashData<K, V>, key: K) {
-        const hashCode = hash(key) & MAX_INT32;
+        const hashCode = identityHash(key) & MAX_INT32;
         const bucket = hashCode % hashData.buckets.length;
         let last = -1;
         let entry: HashEntry<K, V> | undefined;

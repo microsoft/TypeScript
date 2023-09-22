@@ -1,10 +1,6 @@
 /** @internal */
-export interface BasicLockable {
+export interface Lockable {
+    tryLock(): boolean;
     lock(): void;
     unlock(): void;
-}
-
-/** @internal */
-export interface Lockable extends BasicLockable {
-    tryLock(): boolean;
 }

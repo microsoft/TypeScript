@@ -9,9 +9,12 @@ export const enum Tag {
     Condition,
     ManualResetEvent,
     CountdownEvent,
+    Thread,
     Map,
     Set,
     ResizableArray,
+    ConcurrentMap,
+    Semaphore,
     NodeArray,
     Node,
     Symbol,
@@ -53,6 +56,10 @@ export function Tagged<F extends abstract new (...args: any) => SharedStruct, TT
     abstract class TaggedStruct extends base {
         static readonly __tag__ = tag;
         @Shared() readonly __tag__ = tag;
+
+        static [Symbol.hasInstance](value: unknown): boolean {
+            return isTaggedStruct(value, tag);
+        }
     }
     return TaggedStruct as Tagged<F, TTag>;
 }

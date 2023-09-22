@@ -1,4 +1,4 @@
-import { createCompilerHostWorker, Debug, isNodeLikeSystem, setGetSourceFileAsHashVersioned, sys, System, ThreadPoolState, ThreadPoolThread, workerThreads, WorkerThreadWorkerThreadsHost } from "./_namespaces/ts";
+import { createCompilerHostWorker, Debug, isNodeLikeSystem, runThread, setGetSourceFileAsHashVersioned, setSys, setWorkerThreadsHost, System, workerThreads, WorkerThreadWorkerThreadsHost } from "./_namespaces/ts";
 import { SharedSourceFile } from "./sharing/sharedNode";
 import { getSharedObjectAllocator } from "./sharing/sharedObjectAllocator";
 import { SharedSourceFileEntry } from "./sharing/sharedParserState";
@@ -6,19 +6,21 @@ import { Condition } from "./threading/condition";
 import { UniqueLock } from "./threading/uniqueLock";
 
 /** @internal */
-export function executeWorker(_system: System, host: WorkerThreadWorkerThreadsHost) {
+export function executeWorker(system: System, host: WorkerThreadWorkerThreadsHost) {
     // if (process.execArgv.includes("--inspect-brk")) {
     //     const inspector = require("node:inspector") as typeof import("node:inspector");
     //     inspector.open();
     //     inspector.waitForDebugger();
     // }
 
+    setSys(system);
+    setWorkerThreadsHost(host);
     if (isNodeLikeSystem()) {
         const fs: typeof import("fs") = require("fs");
         const util: typeof import("util") = require("util");
         Debug.loggingHost = {
             log(_level, s) {
-                fs.writeSync(2, `[worker#${host.threadId}] ${s || ""}${sys.newLine}`);
+                fs.writeSync(2, `[worker#${host.threadId}] ${s || ""}${system.newLine}`);
             },
             format(...args) {
                 return util.formatWithOptions({ colors: true }, ...args);
@@ -26,26 +28,13 @@ export function executeWorker(_system: System, host: WorkerThreadWorkerThreadsHo
         };
     }
 
-    const { workerData } = host;
-    Debug.assert(workerData);
-    const { type } = workerData as { type: string };
-    switch (type) {
-        case "ThreadPoolThread": {
-            const { state } = workerData as { state: ThreadPoolState };
-            const thread = new ThreadPoolThread(state, (name, arg) => {
-                switch (name) {
-                    case "Program.requestSourceFile":
-                        programRequestSourceFile(arg as SharedSourceFileEntry);
-                        break;
-                }
-            });
-            thread.run();
-            break;
+    runThread((name, arg) => {
+        switch (name) {
+            case "Program.requestSourceFile":
+                programRequestSourceFile(arg as SharedSourceFileEntry);
+                break;
         }
-        default:
-            Debug.fail(`Unsupported worker type: '${type}'.`);
-            break;
-    }
+    });
 
     function programRequestSourceFile(entry: SharedSourceFileEntry) {
         let ok = false;
@@ -53,7 +42,7 @@ export function executeWorker(_system: System, host: WorkerThreadWorkerThreadsHo
         try {
             // Debug.log.trace(`parsing: ${entry.fileName}`);
             const overideObjectAllocator = getSharedObjectAllocator();
-            const host = createCompilerHostWorker({}, entry.setParentNodes, sys, workerThreads, /*threadPool*/ undefined, overideObjectAllocator);
+            const host = createCompilerHostWorker({}, entry.setParentNodes, system, workerThreads, /*threadPool*/ undefined, overideObjectAllocator);
             if (entry.setFileVersion) {
                 setGetSourceFileAsHashVersioned(host);
             }

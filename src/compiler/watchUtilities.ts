@@ -689,20 +689,17 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
 
     return {
         watchFile: createExcludeHandlingAddWatch("watchFile"),
-        watchDirectory: createExcludeHandlingAddWatch("watchDirectory")
+        watchDirectory: createExcludeHandlingAddWatch("watchDirectory"),
     };
 
-    function createExcludeHandlingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
-        return (
-            file: string,
-            cb: FileWatcherCallback | DirectoryWatcherCallback,
-            flags: PollingInterval | WatchDirectoryFlags,
-            options: WatchOptions | undefined,
-            detailInfo1: X,
-            detailInfo2?: Y
-        ) => !matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "") ?
-                factory[key].call(/*thisArgs*/ undefined, file, cb, flags, options, detailInfo1, detailInfo2) :
+    function createExcludeHandlingAddWatch<K extends keyof WatchFactory<X, Y>>(key: K): WatchCallback<K> {
+        return (...args) => {
+            const [file, , flags, options, detailInfo1, detailInfo2] = args;
+            const f = factory[key] as WatchCallback<K>;
+            return !matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "") ?
+                f(...args) :
                 excludeWatcherFactory(file, flags, options, detailInfo1, detailInfo2);
+        };
     }
 
     function useCaseSensitiveFileNames() {
@@ -768,22 +765,26 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
         };
     }
 
-    function createTriggerLoggingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
-        return (
-            file: string,
-            cb: FileWatcherCallback | DirectoryWatcherCallback,
-            flags: PollingInterval | WatchDirectoryFlags,
-            options: WatchOptions | undefined,
-            detailInfo1: X,
-            detailInfo2?: Y
-        ) => plainInvokeFactory[key].call(/*thisArgs*/ undefined, file, (...args: any[]) => {
+    type WatchCallback<K extends keyof WatchFactory<X, Y>> = (...args: Parameters<WatchFactory<X, Y>[K]>) => FileWatcher;
+
+    function addTriggerLoggingToCallback<A extends any[]>(cb: (...args: A) => void, key: keyof WatchFactory<X, Y>, file: string, flags: PollingInterval | WatchDirectoryFlags, options: WatchOptions | undefined, detailInfo1: X, detailInfo2: Y | undefined): (...args: A) => void {
+        return (...args: A) => {
             const triggerredInfo = `${key === "watchFile" ? "FileWatcher" : "DirectoryWatcher"}:: Triggered with ${args[0]} ${args[1] !== undefined ? args[1] : ""}:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
             log(triggerredInfo);
             const start = timestamp();
-            cb.call(/*thisArg*/ undefined, ...args);
+            cb(...args);
             const elapsed = timestamp() - start;
             log(`Elapsed:: ${elapsed}ms ${triggerredInfo}`);
-        }, flags, options, detailInfo1, detailInfo2);
+        };
+    }
+
+    function createTriggerLoggingAddWatch<K extends keyof WatchFactory<X, Y>>(key: K): WatchCallback<K> {
+        return (...args) => {
+            const [file, cb, flags, options, detailInfo1, detailInfo2] = args;
+            const f = plainInvokeFactory[key] as WatchCallback<K>;
+            args[1] = addTriggerLoggingToCallback(cb, key, file, flags, options, detailInfo1, detailInfo2);
+            return f(...args);
+        };
     }
 
     function getWatchInfo<T>(file: string, flags: T, options: WatchOptions | undefined, detailInfo1: X, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {

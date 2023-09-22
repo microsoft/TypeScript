@@ -1,16 +1,16 @@
 import { Condition } from "../threading/condition";
 import { Mutex } from "../threading/mutex";
-import { SharedMutex } from "../threading/sharedMutex";
 import { ResolutionMode, ScriptTarget } from "../types";
-import { SharedMap } from "./collections/sharedMap";
+import { ConcurrentMap } from "./collections/concurrentMap";
 import { SharedSourceFile } from "./sharedNode";
 import { Shared, SharedStructBase } from "./structs/sharedStruct";
 
 /** @internal */
 @Shared()
 export class SharedParserState extends SharedStructBase {
-    @Shared() sharedMutex = new SharedMutex();
-    @Shared() files = new SharedMap<string, SharedSourceFileEntry>();
+    // @Shared() sharedMutex = new SharedMutex();
+    // @Shared() files = new SharedMap<string, SharedSourceFileEntry>();
+    @Shared() files = new ConcurrentMap<string, SharedSourceFileEntry>();
 }
 
 /** @internal */

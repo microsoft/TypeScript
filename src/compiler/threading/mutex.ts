@@ -1,8 +1,7 @@
-import { hasProperty } from "../core";
 import { Debug } from "../debug";
 import { Identifiable } from "../sharing/structs/identifiableStruct";
 import { Shared, SharedStructBase } from "../sharing/structs/sharedStruct";
-import { Tag, Tagged, TaggedStruct } from "../sharing/structs/taggedStruct";
+import { isTaggedStruct, Tag, Tagged } from "../sharing/structs/taggedStruct";
 import { Lockable } from "./lockable";
 
 let tryLock: (self: Mutex, cacheKey?: object) => boolean;
@@ -120,9 +119,7 @@ export class Mutex extends Identifiable(Tagged(SharedStructBase, Tag.Mutex)) {
     }
 
     static [Symbol.hasInstance](value: unknown): value is Mutex {
-        return typeof value === "object" && value !== null && // eslint-disable-line no-null/no-null -- necessary for comparison
-            hasProperty(value, "__tag__") &&
-            (value as TaggedStruct<Tag>).__tag__ === Tag.Mutex;
+        return isTaggedStruct(value, Tag.Mutex);
     }
 }
 
@@ -135,19 +132,19 @@ class LockableMutex implements Lockable {
     }
 
     tryLock(): boolean {
-        Debug.assert(!this._ownsLock);
+        Debug.assert(!this._ownsLock, "cannot take a lock you aleady own.");
         this._ownsLock = tryLock(this._mutex, this);
         return this._ownsLock;
     }
 
     lock(): void {
-        Debug.assert(!this._ownsLock);
+        Debug.assert(!this._ownsLock, "cannot take a lock you aleady own.");
         lock(this._mutex, this);
         this._ownsLock = true;
     }
 
     unlock(): void {
-        Debug.assert(this._ownsLock);
+        Debug.assert(this._ownsLock, "cannot release a lock you do not own.");
         unlock(this._mutex, this);
         this._ownsLock = false;
     }
