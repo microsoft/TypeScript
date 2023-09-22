@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/deeplyNestedMappedTypes.ts] ////
+
+=== deeplyNestedMappedTypes.ts ===
+// Simplified repro from #55535
+
+type Id<T> = { [K in keyof T]: Id<T[K]> };
+>Id : Id<T>
+
+type Foo1 = Id<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
+>Foo1 : Id<{ x: {    y: {        z: {            a: {                b: {                    c: number;                };            };        };    };}; }>
+>x : { y: {    z: {        a: {            b: {                c: number;            };        };    };}; }
+>y : { z: {    a: {        b: {            c: number;        };    };}; }
+>z : { a: {    b: {        c: number;    };}; }
+>a : { b: {    c: number;}; }
+>b : { c: number; }
+>c : number
+
+type Foo2 = Id<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
+>Foo2 : Id<{ x: {    y: {        z: {            a: {                b: {                    c: string;                };            };        };    };}; }>
+>x : { y: {    z: {        a: {            b: {                c: string;            };        };    };}; }
+>y : { z: {    a: {        b: {            c: string;        };    };}; }
+>z : { a: {    b: {        c: string;    };}; }
+>a : { b: {    c: string;}; }
+>b : { c: string; }
+>c : string
+
+declare const foo1: Foo1;
+>foo1 : Id<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+
+const foo2: Foo2 = foo1;  // Error expected
+>foo2 : Id<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>
+>foo1 : Id<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+
+type Id2<T> = { [K in keyof T]: Id2<Id2<T[K]>> };
+>Id2 : Id2<T>
+
+type Foo3 = Id2<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
+>Foo3 : Id2<{ x: {    y: {        z: {            a: {                b: {                    c: number;                };            };        };    };}; }>
+>x : { y: {    z: {        a: {            b: {                c: number;            };        };    };}; }
+>y : { z: {    a: {        b: {            c: number;        };    };}; }
+>z : { a: {    b: {        c: number;    };}; }
+>a : { b: {    c: number;}; }
+>b : { c: number; }
+>c : number
+
+type Foo4 = Id2<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
+>Foo4 : Id2<{ x: {    y: {        z: {            a: {                b: {                    c: string;                };            };        };    };}; }>
+>x : { y: {    z: {        a: {            b: {                c: string;            };        };    };}; }
+>y : { z: {    a: {        b: {            c: string;        };    };}; }
+>z : { a: {    b: {        c: string;    };}; }
+>a : { b: {    c: string;}; }
+>b : { c: string; }
+>c : string
+
+declare const foo3: Foo3;
+>foo3 : Id2<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+
+const foo4: Foo4 = foo3;  // Error expected
+>foo4 : Id2<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>
+>foo3 : Id2<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+
+// Repro from issue linked in #55535
+
+type RequiredDeep<T> = { [K in keyof T]-?: RequiredDeep<T[K]> };
+>RequiredDeep : RequiredDeep<T>
+
+type A = { a?: { b: { c: 1 | { d: 2000 } }}}
+>A : { a?: { b: {    c: 1 | {        d: 2000;    };}; } | undefined; }
+>a : { b: {    c: 1 | {        d: 2000;    };}; } | undefined
+>b : { c: 1 | {    d: 2000;}; }
+>c : { d: 2000; } | 1
+>d : 2000
+
+type B = { a?: { b: { c: { d: { e: { f: { g: 2 }}}}, x: 1000 }}}
+>B : { a?: { b: {    c: {        d: {            e: {                f: {                    g: 2;                };            };        };    };    x: 1000;}; } | undefined; }
+>a : { b: {    c: {        d: {            e: {                f: {                    g: 2;                };            };        };    };    x: 1000;}; } | undefined
+>b : { c: {    d: {        e: {            f: {                g: 2;            };        };    };}; x: 1000; }
+>c : { d: {    e: {        f: {            g: 2;        };    };}; }
+>d : { e: {    f: {        g: 2;    };}; }
+>e : { f: {    g: 2;}; }
+>f : { g: 2; }
+>g : 2
+>x : 1000
+
+type C = RequiredDeep<A>;
+>C : RequiredDeep<A>
+
+type D = RequiredDeep<B>;
+>D : RequiredDeep<B>
+
+type Test1 = [C, D] extends [D, C] ? true : false;  // false
+>Test1 : false
+>true : true
+>false : false
+
+type Test2 = C extends D ? true : false;  // false
+>Test2 : false
+>true : true
+>false : false
+
+type Test3 = D extends C ? true : false;  // false
+>Test3 : false
+>true : true
+>false : false
+
+// Simplified repro from #54246
+
+// Except for the final non-recursive Record<K, V>, object types produced by NestedRecord all have the same symbol
+// and thus are considered deeply nested after three levels of nesting. Ideally we'd detect that recursion in this
+// type always terminates, but we're unaware of a general algorithm that accomplishes this.
+
+type NestedRecord<K extends string, V> = K extends `${infer K0}.${infer KR}` ? { [P in K0]: NestedRecord<KR, V> } : Record<K, V>;
+>NestedRecord : NestedRecord<K, V>
+
+type Bar1 = NestedRecord<"x.y.z.a.b.c", number>;
+>Bar1 : { x: { y: { z: { a: { b: Record<"c", number>; }; }; }; }; }
+
+type Bar2 = NestedRecord<"x.y.z.a.b.c", string>;
+>Bar2 : { x: { y: { z: { a: { b: Record<"c", string>; }; }; }; }; }
+
+declare const bar1: Bar1;
+>bar1 : { x: { y: { z: { a: { b: Record<"c", number>; }; }; }; }; }
+
+const bar2: Bar2 = bar1;  // Error expected
+>bar2 : { x: { y: { z: { a: { b: Record<"c", string>; }; }; }; }; }
+>bar1 : { x: { y: { z: { a: { b: Record<"c", number>; }; }; }; }; }
+

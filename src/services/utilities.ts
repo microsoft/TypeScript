@@ -226,6 +226,7 @@ import {
     isRequireVariableStatement,
     isRightSideOfQualifiedNameOrPropertyAccess,
     isRootedDiskPath,
+    isSatisfiesExpression,
     isSetAccessorDeclaration,
     isSourceFile,
     isSourceFileJS,
@@ -330,7 +331,6 @@ import {
     SpreadElement,
     stableSort,
     startsWith,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     stringToToken,
@@ -3356,7 +3356,7 @@ function indexInTextChange(change: string, name: string): number {
 export function needsParentheses(expression: Expression): boolean {
     return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken
         || isObjectLiteralExpression(expression)
-        || isAsExpression(expression) && isObjectLiteralExpression(expression.expression);
+        || (isAsExpression(expression) || isSatisfiesExpression(expression)) && isObjectLiteralExpression(expression.expression);
 }
 
 /** @internal */
@@ -3854,7 +3854,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
     }
 
     function getNodeModulesPackageNameFromFileName(importedFileName: string, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost): string | undefined {
-        if (!stringContains(importedFileName, "node_modules")) {
+        if (!importedFileName.includes("node_modules")) {
             return undefined;
         }
         const specifier = moduleSpecifiers.getNodeModulesPackageName(

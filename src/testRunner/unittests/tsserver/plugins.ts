@@ -218,3 +218,72 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
         baselineTsserverLogs("plugins", "getSupportedCodeFixes can be proxied", session);
     });
 });
+
+describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
+    it("new files with non ts extensions and wildcard matching", () => {
+        const aTs: File = {
+            path: "/user/username/projects/myproject/a.ts",
+            content: `export const a = 10;`,
+        };
+        const bVue: File = {
+            path: "/user/username/projects/myproject/b.vue",
+            content: "bVue file",
+        };
+        const config: File = {
+            path: "/user/username/projects/myproject/tsconfig.json",
+            content: JSON.stringify(
+                {
+                    compilerOptions: { composite: true },
+                    include: ["*.ts", "*.vue"],
+                },
+                undefined,
+                " ",
+            ),
+        };
+        const host = createServerHost([aTs, bVue, config, libFile]);
+        host.require = () => {
+            return {
+                module: () => ({
+                    create(info: ts.server.PluginCreateInfo) {
+                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
+                        info.languageServiceHost.getScriptKind = fileName =>
+                            ts.fileExtensionIs(fileName, ".vue") ?
+                                ts.ScriptKind.TS :
+                                originalScriptKind(fileName);
+                        const originalGetScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(info.languageServiceHost);
+                        info.languageServiceHost.getScriptSnapshot = fileName =>
+                            ts.fileExtensionIs(fileName, ".vue") ?
+                                ts.ScriptSnapshot.fromString(`export const y = "${info.languageServiceHost.readFile(fileName)}";`) :
+                                originalGetScriptSnapshot(fileName);
+                        return proxy;
+                    },
+                    getExternalFiles: (project: ts.server.Project) => {
+                        if (project.projectKind !== ts.server.ProjectKind.Configured) return [];
+                        const configFile = project.getProjectName();
+                        const config = ts.readJsonConfigFile(configFile, project.readFile.bind(project));
+                        const parseHost: ts.ParseConfigHost = {
+                            useCaseSensitiveFileNames: project.useCaseSensitiveFileNames(),
+                            fileExists: project.fileExists.bind(project),
+                            readFile: project.readFile.bind(project),
+                            readDirectory: (...args) => {
+                                args[1] = [".vue"];
+                                return project.readDirectory(...args);
+                            },
+                        };
+                        const parsed = ts.parseJsonSourceFileConfigFileContent(config, parseHost, project.getCurrentDirectory());
+                        return parsed.fileNames;
+                    },
+                }),
+                error: undefined,
+            };
+        };
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host), globalPlugins: ["myplugin"] });
+        openFilesForSession([aTs], session);
+
+        host.writeFile("/user/username/projects/myproject/c.vue", "cVue file");
+        host.runQueuedTimeoutCallbacks();
+
+        baselineTsserverLogs("plugins", "new files with non ts extensions with wildcard matching", session);
+    });
+});
