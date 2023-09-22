@@ -7564,7 +7564,7 @@
         "category": "Message",
         "code": 95153
     },
-    "Can only convert string concatenation": {
+    "Can only convert string concatenations and string literals": {
         "category": "Message",
         "code": 95154
     },

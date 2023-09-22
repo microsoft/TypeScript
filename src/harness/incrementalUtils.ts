@@ -415,7 +415,7 @@ export function verifyResolutionCache(
 function verifyProgram(service: ts.server.ProjectService, project: ts.server.Project) {
     if (service.serverMode === ts.LanguageServiceMode.Syntactic) return;
     const options = project.getCompilerOptions();
-    const compilerHost = ts.createCompilerHostWorker(options, /*setParentNodes*/ undefined, /*skipNonSemanticJSDocParsing*/ undefined, service.host);
+    const compilerHost = ts.createCompilerHostWorker(options, /*setParentNodes*/ undefined, service.host);
     compilerHost.useSourceOfProjectReferenceRedirect = project.useSourceOfProjectReferenceRedirect?.bind(project);
     compilerHost.getCurrentDirectory = project.getCurrentDirectory.bind(project);
     const getDefaultLibLocation = compilerHost.getDefaultLibLocation!;

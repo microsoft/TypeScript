@@ -326,7 +326,7 @@ function verifyProgramStructureAndResolutionCache(
     symlinksNotReflected?: readonly string[],
 ) {
     const options = program.getCompilerOptions();
-    const compilerHost = ts.createCompilerHostWorker(options, /*setParentNodes*/ undefined, /*skipNonSemanticJSDocParsing*/ undefined, sys);
+    const compilerHost = ts.createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys);
     compilerHost.trace = ts.noop;
     compilerHost.writeFile = ts.notImplemented;
     compilerHost.useSourceOfProjectReferenceRedirect = useSourceOfProjectReferenceRedirect;
