@@ -428,7 +428,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return serializedConstituent;
             }
 
-            // If there exists union that is not `void 0` expression, check if the the common type is identifier.
+            // If there exists union that is not `void 0` expression, check if the common type is identifier.
             // anything more complex and we will just default to Object
             if (serializedType) {
                 // Different types

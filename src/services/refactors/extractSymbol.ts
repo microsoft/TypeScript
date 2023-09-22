@@ -461,7 +461,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
     searched span to cover a real node range making it more likely that something useful will show up. */
     const adjustedSpan = startToken && endToken && invoked ? getAdjustedSpanFromNodes(startToken, endToken, sourceFile) : span;
 
-    // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
+    // Walk up starting from the start position until we find a non-SourceFile node that subsumes the selected span.
     // This may fail (e.g. you select two statements in the root of a source file)
     const start = cursorRequest ? getExtractableParent(startToken) : getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
 

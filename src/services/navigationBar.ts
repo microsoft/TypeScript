@@ -635,7 +635,7 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
         getAssignmentDeclarationKind(a.node) :
         AssignmentDeclarationKind.None;
 
-    // We treat this as an es5 class and merge the nodes in in one of several cases
+    // We treat this as an es5 class and merge the nodes in one of several cases
     if (
         (isEs5ClassMember[bAssignmentDeclarationKind] && isEs5ClassMember[aAssignmentDeclarationKind]) // merge two class elements
         || (isPossibleConstructor(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // ctor function & member
@@ -756,7 +756,7 @@ function isSynthesized(node: Node) {
     return !!(node.flags & NodeFlags.Synthesized);
 }
 
-// We want to merge own children like `I` in in `module A { interface I {} } module A { interface I {} }`
+// We want to merge own children like `I` in `module A { interface I {} } module A { interface I {} }`
 // We don't want to merge unrelated children like `m` in `const o = { a: { m() {} }, b: { m() {} } };`
 function isOwnChild(n: Node, parent: NavigationBarNode): boolean {
     const par = isModuleBlock(n.parent) ? n.parent.parent : n.parent;

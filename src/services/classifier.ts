@@ -180,7 +180,7 @@ export function createClassifier(): Classifier {
                     break;
                 case SyntaxKind.GreaterThanToken:
                     if (angleBracketStack > 0) {
-                        // If we think we're currently in something generic, then mark that that
+                        // If we think we're currently in something generic, then mark that
                         // generic entity is complete.
                         angleBracketStack--;
                     }

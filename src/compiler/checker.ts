@@ -5491,7 +5491,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     /**
      * Get the merged symbol for a node. If you know the node is a `Declaration`, it is faster and more type safe to
-     * use use `getSymbolOfDeclaration` instead.
+     * use `getSymbolOfDeclaration` instead.
      */
     function getSymbolOfNode(node: Node): Symbol | undefined {
         return canHaveSymbol(node) ? getSymbolOfDeclaration(node) : undefined;
@@ -9245,7 +9245,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // }
                     // This is needed because in JS, statements like `const x = require("./f")` support both type and value lookup, even if they're
                     // normally just value lookup (so it functions kinda like an alias even when it's not an alias)
-                    // _Usually_, we'll simply print the top-level as an alias instead of a `var` in such situations, however is is theoretically
+                    // _Usually_, we'll simply print the top-level as an alias instead of a `var` in such situations, however is theoretically
                     // possible to encounter a situation where a type has members from both the current file and other files - in those situations,
                     // emit akin to the above would be needed.
 
@@ -9768,7 +9768,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !length(getIndexInfosOfType(typeToSerialize)) &&
                     !isClassInstanceSide(typeToSerialize) && // While a class instance is potentially representable as a NS, prefer printing a reference to the instance type and serializing the class
                     !!(length(filter(getPropertiesOfType(typeToSerialize), isNamespaceMember)) || length(getSignaturesOfType(typeToSerialize, SignatureKind.Call))) &&
-                    !length(getSignaturesOfType(typeToSerialize, SignatureKind.Construct)) && // TODO: could probably serialize as function + ns + class, now that that's OK
+                    !length(getSignaturesOfType(typeToSerialize, SignatureKind.Construct)) && // TODO: could probably serialize as function + ns + class, now that's OK
                     !getDeclarationWithTypeAnnotation(hostSymbol, enclosingDeclaration) &&
                     !(typeToSerialize.symbol && some(typeToSerialize.symbol.declarations, d => getSourceFileOfNode(d) !== ctxSrc)) &&
                     !some(getPropertiesOfType(typeToSerialize), p => isLateBoundName(p.escapedName)) &&
@@ -21595,7 +21595,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else if (variance === VarianceFlags.Bivariant) {
                         // In the bivariant case we first compare contravariantly without reporting
                         // errors. Then, if that doesn't succeed, we compare covariantly with error
-                        // reporting. Thus, error elaboration will be based on the the covariant check,
+                        // reporting. Thus, error elaboration will be based on the covariant check,
                         // which is generally easier to reason about.
                         related = isRelatedTo(t, s, RecursionFlags.Both, /*reportErrors*/ false);
                         if (!related) {
@@ -24143,7 +24143,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * If the the provided object literal is subject to the excess properties check,
+     * If the provided object literal is subject to the excess properties check,
      * create a new that is exempt. Recursively mark object literal members as exempt.
      * Leave signatures alone since they are not subject to the check.
      */
@@ -28098,7 +28098,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If a discriminant property is available, use that to reduce the type.
                 const discriminant = keyPropertyName && getTypeOfPropertyOfType(c, keyPropertyName);
                 const matching = discriminant && getConstituentTypeForKeyType(type as UnionType, discriminant);
-                // For each constituent t in the current type, if t and and c are directly related, pick the most
+                // For each constituent t in the current type, if t and c are directly related, pick the most
                 // specific of the two. When t and c are related in both directions, we prefer c for type predicates
                 // because that is the asserted type, but t for `instanceof` because generics aren't reflected in
                 // prototype object types.

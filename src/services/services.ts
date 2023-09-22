@@ -2261,7 +2261,7 @@ export function createLanguageService(
         let nodeForStartPos = node;
         while (true) {
             if (isRightSideOfPropertyAccess(nodeForStartPos) || isRightSideOfQualifiedName(nodeForStartPos)) {
-                // If on the span is in right side of the the property or qualified name, return the span from the qualified name pos to end of this node
+                // If on the span is in right side of the property or qualified name, return the span from the qualified name pos to end of this node
                 nodeForStartPos = nodeForStartPos.parent;
             }
             else if (isNameOfModuleDeclaration(nodeForStartPos)) {

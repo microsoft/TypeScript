@@ -3205,7 +3205,7 @@ namespace Parser {
 
                 // case ParsingContext.TypeParameters:
                 // This would probably be safe to reuse.  There is no speculative parsing with
-                // type parameters.  Note that that's because type *parameters* only occur in
+                // type parameters.  Note that's because type *parameters* only occur in
                 // unambiguous *type* contexts.  While type *arguments* occur in very ambiguous
                 // *expression* contexts.
 
@@ -7897,7 +7897,7 @@ namespace Parser {
 
     function parseDecoratorExpression() {
         if (inAwaitContext() && token() === SyntaxKind.AwaitKeyword) {
-            // `@await` is is disallowed in an [Await] context, but can cause parsing to go off the rails
+            // `@await` is disallowed in an [Await] context, but can cause parsing to go off the rails
             // This simply parses the missing identifier and moves on.
             const pos = getNodePos();
             const awaitExpression = parseIdentifier(Diagnostics.Expression_expected);

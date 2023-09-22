@@ -4580,7 +4580,7 @@
       </Item>
       <Item ItemId=";Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_d_2809" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.]]></Val>
+          <Val><![CDATA[Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Očekávala se deklarace nebo příkaz. Tento znak = následuje blok příkazů, takže pokud jste chtěli napsat destrukturující přiřazení, možná bude nutné uzavřít celé přiřazení do závorek.]]></Val>
           </Tgt>

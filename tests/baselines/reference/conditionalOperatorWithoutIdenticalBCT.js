@@ -14,7 +14,7 @@ var b: B;
 true ? a : b;
 var result1 = true ? a : b;
 
-//Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
+//Be contextually typed and bct is not identical, results in errors that union type is not assignable to target
 var result2: A = true ? a : b;
 var result3: B = true ? a : b;
 var result31: A | B = true ? a : b;
@@ -70,7 +70,7 @@ var b;
 // No errors anymore, uses union types
 true ? a : b;
 var result1 = true ? a : b;
-//Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
+//Be contextually typed and bct is not identical, results in errors that union type is not assignable to target
 var result2 = true ? a : b;
 var result3 = true ? a : b;
 var result31 = true ? a : b;

@@ -10,7 +10,7 @@
 //// let [|A|]: [|A|] = 1;
 //// export { [|A|] as [|B|] };
 
-// a little strange, but the the type/value namespaces work too
+// a little strange, but the type/value namespaces work too
 
 // @Filename: /3.ts
 //// type [|A|] = 1;

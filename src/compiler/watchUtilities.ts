@@ -592,7 +592,7 @@ export function isIgnoredFileFromWildCardWatching({
     fileOrDirectoryPath = newPath;
     if (fileOrDirectoryPath === watchedDirPath) return false;
 
-    // If the the added or created file or directory is not supported file name, ignore the file
+    // If the added or created file or directory is not supported file name, ignore the file
     if (
         hasExtension(fileOrDirectoryPath) && !(
             isSupportedSourceFileName(fileOrDirectory, options, extraFileExtensions) ||

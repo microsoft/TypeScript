@@ -39,7 +39,7 @@ describe("unittests:: tsserver:: reload", () => {
         const snap1 = projectService.getScriptInfo(f1.path)!.getSnapshot();
         session.logger.log(`Content of ${f1.path}:: ${ts.getSnapshotText(snap1)}`);
 
-        // reload from original file file
+        // reload from original file
         session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
             command: ts.server.protocol.CommandTypes.Reload,
             arguments: { file: f1.path, tmpfile: undefined! },

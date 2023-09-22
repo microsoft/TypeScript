@@ -39,7 +39,7 @@ function f3() {
     const y = x;  // string | number | null
 }
 
-// No CFA for 'let' with with type annotation
+// No CFA for 'let' with type annotation
 function f4() {
     let x: any;
     if (cond) {
@@ -87,7 +87,7 @@ function f7() {
     const y = x;  // string | number | null
 }
 
-// No CFA for 'var' with with type annotation
+// No CFA for 'var' with type annotation
 function f8() {
     var x: any;
     if (cond) {
@@ -163,7 +163,7 @@ function f3() {
     }
     var y = x; // string | number | null
 }
-// No CFA for 'let' with with type annotation
+// No CFA for 'let' with type annotation
 function f4() {
     var x;
     if (cond) {
@@ -207,7 +207,7 @@ function f7() {
     }
     var y = x; // string | number | null
 }
-// No CFA for 'var' with with type annotation
+// No CFA for 'var' with type annotation
 function f8() {
     var x;
     if (cond) {

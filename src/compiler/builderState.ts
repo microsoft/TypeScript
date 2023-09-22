@@ -554,7 +554,7 @@ export namespace BuilderState {
     }
 
     /**
-     * Gets the files referenced by the the file path
+     * Gets the files referenced by the file path
      */
     export function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path) {
         const keys = state.referencedMap!.getKeys(referencedFilePath);
