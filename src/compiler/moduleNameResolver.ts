@@ -609,7 +609,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         affectingLocations: initializeResolutionField(affectingLocations),
         resolutionDiagnostics: initializeResolutionField(diagnostics),
     };
-    if (containingDirectory) {
+    if (containingDirectory !== undefined) {
         cache?.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
         if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
             cache?.getOrCreateCacheForNonRelativeName(typeReferenceDirectiveName, resolutionMode, redirectedReference).set(containingDirectory, result);
@@ -823,6 +823,7 @@ export interface ModeAwareCache<T> {
  * This assumes that any module id will have the same resolution for sibling files located in the same folder.
  */
 export interface PerDirectoryResolutionCache<T> {
+    /** @internal */ directoryToModuleNameMap: CacheWithRedirects<Path, ModeAwareCache<T>>;
     getFromDirectoryCache(name: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
     getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): ModeAwareCache<T>;
     clear(): void;
@@ -834,6 +835,7 @@ export interface PerDirectoryResolutionCache<T> {
 }
 
 export interface NonRelativeNameResolutionCache<T> {
+    /** @internal */ moduleNameToDirectoryMap: CacheWithRedirects<ModeAwareCacheKey, PerNonRelativeNameCache<T>>;
     getFromNonRelativeNameCache(nonRelativeName: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
     getOrCreateCacheForNonRelativeName(nonRelativeName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerNonRelativeNameCache<T>;
     clear(): void;
@@ -901,6 +903,13 @@ export interface CacheWithRedirects<K, V> {
     getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V>;
     update(newOptions: CompilerOptions): void;
     clear(): void;
+    getState(): {
+        ownOptions: CompilerOptions | undefined;
+        optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>;
+        redirectsKeyToMap: Map<RedirectsCacheKey, Map<K, V>>;
+        ownMap: Map<K, V>;
+        redirectsMap: Map<CompilerOptions, Map<K, V>>;
+    };
 }
 
 /** @internal */
@@ -917,6 +926,7 @@ export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | und
         getOrCreateMapOfCacheRedirects,
         update,
         clear,
+        getState: () => ({ ownOptions, optionsToRedirectsKey, redirectsKeyToMap, ownMap, redirectsMap }),
     };
 
     function getMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> | undefined {
@@ -1019,6 +1029,7 @@ function createPerDirectoryResolutionCache<T>(
 ): PerDirectoryResolutionCache<T> {
     const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(options, optionsToRedirectsKey);
     return {
+        directoryToModuleNameMap,
         getFromDirectoryCache,
         getOrCreateCacheForDirectory,
         clear,
@@ -1107,6 +1118,7 @@ function createNonRelativeNameResolutionCache<T>(
 ): NonRelativeNameResolutionCache<T> {
     const moduleNameToDirectoryMap = createCacheWithRedirects<ModeAwareCacheKey, PerNonRelativeNameCache<T>>(options, optionsToRedirectsKey);
     return {
+        moduleNameToDirectoryMap,
         getFromNonRelativeNameCache,
         getOrCreateCacheForNonRelativeName,
         clear,

@@ -17,6 +17,7 @@ import {
     ProgramBuildInfo,
     SymlinkCache,
     ThisContainer,
+    TypeReferenceDirectiveResolutionCache,
 } from "./_namespaces/ts";
 
 // branded string type used to store absolute, normalized and canonicalized paths
@@ -4623,6 +4624,12 @@ export interface LibResolution<T extends ResolvedModuleWithFailedLookupLocations
     resolution: T;
     actual: string;
 }
+
+/** @internal */
+export interface ResolutionStorageCaches {
+    moduleResolutionCache?: ModuleResolutionCache;
+    typeReferenceDirectiveResolutionCache?: TypeReferenceDirectiveResolutionCache;
+}
 export interface Program extends ScriptReferenceHost {
     getCurrentDirectory(): string;
     /**
@@ -4644,6 +4651,8 @@ export interface Program extends ScriptReferenceHost {
     getMissingFilePaths(): readonly Path[];
     /** @internal */
     getModuleResolutionCache(): ModuleResolutionCache | undefined;
+    /** @internal */
+    getResolutionStorageCaches(): ResolutionStorageCaches | undefined;
     /** @internal */
     getFilesByNameMap(): Map<string, SourceFile | false | undefined>;
 
@@ -7770,6 +7779,8 @@ export interface CompilerHost extends ModuleResolutionHost {
         containingSourceFile: SourceFile | undefined,
         reusedNames: readonly T[] | undefined,
     ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
+    /** @internal */
+    getResolutionStorageCaches?(): ResolutionStorageCaches | undefined;
     /** @internal */
     resolveLibrary?(
         libraryName: string,

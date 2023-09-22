@@ -24,6 +24,7 @@ import {
     Program,
     ProjectReference,
     ResolutionMode,
+    ResolutionStorageCaches,
     ResolvedModule,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
@@ -398,6 +399,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
     /* Lets the Program from a AutoImportProviderProject use its host project's ModuleResolutionCache */
     /** @internal */ getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+    /** @internal */ getResolutionStorageCaches?(): ResolutionStorageCaches | undefined;
 
     /*
      * Required for full import and type reference completions.

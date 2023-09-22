@@ -258,6 +258,7 @@ import {
     Path,
     pathIsAbsolute,
     pathIsRelative,
+    PerDirectoryResolutionCache,
     Program,
     ProgramHost,
     ProjectReference,
@@ -271,6 +272,7 @@ import {
     removeSuffix,
     resolutionExtensionIsTSOrJson,
     ResolutionMode,
+    ResolutionStorageCaches,
     ResolutionWithFailedLookupLocations,
     resolveConfigFileProjectName,
     ResolvedConfigFileName,
@@ -1558,6 +1560,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const hasEmitBlockingDiagnostics = new Map<string, boolean>();
     let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression | false | undefined;
 
+    let resolutionStorageCaches: ResolutionStorageCaches | undefined = host.getResolutionStorageCaches?.();
     let moduleResolutionCache: ModuleResolutionCache | undefined;
     let actualResolveModuleNamesWorker: (
         moduleNames: readonly StringLiteralLike[],
@@ -1604,6 +1607,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 moduleResolutionCache,
                 createModuleResolutionLoader,
             );
+        (resolutionStorageCaches ??= {}).moduleResolutionCache = moduleResolutionCache;
     }
 
     let actualResolveTypeReferenceDirectiveNamesWorker: <T extends FileReference | string>(
@@ -1646,6 +1650,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 typeReferenceDirectiveResolutionCache,
                 createTypeReferenceResolutionLoader,
             );
+        (resolutionStorageCaches ??= {}).typeReferenceDirectiveResolutionCache = typeReferenceDirectiveResolutionCache;
     }
 
     const hasInvalidatedLibResolutions = host.hasInvalidatedLibResolutions || returnFalse;
@@ -1886,6 +1891,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         usesUriStyleNodeCoreModules,
         resolvedModules,
         resolvedTypeReferenceDirectiveNames,
+        getResolutionStorageCaches: () => resolutionStorageCaches,
         resolvedLibReferences,
         getResolvedModule,
         getResolvedTypeReferenceDirective,
@@ -1941,34 +1947,121 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     return program;
 
     function getResolvedModule(file: SourceFile, moduleName: string, mode: ResolutionMode) {
-        return resolvedModules?.get(file.path)?.get(moduleName, mode);
+        return getResolution(
+            file,
+            moduleName,
+            mode,
+            resolvedModules,
+            resolutionStorageCaches?.moduleResolutionCache,
+            getModuleNames,
+            moduleResolutionNameAndModeGetter,
+        );
     }
 
     function getResolvedTypeReferenceDirective(file: SourceFile, typeDirectiveName: string, mode: ResolutionMode) {
-        return resolvedTypeReferenceDirectiveNames?.get(file.path)?.get(typeDirectiveName, mode);
+        return getResolution(
+            file,
+            typeDirectiveName,
+            mode,
+            resolvedTypeReferenceDirectiveNames,
+            resolutionStorageCaches?.typeReferenceDirectiveResolutionCache,
+            file => file.typeReferenceDirectives,
+            typeReferenceResolutionNameAndModeGetter,
+        );
+    }
+
+    function getResolution<T, Entry>(
+        file: SourceFile,
+        name: string,
+        mode: ResolutionMode,
+        perFileCache: Map<Path, ModeAwareCache<T>> | undefined,
+        resolutionCache: PerDirectoryResolutionCache<T> | undefined,
+        getEntries: (file: SourceFile) => readonly Entry[],
+        nameAndMode: ResolutionNameAndModeGetter<Entry, SourceFile>,
+    ) {
+        const result = perFileCache?.get(file.path)?.get(name, mode);
+        if (resolutionCache) {
+            const fileFromProgram = getSourceFileByPath(file.path);
+            if (
+                !fileFromProgram ||
+                fileFromProgram.path !== file.path ||
+                // There can be case where the resolution was resolved in directory with "mode" but not in file.
+                !forEach(getEntries(fileFromProgram), entry =>
+                    nameAndMode.getName(entry) === name &&
+                    nameAndMode.getMode(entry, fileFromProgram) === mode)
+            ) {
+                Debug.assert(result === undefined);
+                return undefined;
+            }
+            const containingDirectory = getDirectoryPath(file.path);
+            const redirectedReference = getRedirectReferenceForResolution(file);
+            // May be we need to update ownOptions
+            const { ownOptions } = resolutionCache.directoryToModuleNameMap.getState();
+            if (ownOptions) resolutionCache.directoryToModuleNameMap.update(options);
+            const fromCache = resolutionCache.getFromDirectoryCache(name, mode, containingDirectory, redirectedReference);
+            Debug.assert(
+                result === fromCache ||
+                    // Currently resolutionCache in tsserver or tsc-watch doesnt retain per directory resolutions through program update
+                    // So cache might have different result than actual resolution - which will be fixed as part of sharing resolutions across projects
+                    JSON.stringify((result as ResolvedModuleWithFailedLookupLocations)?.resolvedModule) === JSON.stringify((fromCache as ResolvedModuleWithFailedLookupLocations)?.resolvedModule) ||
+                    JSON.stringify((result as ResolvedTypeReferenceDirectiveWithFailedLookupLocations)?.resolvedTypeReferenceDirective) === JSON.stringify((fromCache as ResolvedTypeReferenceDirectiveWithFailedLookupLocations)?.resolvedTypeReferenceDirective),
+            );
+            if (ownOptions) resolutionCache.directoryToModuleNameMap.update(ownOptions);
+            return fromCache;
+        }
+        return result;
     }
 
     function forEachResolvedModule(
         callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
         file?: SourceFile,
     ) {
-        forEachResolution(resolvedModules, callback, file);
+        forEachResolution(
+            callback,
+            file,
+            resolvedModules,
+            resolutionStorageCaches?.moduleResolutionCache,
+            getModuleNames,
+            moduleResolutionNameAndModeGetter,
+        );
     }
 
     function forEachResolvedTypeReferenceDirective(
         callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
         file?: SourceFile,
     ): void {
-        forEachResolution(resolvedTypeReferenceDirectiveNames, callback, file);
+        forEachResolution(
+            callback,
+            file,
+            resolvedTypeReferenceDirectiveNames,
+            resolutionStorageCaches?.typeReferenceDirectiveResolutionCache,
+            file => file.typeReferenceDirectives,
+            typeReferenceResolutionNameAndModeGetter,
+        );
     }
 
-    function forEachResolution<T>(
-        resolutionCache: Map<Path, ModeAwareCache<T>> | undefined,
+    function forEachResolution<T, Entry>(
         callback: (resolution: T, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
         file: SourceFile | undefined,
+        perFileCache: Map<Path, ModeAwareCache<T>> | undefined,
+        resolutionCache: PerDirectoryResolutionCache<T> | undefined,
+        getEntries: (file: SourceFile) => readonly Entry[],
+        nameAndMode: ResolutionNameAndModeGetter<Entry, SourceFile>,
     ) {
-        if (file) resolutionCache?.get(file.path)?.forEach((resolution, name, mode) => callback(resolution, name, mode, file.path));
-        else resolutionCache?.forEach((resolutions, filePath) => resolutions.forEach((resolution, name, mode) => callback(resolution, name, mode, filePath)));
+        if (file) {
+            perFileCache?.get(file.path)?.forEach((resolution, name, mode) => {
+                getResolution(file, name, mode, perFileCache, resolutionCache, getEntries, nameAndMode);
+                callback(resolution, name, mode, file.path);
+            });
+        }
+        else {
+            perFileCache?.forEach((resolutions, filePath) =>
+                resolutions.forEach((resolution, name, mode) => {
+                    getResolution(getSourceFileByPath(filePath)!, name, mode, perFileCache, resolutionCache, getEntries, nameAndMode);
+                    callback(resolution, name, mode, filePath);
+                })
+            );
+        }
     }
 
     function getPackagesMap() {
@@ -2594,6 +2687,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         usesUriStyleNodeCoreModules = oldProgram.usesUriStyleNodeCoreModules;
         resolvedModules = oldProgram.resolvedModules;
         resolvedTypeReferenceDirectiveNames = oldProgram.resolvedTypeReferenceDirectiveNames;
+        resolutionStorageCaches = oldProgram.getResolutionStorageCaches();
         resolvedLibReferences = oldProgram.resolvedLibReferences;
         packageMap = oldProgram.getCurrentPackagesMap();
 
@@ -3845,13 +3939,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectives, file);
         const resolutionsInFile = createModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
         (resolvedTypeReferenceDirectiveNames ??= new Map()).set(file.path, resolutionsInFile);
+        const redirectedReference = getRedirectReferenceForResolution(file);
+        const resolutionsInCache = resolutionStorageCaches?.typeReferenceDirectiveResolutionCache?.getOrCreateCacheForDirectory(getDirectoryPath(file.path), redirectedReference);
         for (let index = 0; index < typeDirectives.length; index++) {
             const ref = file.typeReferenceDirectives[index];
             const resolvedTypeReferenceDirective = resolutions[index];
             // store resolved type directive on the file
             const fileName = toFileNameLowerCase(ref.fileName);
-            resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
-            const mode = ref.resolutionMode || file.impliedNodeFormat;
+            const mode = getModeForFileReference(ref, file.impliedNodeFormat);
+            resolutionsInFile.set(fileName, mode, resolvedTypeReferenceDirective);
+            // We have to set this resolution if say this was done as part of reusing program where not every resolution is re-valudated
+            if (resolutionsInCache && !resolutionsInCache.has(fileName, mode)) resolutionsInCache.set(fileName, mode, resolutions[index]);
             if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
                 (fileProcessingDiagnostics ??= []).push({
                     kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics,
@@ -4021,14 +4119,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolutions = resolvedModulesProcessing?.get(file.path) ||
                 resolveModuleNamesReusingOldState(moduleNames, file);
             Debug.assert(resolutions.length === moduleNames.length);
-            const optionsForFile = (useSourceOfProjectReferenceRedirect ? getRedirectReferenceForResolution(file)?.commandLine.options : undefined) || options;
+            const redirectedReference = getRedirectReferenceForResolution(file);
+            const optionsForFile = (useSourceOfProjectReferenceRedirect ? redirectedReference?.commandLine.options : undefined) || options;
             const resolutionsInFile = createModeAwareCache<ResolutionWithFailedLookupLocations>();
             (resolvedModules ??= new Map()).set(file.path, resolutionsInFile);
+            const resolutionsInCache = resolutionStorageCaches?.moduleResolutionCache?.getOrCreateCacheForDirectory(getDirectoryPath(file.path), redirectedReference);
             for (let index = 0; index < moduleNames.length; index++) {
                 const resolution = resolutions[index].resolvedModule;
                 const moduleName = moduleNames[index].text;
                 const mode = getModeForUsageLocation(file, moduleNames[index]);
                 resolutionsInFile.set(moduleName, mode, resolutions[index]);
+                // We have to set this resolution if say this was done as part of reusing program where not every resolution is re-valudated
+                if (resolutionsInCache && !resolutionsInCache.has(moduleName, mode)) resolutionsInCache.set(moduleName, mode, resolutions[index]);
                 addResolutionDiagnosticsFromResolutionOrCache(file, moduleName, resolutions[index], mode);
 
                 if (!resolution) {
