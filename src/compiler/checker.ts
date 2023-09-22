@@ -45134,9 +45134,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkImportAttributes(declaration: ImportDeclaration | ExportDeclaration) {
-        if (declaration.attributes && declaration.attributes.token === SyntaxKind.AssertKeyword) {
-            grammarErrorOnFirstToken(declaration.attributes, Diagnostics.The_assert_keyword_in_import_attributes_is_deprecated_and_has_been_replaced_by_the_with_keyword);
-        }
         const node = declaration.attributes;
         if (node) {
             const validForTypeAttributes = isExclusivelyTypeOnlyImportOrExport(declaration);

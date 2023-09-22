@@ -19,10 +19,6 @@
         "category": "Error",
         "code": 1007
     },
-    "The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.": {
-        "category": "Error",
-        "code": 1008
-    },
     "Trailing comma not allowed.": {
         "category": "Error",
         "code": 1009

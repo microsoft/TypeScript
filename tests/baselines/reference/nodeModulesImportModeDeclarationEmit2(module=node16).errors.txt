@@ -1,44 +1,26 @@
-/index.ts(1,45): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
-/index.ts(2,44): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 /index.ts(6,14): error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
-/index.ts(6,50): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 /index.ts(6,50): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
-/index.ts(7,49): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 /index.ts(7,49): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
-/index.ts(10,45): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
-/index.ts(11,44): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 
 
-==== /index.ts (9 errors) ====
+==== /index.ts (3 errors) ====
     import type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
-                                                ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
     import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
-                                               ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
     
     export interface LocalInterface extends RequireInterface, ImportInterface {}
     
     import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
                  ~~~~~~~~~~~~~~~~
 !!! error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
-                                                     ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
-                                                    ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     export interface Loc extends Req, Imp {}
     
     export type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
-                                                ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
     export type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
-                                               ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
     
 ==== /node_modules/pkg/package.json (0 errors) ====
     {
