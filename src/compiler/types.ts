@@ -4651,6 +4651,20 @@ export interface Program extends ScriptReferenceHost {
     resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
     /** @internal */
     resolvedTypeReferenceDirectiveNames: Map<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
+    /** @internal */
+    getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+    /** @internal */
+    getResolvedTypeReferenceDirective(f: SourceFile, typeDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+    /** @internal */
+    forEachResolvedModule(
+        callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file?: SourceFile,
+    ): void;
+    /** @internal */
+    forEachResolvedTypeReferenceDirective(
+        callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file?: SourceFile,
+    ): void;
 
     /**
      * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -4868,7 +4882,7 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 
-    resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
+    getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
 
     readonly redirectTargetsMap: RedirectTargetsMap;
 

@@ -19,18 +19,35 @@ import {
 } from "./helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: Reuse program structure:: General", () => {
-    function baselineCache<T>(baselines: string[], cacheType: string, cache: ts.ModeAwareCache<T> | undefined) {
-        baselines.push(`${cacheType}: ${!cache ? cache : ""}`);
-        cache?.forEach((resolved, key, mode) => baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(resolved, /*replacer*/ undefined, 2)}`));
+    function baselineCache<File, T>(
+        baselines: string[],
+        cacheType: string,
+        file: File,
+        forEach: (
+            callback: (resolvedModule: T, moduleName: string, mode: ts.ResolutionMode) => void,
+            file: File,
+        ) => void,
+    ) {
+        let addedHeader = false;
+        forEach(baselineResolution, file);
+
+        function baselineResolution(resolved: T, key: string, mode: ts.ResolutionMode) {
+            if (!addedHeader) {
+                addedHeader = true;
+                baselines.push(`${cacheType}:`);
+            }
+            baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(resolved, /*replacer*/ undefined, 2)}`);
+        }
     }
     function baselineProgram(baselines: string[], program: ts.Program, host?: TestCompilerHost) {
         baselines.push(`Program Reused:: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
         program.getSourceFiles().forEach(f => {
             baselines.push(`File: ${f.fileName}`, f.text);
-            baselineCache(baselines, "resolvedModules", program.resolvedModules?.get(f.path));
-            baselineCache(baselines, "resolvedTypeReferenceDirectiveNames", program.resolvedTypeReferenceDirectiveNames?.get(f.path));
+            baselineCache(baselines, "resolvedModules", f, program.forEachResolvedModule);
+            baselineCache(baselines, "resolvedTypeReferenceDirectiveNames", f, program.forEachResolvedTypeReferenceDirective);
             baselines.push("");
         });
+        baselineCache(baselines, "automaticTypeDirectiveResolutions", /*file*/ undefined, cb => program.getAutomaticTypeDirectiveResolutions().forEach(cb));
         host ??= (program as ProgramWithSourceTexts).host;
         host.getTrace().forEach(trace => baselines.push(Utils.sanitizeTraceResolutionLogEntry(trace)));
         host.clearTrace();
