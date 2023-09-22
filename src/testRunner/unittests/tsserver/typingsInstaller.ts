@@ -717,7 +717,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             logger,
             (installer, requestId, packageNames, cb) => {
                 let typingFiles: (File & { typings: string; })[] = [];
-                if (packageNames.indexOf(ts.server.typingsInstaller.typingsName("commander")) >= 0) {
+                if (packageNames.includes(ts.server.typingsInstaller.typingsName("commander"))) {
                     typingFiles = [commander, jquery, lodash, cordova];
                 }
                 else {
@@ -1243,7 +1243,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             logger,
             (installer, requestId, packageNames, cb) => {
                 let typingFiles: (File & { typings: string; })[] = [];
-                if (packageNames.indexOf(ts.server.typingsInstaller.typingsName("commander")) >= 0) {
+                if (packageNames.includes(ts.server.typingsInstaller.typingsName("commander"))) {
                     typingFiles = [commander];
                 }
                 else {
@@ -2312,7 +2312,9 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
     const foooPath = "/a/b/node_modules/fooo/index.d.ts";
     function verifyResolvedModuleOfFooo(project: ts.server.Project) {
         ts.server.updateProjectIfDirty(project);
-        const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo", /*mode*/ undefined)!.resolvedModule!;
+        const program = project.getLanguageService().getProgram()!;
+        const sourceFile = program.getSourceFileByPath(appPath)!;
+        const foooResolution = program.getResolvedModule(sourceFile, "fooo", /*mode*/ undefined)!.resolvedModule!;
         assert.equal(foooResolution.resolvedFileName, foooPath);
         return foooResolution;
     }

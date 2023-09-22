@@ -124,7 +124,6 @@ import {
     some,
     SourceFile,
     startsWith,
-    stringContains,
     SymbolDisplayPart,
     SyntaxKind,
     TextChange,
@@ -140,11 +139,14 @@ import {
     WithMetadata,
 } from "./_namespaces/ts";
 import {
+    CloseFileWatcherEvent,
     ConfigFileDiagEvent,
     ConfiguredProject,
     convertFormatOptions,
     convertScriptKindName,
     convertUserPreferences,
+    CreateDirectoryWatcherEvent,
+    CreateFileWatcherEvent,
     EmitResult,
     emptyArray,
     Errors,
@@ -950,6 +952,7 @@ export interface SessionOptions {
      * If falsy, all events are suppressed.
      */
     canUseEvents: boolean;
+    canUseWatchEvents?: boolean;
     eventHandler?: ProjectServiceEventHandler;
     /** Has no effect if eventHandler is also specified. */
     suppressDiagnosticEvents?: boolean;
@@ -1027,6 +1030,7 @@ export class Session<TMessage = string> implements EventSender {
             typesMapLocation: opts.typesMapLocation,
             serverMode: opts.serverMode,
             session: this,
+            canUseWatchEvents: opts.canUseWatchEvents,
             incrementalVerifier: opts.incrementalVerifier,
         };
         this.projectService = new ProjectService(settings);
@@ -1081,39 +1085,37 @@ export class Session<TMessage = string> implements EventSender {
     private defaultEventHandler(event: ProjectServiceEvent) {
         switch (event.eventName) {
             case ProjectsUpdatedInBackgroundEvent:
-                const { openFiles } = event.data;
-                this.projectsUpdatedInBackgroundEvent(openFiles);
+                this.projectsUpdatedInBackgroundEvent(event.data.openFiles);
                 break;
             case ProjectLoadingStartEvent:
-                const { project, reason } = event.data;
-                this.event<protocol.ProjectLoadingStartEventBody>(
-                    { projectName: project.getProjectName(), reason },
-                    ProjectLoadingStartEvent,
-                );
+                this.event<protocol.ProjectLoadingStartEventBody>({
+                    projectName: event.data.project.getProjectName(),
+                    reason: event.data.reason,
+                }, event.eventName);
                 break;
             case ProjectLoadingFinishEvent:
-                const { project: finishProject } = event.data;
-                this.event<protocol.ProjectLoadingFinishEventBody>({ projectName: finishProject.getProjectName() }, ProjectLoadingFinishEvent);
+                this.event<protocol.ProjectLoadingFinishEventBody>({
+                    projectName: event.data.project.getProjectName(),
+                }, event.eventName);
                 break;
             case LargeFileReferencedEvent:
-                const { file, fileSize, maxFileSize } = event.data;
-                this.event<protocol.LargeFileReferencedEventBody>({ file, fileSize, maxFileSize }, LargeFileReferencedEvent);
+            case CreateFileWatcherEvent:
+            case CreateDirectoryWatcherEvent:
+            case CloseFileWatcherEvent:
+                this.event(event.data, event.eventName);
                 break;
             case ConfigFileDiagEvent:
-                const { triggerFile, configFileName: configFile, diagnostics } = event.data;
-                const bakedDiags = map(diagnostics, diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true));
                 this.event<protocol.ConfigFileDiagnosticEventBody>({
-                    triggerFile,
-                    configFile,
-                    diagnostics: bakedDiags,
-                }, ConfigFileDiagEvent);
+                    triggerFile: event.data.triggerFile,
+                    configFile: event.data.configFileName,
+                    diagnostics: map(event.data.diagnostics, diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true)),
+                }, event.eventName);
                 break;
             case ProjectLanguageServiceStateEvent: {
-                const eventName: protocol.ProjectLanguageServiceStateEventName = ProjectLanguageServiceStateEvent;
                 this.event<protocol.ProjectLanguageServiceStateEventBody>({
                     projectName: event.data.project.getProjectName(),
                     languageServiceEnabled: event.data.languageServiceEnabled,
-                }, eventName);
+                }, event.eventName);
                 break;
             }
             case ProjectInfoTelemetryEvent: {
@@ -2614,6 +2616,7 @@ export class Session<TMessage = string> implements EventSender {
             const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
             return [{ project, navigateToItems: project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file) }];
         }
+        const preferences = this.getHostPreferences();
 
         const outputs: ProjectNavigateToItems[] = [];
 
@@ -2647,7 +2650,13 @@ export class Session<TMessage = string> implements EventSender {
 
         // Mutates `outputs`
         function addItemsForProject(project: Project) {
-            const projectItems = project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject());
+            const projectItems = project.getLanguageService().getNavigateToItems(
+                searchValue,
+                maxResultCount,
+                /*fileName*/ undefined,
+                /*excludeDts*/ project.isNonTsProject(),
+                /*excludeLibFiles*/ preferences.excludeLibrarySymbolsInNavTo,
+            );
             const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !getMappedLocationForProject(documentSpanLocation(item), project));
             if (unseenItems.length) {
                 outputs.push({ project, navigateToItems: unseenItems });
@@ -2960,7 +2969,7 @@ export class Session<TMessage = string> implements EventSender {
         }
 
         // No need to analyze lib.d.ts
-        const fileNamesInProject = fileNames!.filter(value => !stringContains(value, "lib.d.ts")); // TODO: GH#18217
+        const fileNamesInProject = fileNames!.filter(value => !value.includes("lib.d.ts")); // TODO: GH#18217
         if (fileNamesInProject.length === 0) {
             return;
         }

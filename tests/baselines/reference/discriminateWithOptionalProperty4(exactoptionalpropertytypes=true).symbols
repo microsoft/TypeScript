@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/discriminateWithOptionalProperty4.ts] ////
+
+=== discriminateWithOptionalProperty4.ts ===
+// https://github.com/microsoft/TypeScript/issues/55566
+
+export function main(a: string[] | undefined) {
+>main : Symbol(main, Decl(discriminateWithOptionalProperty4.ts, 0, 0))
+>a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 2, 21))
+
+  const z = a ? { a } : { b: ["there"] };
+>z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+>a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 2, 21))
+>a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+>b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 3, 25))
+
+  z.a //
+>z.a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17), Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+>z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+>a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17), Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+
+    ? z.a.toString()
+>z.a.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+>z.a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+>z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+>a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+>toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+
+    : z.b.toString();
+>z.b.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+>z.b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 3, 25))
+>z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+>b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 3, 25))
+>toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+
+  const zWorkAround:
+>zWorkAround : Symbol(zWorkAround, Decl(discriminateWithOptionalProperty4.ts, 9, 7))
+
+    | { a: string[]; b?: undefined }
+>a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 10, 7))
+>b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 10, 20))
+
+    | { b: string[]; a?: undefined } = z;
+>b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 11, 7))
+>a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 11, 20))
+>z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+
+  zWorkAround.a ? zWorkAround.a.toString() : zWorkAround.b.toString();
+>zWorkAround.a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 10, 7), Decl(discriminateWithOptionalProperty4.ts, 11, 20))
+>zWorkAround : Symbol(zWorkAround, Decl(discriminateWithOptionalProperty4.ts, 9, 7))
+>a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 10, 7), Decl(discriminateWithOptionalProperty4.ts, 11, 20))
+>zWorkAround.a.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+>zWorkAround.a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 10, 7))
+>zWorkAround : Symbol(zWorkAround, Decl(discriminateWithOptionalProperty4.ts, 9, 7))
+>a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 10, 7))
+>toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+>zWorkAround.b.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+>zWorkAround.b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 11, 7))
+>zWorkAround : Symbol(zWorkAround, Decl(discriminateWithOptionalProperty4.ts, 9, 7))
+>b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 11, 7))
+>toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+
+  "a" in z ? z.a.toString() : z.b.toString();
+>z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+>z.a.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+>z.a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17), Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+>z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+>a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17), Decl(discriminateWithOptionalProperty4.ts, 3, 17))
+>toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+>z.b.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+>z.b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 3, 25))
+>z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
+>b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 3, 25))
+>toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
+}
+

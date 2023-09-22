@@ -811,6 +811,7 @@ declare namespace FourSlashInterface {
         readonly pattern: string;
         readonly fileName?: string;
         readonly expected: ReadonlyArray<ExpectedNavigateToItem>;
+        readonly excludeLibFiles?: boolean;
     }
     interface ExpectedNavigateToItem {
         readonly name: string;

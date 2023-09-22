@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    dedent,
+} from "../../_namespaces/Utils";
+import {
     commonFile1,
 } from "../helpers/tscWatch";
 import {
@@ -288,5 +291,42 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         }, session);
         session.testhost.logTimeoutQueueLength();
         baselineTsserverLogs("inferredProjects", "Setting compiler options for inferred projects when there are no open files should not schedule any refresh", session);
+    });
+
+    it("when existing inferred project has no root files", () => {
+        const host = createServerHost({
+            "/user/username/projects/myproject/app.ts": dedent`
+                import {x} from "./module";
+            `,
+            // Removing resolutions of this happens after program gets created and we are removing not needed files
+            "/user/username/projects/myproject/module.d.ts": dedent`
+                import {y} from "./module2";
+                import {a} from "module3";
+                export const x = y;
+                export const b = a;
+            `,
+            "/user/username/projects/myproject/module2.d.ts": dedent`
+                export const y = 10;
+            `,
+            "/user/username/projects/myproject/node_modules/module3/package.json": JSON.stringify({
+                name: "module3",
+                version: "1.0.0",
+            }),
+            "/user/username/projects/myproject/node_modules/module3/index.d.ts": dedent`
+                export const a = 10;
+            `,
+            [libFile.path]: libFile.content,
+        });
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([{
+            file: "/user/username/projects/myproject/app.ts",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        closeFilesForSession(["/user/username/projects/myproject/app.ts"], session);
+        openFilesForSession([{
+            file: "/user/username/projects/myproject/module.d.ts",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        baselineTsserverLogs("inferredProjects", "when existing inferred project has no root files", session);
     });
 });

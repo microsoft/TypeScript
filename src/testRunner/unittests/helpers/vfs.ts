@@ -60,7 +60,7 @@ export function replaceText(fs: vfs.FileSystem, path: string, oldText: string, n
         throw new Error(`File ${path} does not exist`);
     }
     const old = fs.readFileSync(path, "utf-8");
-    if (old.indexOf(oldText) < 0) {
+    if (!old.includes(oldText)) {
         throw new Error(`Text "${oldText}" does not exist in file ${path}`);
     }
     const newContent = old.replace(oldText, newText);

@@ -1,3 +1,6 @@
+import {
+    IncrementalVerifierCallbacks,
+} from "../../../harness/incrementalUtils";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
@@ -19,44 +22,54 @@ import {
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectSystem CachingFileSystemInformation", () => {
-    enum CalledMapsWithSingleArg {
-        fileExists = "fileExists",
-        directoryExists = "directoryExists",
-        getDirectories = "getDirectories",
-        readFile = "readFile",
-    }
-    enum CalledMapsWithFiveArgs {
-        readDirectory = "readDirectory",
-    }
+    type CalledMapsWithSingleArg = "fileExists" | "directoryExists" | "getDirectories" | "readFile";
+    type CalledMapsWithFiveArgs = "readDirectory";
     type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
     type CalledWithFiveArgs = [readonly string[], readonly string[], readonly string[], number];
     function createLoggerTrackingHostCalls(host: TestServerHost) {
+        const originals: Record<CalledMaps, any> = {} as any;
         const calledMaps: Record<CalledMapsWithSingleArg, ts.MultiMap<string, true>> & Record<CalledMapsWithFiveArgs, ts.MultiMap<string, CalledWithFiveArgs>> = {
-            fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
-            directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
-            getDirectories: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.getDirectories),
-            readFile: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.readFile),
-            readDirectory: setCallsTrackingWithFiveArgFn(CalledMapsWithFiveArgs.readDirectory),
+            fileExists: setCallsTrackingWithSingleArgFn("fileExists"),
+            directoryExists: setCallsTrackingWithSingleArgFn("directoryExists"),
+            getDirectories: setCallsTrackingWithSingleArgFn("getDirectories"),
+            readFile: setCallsTrackingWithSingleArgFn("readFile"),
+            readDirectory: setCallsTrackingWithFiveArgFn("readDirectory"),
         };
+
+        (host as IncrementalVerifierCallbacks).beforeVerification = storeAndSetToOriginal;
+        (host as IncrementalVerifierCallbacks).afterVerification = revertCallbacks;
+
+        function storeAndSetToOriginal() {
+            const current: Record<CalledMaps, any> = {} as any;
+            forEachHostProperty(prop => {
+                current[prop] = host[prop];
+                host[prop] = originals[prop];
+            });
+            return current;
+        }
+
+        function revertCallbacks(storage: Record<CalledMaps, any>) {
+            forEachHostProperty(prop => host[prop] = storage[prop]);
+        }
 
         return logCacheAndClear;
 
         function setCallsTrackingWithSingleArgFn(prop: CalledMapsWithSingleArg) {
             const calledMap = ts.createMultiMap<string, true>();
-            const cb = (host as any)[prop].bind(host);
+            originals[prop] = (host as any)[prop].bind(host);
             (host as any)[prop] = (f: string) => {
                 calledMap.add(f, /*value*/ true);
-                return cb(f);
+                return originals[prop](f);
             };
             return calledMap;
         }
 
         function setCallsTrackingWithFiveArgFn<U, V, W, X>(prop: CalledMapsWithFiveArgs) {
             const calledMap = ts.createMultiMap<string, [U, V, W, X]>();
-            const cb = (host as any)[prop].bind(host);
+            originals[prop] = (host as any)[prop].bind(host);
             (host as any)[prop] = (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => {
                 calledMap.add(f, [arg1!, arg2!, arg3!, arg4!]); // TODO: GH#18217
-                return cb(f, arg1, arg2, arg3, arg4);
+                return originals[prop](f, arg1, arg2, arg3, arg4);
             };
             return calledMap;
         }
@@ -68,11 +81,15 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         }
 
         function logCacheAndClear(logger: Logger) {
-            logCacheEntry(logger, CalledMapsWithSingleArg.fileExists);
-            logCacheEntry(logger, CalledMapsWithSingleArg.directoryExists);
-            logCacheEntry(logger, CalledMapsWithSingleArg.getDirectories);
-            logCacheEntry(logger, CalledMapsWithSingleArg.readFile);
-            logCacheEntry(logger, CalledMapsWithFiveArgs.readDirectory);
+            forEachHostProperty(prop => logCacheEntry(logger, prop));
+        }
+
+        function forEachHostProperty(callback: (prop: CalledMaps) => void) {
+            callback("fileExists");
+            callback("directoryExists");
+            callback("getDirectories");
+            callback("readFile");
+            callback("readDirectory");
         }
     }
 

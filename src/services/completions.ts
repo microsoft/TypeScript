@@ -58,6 +58,7 @@ import {
     escapeSnippetText,
     every,
     ExportKind,
+    ExportMapInfoKey,
     Expression,
     ExpressionWithTypeArguments,
     factory,
@@ -485,14 +486,14 @@ interface SymbolOriginInfoExport extends SymbolOriginInfo {
     moduleSymbol: Symbol;
     isDefaultExport: boolean;
     exportName: string;
-    exportMapKey: string;
+    exportMapKey: ExportMapInfoKey;
 }
 
 interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
     symbolName: string;
     moduleSymbol: Symbol;
     exportName: string;
-    exportMapKey?: string;
+    exportMapKey?: ExportMapInfoKey;
     moduleSpecifier: string;
 }
 

@@ -158,6 +158,7 @@ describe("unittests:: canWatch::", () => {
         getPathsOfDifferentFoldersWithUsers("user");
         getPathsOfDifferentFoldersWithUsers("usr");
         getPathsOfDifferentFoldersWithUsers("home");
+        getPathsOfDifferentFoldersWithWorkspaces();
         baselineOsRoot(paths, longestPathLength, baseline);
         Baseline.runBaseline(`canWatch/${scenario}${suffix}.baseline.md`, baseline.join("\r\n"));
         function getPathsOfDifferentFoldersAt(root: ts.Path) {
@@ -175,6 +176,9 @@ describe("unittests:: canWatch::", () => {
             paths.push(users);
             getPathsOfDifferentFoldersAt(combinePaths(users, "username"));
         }
+        function getPathsOfDifferentFoldersWithWorkspaces() {
+            getPathsOfDifferentFoldersAt(combinePaths(osRoot, "workspaces"));
+        }
     }
 
     function combinePaths(path: string, addition: string, anotherAddition?: string): ts.Path {
@@ -190,7 +194,7 @@ describe("unittests:: canWatch::", () => {
         let result = "|";
         let divider = addDivider ? "|" : undefined;
         columns.forEach((header, index) => {
-            result += " " + ts.padRight(header, maxLengths[index]) + " |";
+            result += " " + header.padEnd(maxLengths[index]) + " |";
             if (addDivider) divider += " " + "-".repeat(maxLengths[index]) + " |";
         });
         baseline.push(result);

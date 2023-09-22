@@ -171,6 +171,7 @@ declare namespace ts {
                 ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
                 ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
                 ProvideInlayHints = "provideInlayHints",
+                WatchChange = "watchChange",
             }
             /**
              * A TypeScript Server message
@@ -1504,6 +1505,15 @@ declare namespace ts {
             interface CloseRequest extends FileRequest {
                 command: CommandTypes.Close;
             }
+            interface WatchChangeRequest extends Request {
+                command: CommandTypes.WatchChange;
+                arguments: WatchChangeRequestArgs;
+            }
+            interface WatchChangeRequestArgs {
+                id: number;
+                path: string;
+                eventType: "create" | "delete" | "update";
+            }
             /**
              * Request to obtain the list of files that should be regenerated if target file is recompiled.
              * NOTE: this us query-only operation and does not generate any output on disk.
@@ -2421,6 +2431,33 @@ declare namespace ts {
                  */
                 maxFileSize: number;
             }
+            type CreateFileWatcherEventName = "createFileWatcher";
+            interface CreateFileWatcherEvent extends Event {
+                readonly event: CreateFileWatcherEventName;
+                readonly body: CreateFileWatcherEventBody;
+            }
+            interface CreateFileWatcherEventBody {
+                readonly id: number;
+                readonly path: string;
+            }
+            type CreateDirectoryWatcherEventName = "createDirectoryWatcher";
+            interface CreateDirectoryWatcherEvent extends Event {
+                readonly event: CreateDirectoryWatcherEventName;
+                readonly body: CreateDirectoryWatcherEventBody;
+            }
+            interface CreateDirectoryWatcherEventBody {
+                readonly id: number;
+                readonly path: string;
+                readonly recursive: boolean;
+            }
+            type CloseFileWatcherEventName = "closeFileWatcher";
+            interface CloseFileWatcherEvent extends Event {
+                readonly event: CloseFileWatcherEventName;
+                readonly body: CloseFileWatcherEventBody;
+            }
+            interface CloseFileWatcherEventBody {
+                readonly id: number;
+            }
             /**
              * Arguments for reload request.
              */
@@ -2897,6 +2934,10 @@ declare namespace ts {
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */
                 readonly disableLineTextInReferences?: boolean;
+                /**
+                 * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
+                 */
+                readonly excludeLibrarySymbolsInNavTo?: boolean;
             }
             interface CompilerOptions {
                 allowJs?: boolean;
@@ -3291,6 +3332,7 @@ declare namespace ts {
             isNonTsProject(): boolean;
             isJsOnlyProject(): boolean;
             static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
+            readonly jsDocParsingMode: JSDocParsingMode | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
             private get typingsCache();
@@ -3523,6 +3565,21 @@ declare namespace ts {
             readonly eventName: typeof OpenFileInfoTelemetryEvent;
             readonly data: OpenFileInfoTelemetryEventData;
         }
+        const CreateFileWatcherEvent: protocol.CreateFileWatcherEventName;
+        interface CreateFileWatcherEvent {
+            readonly eventName: protocol.CreateFileWatcherEventName;
+            readonly data: protocol.CreateFileWatcherEventBody;
+        }
+        const CreateDirectoryWatcherEvent: protocol.CreateDirectoryWatcherEventName;
+        interface CreateDirectoryWatcherEvent {
+            readonly eventName: protocol.CreateDirectoryWatcherEventName;
+            readonly data: protocol.CreateDirectoryWatcherEventBody;
+        }
+        const CloseFileWatcherEvent: protocol.CloseFileWatcherEventName;
+        interface CloseFileWatcherEvent {
+            readonly eventName: protocol.CloseFileWatcherEventName;
+            readonly data: protocol.CloseFileWatcherEventBody;
+        }
         interface ProjectInfoTelemetryEventData {
             /** Cryptographically secure hash of project file location. */
             readonly projectId: string;
@@ -3570,7 +3627,7 @@ declare namespace ts {
         interface OpenFileInfo {
             readonly checkJs: boolean;
         }
-        type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+        type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent | CreateFileWatcherEvent | CreateDirectoryWatcherEvent | CloseFileWatcherEvent;
         type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
         interface SafeList {
             [name: string]: {
@@ -3604,6 +3661,7 @@ declare namespace ts {
             useInferredProjectPerProjectRoot: boolean;
             typingsInstaller?: ITypingsInstaller;
             eventHandler?: ProjectServiceEventHandler;
+            canUseWatchEvents?: boolean;
             suppressDiagnosticEvents?: boolean;
             throttleWaitMilliseconds?: number;
             globalPlugins?: readonly string[];
@@ -3612,6 +3670,7 @@ declare namespace ts {
             typesMapLocation?: string;
             serverMode?: LanguageServiceMode;
             session: Session<unknown> | undefined;
+            jsDocParsingMode?: JSDocParsingMode;
         }
         interface WatchOptionsAndErrors {
             watchOptions: WatchOptions;
@@ -3674,7 +3733,6 @@ declare namespace ts {
             readonly typingsInstaller: ITypingsInstaller;
             private readonly globalCacheLocationDirectoryPath;
             readonly throttleWaitMilliseconds?: number;
-            private readonly eventHandler?;
             private readonly suppressDiagnosticEvents?;
             readonly globalPlugins: readonly string[];
             readonly pluginProbeLocations: readonly string[];
@@ -3686,6 +3744,7 @@ declare namespace ts {
             private performanceEventHandler?;
             private pendingPluginEnablements?;
             private currentPluginEnablementPromise?;
+            readonly jsDocParsingMode: JSDocParsingMode | undefined;
             constructor(opts: ProjectServiceOptions);
             toPath(fileName: string): Path;
             private loadTypesMap;
@@ -3887,6 +3946,7 @@ declare namespace ts {
              * If falsy, all events are suppressed.
              */
             canUseEvents: boolean;
+            canUseWatchEvents?: boolean;
             eventHandler?: ProjectServiceEventHandler;
             /** Has no effect if eventHandler is also specified. */
             suppressDiagnosticEvents?: boolean;
@@ -7746,6 +7806,7 @@ declare namespace ts {
         hasInvalidatedResolutions?(filePath: Path): boolean;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface SourceMapRange extends TextRange {
         source?: SourceMapSource;
@@ -8603,6 +8664,33 @@ declare namespace ts {
         IndexSignatureParameters = 8848,
         JSDocComment = 33,
     }
+    enum JSDocParsingMode {
+        /**
+         * Always parse JSDoc comments and include them in the AST.
+         *
+         * This is the default if no mode is provided.
+         */
+        ParseAll = 0,
+        /**
+         * Never parse JSDoc comments, mo matter the file type.
+         */
+        ParseNone = 1,
+        /**
+         * Parse only JSDoc comments which are needed to provide correct type errors.
+         *
+         * This will always parse JSDoc in non-TS files, but only parse JSDoc comments
+         * containing `@see` and `@link` in TS files.
+         */
+        ParseForTypeErrors = 2,
+        /**
+         * Parse only JSDoc comments which are needed to provide correct type info.
+         *
+         * This will always parse JSDoc in non-TS files, but never in TS files.
+         *
+         * Note: Do not use this mode if you require accurate type errors; use {@link ParseForTypeErrors} instead.
+         */
+        ParseForTypeInfo = 3,
+    }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
@@ -8640,6 +8728,7 @@ declare namespace ts {
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+        readonly excludeLibrarySymbolsInNavTo?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {
@@ -8763,6 +8852,8 @@ declare namespace ts {
         setOnError(onError: ErrorCallback | undefined): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
+        setScriptKind(scriptKind: ScriptKind): void;
+        setJSDocParsingMode(kind: JSDocParsingMode): void;
         /** @deprecated use {@link resetTokenState} */
         setTextPos(textPos: number): void;
         resetTokenState(pos: number): void;
@@ -9433,6 +9524,7 @@ declare namespace ts {
          * check specified by `isFileProbablyExternalModule` will be used to set the field.
          */
         setExternalModuleIndicator?: (file: SourceFile) => void;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine;
     /**
@@ -10024,6 +10116,7 @@ declare namespace ts {
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
         getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** Instead of using output d.ts file from project reference, use its source file */
@@ -10274,6 +10367,7 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     type WithMetadata<T> = T & {
         metadata?: unknown;
@@ -10398,7 +10492,7 @@ declare namespace ts {
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         getFileReferences(fileName: string): ReferenceEntry[];
-        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean, excludeLibFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
@@ -11037,7 +11131,7 @@ declare namespace ts {
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
          */
         exportName: string;
-        exportMapKey?: string;
+        exportMapKey?: ExportMapInfoKey;
         moduleSpecifier?: string;
         /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
@@ -11047,7 +11141,7 @@ declare namespace ts {
         isPackageJsonImport?: true;
     }
     interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
-        exportMapKey: string;
+        exportMapKey: ExportMapInfoKey;
     }
     interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
         moduleSpecifier: string;
@@ -11362,13 +11456,16 @@ declare namespace ts {
         span: TextSpan;
         preferences: UserPreferences;
     }
+    type ExportMapInfoKey = string & {
+        __exportInfoKey: void;
+    };
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
     function createClassifier(): Classifier;
     interface DocumentHighlights {
         fileName: string;
         highlightSpans: HighlightSpan[];
     }
-    function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string): DocumentRegistry;
+    function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string, jsDocParsingMode?: JSDocParsingMode): DocumentRegistry;
     /**
      * The document registry represents a store of SourceFile objects that can be shared between
      * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
