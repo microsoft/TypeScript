@@ -3663,6 +3663,10 @@
         "category": "Error",
         "code": 2854
     },
+    "Class field '{0}' defined by the parent class is not accessible in the child class via super.": {
+        "category": "Error",
+        "code": 2855
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
