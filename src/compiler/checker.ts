@@ -39700,7 +39700,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 grammarErrorOnNode(
                     errorNode,
                     node.attributes.attributes.token === SyntaxKind.WithKeyword
-                        ? Diagnostics.resolution_mode_attribute_are_only_supported_when_moduleResolution_is_node16_or_nodenext
+                        ? Diagnostics.The_resolution_mode_attribute_is_only_supported_when_moduleResolution_is_node16_or_nodenext
                         : Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext,
                 );
             }
@@ -45147,7 +45147,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return grammarErrorOnNode(
                         node,
                         isImportAttributes
-                            ? Diagnostics.resolution_mode_attribute_are_only_supported_when_moduleResolution_is_node16_or_nodenext
+                            ? Diagnostics.The_resolution_mode_attribute_is_only_supported_when_moduleResolution_is_node16_or_nodenext
                             : Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext,
                     );
                 }

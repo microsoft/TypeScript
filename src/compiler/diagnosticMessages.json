@@ -1524,15 +1524,15 @@
         "category": "Message",
         "code": 1461
     },
-    "'resolution-mode' attribute are only supported when `moduleResolution` is `node16` or `nodenext`.": {
+    "The 'resolution-mode' attribute is only supported when 'moduleResolution' is 'node16' or 'nodenext'.": {
         "category": "Error",
         "code": 1462
     },
-    "`resolution-mode` is the only valid key for type import attributes.": {
+    "'resolution-mode' is the only valid key for type import attributes.": {
         "category": "Error",
         "code": 1463
     },
-    "Type import attributes should have exactly one key - `resolution-mode` - with value `import` or `require`.": {
+    "Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.": {
         "category": "Error",
         "code": 1464
     },
@@ -1641,7 +1641,7 @@
         "category": "Error",
         "code": 1495
     },
-    "Identifier, string literal or number literal expected.": {
+    "Identifier, string literal, or number literal expected.": {
         "category": "Error",
         "code": 1496
     },

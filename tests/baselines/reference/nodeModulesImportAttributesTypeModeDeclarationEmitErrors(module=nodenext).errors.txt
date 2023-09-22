@@ -29,11 +29,11 @@ error TS2468: Cannot find global value 'Promise'.
 /other.ts(7,79): error TS1434: Unexpected keyword or identifier.
 /other.ts(7,79): error TS2304: Cannot find name 'ImportInterface'.
 /other.ts(7,94): error TS1128: Declaration or statement expected.
-/other2.ts(3,30): error TS1463: `resolution-mode` is the only valid key for type import attributes.
-/other2.ts(4,30): error TS1463: `resolution-mode` is the only valid key for type import attributes.
+/other2.ts(3,30): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
+/other2.ts(4,30): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
 /other2.ts(4,50): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
-/other2.ts(6,57): error TS1463: `resolution-mode` is the only valid key for type import attributes.
-/other2.ts(7,57): error TS1463: `resolution-mode` is the only valid key for type import attributes.
+/other2.ts(6,57): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
+/other2.ts(7,57): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
 /other2.ts(7,77): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
 /other3.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other3.ts(3,21): error TS1005: '{' expected.
@@ -71,11 +71,11 @@ error TS2468: Cannot find global value 'Promise'.
 /other4.ts(10,58): error TS1005: ',' expected.
 /other4.ts(10,59): error TS1134: Variable declaration expected.
 /other4.ts(10,75): error TS1005: ',' expected.
-/other5.ts(2,29): error TS1464: Type import attributes should have exactly one key - `resolution-mode` - with value `import` or `require`.
-/other5.ts(3,29): error TS1464: Type import attributes should have exactly one key - `resolution-mode` - with value `import` or `require`.
+/other5.ts(2,29): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+/other5.ts(3,29): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
 /other5.ts(3,35): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
-/other5.ts(5,56): error TS1464: Type import attributes should have exactly one key - `resolution-mode` - with value `import` or `require`.
-/other5.ts(6,56): error TS1464: Type import attributes should have exactly one key - `resolution-mode` - with value `import` or `require`.
+/other5.ts(5,56): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
+/other5.ts(6,56): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
 /other5.ts(6,62): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
 
 
@@ -180,19 +180,19 @@ error TS2468: Cannot find global value 'Promise'.
     export type LocalInterface =
         & import("pkg", { with: {"bad": "require"} }).RequireInterface
                                  ~~~~~
-!!! error TS1463: `resolution-mode` is the only valid key for type import attributes.
+!!! error TS1463: 'resolution-mode' is the only valid key for type import attributes.
         & import("pkg", { with: {"bad": "import"} }).ImportInterface;
                                  ~~~~~
-!!! error TS1463: `resolution-mode` is the only valid key for type import attributes.
+!!! error TS1463: 'resolution-mode' is the only valid key for type import attributes.
                                                      ~~~~~~~~~~~~~~~
 !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
     
     export const a = (null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface);
                                                             ~~~~~
-!!! error TS1463: `resolution-mode` is the only valid key for type import attributes.
+!!! error TS1463: 'resolution-mode' is the only valid key for type import attributes.
     export const b = (null as any as import("pkg", { with: {"bad": "import"} }).ImportInterface);
                                                             ~~~~~
-!!! error TS1463: `resolution-mode` is the only valid key for type import attributes.
+!!! error TS1463: 'resolution-mode' is the only valid key for type import attributes.
                                                                                 ~~~~~~~~~~~~~~~
 !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
     
@@ -302,18 +302,18 @@ error TS2468: Cannot find global value 'Promise'.
     export type LocalInterface =
         & import("pkg", { with: {} }).RequireInterface
                                 ~~
-!!! error TS1464: Type import attributes should have exactly one key - `resolution-mode` - with value `import` or `require`.
+!!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
         & import("pkg", { with: {} }).ImportInterface;
                                 ~~
-!!! error TS1464: Type import attributes should have exactly one key - `resolution-mode` - with value `import` or `require`.
+!!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
                                       ~~~~~~~~~~~~~~~
 !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
     
     export const a = (null as any as import("pkg", { with: {} }).RequireInterface);
                                                            ~~
-!!! error TS1464: Type import attributes should have exactly one key - `resolution-mode` - with value `import` or `require`.
+!!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
     export const b = (null as any as import("pkg", { with: {} }).ImportInterface);
                                                            ~~
-!!! error TS1464: Type import attributes should have exactly one key - `resolution-mode` - with value `import` or `require`.
+!!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
                                                                  ~~~~~~~~~~~~~~~
 !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
