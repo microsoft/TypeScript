@@ -109,21 +109,27 @@ interface ResolutionInfo {
     mode: ts.ResolutionMode;
 }
 
-function getResolutionCacheDetails<T extends ts.ResolutionWithFailedLookupLocations>(
+function getResolutionCacheDetails<File, T extends ts.ResolutionWithFailedLookupLocations>(
     baseline: string[],
     cacheType: string,
-    cache: ts.ModeAwareCache<T> | undefined,
+    file: File,
+    forEach:
+        | ((
+            callback: (resolvedModule: T, moduleName: string, mode: ts.ResolutionMode) => void,
+            file: File,
+        ) => void)
+        | undefined,
     getResolvedFileName: (resolution: T) => string | undefined,
     indent: string,
 ) {
     let addedCacheType = false;
-    cache?.forEach((resolved, key, mode) => {
+    forEach?.((resolved, key, mode) => {
         if (!addedCacheType) {
             addedCacheType = true;
             baseline.push(`${indent}${cacheType}:`);
         }
         baseline.push(`${indent}  ${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""}${getResolvedFileName(resolved)}`);
-    });
+    }, file);
 }
 
 function getResolvedModuleFileName(r: ts.ResolvedModuleWithFailedLookupLocations) {
@@ -157,14 +163,16 @@ function getProgramStructure(program: ts.Program | undefined) {
         getResolutionCacheDetails(
             baseline,
             "Modules",
-            program.resolvedModules?.get(f.path),
+            f,
+            program.forEachResolvedModule,
             getResolvedModuleFileName,
             "    ",
         );
         getResolutionCacheDetails(
             baseline,
             "TypeRefs",
-            program.resolvedTypeReferenceDirectiveNames?.get(f.path),
+            f,
+            program.forEachResolvedTypeReferenceDirective,
             getResolvedTypeRefFileName,
             "    ",
         );
@@ -172,7 +180,8 @@ function getProgramStructure(program: ts.Program | undefined) {
     getResolutionCacheDetails(
         baseline,
         "AutoTypeRefs",
-        program?.getAutomaticTypeDirectiveResolutions(),
+        /*file*/ undefined,
+        program?.getAutomaticTypeDirectiveResolutions().forEach,
         getResolvedTypeRefFileName,
         "  ",
     );
