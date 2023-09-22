@@ -31825,10 +31825,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // This is true for both [[Set]] (old) and [[Define]] (ES spec) semantics.
             if (!(flags & ModifierFlags.Static) && prop.declarations?.some(isClassFieldAndNotAutoAccessor)) {
                 if (errorNode) {
-                    error(errorNode,
-                        Diagnostics.Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super,
-                        symbolToString(prop)
-                    );
+                    error(errorNode, Diagnostics.Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super, symbolToString(prop));
                 }
                 return false;
             }
