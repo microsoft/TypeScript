@@ -36,6 +36,7 @@ function main() {
 if ((v8 as any)?.startupSnapshot.isBuildingSnapshot()) {
     (v8 as any).startupSnapshot.setDeserializeMainFunction(() => {
         // When we're executed as a snapshot, argv won't contain the js file anymore.
+        // TODO(jakebailey): if we need to fork TS, we probably need to know the snapshot name and exec that...
         process.argv.splice(1, 0, __filename);
         ts.setSys(ts.createSystem());
         main();
