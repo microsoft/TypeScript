@@ -32,8 +32,10 @@ import {
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
     combinePaths,
+    CommentRange,
     compareDiagnostics,
     CompilerOptions,
+    concatenate,
     ConciseBody,
     ConstructorDeclaration,
     ConstructorTypeNode,
@@ -62,6 +64,7 @@ import {
     filter,
     find,
     flatMap,
+    forEach,
     ForInitializer,
     ForInOrOfStatement,
     FunctionBody,
@@ -80,6 +83,9 @@ import {
     getJSDocCommentsAndTags,
     getJSDocRoot,
     getJSDocTypeParameterDeclarations,
+    getLeadingCommentRanges,
+    getLeadingCommentRangesOfNode,
+    getTrailingCommentRanges,
     hasAccessorModifier,
     HasDecorators,
     hasDecorators,
@@ -197,6 +203,7 @@ import {
     JsxTagNameExpression,
     KeywordSyntaxKind,
     LabeledStatement,
+    last,
     lastOrUndefined,
     LeftHandSideExpression,
     length,
@@ -251,9 +258,11 @@ import {
     setUILocale,
     SignatureDeclaration,
     skipOuterExpressions,
+    skipTrivia,
     some,
     sortAndDeduplicate,
     SortedReadonlyArray,
+    SourceFile,
     Statement,
     StringLiteral,
     StringLiteralLike,
@@ -2584,4 +2593,32 @@ export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): bool
 export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean {
     const type = isJSDocParameterTag(node) ? (node.typeExpression && node.typeExpression.type) : node.type;
     return (node as ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === SyntaxKind.JSDocVariadicType;
+}
+
+function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
+    const comment = currentSourceFile.text.substring(range.pos, range.end);
+    return comment.includes("@internal");
+}
+
+export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
+    const parseTreeNode = getParseTreeNode(node);
+    if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
+        const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+        const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
+        const text = currentSourceFile.text;
+        const commentRanges = previousSibling
+            ? concatenate(
+                // to handle
+                // ... parameters, /** @internal */
+                // public param: string
+                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true)),
+                getLeadingCommentRanges(text, node.pos),
+            )
+            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true));
+        return some(commentRanges) && hasInternalAnnotation(last(commentRanges), currentSourceFile);
+    }
+    const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
+    return !!forEach(leadingCommentRanges, range => {
+        return hasInternalAnnotation(range, currentSourceFile);
+    });
 }

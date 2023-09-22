@@ -9153,6 +9153,7 @@ declare namespace ts {
     function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain;
     function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean;
     function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean;
+    function isInternalDeclaration(node: Node, currentSourceFile: SourceFile): boolean;
     let unchangedTextChangeRange: TextChangeRange;
     type ParameterPropertyDeclaration = ParameterDeclaration & {
         parent: ConstructorDeclaration;
@@ -9801,7 +9802,6 @@ declare namespace ts {
      * @param context A lexical environment context for the visitor.
      */
     function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
-    function isInternalDeclaration(node: Node, currentSourceFile: SourceFile): boolean;
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
     function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
