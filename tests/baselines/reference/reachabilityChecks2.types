@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reachabilityChecks2.ts ===
+//// [tests/cases/compiler/reachabilityChecks2.ts] ////
+
+=== reachabilityChecks2.ts ===
 while (true) { }
 >true : true
 

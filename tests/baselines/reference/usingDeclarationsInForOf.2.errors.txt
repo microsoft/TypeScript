@@ -1,0 +1,15 @@
+usingDeclarationsInForOf.2.ts(1,6): error TS2304: Cannot find name 'using'.
+usingDeclarationsInForOf.2.ts(1,15): error TS2304: Cannot find name 'of'.
+usingDeclarationsInForOf.2.ts(1,19): error TS1011: An element access expression should take an argument.
+
+
+==== usingDeclarationsInForOf.2.ts (3 errors) ====
+    for (using of of []) {
+         ~~~~~
+!!! error TS2304: Cannot find name 'using'.
+                  ~~
+!!! error TS2304: Cannot find name 'of'.
+                      
+!!! error TS1011: An element access expression should take an argument.
+    }
+    

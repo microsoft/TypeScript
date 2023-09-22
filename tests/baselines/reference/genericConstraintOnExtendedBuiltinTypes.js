@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericConstraintOnExtendedBuiltinTypes.ts] ////
+
 //// [genericConstraintOnExtendedBuiltinTypes.ts]
 declare module EndGate {
     export interface ICloneable {

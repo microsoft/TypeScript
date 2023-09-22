@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/withStatementErrors.ts] ////
+
 //// [withStatementErrors.ts]
 declare var ooo:any;
 

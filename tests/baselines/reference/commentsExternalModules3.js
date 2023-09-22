@@ -90,7 +90,7 @@ var m1;
         return foo();
     }
     m1.fooExport = fooExport;
-})(m1 = exports.m1 || (exports.m1 = {}));
+})(m1 || (exports.m1 = m1 = {}));
 m1.fooExport();
 var myvar = new m1.m2.c();
 /** Module comment */
@@ -121,7 +121,7 @@ var m4;
         return foo();
     }
     m4.fooExport = fooExport;
-})(m4 = exports.m4 || (exports.m4 = {}));
+})(m4 || (exports.m4 = m4 = {}));
 m4.fooExport();
 var myvar2 = new m4.m2.c();
 //// [commentsExternalModules_1.js]
@@ -138,11 +138,11 @@ exports.newVar2 = new extMod.m4.m2.c();
 
 //// [commentsExternalModules2_0.d.ts]
 /** Module comment*/
-export declare module m1 {
+export declare namespace m1 {
     /** b's comment*/
     var b: number;
     /** m2 comments*/
-    module m2 {
+    namespace m2 {
         /** class comment;*/
         class c {
         }
@@ -153,12 +153,12 @@ export declare module m1 {
     function fooExport(): number;
 }
 /** Module comment */
-export declare module m4 {
+export declare namespace m4 {
     /** b's comment */
     var b: number;
     /** m2 comments
     */
-    module m2 {
+    namespace m2 {
         /** class comment; */
         class c {
         }

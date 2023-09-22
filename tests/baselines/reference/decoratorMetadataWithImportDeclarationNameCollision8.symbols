@@ -1,4 +1,6 @@
-=== tests/cases/compiler/service.ts ===
+//// [tests/cases/compiler/decoratorMetadataWithImportDeclarationNameCollision8.ts] ////
+
+=== service.ts ===
 import database = require('./db');
 >database : Symbol(database, Decl(service.ts, 0, 0))
 
@@ -42,7 +44,7 @@ class MyClass {
 export {MyClass};
 >MyClass : Symbol(MyClass, Decl(service.ts, 13, 8))
 
-=== tests/cases/compiler/db.ts ===
+=== db.ts ===
 export class db {
 >db : Symbol(db, Decl(db.ts, 0, 0))
 

@@ -68,22 +68,18 @@ Shape signatures in builder refreshed for::
 /a/b/globalfile3.ts (used version)
 /a/b/modulefile2.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/file1consumer1.ts: *new*
-  {}
-/a/b/modulefile1.ts: *new*
   {}
 /a/b/file1consumer2.ts: *new*
   {}
 /a/b/globalfile3.ts: *new*
   {}
+/a/b/modulefile1.ts: *new*
+  {}
 /a/b/modulefile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -172,26 +168,22 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer2.ts (computed .d.ts)
 /a/b/file1consumer1.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/file1consumer1.ts:
-  {}
-/a/b/modulefile1.ts:
   {}
 /a/b/file1consumer2.ts:
   {}
+/a/b/file1consumer3.ts: *new*
+  {}
 /a/b/globalfile3.ts:
+  {}
+/a/b/modulefile1.ts:
   {}
 /a/b/modulefile2.ts:
   {}
-/a/lib/lib.d.ts:
+/a/b/tsconfig.json:
   {}
-/a/b/file1consumer3.ts: *new*
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::

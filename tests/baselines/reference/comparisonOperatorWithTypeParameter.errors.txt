@@ -1,38 +1,38 @@
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(6,15): error TS2365: Operator '<' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(7,15): error TS2365: Operator '>' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(8,15): error TS2365: Operator '<=' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(9,15): error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(10,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(11,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(12,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(13,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(15,15): error TS2365: Operator '<' cannot be applied to types 'U' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(16,15): error TS2365: Operator '>' cannot be applied to types 'U' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(17,15): error TS2365: Operator '<=' cannot be applied to types 'U' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(18,15): error TS2365: Operator '>=' cannot be applied to types 'U' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(19,15): error TS2367: This comparison appears to be unintentional because the types 'U' and 'T' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(20,15): error TS2367: This comparison appears to be unintentional because the types 'U' and 'T' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(21,15): error TS2367: This comparison appears to be unintentional because the types 'U' and 'T' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(22,15): error TS2367: This comparison appears to be unintentional because the types 'U' and 'T' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(24,15): error TS2365: Operator '<' cannot be applied to types 'T' and 'V'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(25,15): error TS2365: Operator '>' cannot be applied to types 'T' and 'V'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(26,15): error TS2365: Operator '<=' cannot be applied to types 'T' and 'V'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(27,15): error TS2365: Operator '>=' cannot be applied to types 'T' and 'V'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(28,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'V' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(29,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'V' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(30,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'V' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(31,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'V' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(33,15): error TS2365: Operator '<' cannot be applied to types 'V' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(34,15): error TS2365: Operator '>' cannot be applied to types 'V' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(35,15): error TS2365: Operator '<=' cannot be applied to types 'V' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(36,15): error TS2365: Operator '>=' cannot be applied to types 'V' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(37,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(38,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(39,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts(40,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
+comparisonOperatorWithTypeParameter.ts(6,15): error TS2365: Operator '<' cannot be applied to types 'T' and 'U'.
+comparisonOperatorWithTypeParameter.ts(7,15): error TS2365: Operator '>' cannot be applied to types 'T' and 'U'.
+comparisonOperatorWithTypeParameter.ts(8,15): error TS2365: Operator '<=' cannot be applied to types 'T' and 'U'.
+comparisonOperatorWithTypeParameter.ts(9,15): error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
+comparisonOperatorWithTypeParameter.ts(10,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+comparisonOperatorWithTypeParameter.ts(11,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+comparisonOperatorWithTypeParameter.ts(12,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+comparisonOperatorWithTypeParameter.ts(13,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+comparisonOperatorWithTypeParameter.ts(15,15): error TS2365: Operator '<' cannot be applied to types 'U' and 'T'.
+comparisonOperatorWithTypeParameter.ts(16,15): error TS2365: Operator '>' cannot be applied to types 'U' and 'T'.
+comparisonOperatorWithTypeParameter.ts(17,15): error TS2365: Operator '<=' cannot be applied to types 'U' and 'T'.
+comparisonOperatorWithTypeParameter.ts(18,15): error TS2365: Operator '>=' cannot be applied to types 'U' and 'T'.
+comparisonOperatorWithTypeParameter.ts(19,15): error TS2367: This comparison appears to be unintentional because the types 'U' and 'T' have no overlap.
+comparisonOperatorWithTypeParameter.ts(20,15): error TS2367: This comparison appears to be unintentional because the types 'U' and 'T' have no overlap.
+comparisonOperatorWithTypeParameter.ts(21,15): error TS2367: This comparison appears to be unintentional because the types 'U' and 'T' have no overlap.
+comparisonOperatorWithTypeParameter.ts(22,15): error TS2367: This comparison appears to be unintentional because the types 'U' and 'T' have no overlap.
+comparisonOperatorWithTypeParameter.ts(24,15): error TS2365: Operator '<' cannot be applied to types 'T' and 'V'.
+comparisonOperatorWithTypeParameter.ts(25,15): error TS2365: Operator '>' cannot be applied to types 'T' and 'V'.
+comparisonOperatorWithTypeParameter.ts(26,15): error TS2365: Operator '<=' cannot be applied to types 'T' and 'V'.
+comparisonOperatorWithTypeParameter.ts(27,15): error TS2365: Operator '>=' cannot be applied to types 'T' and 'V'.
+comparisonOperatorWithTypeParameter.ts(28,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'V' have no overlap.
+comparisonOperatorWithTypeParameter.ts(29,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'V' have no overlap.
+comparisonOperatorWithTypeParameter.ts(30,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'V' have no overlap.
+comparisonOperatorWithTypeParameter.ts(31,15): error TS2367: This comparison appears to be unintentional because the types 'T' and 'V' have no overlap.
+comparisonOperatorWithTypeParameter.ts(33,15): error TS2365: Operator '<' cannot be applied to types 'V' and 'T'.
+comparisonOperatorWithTypeParameter.ts(34,15): error TS2365: Operator '>' cannot be applied to types 'V' and 'T'.
+comparisonOperatorWithTypeParameter.ts(35,15): error TS2365: Operator '<=' cannot be applied to types 'V' and 'T'.
+comparisonOperatorWithTypeParameter.ts(36,15): error TS2365: Operator '>=' cannot be applied to types 'V' and 'T'.
+comparisonOperatorWithTypeParameter.ts(37,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
+comparisonOperatorWithTypeParameter.ts(38,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
+comparisonOperatorWithTypeParameter.ts(39,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
+comparisonOperatorWithTypeParameter.ts(40,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts (32 errors) ====
+==== comparisonOperatorWithTypeParameter.ts (32 errors) ====
     var a: {};
     var b: Object;
     

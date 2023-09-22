@@ -1,10 +1,10 @@
-tests/cases/compiler/arraySigChecking.ts(11,17): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
-tests/cases/compiler/arraySigChecking.ts(18,27): error TS2322: Type 'void' is not assignable to type 'string'.
-tests/cases/compiler/arraySigChecking.ts(22,13): error TS2322: Type 'number' is not assignable to type 'number[]'.
-tests/cases/compiler/arraySigChecking.ts(22,16): error TS2322: Type 'number' is not assignable to type 'number[]'.
+arraySigChecking.ts(11,17): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+arraySigChecking.ts(18,27): error TS2322: Type 'void' is not assignable to type 'string'.
+arraySigChecking.ts(22,13): error TS2322: Type 'number' is not assignable to type 'number[]'.
+arraySigChecking.ts(22,16): error TS2322: Type 'number' is not assignable to type 'number[]'.
 
 
-==== tests/cases/compiler/arraySigChecking.ts (4 errors) ====
+==== arraySigChecking.ts (4 errors) ====
     declare module M {
         interface iBar { t: any; }
         interface iFoo extends iBar {

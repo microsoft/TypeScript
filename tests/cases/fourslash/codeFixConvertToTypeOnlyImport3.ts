@@ -26,7 +26,7 @@
 goTo.file("imports.ts");
 verify.codeFixAll({
     fixId: "convertToTypeOnlyImport",
-    fixAllDescription: ts.Diagnostics.Convert_all_imports_not_used_as_a_value_to_type_only_imports.message,
+    fixAllDescription: ts.Diagnostics.Fix_all_with_type_only_imports.message,
     newFileContent: `import type A from './exports1';
 import type { B, C } from './exports1';
 import type D from "./exports2";

@@ -1,10 +1,10 @@
-tests/cases/compiler/getAndSetNotIdenticalType3.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<number>'.
+getAndSetNotIdenticalType3.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<number>'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/getAndSetNotIdenticalType3.ts(15,1): error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
+getAndSetNotIdenticalType3.ts(15,1): error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/getAndSetNotIdenticalType3.ts (2 errors) ====
+==== getAndSetNotIdenticalType3.ts (2 errors) ====
     class A<T> { foo: T; }
     
     class C<T> {

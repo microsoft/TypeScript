@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts] ////
+
 //// [arityAndOrderCompatibility01.ts]
 interface StrNum extends Array<string|number> {
     0: string;

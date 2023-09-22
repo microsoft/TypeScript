@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noUnusedLocals_writeOnly.ts ===
+//// [tests/cases/compiler/noUnusedLocals_writeOnly.ts] ////
+
+=== noUnusedLocals_writeOnly.ts ===
 function f(x = 0, b = false) {
 >f : (x?: number, b?: boolean) => void
 >x : number

@@ -1,11 +1,13 @@
-=== tests/cases/compiler/base.d.ts ===
+//// [tests/cases/compiler/expressionTypeNodeShouldError.ts] ////
+
+=== base.d.ts ===
 declare const x: "foo".charCodeAt(0);
 >x : "foo"
 >charCodeAt : any
 >(0) : 0
 >0 : 0
 
-=== tests/cases/compiler/string.ts ===
+=== string.ts ===
 interface String {
     typeof<T>(x: T): T;
 >typeof : <T>(x: T) => T
@@ -46,7 +48,7 @@ type ItemType = "".typeof(nodes.item(0));
 >item : (index: number) => HTMLLIElement
 >0 : 0
 
-=== tests/cases/compiler/number.ts ===
+=== number.ts ===
 interface Number {
     typeof<T>(x: T): T;
 >typeof : <T>(x: T) => T
@@ -87,7 +89,7 @@ type ItemType2 = 4..typeof(nodes.item(0));
 >item : (index: number) => HTMLLIElement
 >0 : 0
 
-=== tests/cases/compiler/boolean.ts ===
+=== boolean.ts ===
 interface Boolean {
     typeof<T>(x: T): T;
 >typeof : <T>(x: T) => T

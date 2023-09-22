@@ -1,8 +1,8 @@
-tests/cases/compiler/missingRequiredDeclare.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
-tests/cases/compiler/missingRequiredDeclare.d.ts(1,9): error TS1039: Initializers are not allowed in ambient contexts.
+missingRequiredDeclare.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+missingRequiredDeclare.d.ts(1,9): error TS1039: Initializers are not allowed in ambient contexts.
 
 
-==== tests/cases/compiler/missingRequiredDeclare.d.ts (2 errors) ====
+==== missingRequiredDeclare.d.ts (2 errors) ====
     var x = 1;
     ~~~
 !!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.

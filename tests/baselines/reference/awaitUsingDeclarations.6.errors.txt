@@ -1,0 +1,15 @@
+awaitUsingDeclarations.6.ts(2,17): error TS1492: 'await using' declarations may not have binding patterns.
+awaitUsingDeclarations.6.ts(2,18): error TS2339: Property 'a' does not exist on type 'null'.
+
+
+==== awaitUsingDeclarations.6.ts (2 errors) ====
+    {
+        await using {a} = null;
+                    ~~~
+!!! error TS1492: 'await using' declarations may not have binding patterns.
+                     ~
+!!! error TS2339: Property 'a' does not exist on type 'null'.
+    }
+    
+    
+    export {};

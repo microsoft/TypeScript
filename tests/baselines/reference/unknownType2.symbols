@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/unknown/unknownType2.ts ===
+//// [tests/cases/conformance/types/unknown/unknownType2.ts] ////
+
+=== unknownType2.ts ===
 type isUnknown<T> = unknown extends T ? true : false;
 >isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
 >T : Symbol(T, Decl(unknownType2.ts, 0, 15))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emptyAnonymousObjectNarrowing.ts ===
+//// [tests/cases/compiler/emptyAnonymousObjectNarrowing.ts] ////
+
+=== emptyAnonymousObjectNarrowing.ts ===
 declare let nonNull: {};
 >nonNull : {}
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/other.ts ===
+//// [tests/cases/compiler/declarationEmitWithDefaultAsComputedName2.ts] ////
+
+=== other.ts ===
 type Experiment<Name> = {
 >Experiment : Symbol(Experiment, Decl(other.ts, 0, 0))
 >Name : Symbol(Name, Decl(other.ts, 0, 16))
@@ -29,7 +31,7 @@ export default createExperiment({
 
 });
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import * as other2 from "./other";
 >other2 : Symbol(other2, Decl(main.ts, 0, 6))
 

@@ -16,6 +16,7 @@ import {
     emptyArray,
     Expression,
     factory,
+    findAncestor,
     findContainingList,
     findIndex,
     findPrecedingToken,
@@ -30,7 +31,9 @@ import {
     Identifier,
     identity,
     InternalSymbolName,
+    isArrayBindingPattern,
     isBinaryExpression,
+    isBindingElement,
     isBlock,
     isCallOrNewExpression,
     isFunctionTypeNode,
@@ -41,6 +44,8 @@ import {
     isJsxOpeningLikeElement,
     isMethodDeclaration,
     isNoSubstitutionTemplateLiteral,
+    isObjectBindingPattern,
+    isParameter,
     isPropertyAccessExpression,
     isSourceFile,
     isSourceFileJS,
@@ -50,6 +55,7 @@ import {
     isTemplateSpan,
     isTemplateTail,
     isTransientSymbol,
+    JsxTagNameExpression,
     last,
     lastOrUndefined,
     ListFormat,
@@ -84,9 +90,19 @@ import {
     TypeParameter,
 } from "./_namespaces/ts";
 
-const enum InvocationKind { Call, TypeArgs, Contextual }
-interface CallInvocation { readonly kind: InvocationKind.Call; readonly node: CallLikeExpression; }
-interface TypeArgsInvocation { readonly kind: InvocationKind.TypeArgs; readonly called: Identifier; }
+const enum InvocationKind {
+    Call,
+    TypeArgs,
+    Contextual,
+}
+interface CallInvocation {
+    readonly kind: InvocationKind.Call;
+    readonly node: CallLikeExpression;
+}
+interface TypeArgsInvocation {
+    readonly kind: InvocationKind.TypeArgs;
+    readonly called: Identifier;
+}
 interface ContextualInvocation {
     readonly kind: InvocationKind.Contextual;
     readonly signature: Signature;
@@ -145,7 +161,10 @@ export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, 
             : createTypeHelpItems(candidateInfo.symbol, argumentInfo, sourceFile, typeChecker));
 }
 
-const enum CandidateOrTypeKind { Candidate, Type }
+const enum CandidateOrTypeKind {
+    Candidate,
+    Type,
+}
 interface CandidateInfo {
     readonly kind: CandidateOrTypeKind.Candidate;
     readonly candidates: readonly Signature[];
@@ -214,13 +233,16 @@ function createJSSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Pro
             if (callSignatures && callSignatures.length) {
                 return typeChecker.runWithCancellationToken(
                     cancellationToken,
-                    typeChecker => createSignatureHelpItems(
-                        callSignatures,
-                        callSignatures[0],
-                        argumentInfo,
-                        sourceFile,
-                        typeChecker,
-                        /*useFullPrefix*/ true));
+                    typeChecker =>
+                        createSignatureHelpItems(
+                            callSignatures,
+                            callSignatures[0],
+                            argumentInfo,
+                            sourceFile,
+                            typeChecker,
+                            /*useFullPrefix*/ true,
+                        ),
+                );
             }
         }));
 }
@@ -256,7 +278,7 @@ export function getArgumentInfoForCompletions(node: Node, position: number, sour
         : { invocation: info.invocation.node, argumentCount: info.argumentCount, argumentIndex: info.argumentIndex };
 }
 
-function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile: SourceFile): { readonly list: Node, readonly argumentIndex: number, readonly argumentCount: number, readonly argumentsSpan: TextSpan } | undefined {
+function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile: SourceFile): { readonly list: Node; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; } | undefined {
     const info = getArgumentOrParameterListAndIndex(node, sourceFile);
     if (!info) return undefined;
     const { list, argumentIndex } = info;
@@ -268,7 +290,7 @@ function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile
     const argumentsSpan = getApplicableSpanForArguments(list, sourceFile);
     return { list, argumentIndex, argumentCount, argumentsSpan };
 }
-function getArgumentOrParameterListAndIndex(node: Node, sourceFile: SourceFile): { readonly list: Node, readonly argumentIndex: number } | undefined {
+function getArgumentOrParameterListAndIndex(node: Node, sourceFile: SourceFile): { readonly list: Node; readonly argumentIndex: number; } | undefined {
     if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
         // Find the list that starts right *after* the < or ( token.
         // If the user has just opened a list, consider this item 0.
@@ -359,7 +381,7 @@ function getImmediatelyContainingArgumentInfo(node: Node, position: number, sour
             invocation: { kind: InvocationKind.Call, node: parent },
             argumentsSpan: createTextSpan(attributeSpanStart, attributeSpanEnd - attributeSpanStart),
             argumentIndex: 0,
-            argumentCount: 1
+            argumentCount: 1,
         };
     }
     else {
@@ -387,8 +409,11 @@ function countBinaryExpressionParameters(b: BinaryExpression): number {
 }
 
 function tryGetParameterInfo(startingToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
-    const info = getContextualSignatureLocationInfo(startingToken, sourceFile, position, checker);
-    if (!info) return undefined;
+    const node = getAdjustedNode(startingToken);
+    if (node === undefined) return undefined;
+
+    const info = getContextualSignatureLocationInfo(node, sourceFile, position, checker);
+    if (info === undefined) return undefined;
     const { contextualType, argumentIndex, argumentCount, argumentsSpan } = info;
 
     // for optional function condition.
@@ -404,16 +429,30 @@ function tryGetParameterInfo(startingToken: Node, position: number, sourceFile: 
     return { isTypeParameterList: false, invocation, argumentsSpan, argumentIndex, argumentCount };
 }
 
-interface ContextualSignatureLocationInfo { readonly contextualType: Type; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; }
-function getContextualSignatureLocationInfo(startingToken: Node, sourceFile: SourceFile, position: number, checker: TypeChecker): ContextualSignatureLocationInfo | undefined {
-    if (startingToken.kind !== SyntaxKind.OpenParenToken && startingToken.kind !== SyntaxKind.CommaToken) return undefined;
-    const { parent } = startingToken;
+function getAdjustedNode(node: Node) {
+    switch (node.kind) {
+        case SyntaxKind.OpenParenToken:
+        case SyntaxKind.CommaToken:
+            return node;
+        default:
+            return findAncestor(node.parent, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
+    }
+}
+
+interface ContextualSignatureLocationInfo {
+    readonly contextualType: Type;
+    readonly argumentIndex: number;
+    readonly argumentCount: number;
+    readonly argumentsSpan: TextSpan;
+}
+function getContextualSignatureLocationInfo(node: Node, sourceFile: SourceFile, position: number, checker: TypeChecker): ContextualSignatureLocationInfo | undefined {
+    const { parent } = node;
     switch (parent.kind) {
         case SyntaxKind.ParenthesizedExpression:
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
-            const info = getArgumentOrParameterListInfo(startingToken, position, sourceFile);
+            const info = getArgumentOrParameterListInfo(node, position, sourceFile);
             if (!info) return undefined;
             const { argumentIndex, argumentCount, argumentsSpan } = info;
             const contextualType = isMethodDeclaration(parent) ? checker.getContextualTypeForObjectLiteralElement(parent) : checker.getContextualType(parent as ParenthesizedExpression | FunctionExpression | ArrowFunction);
@@ -421,7 +460,7 @@ function getContextualSignatureLocationInfo(startingToken: Node, sourceFile: Sou
         case SyntaxKind.BinaryExpression: {
             const highestBinary = getHighestBinary(parent as BinaryExpression);
             const contextualType = checker.getContextualType(highestBinary);
-            const argumentIndex = startingToken.kind === SyntaxKind.OpenParenToken ? 0 : countBinaryExpressionParameters(parent as BinaryExpression) - 1;
+            const argumentIndex = node.kind === SyntaxKind.OpenParenToken ? 0 : countBinaryExpressionParameters(parent as BinaryExpression) - 1;
             const argumentCount = countBinaryExpressionParameters(highestBinary);
             return contextualType && { contextualType, argumentIndex, argumentCount, argumentsSpan: createTextSpanFromNode(parent) };
         }
@@ -494,11 +533,9 @@ function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node, positio
     //          not enough to put us in the substitution expression; we should consider ourselves part of
     //          the *next* span's expression by offsetting the index (argIndex = (spanIndex + 1) + 1).
     //
-    /* eslint-disable local/no-double-space */
     // Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
     //              ^       ^ ^       ^   ^          ^ ^      ^     ^
     // Case:        1       1 3       2   1          3 2      2     1
-    /* eslint-enable local/no-double-space */
     Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
     if (isTemplateLiteralToken(node)) {
         if (isInsideTemplateLiteral(node, position, sourceFile)) {
@@ -520,7 +557,7 @@ function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression,
         invocation: { kind: InvocationKind.Call, node: tagExpression },
         argumentsSpan: getApplicableSpanForTaggedTemplate(tagExpression, sourceFile),
         argumentIndex,
-        argumentCount
+        argumentCount,
     };
 }
 
@@ -581,7 +618,7 @@ function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, 
     return children[indexOfOpenerToken + 1];
 }
 
-function getExpressionFromInvocation(invocation: CallInvocation | TypeArgsInvocation): Expression {
+function getExpressionFromInvocation(invocation: CallInvocation | TypeArgsInvocation): Expression | JsxTagNameExpression {
     return invocation.kind === InvocationKind.Call ? getInvokedExpression(invocation.node) : invocation.called;
 }
 
@@ -648,7 +685,7 @@ function createTypeHelpItems(
     symbol: Symbol,
     { argumentCount, argumentsSpan: applicableSpan, invocation, argumentIndex }: ArgumentListInfo,
     sourceFile: SourceFile,
-    checker: TypeChecker
+    checker: TypeChecker,
 ): SignatureHelpItems | undefined {
     const typeParameters = checker.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
     if (!typeParameters) return undefined;
@@ -695,7 +732,12 @@ function returnTypeToDisplayParts(candidateSignature: Signature, enclosingDeclar
     });
 }
 
-interface SignatureHelpItemInfo { readonly isVariadic: boolean; readonly parameters: SignatureHelpParameter[]; readonly prefix: readonly SymbolDisplayPart[]; readonly suffix: readonly SymbolDisplayPart[]; }
+interface SignatureHelpItemInfo {
+    readonly isVariadic: boolean;
+    readonly parameters: SignatureHelpParameter[];
+    readonly prefix: readonly SymbolDisplayPart[];
+    readonly suffix: readonly SymbolDisplayPart[];
+}
 
 function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
     const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;
@@ -721,15 +763,14 @@ function itemInfoForParameters(candidateSignature: Signature, checker: TypeCheck
         }
     });
     const lists = checker.getExpandedParameters(candidateSignature);
-    const isVariadic: (parameterList: readonly Symbol[]) => boolean =
-        !checker.hasEffectiveRestParameter(candidateSignature) ? _ => false
+    const isVariadic: (parameterList: readonly Symbol[]) => boolean = !checker.hasEffectiveRestParameter(candidateSignature) ? _ => false
         : lists.length === 1 ? _ => true
         : pList => !!(pList.length && tryCast(pList[pList.length - 1], isTransientSymbol)?.links.checkFlags! & CheckFlags.RestParameter);
     return lists.map(parameterList => ({
         isVariadic: isVariadic(parameterList),
         parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),
         prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)],
-        suffix: [punctuationPart(SyntaxKind.CloseParenToken)]
+        suffix: [punctuationPart(SyntaxKind.CloseParenToken)],
     }));
 }
 

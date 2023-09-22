@@ -26,15 +26,7 @@
   //     }
   // }
   // 
-  // const Comp = () =>
-  //     <div>
-  //         Some content
-  //         <div>More content</div>
-  //     </div>;
-  // 
-  // const x = <Comp>
-  //     Content
-  // </Comp>;
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -131,10 +123,7 @@
   //         Some content
   //         <div>More content</div>
   //     </div>;
-  // 
-  // const x = <Comp>
-  //     Content
-  // </Comp>;
+  // --- (line: 13) skipped ---
 
   // === Details ===
   [
@@ -500,10 +489,7 @@
 
 // === findAllReferences ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
+// --- (line: 4) skipped ---
 //     }
 // }
 // 
@@ -519,10 +505,7 @@
 
   // === Definitions ===
   // === /a.tsx ===
-  // namespace JSX {
-  //     export interface Element { }
-  //     export interface IntrinsicElements {
-  //         div: any;
+  // --- (line: 4) skipped ---
   //     }
   // }
   // 
@@ -604,10 +587,7 @@
 
 // === findAllReferences ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
+// --- (line: 4) skipped ---
 //     }
 // }
 // 
@@ -623,10 +603,7 @@
 
   // === Definitions ===
   // === /a.tsx ===
-  // namespace JSX {
-  //     export interface Element { }
-  //     export interface IntrinsicElements {
-  //         div: any;
+  // --- (line: 4) skipped ---
   //     }
   // }
   // 
@@ -708,10 +685,7 @@
 
 // === findAllReferences ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
+// --- (line: 4) skipped ---
 //     }
 // }
 // 
@@ -727,10 +701,7 @@
 
   // === Definitions ===
   // === /a.tsx ===
-  // namespace JSX {
-  //     export interface Element { }
-  //     export interface IntrinsicElements {
-  //         div: any;
+  // --- (line: 4) skipped ---
   //     }
   // }
   // 
@@ -833,11 +804,7 @@
 
 // === documentHighlights ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
-//     }
+// --- (line: 5) skipped ---
 // }
 // 
 // const Comp = () =>
@@ -854,13 +821,7 @@
 
 // === documentHighlights ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
-//     }
-// }
-// 
+// --- (line: 7) skipped ---
 // const Comp = () =>
 //     <div>
 //         Some content
@@ -875,13 +836,7 @@
 
 // === documentHighlights ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
-//     }
-// }
-// 
+// --- (line: 7) skipped ---
 // const Comp = () =>
 //     <div>
 //         Some content
@@ -896,11 +851,7 @@
 
 // === documentHighlights ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
-//     }
+// --- (line: 5) skipped ---
 // }
 // 
 // const Comp = () =>
@@ -917,10 +868,7 @@
 
 // === documentHighlights ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
+// --- (line: 4) skipped ---
 //     }
 // }
 // 
@@ -938,16 +886,7 @@
 
 // === documentHighlights ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
-//     }
-// }
-// 
-// const Comp = () =>
-//     <div>
-//         Some content
+// --- (line: 10) skipped ---
 //         <div>More content</div>
 //     </div>;
 // 
@@ -959,16 +898,7 @@
 
 // === documentHighlights ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
-//     }
-// }
-// 
-// const Comp = () =>
-//     <div>
-//         Some content
+// --- (line: 10) skipped ---
 //         <div>More content</div>
 //     </div>;
 // 

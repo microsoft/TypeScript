@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts] ////
+
 //// [autoAccessorDisallowedModifiers.ts]
 abstract class C1 {
     accessor accessor a: any;

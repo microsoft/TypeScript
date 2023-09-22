@@ -13,21 +13,7 @@
 //         function f() {
 //             break;
 //             break;
-//         }
-// }
-// 
-// switch (10) {
-//     default
-//     case 1:
-//     case 2
-// 
-//     cose 4:
-//     case 8:
-//     case 0xBEEF:
-//         break;
-//     case 16:
-//         () => break;
-// }
+// --- (line: 14) skipped ---
 
 
 
@@ -46,29 +32,13 @@
 //         function f() {
 //             break;
 //             break;
-//         }
-// }
-// 
-// switch (10) {
-//     default
-//     case 1:
-//     case 2
-// 
-//     cose 4:
-//     case 8:
-//     case 0xBEEF:
-//         break;
-//     case 16:
-//         () => break;
-// }
+// --- (line: 14) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefaultBroken.ts ===
-// switch(10) {
-//     case 1:
-//     case 2:
+// --- (line: 3) skipped ---
 //     case 4:
 //     case 8:
 //     case 0xBEEF:
@@ -77,33 +47,13 @@
 //     cas 16:
 //     case 12:
 //         function f() {
-//             break;
-//             break;
-//         }
-// }
-// 
-// switch (10) {
-//     default
-//     case 1:
-//     case 2
-// 
-//     cose 4:
-//     case 8:
-//     case 0xBEEF:
-//         break;
-//     case 16:
-//         () => break;
-// }
+// --- (line: 12) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefaultBroken.ts ===
-// switch(10) {
-//     case 1:
-//     case 2:
-//     case 4:
-//     case 8:
+// --- (line: 5) skipped ---
 //     case 0xBEEF:
 //     defult:
 //         break;
@@ -111,22 +61,7 @@
 //     case 12:
 //         function f() {
 //             break;
-//             break;
-//         }
-// }
-// 
-// switch (10) {
-//     default
-//     case 1:
-//     case 2
-// 
-//     cose 4:
-//     case 8:
-//     case 0xBEEF:
-//         break;
-//     case 16:
-//         () => break;
-// }
+// --- (line: 13) skipped ---
 
 
 
@@ -145,34 +80,13 @@
 //         function f() {
 //             break;
 //             break;
-//         }
-// }
-// 
-// switch (10) {
-//     default
-//     case 1:
-//     case 2
-// 
-//     cose 4:
-//     case 8:
-//     case 0xBEEF:
-//         break;
-//     case 16:
-//         () => break;
-// }
+// --- (line: 14) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefaultBroken.ts ===
-// switch(10) {
-//     case 1:
-//     case 2:
-//     case 4:
-//     case 8:
-//     case 0xBEEF:
-//     defult:
-//         break;
+// --- (line: 8) skipped ---
 //     cas 16:
 //     case 12:
 //         function f() {
@@ -180,33 +94,13 @@
 //             break;
 //         }
 // }
-// 
-// switch (10) {
-//     default
-//     case 1:
-//     case 2
-// 
-//     cose 4:
-//     case 8:
-//     case 0xBEEF:
-//         break;
-//     case 16:
-//         () => break;
-// }
+// --- (line: 16) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefaultBroken.ts ===
-// switch(10) {
-//     case 1:
-//     case 2:
-//     case 4:
-//     case 8:
-//     case 0xBEEF:
-//     defult:
-//         break;
-//     cas 16:
+// --- (line: 9) skipped ---
 //     case 12:
 //         function f() {
 //             break;
@@ -214,36 +108,13 @@
 //         }
 // }
 // 
-// switch (10) {
-//     default
-//     case 1:
-//     case 2
-// 
-//     cose 4:
-//     case 8:
-//     case 0xBEEF:
-//         break;
-//     case 16:
-//         () => break;
-// }
+// --- (line: 17) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefaultBroken.ts ===
-// switch(10) {
-//     case 1:
-//     case 2:
-//     case 4:
-//     case 8:
-//     case 0xBEEF:
-//     defult:
-//         break;
-//     cas 16:
-//     case 12:
-//         function f() {
-//             break;
-//             break;
+// --- (line: 13) skipped ---
 //         }
 // }
 // 
@@ -264,19 +135,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefaultBroken.ts ===
-// switch(10) {
-//     case 1:
-//     case 2:
-//     case 4:
-//     case 8:
-//     case 0xBEEF:
-//     defult:
-//         break;
-//     cas 16:
-//     case 12:
-//         function f() {
-//             break;
-//             break;
+// --- (line: 13) skipped ---
 //         }
 // }
 // 
@@ -297,24 +156,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefaultBroken.ts ===
-// switch(10) {
-//     case 1:
-//     case 2:
-//     case 4:
-//     case 8:
-//     case 0xBEEF:
-//     defult:
-//         break;
-//     cas 16:
-//     case 12:
-//         function f() {
-//             break;
-//             break;
-//         }
-// }
-// 
-// switch (10) {
-//     default
+// --- (line: 18) skipped ---
 //     case 1:
 //     case 2
 // 
@@ -322,27 +164,13 @@
 //     case 8:
 //     case 0xBEEF:
 //         break;
-//     case 16:
-//         () => break;
-// }
+// --- (line: 26) skipped ---
 
 
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefaultBroken.ts ===
-// switch(10) {
-//     case 1:
-//     case 2:
-//     case 4:
-//     case 8:
-//     case 0xBEEF:
-//     defult:
-//         break;
-//     cas 16:
-//     case 12:
-//         function f() {
-//             break;
-//             break;
+// --- (line: 13) skipped ---
 //         }
 // }
 // 
@@ -363,29 +191,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefaultBroken.ts ===
-// switch(10) {
-//     case 1:
-//     case 2:
-//     case 4:
-//     case 8:
-//     case 0xBEEF:
-//     defult:
-//         break;
-//     cas 16:
-//     case 12:
-//         function f() {
-//             break;
-//             break;
-//         }
-// }
-// 
-// switch (10) {
-//     default
-//     case 1:
-//     case 2
-// 
-//     cose 4:
-//     case 8:
+// --- (line: 23) skipped ---
 //     case 0xBEEF:
 //         break;
 //     case 16:

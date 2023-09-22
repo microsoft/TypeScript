@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newLexicalEnvironmentForConvertedLoop.ts ===
+//// [tests/cases/compiler/newLexicalEnvironmentForConvertedLoop.ts] ////
+
+=== newLexicalEnvironmentForConvertedLoop.ts ===
 function baz(x: any) {
 >baz : (x: any) => any[][]
 >x : any
@@ -40,6 +42,6 @@ function foo(set: any) {
 >values : any
 >push : any
 >...[] : never
->[] : readonly []
+>[] : []
   }
 };

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/matchReturnTypeInAllBranches.ts] ////
+
 //// [matchReturnTypeInAllBranches.ts]
 // Represents a monster who enjoys ice cream
 class IceCreamMonster {

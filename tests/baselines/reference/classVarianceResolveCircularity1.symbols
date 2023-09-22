@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/classVarianceResolveCircularity1.ts] ////
+
+=== classVarianceResolveCircularity1.ts ===
+// Issue #52813
+
+class Bar<T> {
+>Bar : Symbol(Bar, Decl(classVarianceResolveCircularity1.ts, 0, 0))
+>T : Symbol(T, Decl(classVarianceResolveCircularity1.ts, 2, 10))
+
+    num!: number;
+>num : Symbol(Bar.num, Decl(classVarianceResolveCircularity1.ts, 2, 14))
+
+    Value = callme(this).num;
+>Value : Symbol(Bar.Value, Decl(classVarianceResolveCircularity1.ts, 3, 17))
+>callme(this).num : Symbol(Bar.num, Decl(classVarianceResolveCircularity1.ts, 2, 14))
+>callme : Symbol(callme, Decl(classVarianceResolveCircularity1.ts, 6, 1), Decl(classVarianceResolveCircularity1.ts, 7, 47))
+>this : Symbol(Bar, Decl(classVarianceResolveCircularity1.ts, 0, 0))
+>num : Symbol(Bar.num, Decl(classVarianceResolveCircularity1.ts, 2, 14))
+
+    Field: number = callme(this).num;
+>Field : Symbol(Bar.Field, Decl(classVarianceResolveCircularity1.ts, 4, 29))
+>callme(this).num : Symbol(Bar.num, Decl(classVarianceResolveCircularity1.ts, 2, 14))
+>callme : Symbol(callme, Decl(classVarianceResolveCircularity1.ts, 6, 1), Decl(classVarianceResolveCircularity1.ts, 7, 47))
+>this : Symbol(Bar, Decl(classVarianceResolveCircularity1.ts, 0, 0))
+>num : Symbol(Bar.num, Decl(classVarianceResolveCircularity1.ts, 2, 14))
+}
+declare function callme(x: Bar<any>): Bar<any>;
+>callme : Symbol(callme, Decl(classVarianceResolveCircularity1.ts, 6, 1), Decl(classVarianceResolveCircularity1.ts, 7, 47))
+>x : Symbol(x, Decl(classVarianceResolveCircularity1.ts, 7, 24))
+>Bar : Symbol(Bar, Decl(classVarianceResolveCircularity1.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(classVarianceResolveCircularity1.ts, 0, 0))
+
+declare function callme(x: object): string;
+>callme : Symbol(callme, Decl(classVarianceResolveCircularity1.ts, 6, 1), Decl(classVarianceResolveCircularity1.ts, 7, 47))
+>x : Symbol(x, Decl(classVarianceResolveCircularity1.ts, 8, 24))
+

@@ -8,18 +8,7 @@
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
@@ -28,21 +17,7 @@
   //     set #foo(value: number){  }
   //     constructor() {
   //         this.#foo();
-  //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
-  //     }
-  // }
-  // class E {
-  //     get #foo(){ return 1; }
-  //     set #foo(value: number){  }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -108,18 +83,7 @@
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
@@ -128,21 +92,7 @@
   //     set #foo(value: number){  }
   //     constructor() {
   //         this.#foo();
-  //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
-  //     }
-  // }
-  // class E {
-  //     get #foo(){ return 1; }
-  //     set #foo(value: number){  }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -208,18 +158,7 @@
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
@@ -229,20 +168,7 @@
   //     constructor() {
   //         this.#foo();
   //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
-  //     }
-  // }
-  // class E {
-  //     get #foo(){ return 1; }
-  //     set #foo(value: number){  }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -308,18 +234,7 @@
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
@@ -329,20 +244,7 @@
   //     constructor() {
   //         this.#foo();
   //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
-  //     }
-  // }
-  // class E {
-  //     get #foo(){ return 1; }
-  //     set #foo(value: number){  }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -408,18 +310,7 @@
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 9) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
@@ -431,18 +322,7 @@
   //     }
   // }
   // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
-  //     }
-  // }
-  // class E {
-  //     get #foo(){ return 1; }
-  //     set #foo(value: number){  }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
+  // --- (line: 9) skipped ---
 
   // === Details ===
   [
@@ -500,17 +380,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-// class C {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 11) skipped ---
 //     }
 // }
 // class E {
@@ -523,17 +393,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-  // class C {
-  //     get #foo(){ return 1; }
-  //     set #foo(value: number){  }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
+  // --- (line: 11) skipped ---
   //     }
   // }
   // class E {
@@ -600,17 +460,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-// class C {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 11) skipped ---
 //     }
 // }
 // class E {
@@ -623,17 +473,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-  // class C {
-  //     get #foo(){ return 1; }
-  //     set #foo(value: number){  }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
+  // --- (line: 11) skipped ---
   //     }
   // }
   // class E {
@@ -700,17 +540,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-// class C {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 11) skipped ---
 //     }
 // }
 // class E {
@@ -723,17 +553,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-  // class C {
-  //     get #foo(){ return 1; }
-  //     set #foo(value: number){  }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
+  // --- (line: 11) skipped ---
   //     }
   // }
   // class E {
@@ -800,17 +620,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-// class C {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 11) skipped ---
 //     }
 // }
 // class E {
@@ -823,17 +633,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-  // class C {
-  //     get #foo(){ return 1; }
-  //     set #foo(value: number){  }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
+  // --- (line: 11) skipped ---
   //     }
   // }
   // class E {
@@ -900,17 +700,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-// class C {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 11) skipped ---
 //     }
 // }
 // class E {
@@ -923,17 +713,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-  // class C {
-  //     get #foo(){ return 1; }
-  //     set #foo(value: number){  }
-  //     constructor() {
-  //         this.#foo();
-  //     }
-  // }
-  // class D extends C {
-  //     constructor() {
-  //         super()
-  //         this.#foo = 20;
+  // --- (line: 11) skipped ---
   //     }
   // }
   // class E {

@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info 0    [00:03:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/tsconfig.json]
 { "compilerOptions": { "module": "commonjs" } }
@@ -314,7 +314,7 @@ export const S99_0 = 0;
                     export = exp;
 
 
-Info 1    [00:03:34.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "configure",
       "arguments": {
@@ -329,9 +329,15 @@ Info 1    [00:03:34.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:03:35.000] response:
-    {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-Info 3    [00:03:36.000] response:
+Info seq  [hh:mm:ss:mss] response:
+    {
+     "seq": 0,
+     "type": "response",
+     "command": "configure",
+     "request_seq": 1,
+     "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -339,7 +345,7 @@ After request
 
 Before request
 
-Info 4    [00:03:37.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
@@ -348,11 +354,11 @@ Info 4    [00:03:37.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 5    [00:03:38.000] Search path: /
-Info 6    [00:03:39.000] For info: /index.ts :: Config file name: /tsconfig.json
-Info 7    [00:03:40.000] Creating configuration project /tsconfig.json
-Info 8    [00:03:41.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info 9    [00:03:42.000] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Search path: /
+Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/index.ts",
   "/lib/a_0.ts",
@@ -462,114 +468,114 @@ Info 9    [00:03:42.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 10   [00:03:43.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 11   [00:03:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 12   [00:03:45.000] FileWatcher:: Added:: WatchInfo: /lib/a_0.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:03:46.000] FileWatcher:: Added:: WatchInfo: /lib/a_1.ts 500 undefined WatchType: Closed Script info
-Info 14   [00:03:47.000] FileWatcher:: Added:: WatchInfo: /lib/a_10.ts 500 undefined WatchType: Closed Script info
-Info 15   [00:03:48.000] FileWatcher:: Added:: WatchInfo: /lib/a_11.ts 500 undefined WatchType: Closed Script info
-Info 16   [00:03:49.000] FileWatcher:: Added:: WatchInfo: /lib/a_12.ts 500 undefined WatchType: Closed Script info
-Info 17   [00:03:50.000] FileWatcher:: Added:: WatchInfo: /lib/a_13.ts 500 undefined WatchType: Closed Script info
-Info 18   [00:03:51.000] FileWatcher:: Added:: WatchInfo: /lib/a_14.ts 500 undefined WatchType: Closed Script info
-Info 19   [00:03:52.000] FileWatcher:: Added:: WatchInfo: /lib/a_15.ts 500 undefined WatchType: Closed Script info
-Info 20   [00:03:53.000] FileWatcher:: Added:: WatchInfo: /lib/a_16.ts 500 undefined WatchType: Closed Script info
-Info 21   [00:03:54.000] FileWatcher:: Added:: WatchInfo: /lib/a_17.ts 500 undefined WatchType: Closed Script info
-Info 22   [00:03:55.000] FileWatcher:: Added:: WatchInfo: /lib/a_18.ts 500 undefined WatchType: Closed Script info
-Info 23   [00:03:56.000] FileWatcher:: Added:: WatchInfo: /lib/a_19.ts 500 undefined WatchType: Closed Script info
-Info 24   [00:03:57.000] FileWatcher:: Added:: WatchInfo: /lib/a_2.ts 500 undefined WatchType: Closed Script info
-Info 25   [00:03:58.000] FileWatcher:: Added:: WatchInfo: /lib/a_20.ts 500 undefined WatchType: Closed Script info
-Info 26   [00:03:59.000] FileWatcher:: Added:: WatchInfo: /lib/a_21.ts 500 undefined WatchType: Closed Script info
-Info 27   [00:04:00.000] FileWatcher:: Added:: WatchInfo: /lib/a_22.ts 500 undefined WatchType: Closed Script info
-Info 28   [00:04:01.000] FileWatcher:: Added:: WatchInfo: /lib/a_23.ts 500 undefined WatchType: Closed Script info
-Info 29   [00:04:02.000] FileWatcher:: Added:: WatchInfo: /lib/a_24.ts 500 undefined WatchType: Closed Script info
-Info 30   [00:04:03.000] FileWatcher:: Added:: WatchInfo: /lib/a_25.ts 500 undefined WatchType: Closed Script info
-Info 31   [00:04:04.000] FileWatcher:: Added:: WatchInfo: /lib/a_26.ts 500 undefined WatchType: Closed Script info
-Info 32   [00:04:05.000] FileWatcher:: Added:: WatchInfo: /lib/a_27.ts 500 undefined WatchType: Closed Script info
-Info 33   [00:04:06.000] FileWatcher:: Added:: WatchInfo: /lib/a_28.ts 500 undefined WatchType: Closed Script info
-Info 34   [00:04:07.000] FileWatcher:: Added:: WatchInfo: /lib/a_29.ts 500 undefined WatchType: Closed Script info
-Info 35   [00:04:08.000] FileWatcher:: Added:: WatchInfo: /lib/a_3.ts 500 undefined WatchType: Closed Script info
-Info 36   [00:04:09.000] FileWatcher:: Added:: WatchInfo: /lib/a_30.ts 500 undefined WatchType: Closed Script info
-Info 37   [00:04:10.000] FileWatcher:: Added:: WatchInfo: /lib/a_31.ts 500 undefined WatchType: Closed Script info
-Info 38   [00:04:11.000] FileWatcher:: Added:: WatchInfo: /lib/a_32.ts 500 undefined WatchType: Closed Script info
-Info 39   [00:04:12.000] FileWatcher:: Added:: WatchInfo: /lib/a_33.ts 500 undefined WatchType: Closed Script info
-Info 40   [00:04:13.000] FileWatcher:: Added:: WatchInfo: /lib/a_34.ts 500 undefined WatchType: Closed Script info
-Info 41   [00:04:14.000] FileWatcher:: Added:: WatchInfo: /lib/a_35.ts 500 undefined WatchType: Closed Script info
-Info 42   [00:04:15.000] FileWatcher:: Added:: WatchInfo: /lib/a_36.ts 500 undefined WatchType: Closed Script info
-Info 43   [00:04:16.000] FileWatcher:: Added:: WatchInfo: /lib/a_37.ts 500 undefined WatchType: Closed Script info
-Info 44   [00:04:17.000] FileWatcher:: Added:: WatchInfo: /lib/a_38.ts 500 undefined WatchType: Closed Script info
-Info 45   [00:04:18.000] FileWatcher:: Added:: WatchInfo: /lib/a_39.ts 500 undefined WatchType: Closed Script info
-Info 46   [00:04:19.000] FileWatcher:: Added:: WatchInfo: /lib/a_4.ts 500 undefined WatchType: Closed Script info
-Info 47   [00:04:20.000] FileWatcher:: Added:: WatchInfo: /lib/a_40.ts 500 undefined WatchType: Closed Script info
-Info 48   [00:04:21.000] FileWatcher:: Added:: WatchInfo: /lib/a_41.ts 500 undefined WatchType: Closed Script info
-Info 49   [00:04:22.000] FileWatcher:: Added:: WatchInfo: /lib/a_42.ts 500 undefined WatchType: Closed Script info
-Info 50   [00:04:23.000] FileWatcher:: Added:: WatchInfo: /lib/a_43.ts 500 undefined WatchType: Closed Script info
-Info 51   [00:04:24.000] FileWatcher:: Added:: WatchInfo: /lib/a_44.ts 500 undefined WatchType: Closed Script info
-Info 52   [00:04:25.000] FileWatcher:: Added:: WatchInfo: /lib/a_45.ts 500 undefined WatchType: Closed Script info
-Info 53   [00:04:26.000] FileWatcher:: Added:: WatchInfo: /lib/a_46.ts 500 undefined WatchType: Closed Script info
-Info 54   [00:04:27.000] FileWatcher:: Added:: WatchInfo: /lib/a_47.ts 500 undefined WatchType: Closed Script info
-Info 55   [00:04:28.000] FileWatcher:: Added:: WatchInfo: /lib/a_48.ts 500 undefined WatchType: Closed Script info
-Info 56   [00:04:29.000] FileWatcher:: Added:: WatchInfo: /lib/a_49.ts 500 undefined WatchType: Closed Script info
-Info 57   [00:04:30.000] FileWatcher:: Added:: WatchInfo: /lib/a_5.ts 500 undefined WatchType: Closed Script info
-Info 58   [00:04:31.000] FileWatcher:: Added:: WatchInfo: /lib/a_50.ts 500 undefined WatchType: Closed Script info
-Info 59   [00:04:32.000] FileWatcher:: Added:: WatchInfo: /lib/a_51.ts 500 undefined WatchType: Closed Script info
-Info 60   [00:04:33.000] FileWatcher:: Added:: WatchInfo: /lib/a_52.ts 500 undefined WatchType: Closed Script info
-Info 61   [00:04:34.000] FileWatcher:: Added:: WatchInfo: /lib/a_53.ts 500 undefined WatchType: Closed Script info
-Info 62   [00:04:35.000] FileWatcher:: Added:: WatchInfo: /lib/a_54.ts 500 undefined WatchType: Closed Script info
-Info 63   [00:04:36.000] FileWatcher:: Added:: WatchInfo: /lib/a_55.ts 500 undefined WatchType: Closed Script info
-Info 64   [00:04:37.000] FileWatcher:: Added:: WatchInfo: /lib/a_56.ts 500 undefined WatchType: Closed Script info
-Info 65   [00:04:38.000] FileWatcher:: Added:: WatchInfo: /lib/a_57.ts 500 undefined WatchType: Closed Script info
-Info 66   [00:04:39.000] FileWatcher:: Added:: WatchInfo: /lib/a_58.ts 500 undefined WatchType: Closed Script info
-Info 67   [00:04:40.000] FileWatcher:: Added:: WatchInfo: /lib/a_59.ts 500 undefined WatchType: Closed Script info
-Info 68   [00:04:41.000] FileWatcher:: Added:: WatchInfo: /lib/a_6.ts 500 undefined WatchType: Closed Script info
-Info 69   [00:04:42.000] FileWatcher:: Added:: WatchInfo: /lib/a_60.ts 500 undefined WatchType: Closed Script info
-Info 70   [00:04:43.000] FileWatcher:: Added:: WatchInfo: /lib/a_61.ts 500 undefined WatchType: Closed Script info
-Info 71   [00:04:44.000] FileWatcher:: Added:: WatchInfo: /lib/a_62.ts 500 undefined WatchType: Closed Script info
-Info 72   [00:04:45.000] FileWatcher:: Added:: WatchInfo: /lib/a_63.ts 500 undefined WatchType: Closed Script info
-Info 73   [00:04:46.000] FileWatcher:: Added:: WatchInfo: /lib/a_64.ts 500 undefined WatchType: Closed Script info
-Info 74   [00:04:47.000] FileWatcher:: Added:: WatchInfo: /lib/a_65.ts 500 undefined WatchType: Closed Script info
-Info 75   [00:04:48.000] FileWatcher:: Added:: WatchInfo: /lib/a_66.ts 500 undefined WatchType: Closed Script info
-Info 76   [00:04:49.000] FileWatcher:: Added:: WatchInfo: /lib/a_67.ts 500 undefined WatchType: Closed Script info
-Info 77   [00:04:50.000] FileWatcher:: Added:: WatchInfo: /lib/a_68.ts 500 undefined WatchType: Closed Script info
-Info 78   [00:04:51.000] FileWatcher:: Added:: WatchInfo: /lib/a_69.ts 500 undefined WatchType: Closed Script info
-Info 79   [00:04:52.000] FileWatcher:: Added:: WatchInfo: /lib/a_7.ts 500 undefined WatchType: Closed Script info
-Info 80   [00:04:53.000] FileWatcher:: Added:: WatchInfo: /lib/a_70.ts 500 undefined WatchType: Closed Script info
-Info 81   [00:04:54.000] FileWatcher:: Added:: WatchInfo: /lib/a_71.ts 500 undefined WatchType: Closed Script info
-Info 82   [00:04:55.000] FileWatcher:: Added:: WatchInfo: /lib/a_72.ts 500 undefined WatchType: Closed Script info
-Info 83   [00:04:56.000] FileWatcher:: Added:: WatchInfo: /lib/a_73.ts 500 undefined WatchType: Closed Script info
-Info 84   [00:04:57.000] FileWatcher:: Added:: WatchInfo: /lib/a_74.ts 500 undefined WatchType: Closed Script info
-Info 85   [00:04:58.000] FileWatcher:: Added:: WatchInfo: /lib/a_75.ts 500 undefined WatchType: Closed Script info
-Info 86   [00:04:59.000] FileWatcher:: Added:: WatchInfo: /lib/a_76.ts 500 undefined WatchType: Closed Script info
-Info 87   [00:05:00.000] FileWatcher:: Added:: WatchInfo: /lib/a_77.ts 500 undefined WatchType: Closed Script info
-Info 88   [00:05:01.000] FileWatcher:: Added:: WatchInfo: /lib/a_78.ts 500 undefined WatchType: Closed Script info
-Info 89   [00:05:02.000] FileWatcher:: Added:: WatchInfo: /lib/a_79.ts 500 undefined WatchType: Closed Script info
-Info 90   [00:05:03.000] FileWatcher:: Added:: WatchInfo: /lib/a_8.ts 500 undefined WatchType: Closed Script info
-Info 91   [00:05:04.000] FileWatcher:: Added:: WatchInfo: /lib/a_80.ts 500 undefined WatchType: Closed Script info
-Info 92   [00:05:05.000] FileWatcher:: Added:: WatchInfo: /lib/a_81.ts 500 undefined WatchType: Closed Script info
-Info 93   [00:05:06.000] FileWatcher:: Added:: WatchInfo: /lib/a_82.ts 500 undefined WatchType: Closed Script info
-Info 94   [00:05:07.000] FileWatcher:: Added:: WatchInfo: /lib/a_83.ts 500 undefined WatchType: Closed Script info
-Info 95   [00:05:08.000] FileWatcher:: Added:: WatchInfo: /lib/a_84.ts 500 undefined WatchType: Closed Script info
-Info 96   [00:05:09.000] FileWatcher:: Added:: WatchInfo: /lib/a_85.ts 500 undefined WatchType: Closed Script info
-Info 97   [00:05:10.000] FileWatcher:: Added:: WatchInfo: /lib/a_86.ts 500 undefined WatchType: Closed Script info
-Info 98   [00:05:11.000] FileWatcher:: Added:: WatchInfo: /lib/a_87.ts 500 undefined WatchType: Closed Script info
-Info 99   [00:05:12.000] FileWatcher:: Added:: WatchInfo: /lib/a_88.ts 500 undefined WatchType: Closed Script info
-Info 100  [00:05:13.000] FileWatcher:: Added:: WatchInfo: /lib/a_89.ts 500 undefined WatchType: Closed Script info
-Info 101  [00:05:14.000] FileWatcher:: Added:: WatchInfo: /lib/a_9.ts 500 undefined WatchType: Closed Script info
-Info 102  [00:05:15.000] FileWatcher:: Added:: WatchInfo: /lib/a_90.ts 500 undefined WatchType: Closed Script info
-Info 103  [00:05:16.000] FileWatcher:: Added:: WatchInfo: /lib/a_91.ts 500 undefined WatchType: Closed Script info
-Info 104  [00:05:17.000] FileWatcher:: Added:: WatchInfo: /lib/a_92.ts 500 undefined WatchType: Closed Script info
-Info 105  [00:05:18.000] FileWatcher:: Added:: WatchInfo: /lib/a_93.ts 500 undefined WatchType: Closed Script info
-Info 106  [00:05:19.000] FileWatcher:: Added:: WatchInfo: /lib/a_94.ts 500 undefined WatchType: Closed Script info
-Info 107  [00:05:20.000] FileWatcher:: Added:: WatchInfo: /lib/a_95.ts 500 undefined WatchType: Closed Script info
-Info 108  [00:05:21.000] FileWatcher:: Added:: WatchInfo: /lib/a_96.ts 500 undefined WatchType: Closed Script info
-Info 109  [00:05:22.000] FileWatcher:: Added:: WatchInfo: /lib/a_97.ts 500 undefined WatchType: Closed Script info
-Info 110  [00:05:23.000] FileWatcher:: Added:: WatchInfo: /lib/a_98.ts 500 undefined WatchType: Closed Script info
-Info 111  [00:05:24.000] FileWatcher:: Added:: WatchInfo: /lib/a_99.ts 500 undefined WatchType: Closed Script info
-Info 112  [00:05:25.000] FileWatcher:: Added:: WatchInfo: /lib/foo/constants.d.ts 500 undefined WatchType: Closed Script info
-Info 113  [00:05:26.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 114  [00:05:27.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 115  [00:05:28.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 116  [00:05:29.000] Project '/tsconfig.json' (Configured)
-Info 117  [00:05:30.000] 	Files (102)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_0.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_10.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_11.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_12.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_13.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_14.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_15.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_16.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_17.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_18.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_19.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_20.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_21.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_22.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_23.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_24.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_25.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_26.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_27.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_28.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_29.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_3.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_30.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_31.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_32.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_33.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_34.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_35.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_36.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_37.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_38.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_39.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_4.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_40.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_41.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_42.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_43.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_44.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_45.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_46.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_47.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_48.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_49.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_5.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_50.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_51.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_52.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_53.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_54.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_55.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_56.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_57.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_58.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_59.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_6.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_60.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_61.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_62.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_63.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_64.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_65.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_66.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_67.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_68.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_69.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_7.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_70.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_71.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_72.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_73.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_74.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_75.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_76.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_77.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_78.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_79.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_8.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_80.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_81.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_82.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_83.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_84.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_85.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_86.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_87.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_88.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_89.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_9.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_90.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_91.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_92.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_93.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_94.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_95.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_96.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_97.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_98.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_99.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/foo/constants.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (102)
 	/index.ts SVC-1-0 ""
 	/lib/a_0.ts Text-1 "export const S0_0 = 0;"
 	/lib/a_1.ts Text-1 "export const S1_0 = 0;"
@@ -879,15 +885,15 @@ Info 117  [00:05:30.000] 	Files (102)
 	lib/foo/constants.d.ts
 	  Matched by default include pattern '**/*'
 
-Info 118  [00:05:31.000] -----------------------------------------------
-Info 119  [00:05:32.000] Project '/tsconfig.json' (Configured)
-Info 119  [00:05:33.000] 	Files (102)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (102)
 
-Info 119  [00:05:34.000] -----------------------------------------------
-Info 119  [00:05:35.000] Open files: 
-Info 119  [00:05:36.000] 	FileName: /index.ts ProjectRootPath: undefined
-Info 119  [00:05:37.000] 		Projects: /tsconfig.json
-Info 119  [00:05:38.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
@@ -898,8 +904,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /lib/a_0.ts: *new*
   {}
 /lib/a_1.ts: *new*
@@ -1102,6 +1106,8 @@ FsWatches::
   {}
 /lib/foo/constants.d.ts: *new*
   {}
+/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
 /: *new*
@@ -1109,7 +1115,7 @@ FsWatchesRecursive::
 
 Before request
 
-Info 120  [00:05:39.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -1135,7 +1141,7 @@ Info 120  [00:05:39.000] request:
       "seq": 3,
       "type": "request"
     }
-Info 121  [00:05:40.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
@@ -1144,7 +1150,7 @@ After request
 
 Before request
 
-Info 122  [00:05:41.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -1155,10 +1161,10 @@ Info 122  [00:05:41.000] request:
       "seq": 4,
       "type": "request"
     }
-Info 123  [00:05:42.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 124  [00:05:43.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 125  [00:05:44.000] Project '/tsconfig.json' (Configured)
-Info 126  [00:05:45.000] 	Files (102)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (102)
 	/index.ts SVC-1-1 "s"
 	/lib/a_0.ts Text-1 "export const S0_0 = 0;"
 	/lib/a_1.ts Text-1 "export const S1_0 = 0;"
@@ -1262,18 +1268,18 @@ Info 126  [00:05:45.000] 	Files (102)
 	/lib/a_99.ts Text-1 "export const S99_0 = 0;"
 	/lib/foo/constants.d.ts Text-1 "\n                    type Signals = \"SIGINT\" | \"SIGABRT\";\n                    declare const exp: {} & { [K in Signals]: K };\n                    export = exp;"
 
-Info 127  [00:05:46.000] -----------------------------------------------
-Info 128  [00:05:47.000] getCompletionData: Get current token: *
-Info 129  [00:05:48.000] getCompletionData: Is inside comment: *
-Info 130  [00:05:49.000] getCompletionData: Get previous token: *
-Info 131  [00:05:50.000] getExportInfoMap: cache miss or empty; calculating new results
-Info 132  [00:05:51.000] getExportInfoMap: done in * ms
-Info 133  [00:05:52.000] collectAutoImports: resolved 100 module specifiers, plus 0 ambient and 3 from cache (100.0% hit rate)
-Info 134  [00:05:53.000] collectAutoImports: response is incomplete
-Info 135  [00:05:54.000] collectAutoImports: *
-Info 136  [00:05:55.000] getCompletionData: Semantic work: *
-Info 137  [00:05:56.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-Info 138  [00:05:57.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 100 module specifiers, plus 0 ambient and 3 from cache (100.0% hit rate)
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "flags": 9,
@@ -1697,7 +1703,7 @@ Info 138  [00:05:57.000] response:
             "source": "/lib/foo/constants",
             "data": {
               "exportName": "export=",
-              "exportMapKey": "exp|*|",
+              "exportMapKey": "3 * exp ",
               "fileName": "/lib/foo/constants.d.ts"
             }
           },
@@ -1716,7 +1722,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S0_0",
-              "exportMapKey": "S0_0|*|",
+              "exportMapKey": "4 * S0_0 ",
               "moduleSpecifier": "./lib/a_0",
               "fileName": "/lib/a_0.ts"
             }
@@ -1736,7 +1742,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S1_0",
-              "exportMapKey": "S1_0|*|",
+              "exportMapKey": "4 * S1_0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
             }
@@ -1756,7 +1762,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S10_0",
-              "exportMapKey": "S10_0|*|",
+              "exportMapKey": "5 * S10_0 ",
               "moduleSpecifier": "./lib/a_10",
               "fileName": "/lib/a_10.ts"
             }
@@ -1776,7 +1782,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S11_0",
-              "exportMapKey": "S11_0|*|",
+              "exportMapKey": "5 * S11_0 ",
               "moduleSpecifier": "./lib/a_11",
               "fileName": "/lib/a_11.ts"
             }
@@ -1796,7 +1802,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S12_0",
-              "exportMapKey": "S12_0|*|",
+              "exportMapKey": "5 * S12_0 ",
               "moduleSpecifier": "./lib/a_12",
               "fileName": "/lib/a_12.ts"
             }
@@ -1816,7 +1822,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S13_0",
-              "exportMapKey": "S13_0|*|",
+              "exportMapKey": "5 * S13_0 ",
               "moduleSpecifier": "./lib/a_13",
               "fileName": "/lib/a_13.ts"
             }
@@ -1836,7 +1842,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S14_0",
-              "exportMapKey": "S14_0|*|",
+              "exportMapKey": "5 * S14_0 ",
               "moduleSpecifier": "./lib/a_14",
               "fileName": "/lib/a_14.ts"
             }
@@ -1856,7 +1862,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S15_0",
-              "exportMapKey": "S15_0|*|",
+              "exportMapKey": "5 * S15_0 ",
               "moduleSpecifier": "./lib/a_15",
               "fileName": "/lib/a_15.ts"
             }
@@ -1876,7 +1882,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S16_0",
-              "exportMapKey": "S16_0|*|",
+              "exportMapKey": "5 * S16_0 ",
               "moduleSpecifier": "./lib/a_16",
               "fileName": "/lib/a_16.ts"
             }
@@ -1896,7 +1902,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S17_0",
-              "exportMapKey": "S17_0|*|",
+              "exportMapKey": "5 * S17_0 ",
               "moduleSpecifier": "./lib/a_17",
               "fileName": "/lib/a_17.ts"
             }
@@ -1916,7 +1922,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S18_0",
-              "exportMapKey": "S18_0|*|",
+              "exportMapKey": "5 * S18_0 ",
               "moduleSpecifier": "./lib/a_18",
               "fileName": "/lib/a_18.ts"
             }
@@ -1936,7 +1942,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S19_0",
-              "exportMapKey": "S19_0|*|",
+              "exportMapKey": "5 * S19_0 ",
               "moduleSpecifier": "./lib/a_19",
               "fileName": "/lib/a_19.ts"
             }
@@ -1956,7 +1962,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S2_0",
-              "exportMapKey": "S2_0|*|",
+              "exportMapKey": "4 * S2_0 ",
               "moduleSpecifier": "./lib/a_2",
               "fileName": "/lib/a_2.ts"
             }
@@ -1976,7 +1982,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S20_0",
-              "exportMapKey": "S20_0|*|",
+              "exportMapKey": "5 * S20_0 ",
               "moduleSpecifier": "./lib/a_20",
               "fileName": "/lib/a_20.ts"
             }
@@ -1996,7 +2002,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S21_0",
-              "exportMapKey": "S21_0|*|",
+              "exportMapKey": "5 * S21_0 ",
               "moduleSpecifier": "./lib/a_21",
               "fileName": "/lib/a_21.ts"
             }
@@ -2016,7 +2022,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S22_0",
-              "exportMapKey": "S22_0|*|",
+              "exportMapKey": "5 * S22_0 ",
               "moduleSpecifier": "./lib/a_22",
               "fileName": "/lib/a_22.ts"
             }
@@ -2036,7 +2042,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S23_0",
-              "exportMapKey": "S23_0|*|",
+              "exportMapKey": "5 * S23_0 ",
               "moduleSpecifier": "./lib/a_23",
               "fileName": "/lib/a_23.ts"
             }
@@ -2056,7 +2062,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S24_0",
-              "exportMapKey": "S24_0|*|",
+              "exportMapKey": "5 * S24_0 ",
               "moduleSpecifier": "./lib/a_24",
               "fileName": "/lib/a_24.ts"
             }
@@ -2076,7 +2082,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S25_0",
-              "exportMapKey": "S25_0|*|",
+              "exportMapKey": "5 * S25_0 ",
               "moduleSpecifier": "./lib/a_25",
               "fileName": "/lib/a_25.ts"
             }
@@ -2096,7 +2102,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S26_0",
-              "exportMapKey": "S26_0|*|",
+              "exportMapKey": "5 * S26_0 ",
               "moduleSpecifier": "./lib/a_26",
               "fileName": "/lib/a_26.ts"
             }
@@ -2116,7 +2122,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S27_0",
-              "exportMapKey": "S27_0|*|",
+              "exportMapKey": "5 * S27_0 ",
               "moduleSpecifier": "./lib/a_27",
               "fileName": "/lib/a_27.ts"
             }
@@ -2136,7 +2142,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S28_0",
-              "exportMapKey": "S28_0|*|",
+              "exportMapKey": "5 * S28_0 ",
               "moduleSpecifier": "./lib/a_28",
               "fileName": "/lib/a_28.ts"
             }
@@ -2156,7 +2162,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S29_0",
-              "exportMapKey": "S29_0|*|",
+              "exportMapKey": "5 * S29_0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
             }
@@ -2176,7 +2182,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S3_0",
-              "exportMapKey": "S3_0|*|",
+              "exportMapKey": "4 * S3_0 ",
               "moduleSpecifier": "./lib/a_3",
               "fileName": "/lib/a_3.ts"
             }
@@ -2196,7 +2202,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S30_0",
-              "exportMapKey": "S30_0|*|",
+              "exportMapKey": "5 * S30_0 ",
               "moduleSpecifier": "./lib/a_30",
               "fileName": "/lib/a_30.ts"
             }
@@ -2216,7 +2222,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S31_0",
-              "exportMapKey": "S31_0|*|",
+              "exportMapKey": "5 * S31_0 ",
               "moduleSpecifier": "./lib/a_31",
               "fileName": "/lib/a_31.ts"
             }
@@ -2236,7 +2242,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S32_0",
-              "exportMapKey": "S32_0|*|",
+              "exportMapKey": "5 * S32_0 ",
               "moduleSpecifier": "./lib/a_32",
               "fileName": "/lib/a_32.ts"
             }
@@ -2256,7 +2262,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S33_0",
-              "exportMapKey": "S33_0|*|",
+              "exportMapKey": "5 * S33_0 ",
               "moduleSpecifier": "./lib/a_33",
               "fileName": "/lib/a_33.ts"
             }
@@ -2276,7 +2282,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S34_0",
-              "exportMapKey": "S34_0|*|",
+              "exportMapKey": "5 * S34_0 ",
               "moduleSpecifier": "./lib/a_34",
               "fileName": "/lib/a_34.ts"
             }
@@ -2296,7 +2302,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S35_0",
-              "exportMapKey": "S35_0|*|",
+              "exportMapKey": "5 * S35_0 ",
               "moduleSpecifier": "./lib/a_35",
               "fileName": "/lib/a_35.ts"
             }
@@ -2316,7 +2322,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S36_0",
-              "exportMapKey": "S36_0|*|",
+              "exportMapKey": "5 * S36_0 ",
               "moduleSpecifier": "./lib/a_36",
               "fileName": "/lib/a_36.ts"
             }
@@ -2336,7 +2342,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S37_0",
-              "exportMapKey": "S37_0|*|",
+              "exportMapKey": "5 * S37_0 ",
               "moduleSpecifier": "./lib/a_37",
               "fileName": "/lib/a_37.ts"
             }
@@ -2356,7 +2362,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S38_0",
-              "exportMapKey": "S38_0|*|",
+              "exportMapKey": "5 * S38_0 ",
               "moduleSpecifier": "./lib/a_38",
               "fileName": "/lib/a_38.ts"
             }
@@ -2376,7 +2382,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S39_0",
-              "exportMapKey": "S39_0|*|",
+              "exportMapKey": "5 * S39_0 ",
               "moduleSpecifier": "./lib/a_39",
               "fileName": "/lib/a_39.ts"
             }
@@ -2396,7 +2402,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S4_0",
-              "exportMapKey": "S4_0|*|",
+              "exportMapKey": "4 * S4_0 ",
               "moduleSpecifier": "./lib/a_4",
               "fileName": "/lib/a_4.ts"
             }
@@ -2416,7 +2422,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S40_0",
-              "exportMapKey": "S40_0|*|",
+              "exportMapKey": "5 * S40_0 ",
               "moduleSpecifier": "./lib/a_40",
               "fileName": "/lib/a_40.ts"
             }
@@ -2436,7 +2442,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S41_0",
-              "exportMapKey": "S41_0|*|",
+              "exportMapKey": "5 * S41_0 ",
               "moduleSpecifier": "./lib/a_41",
               "fileName": "/lib/a_41.ts"
             }
@@ -2456,7 +2462,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S42_0",
-              "exportMapKey": "S42_0|*|",
+              "exportMapKey": "5 * S42_0 ",
               "moduleSpecifier": "./lib/a_42",
               "fileName": "/lib/a_42.ts"
             }
@@ -2476,7 +2482,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S43_0",
-              "exportMapKey": "S43_0|*|",
+              "exportMapKey": "5 * S43_0 ",
               "moduleSpecifier": "./lib/a_43",
               "fileName": "/lib/a_43.ts"
             }
@@ -2496,7 +2502,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S44_0",
-              "exportMapKey": "S44_0|*|",
+              "exportMapKey": "5 * S44_0 ",
               "moduleSpecifier": "./lib/a_44",
               "fileName": "/lib/a_44.ts"
             }
@@ -2516,7 +2522,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S45_0",
-              "exportMapKey": "S45_0|*|",
+              "exportMapKey": "5 * S45_0 ",
               "moduleSpecifier": "./lib/a_45",
               "fileName": "/lib/a_45.ts"
             }
@@ -2536,7 +2542,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S46_0",
-              "exportMapKey": "S46_0|*|",
+              "exportMapKey": "5 * S46_0 ",
               "moduleSpecifier": "./lib/a_46",
               "fileName": "/lib/a_46.ts"
             }
@@ -2556,7 +2562,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S47_0",
-              "exportMapKey": "S47_0|*|",
+              "exportMapKey": "5 * S47_0 ",
               "moduleSpecifier": "./lib/a_47",
               "fileName": "/lib/a_47.ts"
             }
@@ -2576,7 +2582,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S48_0",
-              "exportMapKey": "S48_0|*|",
+              "exportMapKey": "5 * S48_0 ",
               "moduleSpecifier": "./lib/a_48",
               "fileName": "/lib/a_48.ts"
             }
@@ -2596,7 +2602,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S49_0",
-              "exportMapKey": "S49_0|*|",
+              "exportMapKey": "5 * S49_0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
             }
@@ -2616,7 +2622,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S5_0",
-              "exportMapKey": "S5_0|*|",
+              "exportMapKey": "4 * S5_0 ",
               "moduleSpecifier": "./lib/a_5",
               "fileName": "/lib/a_5.ts"
             }
@@ -2636,7 +2642,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S50_0",
-              "exportMapKey": "S50_0|*|",
+              "exportMapKey": "5 * S50_0 ",
               "moduleSpecifier": "./lib/a_50",
               "fileName": "/lib/a_50.ts"
             }
@@ -2656,7 +2662,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S51_0",
-              "exportMapKey": "S51_0|*|",
+              "exportMapKey": "5 * S51_0 ",
               "moduleSpecifier": "./lib/a_51",
               "fileName": "/lib/a_51.ts"
             }
@@ -2676,7 +2682,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S52_0",
-              "exportMapKey": "S52_0|*|",
+              "exportMapKey": "5 * S52_0 ",
               "moduleSpecifier": "./lib/a_52",
               "fileName": "/lib/a_52.ts"
             }
@@ -2696,7 +2702,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S53_0",
-              "exportMapKey": "S53_0|*|",
+              "exportMapKey": "5 * S53_0 ",
               "moduleSpecifier": "./lib/a_53",
               "fileName": "/lib/a_53.ts"
             }
@@ -2716,7 +2722,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S54_0",
-              "exportMapKey": "S54_0|*|",
+              "exportMapKey": "5 * S54_0 ",
               "moduleSpecifier": "./lib/a_54",
               "fileName": "/lib/a_54.ts"
             }
@@ -2736,7 +2742,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S55_0",
-              "exportMapKey": "S55_0|*|",
+              "exportMapKey": "5 * S55_0 ",
               "moduleSpecifier": "./lib/a_55",
               "fileName": "/lib/a_55.ts"
             }
@@ -2756,7 +2762,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S56_0",
-              "exportMapKey": "S56_0|*|",
+              "exportMapKey": "5 * S56_0 ",
               "moduleSpecifier": "./lib/a_56",
               "fileName": "/lib/a_56.ts"
             }
@@ -2776,7 +2782,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S57_0",
-              "exportMapKey": "S57_0|*|",
+              "exportMapKey": "5 * S57_0 ",
               "moduleSpecifier": "./lib/a_57",
               "fileName": "/lib/a_57.ts"
             }
@@ -2796,7 +2802,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S58_0",
-              "exportMapKey": "S58_0|*|",
+              "exportMapKey": "5 * S58_0 ",
               "moduleSpecifier": "./lib/a_58",
               "fileName": "/lib/a_58.ts"
             }
@@ -2816,7 +2822,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S59_0",
-              "exportMapKey": "S59_0|*|",
+              "exportMapKey": "5 * S59_0 ",
               "moduleSpecifier": "./lib/a_59",
               "fileName": "/lib/a_59.ts"
             }
@@ -2836,7 +2842,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S6_0",
-              "exportMapKey": "S6_0|*|",
+              "exportMapKey": "4 * S6_0 ",
               "moduleSpecifier": "./lib/a_6",
               "fileName": "/lib/a_6.ts"
             }
@@ -2856,7 +2862,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S60_0",
-              "exportMapKey": "S60_0|*|",
+              "exportMapKey": "5 * S60_0 ",
               "moduleSpecifier": "./lib/a_60",
               "fileName": "/lib/a_60.ts"
             }
@@ -2876,7 +2882,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S61_0",
-              "exportMapKey": "S61_0|*|",
+              "exportMapKey": "5 * S61_0 ",
               "moduleSpecifier": "./lib/a_61",
               "fileName": "/lib/a_61.ts"
             }
@@ -2896,7 +2902,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S62_0",
-              "exportMapKey": "S62_0|*|",
+              "exportMapKey": "5 * S62_0 ",
               "moduleSpecifier": "./lib/a_62",
               "fileName": "/lib/a_62.ts"
             }
@@ -2916,7 +2922,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S63_0",
-              "exportMapKey": "S63_0|*|",
+              "exportMapKey": "5 * S63_0 ",
               "moduleSpecifier": "./lib/a_63",
               "fileName": "/lib/a_63.ts"
             }
@@ -2936,7 +2942,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S64_0",
-              "exportMapKey": "S64_0|*|",
+              "exportMapKey": "5 * S64_0 ",
               "moduleSpecifier": "./lib/a_64",
               "fileName": "/lib/a_64.ts"
             }
@@ -2956,7 +2962,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S65_0",
-              "exportMapKey": "S65_0|*|",
+              "exportMapKey": "5 * S65_0 ",
               "moduleSpecifier": "./lib/a_65",
               "fileName": "/lib/a_65.ts"
             }
@@ -2976,7 +2982,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S66_0",
-              "exportMapKey": "S66_0|*|",
+              "exportMapKey": "5 * S66_0 ",
               "moduleSpecifier": "./lib/a_66",
               "fileName": "/lib/a_66.ts"
             }
@@ -2996,7 +3002,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S67_0",
-              "exportMapKey": "S67_0|*|",
+              "exportMapKey": "5 * S67_0 ",
               "moduleSpecifier": "./lib/a_67",
               "fileName": "/lib/a_67.ts"
             }
@@ -3016,7 +3022,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S68_0",
-              "exportMapKey": "S68_0|*|",
+              "exportMapKey": "5 * S68_0 ",
               "moduleSpecifier": "./lib/a_68",
               "fileName": "/lib/a_68.ts"
             }
@@ -3036,7 +3042,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S69_0",
-              "exportMapKey": "S69_0|*|",
+              "exportMapKey": "5 * S69_0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
             }
@@ -3056,7 +3062,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S7_0",
-              "exportMapKey": "S7_0|*|",
+              "exportMapKey": "4 * S7_0 ",
               "moduleSpecifier": "./lib/a_7",
               "fileName": "/lib/a_7.ts"
             }
@@ -3076,7 +3082,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S70_0",
-              "exportMapKey": "S70_0|*|",
+              "exportMapKey": "5 * S70_0 ",
               "moduleSpecifier": "./lib/a_70",
               "fileName": "/lib/a_70.ts"
             }
@@ -3096,7 +3102,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S71_0",
-              "exportMapKey": "S71_0|*|",
+              "exportMapKey": "5 * S71_0 ",
               "moduleSpecifier": "./lib/a_71",
               "fileName": "/lib/a_71.ts"
             }
@@ -3116,7 +3122,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S72_0",
-              "exportMapKey": "S72_0|*|",
+              "exportMapKey": "5 * S72_0 ",
               "moduleSpecifier": "./lib/a_72",
               "fileName": "/lib/a_72.ts"
             }
@@ -3136,7 +3142,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S73_0",
-              "exportMapKey": "S73_0|*|",
+              "exportMapKey": "5 * S73_0 ",
               "moduleSpecifier": "./lib/a_73",
               "fileName": "/lib/a_73.ts"
             }
@@ -3156,7 +3162,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S74_0",
-              "exportMapKey": "S74_0|*|",
+              "exportMapKey": "5 * S74_0 ",
               "moduleSpecifier": "./lib/a_74",
               "fileName": "/lib/a_74.ts"
             }
@@ -3176,7 +3182,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S75_0",
-              "exportMapKey": "S75_0|*|",
+              "exportMapKey": "5 * S75_0 ",
               "moduleSpecifier": "./lib/a_75",
               "fileName": "/lib/a_75.ts"
             }
@@ -3196,7 +3202,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S76_0",
-              "exportMapKey": "S76_0|*|",
+              "exportMapKey": "5 * S76_0 ",
               "moduleSpecifier": "./lib/a_76",
               "fileName": "/lib/a_76.ts"
             }
@@ -3216,7 +3222,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S77_0",
-              "exportMapKey": "S77_0|*|",
+              "exportMapKey": "5 * S77_0 ",
               "moduleSpecifier": "./lib/a_77",
               "fileName": "/lib/a_77.ts"
             }
@@ -3236,7 +3242,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S78_0",
-              "exportMapKey": "S78_0|*|",
+              "exportMapKey": "5 * S78_0 ",
               "moduleSpecifier": "./lib/a_78",
               "fileName": "/lib/a_78.ts"
             }
@@ -3256,7 +3262,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S79_0",
-              "exportMapKey": "S79_0|*|",
+              "exportMapKey": "5 * S79_0 ",
               "moduleSpecifier": "./lib/a_79",
               "fileName": "/lib/a_79.ts"
             }
@@ -3276,7 +3282,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S8_0",
-              "exportMapKey": "S8_0|*|",
+              "exportMapKey": "4 * S8_0 ",
               "moduleSpecifier": "./lib/a_8",
               "fileName": "/lib/a_8.ts"
             }
@@ -3296,7 +3302,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S80_0",
-              "exportMapKey": "S80_0|*|",
+              "exportMapKey": "5 * S80_0 ",
               "moduleSpecifier": "./lib/a_80",
               "fileName": "/lib/a_80.ts"
             }
@@ -3316,7 +3322,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S81_0",
-              "exportMapKey": "S81_0|*|",
+              "exportMapKey": "5 * S81_0 ",
               "moduleSpecifier": "./lib/a_81",
               "fileName": "/lib/a_81.ts"
             }
@@ -3336,7 +3342,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S82_0",
-              "exportMapKey": "S82_0|*|",
+              "exportMapKey": "5 * S82_0 ",
               "moduleSpecifier": "./lib/a_82",
               "fileName": "/lib/a_82.ts"
             }
@@ -3356,7 +3362,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S83_0",
-              "exportMapKey": "S83_0|*|",
+              "exportMapKey": "5 * S83_0 ",
               "moduleSpecifier": "./lib/a_83",
               "fileName": "/lib/a_83.ts"
             }
@@ -3376,7 +3382,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S84_0",
-              "exportMapKey": "S84_0|*|",
+              "exportMapKey": "5 * S84_0 ",
               "moduleSpecifier": "./lib/a_84",
               "fileName": "/lib/a_84.ts"
             }
@@ -3396,7 +3402,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S85_0",
-              "exportMapKey": "S85_0|*|",
+              "exportMapKey": "5 * S85_0 ",
               "moduleSpecifier": "./lib/a_85",
               "fileName": "/lib/a_85.ts"
             }
@@ -3416,7 +3422,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S86_0",
-              "exportMapKey": "S86_0|*|",
+              "exportMapKey": "5 * S86_0 ",
               "moduleSpecifier": "./lib/a_86",
               "fileName": "/lib/a_86.ts"
             }
@@ -3436,7 +3442,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S87_0",
-              "exportMapKey": "S87_0|*|",
+              "exportMapKey": "5 * S87_0 ",
               "moduleSpecifier": "./lib/a_87",
               "fileName": "/lib/a_87.ts"
             }
@@ -3456,7 +3462,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S88_0",
-              "exportMapKey": "S88_0|*|",
+              "exportMapKey": "5 * S88_0 ",
               "moduleSpecifier": "./lib/a_88",
               "fileName": "/lib/a_88.ts"
             }
@@ -3476,7 +3482,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S89_0",
-              "exportMapKey": "S89_0|*|",
+              "exportMapKey": "5 * S89_0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
             }
@@ -3496,7 +3502,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S9_0",
-              "exportMapKey": "S9_0|*|",
+              "exportMapKey": "4 * S9_0 ",
               "moduleSpecifier": "./lib/a_9",
               "fileName": "/lib/a_9.ts"
             }
@@ -3516,7 +3522,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S90_0",
-              "exportMapKey": "S90_0|*|",
+              "exportMapKey": "5 * S90_0 ",
               "moduleSpecifier": "./lib/a_90",
               "fileName": "/lib/a_90.ts"
             }
@@ -3536,7 +3542,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S91_0",
-              "exportMapKey": "S91_0|*|",
+              "exportMapKey": "5 * S91_0 ",
               "moduleSpecifier": "./lib/a_91",
               "fileName": "/lib/a_91.ts"
             }
@@ -3556,7 +3562,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S92_0",
-              "exportMapKey": "S92_0|*|",
+              "exportMapKey": "5 * S92_0 ",
               "moduleSpecifier": "./lib/a_92",
               "fileName": "/lib/a_92.ts"
             }
@@ -3576,7 +3582,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S93_0",
-              "exportMapKey": "S93_0|*|",
+              "exportMapKey": "5 * S93_0 ",
               "moduleSpecifier": "./lib/a_93",
               "fileName": "/lib/a_93.ts"
             }
@@ -3596,7 +3602,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S94_0",
-              "exportMapKey": "S94_0|*|",
+              "exportMapKey": "5 * S94_0 ",
               "moduleSpecifier": "./lib/a_94",
               "fileName": "/lib/a_94.ts"
             }
@@ -3616,7 +3622,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S95_0",
-              "exportMapKey": "S95_0|*|",
+              "exportMapKey": "5 * S95_0 ",
               "moduleSpecifier": "./lib/a_95",
               "fileName": "/lib/a_95.ts"
             }
@@ -3636,7 +3642,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S96_0",
-              "exportMapKey": "S96_0|*|",
+              "exportMapKey": "5 * S96_0 ",
               "moduleSpecifier": "./lib/a_96",
               "fileName": "/lib/a_96.ts"
             }
@@ -3656,7 +3662,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S97_0",
-              "exportMapKey": "S97_0|*|",
+              "exportMapKey": "5 * S97_0 ",
               "moduleSpecifier": "./lib/a_97",
               "fileName": "/lib/a_97.ts"
             }
@@ -3676,7 +3682,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S98_0",
-              "exportMapKey": "S98_0|*|",
+              "exportMapKey": "5 * S98_0 ",
               "moduleSpecifier": "./lib/a_98",
               "fileName": "/lib/a_98.ts"
             }
@@ -3696,7 +3702,7 @@ Info 138  [00:05:57.000] response:
             ],
             "data": {
               "exportName": "S99_0",
-              "exportMapKey": "S99_0|*|",
+              "exportMapKey": "5 * S99_0 ",
               "moduleSpecifier": "./lib/a_99",
               "fileName": "/lib/a_99.ts"
             }
@@ -3710,7 +3716,7 @@ Info 138  [00:05:57.000] response:
             "source": "/lib/foo/constants",
             "data": {
               "exportName": "SIGABRT",
-              "exportMapKey": "SIGABRT|*|",
+              "exportMapKey": "7 * SIGABRT ",
               "fileName": "/lib/foo/constants.d.ts"
             }
           },
@@ -3723,7 +3729,7 @@ Info 138  [00:05:57.000] response:
             "source": "/lib/foo/constants",
             "data": {
               "exportName": "SIGINT",
-              "exportMapKey": "SIGINT|*|",
+              "exportMapKey": "6 * SIGINT ",
               "fileName": "/lib/foo/constants.d.ts"
             }
           }
@@ -3735,7 +3741,7 @@ After request
 
 Before request
 
-Info 139  [00:05:58.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "updateOpen",
       "arguments": {
@@ -3761,7 +3767,7 @@ Info 139  [00:05:58.000] request:
       "seq": 5,
       "type": "request"
     }
-Info 140  [00:05:59.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
@@ -3770,7 +3776,7 @@ After request
 
 Before request
 
-Info 141  [00:06:00.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
@@ -3782,10 +3788,10 @@ Info 141  [00:06:00.000] request:
       "seq": 6,
       "type": "request"
     }
-Info 142  [00:06:01.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 143  [00:06:02.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info 144  [00:06:03.000] Project '/tsconfig.json' (Configured)
-Info 145  [00:06:04.000] 	Files (102)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (102)
 	/index.ts SVC-1-2 "si"
 	/lib/a_0.ts Text-1 "export const S0_0 = 0;"
 	/lib/a_1.ts Text-1 "export const S1_0 = 0;"
@@ -3889,12 +3895,12 @@ Info 145  [00:06:04.000] 	Files (102)
 	/lib/a_99.ts Text-1 "export const S99_0 = 0;"
 	/lib/foo/constants.d.ts Text-1 "\n                    type Signals = \"SIGINT\" | \"SIGABRT\";\n                    declare const exp: {} & { [K in Signals]: K };\n                    export = exp;"
 
-Info 146  [00:06:05.000] -----------------------------------------------
-Info 147  [00:06:06.000] getExportInfoMap: cache hit
-Info 148  [00:06:07.000] continuePreviousIncompleteResponse: resolved 1 module specifiers, plus 0 ambient and 1 from cache
-Info 149  [00:06:08.000] continuePreviousIncompleteResponse: response is complete
-Info 150  [00:06:09.000] continuePreviousIncompleteResponse: *
-Info 151  [00:06:10.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
+Info seq  [hh:mm:ss:mss] continuePreviousIncompleteResponse: resolved 1 module specifiers, plus 0 ambient and 1 from cache
+Info seq  [hh:mm:ss:mss] continuePreviousIncompleteResponse: response is complete
+Info seq  [hh:mm:ss:mss] continuePreviousIncompleteResponse: *
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "flags": 13,
@@ -4323,7 +4329,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S0_0",
-              "exportMapKey": "S0_0|*|",
+              "exportMapKey": "4 * S0_0 ",
               "moduleSpecifier": "./lib/a_0",
               "fileName": "/lib/a_0.ts"
             }
@@ -4343,7 +4349,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S1_0",
-              "exportMapKey": "S1_0|*|",
+              "exportMapKey": "4 * S1_0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
             }
@@ -4363,7 +4369,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S10_0",
-              "exportMapKey": "S10_0|*|",
+              "exportMapKey": "5 * S10_0 ",
               "moduleSpecifier": "./lib/a_10",
               "fileName": "/lib/a_10.ts"
             }
@@ -4383,7 +4389,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S11_0",
-              "exportMapKey": "S11_0|*|",
+              "exportMapKey": "5 * S11_0 ",
               "moduleSpecifier": "./lib/a_11",
               "fileName": "/lib/a_11.ts"
             }
@@ -4403,7 +4409,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S12_0",
-              "exportMapKey": "S12_0|*|",
+              "exportMapKey": "5 * S12_0 ",
               "moduleSpecifier": "./lib/a_12",
               "fileName": "/lib/a_12.ts"
             }
@@ -4423,7 +4429,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S13_0",
-              "exportMapKey": "S13_0|*|",
+              "exportMapKey": "5 * S13_0 ",
               "moduleSpecifier": "./lib/a_13",
               "fileName": "/lib/a_13.ts"
             }
@@ -4443,7 +4449,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S14_0",
-              "exportMapKey": "S14_0|*|",
+              "exportMapKey": "5 * S14_0 ",
               "moduleSpecifier": "./lib/a_14",
               "fileName": "/lib/a_14.ts"
             }
@@ -4463,7 +4469,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S15_0",
-              "exportMapKey": "S15_0|*|",
+              "exportMapKey": "5 * S15_0 ",
               "moduleSpecifier": "./lib/a_15",
               "fileName": "/lib/a_15.ts"
             }
@@ -4483,7 +4489,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S16_0",
-              "exportMapKey": "S16_0|*|",
+              "exportMapKey": "5 * S16_0 ",
               "moduleSpecifier": "./lib/a_16",
               "fileName": "/lib/a_16.ts"
             }
@@ -4503,7 +4509,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S17_0",
-              "exportMapKey": "S17_0|*|",
+              "exportMapKey": "5 * S17_0 ",
               "moduleSpecifier": "./lib/a_17",
               "fileName": "/lib/a_17.ts"
             }
@@ -4523,7 +4529,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S18_0",
-              "exportMapKey": "S18_0|*|",
+              "exportMapKey": "5 * S18_0 ",
               "moduleSpecifier": "./lib/a_18",
               "fileName": "/lib/a_18.ts"
             }
@@ -4543,7 +4549,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S19_0",
-              "exportMapKey": "S19_0|*|",
+              "exportMapKey": "5 * S19_0 ",
               "moduleSpecifier": "./lib/a_19",
               "fileName": "/lib/a_19.ts"
             }
@@ -4563,7 +4569,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S2_0",
-              "exportMapKey": "S2_0|*|",
+              "exportMapKey": "4 * S2_0 ",
               "moduleSpecifier": "./lib/a_2",
               "fileName": "/lib/a_2.ts"
             }
@@ -4583,7 +4589,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S20_0",
-              "exportMapKey": "S20_0|*|",
+              "exportMapKey": "5 * S20_0 ",
               "moduleSpecifier": "./lib/a_20",
               "fileName": "/lib/a_20.ts"
             }
@@ -4603,7 +4609,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S21_0",
-              "exportMapKey": "S21_0|*|",
+              "exportMapKey": "5 * S21_0 ",
               "moduleSpecifier": "./lib/a_21",
               "fileName": "/lib/a_21.ts"
             }
@@ -4623,7 +4629,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S22_0",
-              "exportMapKey": "S22_0|*|",
+              "exportMapKey": "5 * S22_0 ",
               "moduleSpecifier": "./lib/a_22",
               "fileName": "/lib/a_22.ts"
             }
@@ -4643,7 +4649,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S23_0",
-              "exportMapKey": "S23_0|*|",
+              "exportMapKey": "5 * S23_0 ",
               "moduleSpecifier": "./lib/a_23",
               "fileName": "/lib/a_23.ts"
             }
@@ -4663,7 +4669,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S24_0",
-              "exportMapKey": "S24_0|*|",
+              "exportMapKey": "5 * S24_0 ",
               "moduleSpecifier": "./lib/a_24",
               "fileName": "/lib/a_24.ts"
             }
@@ -4683,7 +4689,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S25_0",
-              "exportMapKey": "S25_0|*|",
+              "exportMapKey": "5 * S25_0 ",
               "moduleSpecifier": "./lib/a_25",
               "fileName": "/lib/a_25.ts"
             }
@@ -4703,7 +4709,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S26_0",
-              "exportMapKey": "S26_0|*|",
+              "exportMapKey": "5 * S26_0 ",
               "moduleSpecifier": "./lib/a_26",
               "fileName": "/lib/a_26.ts"
             }
@@ -4723,7 +4729,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S27_0",
-              "exportMapKey": "S27_0|*|",
+              "exportMapKey": "5 * S27_0 ",
               "moduleSpecifier": "./lib/a_27",
               "fileName": "/lib/a_27.ts"
             }
@@ -4743,7 +4749,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S28_0",
-              "exportMapKey": "S28_0|*|",
+              "exportMapKey": "5 * S28_0 ",
               "moduleSpecifier": "./lib/a_28",
               "fileName": "/lib/a_28.ts"
             }
@@ -4763,7 +4769,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S29_0",
-              "exportMapKey": "S29_0|*|",
+              "exportMapKey": "5 * S29_0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
             }
@@ -4783,7 +4789,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S3_0",
-              "exportMapKey": "S3_0|*|",
+              "exportMapKey": "4 * S3_0 ",
               "moduleSpecifier": "./lib/a_3",
               "fileName": "/lib/a_3.ts"
             }
@@ -4803,7 +4809,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S30_0",
-              "exportMapKey": "S30_0|*|",
+              "exportMapKey": "5 * S30_0 ",
               "moduleSpecifier": "./lib/a_30",
               "fileName": "/lib/a_30.ts"
             }
@@ -4823,7 +4829,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S31_0",
-              "exportMapKey": "S31_0|*|",
+              "exportMapKey": "5 * S31_0 ",
               "moduleSpecifier": "./lib/a_31",
               "fileName": "/lib/a_31.ts"
             }
@@ -4843,7 +4849,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S32_0",
-              "exportMapKey": "S32_0|*|",
+              "exportMapKey": "5 * S32_0 ",
               "moduleSpecifier": "./lib/a_32",
               "fileName": "/lib/a_32.ts"
             }
@@ -4863,7 +4869,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S33_0",
-              "exportMapKey": "S33_0|*|",
+              "exportMapKey": "5 * S33_0 ",
               "moduleSpecifier": "./lib/a_33",
               "fileName": "/lib/a_33.ts"
             }
@@ -4883,7 +4889,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S34_0",
-              "exportMapKey": "S34_0|*|",
+              "exportMapKey": "5 * S34_0 ",
               "moduleSpecifier": "./lib/a_34",
               "fileName": "/lib/a_34.ts"
             }
@@ -4903,7 +4909,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S35_0",
-              "exportMapKey": "S35_0|*|",
+              "exportMapKey": "5 * S35_0 ",
               "moduleSpecifier": "./lib/a_35",
               "fileName": "/lib/a_35.ts"
             }
@@ -4923,7 +4929,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S36_0",
-              "exportMapKey": "S36_0|*|",
+              "exportMapKey": "5 * S36_0 ",
               "moduleSpecifier": "./lib/a_36",
               "fileName": "/lib/a_36.ts"
             }
@@ -4943,7 +4949,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S37_0",
-              "exportMapKey": "S37_0|*|",
+              "exportMapKey": "5 * S37_0 ",
               "moduleSpecifier": "./lib/a_37",
               "fileName": "/lib/a_37.ts"
             }
@@ -4963,7 +4969,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S38_0",
-              "exportMapKey": "S38_0|*|",
+              "exportMapKey": "5 * S38_0 ",
               "moduleSpecifier": "./lib/a_38",
               "fileName": "/lib/a_38.ts"
             }
@@ -4983,7 +4989,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S39_0",
-              "exportMapKey": "S39_0|*|",
+              "exportMapKey": "5 * S39_0 ",
               "moduleSpecifier": "./lib/a_39",
               "fileName": "/lib/a_39.ts"
             }
@@ -5003,7 +5009,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S4_0",
-              "exportMapKey": "S4_0|*|",
+              "exportMapKey": "4 * S4_0 ",
               "moduleSpecifier": "./lib/a_4",
               "fileName": "/lib/a_4.ts"
             }
@@ -5023,7 +5029,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S40_0",
-              "exportMapKey": "S40_0|*|",
+              "exportMapKey": "5 * S40_0 ",
               "moduleSpecifier": "./lib/a_40",
               "fileName": "/lib/a_40.ts"
             }
@@ -5043,7 +5049,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S41_0",
-              "exportMapKey": "S41_0|*|",
+              "exportMapKey": "5 * S41_0 ",
               "moduleSpecifier": "./lib/a_41",
               "fileName": "/lib/a_41.ts"
             }
@@ -5063,7 +5069,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S42_0",
-              "exportMapKey": "S42_0|*|",
+              "exportMapKey": "5 * S42_0 ",
               "moduleSpecifier": "./lib/a_42",
               "fileName": "/lib/a_42.ts"
             }
@@ -5083,7 +5089,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S43_0",
-              "exportMapKey": "S43_0|*|",
+              "exportMapKey": "5 * S43_0 ",
               "moduleSpecifier": "./lib/a_43",
               "fileName": "/lib/a_43.ts"
             }
@@ -5103,7 +5109,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S44_0",
-              "exportMapKey": "S44_0|*|",
+              "exportMapKey": "5 * S44_0 ",
               "moduleSpecifier": "./lib/a_44",
               "fileName": "/lib/a_44.ts"
             }
@@ -5123,7 +5129,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S45_0",
-              "exportMapKey": "S45_0|*|",
+              "exportMapKey": "5 * S45_0 ",
               "moduleSpecifier": "./lib/a_45",
               "fileName": "/lib/a_45.ts"
             }
@@ -5143,7 +5149,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S46_0",
-              "exportMapKey": "S46_0|*|",
+              "exportMapKey": "5 * S46_0 ",
               "moduleSpecifier": "./lib/a_46",
               "fileName": "/lib/a_46.ts"
             }
@@ -5163,7 +5169,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S47_0",
-              "exportMapKey": "S47_0|*|",
+              "exportMapKey": "5 * S47_0 ",
               "moduleSpecifier": "./lib/a_47",
               "fileName": "/lib/a_47.ts"
             }
@@ -5183,7 +5189,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S48_0",
-              "exportMapKey": "S48_0|*|",
+              "exportMapKey": "5 * S48_0 ",
               "moduleSpecifier": "./lib/a_48",
               "fileName": "/lib/a_48.ts"
             }
@@ -5203,7 +5209,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S49_0",
-              "exportMapKey": "S49_0|*|",
+              "exportMapKey": "5 * S49_0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
             }
@@ -5223,7 +5229,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S5_0",
-              "exportMapKey": "S5_0|*|",
+              "exportMapKey": "4 * S5_0 ",
               "moduleSpecifier": "./lib/a_5",
               "fileName": "/lib/a_5.ts"
             }
@@ -5243,7 +5249,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S50_0",
-              "exportMapKey": "S50_0|*|",
+              "exportMapKey": "5 * S50_0 ",
               "moduleSpecifier": "./lib/a_50",
               "fileName": "/lib/a_50.ts"
             }
@@ -5263,7 +5269,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S51_0",
-              "exportMapKey": "S51_0|*|",
+              "exportMapKey": "5 * S51_0 ",
               "moduleSpecifier": "./lib/a_51",
               "fileName": "/lib/a_51.ts"
             }
@@ -5283,7 +5289,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S52_0",
-              "exportMapKey": "S52_0|*|",
+              "exportMapKey": "5 * S52_0 ",
               "moduleSpecifier": "./lib/a_52",
               "fileName": "/lib/a_52.ts"
             }
@@ -5303,7 +5309,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S53_0",
-              "exportMapKey": "S53_0|*|",
+              "exportMapKey": "5 * S53_0 ",
               "moduleSpecifier": "./lib/a_53",
               "fileName": "/lib/a_53.ts"
             }
@@ -5323,7 +5329,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S54_0",
-              "exportMapKey": "S54_0|*|",
+              "exportMapKey": "5 * S54_0 ",
               "moduleSpecifier": "./lib/a_54",
               "fileName": "/lib/a_54.ts"
             }
@@ -5343,7 +5349,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S55_0",
-              "exportMapKey": "S55_0|*|",
+              "exportMapKey": "5 * S55_0 ",
               "moduleSpecifier": "./lib/a_55",
               "fileName": "/lib/a_55.ts"
             }
@@ -5363,7 +5369,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S56_0",
-              "exportMapKey": "S56_0|*|",
+              "exportMapKey": "5 * S56_0 ",
               "moduleSpecifier": "./lib/a_56",
               "fileName": "/lib/a_56.ts"
             }
@@ -5383,7 +5389,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S57_0",
-              "exportMapKey": "S57_0|*|",
+              "exportMapKey": "5 * S57_0 ",
               "moduleSpecifier": "./lib/a_57",
               "fileName": "/lib/a_57.ts"
             }
@@ -5403,7 +5409,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S58_0",
-              "exportMapKey": "S58_0|*|",
+              "exportMapKey": "5 * S58_0 ",
               "moduleSpecifier": "./lib/a_58",
               "fileName": "/lib/a_58.ts"
             }
@@ -5423,7 +5429,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S59_0",
-              "exportMapKey": "S59_0|*|",
+              "exportMapKey": "5 * S59_0 ",
               "moduleSpecifier": "./lib/a_59",
               "fileName": "/lib/a_59.ts"
             }
@@ -5443,7 +5449,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S6_0",
-              "exportMapKey": "S6_0|*|",
+              "exportMapKey": "4 * S6_0 ",
               "moduleSpecifier": "./lib/a_6",
               "fileName": "/lib/a_6.ts"
             }
@@ -5463,7 +5469,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S60_0",
-              "exportMapKey": "S60_0|*|",
+              "exportMapKey": "5 * S60_0 ",
               "moduleSpecifier": "./lib/a_60",
               "fileName": "/lib/a_60.ts"
             }
@@ -5483,7 +5489,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S61_0",
-              "exportMapKey": "S61_0|*|",
+              "exportMapKey": "5 * S61_0 ",
               "moduleSpecifier": "./lib/a_61",
               "fileName": "/lib/a_61.ts"
             }
@@ -5503,7 +5509,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S62_0",
-              "exportMapKey": "S62_0|*|",
+              "exportMapKey": "5 * S62_0 ",
               "moduleSpecifier": "./lib/a_62",
               "fileName": "/lib/a_62.ts"
             }
@@ -5523,7 +5529,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S63_0",
-              "exportMapKey": "S63_0|*|",
+              "exportMapKey": "5 * S63_0 ",
               "moduleSpecifier": "./lib/a_63",
               "fileName": "/lib/a_63.ts"
             }
@@ -5543,7 +5549,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S64_0",
-              "exportMapKey": "S64_0|*|",
+              "exportMapKey": "5 * S64_0 ",
               "moduleSpecifier": "./lib/a_64",
               "fileName": "/lib/a_64.ts"
             }
@@ -5563,7 +5569,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S65_0",
-              "exportMapKey": "S65_0|*|",
+              "exportMapKey": "5 * S65_0 ",
               "moduleSpecifier": "./lib/a_65",
               "fileName": "/lib/a_65.ts"
             }
@@ -5583,7 +5589,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S66_0",
-              "exportMapKey": "S66_0|*|",
+              "exportMapKey": "5 * S66_0 ",
               "moduleSpecifier": "./lib/a_66",
               "fileName": "/lib/a_66.ts"
             }
@@ -5603,7 +5609,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S67_0",
-              "exportMapKey": "S67_0|*|",
+              "exportMapKey": "5 * S67_0 ",
               "moduleSpecifier": "./lib/a_67",
               "fileName": "/lib/a_67.ts"
             }
@@ -5623,7 +5629,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S68_0",
-              "exportMapKey": "S68_0|*|",
+              "exportMapKey": "5 * S68_0 ",
               "moduleSpecifier": "./lib/a_68",
               "fileName": "/lib/a_68.ts"
             }
@@ -5643,7 +5649,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S69_0",
-              "exportMapKey": "S69_0|*|",
+              "exportMapKey": "5 * S69_0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
             }
@@ -5663,7 +5669,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S7_0",
-              "exportMapKey": "S7_0|*|",
+              "exportMapKey": "4 * S7_0 ",
               "moduleSpecifier": "./lib/a_7",
               "fileName": "/lib/a_7.ts"
             }
@@ -5683,7 +5689,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S70_0",
-              "exportMapKey": "S70_0|*|",
+              "exportMapKey": "5 * S70_0 ",
               "moduleSpecifier": "./lib/a_70",
               "fileName": "/lib/a_70.ts"
             }
@@ -5703,7 +5709,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S71_0",
-              "exportMapKey": "S71_0|*|",
+              "exportMapKey": "5 * S71_0 ",
               "moduleSpecifier": "./lib/a_71",
               "fileName": "/lib/a_71.ts"
             }
@@ -5723,7 +5729,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S72_0",
-              "exportMapKey": "S72_0|*|",
+              "exportMapKey": "5 * S72_0 ",
               "moduleSpecifier": "./lib/a_72",
               "fileName": "/lib/a_72.ts"
             }
@@ -5743,7 +5749,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S73_0",
-              "exportMapKey": "S73_0|*|",
+              "exportMapKey": "5 * S73_0 ",
               "moduleSpecifier": "./lib/a_73",
               "fileName": "/lib/a_73.ts"
             }
@@ -5763,7 +5769,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S74_0",
-              "exportMapKey": "S74_0|*|",
+              "exportMapKey": "5 * S74_0 ",
               "moduleSpecifier": "./lib/a_74",
               "fileName": "/lib/a_74.ts"
             }
@@ -5783,7 +5789,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S75_0",
-              "exportMapKey": "S75_0|*|",
+              "exportMapKey": "5 * S75_0 ",
               "moduleSpecifier": "./lib/a_75",
               "fileName": "/lib/a_75.ts"
             }
@@ -5803,7 +5809,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S76_0",
-              "exportMapKey": "S76_0|*|",
+              "exportMapKey": "5 * S76_0 ",
               "moduleSpecifier": "./lib/a_76",
               "fileName": "/lib/a_76.ts"
             }
@@ -5823,7 +5829,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S77_0",
-              "exportMapKey": "S77_0|*|",
+              "exportMapKey": "5 * S77_0 ",
               "moduleSpecifier": "./lib/a_77",
               "fileName": "/lib/a_77.ts"
             }
@@ -5843,7 +5849,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S78_0",
-              "exportMapKey": "S78_0|*|",
+              "exportMapKey": "5 * S78_0 ",
               "moduleSpecifier": "./lib/a_78",
               "fileName": "/lib/a_78.ts"
             }
@@ -5863,7 +5869,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S79_0",
-              "exportMapKey": "S79_0|*|",
+              "exportMapKey": "5 * S79_0 ",
               "moduleSpecifier": "./lib/a_79",
               "fileName": "/lib/a_79.ts"
             }
@@ -5883,7 +5889,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S8_0",
-              "exportMapKey": "S8_0|*|",
+              "exportMapKey": "4 * S8_0 ",
               "moduleSpecifier": "./lib/a_8",
               "fileName": "/lib/a_8.ts"
             }
@@ -5903,7 +5909,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S80_0",
-              "exportMapKey": "S80_0|*|",
+              "exportMapKey": "5 * S80_0 ",
               "moduleSpecifier": "./lib/a_80",
               "fileName": "/lib/a_80.ts"
             }
@@ -5923,7 +5929,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S81_0",
-              "exportMapKey": "S81_0|*|",
+              "exportMapKey": "5 * S81_0 ",
               "moduleSpecifier": "./lib/a_81",
               "fileName": "/lib/a_81.ts"
             }
@@ -5943,7 +5949,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S82_0",
-              "exportMapKey": "S82_0|*|",
+              "exportMapKey": "5 * S82_0 ",
               "moduleSpecifier": "./lib/a_82",
               "fileName": "/lib/a_82.ts"
             }
@@ -5963,7 +5969,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S83_0",
-              "exportMapKey": "S83_0|*|",
+              "exportMapKey": "5 * S83_0 ",
               "moduleSpecifier": "./lib/a_83",
               "fileName": "/lib/a_83.ts"
             }
@@ -5983,7 +5989,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S84_0",
-              "exportMapKey": "S84_0|*|",
+              "exportMapKey": "5 * S84_0 ",
               "moduleSpecifier": "./lib/a_84",
               "fileName": "/lib/a_84.ts"
             }
@@ -6003,7 +6009,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S85_0",
-              "exportMapKey": "S85_0|*|",
+              "exportMapKey": "5 * S85_0 ",
               "moduleSpecifier": "./lib/a_85",
               "fileName": "/lib/a_85.ts"
             }
@@ -6023,7 +6029,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S86_0",
-              "exportMapKey": "S86_0|*|",
+              "exportMapKey": "5 * S86_0 ",
               "moduleSpecifier": "./lib/a_86",
               "fileName": "/lib/a_86.ts"
             }
@@ -6043,7 +6049,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S87_0",
-              "exportMapKey": "S87_0|*|",
+              "exportMapKey": "5 * S87_0 ",
               "moduleSpecifier": "./lib/a_87",
               "fileName": "/lib/a_87.ts"
             }
@@ -6063,7 +6069,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S88_0",
-              "exportMapKey": "S88_0|*|",
+              "exportMapKey": "5 * S88_0 ",
               "moduleSpecifier": "./lib/a_88",
               "fileName": "/lib/a_88.ts"
             }
@@ -6083,7 +6089,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S89_0",
-              "exportMapKey": "S89_0|*|",
+              "exportMapKey": "5 * S89_0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
             }
@@ -6103,7 +6109,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S9_0",
-              "exportMapKey": "S9_0|*|",
+              "exportMapKey": "4 * S9_0 ",
               "moduleSpecifier": "./lib/a_9",
               "fileName": "/lib/a_9.ts"
             }
@@ -6123,7 +6129,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S90_0",
-              "exportMapKey": "S90_0|*|",
+              "exportMapKey": "5 * S90_0 ",
               "moduleSpecifier": "./lib/a_90",
               "fileName": "/lib/a_90.ts"
             }
@@ -6143,7 +6149,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S91_0",
-              "exportMapKey": "S91_0|*|",
+              "exportMapKey": "5 * S91_0 ",
               "moduleSpecifier": "./lib/a_91",
               "fileName": "/lib/a_91.ts"
             }
@@ -6163,7 +6169,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S92_0",
-              "exportMapKey": "S92_0|*|",
+              "exportMapKey": "5 * S92_0 ",
               "moduleSpecifier": "./lib/a_92",
               "fileName": "/lib/a_92.ts"
             }
@@ -6183,7 +6189,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S93_0",
-              "exportMapKey": "S93_0|*|",
+              "exportMapKey": "5 * S93_0 ",
               "moduleSpecifier": "./lib/a_93",
               "fileName": "/lib/a_93.ts"
             }
@@ -6203,7 +6209,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S94_0",
-              "exportMapKey": "S94_0|*|",
+              "exportMapKey": "5 * S94_0 ",
               "moduleSpecifier": "./lib/a_94",
               "fileName": "/lib/a_94.ts"
             }
@@ -6223,7 +6229,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S95_0",
-              "exportMapKey": "S95_0|*|",
+              "exportMapKey": "5 * S95_0 ",
               "moduleSpecifier": "./lib/a_95",
               "fileName": "/lib/a_95.ts"
             }
@@ -6243,7 +6249,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S96_0",
-              "exportMapKey": "S96_0|*|",
+              "exportMapKey": "5 * S96_0 ",
               "moduleSpecifier": "./lib/a_96",
               "fileName": "/lib/a_96.ts"
             }
@@ -6263,7 +6269,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S97_0",
-              "exportMapKey": "S97_0|*|",
+              "exportMapKey": "5 * S97_0 ",
               "moduleSpecifier": "./lib/a_97",
               "fileName": "/lib/a_97.ts"
             }
@@ -6283,7 +6289,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S98_0",
-              "exportMapKey": "S98_0|*|",
+              "exportMapKey": "5 * S98_0 ",
               "moduleSpecifier": "./lib/a_98",
               "fileName": "/lib/a_98.ts"
             }
@@ -6303,7 +6309,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "S99_0",
-              "exportMapKey": "S99_0|*|",
+              "exportMapKey": "5 * S99_0 ",
               "moduleSpecifier": "./lib/a_99",
               "fileName": "/lib/a_99.ts"
             }
@@ -6323,7 +6329,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "SIGABRT",
-              "exportMapKey": "SIGABRT|*|",
+              "exportMapKey": "7 * SIGABRT ",
               "moduleSpecifier": "./lib/foo/constants",
               "fileName": "/lib/foo/constants.d.ts"
             }
@@ -6343,7 +6349,7 @@ Info 151  [00:06:10.000] response:
             ],
             "data": {
               "exportName": "SIGINT",
-              "exportMapKey": "SIGINT|*|",
+              "exportMapKey": "6 * SIGINT ",
               "moduleSpecifier": "./lib/foo/constants",
               "fileName": "/lib/foo/constants.d.ts"
             }

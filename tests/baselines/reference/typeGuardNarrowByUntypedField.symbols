@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardNarrowByUntypedField.ts ===
+//// [tests/cases/compiler/typeGuardNarrowByUntypedField.ts] ////
+
+=== typeGuardNarrowByUntypedField.ts ===
 declare function hasOwnProperty<P extends PropertyKey>(target: {}, property: P): target is { readonly [K in P]: unknown };
 >hasOwnProperty : Symbol(hasOwnProperty, Decl(typeGuardNarrowByUntypedField.ts, 0, 0))
 >P : Symbol(P, Decl(typeGuardNarrowByUntypedField.ts, 0, 32))

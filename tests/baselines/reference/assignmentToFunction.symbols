@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentToFunction.ts ===
+//// [tests/cases/compiler/assignmentToFunction.ts] ////
+
+=== assignmentToFunction.ts ===
 function fn() { }
 >fn : Symbol(fn, Decl(assignmentToFunction.ts, 0, 0))
 

@@ -1,14 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: getFileReferences", () => {
     const importA = `import "./a";`;
@@ -26,11 +26,11 @@ describe("unittests:: tsserver:: getFileReferences", () => {
     };
     const cTs: File = {
         path: "/project/c.ts",
-        content: importCurlyFromA
+        content: importCurlyFromA,
     };
     const dTs: File = {
         path: "/project/d.ts",
-        content: [importAFromA, typeofImportA].join("\n")
+        content: [importAFromA, typeofImportA].join("\n"),
     };
     const tsconfig: File = {
         path: "/project/tsconfig.json",
@@ -59,8 +59,8 @@ describe("unittests:: tsserver:: getFileReferences", () => {
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
             arguments: {
-                preferences: { disableLineTextInReferences: true }
-            }
+                preferences: { disableLineTextInReferences: true },
+            },
         });
         session.executeCommandSeq<ts.server.protocol.FileReferencesRequest>({
             command: ts.server.protocol.CommandTypes.FileReferences,

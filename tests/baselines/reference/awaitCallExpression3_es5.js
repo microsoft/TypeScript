@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/awaitCallExpression/awaitCallExpression3_es5.ts] ////
+
 //// [awaitCallExpression3_es5.ts]
 declare var a: boolean;
 declare var p: Promise<boolean>;

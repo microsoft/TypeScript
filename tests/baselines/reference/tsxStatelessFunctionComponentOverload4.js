@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload4.tsx] ////
+
 //// [file.tsx]
 import React = require('react')
 declare function OneThing(): JSX.Element;

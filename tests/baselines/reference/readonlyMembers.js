@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyMembers.ts] ////
+
 //// [readonlyMembers.ts]
 interface X {
     readonly a: number;

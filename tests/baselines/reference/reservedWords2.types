@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reservedWords2.ts ===
+//// [tests/cases/compiler/reservedWords2.ts] ////
+
+=== reservedWords2.ts ===
 import while = require("dfdf");
 > : any
 >= require("dfdf") : any

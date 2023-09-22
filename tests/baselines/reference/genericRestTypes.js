@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericRestTypes.ts] ////
+
 //// [genericRestTypes.ts]
 // Repro from #25793
 

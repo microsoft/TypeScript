@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName1.ts] ////
+
 //// [resolveModuleNameWithSameLetDeclarationName1.ts]
 declare module foo {
 

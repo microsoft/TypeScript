@@ -1,9 +1,9 @@
-tests/cases/compiler/undefinedTypeAssignment4.ts(1,7): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
-tests/cases/compiler/undefinedTypeAssignment4.ts(4,11): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
-tests/cases/compiler/undefinedTypeAssignment4.ts(7,11): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+undefinedTypeAssignment4.ts(1,7): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+undefinedTypeAssignment4.ts(4,11): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+undefinedTypeAssignment4.ts(7,11): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
 
 
-==== tests/cases/compiler/undefinedTypeAssignment4.ts (3 errors) ====
+==== undefinedTypeAssignment4.ts (3 errors) ====
     class undefined {
           ~~~~~~~~~
 !!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.

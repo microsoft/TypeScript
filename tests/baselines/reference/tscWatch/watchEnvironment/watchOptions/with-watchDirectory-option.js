@@ -50,20 +50,16 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json: *new*
+/a/b: *new*
   {}
 /a/b/commonfile1.ts: *new*
   {}
 /a/b/commonfile2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/b/tsconfig.json: *new*
   {}
-/a/b: *new*
+/a/lib/lib.d.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined

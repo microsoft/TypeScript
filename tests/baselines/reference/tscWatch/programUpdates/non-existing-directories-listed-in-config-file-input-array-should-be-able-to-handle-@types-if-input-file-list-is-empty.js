@@ -53,9 +53,5 @@ FsWatches::
 /a/tsconfig.json: *new*
   {}
 
-FsWatchesRecursive::
-/a/node_modules/@types: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
 

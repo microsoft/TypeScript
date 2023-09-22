@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/inexistentPropertyInsideToStringType.ts] ////
+
+=== index.js ===
 function toString() {
 >toString : Symbol(toString, Decl(lib.dom.d.ts, --, --), Decl(index.js, 0, 0))
 

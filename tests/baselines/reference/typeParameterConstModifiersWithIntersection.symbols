@@ -1,0 +1,56 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiersWithIntersection.ts] ////
+
+=== typeParameterConstModifiersWithIntersection.ts ===
+// https://github.com/microsoft/TypeScript/issues/55778
+
+interface Config<T1 extends { type: string }> {
+>Config : Symbol(Config, Decl(typeParameterConstModifiersWithIntersection.ts, 0, 0))
+>T1 : Symbol(T1, Decl(typeParameterConstModifiersWithIntersection.ts, 2, 17))
+>type : Symbol(type, Decl(typeParameterConstModifiersWithIntersection.ts, 2, 29))
+
+  useIt: T1;
+>useIt : Symbol(Config.useIt, Decl(typeParameterConstModifiersWithIntersection.ts, 2, 47))
+>T1 : Symbol(T1, Decl(typeParameterConstModifiersWithIntersection.ts, 2, 17))
+}
+
+declare function test<
+>test : Symbol(test, Decl(typeParameterConstModifiersWithIntersection.ts, 4, 1))
+
+  T1 extends { type: string },
+>T1 : Symbol(T1, Decl(typeParameterConstModifiersWithIntersection.ts, 6, 22))
+>type : Symbol(type, Decl(typeParameterConstModifiersWithIntersection.ts, 7, 14))
+
+  const TConfig extends Config<T1>,
+>TConfig : Symbol(TConfig, Decl(typeParameterConstModifiersWithIntersection.ts, 7, 30))
+>Config : Symbol(Config, Decl(typeParameterConstModifiersWithIntersection.ts, 0, 0))
+>T1 : Symbol(T1, Decl(typeParameterConstModifiersWithIntersection.ts, 6, 22))
+
+>(config: { produceThing: T1 } & TConfig): TConfig;
+>config : Symbol(config, Decl(typeParameterConstModifiersWithIntersection.ts, 9, 2))
+>produceThing : Symbol(produceThing, Decl(typeParameterConstModifiersWithIntersection.ts, 9, 11))
+>T1 : Symbol(T1, Decl(typeParameterConstModifiersWithIntersection.ts, 6, 22))
+>TConfig : Symbol(TConfig, Decl(typeParameterConstModifiersWithIntersection.ts, 7, 30))
+>TConfig : Symbol(TConfig, Decl(typeParameterConstModifiersWithIntersection.ts, 7, 30))
+
+const result = test({
+>result : Symbol(result, Decl(typeParameterConstModifiersWithIntersection.ts, 11, 5))
+>test : Symbol(test, Decl(typeParameterConstModifiersWithIntersection.ts, 4, 1))
+
+  produceThing: {} as {
+>produceThing : Symbol(produceThing, Decl(typeParameterConstModifiersWithIntersection.ts, 11, 21))
+
+    type: "foo";
+>type : Symbol(type, Decl(typeParameterConstModifiersWithIntersection.ts, 12, 23))
+
+  },
+  useIt: {
+>useIt : Symbol(useIt, Decl(typeParameterConstModifiersWithIntersection.ts, 14, 4))
+
+    type: "foo",
+>type : Symbol(type, Decl(typeParameterConstModifiersWithIntersection.ts, 15, 10))
+
+  },
+  extra: 10,
+>extra : Symbol(extra, Decl(typeParameterConstModifiersWithIntersection.ts, 17, 4))
+
+});

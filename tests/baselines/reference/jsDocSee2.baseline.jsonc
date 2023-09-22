@@ -4,16 +4,7 @@
 // const a = ""
 // /** @see {@bar} invalid tag*/
 // const b = ""
-// /** @see foooo unknown reference without brace*/
-// const c = ""
-// /** @see @bar invalid tag without brace*/
-// const d = ""
-// /** @see {d@fff} partial reference */
-// const e = ""
-// /** @see @@@@@@ total invalid tag*/
-// const f = ""
-// /** @see d@{fff} partial reference */
-// const g = ""
+// --- (line: 5) skipped ---
 
 
 
@@ -25,14 +16,7 @@
 // const b = ""
 // /** @see foooo unknown reference without brace*/
 // const c = ""
-// /** @see @bar invalid tag without brace*/
-// const d = ""
-// /** @see {d@fff} partial reference */
-// const e = ""
-// /** @see @@@@@@ total invalid tag*/
-// const f = ""
-// /** @see d@{fff} partial reference */
-// const g = ""
+// --- (line: 7) skipped ---
 
 
 
@@ -46,20 +30,13 @@
 // const c = ""
 // /** @see @bar invalid tag without brace*/
 // const d = ""
-// /** @see {d@fff} partial reference */
-// const e = ""
-// /** @see @@@@@@ total invalid tag*/
-// const f = ""
-// /** @see d@{fff} partial reference */
-// const g = ""
+// --- (line: 9) skipped ---
 
 
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/jsDocSee2.ts ===
-// /** @see {foooo} unknown reference*/
-// const a = ""
-// /** @see {@bar} invalid tag*/
+// --- (line: 3) skipped ---
 // const b = ""
 // /** @see foooo unknown reference without brace*/
 // const c = ""
@@ -67,19 +44,13 @@
 // const d = ""
 // /** @see {d@fff} partial reference */
 // const e = ""
-// /** @see @@@@@@ total invalid tag*/
-// const f = ""
-// /** @see d@{fff} partial reference */
-// const g = ""
+// --- (line: 11) skipped ---
 
 
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/jsDocSee2.ts ===
-// /** @see {foooo} unknown reference*/
-// const a = ""
-// /** @see {@bar} invalid tag*/
-// const b = ""
+// --- (line: 4) skipped ---
 // /** @see foooo unknown reference without brace*/
 // const c = ""
 // /** @see @bar invalid tag without brace*/
@@ -108,13 +79,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/jsDocSee2.ts ===
-// /** @see {foooo} unknown reference*/
-// const a = ""
-// /** @see {@bar} invalid tag*/
-// const b = ""
-// /** @see foooo unknown reference without brace*/
-// const c = ""
-// /** @see @bar invalid tag without brace*/
+// --- (line: 7) skipped ---
 // const d = ""
 // /** @see {d@fff} partial reference */
 // const e = ""
@@ -127,15 +92,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/jsDocSee2.ts ===
-// /** @see {foooo} unknown reference*/
-// const a = ""
-// /** @see {@bar} invalid tag*/
-// const b = ""
-// /** @see foooo unknown reference without brace*/
-// const c = ""
-// /** @see @bar invalid tag without brace*/
-// const d = ""
-// /** @see {d@fff} partial reference */
+// --- (line: 9) skipped ---
 // const e = ""
 // /** @see @@@@@@ total invalid tag*/
 // const f = ""

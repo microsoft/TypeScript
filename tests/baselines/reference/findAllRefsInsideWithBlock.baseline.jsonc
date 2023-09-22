@@ -15,10 +15,7 @@
   // 
   // with ({}) {
   //     var y = x;  // Reference of x here should not be picked
-  //     y++;        // also reference for y should be ignored
-  // }
-  // 
-  // x = x + 1;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [
@@ -75,10 +72,7 @@
   // 
   // with ({}) {
   //     var y = x;  // Reference of x here should not be picked
-  //     y++;        // also reference for y should be ignored
-  // }
-  // 
-  // x = x + 1;
+  // --- (line: 5) skipped ---
 
   // === Details ===
   [

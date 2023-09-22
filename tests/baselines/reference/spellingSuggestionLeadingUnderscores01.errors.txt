@@ -1,9 +1,8 @@
-tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(6,3): error TS2551: Property '___foo' does not exist on type '{ __foo: 10; }'. Did you mean '__foo'?
-tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(14,5): error TS2322: Type '{ ___foo: number; }' is not assignable to type '{ __foo: number; }'.
-  Object literal may only specify known properties, but '___foo' does not exist in type '{ __foo: number; }'. Did you mean to write '__foo'?
+spellingSuggestionLeadingUnderscores01.ts(6,3): error TS2551: Property '___foo' does not exist on type '{ __foo: 10; }'. Did you mean '__foo'?
+spellingSuggestionLeadingUnderscores01.ts(14,5): error TS2561: Object literal may only specify known properties, but '___foo' does not exist in type '{ __foo: number; }'. Did you mean to write '__foo'?
 
 
-==== tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts (2 errors) ====
+==== spellingSuggestionLeadingUnderscores01.ts (2 errors) ====
     // @filename abc.ts
     export declare let a: {
         __foo: 10,
@@ -12,7 +11,7 @@ tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(14,5): error TS23
     a.___foo
       ~~~~~~
 !!! error TS2551: Property '___foo' does not exist on type '{ __foo: 10; }'. Did you mean '__foo'?
-!!! related TS2728 tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts:3:5: '__foo' is declared here.
+!!! related TS2728 spellingSuggestionLeadingUnderscores01.ts:3:5: '__foo' is declared here.
     
     // @filename def.ts
     export let b: {
@@ -22,8 +21,7 @@ tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(14,5): error TS23
     b = {
         ___foo: 100,
         ~~~~~~
-!!! error TS2322: Type '{ ___foo: number; }' is not assignable to type '{ __foo: number; }'.
-!!! error TS2322:   Object literal may only specify known properties, but '___foo' does not exist in type '{ __foo: number; }'. Did you mean to write '__foo'?
+!!! error TS2561: Object literal may only specify known properties, but '___foo' does not exist in type '{ __foo: number; }'. Did you mean to write '__foo'?
     }
     
     

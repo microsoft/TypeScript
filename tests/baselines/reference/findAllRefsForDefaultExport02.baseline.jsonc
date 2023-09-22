@@ -19,10 +19,7 @@
   // 
   // var x: typeof DefaultExportedFunction;
   // 
-  // var y = DefaultExportedFunction();
-  // 
-  // namespace DefaultExportedFunction {
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -119,10 +116,7 @@
   // 
   // var x: typeof DefaultExportedFunction;
   // 
-  // var y = DefaultExportedFunction();
-  // 
-  // namespace DefaultExportedFunction {
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -219,10 +213,7 @@
   // 
   // var x: typeof DefaultExportedFunction;
   // 
-  // var y = DefaultExportedFunction();
-  // 
-  // namespace DefaultExportedFunction {
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -500,11 +491,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
-// export default function DefaultExportedFunction() {
-//     return DefaultExportedFunction;
-// }
-// 
-// var x: typeof DefaultExportedFunction;
+// --- (line: 5) skipped ---
 // 
 // var y = DefaultExportedFunction();
 // 
@@ -552,11 +539,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
-// export default function DefaultExportedFunction() {
-//     return DefaultExportedFunction;
-// }
-// 
-// var x: typeof DefaultExportedFunction;
+// --- (line: 5) skipped ---
 // 
 // var y = DefaultExportedFunction();
 // 
