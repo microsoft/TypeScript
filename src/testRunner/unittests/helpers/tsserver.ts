@@ -489,6 +489,7 @@ function patchHostTimeouts(
 export interface TestSessionOptions extends ts.server.SessionOptions {
     logger: Logger;
     allowNonBaseliningLogger?: boolean;
+    disableAutomaticTypingAcquisition?: boolean;
 }
 
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
@@ -543,7 +544,7 @@ export class TestSession extends ts.server.Session {
 
 export function createSession(host: TestServerHost, opts: Partial<TestSessionOptions> = {}) {
     const logger = opts.logger || createHasErrorMessageLogger();
-    if (opts.typingsInstaller === undefined) {
+    if (!opts.disableAutomaticTypingAcquisition && opts.typingsInstaller === undefined) {
         opts.typingsInstaller = new TestTypingsInstaller(host.getHostSpecificPath("/a/data/"), /*throttleLimit*/ 5, host, logger);
     }
 
@@ -556,7 +557,6 @@ export function createSession(host: TestServerHost, opts: Partial<TestSessionOpt
         cancellationToken: ts.server.nullCancellationToken,
         useSingleInferredProject: false,
         useInferredProjectPerProjectRoot: false,
-        typingsInstaller: undefined!, // TODO: GH#18217
         byteLength: Buffer.byteLength,
         hrtime: process.hrtime,
         logger,

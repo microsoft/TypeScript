@@ -999,6 +999,7 @@ export class ProjectService {
     private currentPluginEnablementPromise?: Promise<void>;
 
     /** @internal */ verifyDocumentRegistry = noop;
+    /** @internal */ verifyProgram: (project: Project) => void = noop;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
