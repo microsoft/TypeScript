@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/indexIntoArrayTupleObjectWithNever.ts] ////
+
+=== indexIntoArrayTupleObjectWithNever.ts ===
+type A = { a: 42 }[never]
+>A : Symbol(A, Decl(indexIntoArrayTupleObjectWithNever.ts, 0, 0))
+>a : Symbol(a, Decl(indexIntoArrayTupleObjectWithNever.ts, 0, 10))
+
+type B = [42][never]
+>B : Symbol(B, Decl(indexIntoArrayTupleObjectWithNever.ts, 0, 25))
+
+type C = Array<42>[never]
+>C : Symbol(C, Decl(indexIntoArrayTupleObjectWithNever.ts, 2, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

@@ -14,9 +14,9 @@ verify.quickInfoAt("1", `const m: <"foo">(s: {
 
 // the exact generic type params are not important in this test (they could change with changes to the inference algorithm)
 // it's important though that they both display the same types
-verify.quickInfoAt("2", `const $: <unknown, string>(s: string) => {
-    $: unknown;
+verify.quickInfoAt("2", `const $: <never, never>(s: never) => {
+    $: never;
 }`);
-verify.quickInfoAt("3", `const $: <unknown, string>(s: string) => {
-    $: unknown;
+verify.quickInfoAt("3", `const $: <never, never>(s: never) => {
+    $: never;
 }`);

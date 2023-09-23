@@ -17783,6 +17783,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                 return objectType;
             }
+            if (indexType.flags & TypeFlags.Never) {
+                return neverType;
+            }
             // If no index signature is applicable, we default to the string index signature. In effect, this means the string
             // index signature applies even when accessing with a symbol-like type.
             const indexInfo = getApplicableIndexInfo(objectType, indexType) || getIndexInfoOfType(objectType, stringType);
@@ -17813,9 +17816,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return getUnionType([indexInfo.type, missingType]);
                 }
                 return indexInfo.type;
-            }
-            if (indexType.flags & TypeFlags.Never) {
-                return neverType;
             }
             if (isJSLiteralType(objectType)) {
                 return anyType;
