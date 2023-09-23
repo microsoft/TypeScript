@@ -128,6 +128,7 @@ import {
     isAssignmentTarget,
     isAsyncFunction,
     isAutoAccessorPropertyDeclaration,
+    isAwaited,
     isBinaryExpression,
     isBindableObjectDefinePropertyCall,
     isBindableStaticAccessExpression,
@@ -999,14 +1000,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const saveExceptionTarget = currentExceptionTarget;
             const saveActiveLabelList = activeLabelList;
             const saveHasExplicitReturn = hasExplicitReturn;
-            const isImmediatelyInvoked = (
-                containerFlags & ContainerFlags.IsFunctionExpression &&
-                !hasSyntacticModifier(node, ModifierFlags.Async) &&
+            const iife = containerFlags & ContainerFlags.IsFunctionExpression &&
                 !(node as FunctionLikeDeclaration).asteriskToken &&
-                !!getImmediatelyInvokedFunctionExpression(node)
-            ) || node.kind === SyntaxKind.ClassStaticBlockDeclaration;
-            // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
-            // similarly to break statements that exit to a label just past the statement body.
+                getImmediatelyInvokedFunctionExpression(node);
+            const isFloatingAsyncIIFE = iife && hasSyntacticModifier(node, ModifierFlags.Async) && !isAwaited(iife);
+            const isImmediatelyInvoked = iife || node.kind === SyntaxKind.ClassStaticBlockDeclaration;
+            // A non-generator IIFE is considered part of the containing control flow. Return statements in non-async functions and
+            // awaited async functions behave similarly to break statements that exit to a label just past the statement body.
             if (!isImmediatelyInvoked) {
                 currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)) {
@@ -1015,7 +1015,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
             // We create a return control flow graph for IIFEs and constructors. For constructors
             // we use the return control flow graph in strict property initialization checks.
-            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+            currentReturnTarget = (isImmediatelyInvoked && !isFloatingAsyncIIFE) || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
             currentExceptionTarget = undefined;
             currentBreakTarget = undefined;
             currentContinueTarget = undefined;
@@ -1041,7 +1041,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).returnFlowNode = currentFlow;
                 }
             }
-            if (!isImmediatelyInvoked) {
+            if (!isImmediatelyInvoked || isFloatingAsyncIIFE) {
                 currentFlow = saveCurrentFlow;
             }
             currentBreakTarget = saveBreakTarget;

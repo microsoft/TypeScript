@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/controlFlow/controlFlowIIFE3.ts] ////
+
+=== controlFlowIIFE3.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(controlFlowIIFE3.ts, 0, 0))
+
+  prop: number; // currently there's an error with strictPropertyInitialization
+>prop : Symbol(Foo.prop, Decl(controlFlowIIFE3.ts, 0, 11))
+
+  constructor() {
+    (async () => (this.prop = await 1))();
+>this.prop : Symbol(Foo.prop, Decl(controlFlowIIFE3.ts, 0, 11))
+>this : Symbol(Foo, Decl(controlFlowIIFE3.ts, 0, 0))
+>prop : Symbol(Foo.prop, Decl(controlFlowIIFE3.ts, 0, 11))
+  }
+}
+
