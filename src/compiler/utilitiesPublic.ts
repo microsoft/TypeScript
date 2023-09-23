@@ -1705,6 +1705,11 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
 }
 
 /** @internal */
+export function isClassFieldAndNotAutoAccessor(node: Node): boolean {
+    return node.parent && isClassLike(node.parent) && isPropertyDeclaration(node) && !hasAccessorModifier(node);
+}
+
+/** @internal */
 export function isMethodOrAccessor(node: Node): node is MethodDeclaration | AccessorDeclaration {
     switch (node.kind) {
         case SyntaxKind.MethodDeclaration:

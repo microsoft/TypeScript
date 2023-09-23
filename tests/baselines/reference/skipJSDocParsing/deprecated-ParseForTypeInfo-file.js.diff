@@ -1,12 +1,13 @@
 ===================================================================
---- withJSDoc	With JSDoc
-+++ withoutJSDoc	Without JSDoc
-@@ -220,6 +220,6 @@
+--- default
++++ ParseForTypeInfo
+@@ -237,7 +237,7 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],
      "identifiers": {},
--    "skipNonSemanticJSDoc": false
-+    "skipNonSemanticJSDoc": true
+-    "jsDocParsingMode": 0,
++    "jsDocParsingMode": 3,
+     "jsDocDiagnostics": []
  }
 \ No newline at end of file

@@ -4293,7 +4293,7 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
 
-    /** @internal */ skipNonSemanticJSDoc?: boolean;
+    /** @internal */ jsDocParsingMode?: JSDocParsingMode;
 }
 
 /** @internal */
@@ -4651,6 +4651,20 @@ export interface Program extends ScriptReferenceHost {
     resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
     /** @internal */
     resolvedTypeReferenceDirectiveNames: Map<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
+    /** @internal */
+    getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+    /** @internal */
+    getResolvedTypeReferenceDirective(f: SourceFile, typeDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+    /** @internal */
+    forEachResolvedModule(
+        callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file?: SourceFile,
+    ): void;
+    /** @internal */
+    forEachResolvedTypeReferenceDirective(
+        callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file?: SourceFile,
+    ): void;
 
     /**
      * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -4868,7 +4882,7 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 
-    resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
+    getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
 
     readonly redirectTargetsMap: RedirectTargetsMap;
 
@@ -6680,7 +6694,6 @@ export interface Signature {
     declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
     typeParameters?: readonly TypeParameter[];   // Type parameters (undefined if non-generic)
     parameters: readonly Symbol[];               // Parameters
-    /** @internal */
     thisParameter?: Symbol;             // symbol of this-type parameter
     /** @internal */
     // See comment in `instantiateSignature` for why these are set lazily.
@@ -7786,6 +7799,8 @@ export interface CompilerHost extends ModuleResolutionHost {
     // For testing:
     /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
+
+    jsDocParsingMode?: JSDocParsingMode;
 }
 
 /** true if --out otherwise source file name *
@@ -9461,6 +9476,7 @@ export interface PrinterOptions {
     /** @internal */ sourceMap?: boolean;
     /** @internal */ inlineSourceMap?: boolean;
     /** @internal */ inlineSources?: boolean;
+    /** @internal*/ omitBraceSourceMapPositions?: boolean;
     /** @internal */ extendedDiagnostics?: boolean;
     /** @internal */ onlyPrintJsDocStyle?: boolean;
     /** @internal */ neverAsciiEscape?: boolean;
@@ -9852,6 +9868,34 @@ export const commentPragmas = {
         kind: PragmaKindFlags.MultiLine,
     },
 } as const;
+
+export const enum JSDocParsingMode {
+    /**
+     * Always parse JSDoc comments and include them in the AST.
+     *
+     * This is the default if no mode is provided.
+     */
+    ParseAll,
+    /**
+     * Never parse JSDoc comments, mo matter the file type.
+     */
+    ParseNone,
+    /**
+     * Parse only JSDoc comments which are needed to provide correct type errors.
+     *
+     * This will always parse JSDoc in non-TS files, but only parse JSDoc comments
+     * containing `@see` and `@link` in TS files.
+     */
+    ParseForTypeErrors,
+    /**
+     * Parse only JSDoc comments which are needed to provide correct type info.
+     *
+     * This will always parse JSDoc in non-TS files, but never in TS files.
+     *
+     * Note: Do not use this mode if you require accurate type errors; use {@link ParseForTypeErrors} instead.
+     */
+    ParseForTypeInfo,
+}
 
 /** @internal */
 export type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends { captureSpan: true; } ? { value: string; pos: number; end: number; } : string;

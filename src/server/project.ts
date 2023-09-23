@@ -71,6 +71,7 @@ import {
     isDeclarationFileName,
     isExternalModuleNameRelative,
     isInsideNodeModules,
+    JSDocParsingMode,
     JsTyping,
     LanguageService,
     LanguageServiceHost,
@@ -506,6 +507,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
 
+    readonly jsDocParsingMode: JSDocParsingMode | undefined;
+
     /** @internal */
     constructor(
         projectName: string,
@@ -524,6 +527,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.directoryStructureHost = directoryStructureHost;
         this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory);
         this.getCanonicalFileName = this.projectService.toCanonicalFileName;
+        this.jsDocParsingMode = this.projectService.jsDocParsingMode;
 
         this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
         if (!this.compilerOptions) {
@@ -535,7 +539,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // If files are listed explicitly or allowJs is specified, allow all extensions
             this.compilerOptions.allowNonTsExtensions = true;
         }
-
         switch (projectService.serverMode) {
             case LanguageServiceMode.Semantic:
                 this.languageServiceEnabled = true;
@@ -603,8 +606,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
         if (this.program && !this.symlinks.hasProcessedResolutions()) {
             this.symlinks.setSymlinksFromResolutions(
-                this.program.resolvedModules,
-                this.program.resolvedTypeReferenceDirectiveNames,
+                this.program.forEachResolvedModule,
+                this.program.forEachResolvedTypeReferenceDirective,
                 this.program.getAutomaticTypeDirectiveResolutions(),
             );
         }
@@ -1537,13 +1540,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                     if (!newFile || (f.resolvedPath === f.path && newFile.resolvedPath !== f.path)) {
                         // new program does not contain this file - detach it from the project
                         // - remove resolutions only if the new program doesnt contain source file by the path (not resolvedPath since path is used for resolution)
-                        this.detachScriptInfoFromProject(f.fileName, !!this.program.getSourceFileByPath(f.path));
+                        this.detachScriptInfoFromProject(f.fileName, !!this.program.getSourceFileByPath(f.path), /*syncDirWatcherRemove*/ true);
                     }
                 }
 
                 oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
                     if (!this.program!.getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
-                        this.detachScriptInfoFromProject(resolvedProjectReference.sourceFile.fileName);
+                        this.detachScriptInfoFromProject(resolvedProjectReference.sourceFile.fileName, /*noRemoveResolution*/ undefined, /*syncDirWatcherRemove*/ true);
                     }
                 });
             }
@@ -1599,6 +1602,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             }
         }
 
+        this.projectService.verifyProgram(this);
         if (this.exportMapCache && !this.exportMapCache.isEmpty()) {
             this.exportMapCache.releaseSymbols();
             if (this.hasAddedorRemovedFiles || oldProgram && !this.program!.structureIsReused) {
@@ -1667,12 +1671,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.projectService.sendPerformanceEvent(kind, durationMs);
     }
 
-    private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
+    private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean, syncDirWatcherRemove?: boolean) {
         const scriptInfoToDetach = this.projectService.getScriptInfo(uncheckedFileName);
         if (scriptInfoToDetach) {
             scriptInfoToDetach.detachFromProject(this);
             if (!noRemoveResolution) {
-                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
+                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path, syncDirWatcherRemove);
             }
         }
     }
@@ -2250,10 +2254,8 @@ function extractUnresolvedImportsFromSourceFile(
     cachedUnresolvedImportsPerFile: Map<Path, readonly string[]>,
 ): readonly string[] {
     return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
-        const resolvedModules = program.resolvedModules?.get(file.path);
-        if (!resolvedModules) return emptyArray;
         let unresolvedImports: string[] | undefined;
-        resolvedModules.forEach(({ resolvedModule }, name) => {
+        program.forEachResolvedModule(({ resolvedModule }, name) => {
             // pick unresolved non-relative names
             if (
                 (!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
@@ -2262,7 +2264,7 @@ function extractUnresolvedImportsFromSourceFile(
             ) {
                 unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
             }
-        });
+        }, file);
         return unresolvedImports || emptyArray;
     });
 }
@@ -2514,16 +2516,17 @@ export class AutoImportProviderProject extends Project {
             );
             if (entrypoints) {
                 const real = host.realpath?.(packageJson.packageDirectory);
-                const isSymlink = real && real !== packageJson.packageDirectory;
+                const realPath = real ? hostProject.toPath(real) : undefined;
+                const isSymlink = realPath && realPath !== hostProject.toPath(packageJson.packageDirectory);
                 if (isSymlink) {
                     symlinkCache.setSymlinkedDirectory(packageJson.packageDirectory, {
-                        real,
-                        realPath: hostProject.toPath(real),
+                        real: real!,
+                        realPath,
                     });
                 }
 
                 return mapDefined(entrypoints, entrypoint => {
-                    const resolvedFileName = isSymlink ? entrypoint.replace(packageJson.packageDirectory, real) : entrypoint;
+                    const resolvedFileName = isSymlink ? entrypoint.replace(packageJson.packageDirectory, real!) : entrypoint;
                     if (!program.getSourceFile(resolvedFileName) && !(isSymlink && program.getSourceFile(entrypoint))) {
                         return resolvedFileName;
                     }
@@ -2710,7 +2713,13 @@ export class ConfiguredProject extends Project {
     private compilerHost?: CompilerHost;
 
     /** @internal */
-    constructor(configFileName: NormalizedPath, readonly canonicalConfigFilePath: NormalizedPath, projectService: ProjectService, documentRegistry: DocumentRegistry, cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
+    constructor(
+        configFileName: NormalizedPath,
+        readonly canonicalConfigFilePath: NormalizedPath,
+        projectService: ProjectService,
+        documentRegistry: DocumentRegistry,
+        cachedDirectoryStructureHost: CachedDirectoryStructureHost,
+    ) {
         super(configFileName, ProjectKind.Configured, projectService, documentRegistry, /*hasExplicitListOfFiles*/ false, /*lastFileExceededProgramSize*/ undefined, /*compilerOptions*/ {}, /*compileOnSaveEnabled*/ false, /*watchOptions*/ undefined, cachedDirectoryStructureHost, getDirectoryPath(configFileName));
     }
 

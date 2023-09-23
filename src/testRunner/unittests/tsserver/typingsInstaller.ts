@@ -2314,7 +2314,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         ts.server.updateProjectIfDirty(project);
         const program = project.getLanguageService().getProgram()!;
         const sourceFile = program.getSourceFileByPath(appPath)!;
-        const foooResolution = program.resolvedModules!.get(sourceFile.path)!.get("fooo", /*mode*/ undefined)!.resolvedModule!;
+        const foooResolution = program.getResolvedModule(sourceFile, "fooo", /*mode*/ undefined)!.resolvedModule!;
         assert.equal(foooResolution.resolvedFileName, foooPath);
         return foooResolution;
     }
