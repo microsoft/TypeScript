@@ -1,27 +1,27 @@
-tests/cases/conformance/moduleResolution/index.ts(2,24): error TS7016: Could not find a declaration file for module 'foo/other'. 'tests/cases/conformance/moduleResolution/node_modules/foo/other.js' implicitly has an 'any' type.
+index.ts(2,24): error TS7016: Could not find a declaration file for module 'foo/other'. 'node_modules/foo/other.js' implicitly has an 'any' type.
   If the 'foo' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module 'foo/other';`
 
 
-==== tests/cases/conformance/moduleResolution/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     import * as Foo from "foo";
     import * as Other from "foo/other"/*1*/;
                            ~~~~~~~~~~~
-!!! error TS7016: Could not find a declaration file for module 'foo/other'. 'tests/cases/conformance/moduleResolution/node_modules/foo/other.js' implicitly has an 'any' type.
+!!! error TS7016: Could not find a declaration file for module 'foo/other'. 'node_modules/foo/other.js' implicitly has an 'any' type.
 !!! error TS7016:   If the 'foo' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module 'foo/other';`
-==== tests/cases/conformance/moduleResolution/node_modules/foo/package.json (0 errors) ====
+==== node_modules/foo/package.json (0 errors) ====
     {   
         "name": "foo",
         "version": "1.0.0"
     }
     
-==== tests/cases/conformance/moduleResolution/node_modules/foo/index.js (0 errors) ====
+==== node_modules/foo/index.js (0 errors) ====
     var foo = 0;
     module.exports = foo;
     
-==== tests/cases/conformance/moduleResolution/node_modules/foo/index.d.ts (0 errors) ====
+==== node_modules/foo/index.d.ts (0 errors) ====
     declare const foo: any;
     export = foo;
     
-==== tests/cases/conformance/moduleResolution/node_modules/foo/other.js (0 errors) ====
+==== node_modules/foo/other.js (0 errors) ====
     module.exports = {};
     

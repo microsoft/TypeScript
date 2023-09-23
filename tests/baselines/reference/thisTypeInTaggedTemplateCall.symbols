@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInTaggedTemplateCall.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInTaggedTemplateCall.ts] ////
+
+=== thisTypeInTaggedTemplateCall.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(thisTypeInTaggedTemplateCall.ts, 0, 0))
 

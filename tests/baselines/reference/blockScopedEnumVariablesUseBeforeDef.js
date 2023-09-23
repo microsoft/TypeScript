@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef.ts] ////
+
 //// [blockScopedEnumVariablesUseBeforeDef.ts]
 function foo1() {
     return E.A
@@ -18,5 +20,5 @@ function foo1() {
     })(E || (E = {}));
 }
 function foo2() {
-    return 0 /* A */;
+    return 0 /* E.A */;
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/unknown/unknownType2.ts] ////
+
 //// [unknownType2.ts]
 type isUnknown<T> = unknown extends T ? true : false;
 type isTrue<T extends true> = T;
@@ -241,7 +243,7 @@ function notNotEquals(u: unknown)  {
     else {
         const a: NumberEnum.A = u;
     }
-    
+
 
     if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
     else {

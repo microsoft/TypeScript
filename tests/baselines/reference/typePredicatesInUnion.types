@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePredicatesInUnion.ts ===
+//// [tests/cases/compiler/typePredicatesInUnion.ts] ////
+
+=== typePredicatesInUnion.ts ===
 interface A {
     pred(x: {}): x is boolean;
 >pred : (x: {}) => x is boolean
@@ -11,7 +13,7 @@ interface B {
 }
 
 type Or = A | B;
->Or : Or
+>Or : A | B
 
 function f(o: Or, x: {}) {
 >f : (o: Or, x: {}) => void

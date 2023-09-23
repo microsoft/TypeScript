@@ -7,16 +7,16 @@
 ////class p { }
 ////
 ////class foo {
-////    constructor ([|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}p|]: any|]) {
+////    constructor (/*1*/public /*2*/p: any) {
 ////    }
 ////
 ////    public f(p) {
-////        this.[|{| "isWriteAccess": true |}p|] = p;
+////        this./*3*/p = p;
 ////    }
 ////
 ////}
 ////
 ////var n = new foo(undefined);
-////n.[|{| "isWriteAccess": true |}p|] = null;
+////n./*4*/p = null;
 
-verify.singleReferenceGroup("(property) foo.p: any", "p");
+verify.baselineFindAllReferences('1', '2', '3', '4');

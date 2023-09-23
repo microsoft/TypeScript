@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakNotInIterationOrSwitchStatement1.ts(1,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
+parser_breakNotInIterationOrSwitchStatement1.ts(1,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakNotInIterationOrSwitchStatement1.ts (1 errors) ====
+==== parser_breakNotInIterationOrSwitchStatement1.ts (1 errors) ====
     break;
     ~~~~~~
 !!! error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.

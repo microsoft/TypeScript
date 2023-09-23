@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a.ts]
 class C { get prop() { return 1; } }
@@ -49,19 +50,17 @@ Shape signatures in builder refreshed for::
 /a.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -85,6 +84,9 @@ Input::
 {"compilerOptions":{"target":"es6","useDefineForClassFields":true}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
@@ -110,20 +112,6 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

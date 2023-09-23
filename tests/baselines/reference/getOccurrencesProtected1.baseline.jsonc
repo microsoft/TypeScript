@@ -1,0 +1,183 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}protected|] prot1;
+//         [|{| kind: "none" |}protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         [|{| kind: "none" |}protected|] protected;
+// 
+//         public constructor(public a, private b, [|{| kind: "none" |}protected|] c, public d, private e, [|{| kind: "none" |}protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         [|{| kind: "none" |}protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         [|{| kind: "none" |}protected|] prot1;
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         [|{| kind: "none" |}protected|] protected;
+// 
+//         public constructor(public a, private b, [|{| kind: "none" |}protected|] c, public d, private e, [|{| kind: "none" |}protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         [|{| kind: "none" |}protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         [|{| kind: "none" |}protected|] prot1;
+//         [|{| kind: "none" |}protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}protected|] protected;
+// 
+//         public constructor(public a, private b, [|{| kind: "none" |}protected|] c, public d, private e, [|{| kind: "none" |}protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         [|{| kind: "none" |}protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         [|{| kind: "none" |}protected|] prot1;
+//         [|{| kind: "none" |}protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         [|{| kind: "none" |}protected|] protected;
+// 
+//         public constructor(public a, private b, /*HIGHLIGHTS*/[|{| kind: "none" |}protected|] c, public d, private e, [|{| kind: "none" |}protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         [|{| kind: "none" |}protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         [|{| kind: "none" |}protected|] prot1;
+//         [|{| kind: "none" |}protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         [|{| kind: "none" |}protected|] protected;
+// 
+//         public constructor(public a, private b, [|{| kind: "none" |}protected|] c, public d, private e, /*HIGHLIGHTS*/[|{| kind: "none" |}protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         [|{| kind: "none" |}protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesProtected1.ts ===
+// --- (line: 3) skipped ---
+//         public pub2;
+//         private priv1;
+//         private priv2;
+//         [|{| kind: "none" |}protected|] prot1;
+//         [|{| kind: "none" |}protected|] prot2;
+// 
+//         public public;
+//         private private;
+//         [|{| kind: "none" |}protected|] protected;
+// 
+//         public constructor(public a, private b, [|{| kind: "none" |}protected|] c, public d, private e, [|{| kind: "none" |}protected|] f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+// --- (line: 18) skipped ---
+
+// --- (line: 21) skipped ---
+// 
+//         public static statPub;
+//         private static statPriv;
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}protected|] static statProt;
+//     }
+// 
+//     export interface I1 {
+// --- (line: 29) skipped ---

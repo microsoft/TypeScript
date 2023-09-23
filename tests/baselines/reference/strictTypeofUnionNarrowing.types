@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictTypeofUnionNarrowing.ts ===
+//// [tests/cases/compiler/strictTypeofUnionNarrowing.ts] ////
+
+=== strictTypeofUnionNarrowing.ts ===
 function stringify1(anything: { toString(): string } | undefined): string {
 >stringify1 : (anything: {    toString(): string;} | undefined) => string
 >anything : { toString(): string; } | undefined

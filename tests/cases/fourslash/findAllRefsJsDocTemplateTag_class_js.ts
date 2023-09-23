@@ -5,12 +5,12 @@
 
 // Both uses of T should be referenced.
 
-/////** @template [|{| "isWriteAccess": true, "isDefinition": true |}T|] */
+/////** @template /*1*/T */
 ////class C {
 ////    constructor() {
-////        /** @type {[|T|]} */
+////        /** @type {/*2*/T} */
 ////        this.x = null;
 ////    }
 ////}
 
-verify.singleReferenceGroup("(type parameter) T in C<T>", test.ranges());
+verify.baselineFindAllReferences('1', '2');

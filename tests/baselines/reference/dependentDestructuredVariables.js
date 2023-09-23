@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
+
 //// [dependentDestructuredVariables.ts]
 type Action =
     | { kind: 'A', payload: number }
@@ -32,6 +34,26 @@ function f12({ kind, payload }: Action) {
             break;
         default:
             payload;  // never
+    }
+}
+
+// repro #50206
+function f13<T extends Action>({ kind, payload }: T) {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
+function f14<T extends Action>(t: T) {
+    const { kind, payload } = t;
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
     }
 }
 
@@ -226,9 +248,217 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 reducer("add", { a: 1, b: 3 });
 reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 
+// repro from https://github.com/microsoft/TypeScript/pull/47190#issuecomment-1057603588
+
+type FooMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): void;
+}
+
+let fooM: FooMethod = {
+  method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooAsyncMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): Promise<any>;
+}
+
+let fooAsyncM: FooAsyncMethod = {
+  async method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooGenMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): Generator<any, any, any>;
+}
+
+let fooGenM: FooGenMethod = {
+  *method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooAsyncGenMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): AsyncGenerator<any, any, any>;
+}
+
+let fooAsyncGenM: FooAsyncGenMethod = {
+  async *method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+// Repro from #48345
+
+type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
+
+const f60: Func = (kind, payload) => {
+    if (kind === "a") {
+        payload.toFixed();  // error
+    }
+    if (kind === "b") {
+        payload.toUpperCase();  // error
+    }
+};
+
+// Repro from #48902
+
+function foo({
+    value1,
+    test1 = value1.test1,
+    test2 = value1.test2,
+    test3 = value1.test3,
+    test4 = value1.test4,
+    test5 = value1.test5,
+    test6 = value1.test6,
+    test7 = value1.test7,
+    test8 = value1.test8,
+    test9 = value1.test9
+}) {}
+
+// Repro from #49772
+
+function fa1(x: [true, number] | [false, string]) {
+    const [guard, value] = x;
+    if (guard) {
+        for (;;) {
+            value;  // number
+        }
+    }
+    else {
+        while (!!true) {
+            value;  // string
+        }
+    }
+}
+
+function fa2(x: { guard: true, value: number } | { guard: false, value: string }) {
+    const { guard, value } = x;
+    if (guard) {
+        for (;;) {
+            value;  // number
+        }
+    }
+    else {
+        while (!!true) {
+            value;  // string
+        }
+    }
+}
+
+const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) => {
+    if (guard) {
+        for (;;) {
+            value;  // number
+        }
+    }
+    else {
+        while (!!true) {
+            value;  // string
+        }
+    }
+}
+
+// Repro from #52152
+
+interface ClientEvents {
+    warn: [message: string];
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+}
+  
+declare class Client {
+    public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+}
+
+const bot = new Client();
+bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+
+// Destructuring tuple types with different arities
+
+function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
+    if (y === 2) {
+        x;  // 1
+    }
+    if (y === 4) {
+        x;  // 3
+    }
+    if (y === undefined) {
+        x;  // 5
+    }
+    if (x === 1) {
+        y;  // 2
+    }
+    if (x === 3) {
+        y;  // 4
+    }
+    if (x === 5) {
+        y;  // undefined
+    }
+}
+
+// Repro from #55661
+
+function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
+    if (y === undefined) {
+        const shouldNotBeOk: never = x;  // Error
+    }
+}
+
 
 //// [dependentDestructuredVariables.js]
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
+var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+};
 function f10({ kind, payload }) {
     if (kind === 'A') {
         payload.toFixed();
@@ -256,6 +486,24 @@ function f12({ kind, payload }) {
             break;
         default:
             payload; // never
+    }
+}
+// repro #50206
+function f13({ kind, payload }) {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+function f14(t) {
+    const { kind, payload } = t;
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
     }
 }
 function f20({ kind, payload }) {
@@ -394,10 +642,133 @@ const reducer = (op, args) => {
 };
 reducer("add", { a: 1, b: 3 });
 reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
+let fooM = {
+    method(type, cb) {
+        if (type == 'num') {
+            cb(123);
+        }
+        else {
+            cb("abc");
+        }
+    }
+};
+let fooAsyncM = {
+    method(type, cb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (type == 'num') {
+                cb(123);
+            }
+            else {
+                cb("abc");
+            }
+        });
+    }
+};
+let fooGenM = {
+    *method(type, cb) {
+        if (type == 'num') {
+            cb(123);
+        }
+        else {
+            cb("abc");
+        }
+    }
+};
+let fooAsyncGenM = {
+    method(type, cb) {
+        return __asyncGenerator(this, arguments, function* method_1() {
+            if (type == 'num') {
+                cb(123);
+            }
+            else {
+                cb("abc");
+            }
+        });
+    }
+};
+const f60 = (kind, payload) => {
+    if (kind === "a") {
+        payload.toFixed(); // error
+    }
+    if (kind === "b") {
+        payload.toUpperCase(); // error
+    }
+};
+// Repro from #48902
+function foo({ value1, test1 = value1.test1, test2 = value1.test2, test3 = value1.test3, test4 = value1.test4, test5 = value1.test5, test6 = value1.test6, test7 = value1.test7, test8 = value1.test8, test9 = value1.test9 }) { }
+// Repro from #49772
+function fa1(x) {
+    const [guard, value] = x;
+    if (guard) {
+        for (;;) {
+            value; // number
+        }
+    }
+    else {
+        while (!!true) {
+            value; // string
+        }
+    }
+}
+function fa2(x) {
+    const { guard, value } = x;
+    if (guard) {
+        for (;;) {
+            value; // number
+        }
+    }
+    else {
+        while (!!true) {
+            value; // string
+        }
+    }
+}
+const fa3 = (guard, value) => {
+    if (guard) {
+        for (;;) {
+            value; // number
+        }
+    }
+    else {
+        while (!!true) {
+            value; // string
+        }
+    }
+};
+const bot = new Client();
+bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+// Destructuring tuple types with different arities
+function fz1([x, y]) {
+    if (y === 2) {
+        x; // 1
+    }
+    if (y === 4) {
+        x; // 3
+    }
+    if (y === undefined) {
+        x; // 5
+    }
+    if (x === 1) {
+        y; // 2
+    }
+    if (x === 3) {
+        y; // 4
+    }
+    if (x === 5) {
+        y; // undefined
+    }
+}
+// Repro from #55661
+function tooNarrow([x, y]) {
+    if (y === undefined) {
+        const shouldNotBeOk = x; // Error
+    }
+}
 
 
 //// [dependentDestructuredVariables.d.ts]
-declare type Action = {
+type Action = {
     kind: 'A';
     payload: number;
 } | {
@@ -407,7 +778,9 @@ declare type Action = {
 declare function f10({ kind, payload }: Action): void;
 declare function f11(action: Action): void;
 declare function f12({ kind, payload }: Action): void;
-declare type Action2 = {
+declare function f13<T extends Action>({ kind, payload }: T): void;
+declare function f14<T extends Action>(t: T): void;
+type Action2 = {
     kind: 'A';
     payload: number | undefined;
 } | {
@@ -418,7 +791,7 @@ declare function f20({ kind, payload }: Action2): void;
 declare function f21(action: Action2): void;
 declare function f22(action: Action2): void;
 declare function f23({ kind, payload }: Action2): void;
-declare type Foo = {
+type Foo = {
     kind: 'A';
     isA: true;
 } | {
@@ -429,7 +802,7 @@ declare type Foo = {
     isA: false;
 };
 declare function f30({ kind, isA }: Foo): void;
-declare type Args = ['A', number] | ['B', string];
+type Args = ['A', number] | ['B', string];
 declare function f40(...[kind, data]: Args): void;
 interface A<T> {
     variant: 'a';
@@ -439,11 +812,11 @@ interface B<T> {
     variant: 'b';
     value: Array<T>;
 }
-declare type AB<T> = A<T> | B<T>;
+type AB<T> = A<T> | B<T>;
 declare function printValue<T>(t: T): void;
 declare function printValueList<T>(t: Array<T>): void;
 declare function unrefined1<T>(ab: AB<T>): void;
-declare type Action3 = {
+type Action3 = {
     type: 'add';
     payload: {
         toAdd: number;
@@ -461,7 +834,7 @@ declare function f50(cb: (...args: Args) => void): void;
 declare const f51: (...args: ['A', number] | ['B', string]) => void;
 declare const f52: (...args: ['A', number] | ['B']) => void;
 declare function readFile(path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void): void;
-declare type ReducerArgs = ["add", {
+type ReducerArgs = ["add", {
     a: number;
     b: number;
 }] | ["concat", {
@@ -469,3 +842,76 @@ declare type ReducerArgs = ["add", {
     secondArr: any[];
 }];
 declare const reducer: (...args: ReducerArgs) => void;
+type FooMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): void;
+};
+declare let fooM: FooMethod;
+type FooAsyncMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): Promise<any>;
+};
+declare let fooAsyncM: FooAsyncMethod;
+type FooGenMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): Generator<any, any, any>;
+};
+declare let fooGenM: FooGenMethod;
+type FooAsyncGenMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): AsyncGenerator<any, any, any>;
+};
+declare let fooAsyncGenM: FooAsyncGenMethod;
+type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
+declare const f60: Func;
+declare function foo({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: {
+    value1: any;
+    test1?: any;
+    test2?: any;
+    test3?: any;
+    test4?: any;
+    test5?: any;
+    test6?: any;
+    test7?: any;
+    test8?: any;
+    test9?: any;
+}): void;
+declare function fa1(x: [true, number] | [false, string]): void;
+declare function fa2(x: {
+    guard: true;
+    value: number;
+} | {
+    guard: false;
+    value: string;
+}): void;
+declare const fa3: (...args: [true, number] | [false, string]) => void;
+interface ClientEvents {
+    warn: [message: string];
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+}
+declare class Client {
+    on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+}
+declare const bot: Client;
+declare function fz1([x, y]: [1, 2] | [3, 4] | [5]): void;
+declare function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]): void;

@@ -1,6 +1,8 @@
-=== tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts ===
+//// [tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts] ////
+
+=== nestedRecursiveArraysOrObjectsError01.ts ===
 type Style = StyleBase | StyleArray;
->Style : Style
+>Style : StyleBase | StyleArray
 
 interface StyleArray extends Array<Style> {}
 interface StyleBase {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonExportedElementsOfMergedModules.ts ===
+//// [tests/cases/compiler/nonExportedElementsOfMergedModules.ts] ////
+
+=== nonExportedElementsOfMergedModules.ts ===
 module One {
 >One : typeof One
 

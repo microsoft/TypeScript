@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectInstantiationFromUnionSpread.ts ===
+//// [tests/cases/compiler/objectInstantiationFromUnionSpread.ts] ////
+
+=== objectInstantiationFromUnionSpread.ts ===
 // #40995
 
 interface Success {
@@ -14,7 +16,7 @@ interface Fail {
 }
 
 type Item = Success | Fail;
->Item : Item
+>Item : Success | Fail
 
 function f1(a: Item[]) {
 >f1 : (a: Item[]) => void

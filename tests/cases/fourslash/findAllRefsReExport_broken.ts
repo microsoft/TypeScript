@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /a.ts
-////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] };|]
+/////*1*/export { /*2*/x };
 
-verify.singleReferenceGroup("export x", "x");
+verify.baselineFindAllReferences('1', '2');

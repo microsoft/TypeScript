@@ -1,4 +1,6 @@
-=== tests/cases/compiler/literalIntersectionYieldsLiteral.ts ===
+//// [tests/cases/compiler/literalIntersectionYieldsLiteral.ts] ////
+
+=== literalIntersectionYieldsLiteral.ts ===
 const x: { type: string } & { type: "string" } = { type: "string" };
 >x : Symbol(x, Decl(literalIntersectionYieldsLiteral.ts, 0, 5))
 >type : Symbol(type, Decl(literalIntersectionYieldsLiteral.ts, 0, 10))

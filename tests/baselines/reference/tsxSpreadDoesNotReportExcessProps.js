@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx] ////
+
 //// [tsxSpreadDoesNotReportExcessProps.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
@@ -42,7 +44,7 @@ var __assign = (this && this.__assign) || function () {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
 var MyComponent = /** @class */ (function (_super) {
     __extends(MyComponent, _super);
@@ -50,7 +52,7 @@ var MyComponent = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     MyComponent.prototype.render = function () {
-        return (react_1["default"].createElement("div", __assign({}, this.props, { className: "ok" })));
+        return (react_1.default.createElement("div", __assign({}, this.props, { className: "ok" })));
     };
     return MyComponent;
-}(react_1["default"].Component));
+}(react_1.default.Component));

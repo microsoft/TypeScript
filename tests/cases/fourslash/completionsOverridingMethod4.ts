@@ -43,22 +43,14 @@ verify.completions({
         {
             name: "hint",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "protected hint(): string {\n}",
+            filterText: "hint",
         },
         {
             name: "refuse",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "public refuse(): string {\n}",
+            filterText: "refuse",
         }
     ],
 });

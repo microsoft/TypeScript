@@ -1,0 +1,105 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
+// /*FIND ALL REFS*/<|enum [|{| isWriteAccess: true, isDefinition: true |}E|] { A }|>
+// let e: [|E|].A;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
+  // /*FIND ALL REFS*/<|enum [|E|] { A }|>
+  // let e: E.A;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
+// <|enum /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}E|] { A }|>
+// let e: [|E|].A;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
+  // <|enum /*FIND ALL REFS*/[|E|] { A }|>
+  // let e: E.A;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
+// <|enum [|{| isWriteAccess: true |}E|] { A }|>
+// let e: /*FIND ALL REFS*/[|E|].A;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
+  // <|enum [|E|] { A }|>
+  // let e: /*FIND ALL REFS*/E.A;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]

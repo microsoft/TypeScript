@@ -71,3 +71,16 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
             item.call(obj);
     }
 }
+
+// Repro from #49316
+
+function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
+    let rootReducer: () => void;
+    if (typeof reducer === 'function') {
+        rootReducer = reducer;
+    }
+}
+
+function f101(x: string | Record<string, any>) {
+    return typeof x === "object" && x.anything;
+}

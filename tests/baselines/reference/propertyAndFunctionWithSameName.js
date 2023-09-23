@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndFunctionWithSameName.ts] ////
+
 //// [propertyAndFunctionWithSameName.ts]
 class C {
     x: number;

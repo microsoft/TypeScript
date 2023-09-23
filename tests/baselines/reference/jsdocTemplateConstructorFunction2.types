@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTemplateConstructorFunction2.ts] ////
+
+=== templateTagWithNestedTypeLiteral.js ===
 /**
  * @param {T} t
  * @template T
@@ -94,5 +96,4 @@ const options = { value: null };
 >options : A
 >{ value: null } : { value: null; }
 >value : null
->null : null
 

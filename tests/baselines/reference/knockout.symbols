@@ -1,4 +1,6 @@
-=== tests/cases/compiler/knockout.ts ===
+//// [tests/cases/compiler/knockout.ts] ////
+
+=== knockout.ts ===
   declare module ko {
 >ko : Symbol(ko, Decl(knockout.ts, 0, 0))
 

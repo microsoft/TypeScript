@@ -1,5 +1,5 @@
 {
-    "kind": "JSDocComment",
+    "kind": "JSDoc",
     "pos": 0,
     "end": 66,
     "flags": "JSDoc",
@@ -64,7 +64,7 @@
                                 }
                             },
                             "name": {
-                                "kind": "FirstNode",
+                                "kind": "QualifiedName",
                                 "pos": 50,
                                 "end": 53,
                                 "modifierFlagsCache": 0,

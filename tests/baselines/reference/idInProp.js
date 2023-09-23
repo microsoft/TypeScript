@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/idInProp.ts] ////
+
 //// [idInProp.ts]
 function f() {
 

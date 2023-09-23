@@ -1,6 +1,8 @@
-=== tests/cases/compiler/DeclarationErrorsNoEmitOnError.ts ===
+//// [tests/cases/compiler/DeclarationErrorsNoEmitOnError.ts] ////
+
+=== DeclarationErrorsNoEmitOnError.ts ===
 type T = { x : number }
->T : T
+>T : { x: number; }
 >x : number
 
 export interface I {

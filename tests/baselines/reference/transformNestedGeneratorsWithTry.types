@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/transformNestedGeneratorsWithTry.ts] ////
+
+=== main.ts ===
 // https://github.com/Microsoft/TypeScript/issues/11177
 import * as Bluebird from 'bluebird';
 >Bluebird : PromiseConstructor
@@ -16,9 +18,9 @@ async function a(): Bluebird<void> {
         await Bluebird.resolve(); // -- remove this and it compiles
 >await Bluebird.resolve() : void
 >Bluebird.resolve() : Promise<void>
->Bluebird.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Bluebird.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Bluebird : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 
       } catch (error) { }
 >error : any
@@ -34,7 +36,7 @@ async function a(): Bluebird<void> {
 >error : any
 }
 
-=== tests/cases/compiler/bluebird.d.ts ===
+=== bluebird.d.ts ===
 declare module "bluebird" {
 >"bluebird" : typeof import("bluebird")
 

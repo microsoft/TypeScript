@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts] ////
+
 //// [destructuringParameterDeclaration3ES6.ts]
 // If the parameter is a rest parameter, the parameter type is any[]
 // A type annotation for a rest parameter must denote an array type.
@@ -76,4 +78,4 @@ var E;
 })(E || (E = {}));
 function foo1(...a) { }
 foo1(1, 2, 3, E.a);
-foo1(1, 2, 3, 0 /* a */, E.b);
+foo1(1, 2, 3, 0 /* E1.a */, E.b);

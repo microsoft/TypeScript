@@ -1,12 +1,14 @@
-=== tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping2.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping2.ts] ////
+
+=== taggedTemplateContextualTyping2.ts ===
 type FuncType1 = (x: <T>(p: T) => T) => typeof x;
->FuncType1 : FuncType1
+>FuncType1 : (x: <T>(p: T) => T) => typeof x
 >x : <T>(p: T) => T
 >p : T
 >x : <T>(p: T) => T
 
 type FuncType2 = (x: <S, T>(p: T) => T) => typeof x;
->FuncType2 : FuncType2
+>FuncType2 : (x: <S, T>(p: T) => T) => typeof x
 >x : <S, T>(p: T) => T
 >p : T
 >x : <S, T>(p: T) => T
@@ -62,7 +64,6 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<strin
 >y : <S, T>(p: T) => T
 >y<string, number>(null) : number
 >y : <S, T>(p: T) => T
->null : null
 >y : <S, T>(p: T) => T
 >"hello" : "hello"
 

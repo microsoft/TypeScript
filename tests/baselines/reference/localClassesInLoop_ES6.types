@@ -1,4 +1,6 @@
-=== tests/cases/compiler/localClassesInLoop_ES6.ts ===
+//// [tests/cases/compiler/localClassesInLoop_ES6.ts] ////
+
+=== localClassesInLoop_ES6.ts ===
 declare function use(a: any);
 >use : (a: any) => any
 >a : any

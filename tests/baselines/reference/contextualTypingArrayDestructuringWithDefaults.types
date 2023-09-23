@@ -1,6 +1,8 @@
-=== tests/cases/compiler/contextualTypingArrayDestructuringWithDefaults.ts ===
+//// [tests/cases/compiler/contextualTypingArrayDestructuringWithDefaults.ts] ////
+
+=== contextualTypingArrayDestructuringWithDefaults.ts ===
 type I = { a: "a" };
->I : I
+>I : { a: "a"; }
 >a : "a"
 
 let [ c0 = {a: "a"} ]: [I?] = [];

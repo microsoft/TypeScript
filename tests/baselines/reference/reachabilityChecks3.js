@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks3.ts] ////
+
 //// [reachabilityChecks3.ts]
 let x = 1;
 loop: while (true) {

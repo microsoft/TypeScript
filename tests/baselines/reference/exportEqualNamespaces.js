@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportEqualNamespaces.ts] ////
+
 //// [exportEqualNamespaces.ts]
 declare module server {
     interface Server extends Object { }

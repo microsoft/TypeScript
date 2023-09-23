@@ -1,5 +1,7 @@
-=== tests/cases/compiler/augmentArray.ts ===
+//// [tests/cases/compiler/augmentArray.ts] ////
+
+=== augmentArray.ts ===
+
 interface Array<T> {
-No type information for this code.    (): any[];
-No type information for this code.}
-No type information for this code.
+    (): any[];
+}

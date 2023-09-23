@@ -1,0 +1,60 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForDefaultExport08.ts ===
+// --- (line: 4) skipped ---
+// 
+// var y = new DefaultExportedClass;
+// 
+// <|namespace /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}DefaultExportedClass|] {
+// }|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport08.ts ===
+  // <|export default class [|DefaultExportedClass|] {
+  // }|>
+  // 
+  // var x: DefaultExportedClass;
+  // 
+  // var y = new DefaultExportedClass;
+  // 
+  // namespace /*FIND ALL REFS*/DefaultExportedClass {
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class DefaultExportedClass\nnamespace DefaultExportedClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedClass",
+      "kind": "moduleName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "DefaultExportedClass",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]

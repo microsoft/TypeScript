@@ -1,4 +1,6 @@
-=== tests/cases/compiler/module_augmentExistingAmbientVariable.ts ===
+//// [tests/cases/compiler/module_augmentExistingAmbientVariable.ts] ////
+
+=== module_augmentExistingAmbientVariable.ts ===
 declare var console: any;
 >console : Symbol(console, Decl(module_augmentExistingAmbientVariable.ts, 0, 11))
 

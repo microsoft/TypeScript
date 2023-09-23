@@ -1,7 +1,7 @@
 test.ts(5,39): error TS1147: Import declarations in a namespace cannot reference a module.
-test.ts(5,39): error TS2792: Cannot find module 'mExported'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+test.ts(5,39): error TS2792: Cannot find module 'mExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 test.ts(24,35): error TS1147: Import declarations in a namespace cannot reference a module.
-test.ts(24,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+test.ts(24,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
 ==== test.ts (4 errors) ====
@@ -13,7 +13,7 @@ test.ts(24,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to
                                           ~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
                                           ~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'mExported'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'mExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
         export var c1 = new mExported.me.class1;
         export function f1() {
             return new mExported.me.class1();
@@ -36,7 +36,7 @@ test.ts(24,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to
                                       ~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
                                       ~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'mNonExported'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'mNonExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
         export var c3 = new mNonExported.mne.class1;
         export function f3() {
             return new mNonExported.mne.class1();

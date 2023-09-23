@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFromPropNameInUnionType.ts] ////
+
 //// [typeGuardOfFromPropNameInUnionType.ts]
 class A { a: string; }
 class B { b: number; }

@@ -5,7 +5,7 @@ sourceRoot:
 sources: Element.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/Element.js
+emittedFile:Element.js
 sourceFile:Element.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -184,7 +184,7 @@ sourceFile:Element.ts
 2 >    ^^^^^^^^^^^^^^^^^^^^^
 3 >                         ^^^^^^^^^^^^^^^^
 4 >                                         ^
-5 >                                          ^^^^^^^^^^^^^^^->
+5 >                                          ^^^^^^^->
 1->
 2 >    createElement
 3 >                         (args: any[]) {
@@ -198,45 +198,39 @@ sourceFile:Element.ts
 3 >Emitted(13, 42) Source(22, 6) + SourceIndex(0)
 4 >Emitted(13, 43) Source(22, 6) + SourceIndex(0)
 ---
->>>})(Element = exports.Element || (exports.Element = {}));
+>>>})(Element || (exports.Element = Element = {}));
 1->
 2 >^
 3 > ^^
 4 >   ^^^^^^^
-5 >          ^^^
-6 >             ^^^^^^^^^^^^^^^
-7 >                            ^^^^^
-8 >                                 ^^^^^^^^^^^^^^^
-9 >                                                ^^^^^^^^
+5 >          ^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                 ^^^^^^^
+7 >                                        ^^^^^^^^
 1->
   >
 2 >}
 3 > 
 4 >   Element
 5 >          
-6 >             Element
-7 >                            
-8 >                                 Element
-9 >                                                 {
-  >                                                    export function isElement(el: any): el is JSX.Element {
-  >                                                        return el.markAsChildOfRootElement !== undefined;
-  >                                                    }
-  >                                                
-  >                                                    export function createElement(args: any[]) {
-  >                                                
-  >                                                        return {
-  >                                                        }
-  >                                                    }
+6 >                                 Element
+7 >                                         {
+  >                                            export function isElement(el: any): el is JSX.Element {
+  >                                                return el.markAsChildOfRootElement !== undefined;
+  >                                            }
+  >                                        
+  >                                            export function createElement(args: any[]) {
+  >                                        
+  >                                                return {
   >                                                }
+  >                                            }
+  >                                        }
 1->Emitted(14, 1) Source(23, 1) + SourceIndex(0)
 2 >Emitted(14, 2) Source(23, 2) + SourceIndex(0)
 3 >Emitted(14, 4) Source(13, 18) + SourceIndex(0)
 4 >Emitted(14, 11) Source(13, 25) + SourceIndex(0)
-5 >Emitted(14, 14) Source(13, 18) + SourceIndex(0)
-6 >Emitted(14, 29) Source(13, 25) + SourceIndex(0)
-7 >Emitted(14, 34) Source(13, 18) + SourceIndex(0)
-8 >Emitted(14, 49) Source(13, 25) + SourceIndex(0)
-9 >Emitted(14, 57) Source(23, 2) + SourceIndex(0)
+5 >Emitted(14, 34) Source(13, 18) + SourceIndex(0)
+6 >Emitted(14, 41) Source(13, 25) + SourceIndex(0)
+7 >Emitted(14, 49) Source(23, 2) + SourceIndex(0)
 ---
 >>>exports.createElement = Element.createElement;
 1 >
@@ -357,7 +351,7 @@ sourceRoot:
 sources: test.tsx
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/test.js
+emittedFile:test.js
 sourceFile:test.tsx
 -------------------------------------------------------------------
 >>>"use strict";

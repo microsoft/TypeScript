@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload4.tsx] ////
+
 //// [file.tsx]
 import React = require('react')
 declare function OneThing(): JSX.Element;
@@ -40,7 +42,7 @@ const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var obj = {
         yy: 10,
         yy1: "hello"

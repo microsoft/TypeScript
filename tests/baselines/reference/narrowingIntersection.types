@@ -1,12 +1,14 @@
-=== tests/cases/compiler/narrowingIntersection.ts ===
+//// [tests/cases/compiler/narrowingIntersection.ts] ////
+
+=== narrowingIntersection.ts ===
 // Somehow this being an intersection matters.
 type FooAndBaz = { foo: unknown } & { baz: unknown };
->FooAndBaz : FooAndBaz
+>FooAndBaz : { foo: unknown; } & { baz: unknown; }
 >foo : unknown
 >baz : unknown
 
 type Disjoint =
->Disjoint : Disjoint
+>Disjoint : { readonly value: string; readonly err?: never; } | { readonly value?: never; readonly err: FooAndBaz; }
 
  | { readonly value: string; readonly err?: never; }
 >value : string
@@ -38,7 +40,7 @@ function test1(result: Disjoint): string {
 }
 
 type TrivialIntersection = { a: 1 } & { a: 1 };
->TrivialIntersection : TrivialIntersection
+>TrivialIntersection : { a: 1; } & { a: 1; }
 >a : 1
 >a : 1
 

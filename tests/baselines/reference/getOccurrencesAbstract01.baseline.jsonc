@@ -1,0 +1,67 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract01.ts ===
+// /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] class Animal {
+//     [|{| kind: "none" |}abstract|] prop1; // Does not compile
+//     [|{| kind: "none" |}abstract|] abstract();
+//     [|{| kind: "none" |}abstract|] walk(): void;
+//     [|{| kind: "none" |}abstract|] makeSound(): void;
+// }
+// // Abstract class below should not get highlighted
+// abstract class Foo {
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract01.ts ===
+// [|{| kind: "none" |}abstract|] class Animal {
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] prop1; // Does not compile
+//     [|{| kind: "none" |}abstract|] abstract();
+//     [|{| kind: "none" |}abstract|] walk(): void;
+//     [|{| kind: "none" |}abstract|] makeSound(): void;
+// }
+// // Abstract class below should not get highlighted
+// abstract class Foo {
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract01.ts ===
+// [|{| kind: "none" |}abstract|] class Animal {
+//     [|{| kind: "none" |}abstract|] prop1; // Does not compile
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] abstract();
+//     [|{| kind: "none" |}abstract|] walk(): void;
+//     [|{| kind: "none" |}abstract|] makeSound(): void;
+// }
+// // Abstract class below should not get highlighted
+// abstract class Foo {
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract01.ts ===
+// [|{| kind: "none" |}abstract|] class Animal {
+//     [|{| kind: "none" |}abstract|] prop1; // Does not compile
+//     [|{| kind: "none" |}abstract|] abstract();
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] walk(): void;
+//     [|{| kind: "none" |}abstract|] makeSound(): void;
+// }
+// // Abstract class below should not get highlighted
+// abstract class Foo {
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract01.ts ===
+// [|{| kind: "none" |}abstract|] class Animal {
+//     [|{| kind: "none" |}abstract|] prop1; // Does not compile
+//     [|{| kind: "none" |}abstract|] abstract();
+//     [|{| kind: "none" |}abstract|] walk(): void;
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] makeSound(): void;
+// }
+// // Abstract class below should not get highlighted
+// abstract class Foo {
+// --- (line: 9) skipped ---

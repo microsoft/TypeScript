@@ -1,0 +1,361 @@
+// === findAllReferences ===
+// === /foo.ts ===
+// <|import * as /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}a|] from "./a.js"|>
+// import aDefault from "./a.js"
+// import * as b from "./b.js"
+// import bDefault from "./b.js"
+// --- (line: 5) skipped ---
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // <|import * as /*FIND ALL REFS*/[|a|] from "./a.js"|>
+  // import aDefault from "./a.js"
+  // import * as b from "./b.js"
+  // import bDefault from "./b.js"
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import a",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// import * as a from "./a.js"
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}aDefault|] from "./a.js"|>
+// import * as b from "./b.js"
+// import bDefault from "./b.js"
+// 
+// --- (line: 6) skipped ---
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // import * as a from "./a.js"
+  // <|import /*FIND ALL REFS*/[|aDefault|] from "./a.js"|>
+  // import * as b from "./b.js"
+  // import bDefault from "./b.js"
+  // 
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import aDefault",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "aDefault",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// import * as a from "./a.js"
+// import aDefault from "./a.js"
+// <|import * as /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}b|] from "./b.js"|>
+// import bDefault from "./b.js"
+// 
+// import * as c from "./c"
+// --- (line: 7) skipped ---
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // import * as a from "./a.js"
+  // import aDefault from "./a.js"
+  // <|import * as /*FIND ALL REFS*/[|b|] from "./b.js"|>
+  // import bDefault from "./b.js"
+  // 
+  // import * as c from "./c"
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import b",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// import * as a from "./a.js"
+// import aDefault from "./a.js"
+// import * as b from "./b.js"
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}bDefault|] from "./b.js"|>
+// 
+// import * as c from "./c"
+// import cDefault from "./c"
+// import * as d from "./d"
+// import dDefault from "./d"
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // import * as a from "./a.js"
+  // import aDefault from "./a.js"
+  // import * as b from "./b.js"
+  // <|import /*FIND ALL REFS*/[|bDefault|] from "./b.js"|>
+  // 
+  // import * as c from "./c"
+  // import cDefault from "./c"
+  // import * as d from "./d"
+  // import dDefault from "./d"
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import bDefault",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bDefault",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// import * as a from "./a.js"
+// import aDefault from "./a.js"
+// import * as b from "./b.js"
+// import bDefault from "./b.js"
+// 
+// <|import * as /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}c|] from "./c"|>
+// import cDefault from "./c"
+// import * as d from "./d"
+// import dDefault from "./d"
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // import * as a from "./a.js"
+  // import aDefault from "./a.js"
+  // import * as b from "./b.js"
+  // import bDefault from "./b.js"
+  // 
+  // <|import * as /*FIND ALL REFS*/[|c|] from "./c"|>
+  // import cDefault from "./c"
+  // import * as d from "./d"
+  // import dDefault from "./d"
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import c",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "c",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// --- (line: 3) skipped ---
+// import bDefault from "./b.js"
+// 
+// import * as c from "./c"
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}cDefault|] from "./c"|>
+// import * as d from "./d"
+// import dDefault from "./d"
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // --- (line: 3) skipped ---
+  // import bDefault from "./b.js"
+  // 
+  // import * as c from "./c"
+  // <|import /*FIND ALL REFS*/[|cDefault|] from "./c"|>
+  // import * as d from "./d"
+  // import dDefault from "./d"
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import cDefault",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "cDefault",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// --- (line: 4) skipped ---
+// 
+// import * as c from "./c"
+// import cDefault from "./c"
+// <|import * as /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}d|] from "./d"|>
+// import dDefault from "./d"
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // --- (line: 4) skipped ---
+  // 
+  // import * as c from "./c"
+  // import cDefault from "./c"
+  // <|import * as /*FIND ALL REFS*/[|d|] from "./d"|>
+  // import dDefault from "./d"
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import d",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "d",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// --- (line: 5) skipped ---
+// import * as c from "./c"
+// import cDefault from "./c"
+// import * as d from "./d"
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}dDefault|] from "./d"|>
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // --- (line: 5) skipped ---
+  // import * as c from "./c"
+  // import cDefault from "./c"
+  // import * as d from "./d"
+  // <|import /*FIND ALL REFS*/[|dDefault|] from "./d"|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import dDefault",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "dDefault",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]

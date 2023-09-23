@@ -1,6 +1,8 @@
-=== tests/cases/compiler/truthinessCallExpressionCoercion1.ts ===
+//// [tests/cases/compiler/truthinessCallExpressionCoercion1.ts] ////
+
+=== truthinessCallExpressionCoercion1.ts ===
 function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
->onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: (() => boolean) | undefined) => void
+>onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: () => boolean) => void
 >required : () => boolean
 >optional : (() => boolean) | undefined
 
@@ -104,7 +106,6 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
 >[() => null] : (() => null)[]
 >() => null : () => null
->null : null
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
 >() => { test(); } : () => void
 >test() : boolean
@@ -123,7 +124,6 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
 >[() => null] : (() => null)[]
 >() => null : () => null
->null : null
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
 >test => { test() } : (test: () => null) => void
 >test : () => null

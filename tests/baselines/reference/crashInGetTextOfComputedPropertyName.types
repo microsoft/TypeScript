@@ -1,4 +1,6 @@
-=== tests/cases/compiler/crashInGetTextOfComputedPropertyName.ts ===
+//// [tests/cases/compiler/crashInGetTextOfComputedPropertyName.ts] ////
+
+=== crashInGetTextOfComputedPropertyName.ts ===
 // https://github.com/Microsoft/TypeScript/issues/29006
 export interface A { type: 'a' }
 >type : "a"
@@ -7,7 +9,7 @@ export interface B { type: 'b' }
 >type : "b"
 
 export type AB = A | B
->AB : AB
+>AB : A | B
 
 const itemId = 'some-id'
 >itemId : "some-id"

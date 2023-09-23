@@ -1,8 +1,10 @@
-=== tests/cases/compiler/mappedTypeInferenceCircularity.ts ===
+//// [tests/cases/compiler/mappedTypeInferenceCircularity.ts] ////
+
+=== mappedTypeInferenceCircularity.ts ===
 // Repro from #12511
 
 type HTML = { [K in 'div']: Block<HTML> };
->HTML : HTML
+>HTML : { div: Block<HTML>; }
 
 type Block<P> = <T>(func: HTML) => {};
 >Block : Block<P>

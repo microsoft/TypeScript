@@ -26,7 +26,7 @@ function boxify<T>(obj: T): Boxified<T> {
     return result;
 }
 
-function unboxify<T>(obj: Boxified<T>): T {
+function unboxify<T extends object>(obj: Boxified<T>): T {
     let result = {} as T;
     for (let k in obj) {
         result[k] = unbox(obj[k]);

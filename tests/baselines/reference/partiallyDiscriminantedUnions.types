@@ -1,4 +1,6 @@
-=== tests/cases/compiler/partiallyDiscriminantedUnions.ts ===
+//// [tests/cases/compiler/partiallyDiscriminantedUnions.ts] ////
+
+=== partiallyDiscriminantedUnions.ts ===
 // Repro from #10586
 
 interface A1 {
@@ -26,7 +28,7 @@ interface B {
 }
 
 type AB = A1 | A2 | B;
->AB : AB
+>AB : A1 | A2 | B
 
 const ab: AB = <AB>{};
 >ab : AB
@@ -65,10 +67,10 @@ class Circle { kind: "circle"; }
 >kind : "circle"
 
 type Shape = Circle | Square;
->Shape : Shape
+>Shape : Square | Circle
 
 type Shapes = Shape | Array<Shape>;
->Shapes : Shapes
+>Shapes : Shape | Shape[]
 
 function isShape(s : Shapes): s is Shape {
 >isShape : (s: Shapes) => s is Shape

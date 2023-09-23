@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessRelation.ts] ////
+
 //// [indexedAccessRelation.ts]
 // Repro from #14723
 
@@ -37,7 +39,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Component = /** @class */ (function () {
     function Component() {
     }

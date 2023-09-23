@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashIntypeCheckInvocationExpression.ts] ////
+
 //// [crashIntypeCheckInvocationExpression.ts]
 var nake;
 function doCompile<P0, P1, P2>(fileset: P0, moduleType: P1) {
@@ -15,7 +17,7 @@ export var compileServer = task<number, number, any>(<P0, P1, P2>() => {
 //// [crashIntypeCheckInvocationExpression.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.compileServer = void 0;
     var nake;
     function doCompile(fileset, moduleType) {

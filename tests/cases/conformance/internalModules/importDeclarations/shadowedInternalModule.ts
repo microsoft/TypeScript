@@ -31,3 +31,34 @@ module Z {
 
     var Y = 12;
 }
+
+//
+
+module a {
+  export type A = number;
+}
+
+module b {
+  export import A = a.A;
+  export module A {}
+}
+
+module c {
+  import any = b.A;
+}
+
+//
+
+module q {
+  export const Q = {};
+}
+
+module r {
+  export import Q = q.Q;
+  export type Q = number;
+}
+
+module s {
+  import Q = r.Q;
+  const Q = 0;
+}

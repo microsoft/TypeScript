@@ -10,7 +10,7 @@ D;
 // ==ORGANIZED==
 
 import * as NS from "lib";
-import D, { class, class, class, F1, F2 } from "lib";
+import D, { F1, F2, class, class, class } from "lib";
 class class class;
 
 D;

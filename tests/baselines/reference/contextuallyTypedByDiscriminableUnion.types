@@ -1,6 +1,8 @@
-=== tests/cases/compiler/contextuallyTypedByDiscriminableUnion.ts ===
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion.ts] ////
+
+=== contextuallyTypedByDiscriminableUnion.ts ===
 type ADT = {
->ADT : ADT
+>ADT : { kind: "a"; method(x: string): number; } | { kind: "b"; method(x: number): string; }
 
     kind: "a",
 >kind : "a"
@@ -66,4 +68,26 @@ invoke({
 >a : string
     }
 });
+
+const kind = "a"
+>kind : "a"
+>"a" : "a"
+
+invoke({
+>invoke({    kind,    method(a) {        return +a;    }}) : void
+>invoke : (item: ADT) => void
+>{    kind,    method(a) {        return +a;    }} : { kind: "a"; method(a: string): number; }
+
+    kind,
+>kind : "a"
+
+    method(a) {
+>method : (a: string) => number
+>a : string
+
+        return +a;
+>+a : number
+>a : string
+    }
+})
 

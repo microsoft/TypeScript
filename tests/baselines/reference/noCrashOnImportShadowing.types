@@ -1,9 +1,11 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/noCrashOnImportShadowing.ts] ////
+
+=== b.ts ===
 export const zzz = 123;
 >zzz : 123
 >123 : 123
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import * as B from "./b";
 >B : typeof B
 
@@ -24,11 +26,11 @@ B.zzz;
 >zzz : 123
 
 export { B };
->B : any
+>B : typeof B
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { B } from "./a";
->B : any
+>B : typeof OriginalB
 
 const x: B = { x: "" };
 >x : B
@@ -37,9 +39,9 @@ const x: B = { x: "" };
 >"" : ""
 
 B.zzz;
->B.zzz : any
->B : any
->zzz : any
+>B.zzz : 123
+>B : typeof OriginalB
+>zzz : 123
 
 import * as OriginalB from "./b";
 >OriginalB : typeof OriginalB

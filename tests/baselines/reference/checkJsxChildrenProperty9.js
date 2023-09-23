@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty9.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 
@@ -8,7 +10,7 @@ let k3 = <div> {1} {"That is a number"} </div>;
 
 //// [file.jsx]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 // OK
 var k1 = <div> <h2> Hello </h2> <h1> world </h1></div>;

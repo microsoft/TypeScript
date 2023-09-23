@@ -29,22 +29,14 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "met(n: string): void {\n}",
+            filterText: "met"
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "met2(n: number): void {\n}",
+            filterText: "met2"
         }
     ],
 });
@@ -61,22 +53,14 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "met(n: string): void;",
+            insertText: "abstract met(n: string): void;",
+            filterText: "met"
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "met2(n: number): void;",
+            insertText: "abstract met2(n: number): void;",
+            filterText: "met2"
         }
     ],
 });
@@ -93,22 +77,14 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "met(n: string): void;",
+            insertText: "abstract met(n: string): void;",
+            filterText: "met"
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "met2(n: number): void;",
+            insertText: "abstract met2(n: number): void;",
+            filterText: "met2"
         }
     ],
 });

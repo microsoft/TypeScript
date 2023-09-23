@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectFromEntries.ts ===
+//// [tests/cases/compiler/objectFromEntries.ts] ////
+
+=== objectFromEntries.ts ===
 const o = Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]);
 >o : Symbol(o, Decl(objectFromEntries.ts, 0, 5))
 >Object.fromEntries : Symbol(ObjectConstructor.fromEntries, Decl(lib.es2019.object.d.ts, --, --), Decl(lib.es2019.object.d.ts, --, --))

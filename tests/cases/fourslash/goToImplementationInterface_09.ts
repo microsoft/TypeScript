@@ -9,4 +9,4 @@
 //// import { Interface } from "./def";
 //// const c: I/*ref*/nterface = [|{ P: 2 }|];
 
-verify.allRangesAppearInImplementationList("ref");
+verify.baselineGoToImplementation("ref");

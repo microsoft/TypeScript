@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts] ////
+
 //// [arrayLiterals3.ts]
 // Each element expression in a non-empty array literal is processed as follows:
 //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)

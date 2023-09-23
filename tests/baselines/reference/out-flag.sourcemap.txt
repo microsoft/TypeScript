@@ -5,7 +5,7 @@ sourceRoot:
 sources: out-flag.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/out-flag.js
+emittedFile:out-flag.js
 sourceFile:out-flag.ts
 -------------------------------------------------------------------
 >>>//// @out: bin\

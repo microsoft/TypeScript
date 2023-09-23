@@ -1,4 +1,6 @@
-=== tests/cases/compiler/methodChainError.ts ===
+//// [tests/cases/compiler/methodChainError.ts] ////
+
+=== methodChainError.ts ===
 class Builder {
 >Builder : Symbol(Builder, Decl(methodChainError.ts, 0, 0))
 

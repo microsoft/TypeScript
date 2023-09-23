@@ -223,7 +223,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a0 = exports.a9 = exports.a8 = exports.a7 = exports.a6 = exports.a5 = exports.a4 = exports.a3 = exports.a2 = exports.a1 = void 0;
 var z2 = require("variable");
 var z3 = require("interface-variable");
@@ -286,25 +286,25 @@ class_1.a;
 class_module_1.a;
 // named export
 var interface_2 = require("interface");
-__createBinding(exports, interface_2, "a", "a1");
+Object.defineProperty(exports, "a1", { enumerable: true, get: function () { return interface_2.a; } });
 var variable_2 = require("variable");
-__createBinding(exports, variable_2, "a", "a2");
+Object.defineProperty(exports, "a2", { enumerable: true, get: function () { return variable_2.a; } });
 var interface_variable_2 = require("interface-variable");
-__createBinding(exports, interface_variable_2, "a", "a3");
+Object.defineProperty(exports, "a3", { enumerable: true, get: function () { return interface_variable_2.a; } });
 var module_2 = require("module");
-__createBinding(exports, module_2, "a", "a4");
+Object.defineProperty(exports, "a4", { enumerable: true, get: function () { return module_2.a; } });
 var interface_module_2 = require("interface-module");
-__createBinding(exports, interface_module_2, "a", "a5");
+Object.defineProperty(exports, "a5", { enumerable: true, get: function () { return interface_module_2.a; } });
 var variable_module_2 = require("variable-module");
-__createBinding(exports, variable_module_2, "a", "a6");
+Object.defineProperty(exports, "a6", { enumerable: true, get: function () { return variable_module_2.a; } });
 var function_2 = require("function");
-__createBinding(exports, function_2, "a", "a7");
+Object.defineProperty(exports, "a7", { enumerable: true, get: function () { return function_2.a; } });
 var function_module_2 = require("function-module");
-__createBinding(exports, function_module_2, "a", "a8");
+Object.defineProperty(exports, "a8", { enumerable: true, get: function () { return function_module_2.a; } });
 var class_2 = require("class");
-__createBinding(exports, class_2, "a", "a9");
+Object.defineProperty(exports, "a9", { enumerable: true, get: function () { return class_2.a; } });
 var class_module_2 = require("class-module");
-__createBinding(exports, class_module_2, "a", "a0");
+Object.defineProperty(exports, "a0", { enumerable: true, get: function () { return class_module_2.a; } });
 // export-star
 __exportStar(require("interface"), exports);
 __exportStar(require("variable"), exports);

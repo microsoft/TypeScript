@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithNumericIndexers1.ts] ////
+
 //// [objectTypesIdentityWithNumericIndexers1.ts]
 // object types are identical structurally
 

@@ -39,16 +39,6 @@ goTo.marker("");
 verify.completions({
   marker: "",
   exact: completion.globalsPlus([{
-    // TODO: We should filter this one out due to its bad module specifier,
-    // but we don't know it's going to be filtered out until we actually
-    // resolve the module specifier, which is a problem for completions
-    // that don't have their module specifiers eagerly resolved.
-    name: "fooFromIndex",
-    source: "../node_modules/dependency/lib/index.js",
-    sourceDisplay: "../node_modules/dependency/lib/index.js",
-    sortText: completion.SortText.AutoImportSuggestions,
-    hasAction: true,
-  }, {
     name: "fooFromLol",
     source: "dependency",
     sourceDisplay: "dependency",

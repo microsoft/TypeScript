@@ -1,4 +1,6 @@
-=== tests/cases/compiler/shadowingViaLocalValue.ts ===
+//// [tests/cases/compiler/shadowingViaLocalValue.ts] ////
+
+=== shadowingViaLocalValue.ts ===
 {
     let x;
 >x : Symbol(x, Decl(shadowingViaLocalValue.ts, 1, 7))

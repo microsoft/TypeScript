@@ -3,7 +3,7 @@
 //@Filename: findAllRefsOnDefinition2-import.ts
 ////export module Test{
 ////
-////    [|export interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}start|] { }|]
+////    /*1*/export interface /*2*/start { }
 ////
 ////    export interface stop { }
 ////}
@@ -11,7 +11,7 @@
 //@Filename: findAllRefsOnDefinition2.ts
 ////import Second = require("./findAllRefsOnDefinition2-import");
 ////
-////var start: Second.Test.[|start|];
+////var start: Second.Test./*3*/start;
 ////var stop: Second.Test.stop;
 
-verify.singleReferenceGroup("interface Test.start", "start");
+verify.baselineFindAllReferences('1', '2', '3');

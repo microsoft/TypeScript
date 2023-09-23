@@ -8,7 +8,7 @@
 ////{
 ////    "compilerOptions": {
 ////        "outDir": "./dist",
-////        "module": "node12",
+////        "module": "node16",
 ////        "target": "esnext"
 ////    },
 ////    "include": ["./src"]

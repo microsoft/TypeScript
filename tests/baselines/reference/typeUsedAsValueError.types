@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeUsedAsValueError.ts ===
+//// [tests/cases/compiler/typeUsedAsValueError.ts] ////
+
+=== typeUsedAsValueError.ts ===
 interface Interface {
 
 }
@@ -12,7 +14,7 @@ type TypeAliasForSomeClass = SomeClass;
 >TypeAliasForSomeClass : SomeClass
 
 type someType = { x: number };
->someType : someType
+>someType : { x: number; }
 >x : number
 
 function acceptsSomeType(a: someType) {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleDuplicateIdentifiers.ts ===
+//// [tests/cases/compiler/moduleDuplicateIdentifiers.ts] ////
+
+=== moduleDuplicateIdentifiers.ts ===
 export var Foo = 2;
 >Foo : number
 >2 : 2
@@ -42,7 +44,7 @@ export class Kettle {
 }
 
 export class Kettle { // Should error
->Kettle : import("tests/cases/compiler/moduleDuplicateIdentifiers").Kettle
+>Kettle : import("moduleDuplicateIdentifiers").Kettle
 
 	member2 = 42;
 >member2 : number

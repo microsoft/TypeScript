@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts] ////
+
 //// [privateNameDuplicateField.ts]
 function Field() {
 
@@ -456,24 +458,18 @@ function Field() {
     _A_Field_StaticField_foo_1 = { value: "foo" };
     // Error
     class A_Field_StaticMethod {
-        constructor() {
-        }
         #foo = "foo";
         static #foo() { }
     }
     _b = A_Field_StaticMethod, _A_Field_StaticMethod_foo = new WeakMap();
     // Error
     class A_Field_StaticGetter {
-        constructor() {
-        }
         #foo = "foo";
         static get #foo() { return ""; }
     }
     _c = A_Field_StaticGetter, _A_Field_StaticGetter_foo = new WeakMap();
     // Error
     class A_Field_StaticSetter {
-        constructor() {
-        }
         #foo = "foo";
         static set #foo(value) { }
     }
@@ -557,7 +553,7 @@ function Method() {
     _d = A_Method_StaticSetter, _A_Method_StaticSetter_instances = new WeakSet();
 }
 function Getter() {
-    var _A_Getter_Field_instances, _A_Getter_Field_foo_get, _A_Getter_Field_foo, _A_Getter_Method_instances, _A_Getter_Method_foo_get, _A_Getter_Method_foo, _A_Getter_Getter_instances, _A_Getter_Getter_foo_get, _A_Getter_Getter_foo_get_1, _A_Getter_Setter_instances, _A_Getter_Setter_foo_get, _A_Getter_Setter_foo_set, _A_Getter_StaticField_instances, _a, _A_Getter_StaticField_foo_get, _A_Getter_StaticField_foo, _A_Getter_StaticMethod_instances, _b, _A_Getter_StaticMethod_foo_get, _A_Getter_StaticMethod_foo, _A_Getter_StaticGetter_instances, _c, _A_Getter_StaticGetter_foo_get, _A_Getter_StaticGetter_foo_get_1, _A_Getter_StaticSetter_instances, _d, _A_Getter_StaticSetter_foo_get, _A_Getter_StaticSetter_foo_set;
+    var _A_Getter_Field_instances, _A_Getter_Field_foo_get, _A_Getter_Field_foo, _A_Getter_Method_instances, _A_Getter_Method_foo_get, _A_Getter_Method_foo, _A_Getter_Getter_instances, _A_Getter_Getter_foo_get, _A_Getter_Getter_foo_1_get, _A_Getter_Setter_instances, _A_Getter_Setter_foo_get, _A_Getter_Setter_foo_set, _A_Getter_StaticField_instances, _a, _A_Getter_StaticField_foo_get, _A_Getter_StaticField_foo, _A_Getter_StaticMethod_instances, _b, _A_Getter_StaticMethod_foo_get, _A_Getter_StaticMethod_foo, _A_Getter_StaticGetter_instances, _c, _A_Getter_StaticGetter_foo_get, _A_Getter_StaticGetter_foo_1_get, _A_Getter_StaticSetter_instances, _d, _A_Getter_StaticSetter_foo_get, _A_Getter_StaticSetter_foo_set;
     // Error
     class A_Getter_Field {
         constructor() {
@@ -631,7 +627,7 @@ function Getter() {
     _d = A_Getter_StaticSetter, _A_Getter_StaticSetter_instances = new WeakSet();
 }
 function Setter() {
-    var _A_Setter_Field_instances, _A_Setter_Field_foo_set, _A_Setter_Field_foo, _A_Setter_Method_instances, _A_Setter_Method_foo_set, _A_Setter_Method_foo, _A_Setter_Getter_instances, _A_Setter_Getter_foo_set, _A_Setter_Getter_foo_get, _A_Setter_Setter_instances, _A_Setter_Setter_foo_set, _A_Setter_Setter_foo_set_1, _A_Setter_StaticField_instances, _a, _A_Setter_StaticField_foo_set, _A_Setter_StaticField_foo, _A_Setter_StaticMethod_instances, _b, _A_Setter_StaticMethod_foo_set, _A_Setter_StaticMethod_foo, _A_Setter_StaticGetter_instances, _c, _A_Setter_StaticGetter_foo_set, _A_Setter_StaticGetter_foo_get, _A_Setter_StaticSetter_instances, _d, _A_Setter_StaticSetter_foo_set, _A_Setter_StaticSetter_foo_set_1;
+    var _A_Setter_Field_instances, _A_Setter_Field_foo_set, _A_Setter_Field_foo, _A_Setter_Method_instances, _A_Setter_Method_foo_set, _A_Setter_Method_foo, _A_Setter_Getter_instances, _A_Setter_Getter_foo_set, _A_Setter_Getter_foo_get, _A_Setter_Setter_instances, _A_Setter_Setter_foo_set, _A_Setter_Setter_foo_1_set, _A_Setter_StaticField_instances, _a, _A_Setter_StaticField_foo_set, _A_Setter_StaticField_foo, _A_Setter_StaticMethod_instances, _b, _A_Setter_StaticMethod_foo_set, _A_Setter_StaticMethod_foo, _A_Setter_StaticGetter_instances, _c, _A_Setter_StaticGetter_foo_set, _A_Setter_StaticGetter_foo_get, _A_Setter_StaticSetter_instances, _d, _A_Setter_StaticSetter_foo_set, _A_Setter_StaticSetter_foo_1_set;
     // Error
     class A_Setter_Field {
         constructor() {
@@ -836,7 +832,7 @@ function StaticMethod() {
     _h = A_StaticMethod_StaticSetter;
 }
 function StaticGetter() {
-    var _a, _A_StaticGetter_Field_foo_get, _A_StaticGetter_Field_foo, _A_StaticGetter_Method_instances, _b, _A_StaticGetter_Method_foo_get, _A_StaticGetter_Method_foo, _A_StaticGetter_Getter_instances, _c, _A_StaticGetter_Getter_foo_get, _A_StaticGetter_Getter_foo_get_1, _A_StaticGetter_Setter_instances, _d, _A_StaticGetter_Setter_foo_get, _A_StaticGetter_Setter_foo_set, _e, _A_StaticGetter_StaticField_foo_get, _A_StaticGetter_StaticField_foo, _f, _A_StaticGetter_StaticMethod_foo_get, _A_StaticGetter_StaticMethod_foo, _g, _A_StaticGetter_StaticGetter_foo_get, _A_StaticGetter_StaticGetter_foo_get_1, _h, _A_StaticGetter_StaticSetter_foo_get, _A_StaticGetter_StaticSetter_foo_set;
+    var _a, _A_StaticGetter_Field_foo_get, _A_StaticGetter_Field_foo, _A_StaticGetter_Method_instances, _b, _A_StaticGetter_Method_foo_get, _A_StaticGetter_Method_foo, _A_StaticGetter_Getter_instances, _c, _A_StaticGetter_Getter_foo_get, _A_StaticGetter_Getter_foo_1_get, _A_StaticGetter_Setter_instances, _d, _A_StaticGetter_Setter_foo_get, _A_StaticGetter_Setter_foo_set, _e, _A_StaticGetter_StaticField_foo_get, _A_StaticGetter_StaticField_foo, _f, _A_StaticGetter_StaticMethod_foo_get, _A_StaticGetter_StaticMethod_foo, _g, _A_StaticGetter_StaticGetter_foo_get, _A_StaticGetter_StaticGetter_foo_1_get, _h, _A_StaticGetter_StaticSetter_foo_get, _A_StaticGetter_StaticSetter_foo_set;
     // Error
     class A_StaticGetter_Field {
         constructor() {
@@ -897,7 +893,7 @@ function StaticGetter() {
     _h = A_StaticGetter_StaticSetter, _A_StaticGetter_StaticSetter_foo_get = function _A_StaticGetter_StaticSetter_foo_get() { return ""; }, _A_StaticGetter_StaticSetter_foo_set = function _A_StaticGetter_StaticSetter_foo_set(value) { };
 }
 function StaticSetter() {
-    var _a, _A_StaticSetter_Field_foo_set, _A_StaticSetter_Field_foo, _A_StaticSetter_Method_instances, _b, _A_StaticSetter_Method_foo_set, _A_StaticSetter_Method_foo, _A_StaticSetter_Getter_instances, _c, _A_StaticSetter_Getter_foo_set, _A_StaticSetter_Getter_foo_get, _A_StaticSetter_Setter_instances, _d, _A_StaticSetter_Setter_foo_set, _A_StaticSetter_Setter_foo_set_1, _e, _A_StaticSetter_StaticField_foo_set, _A_StaticSetter_StaticField_foo, _f, _A_StaticSetter_StaticMethod_foo_set, _A_StaticSetter_StaticMethod_foo, _g, _A_StaticSetter_StaticGetter_foo_set, _A_StaticSetter_StaticGetter_foo_get, _h, _A_StaticSetter_StaticSetter_foo_set, _A_StaticSetter_StaticSetter_foo_set_1;
+    var _a, _A_StaticSetter_Field_foo_set, _A_StaticSetter_Field_foo, _A_StaticSetter_Method_instances, _b, _A_StaticSetter_Method_foo_set, _A_StaticSetter_Method_foo, _A_StaticSetter_Getter_instances, _c, _A_StaticSetter_Getter_foo_set, _A_StaticSetter_Getter_foo_get, _A_StaticSetter_Setter_instances, _d, _A_StaticSetter_Setter_foo_set, _A_StaticSetter_Setter_foo_1_set, _e, _A_StaticSetter_StaticField_foo_set, _A_StaticSetter_StaticField_foo, _f, _A_StaticSetter_StaticMethod_foo_set, _A_StaticSetter_StaticMethod_foo, _g, _A_StaticSetter_StaticGetter_foo_set, _A_StaticSetter_StaticGetter_foo_get, _h, _A_StaticSetter_StaticSetter_foo_set, _A_StaticSetter_StaticSetter_foo_1_set;
     // Error
     class A_StaticSetter_Field {
         constructor() {

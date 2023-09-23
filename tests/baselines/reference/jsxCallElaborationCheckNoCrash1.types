@@ -1,11 +1,13 @@
-=== tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx ===
+//// [tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx] ////
+
+=== jsxCallElaborationCheckNoCrash1.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";
 >React : typeof React
 
 type Tags = "span" | "div";
->Tags : Tags
+>Tags : "div" | "span"
 
 export const Hoc = <Tag extends Tags>(
 >Hoc : <Tag extends Tags>(TagElement: Tag) => React.SFC

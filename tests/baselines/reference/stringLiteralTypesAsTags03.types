@@ -1,6 +1,8 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags03.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags03.ts] ////
+
+=== stringLiteralTypesAsTags03.ts ===
 type Kind = "A" | "B"
->Kind : Kind
+>Kind : "A" | "B"
 
 interface Entity {
     kind: Kind;

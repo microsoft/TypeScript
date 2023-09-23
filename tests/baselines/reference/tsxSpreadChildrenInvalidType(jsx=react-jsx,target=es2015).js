@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx] ////
+
 //// [tsxSpreadChildrenInvalidType.tsx]
 declare module JSX {
 	interface Element { }
@@ -33,6 +35,7 @@ let x: TodoListProps;
 
 
 //// [tsxSpreadChildrenInvalidType.js]
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 function Todo(prop) {
     return _jsx("div", { children: prop.key.toString() + prop.todo });
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/methodSignatureDeclarationEmit1.ts] ////
+
 //// [methodSignatureDeclarationEmit1.ts]
 class C {
   public foo(n: number): void;

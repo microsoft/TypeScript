@@ -1,4 +1,6 @@
-=== tests/cases/compiler/node_modules/backbone/index.d.ts ===
+//// [tests/cases/compiler/stackDepthLimitCastingType.ts] ////
+
+=== node_modules/backbone/index.d.ts ===
 declare global {
 >global : typeof global
 
@@ -7,7 +9,7 @@ declare global {
 >Model : Model<T, E>
 
         initialize(attributes?: T, options?: CombinedModelConstructorOptions<E, this>): void;
->initialize : (attributes?: T | undefined, options?: CombinedModelConstructorOptions<E, this> | undefined) => void
+>initialize : (attributes?: T, options?: CombinedModelConstructorOptions<E, this>) => void
 >attributes : T | undefined
 >options : CombinedModelConstructorOptions<E, this> | undefined
 
@@ -36,9 +38,9 @@ export {
 
 };
 export as namespace Backbone;
->Backbone : typeof import("tests/cases/compiler/node_modules/backbone/index")
+>Backbone : typeof import("node_modules/backbone/index")
 
-=== tests/cases/compiler/node_modules/backbone-fetch-cache/index.d.ts ===
+=== node_modules/backbone-fetch-cache/index.d.ts ===
 import * as Backbone from "backbone";
 >Backbone : typeof Backbone
 
@@ -53,9 +55,9 @@ declare module "backbone" {
 }
 export {};
 export as namespace BackboneFetchCache;
->BackboneFetchCache : typeof import("tests/cases/compiler/node_modules/backbone-fetch-cache/index")
+>BackboneFetchCache : typeof import("node_modules/backbone-fetch-cache/index")
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as Backbone from "backbone";
 >Backbone : typeof Backbone
 
@@ -78,5 +80,4 @@ hoge.fetch(null as any);
 >hoge : Backbone.ModelWithCache
 >fetch : (options?: any) => JQueryXHR
 >null as any : any
->null : null
 

@@ -3,11 +3,11 @@
 // @Filename: /a.ts
 ////export {};
 ////declare global {
-////    [|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}f|](): void;|]
+////    /*1*/function /*2*/f(): void;
 ////}
 
 // @Filename: /b.ts
-////[|f|]();
+/////*3*/f();
 
 verify.noErrors();
-verify.singleReferenceGroup("function f(): void", "f");
+verify.baselineFindAllReferences('1', '2', '3');

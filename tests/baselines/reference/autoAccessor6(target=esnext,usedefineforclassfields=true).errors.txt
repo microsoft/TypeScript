@@ -1,0 +1,18 @@
+autoAccessor6.ts(6,5): error TS2610: 'a' is defined as an accessor in class 'C1', but is overridden here in 'C2' as an instance property.
+
+
+==== autoAccessor6.ts (1 errors) ====
+    class C1 {
+        accessor a: any;
+    }
+    
+    class C2 extends C1 {
+        a = 1;
+        ~
+!!! error TS2610: 'a' is defined as an accessor in class 'C1', but is overridden here in 'C2' as an instance property.
+    }
+    
+    class C3 extends C1 {
+        get a() { return super.a; }
+    }
+    

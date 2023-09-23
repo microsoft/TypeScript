@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsObjectLiteralHasCheckedKeyof.ts] ////
+
 //// [file.js]
 // @ts-check
 const obj = {

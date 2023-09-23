@@ -1,4 +1,6 @@
-=== tests/cases/compiler/localTypeParameterInferencePriority.ts ===
+//// [tests/cases/compiler/localTypeParameterInferencePriority.ts] ////
+
+=== localTypeParameterInferencePriority.ts ===
 export type UnrollOnHover<O extends object> = O extends object ?
 >UnrollOnHover : UnrollOnHover<O>
 
@@ -7,7 +9,7 @@ export type UnrollOnHover<O extends object> = O extends object ?
 
 
 export type Schema = Record<string, unknown>;
->Schema : Schema
+>Schema : { [x: string]: unknown; }
 
 class Table<S extends Schema>  {
 >Table : Table<S>
@@ -21,7 +23,6 @@ class Table<S extends Schema>  {
 
         return null!
 >null! : null
->null : null
     }
 }
 

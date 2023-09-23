@@ -1,9 +1,11 @@
-=== tests/cases/compiler/jsxSpreadFirstUnionNoErrors.tsx ===
+//// [tests/cases/compiler/jsxSpreadFirstUnionNoErrors.tsx] ////
+
+=== jsxSpreadFirstUnionNoErrors.tsx ===
 import React from "react";
 >React : typeof React
 
 type InfoProps =
->InfoProps : InfoProps
+>InfoProps : { status: "hidden"; } | { status: "visible"; content: string; }
 
 | { status: "hidden" }
 >status : "hidden"

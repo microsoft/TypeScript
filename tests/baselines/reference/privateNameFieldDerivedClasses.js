@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldDerivedClasses.ts] ////
+
 //// [privateNameFieldDerivedClasses.ts]
 class Base {
     #prop: number = 123;

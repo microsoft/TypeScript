@@ -1,6 +1,8 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts] ////
+
+=== stringLiteralTypesInUnionTypes03.ts ===
 type T = number | "foo" | "bar";
->T : T
+>T : number | "foo" | "bar"
 
 var x: "foo" | "bar" | number;
 >x : number | "foo" | "bar"

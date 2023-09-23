@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/import/importTypeAmbient.ts ===
+//// [tests/cases/conformance/types/import/importTypeAmbient.ts] ////
+
+=== importTypeAmbient.ts ===
 declare module "foo" {
 >"foo" : typeof import("foo")
 
@@ -13,7 +15,7 @@ declare module "foo" {
 >Point : Point
 }
 const x: import("foo") = { x: 0, y: 0 };
->x : Point
+>x : import("foo")
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0

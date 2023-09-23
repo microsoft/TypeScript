@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleConstEnumDeclaration2.ts] ////
+
 //// [es6ModuleConstEnumDeclaration2.ts]
 export const enum e1 {
     a,
@@ -58,8 +60,8 @@ var e2;
     e2[e2["y"] = 1] = "y";
     e2[e2["z"] = 2] = "z";
 })(e2 || (e2 = {}));
-var x = 0 /* a */;
-var y = 0 /* x */;
+var x = 0 /* e1.a */;
+var y = 0 /* e2.x */;
 export var m1;
 (function (m1) {
     let e3;
@@ -74,10 +76,10 @@ export var m1;
         e4[e4["y"] = 1] = "y";
         e4[e4["z"] = 2] = "z";
     })(e4 || (e4 = {}));
-    var x1 = 0 /* a */;
-    var y1 = 0 /* x */;
-    var x2 = 0 /* a */;
-    var y2 = 0 /* x */;
+    var x1 = 0 /* e1.a */;
+    var y1 = 0 /* e2.x */;
+    var x2 = 0 /* e3.a */;
+    var y2 = 0 /* e4.x */;
 })(m1 || (m1 = {}));
 var m2;
 (function (m2) {
@@ -93,9 +95,9 @@ var m2;
         e6[e6["y"] = 1] = "y";
         e6[e6["z"] = 2] = "z";
     })(e6 || (e6 = {}));
-    var x1 = 0 /* a */;
-    var y1 = 0 /* x */;
-    var x2 = 0 /* a */;
-    var y2 = 0 /* x */;
-    var x3 = 0 /* a */;
+    var x1 = 0 /* e1.a */;
+    var y1 = 0 /* e2.x */;
+    var x2 = 0 /* e5.a */;
+    var y2 = 0 /* e6.x */;
+    var x3 = 0 /* m1.e3.a */;
 })(m2 || (m2 = {}));

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts] ////
+
 //// [excessPropertyChecksWithNestedIntersections.ts]
 // https://github.com/Microsoft/TypeScript/issues/13813
 
@@ -74,7 +76,7 @@ test = { foo: true, bar: { foo: true, bar: true, boo: true } }
 //// [excessPropertyChecksWithNestedIntersections.js]
 "use strict";
 // https://github.com/Microsoft/TypeScript/issues/13813
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.myInstance = exports.photo = exports.obj = void 0;
 var a = { a: { x: 'hello' } }; // ok
 var b = { a: { x: 2 } }; // error - types of property x are incompatible

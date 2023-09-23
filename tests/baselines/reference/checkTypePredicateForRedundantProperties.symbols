@@ -1,4 +1,6 @@
-=== tests/cases/compiler/checkTypePredicateForRedundantProperties.ts ===
+//// [tests/cases/compiler/checkTypePredicateForRedundantProperties.ts] ////
+
+=== checkTypePredicateForRedundantProperties.ts ===
 function addProp2(x: any): x is { a: string; a: string; } {
 >addProp2 : Symbol(addProp2, Decl(checkTypePredicateForRedundantProperties.ts, 0, 0))
 >x : Symbol(x, Decl(checkTypePredicateForRedundantProperties.ts, 0, 18))

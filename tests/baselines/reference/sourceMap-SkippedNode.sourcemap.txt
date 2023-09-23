@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMap-SkippedNode.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMap-SkippedNode.js
+emittedFile:sourceMap-SkippedNode.js
 sourceFile:sourceMap-SkippedNode.ts
 -------------------------------------------------------------------
 >>>try {

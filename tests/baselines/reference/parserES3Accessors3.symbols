@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript3/Accessors/parserES3Accessors3.ts ===
+//// [tests/cases/conformance/parser/ecmascript3/Accessors/parserES3Accessors3.ts] ////
+
+=== parserES3Accessors3.ts ===
 var v = { get Foo() { } };
 >v : Symbol(v, Decl(parserES3Accessors3.ts, 0, 3))
 >Foo : Symbol(Foo, Decl(parserES3Accessors3.ts, 0, 9))

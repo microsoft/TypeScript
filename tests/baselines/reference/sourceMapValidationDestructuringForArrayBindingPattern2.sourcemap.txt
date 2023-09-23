@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringForArrayBindingPattern2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringForArrayBindingPattern2.js
+emittedFile:sourceMapValidationDestructuringForArrayBindingPattern2.js
 sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 -------------------------------------------------------------------
 >>>var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingOfGenericFunctionTypedArguments1.ts] ////
+
 //// [contextualTypingOfGenericFunctionTypedArguments1.ts]
 interface Collection<T> {
     length: number;

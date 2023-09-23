@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/discriminatedUnionTypes1.ts ===
+//// [tests/cases/conformance/types/union/discriminatedUnionTypes1.ts] ////
+
+=== discriminatedUnionTypes1.ts ===
 interface Square {
     kind: "square";
 >kind : "square"
@@ -27,7 +29,7 @@ interface Circle {
 }
 
 type Shape = Square | Rectangle | Circle;
->Shape : Shape
+>Shape : Square | Rectangle | Circle
 
 function area1(s: Shape) {
 >area1 : (s: Shape) => number
@@ -248,7 +250,7 @@ function area4(s: Shape) {
 }
 
 type Message =
->Message : Message
+>Message : { kind: "A"; x: string; } | { kind: "B" | "C"; y: number; } | { kind: "D"; }
 
     { kind: "A", x: string } |
 >kind : "A"

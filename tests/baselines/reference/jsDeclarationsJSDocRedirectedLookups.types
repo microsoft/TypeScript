@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsJSDocRedirectedLookups.ts] ////
+
+=== index.js ===
 // these are recognized as TS concepts by the checker
 /** @type {String} */const a = "";
 >a : string
@@ -22,7 +24,6 @@
 
 /** @type {Null} */const f = null;
 >f : null
->null : null
 
 /** @type {Function} */const g = () => void 0;
 >g : Function
@@ -43,9 +44,9 @@
 /** @type {promise} */const j = Promise.resolve(0);
 >j : Promise<any>
 >Promise.resolve(0) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >0 : 0
 
 /** @type {Object<string, string>} */const k = {x: "x"};

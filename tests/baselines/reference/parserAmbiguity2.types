@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguity2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguity2.ts] ////
+
+=== parserAmbiguity2.ts ===
 f(g<A, B>7);
 >f(g<A, B>7) : any
 >f : any

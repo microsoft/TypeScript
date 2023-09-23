@@ -1,10 +1,10 @@
-tests/cases/compiler/useUnknownInCatchVariables01.ts(6,12): error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
-tests/cases/compiler/useUnknownInCatchVariables01.ts(7,10): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/useUnknownInCatchVariables01.ts(8,10): error TS2349: This expression is not callable.
+useUnknownInCatchVariables01.ts(6,12): error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+useUnknownInCatchVariables01.ts(7,10): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+useUnknownInCatchVariables01.ts(8,10): error TS2349: This expression is not callable.
   Type '{}' has no call signatures.
 
 
-==== tests/cases/compiler/useUnknownInCatchVariables01.ts (3 errors) ====
+==== useUnknownInCatchVariables01.ts (3 errors) ====
     try {
         // ...
     }

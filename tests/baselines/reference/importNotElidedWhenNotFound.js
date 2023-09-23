@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importNotElidedWhenNotFound.ts] ////
+
 //// [importNotElidedWhenNotFound.ts]
 import X from 'file';
 import Z from 'other_file';
@@ -34,22 +36,22 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var file_1 = require("file");
 var other_file_1 = require("other_file");
 var Y = /** @class */ (function (_super) {
     __extends(Y, _super);
     function Y() {
-        return _super.call(this, file_1["default"]) || this;
+        return _super.call(this, file_1.default) || this;
     }
     return Y;
-}(other_file_1["default"]));
+}(other_file_1.default));
 var file2_1 = require("file2");
 var file3_1 = require("file3");
 var Q = /** @class */ (function (_super) {
     __extends(Q, _super);
     function Q() {
-        return _super.call(this, file2_1["default"], file3_1["default"]) || this;
+        return _super.call(this, file2_1.default, file3_1.default) || this;
     }
     return Q;
-}(other_file_1["default"]));
+}(other_file_1.default));

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexerAsOptional.ts ===
+//// [tests/cases/compiler/indexerAsOptional.ts] ////
+
+=== indexerAsOptional.ts ===
 interface indexSig {
 >indexSig : Symbol(indexSig, Decl(indexerAsOptional.ts, 0, 0))
 

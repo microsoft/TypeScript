@@ -5,7 +5,7 @@ sourceRoot:
 sources: recursiveClassReferenceTest.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/recursiveClassReferenceTest.js
+emittedFile:recursiveClassReferenceTest.js
 sourceFile:recursiveClassReferenceTest.ts
 -------------------------------------------------------------------
 >>>// Scenario 1: Test reqursive function call with "this" parameter

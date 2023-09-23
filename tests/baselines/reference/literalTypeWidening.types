@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/literalTypeWidening.ts ===
+//// [tests/cases/conformance/types/literal/literalTypeWidening.ts] ////
+
+=== literalTypeWidening.ts ===
 // Widening vs. non-widening literal types
 
 function f1() {
@@ -343,7 +345,7 @@ if (isSuccess(result)) {
 // Repro from #10898
 
 type TestEvent = "onmouseover" | "onmouseout";
->TestEvent : TestEvent
+>TestEvent : "onmouseover" | "onmouseout"
 
 function onMouseOver(): TestEvent { return "onmouseover"; }
 >onMouseOver : () => TestEvent
@@ -398,7 +400,7 @@ export function keys<K extends string, V>(obj: Record<K, V>): K[] {
 }
 
 type Obj = { code: LangCode }
->Obj : Obj
+>Obj : { code: LangCode; }
 >code : "fr" | "en" | "es" | "it" | "nl"
 
 const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')

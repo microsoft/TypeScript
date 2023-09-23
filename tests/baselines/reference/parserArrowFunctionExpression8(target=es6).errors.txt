@@ -1,0 +1,14 @@
+fileJs.js(1,1): error TS2304: Cannot find name 'x'.
+fileTs.ts(1,1): error TS2304: Cannot find name 'x'.
+
+
+==== fileJs.js (1 errors) ====
+    x ? y => ({ y }) : z => ({ z }) // Legal JS
+    ~
+!!! error TS2304: Cannot find name 'x'.
+    
+==== fileTs.ts (1 errors) ====
+    x ? y => ({ y }) : z => ({ z })
+    ~
+!!! error TS2304: Cannot find name 'x'.
+    

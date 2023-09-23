@@ -1,4 +1,6 @@
-=== tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts] ////
+
+=== importCallExpressionGrammarError.ts ===
 declare function getSpecifier(): string;
 >getSpecifier : () => string
 
@@ -13,7 +15,7 @@ var a = ["./0"];
 import(...["PathModule"]);
 >import(...["PathModule"]) : Promise<any>
 >...["PathModule"] : string
->["PathModule"] : string[]
+>["PathModule"] : [string]
 >"PathModule" : "PathModule"
 
 var p1 = import(...a);

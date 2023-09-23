@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePredicateStructuralMatch.ts ===
+//// [tests/cases/compiler/typePredicateStructuralMatch.ts] ////
+
+=== typePredicateStructuralMatch.ts ===
 // Repro from #12235
 
 getResults1([]);
@@ -26,11 +28,11 @@ getResults2({data: []});
 >[] : undefined[]
 
 type Result = { value: string };
->Result : Result
+>Result : { value: string; }
 >value : string
 
 type Results = Result[];
->Results : Results
+>Results : Result[]
 
 function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 >isResponseInData : <T>(value: T | {    data: T;}) => value is { data: T; }

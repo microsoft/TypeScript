@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts] ////
+
 //// [strictPropertyInitialization.ts]
 // Properties with non-undefined types require initialization
 
@@ -133,6 +135,32 @@ class C11 {
     }
 }
 
+const a = 'a';
+const b = Symbol();
+
+class C12 {
+    [a]: number;
+    [b]: number;
+    ['c']: number;
+
+    constructor() {
+        this[a] = 1;
+        this[b] = 1;
+        this['c'] = 1;
+    }
+}
+
+enum E {
+    A = "A",
+    B = "B"
+}
+class C13 {
+    [E.A]: number;
+    constructor() {
+        this[E.A] = 1;
+    }
+}
+
 
 //// [strictPropertyInitialization.js]
 "use strict";
@@ -235,6 +263,26 @@ class C11 {
     }
 }
 _C11_b = new WeakMap();
+const a = 'a';
+const b = Symbol();
+class C12 {
+    constructor() {
+        this[a] = 1;
+        this[b] = 1;
+        this['c'] = 1;
+    }
+}
+var E;
+(function (E) {
+    E["A"] = "A";
+    E["B"] = "B";
+})(E || (E = {}));
+class C13 {
+    constructor() {
+        this[E.A] = 1;
+    }
+}
+E.A;
 
 
 //// [strictPropertyInitialization.d.ts]
@@ -301,5 +349,21 @@ declare function someValue(): any;
 declare class C11 {
     #private;
     a: number;
+    constructor();
+}
+declare const a = "a";
+declare const b: unique symbol;
+declare class C12 {
+    [a]: number;
+    [b]: number;
+    ['c']: number;
+    constructor();
+}
+declare enum E {
+    A = "A",
+    B = "B"
+}
+declare class C13 {
+    [E.A]: number;
     constructor();
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/module.d.ts ===
+//// [tests/cases/compiler/importTypeGenericArrowTypeParenthesized.ts] ////
+
+=== module.d.ts ===
 declare module "module" {
 >"module" : typeof import("module")
 
@@ -8,7 +10,7 @@ declare module "module" {
 >fn : <T>(x: T) => Modifier<T>
 >x : T
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { fn } from "module";
 >fn : <T>(x: T) => import("module").Modifier<T>
 
@@ -41,7 +43,7 @@ export const works1 = fn((x: number) => x);
 >x : number
 
 type MakeItWork = <T>(x: T) => T;
->MakeItWork : MakeItWork
+>MakeItWork : <T>(x: T) => T
 >x : T
 
 export const works2 = fn<MakeItWork>(x => x);

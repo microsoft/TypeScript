@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapSample.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapSample.js
+emittedFile:sourceMapSample.js
 sourceFile:sourceMapSample.ts
 -------------------------------------------------------------------
 >>>var Foo;

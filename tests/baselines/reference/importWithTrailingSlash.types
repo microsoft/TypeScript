@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importWithTrailingSlash.ts] ////
+
 === /a.ts ===
 export default { a: 0 };
 >{ a: 0 } : { a: number; }
@@ -12,15 +14,15 @@ export default { aIndex: 0 };
 
 === /a/test.ts ===
 import a from ".";
->a : { a: number; }
+>a : { aIndex: number; }
 
 import aIndex from "./";
 >aIndex : { aIndex: number; }
 
 a.a;
->a.a : number
->a : { a: number; }
->a : number
+>a.a : any
+>a : { aIndex: number; }
+>a : any
 
 aIndex.aIndex;
 >aIndex.aIndex : number
@@ -29,15 +31,15 @@ aIndex.aIndex;
 
 === /a/b/test.ts ===
 import a from "..";
->a : { a: number; }
+>a : { aIndex: number; }
 
 import aIndex from "../";
 >aIndex : { aIndex: number; }
 
 a.a;
->a.a : number
->a : { a: number; }
->a : number
+>a.a : any
+>a : { aIndex: number; }
+>a : any
 
 aIndex.aIndex;
 >aIndex.aIndex : number

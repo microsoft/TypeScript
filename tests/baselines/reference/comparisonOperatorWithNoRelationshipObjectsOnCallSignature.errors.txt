@@ -1,102 +1,102 @@
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(35,12): error TS2365: Operator '<' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(36,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(37,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(38,12): error TS2365: Operator '<' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(39,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(40,12): error TS2365: Operator '<' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(43,12): error TS2365: Operator '<' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(44,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(46,12): error TS2365: Operator '<' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(47,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(48,12): error TS2365: Operator '<' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(52,12): error TS2365: Operator '>' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(53,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(54,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(55,12): error TS2365: Operator '>' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(56,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(57,12): error TS2365: Operator '>' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(60,12): error TS2365: Operator '>' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(61,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(62,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(63,12): error TS2365: Operator '>' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(64,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(65,12): error TS2365: Operator '>' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(69,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(70,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(71,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(72,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(73,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(74,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(77,12): error TS2365: Operator '<=' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(78,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(79,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(80,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(81,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(82,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(86,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(87,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(88,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(89,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(90,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(91,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(94,12): error TS2365: Operator '>=' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(95,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(96,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(97,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(98,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(99,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(103,12): error TS2367: This condition will always return 'false' since the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(104,12): error TS2367: This condition will always return 'false' since the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(105,12): error TS2367: This condition will always return 'false' since the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(106,12): error TS2367: This condition will always return 'false' since the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(107,12): error TS2367: This condition will always return 'false' since the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(108,12): error TS2367: This condition will always return 'false' since the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(111,12): error TS2367: This condition will always return 'false' since the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(112,12): error TS2367: This condition will always return 'false' since the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(113,12): error TS2367: This condition will always return 'false' since the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(114,12): error TS2367: This condition will always return 'false' since the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(115,12): error TS2367: This condition will always return 'false' since the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(116,12): error TS2367: This condition will always return 'false' since the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(120,12): error TS2367: This condition will always return 'true' since the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(121,12): error TS2367: This condition will always return 'true' since the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(122,12): error TS2367: This condition will always return 'true' since the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(123,12): error TS2367: This condition will always return 'true' since the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(124,12): error TS2367: This condition will always return 'true' since the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(125,12): error TS2367: This condition will always return 'true' since the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(128,12): error TS2367: This condition will always return 'true' since the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(129,12): error TS2367: This condition will always return 'true' since the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(130,12): error TS2367: This condition will always return 'true' since the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(131,12): error TS2367: This condition will always return 'true' since the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(132,12): error TS2367: This condition will always return 'true' since the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(133,12): error TS2367: This condition will always return 'true' since the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(137,12): error TS2367: This condition will always return 'false' since the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(138,12): error TS2367: This condition will always return 'false' since the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(139,12): error TS2367: This condition will always return 'false' since the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(140,12): error TS2367: This condition will always return 'false' since the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(141,12): error TS2367: This condition will always return 'false' since the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(142,12): error TS2367: This condition will always return 'false' since the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(145,12): error TS2367: This condition will always return 'false' since the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(146,12): error TS2367: This condition will always return 'false' since the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(147,12): error TS2367: This condition will always return 'false' since the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(148,12): error TS2367: This condition will always return 'false' since the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(149,12): error TS2367: This condition will always return 'false' since the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(150,12): error TS2367: This condition will always return 'false' since the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(154,12): error TS2367: This condition will always return 'true' since the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(155,12): error TS2367: This condition will always return 'true' since the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(156,12): error TS2367: This condition will always return 'true' since the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(157,12): error TS2367: This condition will always return 'true' since the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(158,12): error TS2367: This condition will always return 'true' since the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(159,12): error TS2367: This condition will always return 'true' since the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(162,12): error TS2367: This condition will always return 'true' since the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(163,12): error TS2367: This condition will always return 'true' since the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(164,12): error TS2367: This condition will always return 'true' since the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(165,12): error TS2367: This condition will always return 'true' since the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(166,12): error TS2367: This condition will always return 'true' since the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2367: This condition will always return 'true' since the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(35,12): error TS2365: Operator '<' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(36,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(37,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(38,12): error TS2365: Operator '<' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(39,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(40,12): error TS2365: Operator '<' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(43,12): error TS2365: Operator '<' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(44,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(46,12): error TS2365: Operator '<' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(47,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(48,12): error TS2365: Operator '<' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(52,12): error TS2365: Operator '>' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(53,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(54,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(55,12): error TS2365: Operator '>' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(56,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(57,12): error TS2365: Operator '>' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(60,12): error TS2365: Operator '>' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(61,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(62,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(63,12): error TS2365: Operator '>' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(64,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(65,12): error TS2365: Operator '>' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(69,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(70,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(71,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(72,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(73,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(74,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(77,12): error TS2365: Operator '<=' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(78,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(79,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(80,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(81,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(82,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(86,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(87,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(88,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(89,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(90,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(91,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(94,12): error TS2365: Operator '>=' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(95,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(96,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(97,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(98,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(99,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(103,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(104,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(105,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(106,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(107,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(108,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(111,12): error TS2367: This comparison appears to be unintentional because the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(112,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(113,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(114,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(115,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(116,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(120,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(121,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(122,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(123,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(124,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(125,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(128,12): error TS2367: This comparison appears to be unintentional because the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(129,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(130,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(131,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(132,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(133,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(137,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(138,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(139,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(140,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(141,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(142,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(145,12): error TS2367: This comparison appears to be unintentional because the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(146,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(147,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(148,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(149,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(150,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(154,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(155,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(156,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(157,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(158,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(159,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(162,12): error TS2367: This comparison appears to be unintentional because the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(163,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(164,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(165,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(166,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts (96 errors) ====
+==== comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts (96 errors) ====
     class Base {
         public a: string;
     }
@@ -297,163 +297,163 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     // operator ==
     var r5a1 = a1 == b1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
     var r5a2 = a2 == b2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
     var r5a3 = a3 == b3;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
     var r5a4 = a4 == b4;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
     var r5a5 = a5 == b5;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
     var r5a6 = a6 == b6;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
     var r5a7 = a7 == b7;
     
     var r5b1 = b1 == a1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
     var r5b2 = b2 == a2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
     var r5b3 = b3 == a3;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
     var r5b4 = b4 == a4;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
     var r5b5 = b5 == a5;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
     var r5b6 = b6 == a6;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
     var r5b7 = b7 == a7;
     
     // operator !=
     var r6a1 = a1 != b1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
     var r6a2 = a2 != b2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
     var r6a3 = a3 != b3;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
     var r6a4 = a4 != b4;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
     var r6a5 = a5 != b5;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
     var r6a6 = a6 != b6;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
     var r6a7 = a7 != b7;
     
     var r6b1 = b1 != a1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
     var r6b2 = b2 != a2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
     var r6b3 = b3 != a3;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
     var r6b4 = b4 != a4;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
     var r6b5 = b5 != a5;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
     var r6b6 = b6 != a6;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
     var r6b7 = b7 != a7;
     
     // operator ===
     var r7a1 = a1 === b1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
     var r7a2 = a2 === b2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
     var r7a3 = a3 === b3;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
     var r7a4 = a4 === b4;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
     var r7a5 = a5 === b5;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
     var r7a6 = a6 === b6;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
     var r7a7 = a7 === b7;
     
     var r7b1 = b1 === a1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
     var r7b2 = b2 === a2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
     var r7b3 = b3 === a3;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
     var r7b4 = b4 === a4;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
     var r7b5 = b5 === a5;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
     var r7b6 = b6 === a6;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
     var r7b7 = b7 === a7;
     
     // operator !==
     var r8a1 = a1 !== b1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
     var r8a2 = a2 !== b2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
     var r8a3 = a3 !== b3;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
     var r8a4 = a4 !== b4;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and '{ fn(): C; }' have no overlap.
     var r8a5 = a5 !== b5;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }' have no overlap.
     var r8a6 = a6 !== b6;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }' have no overlap.
     var r8a7 = a7 !== b7;
     
     var r8b1 = b1 !== a1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'new () => Base' and '{ fn(): Base; }' have no overlap.
     var r8b2 = b2 !== a2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }' have no overlap.
     var r8b3 = b3 !== a3;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }' have no overlap.
     var r8b4 = b4 !== a4;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(): C; }' and '{ fn(): Base; }' have no overlap.
     var r8b5 = b5 !== a5;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }' have no overlap.
     var r8b6 = b6 !== a6;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
     var r8b7 = b7 !== a7;

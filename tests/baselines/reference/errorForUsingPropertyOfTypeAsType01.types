@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts ===
+//// [tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts] ////
+
+=== errorForUsingPropertyOfTypeAsType01.ts ===
 namespace Test1 {
 >Test1 : typeof Test1
 
@@ -45,7 +47,7 @@ namespace Test3 {
 >Test3 : typeof Test3
 
     export type Foo = {
->Foo : Foo
+>Foo : { bar: string; }
 
         bar: string;
 >bar : string
@@ -67,7 +69,7 @@ namespace Test4 {
 >Test4 : typeof Test4
 
     export type Foo = { bar: number }
->Foo : Foo
+>Foo : { bar: number; } | { bar: string; }
 >bar : number
 
                     | { bar: string }
@@ -89,7 +91,7 @@ namespace Test5 {
 >Test5 : typeof Test5
 
     export type Foo = { bar: number }
->Foo : Foo
+>Foo : { bar: number; } | { wat: string; }
 >bar : number
 
                     | { wat: string }

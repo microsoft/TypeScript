@@ -1,4 +1,6 @@
-=== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts ===
+//// [tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts] ////
+
+=== chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts ===
 class Chain<T> {
 >Chain : Chain<T>
 
@@ -98,7 +100,6 @@ class Chain<T> {
 >s : S
 
         return null;
->null : null
     }
 }
 
@@ -228,6 +229,5 @@ class Chain2<T extends I> {
 >"" : ""
 
         return null;
->null : null
     }
 }

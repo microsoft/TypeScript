@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericMemberFunction.ts] ////
+
 //// [genericMemberFunction.ts]
 export class BuildError<A, B, C>{
   public parent<A, B extends A, C>(): FileWithErrors<A, B, C> {
@@ -25,7 +27,7 @@ export class BuildResult<A, B, C>{
 //// [genericMemberFunction.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.BuildResult = exports.FileWithErrors = exports.BuildError = void 0;
     var BuildError = /** @class */ (function () {
         function BuildError() {

@@ -1,3 +1,9 @@
+import * as documents from "../_namespaces/documents";
+import * as fakes from "../_namespaces/fakes";
+import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
+import * as vfs from "../_namespaces/vfs";
+
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
         const builtFile = `built/local/${fileName}`;
@@ -11,15 +17,6 @@ describe("unittests:: Public APIs", () => {
 
         it("should be acknowledged when they change", () => {
             Harness.Baseline.runBaseline(api, fileContent, { PrintDiff: true });
-        });
-
-        it("should compile", () => {
-            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
-            fs.linkSync(`${vfs.builtFolder}/${fileName}`, `${vfs.srcFolder}/${fileName}`);
-            const sys = new fakes.System(fs);
-            const host = new fakes.CompilerHost(sys);
-            const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], {});
-            assert(!result.diagnostics || !result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(result.diagnostics, /*pretty*/ true));
         });
     }
 
@@ -90,12 +87,13 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const host = new fakes.CompilerHost(vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
 
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -112,18 +110,65 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const host = new fakes.CompilerHost(vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
 
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
         const file = program.getSourceFile("/file.ts")!;
         const type = checker.getTypeAtLocation(file);
         assert.equal(type.flags, ts.TypeFlags.Any);
+    });
+
+    it("works on ExpressionWithTypeArguments", () => {
+        const content = `
+            function fn<T>(value: T) {
+                return { value };
+            }
+            const foo = fn<string>;
+        `;
+        const host = new fakes.CompilerHost(vfs.createFromFileSystem(
+            Harness.IO,
+            /*ignoreCase*/ true,
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
+
+        const program = ts.createProgram({
+            host,
+            rootNames: ["/file.ts"],
+            options: { noLib: true },
+        });
+
+        const checker = program.getTypeChecker();
+        const file = program.getSourceFile("/file.ts")!;
+        const [declaration] = (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
+        assert.equal(checker.getTypeAtLocation(declaration.initializer!).flags, ts.TypeFlags.Object);
+    });
+
+    it("returns an errorType for VariableDeclaration with BindingPattern name", () => {
+        const content = "const foo = [1];\n" + "const [a] = foo;";
+
+        const host = new fakes.CompilerHost(vfs.createFromFileSystem(
+            Harness.IO,
+            /*ignoreCase*/ true,
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
+
+        const program = ts.createProgram({
+            host,
+            rootNames: ["/file.ts"],
+            options: { noLib: true },
+        });
+
+        const checker = program.getTypeChecker();
+        const file = program.getSourceFile("/file.ts")!;
+        const [declaration] = (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
+        assert.equal(checker.getTypeAtLocation(declaration).flags, ts.TypeFlags.Any);
     });
 });
 
@@ -146,7 +191,7 @@ describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
                     assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} read ${fileName}.`);
                     // Throw error here so that actual change to localized diagnostics messages doesnt take place
                     throw new Error("cannot read file");
-                }
+                },
             }, errors);
         });
     }
@@ -155,30 +200,34 @@ describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
 });
 
 describe("unittests:: Public APIs :: forEachChild of @param comments in JSDoc", () => {
-    const content = `
+    it("finds correct children", () => {
+        const content = `
 /**
  * @param The {@link TypeReferencesInAedoc}.
  */
 var x
 `;
-    const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
-    const paramTag = sourceFile.getChildren()[0].getChildren()[0].getChildren()[0].getChildren()[0];
-    const kids = paramTag.getChildren();
-    const seen: Set<ts.Node> = new Set();
-    ts.forEachChild(paramTag, n => {
-        assert.strictEqual(/*actual*/ false, seen.has(n), "Found a duplicate-added child");
-        seen.add(n);
+        const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+        const paramTag = sourceFile.getChildren()[0].getChildren()[0].getChildren()[0].getChildren()[0];
+        const kids = paramTag.getChildren();
+        const seen = new Set<ts.Node>();
+        ts.forEachChild(paramTag, n => {
+            assert.strictEqual(/*actual*/ false, seen.has(n), "Found a duplicate-added child");
+            seen.add(n);
+        });
+        assert.equal(5, kids.length);
     });
-    assert.equal(5, kids.length);
 });
 
 describe("unittests:: Public APIs:: getChild* methods on EndOfFileToken with JSDoc", () => {
-    const content = `
+    it("finds correct children", () => {
+        const content = `
 /** jsdoc comment attached to EndOfFileToken */
 `;
-    const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
-    const endOfFileToken = sourceFile.getChildren()[1];
-    assert.equal(endOfFileToken.getChildren().length, 1);
-    assert.equal(endOfFileToken.getChildCount(), 1);
-    assert.notEqual(endOfFileToken.getChildAt(0), /*expected*/ undefined);
+        const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+        const endOfFileToken = sourceFile.getChildren()[1];
+        assert.equal(endOfFileToken.getChildren().length, 1);
+        assert.equal(endOfFileToken.getChildCount(), 1);
+        assert.notEqual(endOfFileToken.getChildAt(0), /*expected*/ undefined);
+    });
 });

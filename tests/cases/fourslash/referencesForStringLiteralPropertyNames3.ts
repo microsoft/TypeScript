@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo2 {
-////    [|get "[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}42|]"() { return 0; }|]
-////    [|set [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}42|](n) { }|]
+////    /*1*/get "/*2*/42"() { return 0; }
+////    /*3*/set /*4*/42(n) { }
 ////}
 ////
 ////var y: Foo2;
-////y[[|42|]];
+////y[/*5*/42];
 
-verify.singleReferenceGroup('(property) Foo2["42"]: number', "42");
+verify.baselineFindAllReferences('1', '2', '3', '4', '5');

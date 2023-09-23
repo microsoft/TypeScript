@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts] ////
+
+=== propertyAndAccessorWithSameName.ts ===
 class C {
 >C : Symbol(C, Decl(propertyAndAccessorWithSameName.ts, 0, 0))
 

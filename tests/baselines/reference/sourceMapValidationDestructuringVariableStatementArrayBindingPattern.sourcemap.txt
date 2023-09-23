@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatementArrayBindingPattern.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern.js
+emittedFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern.js
 sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern.ts
 -------------------------------------------------------------------
 >>>var robotA = [1, "mower", "mowing"];

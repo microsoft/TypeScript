@@ -1,4 +1,6 @@
-=== tests/cases/compiler/subclassWithPolymorphicThisIsAssignable.ts ===
+//// [tests/cases/compiler/subclassWithPolymorphicThisIsAssignable.ts] ////
+
+=== subclassWithPolymorphicThisIsAssignable.ts ===
 /* taken from mongoose.Document */
 interface Document {
 >Document : Symbol(Document, Decl(subclassWithPolymorphicThisIsAssignable.ts, 0, 0))
