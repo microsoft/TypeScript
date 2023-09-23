@@ -226,6 +226,7 @@ import {
     isRequireVariableStatement,
     isRightSideOfQualifiedNameOrPropertyAccess,
     isRootedDiskPath,
+    isSatisfiesExpression,
     isSetAccessorDeclaration,
     isSourceFile,
     isSourceFileJS,
@@ -3355,7 +3356,7 @@ function indexInTextChange(change: string, name: string): number {
 export function needsParentheses(expression: Expression): boolean {
     return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken
         || isObjectLiteralExpression(expression)
-        || isAsExpression(expression) && isObjectLiteralExpression(expression.expression);
+        || (isAsExpression(expression) || isSatisfiesExpression(expression)) && isObjectLiteralExpression(expression.expression);
 }
 
 /** @internal */

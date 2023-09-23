@@ -553,6 +553,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         node16: ModuleKind.Node16,
         nodenext: ModuleKind.NodeNext,
     })),
+    affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
@@ -647,7 +648,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "allowJs",
         type: "boolean",
-        affectsModuleResolution: true,
+        allowJsFlag: true,
+        affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these_files,
@@ -657,6 +659,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         name: "checkJs",
         type: "boolean",
         affectsModuleResolution: true,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Enable_error_reporting_in_type_checked_JavaScript_files,
@@ -669,6 +673,10 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsModuleResolution: true,
+        // The checker emits an error when it sees JSX but this option is not set in compilerOptions.
+        // This is effectively a semantic error, so mark this option as affecting semantic diagnostics
+        // so we know to refresh errors when this option is changed.
+        affectsSemanticDiagnostics: true,
         paramType: Diagnostics.KIND,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Language_and_Environment,
@@ -987,6 +995,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             bundler: ModuleResolutionKind.Bundler,
         })),
         deprecatedKeys: new Set(["node"]),
+        affectsSourceFile: true,
         affectsModuleResolution: true,
         paramType: Diagnostics.STRATEGY,
         category: Diagnostics.Modules,
@@ -1533,6 +1542,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             legacy: ModuleDetectionKind.Legacy,
             force: ModuleDetectionKind.Force,
         })),
+        affectsSourceFile: true,
         affectsModuleResolution: true,
         description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
         category: Diagnostics.Language_and_Environment,
@@ -1564,7 +1574,7 @@ export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOptio
 export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsModuleResolution);
 
 /** @internal */
-export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
+export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSourceFile || !!option.affectsBindDiagnostics);
 
 /** @internal */
 export const optionsAffectingProgramStructure: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsProgramStructure);

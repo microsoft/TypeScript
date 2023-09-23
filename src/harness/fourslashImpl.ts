@@ -2763,6 +2763,7 @@ export class TestState {
                 this.languageService.getProgram()?.getCompilerOptions() || {},
             ),
             setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
+            jsDocParsingMode: this.languageServiceAdapterHost.jsDocParsingMode,
         };
         const referenceSourceFile = ts.createLanguageServiceSourceFile(
             this.activeFile.fileName,

@@ -3,15 +3,12 @@ File: /types/typedefs/index.d.ts
 
 
 declare var $: number
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 /// <reference types='typedefs'/>
 
 var x = $
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -35,15 +32,12 @@ File: /types/typedefs/index.d.ts
 
 
 declare var $: number
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 /// <reference types='typedefs'/>
 
 var x = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -67,8 +61,6 @@ File: /a.ts
 
 
 var x = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]
@@ -81,8 +73,6 @@ File: /types/typedefs/index.d.ts
 
 
 declare var $: number
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 /// <reference types="typedefs"/>
@@ -90,8 +80,7 @@ File: /a.ts
                 
 
 var x = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,

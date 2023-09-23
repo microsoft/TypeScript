@@ -3679,17 +3679,21 @@
         "category": "Error",
         "code": 2854
     },
-    "Import attributes are not allowed on statements that transpile to CommonJS 'require' calls.": {
+    "Class field '{0}' defined by the parent class is not accessible in the child class via super.": {
         "category": "Error",
         "code": 2855
     },
-    "Import attributes cannot be used with type-only imports or exports.": {
+    "Import attributes are not allowed on statements that transpile to CommonJS 'require' calls.": {
         "category": "Error",
         "code": 2856
     },
-    "Import attribute values must be string literal expressions.": {
+    "Import attributes cannot be used with type-only imports or exports.": {
         "category": "Error",
         "code": 2857
+    },
+    "Import attribute values must be string literal expressions.": {
+        "category": "Error",
+        "code": 2858
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -7588,7 +7592,7 @@
         "category": "Message",
         "code": 95153
     },
-    "Can only convert string concatenation": {
+    "Can only convert string concatenations and string literals": {
         "category": "Message",
         "code": 95154
     },

@@ -12,7 +12,7 @@ foo(1);
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -34,7 +34,7 @@ foo('');
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -56,7 +56,7 @@ foo(true);
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -78,7 +78,7 @@ foo(() => 1);
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -100,7 +100,7 @@ foo(function () { return 1 });
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -122,7 +122,7 @@ foo({});
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -144,7 +144,7 @@ foo({ a: 1 });
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -166,7 +166,7 @@ foo([]);
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -188,7 +188,7 @@ foo([1]);
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -210,7 +210,7 @@ foo(foo);
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -232,7 +232,7 @@ foo((1));
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -254,7 +254,7 @@ foo(foo(1));
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"
@@ -276,7 +276,7 @@ foo(foo(1));
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter2.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
     },
     {
       "text": ":"

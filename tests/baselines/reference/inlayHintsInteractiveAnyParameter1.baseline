@@ -12,7 +12,7 @@ foo(1);
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter1.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter1.ts"
     },
     {
       "text": ":"
@@ -34,7 +34,7 @@ foo('');
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter1.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter1.ts"
     },
     {
       "text": ":"
@@ -56,7 +56,7 @@ foo(true);
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter1.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter1.ts"
     },
     {
       "text": ":"
@@ -78,7 +78,7 @@ foo((1));
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter1.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter1.ts"
     },
     {
       "text": ":"
@@ -100,7 +100,7 @@ foo(foo(1));
         "start": 14,
         "length": 1
       },
-      "file": "/tests/cases/fourslash/inlayHintsInterativeAnyParameter1.ts"
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter1.ts"
     },
     {
       "text": ":"
