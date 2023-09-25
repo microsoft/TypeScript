@@ -1648,11 +1648,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         isContextSensitive,
         getTypeOfPropertyOfContextualType,
         getFullyQualifiedName,
-        getResolvedSignature: (node, candidatesOutArray, argumentCount) =>
-            getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
+        getResolvedSignature: (node, candidatesOutArray, argumentCount) => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
         getCandidateSignaturesForStringLiteralCompletions,
-        getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) =>
-            runWithoutResolvedSignatureCaching(node, () => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp)),
+        getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) => runWithoutResolvedSignatureCaching(node, () => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp)),
         getExpandedParameters,
         hasEffectiveRestParameter,
         containsArgumentsReference,
