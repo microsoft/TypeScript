@@ -636,23 +636,32 @@ function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: Decl
     return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
 }
 
+export type MemberKey = string & {
+    __memberKey: void
+}
 
-
-export function getMemberKey(name: ts.PropertyName): string | undefined {
+export function getMemberKey(name: string | Exclude<ts.PropertyName, ts.ComputedPropertyName> | ts.NoSubstitutionTemplateLiteral): MemberKey
+export function getMemberKey(name: string | ts.PropertyName | ts.NoSubstitutionTemplateLiteral | undefined): MemberKey | undefined
+export function getMemberKey(name: string | ts.PropertyName | ts.NoSubstitutionTemplateLiteral | undefined): string | undefined {
+    if(name === undefined) {
+        return undefined;
+    }
+    if(typeof name === "string") {
+        return ("I:" + name);
+    }
     if(isPrivateIdentifier(name)) {
         return ("P:" + name.escapedText);
     }
     if (isIdentifier(name)) {
         return ("I:" + name.escapedText);
     }
-    if (isStringLiteral(name)) {
+    if (isStringLiteralLike(name)) {
         return ("I:" + name.text);
     }
     if (isNumericLiteral(name)) {
         return ("I:" + (+name.text));
     }
     if (ts.isComputedPropertyName(name)) {
-        let fullId = "C:";
         let computedName = name.expression;
         
         if (isStringLiteral(computedName)) {
@@ -673,6 +682,7 @@ export function getMemberKey(name: ts.PropertyName): string | undefined {
                 return undefined;
             }
         }
+        let fullId = "C:";
         // We only support dotted identifiers as property keys
         while (true) {
             if (isIdentifier(computedName)) {

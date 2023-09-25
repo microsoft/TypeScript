@@ -447,6 +447,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
                         Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
                 }
 
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionType:
                 return symbolAccessibilityResult.errorModuleName ?
