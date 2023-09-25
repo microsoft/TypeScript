@@ -1,0 +1,14 @@
+declarationEmitBindingPatterns2.ts(7,16): error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '1 | 0'.
+
+
+==== declarationEmitBindingPatterns2.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55439
+    
+    function foo(): { y: 1 } {
+      return { y: 1 };
+    }
+      
+    export const { y = 0 } = foo();
+                   ~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '1 | 0'.
+    

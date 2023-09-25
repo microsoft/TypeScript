@@ -1,0 +1,22 @@
+declarationEmitPrivateReadonlyLiterals.ts(2,29): error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"a"'.
+declarationEmitPrivateReadonlyLiterals.ts(3,22): error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"b"'.
+declarationEmitPrivateReadonlyLiterals.ts(4,29): error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '42'.
+declarationEmitPrivateReadonlyLiterals.ts(5,22): error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '42'.
+
+
+==== declarationEmitPrivateReadonlyLiterals.ts (4 errors) ====
+    class Foo {
+        private static readonly A = "a";
+                                ~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"a"'.
+        private readonly B = "b";
+                         ~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"b"'.
+        private static readonly C = 42;
+                                ~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '42'.
+        private readonly D = 42;
+                         ~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '42'.
+    }
+    

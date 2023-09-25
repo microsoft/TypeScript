@@ -53,3 +53,53 @@ export declare const SpotifyAgeGroupEnum: {
     "60-150": (typeof AgeGroups)["60-150"];
 };
 export {};
+
+
+//// [DtsFileErrors]
+
+
+declarationEmitSpreadStringlyKeyedEnum.d.ts(12,5): error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["0-17"]'.
+declarationEmitSpreadStringlyKeyedEnum.d.ts(13,5): error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["18-22"]'.
+declarationEmitSpreadStringlyKeyedEnum.d.ts(14,5): error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["23-27"]'.
+declarationEmitSpreadStringlyKeyedEnum.d.ts(15,5): error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["28-34"]'.
+declarationEmitSpreadStringlyKeyedEnum.d.ts(16,5): error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["35-44"]'.
+declarationEmitSpreadStringlyKeyedEnum.d.ts(17,5): error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["45-59"]'.
+declarationEmitSpreadStringlyKeyedEnum.d.ts(18,5): error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["60-150"]'.
+
+
+==== declarationEmitSpreadStringlyKeyedEnum.d.ts (7 errors) ====
+    declare enum AgeGroups {
+        "0-17" = 0,
+        "18-22" = 1,
+        "23-27" = 2,
+        "28-34" = 3,
+        "35-44" = 4,
+        "45-59" = 5,
+        "60-150" = 6
+    }
+    export declare const SpotifyAgeGroupEnum: {
+        [x: number]: string;
+        "0-17": (typeof AgeGroups)["0-17"];
+        ~~~~~~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["0-17"]'.
+        "18-22": (typeof AgeGroups)["18-22"];
+        ~~~~~~~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["18-22"]'.
+        "23-27": (typeof AgeGroups)["23-27"];
+        ~~~~~~~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["23-27"]'.
+        "28-34": (typeof AgeGroups)["28-34"];
+        ~~~~~~~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["28-34"]'.
+        "35-44": (typeof AgeGroups)["35-44"];
+        ~~~~~~~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["35-44"]'.
+        "45-59": (typeof AgeGroups)["45-59"];
+        ~~~~~~~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["45-59"]'.
+        "60-150": (typeof AgeGroups)["60-150"];
+        ~~~~~~~~
+!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'AgeGroups' or '(typeof AgeGroups)["60-150"]'.
+    };
+    export {};
+    
