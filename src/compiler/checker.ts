@@ -20775,7 +20775,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             tracing?.instant(tracing.Phase.CheckTypes, "checkTypeRelatedTo_DepthLimit", { sourceId: source.id, targetId: target.id, depth: sourceDepth, targetDepth });
             const message = relationCount <= 0 ?
                 Diagnostics.Excessive_complexity_comparing_types_0_and_1 :
-                Diagnostics.Excessive_stack_depth_comparing_types_0_and_1
+                Diagnostics.Excessive_stack_depth_comparing_types_0_and_1;
             const diag = error(errorNode || currentNode, message, typeToString(source), typeToString(target));
             if (errorOutputContainer) {
                 (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
