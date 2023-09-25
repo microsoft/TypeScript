@@ -30,6 +30,7 @@ import {
     DirectoryWatcherCallback,
     DocumentPositionMapper,
     DocumentRegistry,
+    ensureTrailingDirectorySeparator,
     enumerateInsertsAndDeletes,
     every,
     explainFiles,
@@ -2520,8 +2521,8 @@ export class AutoImportProviderProject extends Project {
                 const isSymlink = realPath && realPath !== hostProject.toPath(packageJson.packageDirectory);
                 if (isSymlink) {
                     symlinkCache.setSymlinkedDirectory(packageJson.packageDirectory, {
-                        real: real!,
-                        realPath,
+                        real: ensureTrailingDirectorySeparator(real!),
+                        realPath: ensureTrailingDirectorySeparator(realPath),
                     });
                 }
 
