@@ -17915,7 +17915,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isPatternLiteralType(type: Type) {
         return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType) ||
-            !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type);
+            !!(type.flags & TypeFlags.StringMapping) && everyContainedType((type as StringMappingType).type, isPatternLiteralPlaceholderType);
     }
 
     function isGenericType(type: Type): boolean {

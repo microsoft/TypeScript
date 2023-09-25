@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/types/literal/stringMappingDeferralInConditionalTypes.ts] ////
+
+=== stringMappingDeferralInConditionalTypes.ts ===
+// https://github.com/microsoft/TypeScript/issues/55847
+
+type A<S> = Lowercase<S & string> extends "foo" ? 1 : 0;
+>A : A<S>
+
+let x1: A<"foo"> = 1; // ok
+>x1 : 1
+>1 : 1
+
+type B<S> = Lowercase<S & string> extends `f${string}` ? 1 : 0;
+>B : B<S>
+
+let x2: B<"foo"> = 1; // ok
+>x2 : 1
+>1 : 1
+

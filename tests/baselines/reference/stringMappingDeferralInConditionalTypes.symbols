@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/types/literal/stringMappingDeferralInConditionalTypes.ts] ////
+
+=== stringMappingDeferralInConditionalTypes.ts ===
+// https://github.com/microsoft/TypeScript/issues/55847
+
+type A<S> = Lowercase<S & string> extends "foo" ? 1 : 0;
+>A : Symbol(A, Decl(stringMappingDeferralInConditionalTypes.ts, 0, 0))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 2, 7))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 2, 7))
+
+let x1: A<"foo"> = 1; // ok
+>x1 : Symbol(x1, Decl(stringMappingDeferralInConditionalTypes.ts, 3, 3))
+>A : Symbol(A, Decl(stringMappingDeferralInConditionalTypes.ts, 0, 0))
+
+type B<S> = Lowercase<S & string> extends `f${string}` ? 1 : 0;
+>B : Symbol(B, Decl(stringMappingDeferralInConditionalTypes.ts, 3, 21))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 5, 7))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 5, 7))
+
+let x2: B<"foo"> = 1; // ok
+>x2 : Symbol(x2, Decl(stringMappingDeferralInConditionalTypes.ts, 6, 3))
+>B : Symbol(B, Decl(stringMappingDeferralInConditionalTypes.ts, 3, 21))
+
