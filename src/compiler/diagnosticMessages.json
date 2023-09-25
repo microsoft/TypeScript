@@ -3663,9 +3663,13 @@
         "category": "Error",
         "code": 2854
     },
-    "Excessive complexity comparing types '{0}' and '{1}'.": {
+    "Class field '{0}' defined by the parent class is not accessible in the child class via super.": {
         "category": "Error",
         "code": 2855
+    },
+    "Excessive complexity comparing types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2856
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

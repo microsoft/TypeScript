@@ -477,6 +477,7 @@ import {
     isClassDeclaration,
     isClassElement,
     isClassExpression,
+    isClassFieldAndNotAutoAccessor,
     isClassLike,
     isClassStaticBlockDeclaration,
     isCommaSequence,
@@ -4959,7 +4960,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
         const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
-        const resolvedModule = host.resolvedModules?.get(currentSourceFile.path)?.get(moduleReference, mode)?.resolvedModule;
+        const resolvedModule = host.getResolvedModule(currentSourceFile, moduleReference, mode)?.resolvedModule;
         const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule, currentSourceFile);
         const sourceFile = resolvedModule
             && (!resolutionDiagnostic || resolutionDiagnostic === Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set)
@@ -31843,6 +31844,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return false;
             }
+            // A class field cannot be accessed via super.* from a derived class.
+            // This is true for both [[Set]] (old) and [[Define]] (ES spec) semantics.
+            if (!(flags & ModifierFlags.Static) && prop.declarations?.some(isClassFieldAndNotAutoAccessor)) {
+                if (errorNode) {
+                    error(errorNode, Diagnostics.Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super, symbolToString(prop));
+                }
+                return false;
+            }
         }
 
         // Referencing abstract properties within their own constructors is not allowed
@@ -32329,9 +32338,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (file) {
             if (compilerOptions.checkJs === undefined && file.checkJsDirective === undefined && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
                 const declarationFile = forEach(suggestion?.declarations, getSourceFileOfNode);
+                const suggestionHasNoExtendsOrDecorators = !suggestion?.valueDeclaration
+                    || !isClassLike(suggestion.valueDeclaration)
+                    || suggestion.valueDeclaration.heritageClauses?.length
+                    || classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, suggestion.valueDeclaration);
                 return !(file !== declarationFile && !!declarationFile && isGlobalSourceFile(declarationFile))
-                    && !(excludeClasses && suggestion && suggestion.flags & SymbolFlags.Class)
-                    && !(!!node && excludeClasses && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword);
+                    && !(excludeClasses && suggestion && suggestion.flags & SymbolFlags.Class && suggestionHasNoExtendsOrDecorators)
+                    && !(!!node && excludeClasses && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword && suggestionHasNoExtendsOrDecorators);
             }
         }
         return false;

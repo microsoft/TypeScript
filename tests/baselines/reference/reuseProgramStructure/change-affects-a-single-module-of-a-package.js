@@ -3,14 +3,12 @@ File: /node_modules/b/internal.d.ts
 
 
 export const b = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
 export * from './internal';
 
-resolvedModules: 
+resolvedModules:
 ./internal: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/internal.d.ts",
@@ -31,13 +29,12 @@ resolvedModules:
     "/node_modules/b/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
 import {b} from 'b'
 var a = b;
-resolvedModules: 
+resolvedModules:
 b: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
@@ -61,7 +58,6 @@ b: {
     "/node_modules/b/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]
@@ -74,14 +70,12 @@ File: /node_modules/b/internal.d.ts
 
 
 export const b = 2;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
 export * from './internal';
 
-resolvedModules: 
+resolvedModules:
 ./internal: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/internal.d.ts",
@@ -102,13 +96,12 @@ resolvedModules:
     "/node_modules/b/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
 import {b} from 'b'
 var a = b;
-resolvedModules: 
+resolvedModules:
 b: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
@@ -132,7 +125,6 @@ b: {
     "/node_modules/b/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]

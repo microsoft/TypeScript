@@ -3,15 +3,11 @@ File: c.ts
 
 
 var z = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts
 /// <reference path='c.ts'/>
 
 var y = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a.ts
 
@@ -21,8 +17,7 @@ File: a.ts
 
 
 var x = 1
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
     "node_modules/@types/typerefs/package.json",
@@ -36,6 +31,19 @@ typerefs: {
   ]
 }
 
+automaticTypeDirectiveResolutions:
+a: {
+  "failedLookupLocations": [
+    "node_modules/@types/a/package.json",
+    "node_modules/@types/a/index.d.ts",
+    "node_modules/a/package.json",
+    "node_modules/a.d.ts",
+    "node_modules/a/index.d.ts",
+    "node_modules/@types/a/package.json",
+    "node_modules/@types/a.d.ts",
+    "node_modules/@types/a/index.d.ts"
+  ]
+}
 
 MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
 
@@ -49,15 +57,11 @@ File: c.ts
 
 
 var z = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts
 /// <reference path='c.ts'/>
 
 var y = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a.ts
 
@@ -67,8 +71,7 @@ File: a.ts
 
 
 var x = 1
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
     "node_modules/@types/typerefs/package.json",
@@ -82,6 +85,19 @@ typerefs: {
   ]
 }
 
+automaticTypeDirectiveResolutions:
+a: {
+  "failedLookupLocations": [
+    "node_modules/@types/a/package.json",
+    "node_modules/@types/a/index.d.ts",
+    "node_modules/a/package.json",
+    "node_modules/a.d.ts",
+    "node_modules/a/index.d.ts",
+    "node_modules/@types/a/package.json",
+    "node_modules/@types/a.d.ts",
+    "node_modules/@types/a/index.d.ts"
+  ]
+}
 
 MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
 

@@ -766,7 +766,7 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
 
 /** @internal */
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
-    const node10Result = host.resolvedModules?.get(sourceFile.path)?.get(moduleReference, mode)?.node10Result;
+    const node10Result = host.getResolvedModule(sourceFile, moduleReference, mode)?.node10Result;
     const result = node10Result
         ? chainDiagnosticMessages(
             /*details*/ undefined,
@@ -828,7 +828,7 @@ export function hasChangesInResolutions<K, V>(
     names: readonly K[],
     newSourceFile: SourceFile,
     newResolutions: readonly V[],
-    oldResolutions: ModeAwareCache<V> | undefined,
+    getOldResolution: (name: string, mode: ResolutionMode) => V | undefined,
     comparer: (oldResolution: V, newResolution: V) => boolean,
     nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
 ): boolean {
@@ -839,7 +839,7 @@ export function hasChangesInResolutions<K, V>(
         const entry = names[i];
         const name = nameAndModeGetter.getName(entry);
         const mode = nameAndModeGetter.getMode(entry, newSourceFile);
-        const oldResolution = oldResolutions && oldResolutions.get(name, mode);
+        const oldResolution = getOldResolution(name, mode);
         const changed = oldResolution
             ? !newResolution || !comparer(oldResolution, newResolution)
             : newResolution;
@@ -8825,8 +8825,12 @@ export interface SymlinkCache {
      * `hasProcessedResolutions` returns false (once per cache instance).
      */
     setSymlinksFromResolutions(
-        resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined,
-        resolvedTypeReferenceDirectiveNames: Map<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined,
+        forEachResolvedModule: (
+            callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        ) => void,
+        forEachResolvedTypeReferenceDirective: (
+            callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        ) => void,
         typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>,
     ): void;
     /**
@@ -8860,11 +8864,11 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
                 (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
             }
         },
-        setSymlinksFromResolutions(resolvedModules, resolvedTypeReferenceDirectiveNames, typeReferenceDirectives) {
+        setSymlinksFromResolutions(forEachResolvedModule, forEachResolvedTypeReferenceDirective, typeReferenceDirectives) {
             Debug.assert(!hasProcessedResolutions);
             hasProcessedResolutions = true;
-            resolvedModules?.forEach(cache => cache.forEach(resolution => processResolution(this, resolution.resolvedModule)));
-            resolvedTypeReferenceDirectiveNames?.forEach(cache => cache.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective)));
+            forEachResolvedModule(resolution => processResolution(this, resolution.resolvedModule));
+            forEachResolvedTypeReferenceDirective(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
             typeReferenceDirectives.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,

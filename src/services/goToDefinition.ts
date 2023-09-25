@@ -82,6 +82,7 @@ import {
     NodeFlags,
     ObjectFlags,
     Program,
+    ResolvedModuleWithFailedLookupLocations,
     resolvePath,
     ScriptElementKind,
     SignatureDeclaration,
@@ -179,7 +180,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     if (!symbol && isModuleSpecifierLike(fallbackNode)) {
         // We couldn't resolve the module specifier as an external module, but it could
         // be that module resolution succeeded but the target was not a module.
-        const ref = program.resolvedModules?.get(sourceFile.path)?.get(fallbackNode.text, getModeForUsageLocation(sourceFile, fallbackNode))?.resolvedModule;
+        const ref = program.getResolvedModule(sourceFile, fallbackNode.text, getModeForUsageLocation(sourceFile, fallbackNode))?.resolvedModule;
         if (ref) {
             return [{
                 name: fallbackNode.text,
@@ -332,11 +333,11 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
         return file && { reference: libReferenceDirective, fileName: file.fileName, file, unverified: false };
     }
 
-    const resolvedModules = program.resolvedModules?.get(sourceFile.path);
-    if (resolvedModules?.size()) {
+    if (sourceFile.imports.length || sourceFile.moduleAugmentations.length) {
         const node = getTouchingToken(sourceFile, position);
-        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && resolvedModules.has(node.text, getModeForUsageLocation(sourceFile, node))) {
-            const verifiedFileName = resolvedModules.get(node.text, getModeForUsageLocation(sourceFile, node))?.resolvedModule?.resolvedFileName;
+        let resolution: ResolvedModuleWithFailedLookupLocations | undefined;
+        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && (resolution = program.getResolvedModule(sourceFile, node.text, getModeForUsageLocation(sourceFile, node)))) {
+            const verifiedFileName = resolution.resolvedModule?.resolvedFileName;
             const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
             return {
                 file: program.getSourceFile(fileName),

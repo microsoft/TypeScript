@@ -4651,6 +4651,20 @@ export interface Program extends ScriptReferenceHost {
     resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
     /** @internal */
     resolvedTypeReferenceDirectiveNames: Map<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
+    /** @internal */
+    getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+    /** @internal */
+    getResolvedTypeReferenceDirective(f: SourceFile, typeDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+    /** @internal */
+    forEachResolvedModule(
+        callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file?: SourceFile,
+    ): void;
+    /** @internal */
+    forEachResolvedTypeReferenceDirective(
+        callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file?: SourceFile,
+    ): void;
 
     /**
      * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -4868,7 +4882,7 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 
-    resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
+    getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
 
     readonly redirectTargetsMap: RedirectTargetsMap;
 
@@ -6680,7 +6694,6 @@ export interface Signature {
     declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
     typeParameters?: readonly TypeParameter[];   // Type parameters (undefined if non-generic)
     parameters: readonly Symbol[];               // Parameters
-    /** @internal */
     thisParameter?: Symbol;             // symbol of this-type parameter
     /** @internal */
     // See comment in `instantiateSignature` for why these are set lazily.
@@ -9463,6 +9476,7 @@ export interface PrinterOptions {
     /** @internal */ sourceMap?: boolean;
     /** @internal */ inlineSourceMap?: boolean;
     /** @internal */ inlineSources?: boolean;
+    /** @internal*/ omitBraceSourceMapPositions?: boolean;
     /** @internal */ extendedDiagnostics?: boolean;
     /** @internal */ onlyPrintJsDocStyle?: boolean;
     /** @internal */ neverAsciiEscape?: boolean;
