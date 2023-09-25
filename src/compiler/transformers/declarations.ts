@@ -25,6 +25,7 @@ import {
     ConstructSignatureDeclaration,
     contains,
     createDiagnosticForNode,
+    createDiagnosticForRange,
     createEmptyExports,
     createGetSymbolAccessibilityDiagnosticForNode,
     createGetSymbolAccessibilityDiagnosticForNodeName,
@@ -236,7 +237,9 @@ import {
     VisitResult,
 } from "../_namespaces/ts";
 import * as moduleSpecifiers from "../_namespaces/ts.moduleSpecifiers";
-import { createLocalInferenceResolver } from "./declarations/localInferenceResolver";
+import {
+    createLocalInferenceResolver,
+} from "./declarations/localInferenceResolver";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
@@ -352,7 +355,7 @@ export function transformDeclarations(context: TransformationContext) {
     function reportIsolatedDeclarationError(node: Node) {
         const message = createDiagnosticForNode(
             node,
-            Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit
+            Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit,
         );
         context.addDiagnostic(message);
     }
@@ -377,20 +380,38 @@ export function transformDeclarations(context: TransformationContext) {
         refs.set(getOriginalNodeId(container), container);
     }
 
+    function forbidReferenceDirectives(file: SourceFile) {
+        if (!isolatedDeclarations) {
+            return;
+        }
+        file.libReferenceDirectives.forEach(ref => {
+            context.addDiagnostic(createDiagnosticForRange(
+                file,
+                ref,
+                Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+            ));
+        });
+        file.typeReferenceDirectives.forEach(ref => {
+            context.addDiagnostic(createDiagnosticForRange(
+                file,
+                ref,
+                Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+            ));
+        });
+    }
+
     function handleTypeReferenceError(typeReferenceDirective: [specifier: string, mode: ResolutionMode], requestingNode: Node) {
-        if(!isolatedDeclarations) {
+        if (!isolatedDeclarations) {
             return;
         }
         const existingDirective = existingTypeReferencesSources?.some(s => s.typeReferenceDirectives.some(d => d.fileName === typeReferenceDirective[0]));
-        if(!existingDirective) {
-            const message = createDiagnosticForNode(
+        if (!existingDirective) {
+            context.addDiagnostic(createDiagnosticForNode(
                 requestingNode,
                 Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit,
-                typeReferenceDirective[0]
-            );
-            context.addDiagnostic(message);
+                typeReferenceDirective[0],
+            ));
         }
-        
     }
 
     function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -569,6 +590,7 @@ export function transformDeclarations(context: TransformationContext) {
                         return newFile;
                     }
                     needsDeclare = true;
+                    forbidReferenceDirectives(sourceFile);
                     const updated = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
                     return factory.updateSourceFile(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                 }),
@@ -630,15 +652,16 @@ export function transformDeclarations(context: TransformationContext) {
         }
         const typeReferences = getFileReferencesForUsedTypeReferences();
         const libReferences = getLibReferences();
+        forbidReferenceDirectives(node);
 
         const updated = factory.updateSourceFile(
             node,
             combinedStatements,
             /*isDeclarationFile*/ true,
             references,
-            isolatedDeclarations? node.typeReferenceDirectives : typeReferences,
+            isolatedDeclarations ? [] : typeReferences,
             node.hasNoDefaultLib,
-            libReferences
+            isolatedDeclarations ? [] : libReferences,
         );
         updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
         return updated;
@@ -666,8 +689,8 @@ export function transformDeclarations(context: TransformationContext) {
                     }
                 }
             }
-            if(requestingNode) {
-                handleTypeReferenceError([typeName, mode], requestingNode)
+            if (requestingNode) {
+                handleTypeReferenceError([typeName, mode], requestingNode);
             }
             return { fileName: typeName, pos: -1, end: -1, ...(mode ? { resolutionMode: mode } : undefined) };
         }
@@ -794,7 +817,7 @@ export function transformDeclarations(context: TransformationContext) {
         const newParam = factory.updateParameterDeclaration(
             p,
             maskModifiers(factory, p, modifierMask),
-            p.dotDotDotToken,   
+            p.dotDotDotToken,
             filterBindingPatternInitializersAndRenamings(p.name),
             resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
             ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
@@ -828,7 +851,6 @@ export function transformDeclarations(context: TransformationContext) {
         }
         if (isolatedDeclarations && localInferenceResolver) {
             return localInferenceResolver.fromInitializer(node, type, currentSourceFile);
-            
         }
         const shouldUseResolverType = node.kind === SyntaxKind.Parameter &&
             (resolver.isRequiredInitializedParameter(node) ||
@@ -1091,7 +1113,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
         // Augmentation of export depends on import
         if (resolver.isImportRequiredByAugmentation(decl)) {
-            if(isolatedDeclarations) {
+            if (isolatedDeclarations) {
                 // TODO: Should report better error here. Suggest we add the syntax import type '....'
                 // Also add a test for this.
                 reportIsolatedDeclarationError(decl);
@@ -1177,10 +1199,12 @@ export function transformDeclarations(context: TransformationContext) {
         if (isDeclaration(input)) {
             if (isDeclarationAndNotVisible(input)) return;
             if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
-                if (isolatedDeclarations && hasIdentifierComputedName(input) &&
+                if (
+                    isolatedDeclarations && hasIdentifierComputedName(input) &&
                     // When --noImplicitAny is off, it's automatically 'any' type so we shouldn't complain.
                     // when it's on, it should be an error on the noImplicitAny side, so we also shouldn't complain.
-                    !isInterfaceDeclaration(input.parent) && !isTypeLiteralNode(input.parent)) {
+                    !isInterfaceDeclaration(input.parent) && !isTypeLiteralNode(input.parent)
+                ) {
                     reportIsolatedDeclarationError(input);
                 }
                 else {
@@ -1279,9 +1303,8 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isPrivateIdentifier(input.name)) {
                         return cleanup(/*returnValue*/ undefined);
                     }
-                    const accessorType =
-                        isolatedDeclarations ?
-                        input.type:
+                    const accessorType = isolatedDeclarations ?
+                        input.type :
                         getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
                     return cleanup(factory.updateGetAccessorDeclaration(
                         input,
@@ -1602,7 +1625,7 @@ export function transformDeclarations(context: TransformationContext) {
                     /*body*/ undefined,
                 ));
                 if (clean && resolver.isExpandoFunction(input) && shouldEmitFunctionProperties(input)) {
-                    if(isolatedDeclarations) {
+                    if (isolatedDeclarations) {
                         context.addDiagnostic(createDiagnosticForNode(
                             input,
                             Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
@@ -1628,7 +1651,7 @@ export function transformDeclarations(context: TransformationContext) {
                         let type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
                         getSymbolAccessibilityDiagnostic = oldDiag;
 
-                        if(isolatedDeclarations) {
+                        if (isolatedDeclarations) {
                             reportIsolatedDeclarationError(p.valueDeclaration);
                             type = factory.createTypeReferenceNode("invalid");
                         }
@@ -1821,13 +1844,14 @@ export function transformDeclarations(context: TransformationContext) {
 
                     // Isolated declarations does not allow inferred type in the extends clause
                     if (isolatedDeclarations) {
-                        if(
+                        if (
                             // Checking if it's a separate compiler error so we don't make it an isolatedDeclarations error.
                             // This is only an approximation as we need type information to figure out if something
                             // is a constructor type or not.
                             !isLiteralExpression(extendsClause.expression) &&
                             extendsClause.expression.kind !== SyntaxKind.FalseKeyword &&
-                            extendsClause.expression.kind !== SyntaxKind.TrueKeyword) {
+                            extendsClause.expression.kind !== SyntaxKind.TrueKeyword
+                        ) {
                             reportIsolatedDeclarationError(extendsClause);
                         }
                         return cleanup(factory.updateClassDeclaration(
@@ -1835,14 +1859,13 @@ export function transformDeclarations(context: TransformationContext) {
                             modifiers,
                             input.name,
                             typeParameters,
-                            factory.createNodeArray([factory.createHeritageClause(SyntaxKind.ExtendsKeyword,
-                                [
-                                    factory.createExpressionWithTypeArguments(
-                                        factory.createIdentifier("invalid"),
-                                        /*typeArguments*/ undefined,
-                                    )
-                                ])]),
-                            members
+                            factory.createNodeArray([factory.createHeritageClause(SyntaxKind.ExtendsKeyword, [
+                                factory.createExpressionWithTypeArguments(
+                                    factory.createIdentifier("invalid"),
+                                    /*typeArguments*/ undefined,
+                                ),
+                            ])]),
+                            members,
                         ));
                     }
                     const oldId = input.name ? unescapeLeadingUnderscores(input.name.escapedText) : "default";
@@ -1894,14 +1917,16 @@ export function transformDeclarations(context: TransformationContext) {
             case SyntaxKind.EnumDeclaration: {
                 return cleanup(factory.updateEnumDeclaration(
                     input,
-                    factory.createNodeArray(ensureModifiers(input)), 
+                    factory.createNodeArray(ensureModifiers(input)),
                     input.name,
                     factory.createNodeArray(mapDefined(input.members, m => {
                         if (shouldStripInternal(m)) return;
                         if (isolatedDeclarations) {
-                            if (m.initializer && !resolver.isLiteralConstDeclaration(m) &&
+                            if (
+                                m.initializer && !resolver.isLiteralConstDeclaration(m) &&
                                 // This will be its own compiler error instead, so don't report.
-                                !isComputedPropertyName(m.name)) {
+                                !isComputedPropertyName(m.name)
+                            ) {
                                 reportIsolatedDeclarationError(m);
                             }
                         }

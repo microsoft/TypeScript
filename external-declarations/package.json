@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node ../built/local/tsc.js -p ./src",
     "watch": "node ../built/local/tsc.js -w -p ./src",
-    "run-tests-parallel": "node ./build/test-runner/parallel-run.js --rootPaths=../tests/cases --libPath=../tests/lib --type=all --shardCount=8",
+    "run-tests-parallel": "node ./build/test-runner/parallel-run.js --rootPaths=../tests/cases --libPath=../tests/lib --type=all --shardCount=8 --forceIsolatedDeclarations",
     "run-test": "node ./build/test-runner/test-runner-main.js --type=all --rootPaths=c:/dev/TSC/TypeScript/tests/cases ",
     "transform-tests-parallel": "node ./build/code-mod/parallel-run.js --rootPaths=../tests/cases --shardCount=8",
     "transform-test": "node ./build/code-mod/test-updater.js --rootPaths=../tests/cases",

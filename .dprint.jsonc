@@ -49,6 +49,7 @@
         "**/*.generated.*",
         "scripts/*.d.*",
         "external-declarations/tsc-tests/**",
+        "external-declarations/tests/**",
         "external-declarations/fixer-test/**"
     ],
     "plugins": [

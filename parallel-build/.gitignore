@@ -1,0 +1,12 @@
+/build
+/node_modules
+/src/*.tsbuildinfo
+/tests/actual
+/tsc-tests
+/tasks
+/tasks-stats*
+/tasks-times
+clean.json
+results
+*.txt
+*.json
