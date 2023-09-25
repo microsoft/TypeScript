@@ -200,6 +200,32 @@ const enum CallHierarchyItemDirection {
     Outgoing,
 }
 
+interface RealizedDiagnostic {
+    message: string;
+    start: number;
+    length: number;
+    category: string;
+    code: number;
+    reportsUnnecessary?: {};
+    reportsDeprecated?: {};
+}
+
+function realizeDiagnostics(diagnostics: readonly ts.Diagnostic[], newLine: string): RealizedDiagnostic[] {
+    return diagnostics.map(d => realizeDiagnostic(d, newLine));
+}
+
+function realizeDiagnostic(diagnostic: ts.Diagnostic, newLine: string): RealizedDiagnostic {
+    return {
+        message: ts.flattenDiagnosticMessageText(diagnostic.messageText, newLine),
+        start: diagnostic.start!, // TODO: GH#18217
+        length: diagnostic.length!, // TODO: GH#18217
+        category: ts.diagnosticCategoryName(diagnostic),
+        code: diagnostic.code,
+        reportsUnnecessary: diagnostic.reportsUnnecessary,
+        reportsDeprecated: diagnostic.reportsDeprecated,
+    };
+}
+
 export class TestState {
     // Language service instance
     private languageServiceAdapterHost: Harness.LanguageService.LanguageServiceAdapterHost;
@@ -1758,8 +1784,8 @@ export class TestState {
 
     private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {
         assert.deepEqual(
-            ts.realizeDiagnostics(diagnostics, "\n"),
-            expected.map((e): ts.RealizedDiagnostic => {
+            realizeDiagnostics(diagnostics, "\n"),
+            expected.map((e): RealizedDiagnostic => {
                 const range = e.range || this.getRangesInFile()[0];
                 if (!range) {
                     this.raiseError("Must provide a range for each expected diagnostic, or have one range in the fourslash source.");
