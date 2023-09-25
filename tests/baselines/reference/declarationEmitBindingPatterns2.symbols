@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/declarationEmitBindingPatterns2.ts] ////
+
+=== declarationEmitBindingPatterns2.ts ===
+// https://github.com/microsoft/TypeScript/issues/55439
+
+function foo(): { y: 1 } {
+>foo : Symbol(foo, Decl(declarationEmitBindingPatterns2.ts, 0, 0))
+>y : Symbol(y, Decl(declarationEmitBindingPatterns2.ts, 2, 17))
+
+  return { y: 1 };
+>y : Symbol(y, Decl(declarationEmitBindingPatterns2.ts, 3, 10))
+}
+  
+export const { y = 0 } = foo();
+>y : Symbol(y, Decl(declarationEmitBindingPatterns2.ts, 6, 14))
+>foo : Symbol(foo, Decl(declarationEmitBindingPatterns2.ts, 0, 0))
+
