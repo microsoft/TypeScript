@@ -78,12 +78,6 @@ export declare class B {
 }
 //// [f3.d.ts]
 declare namespace N {
-    interface Ifc {
-        a: any;
-    }
-    interface Cls {
-        a: any;
-    }
 }
 declare module "./f1" {
     import { B } from "./f2";

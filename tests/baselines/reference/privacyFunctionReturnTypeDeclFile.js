@@ -2400,64 +2400,6 @@ export declare namespace publicModule {
     export {};
 }
 declare namespace privateModule {
-    class privateClass {
-    }
-    export class publicClass {
-    }
-    export interface publicInterfaceWithPrivateParmeterTypes {
-        new (): privateClass;
-        (): privateClass;
-        [x: number]: privateClass;
-        myMethod(): privateClass;
-    }
-    export interface publicInterfaceWithPublicParmeterTypes {
-        new (): publicClass;
-        (): publicClass;
-        [x: number]: publicClass;
-        myMethod(): publicClass;
-    }
-    export class publicClassWithWithPrivateParmeterTypes {
-        static myPublicStaticMethod(): privateClass;
-        private static myPrivateStaticMethod;
-        myPublicMethod(): privateClass;
-        private myPrivateMethod;
-        static myPublicStaticMethod1(): privateClass;
-        private static myPrivateStaticMethod1;
-        myPublicMethod1(): privateClass;
-        private myPrivateMethod1;
-    }
-    export class publicClassWithWithPublicParmeterTypes {
-        static myPublicStaticMethod(): publicClass;
-        private static myPrivateStaticMethod;
-        myPublicMethod(): publicClass;
-        private myPrivateMethod;
-        static myPublicStaticMethod1(): publicClass;
-        private static myPrivateStaticMethod1;
-        myPublicMethod1(): publicClass;
-        private myPrivateMethod1;
-    }
-    export function publicFunctionWithPrivateParmeterTypes(): privateClass;
-    export function publicFunctionWithPublicParmeterTypes(): publicClass;
-    export function publicFunctionWithPrivateParmeterTypes1(): privateClass;
-    export function publicFunctionWithPublicParmeterTypes1(): publicClass;
-    export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
-    export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
-    export interface publicInterfaceWithPrivateModuleParameterTypes {
-        new (): privateModule.publicClass;
-        (): privateModule.publicClass;
-        [x: number]: privateModule.publicClass;
-        myMethod(): privateModule.publicClass;
-    }
-    export class publicClassWithPrivateModuleParameterTypes {
-        static myPublicStaticMethod(): privateModule.publicClass;
-        myPublicMethod(): privateModule.publicClass;
-        static myPublicStaticMethod1(): publicClass;
-        myPublicMethod1(): publicClass;
-    }
-    export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
-    export function publicFunctionWithPrivateModuleParameterTypes1(): publicClass;
-    export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
-    export {};
 }
 export {};
 //// [privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts]
@@ -2488,64 +2430,6 @@ declare namespace publicModuleInGlobal {
     export class publicClass {
     }
     namespace privateModule {
-        class privateClass {
-        }
-        export class publicClass {
-        }
-        export interface publicInterfaceWithPrivateParmeterTypes {
-            new (): privateClass;
-            (): privateClass;
-            [x: number]: privateClass;
-            myMethod(): privateClass;
-        }
-        export interface publicInterfaceWithPublicParmeterTypes {
-            new (): publicClass;
-            (): publicClass;
-            [x: number]: publicClass;
-            myMethod(): publicClass;
-        }
-        export class publicClassWithWithPrivateParmeterTypes {
-            static myPublicStaticMethod(): privateClass;
-            private static myPrivateStaticMethod;
-            myPublicMethod(): privateClass;
-            private myPrivateMethod;
-            static myPublicStaticMethod1(): privateClass;
-            private static myPrivateStaticMethod1;
-            myPublicMethod1(): privateClass;
-            private myPrivateMethod1;
-        }
-        export class publicClassWithWithPublicParmeterTypes {
-            static myPublicStaticMethod(): publicClass;
-            private static myPrivateStaticMethod;
-            myPublicMethod(): publicClass;
-            private myPrivateMethod;
-            static myPublicStaticMethod1(): publicClass;
-            private static myPrivateStaticMethod1;
-            myPublicMethod1(): publicClass;
-            private myPrivateMethod1;
-        }
-        export function publicFunctionWithPrivateParmeterTypes(): privateClass;
-        export function publicFunctionWithPublicParmeterTypes(): publicClass;
-        export function publicFunctionWithPrivateParmeterTypes1(): privateClass;
-        export function publicFunctionWithPublicParmeterTypes1(): publicClass;
-        export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
-        export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
-        export interface publicInterfaceWithPrivateModuleParameterTypes {
-            new (): privateModule.publicClass;
-            (): privateModule.publicClass;
-            [x: number]: privateModule.publicClass;
-            myMethod(): privateModule.publicClass;
-        }
-        export class publicClassWithPrivateModuleParameterTypes {
-            static myPublicStaticMethod(): privateModule.publicClass;
-            myPublicMethod(): privateModule.publicClass;
-            static myPublicStaticMethod1(): publicClass;
-            myPublicMethod1(): publicClass;
-        }
-        export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
-        export function publicFunctionWithPrivateModuleParameterTypes1(): publicClass;
-        export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
-        export {};
     }
     export interface publicInterfaceWithPrivateParmeterTypes {
         new (): privateClass;
@@ -2602,3 +2486,316 @@ declare namespace publicModuleInGlobal {
     export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
     export {};
 }
+
+
+//// [DtsFileErrors]
+
+
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(68,31): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(69,27): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(70,36): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(71,35): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(74,54): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(75,41): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(76,55): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(77,42): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(79,84): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(80,85): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts(81,91): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(44,27): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(45,23): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(46,32): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(47,31): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(50,50): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(51,37): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(52,51): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(53,38): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(55,88): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(56,89): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(57,95): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(102,31): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(103,27): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(104,36): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(105,35): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(108,54): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(109,41): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(110,55): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(111,42): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(113,84): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(114,85): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.d.ts(115,91): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+
+
+==== privacyFunctionReturnTypeDeclFile_externalModule.d.ts (22 errors) ====
+    declare class privateClass {
+    }
+    export declare class publicClass {
+    }
+    export interface publicInterfaceWithPrivateParmeterTypes {
+        new (): privateClass;
+        (): privateClass;
+        [x: number]: privateClass;
+        myMethod(): privateClass;
+    }
+    export interface publicInterfaceWithPublicParmeterTypes {
+        new (): publicClass;
+        (): publicClass;
+        [x: number]: publicClass;
+        myMethod(): publicClass;
+    }
+    export declare class publicClassWithWithPrivateParmeterTypes {
+        static myPublicStaticMethod(): privateClass;
+        private static myPrivateStaticMethod;
+        myPublicMethod(): privateClass;
+        private myPrivateMethod;
+        static myPublicStaticMethod1(): privateClass;
+        private static myPrivateStaticMethod1;
+        myPublicMethod1(): privateClass;
+        private myPrivateMethod1;
+    }
+    export declare class publicClassWithWithPublicParmeterTypes {
+        static myPublicStaticMethod(): publicClass;
+        private static myPrivateStaticMethod;
+        myPublicMethod(): publicClass;
+        private myPrivateMethod;
+        static myPublicStaticMethod1(): publicClass;
+        private static myPrivateStaticMethod1;
+        myPublicMethod1(): publicClass;
+        private myPrivateMethod1;
+    }
+    export declare function publicFunctionWithPrivateParmeterTypes(): privateClass;
+    export declare function publicFunctionWithPublicParmeterTypes(): publicClass;
+    export declare function publicFunctionWithPrivateParmeterTypes1(): privateClass;
+    export declare function publicFunctionWithPublicParmeterTypes1(): publicClass;
+    export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+    export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+    export interface publicInterfaceWithPrivateModuleParameterTypes {
+        new (): privateModule.publicClass;
+                              ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        (): privateModule.publicClass;
+                          ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        [x: number]: privateModule.publicClass;
+                                   ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        myMethod(): privateModule.publicClass;
+                                  ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+    }
+    export declare class publicClassWithPrivateModuleParameterTypes {
+        static myPublicStaticMethod(): privateModule.publicClass;
+                                                     ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        myPublicMethod(): privateModule.publicClass;
+                                        ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        static myPublicStaticMethod1(): privateModule.publicClass;
+                                                      ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        myPublicMethod1(): privateModule.publicClass;
+                                         ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+    }
+    export declare function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+                                                                                           ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+    export declare function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
+                                                                                            ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+    export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+                                                                                                  ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+    export declare namespace publicModule {
+        class privateClass {
+        }
+        export class publicClass {
+        }
+        export interface publicInterfaceWithPrivateParmeterTypes {
+            new (): privateClass;
+            (): privateClass;
+            [x: number]: privateClass;
+            myMethod(): privateClass;
+        }
+        export interface publicInterfaceWithPublicParmeterTypes {
+            new (): publicClass;
+            (): publicClass;
+            [x: number]: publicClass;
+            myMethod(): publicClass;
+        }
+        export class publicClassWithWithPrivateParmeterTypes {
+            static myPublicStaticMethod(): privateClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod(): privateClass;
+            private myPrivateMethod;
+            static myPublicStaticMethod1(): privateClass;
+            private static myPrivateStaticMethod1;
+            myPublicMethod1(): privateClass;
+            private myPrivateMethod1;
+        }
+        export class publicClassWithWithPublicParmeterTypes {
+            static myPublicStaticMethod(): publicClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod(): publicClass;
+            private myPrivateMethod;
+            static myPublicStaticMethod1(): publicClass;
+            private static myPrivateStaticMethod1;
+            myPublicMethod1(): publicClass;
+            private myPrivateMethod1;
+        }
+        export function publicFunctionWithPrivateParmeterTypes(): privateClass;
+        export function publicFunctionWithPublicParmeterTypes(): publicClass;
+        export function publicFunctionWithPrivateParmeterTypes1(): privateClass;
+        export function publicFunctionWithPublicParmeterTypes1(): publicClass;
+        export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+        export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+        export interface publicInterfaceWithPrivateModuleParameterTypes {
+            new (): privateModule.publicClass;
+                                  ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            (): privateModule.publicClass;
+                              ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            [x: number]: privateModule.publicClass;
+                                       ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            myMethod(): privateModule.publicClass;
+                                      ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        }
+        export class publicClassWithPrivateModuleParameterTypes {
+            static myPublicStaticMethod(): privateModule.publicClass;
+                                                         ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            myPublicMethod(): privateModule.publicClass;
+                                            ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            static myPublicStaticMethod1(): privateModule.publicClass;
+                                                          ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            myPublicMethod1(): privateModule.publicClass;
+                                             ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        }
+        export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+                                                                                       ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        export function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
+                                                                                        ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+                                                                                              ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        export {};
+    }
+    declare namespace privateModule {
+    }
+    export {};
+    
+==== privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts (11 errors) ====
+    declare class publicClassInGlobal {
+    }
+    interface publicInterfaceWithPublicParmeterTypesInGlobal {
+        new (): publicClassInGlobal;
+        (): publicClassInGlobal;
+        [x: number]: publicClassInGlobal;
+        myMethod(): publicClassInGlobal;
+    }
+    declare class publicClassWithWithPublicParmeterTypesInGlobal {
+        static myPublicStaticMethod(): publicClassInGlobal;
+        private static myPrivateStaticMethod;
+        myPublicMethod(): publicClassInGlobal;
+        private myPrivateMethod;
+        static myPublicStaticMethod1(): publicClassInGlobal;
+        private static myPrivateStaticMethod1;
+        myPublicMethod1(): publicClassInGlobal;
+        private myPrivateMethod1;
+    }
+    declare function publicFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
+    declare function publicFunctionWithPublicParmeterTypesInGlobal1(): publicClassInGlobal;
+    declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
+    declare namespace publicModuleInGlobal {
+        class privateClass {
+        }
+        export class publicClass {
+        }
+        namespace privateModule {
+        }
+        export interface publicInterfaceWithPrivateParmeterTypes {
+            new (): privateClass;
+            (): privateClass;
+            [x: number]: privateClass;
+            myMethod(): privateClass;
+        }
+        export interface publicInterfaceWithPublicParmeterTypes {
+            new (): publicClass;
+            (): publicClass;
+            [x: number]: publicClass;
+            myMethod(): publicClass;
+        }
+        export class publicClassWithWithPrivateParmeterTypes {
+            static myPublicStaticMethod(): privateClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod(): privateClass;
+            private myPrivateMethod;
+            static myPublicStaticMethod1(): privateClass;
+            private static myPrivateStaticMethod1;
+            myPublicMethod1(): privateClass;
+            private myPrivateMethod1;
+        }
+        export class publicClassWithWithPublicParmeterTypes {
+            static myPublicStaticMethod(): publicClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod(): publicClass;
+            private myPrivateMethod;
+            static myPublicStaticMethod1(): publicClass;
+            private static myPrivateStaticMethod1;
+            myPublicMethod1(): publicClass;
+            private myPrivateMethod1;
+        }
+        export function publicFunctionWithPrivateParmeterTypes(): privateClass;
+        export function publicFunctionWithPublicParmeterTypes(): publicClass;
+        export function publicFunctionWithPrivateParmeterTypes1(): privateClass;
+        export function publicFunctionWithPublicParmeterTypes1(): publicClass;
+        export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+        export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+        export interface publicInterfaceWithPrivateModuleParameterTypes {
+            new (): privateModule.publicClass;
+                                  ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            (): privateModule.publicClass;
+                              ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            [x: number]: privateModule.publicClass;
+                                       ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            myMethod(): privateModule.publicClass;
+                                      ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        }
+        export class publicClassWithPrivateModuleParameterTypes {
+            static myPublicStaticMethod(): privateModule.publicClass;
+                                                         ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            myPublicMethod(): privateModule.publicClass;
+                                            ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            static myPublicStaticMethod1(): privateModule.publicClass;
+                                                          ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            myPublicMethod1(): privateModule.publicClass;
+                                             ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        }
+        export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+                                                                                       ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        export function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
+                                                                                        ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+                                                                                              ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        export {};
+    }
+    

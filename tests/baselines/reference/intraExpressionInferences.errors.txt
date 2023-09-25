@@ -3,11 +3,9 @@ intraExpressionInferences.ts(131,5): error TS2322: Type '(inputs: Unwrap<{ num: 
     The types of 'str' are incompatible between these types.
       Type 'number' is not assignable to type 'string'.
 intraExpressionInferences.ts(133,26): error TS2339: Property 'nonexistent' does not exist on type 'Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>'.
-intraExpressionInferences.ts(148,57): error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '2 | 1'.
-intraExpressionInferences.ts(149,34): error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '2 | 1'.
 
 
-==== intraExpressionInferences.ts (4 errors) ====
+==== intraExpressionInferences.ts (2 errors) ====
     // Repros from #47599
     
     declare function callIt<T>(obj: {
@@ -164,11 +162,7 @@ intraExpressionInferences.ts(149,34): error TS2856: The type of this declaration
     
     simplified({ generator: () => 123, receiver: (t) => console.log(t + 2) })
     whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) })
-                                                            ~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '2 | 1'.
     nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2))
-                                     ~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '2 | 1'.
     
     // Repro from #48466
     

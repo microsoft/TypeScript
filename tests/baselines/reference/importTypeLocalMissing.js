@@ -82,10 +82,6 @@ interface Point {
 export = Point;
 //// [foo2.d.ts]
 declare namespace Bar {
-    interface I {
-        a: string;
-        b: number;
-    }
 }
 export declare namespace Baz {
     interface J {

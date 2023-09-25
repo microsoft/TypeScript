@@ -1,8 +1,7 @@
-typeArgumentInferenceWithObjectLiteral.ts(30,18): error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '0'.
 typeArgumentInferenceWithObjectLiteral.ts(35,43): error TS2345: Argument of type 'E2' is not assignable to parameter of type 'E1'.
 
 
-==== typeArgumentInferenceWithObjectLiteral.ts (2 errors) ====
+==== typeArgumentInferenceWithObjectLiteral.ts (1 errors) ====
     interface Computed<T> {
         read(): T;
         write(value: T);
@@ -33,8 +32,6 @@ typeArgumentInferenceWithObjectLiteral.ts(35,43): error TS2345: Argument of type
     var v1 = f1({ w: x => x, r: () => 0 }, 0);
     var v1 = f1({ w: x => x, r: () => 0 }, E1.X);
     var v1 = f1({ w: x => x, r: () => E1.X }, 0);
-                     ~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '0'.
     
     var v2: E1;
     var v2 = f1({ w: x => x, r: () => E1.X }, E1.X);

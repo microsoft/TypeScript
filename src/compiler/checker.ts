@@ -41974,47 +41974,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return canHaveLiteralInitializer(node) && isLiteralConstDeclaration(node as CanHaveLiteralInitializer); // TODO: Make safe
         }
 
-        function getBindingNameVisible(elem: BindingElement | VariableDeclaration | OmittedExpression): boolean {
+        function isPrivateDeclaration(node: Node) {
+            return hasEffectiveModifier(node, ModifierFlags.Private) || isPrivateIdentifierClassElementDeclaration(node);
+        }
+
+        function isVisibleExternally(elem: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement | OmittedExpression): boolean {
             if (isOmittedExpression(elem)) {
                 return false;
             }
             if (isBindingPattern(elem.name)) {
-                // If any child binding pattern element has been marked visible (usually by collect linked aliases), then this is visible
-                return some(elem.name.elements, getBindingNameVisible);
+                return some(elem.name.elements, isVisibleExternally);
             }
             else {
                 return isDeclarationVisible(elem);
             }
         }
 
-        function isDeclarationAndNotVisible(node: NamedDeclaration) {
-            switch (node.kind) {
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                    return !isDeclarationVisible(node);
-                // The following should be doing their own visibility checks based on filtering their members
-                case SyntaxKind.VariableDeclaration:
-                    return !getBindingNameVisible(node as VariableDeclaration);
-                case SyntaxKind.ImportEqualsDeclaration:
-                case SyntaxKind.ImportDeclaration:
-                case SyntaxKind.ExportDeclaration:
-                case SyntaxKind.ExportAssignment:
-                    return false;
-                case SyntaxKind.ClassStaticBlockDeclaration:
-                    return true;
-            }
-            return false;
-        }
-
         if (
             !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
             && !shouldPrintWithInitializer(node)
-            && !(hasEffectiveModifier(node, ModifierFlags.Private) || isPrivateIdentifierClassElementDeclaration(node))
-            && !isDeclarationAndNotVisible(node)
+            && !isPrivateDeclaration(node)
+            && isVisibleExternally(node)
         ) {
             const widenedLiteralType = getWidenedLiteralType(type);
             if (!isTypeIdenticalTo(type, widenedLiteralType)) {

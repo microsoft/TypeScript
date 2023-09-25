@@ -3654,53 +3654,6 @@ export declare namespace publicModule {
     export {};
 }
 declare namespace privateModule {
-    class privateClass {
-    }
-    export class publicClass {
-    }
-    export class publicClassWithWithPrivateGetAccessorTypes {
-        static get myPublicStaticMethod(): privateClass;
-        private static get myPrivateStaticMethod();
-        get myPublicMethod(): privateClass;
-        private get myPrivateMethod();
-        static get myPublicStaticMethod1(): privateClass;
-        private static get myPrivateStaticMethod1();
-        get myPublicMethod1(): privateClass;
-        private get myPrivateMethod1();
-    }
-    export class publicClassWithWithPublicGetAccessorTypes {
-        static get myPublicStaticMethod(): publicClass;
-        private static get myPrivateStaticMethod();
-        get myPublicMethod(): publicClass;
-        private get myPrivateMethod();
-        static get myPublicStaticMethod1(): publicClass;
-        private static get myPrivateStaticMethod1();
-        get myPublicMethod1(): publicClass;
-        private get myPrivateMethod1();
-    }
-    export class publicClassWithWithPrivateSetAccessorTypes {
-        static set myPublicStaticMethod(param: privateClass);
-        private static set myPrivateStaticMethod(value);
-        set myPublicMethod(param: privateClass);
-        private set myPrivateMethod(value);
-    }
-    export class publicClassWithWithPublicSetAccessorTypes {
-        static set myPublicStaticMethod(param: publicClass);
-        private static set myPrivateStaticMethod(value);
-        set myPublicMethod(param: publicClass);
-        private set myPrivateMethod(value);
-    }
-    export class publicClassWithPrivateModuleGetAccessorTypes {
-        static get myPublicStaticMethod(): privateModule.publicClass;
-        get myPublicMethod(): privateModule.publicClass;
-        static get myPublicStaticMethod1(): publicClass;
-        get myPublicMethod1(): publicClass;
-    }
-    export class publicClassWithPrivateModuleSetAccessorTypes {
-        static set myPublicStaticMethod(param: privateModule.publicClass);
-        set myPublicMethod(param: privateModule.publicClass);
-    }
-    export {};
 }
 export {};
 //// [privacyAccessorDeclFile_GlobalFile.d.ts]
@@ -3728,53 +3681,6 @@ declare namespace publicModuleInGlobal {
     export class publicClass {
     }
     namespace privateModule {
-        class privateClass {
-        }
-        export class publicClass {
-        }
-        export class publicClassWithWithPrivateGetAccessorTypes {
-            static get myPublicStaticMethod(): privateClass;
-            private static get myPrivateStaticMethod();
-            get myPublicMethod(): privateClass;
-            private get myPrivateMethod();
-            static get myPublicStaticMethod1(): privateClass;
-            private static get myPrivateStaticMethod1();
-            get myPublicMethod1(): privateClass;
-            private get myPrivateMethod1();
-        }
-        export class publicClassWithWithPublicGetAccessorTypes {
-            static get myPublicStaticMethod(): publicClass;
-            private static get myPrivateStaticMethod();
-            get myPublicMethod(): publicClass;
-            private get myPrivateMethod();
-            static get myPublicStaticMethod1(): publicClass;
-            private static get myPrivateStaticMethod1();
-            get myPublicMethod1(): publicClass;
-            private get myPrivateMethod1();
-        }
-        export class publicClassWithWithPrivateSetAccessorTypes {
-            static set myPublicStaticMethod(param: privateClass);
-            private static set myPrivateStaticMethod(value);
-            set myPublicMethod(param: privateClass);
-            private set myPrivateMethod(value);
-        }
-        export class publicClassWithWithPublicSetAccessorTypes {
-            static set myPublicStaticMethod(param: publicClass);
-            private static set myPrivateStaticMethod(value);
-            set myPublicMethod(param: publicClass);
-            private set myPrivateMethod(value);
-        }
-        export class publicClassWithPrivateModuleGetAccessorTypes {
-            static get myPublicStaticMethod(): privateModule.publicClass;
-            get myPublicMethod(): privateModule.publicClass;
-            static get myPublicStaticMethod1(): publicClass;
-            get myPublicMethod1(): publicClass;
-        }
-        export class publicClassWithPrivateModuleSetAccessorTypes {
-            static set myPublicStaticMethod(param: privateModule.publicClass);
-            set myPublicMethod(param: privateModule.publicClass);
-        }
-        export {};
     }
     export class publicClassWithWithPrivateGetAccessorTypes {
         static get myPublicStaticMethod(): privateClass;
@@ -3820,3 +3726,235 @@ declare namespace publicModuleInGlobal {
     }
     export {};
 }
+
+
+//// [DtsFileErrors]
+
+
+privacyAccessorDeclFile_GlobalFile.d.ts(59,58): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.d.ts(60,45): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.d.ts(61,59): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.d.ts(62,46): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.d.ts(65,62): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_GlobalFile.d.ts(66,49): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(38,54): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(39,41): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(40,55): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(41,42): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(44,58): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(45,45): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(85,58): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(86,45): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(87,59): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(88,46): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(91,62): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+privacyAccessorDeclFile_externalModule.d.ts(92,49): error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+
+
+==== privacyAccessorDeclFile_externalModule.d.ts (12 errors) ====
+    declare class privateClass {
+    }
+    export declare class publicClass {
+    }
+    export declare class publicClassWithWithPrivateGetAccessorTypes {
+        static get myPublicStaticMethod(): privateClass;
+        private static get myPrivateStaticMethod();
+        get myPublicMethod(): privateClass;
+        private get myPrivateMethod();
+        static get myPublicStaticMethod1(): privateClass;
+        private static get myPrivateStaticMethod1();
+        get myPublicMethod1(): privateClass;
+        private get myPrivateMethod1();
+    }
+    export declare class publicClassWithWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod(): publicClass;
+        private static get myPrivateStaticMethod();
+        get myPublicMethod(): publicClass;
+        private get myPrivateMethod();
+        static get myPublicStaticMethod1(): publicClass;
+        private static get myPrivateStaticMethod1();
+        get myPublicMethod1(): publicClass;
+        private get myPrivateMethod1();
+    }
+    export declare class publicClassWithWithPrivateSetAccessorTypes {
+        static set myPublicStaticMethod(param: privateClass);
+        private static set myPrivateStaticMethod(value);
+        set myPublicMethod(param: privateClass);
+        private set myPrivateMethod(value);
+    }
+    export declare class publicClassWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param: publicClass);
+        private static set myPrivateStaticMethod(value);
+        set myPublicMethod(param: publicClass);
+        private set myPrivateMethod(value);
+    }
+    export declare class publicClassWithPrivateModuleGetAccessorTypes {
+        static get myPublicStaticMethod(): privateModule.publicClass;
+                                                         ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        get myPublicMethod(): privateModule.publicClass;
+                                            ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        static get myPublicStaticMethod1(): privateModule.publicClass;
+                                                          ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        get myPublicMethod1(): privateModule.publicClass;
+                                             ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+    }
+    export declare class publicClassWithPrivateModuleSetAccessorTypes {
+        static set myPublicStaticMethod(param: privateModule.publicClass);
+                                                             ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        set myPublicMethod(param: privateModule.publicClass);
+                                                ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+    }
+    export declare namespace publicModule {
+        class privateClass {
+        }
+        export class publicClass {
+        }
+        export class publicClassWithWithPrivateGetAccessorTypes {
+            static get myPublicStaticMethod(): privateClass;
+            private static get myPrivateStaticMethod();
+            get myPublicMethod(): privateClass;
+            private get myPrivateMethod();
+            static get myPublicStaticMethod1(): privateClass;
+            private static get myPrivateStaticMethod1();
+            get myPublicMethod1(): privateClass;
+            private get myPrivateMethod1();
+        }
+        export class publicClassWithWithPublicGetAccessorTypes {
+            static get myPublicStaticMethod(): publicClass;
+            private static get myPrivateStaticMethod();
+            get myPublicMethod(): publicClass;
+            private get myPrivateMethod();
+            static get myPublicStaticMethod1(): publicClass;
+            private static get myPrivateStaticMethod1();
+            get myPublicMethod1(): publicClass;
+            private get myPrivateMethod1();
+        }
+        export class publicClassWithWithPrivateSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateClass);
+            private static set myPrivateStaticMethod(value);
+            set myPublicMethod(param: privateClass);
+            private set myPrivateMethod(value);
+        }
+        export class publicClassWithWithPublicSetAccessorTypes {
+            static set myPublicStaticMethod(param: publicClass);
+            private static set myPrivateStaticMethod(value);
+            set myPublicMethod(param: publicClass);
+            private set myPrivateMethod(value);
+        }
+        export class publicClassWithPrivateModuleGetAccessorTypes {
+            static get myPublicStaticMethod(): privateModule.publicClass;
+                                                             ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            get myPublicMethod(): privateModule.publicClass;
+                                                ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            static get myPublicStaticMethod1(): privateModule.publicClass;
+                                                              ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            get myPublicMethod1(): privateModule.publicClass;
+                                                 ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        }
+        export class publicClassWithPrivateModuleSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateModule.publicClass);
+                                                                 ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            set myPublicMethod(param: privateModule.publicClass);
+                                                    ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        }
+        export {};
+    }
+    declare namespace privateModule {
+    }
+    export {};
+    
+==== privacyAccessorDeclFile_GlobalFile.d.ts (6 errors) ====
+    declare class publicClassInGlobal {
+    }
+    declare class publicClassInGlobalWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod(): publicClassInGlobal;
+        private static get myPrivateStaticMethod();
+        get myPublicMethod(): publicClassInGlobal;
+        private get myPrivateMethod();
+        static get myPublicStaticMethod1(): publicClassInGlobal;
+        private static get myPrivateStaticMethod1();
+        get myPublicMethod1(): publicClassInGlobal;
+        private get myPrivateMethod1();
+    }
+    declare class publicClassInGlobalWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param: publicClassInGlobal);
+        private static set myPrivateStaticMethod(value);
+        set myPublicMethod(param: publicClassInGlobal);
+        private set myPrivateMethod(value);
+    }
+    declare namespace publicModuleInGlobal {
+        class privateClass {
+        }
+        export class publicClass {
+        }
+        namespace privateModule {
+        }
+        export class publicClassWithWithPrivateGetAccessorTypes {
+            static get myPublicStaticMethod(): privateClass;
+            private static get myPrivateStaticMethod();
+            get myPublicMethod(): privateClass;
+            private get myPrivateMethod();
+            static get myPublicStaticMethod1(): privateClass;
+            private static get myPrivateStaticMethod1();
+            get myPublicMethod1(): privateClass;
+            private get myPrivateMethod1();
+        }
+        export class publicClassWithWithPublicGetAccessorTypes {
+            static get myPublicStaticMethod(): publicClass;
+            private static get myPrivateStaticMethod();
+            get myPublicMethod(): publicClass;
+            private get myPrivateMethod();
+            static get myPublicStaticMethod1(): publicClass;
+            private static get myPrivateStaticMethod1();
+            get myPublicMethod1(): publicClass;
+            private get myPrivateMethod1();
+        }
+        export class publicClassWithWithPrivateSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateClass);
+            private static set myPrivateStaticMethod(value);
+            set myPublicMethod(param: privateClass);
+            private set myPrivateMethod(value);
+        }
+        export class publicClassWithWithPublicSetAccessorTypes {
+            static set myPublicStaticMethod(param: publicClass);
+            private static set myPrivateStaticMethod(value);
+            set myPublicMethod(param: publicClass);
+            private set myPrivateMethod(value);
+        }
+        export class publicClassWithPrivateModuleGetAccessorTypes {
+            static get myPublicStaticMethod(): privateModule.publicClass;
+                                                             ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            get myPublicMethod(): privateModule.publicClass;
+                                                ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            static get myPublicStaticMethod1(): privateModule.publicClass;
+                                                              ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            get myPublicMethod1(): privateModule.publicClass;
+                                                 ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        }
+        export class publicClassWithPrivateModuleSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateModule.publicClass);
+                                                                 ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+            set myPublicMethod(param: privateModule.publicClass);
+                                                    ~~~~~~~~~~~
+!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClass'.
+        }
+        export {};
+    }
+    

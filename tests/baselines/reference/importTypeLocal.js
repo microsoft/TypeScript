@@ -80,10 +80,6 @@ interface Point {
 export = Point;
 //// [foo2.d.ts]
 declare namespace Bar {
-    interface I {
-        a: string;
-        b: number;
-    }
 }
 export declare namespace Baz {
     interface J {
@@ -108,3 +104,51 @@ export declare class Bar2 {
     constructor(input?: any);
 }
 export declare let shim: typeof import("./foo2");
+
+
+//// [DtsFileErrors]
+
+
+foo2.d.ts(10,15): error TS2694: Namespace 'Bar' has no exported member 'I'.
+usage.d.ts(2,44): error TS2694: Namespace '"foo2".Bar' has no exported member 'I'.
+
+
+==== foo.d.ts (0 errors) ====
+    interface Point {
+        x: number;
+        y: number;
+    }
+    export = Point;
+    
+==== foo2.d.ts (1 errors) ====
+    declare namespace Bar {
+    }
+    export declare namespace Baz {
+        interface J {
+            a: number;
+            b: string;
+        }
+    }
+    declare class Bar {
+        item: Bar.I;
+                  ~
+!!! error TS2694: Namespace 'Bar' has no exported member 'I'.
+        constructor(input: Baz.J);
+    }
+    export { Bar };
+    
+==== usage.d.ts (1 errors) ====
+    export declare const x: import("./foo");
+    export declare let y: import("./foo2").Bar.I;
+                                               ~
+!!! error TS2694: Namespace '"foo2".Bar' has no exported member 'I'.
+    export declare class Bar2 {
+        item: {
+            a: string;
+            b: number;
+            c: object;
+        };
+        constructor(input?: any);
+    }
+    export declare let shim: typeof import("./foo2");
+    

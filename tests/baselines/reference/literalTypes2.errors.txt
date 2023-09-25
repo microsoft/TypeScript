@@ -1,10 +1,8 @@
-literalTypes2.ts(102,24): error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '1 | 0'.
-literalTypes2.ts(102,32): error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"foo" | "bar"'.
 literalTypes2.ts(155,7): error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '1 | 2'.
 literalTypes2.ts(156,7): error TS2856: The type of this declaration is ambiguous and may be observed as either 'string | number' or '1 | "two"'.
 
 
-==== literalTypes2.ts (4 errors) ====
+==== literalTypes2.ts (2 errors) ====
     enum E {
         A, B, C
     }
@@ -107,10 +105,6 @@ literalTypes2.ts(156,7): error TS2856: The type of this declaration is ambiguous
     
     function f6() {
         const { c1 = true, c2 = 0, c3 = "foo" } = { c1: false, c2: 1, c3: "bar" };
-                           ~~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '1 | 0'.
-                                   ~~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"foo" | "bar"'.
         let { x1 = true, x2 = 0, x3 = "foo" } = { x1: false, x2: 1, x3: "bar" };
     }
     
