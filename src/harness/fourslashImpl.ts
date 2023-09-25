@@ -10,8 +10,6 @@ import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
 export const enum FourSlashTestType {
     Native,
-    Shims,
-    ShimsWithPreprocess,
     Server,
 }
 
@@ -267,10 +265,6 @@ export class TestState {
         switch (testType) {
             case FourSlashTestType.Native:
                 return new Harness.LanguageService.NativeLanguageServiceAdapter(cancellationToken, compilationOptions);
-            case FourSlashTestType.Shims:
-                return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
-            case FourSlashTestType.ShimsWithPreprocess:
-                return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
             case FourSlashTestType.Server:
                 return new Harness.LanguageService.ServerLanguageServiceAdapter(cancellationToken, compilationOptions);
             default:
