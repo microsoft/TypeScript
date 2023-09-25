@@ -4145,10 +4145,10 @@ declare namespace ts {
     interface MapLike<T> {
         [index: string]: T;
     }
-    interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+    interface SortedReadonlyArray<out T> extends ReadonlyArray<T> {
         " __sortedArrayBrand": any;
     }
-    interface SortedArray<T> extends Array<T> {
+    interface SortedArray<out T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
     type Path = string & {
