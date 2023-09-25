@@ -3663,6 +3663,10 @@
         "category": "Error",
         "code": 2854
     },
+    "Excessive complexity comparing types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2855
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
