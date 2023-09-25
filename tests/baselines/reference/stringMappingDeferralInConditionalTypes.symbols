@@ -23,3 +23,25 @@ let x2: B<"foo"> = 1; // ok
 >x2 : Symbol(x2, Decl(stringMappingDeferralInConditionalTypes.ts, 6, 3))
 >B : Symbol(B, Decl(stringMappingDeferralInConditionalTypes.ts, 3, 21))
 
+type C<S> = Capitalize<Lowercase<S & string>> extends "Foo" ? 1 : 0;
+>C : Symbol(C, Decl(stringMappingDeferralInConditionalTypes.ts, 6, 21))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 8, 7))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 8, 7))
+
+let x3: C<"foo"> = 1; // ok
+>x3 : Symbol(x3, Decl(stringMappingDeferralInConditionalTypes.ts, 9, 3))
+>C : Symbol(C, Decl(stringMappingDeferralInConditionalTypes.ts, 6, 21))
+
+type D<S extends string> = Capitalize<Lowercase<S>> extends "Foo" ? 1 : 0;
+>D : Symbol(D, Decl(stringMappingDeferralInConditionalTypes.ts, 9, 21))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 11, 7))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 11, 7))
+
+let x4: D<"foo"> = 1; // ok
+>x4 : Symbol(x4, Decl(stringMappingDeferralInConditionalTypes.ts, 12, 3))
+>D : Symbol(D, Decl(stringMappingDeferralInConditionalTypes.ts, 9, 21))
+
