@@ -42013,6 +42013,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (
             !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
             && !shouldPrintWithInitializer(node)
+            && !(hasEffectiveModifier(node, ModifierFlags.Private) || isPrivateIdentifierClassElementDeclaration(node))
             && !isDeclarationAndNotVisible(node)
         ) {
             const widenedLiteralType = getWidenedLiteralType(type);
