@@ -3,12 +3,15 @@ import {
     BindingElement,
     BindingPattern,
     ClassDeclaration,
+    CodeFixAllContext,
+    CodeFixContext,
     Diagnostics,
     ExportAssignment,
     Expression,
     ExpressionWithTypeArguments,
     factory,
     GeneratedIdentifierFlags,
+    getEmitScriptTarget,
     getSourceFileOfNode,
     getTokenAtPosition,
     getTrailingCommentRanges,
@@ -39,7 +42,12 @@ import {
 import {
     codeFixAll,
     createCodeFixAction,
+    createCombinedCodeActions,
+    createImportAdder,
+    eachDiagnostic,
+    ImportAdder,
     registerCodeFix,
+    typeToAutoImportableTypeNode,
 } from "../_namespaces/ts.codefix";
 
 const fixId = "fixMissingTypeAnnotationOnExports";
@@ -76,22 +84,38 @@ registerCodeFix({
         const { sourceFile, span } = context;
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
 
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.program.getTypeChecker(), nodeWithDiag));
+        const changes = textChanges.ChangeTracker.with(context, t => {
+            const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
+            doChange(t, context, nodeWithDiag, importAdder);
+            importAdder.writeFixes(t);
+        });
         return [
-            createCodeFixAction(fixId, changes, Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit, fixId, Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit),
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit,
+                fixId,
+                Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit,
+            ),
         ];
     },
-    getAllCodeActions: context =>
-        codeFixAll(context, errorCodes, (changes, diag) => {
-            const nodeWithDiag = getTokenAtPosition(diag.file, diag.start);
-            doChange(changes, diag.file, context.program.getTypeChecker(), nodeWithDiag);
-        }),
+    getAllCodeActions: context => {
+        const changes = textChanges.ChangeTracker.with(context, t => {
+            const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
+            eachDiagnostic(context, errorCodes, diag => {
+                const nodeWithDiag = getTokenAtPosition(diag.file, diag.start);
+                doChange(t, context, nodeWithDiag, importAdder);
+            });
+            importAdder.writeFixes(t);
+        });
+        return createCombinedCodeActions(changes);
+    },
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, typeChecker: TypeChecker, nodeWithDiag: Node): void {
+function doChange(changes: textChanges.ChangeTracker, context: CodeFixContext | CodeFixAllContext, nodeWithDiag: Node, importAdder: ImportAdder): void {
     const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag);
     if (nodeWithNoType) {
-        fixupForIsolatedDeclarations(nodeWithNoType, nodeWithDiag, sourceFile, typeChecker, changes);
+        fixupForIsolatedDeclarations(nodeWithNoType, nodeWithDiag, context, changes, importAdder);
     }
 }
 
@@ -113,22 +137,26 @@ function findNearestParentWithTypeAnnotation(node: Node): Node | undefined {
  * Fixes up to support IsolatedDeclaration by either adding types when possible, or splitting statements and add type annotations
  * for the places that cannot have type annotations (e.g. HeritageClause, default exports, ...)
  */
-function fixupForIsolatedDeclarations(node: Node, nodeWithDiag: Node, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
+function fixupForIsolatedDeclarations(node: Node, nodeWithDiag: Node, context: CodeFixContext | CodeFixAllContext, changes: textChanges.ChangeTracker, importAdder: ImportAdder) {
+    const sourceFile: SourceFile = context.sourceFile;
+    const program = context.program;
+    const typeChecker: TypeChecker = program.getTypeChecker();
+    const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
     switch (node.kind) {
         case SyntaxKind.Parameter:
             const parameter = node as ParameterDeclaration;
-            addTypeToParameterDeclaration(changes, parameter, typeChecker);
+            addTypeToParameterDeclaration(parameter);
             break;
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.VariableDeclaration:
             const variableDeclaration = node as VariableDeclaration | PropertyDeclaration;
             if (!variableDeclaration.type) {
                 if (variableDeclaration.initializer && (isFunctionExpression(variableDeclaration.initializer) || isArrowFunction(variableDeclaration.initializer))) {
-                    addTypeToFunctionLikeDeclaration(variableDeclaration.initializer, sourceFile, typeChecker, changes);
+                    addTypeToFunctionLikeDeclaration(variableDeclaration.initializer, sourceFile);
                 }
                 else {
                     const type = typeChecker.getTypeAtLocation(variableDeclaration);
-                    const typeNode = typeToTypeNode(type, variableDeclaration, typeChecker);
+                    const typeNode = typeToTypeNode(type, variableDeclaration);
                     if (typeNode) {
                         changes.tryInsertTypeAnnotation(sourceFile, variableDeclaration, typeNode);
                     }
@@ -139,13 +167,13 @@ function fixupForIsolatedDeclarations(node: Node, nodeWithDiag: Node, sourceFile
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
-            addTypeToFunctionLikeDeclaration(node as SignatureDeclaration, sourceFile, typeChecker, changes);
+            addTypeToFunctionLikeDeclaration(node as SignatureDeclaration, sourceFile);
             break;
         case SyntaxKind.ExportAssignment:
             const defaultExport = node as ExportAssignment;
             if (!defaultExport.isExportEquals) {
                 const type = typeChecker.getTypeAtLocation(defaultExport.expression);
-                const typeNode = typeToTypeNode(type, node, typeChecker);
+                const typeNode = typeToTypeNode(type, node);
                 return changes.replaceNodeWithNodes(sourceFile, node, [
                     factory.createVariableStatement(
                         /*modifiers*/ undefined,
@@ -165,314 +193,316 @@ function fixupForIsolatedDeclarations(node: Node, nodeWithDiag: Node, sourceFile
             break;
         // Handling expression like heritage clauses e.g. class A extends mixin(B) ..
         case SyntaxKind.ClassDeclaration:
-            handleClassDeclaration(node as ClassDeclaration, nodeWithDiag.parent.parent as ExpressionWithTypeArguments, sourceFile, changes, typeChecker);
+            handleClassDeclaration(node as ClassDeclaration, nodeWithDiag.parent.parent as ExpressionWithTypeArguments);
             break;
         case SyntaxKind.ObjectBindingPattern:
         case SyntaxKind.ArrayBindingPattern:
-            transformDestructuringPatterns(node as BindingPattern, sourceFile, typeChecker, changes);
+            transformDestructuringPatterns(node as BindingPattern);
             break;
         default:
             throw new Error(`Cannot find a fix for the given node ${node.kind}`);
     }
-}
 
-function addTypeToFunctionLikeDeclaration(func: SignatureDeclaration, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
-    if (func.type) {
-        return;
+    function addTypeToFunctionLikeDeclaration(func: SignatureDeclaration, sourceFile: SourceFile) {
+        if (func.type) {
+            return;
+        }
+
+        const type = tryGetReturnType(func);
+        if (!type) {
+            return;
+        }
+        const typeNode = typeToTypeNode(type, func);
+        if (typeNode) {
+            changes.tryInsertTypeAnnotation(
+                sourceFile,
+                func,
+                typeNode,
+            );
+        }
+        addTypesToParametersArray(func.parameters);
     }
 
-    const type = tryGetReturnType(typeChecker, func);
-    if (!type) {
-        return;
-    }
-    const typeNode = typeToTypeNode(type, func, typeChecker);
-    if (typeNode) {
-        changes.tryInsertTypeAnnotation(
-            sourceFile,
-            func,
-            typeNode,
+    function handleClassDeclaration(classDecl: ClassDeclaration, heritageExpression: ExpressionWithTypeArguments) {
+        if (heritageExpression.kind !== SyntaxKind.ExpressionWithTypeArguments) {
+            throw new Error(`Hey + ${heritageExpression.kind}`);
+        }
+        const heritageTypeNode = typeToTypeNode(
+            typeChecker.getTypeAtLocation(heritageExpression.expression),
+            heritageExpression.expression,
         );
-    }
-    addTypesToParametersArray(changes, func.parameters, typeChecker);
-}
 
-function handleClassDeclaration(classDecl: ClassDeclaration, heritageExpression: ExpressionWithTypeArguments, sourceFile: SourceFile, changes: textChanges.ChangeTracker, typeChecker: TypeChecker) {
-    if (heritageExpression.kind !== SyntaxKind.ExpressionWithTypeArguments) {
-        throw new Error(`Hey + ${heritageExpression.kind}`);
-    }
-    const heritageTypeNode = typeToTypeNode(
-        typeChecker.getTypeAtLocation(heritageExpression.expression),
-        heritageExpression.expression,
-        typeChecker,
-    );
-
-    const heritageVariableName = factory.createUniqueName(
-        classDecl.name ? classDecl.name.text + "Base" : "Anonymous",
-        GeneratedIdentifierFlags.Optimistic,
-    );
-    // e.g. const Point3DBase: typeof Point2D = mixin(Point2D);
-    const heritageVariable = factory.createVariableStatement(
-        /*modifiers*/ undefined,
-        factory.createVariableDeclarationList(
-            [factory.createVariableDeclaration(
-                heritageVariableName,
-                /*exclamationToken*/ undefined,
-                heritageTypeNode,
-                heritageExpression.expression,
-            )],
-            NodeFlags.Const,
-        ),
-    );
-    // const touchingToken = getTouchingToken(heritageExpression);
-    changes.insertNodeBefore(sourceFile, classDecl, heritageVariable);
-    const trailingComments = getTrailingCommentRanges(sourceFile.text, heritageExpression.end);
-    const realEnd = trailingComments?.[trailingComments.length - 1]?.end ?? heritageExpression.end;
-    changes.replaceRange(
-        sourceFile,
-        {
-            pos: heritageExpression.getFullStart(),
-            end: realEnd,
-        },
-        heritageVariableName,
-        {
-            prefix: " ",
-        },
-    );
-}
-
-interface ExpressionReverseChain {
-    element?: BindingElement;
-    parent?: ExpressionReverseChain;
-    expression: SubExpression;
-}
-
-const enum ExpressionType {
-    TEXT = 0,
-    COMPUTED = 1,
-    ARRAY_ACCESS = 2,
-    IDENTIFIER = 3,
-}
-
-type SubExpression =
-    | { kind: ExpressionType.TEXT; text: string; }
-    | { kind: ExpressionType.COMPUTED; computed: Expression; }
-    | { kind: ExpressionType.ARRAY_ACCESS; arrayIndex: number; }
-    | { kind: ExpressionType.IDENTIFIER; identifier: Identifier; };
-
-function transformDestructuringPatterns(bindingPattern: BindingPattern, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
-    const enclosingVarStmt = bindingPattern.parent.parent.parent as VariableStatement;
-    const tempHolderForReturn = factory.createUniqueName("dest", GeneratedIdentifierFlags.Optimistic);
-    const baseExpr: ExpressionReverseChain = { expression: { kind: ExpressionType.IDENTIFIER, identifier: tempHolderForReturn } };
-    const bindingElements: ExpressionReverseChain[] = [];
-    if (isArrayBindingPattern(bindingPattern)) {
-        addArrayBindingPatterns(bindingPattern, bindingElements, baseExpr);
-    }
-    else {
-        addObjectBindingPatterns(bindingPattern, bindingElements, baseExpr);
-    }
-
-    const expressionToVar = new Map<Expression, Identifier>();
-    const newNodes: Node[] = [
-        factory.createVariableStatement(
+        const heritageVariableName = factory.createUniqueName(
+            classDecl.name ? classDecl.name.text + "Base" : "Anonymous",
+            GeneratedIdentifierFlags.Optimistic,
+        );
+        // e.g. const Point3DBase: typeof Point2D = mixin(Point2D);
+        const heritageVariable = factory.createVariableStatement(
             /*modifiers*/ undefined,
             factory.createVariableDeclarationList(
                 [factory.createVariableDeclaration(
-                    tempHolderForReturn,
+                    heritageVariableName,
                     /*exclamationToken*/ undefined,
-                    /*type*/ undefined,
-                    enclosingVarStmt.declarationList.declarations[0].initializer,
+                    heritageTypeNode,
+                    heritageExpression.expression,
                 )],
                 NodeFlags.Const,
             ),
-        ),
-    ];
-    let i = 0;
-    while (i < bindingElements.length) {
-        const bindingElement = bindingElements[i];
+        );
+        // const touchingToken = getTouchingToken(heritageExpression);
+        changes.insertNodeBefore(sourceFile, classDecl, heritageVariable);
+        const trailingComments = getTrailingCommentRanges(sourceFile.text, heritageExpression.end);
+        const realEnd = trailingComments?.[trailingComments.length - 1]?.end ?? heritageExpression.end;
+        changes.replaceRange(
+            sourceFile,
+            {
+                pos: heritageExpression.getFullStart(),
+                end: realEnd,
+            },
+            heritageVariableName,
+            {
+                prefix: " ",
+            },
+        );
+    }
 
-        if (bindingElement.element!.propertyName && isComputedPropertyName(bindingElement.element!.propertyName)) {
-            const computedExpression = bindingElement.element!.propertyName.expression;
-            const identifierForComputedProperty = factory.getGeneratedNameForNode(computedExpression);
-            const variableDecl = factory.createVariableDeclaration(
-                identifierForComputedProperty,
-                /*exclamationToken*/ undefined,
-                /*type*/ undefined,
-                computedExpression,
-            );
-            const variableList = factory.createVariableDeclarationList([variableDecl], NodeFlags.Const);
-            const variableStatement = factory.createVariableStatement(/*modifiers*/ undefined, variableList);
-            newNodes.push(variableStatement);
-            expressionToVar.set(computedExpression, identifierForComputedProperty);
-        }
+    interface ExpressionReverseChain {
+        element?: BindingElement;
+        parent?: ExpressionReverseChain;
+        expression: SubExpression;
+    }
 
-        // Name is the RHS of : in case colon exists, otherwise it's just the name of the destructuring
-        const name = bindingElement.element!.name;
-        // isBindingPattern
-        if (isArrayBindingPattern(name)) {
-            addArrayBindingPatterns(name, bindingElements, bindingElement);
-        }
-        else if (isObjectBindingPattern(name)) {
-            addObjectBindingPatterns(name, bindingElements, bindingElement);
+    const enum ExpressionType {
+        TEXT = 0,
+        COMPUTED = 1,
+        ARRAY_ACCESS = 2,
+        IDENTIFIER = 3,
+    }
+
+    type SubExpression =
+        | { kind: ExpressionType.TEXT; text: string; }
+        | { kind: ExpressionType.COMPUTED; computed: Expression; }
+        | { kind: ExpressionType.ARRAY_ACCESS; arrayIndex: number; }
+        | { kind: ExpressionType.IDENTIFIER; identifier: Identifier; };
+
+    function transformDestructuringPatterns(bindingPattern: BindingPattern) {
+        const enclosingVarStmt = bindingPattern.parent.parent.parent as VariableStatement;
+        const tempHolderForReturn = factory.createUniqueName("dest", GeneratedIdentifierFlags.Optimistic);
+        const baseExpr: ExpressionReverseChain = { expression: { kind: ExpressionType.IDENTIFIER, identifier: tempHolderForReturn } };
+        const bindingElements: ExpressionReverseChain[] = [];
+        if (isArrayBindingPattern(bindingPattern)) {
+            addArrayBindingPatterns(bindingPattern, bindingElements, baseExpr);
         }
         else {
-            const typeNode = typeToTypeNode(typeChecker.getTypeAtLocation(name), name, typeChecker);
-            let variableInitializer = createChainedExpression(bindingElement, expressionToVar);
-            if (bindingElement.element!.initializer) {
-                const tempName = factory.createUniqueName("temp", GeneratedIdentifierFlags.Optimistic);
+            addObjectBindingPatterns(bindingPattern, bindingElements, baseExpr);
+        }
+
+        const expressionToVar = new Map<Expression, Identifier>();
+        const newNodes: Node[] = [
+            factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList(
+                    [factory.createVariableDeclaration(
+                        tempHolderForReturn,
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        enclosingVarStmt.declarationList.declarations[0].initializer,
+                    )],
+                    NodeFlags.Const,
+                ),
+            ),
+        ];
+        let i = 0;
+        while (i < bindingElements.length) {
+            const bindingElement = bindingElements[i];
+
+            if (bindingElement.element!.propertyName && isComputedPropertyName(bindingElement.element!.propertyName)) {
+                const computedExpression = bindingElement.element!.propertyName.expression;
+                const identifierForComputedProperty = factory.getGeneratedNameForNode(computedExpression);
+                const variableDecl = factory.createVariableDeclaration(
+                    identifierForComputedProperty,
+                    /*exclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    computedExpression,
+                );
+                const variableList = factory.createVariableDeclarationList([variableDecl], NodeFlags.Const);
+                const variableStatement = factory.createVariableStatement(/*modifiers*/ undefined, variableList);
+                newNodes.push(variableStatement);
+                expressionToVar.set(computedExpression, identifierForComputedProperty);
+            }
+
+            // Name is the RHS of : in case colon exists, otherwise it's just the name of the destructuring
+            const name = bindingElement.element!.name;
+            // isBindingPattern
+            if (isArrayBindingPattern(name)) {
+                addArrayBindingPatterns(name, bindingElements, bindingElement);
+            }
+            else if (isObjectBindingPattern(name)) {
+                addObjectBindingPatterns(name, bindingElements, bindingElement);
+            }
+            else {
+                const typeNode = typeToTypeNode(typeChecker.getTypeAtLocation(name), name);
+                let variableInitializer = createChainedExpression(bindingElement, expressionToVar);
+                if (bindingElement.element!.initializer) {
+                    const tempName = factory.createUniqueName("temp", GeneratedIdentifierFlags.Optimistic);
+                    newNodes.push(factory.createVariableStatement(
+                        /*modifiers*/ undefined,
+                        factory.createVariableDeclarationList(
+                            [factory.createVariableDeclaration(
+                                tempName,
+                                /*exclamationToken*/ undefined,
+                                /*type*/ undefined,
+                                variableInitializer,
+                            )],
+                            NodeFlags.Const,
+                        ),
+                    ));
+                    variableInitializer = factory.createConditionalExpression(
+                        factory.createBinaryExpression(
+                            tempName,
+                            factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                            factory.createIdentifier("undefined"),
+                        ),
+                        factory.createToken(SyntaxKind.QuestionToken),
+                        bindingElement.element!.initializer,
+                        factory.createToken(SyntaxKind.ColonToken),
+                        variableInitializer,
+                    );
+                }
                 newNodes.push(factory.createVariableStatement(
-                    /*modifiers*/ undefined,
+                    [factory.createToken(SyntaxKind.ExportKeyword)],
                     factory.createVariableDeclarationList(
                         [factory.createVariableDeclaration(
-                            tempName,
+                            name,
                             /*exclamationToken*/ undefined,
-                            /*type*/ undefined,
+                            typeNode,
                             variableInitializer,
                         )],
                         NodeFlags.Const,
                     ),
                 ));
-                variableInitializer = factory.createConditionalExpression(
-                    factory.createBinaryExpression(
-                        tempName,
-                        factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-                        factory.createIdentifier("undefined"),
-                    ),
-                    factory.createToken(SyntaxKind.QuestionToken),
-                    bindingElement.element!.initializer,
-                    factory.createToken(SyntaxKind.ColonToken),
-                    variableInitializer,
-                );
             }
-            newNodes.push(factory.createVariableStatement(
-                [factory.createToken(SyntaxKind.ExportKeyword)],
-                factory.createVariableDeclarationList(
-                    [factory.createVariableDeclaration(
-                        name,
-                        /*exclamationToken*/ undefined,
-                        typeNode,
-                        variableInitializer,
-                    )],
-                    NodeFlags.Const,
+            ++i;
+        }
+
+        if (enclosingVarStmt.declarationList.declarations.length > 1) {
+            newNodes.push(factory.updateVariableStatement(
+                enclosingVarStmt,
+                enclosingVarStmt.modifiers,
+                factory.updateVariableDeclarationList(
+                    enclosingVarStmt.declarationList,
+                    enclosingVarStmt.declarationList.declarations.filter(node => node !== bindingPattern.parent),
                 ),
             ));
         }
-        ++i;
+        changes.replaceNodeWithNodes(sourceFile, enclosingVarStmt, newNodes);
     }
 
-    if (enclosingVarStmt.declarationList.declarations.length > 1) {
-        newNodes.push(factory.updateVariableStatement(
-            enclosingVarStmt,
-            enclosingVarStmt.modifiers,
-            factory.updateVariableDeclarationList(
-                enclosingVarStmt.declarationList,
-                enclosingVarStmt.declarationList.declarations.filter(node => node !== bindingPattern.parent),
-            ),
-        ));
-    }
-    changes.replaceNodeWithNodes(sourceFile, enclosingVarStmt, newNodes);
-}
-
-function addArrayBindingPatterns(bindingPattern: ArrayBindingPattern, bindingElements: ExpressionReverseChain[], parent: ExpressionReverseChain) {
-    for (let i = 0; i < bindingPattern.elements.length; ++i) {
-        const element = bindingPattern.elements[i];
-        if (isOmittedExpression(element)) {
-            continue;
-        }
-        bindingElements.push({
-            element,
-            parent,
-            expression: { kind: ExpressionType.ARRAY_ACCESS, arrayIndex: i },
-        });
-    }
-}
-
-function addObjectBindingPatterns(bindingPattern: ObjectBindingPattern, bindingElements: ExpressionReverseChain[], parent: ExpressionReverseChain) {
-    for (const bindingElement of bindingPattern.elements) {
-        let name: string;
-        if (bindingElement.propertyName) {
-            if (isComputedPropertyName(bindingElement.propertyName)) {
-                bindingElements.push({
-                    element: bindingElement,
-                    parent,
-                    expression: { kind: ExpressionType.COMPUTED, computed: bindingElement.propertyName.expression },
-                });
+    function addArrayBindingPatterns(bindingPattern: ArrayBindingPattern, bindingElements: ExpressionReverseChain[], parent: ExpressionReverseChain) {
+        for (let i = 0; i < bindingPattern.elements.length; ++i) {
+            const element = bindingPattern.elements[i];
+            if (isOmittedExpression(element)) {
                 continue;
             }
+            bindingElements.push({
+                element,
+                parent,
+                expression: { kind: ExpressionType.ARRAY_ACCESS, arrayIndex: i },
+            });
+        }
+    }
+
+    function addObjectBindingPatterns(bindingPattern: ObjectBindingPattern, bindingElements: ExpressionReverseChain[], parent: ExpressionReverseChain) {
+        for (const bindingElement of bindingPattern.elements) {
+            let name: string;
+            if (bindingElement.propertyName) {
+                if (isComputedPropertyName(bindingElement.propertyName)) {
+                    bindingElements.push({
+                        element: bindingElement,
+                        parent,
+                        expression: { kind: ExpressionType.COMPUTED, computed: bindingElement.propertyName.expression },
+                    });
+                    continue;
+                }
+                else {
+                    name = bindingElement.propertyName.text;
+                }
+            }
             else {
-                name = bindingElement.propertyName.text;
+                name = (bindingElement.name as Identifier).text;
+            }
+            bindingElements.push({
+                element: bindingElement,
+                parent,
+                expression: { kind: ExpressionType.TEXT, text: name },
+            });
+        }
+    }
+
+    function createChainedExpression(expression: ExpressionReverseChain, expressionToVar: Map<Expression, Identifier>): Expression {
+        const reverseTraverse: ExpressionReverseChain[] = [expression];
+        while (expression.parent) {
+            expression = expression.parent;
+            reverseTraverse.push(expression);
+        }
+        let chainedExpression: Expression = (reverseTraverse[reverseTraverse.length - 1].expression as { identifier: Identifier; }).identifier;
+        for (let i = reverseTraverse.length - 2; i >= 0; --i) {
+            const nextSubExpr = reverseTraverse[i].expression;
+            if (nextSubExpr.kind === ExpressionType.TEXT) {
+                chainedExpression = factory.createPropertyAccessChain(
+                    chainedExpression,
+                    /*questionDotToken*/ undefined,
+                    factory.createIdentifier(nextSubExpr.text),
+                );
+            }
+            else if (nextSubExpr.kind === ExpressionType.COMPUTED) {
+                chainedExpression = factory.createElementAccessExpression(
+                    chainedExpression,
+                    expressionToVar.get(nextSubExpr.computed)!,
+                );
+            }
+            else if (nextSubExpr.kind === ExpressionType.ARRAY_ACCESS) {
+                chainedExpression = factory.createElementAccessExpression(
+                    chainedExpression,
+                    nextSubExpr.arrayIndex,
+                );
             }
         }
-        else {
-            name = (bindingElement.name as Identifier).text;
-        }
-        bindingElements.push({
-            element: bindingElement,
-            parent,
-            expression: { kind: ExpressionType.TEXT, text: name },
-        });
+        return chainedExpression;
     }
-}
 
-function createChainedExpression(expression: ExpressionReverseChain, expressionToVar: Map<Expression, Identifier>): Expression {
-    const reverseTraverse: ExpressionReverseChain[] = [expression];
-    while (expression.parent) {
-        expression = expression.parent;
-        reverseTraverse.push(expression);
+    function typeToTypeNode(type: Type, enclosingDeclaration: Node) {
+        const typeNode = typeChecker.typeToTypeNode(
+            type,
+            enclosingDeclaration,
+            declarationEmitNodeBuilderFlags,
+        );
+        if (!typeNode) {
+            return undefined;
+        }
+        return typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget);
     }
-    let chainedExpression: Expression = (reverseTraverse[reverseTraverse.length - 1].expression as { identifier: Identifier; }).identifier;
-    for (let i = reverseTraverse.length - 2; i >= 0; --i) {
-        const nextSubExpr = reverseTraverse[i].expression;
-        if (nextSubExpr.kind === ExpressionType.TEXT) {
-            chainedExpression = factory.createPropertyAccessChain(
-                chainedExpression,
-                /*questionDotToken*/ undefined,
-                factory.createIdentifier(nextSubExpr.text),
-            );
-        }
-        else if (nextSubExpr.kind === ExpressionType.COMPUTED) {
-            chainedExpression = factory.createElementAccessExpression(
-                chainedExpression,
-                expressionToVar.get(nextSubExpr.computed)!,
-            );
-        }
-        else if (nextSubExpr.kind === ExpressionType.ARRAY_ACCESS) {
-            chainedExpression = factory.createElementAccessExpression(
-                chainedExpression,
-                nextSubExpr.arrayIndex,
-            );
+
+    function tryGetReturnType(node: SignatureDeclaration): Type | undefined {
+        const signature = typeChecker.getSignatureFromDeclaration(node);
+        if (signature) {
+            return typeChecker.getReturnTypeOfSignature(signature);
         }
     }
-    return chainedExpression;
-}
 
-function typeToTypeNode(type: Type, enclosingDeclaration: Node, typeChecker: TypeChecker) {
-    const typeNode = typeChecker.typeToTypeNode(
-        type,
-        enclosingDeclaration,
-        declarationEmitNodeBuilderFlags,
-    );
-    return typeNode;
-}
-
-function tryGetReturnType(typeChecker: TypeChecker, node: SignatureDeclaration): Type | undefined {
-    const signature = typeChecker.getSignatureFromDeclaration(node);
-    if (signature) {
-        return typeChecker.getReturnTypeOfSignature(signature);
+    function addTypesToParametersArray(nodeArray: NodeArray<ParameterDeclaration> | undefined) {
+        if (nodeArray === undefined) return undefined;
+        nodeArray.forEach(param => addTypeToParameterDeclaration(param));
     }
-}
 
-function addTypesToParametersArray(changes: textChanges.ChangeTracker, nodeArray: NodeArray<ParameterDeclaration> | undefined, typeChecker: TypeChecker) {
-    if (nodeArray === undefined) return undefined;
-    nodeArray.forEach(param => addTypeToParameterDeclaration(changes, param, typeChecker));
-}
-
-function addTypeToParameterDeclaration(changes: textChanges.ChangeTracker, parameter: ParameterDeclaration, typeChecker: TypeChecker): void {
-    if (!parameter.type) {
-        const type = typeChecker.getTypeAtLocation(parameter);
-        if (type) {
-            const typeNode = typeToTypeNode(type, parameter, typeChecker);
-            if (typeNode) {
-                changes.tryInsertTypeAnnotation(getSourceFileOfNode(parameter), parameter, typeNode);
+    function addTypeToParameterDeclaration(parameter: ParameterDeclaration): void {
+        if (!parameter.type) {
+            const type = typeChecker.getTypeAtLocation(parameter);
+            if (type) {
+                const typeNode = typeToTypeNode(type, parameter);
+                if (typeNode) {
+                    changes.tryInsertTypeAnnotation(getSourceFileOfNode(parameter), parameter, typeNode);
+                }
             }
         }
     }
