@@ -31,6 +31,7 @@ import {
     endsWith,
     ensureTrailingDirectorySeparator,
     equateStringsCaseSensitive,
+    escapeString,
     Extension,
     fileExtensionIsOneOf,
     filter,
@@ -62,6 +63,7 @@ import {
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
     getTextOfJsxAttributeName,
+    getTextOfNode,
     getTokenAtPosition,
     hasIndexSignature,
     hasProperty,
@@ -260,8 +262,13 @@ function convertStringLiteralCompletions(
             return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, optionalReplacementSpan, entries };
         }
         case StringLiteralCompletionKind.Types: {
+            const quoteChar = contextToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral
+                ? CharacterCodes.backtick
+                : startsWith(getTextOfNode(contextToken), "'")
+                ? CharacterCodes.singleQuote
+                : CharacterCodes.doubleQuote;
             const entries = completion.types.map(type => ({
-                name: type.value,
+                name: escapeString(type.value, quoteChar),
                 kindModifiers: ScriptElementKindModifier.none,
                 kind: ScriptElementKind.string,
                 sortText: SortText.LocationPriority,
@@ -643,14 +650,14 @@ function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOpti
  */
 function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, scriptDirectory: string, ignoreCase: boolean): readonly string[] {
     // Make all paths absolute/normalized if they are not already
-    rootDirs = rootDirs.map(rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
+    rootDirs = rootDirs.map(rootDirectory => ensureTrailingDirectorySeparator(normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory))));
 
     // Determine the path to the directory containing the script relative to the root directory it is contained within
     const relativeDirectory = firstDefined(rootDirs, rootDirectory => containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length) : undefined)!; // TODO: GH#18217
 
     // Now find a path for each potential directory that is to be merged with the one containing the script
     return deduplicate<string>(
-        [...rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)), scriptDirectory],
+        [...rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)), scriptDirectory].map(baseDir => removeTrailingDirectorySeparator(baseDir)),
         equateStringsCaseSensitive,
         compareStringsCaseSensitive,
     );

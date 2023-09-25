@@ -403,7 +403,7 @@ export function createTextChangeRange(span: TextSpan, newLength: number): TextCh
     return { span, newLength };
 }
 
-export let unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0); // eslint-disable-line prefer-const
+export const unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
 
 /**
  * Called to merge all the changes that occurred across several versions of a script snapshot
@@ -1705,6 +1705,11 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
 }
 
 /** @internal */
+export function isClassFieldAndNotAutoAccessor(node: Node): boolean {
+    return node.parent && isClassLike(node.parent) && isPropertyDeclaration(node) && !hasAccessorModifier(node);
+}
+
+/** @internal */
 export function isMethodOrAccessor(node: Node): node is MethodDeclaration | AccessorDeclaration {
     switch (node.kind) {
         case SyntaxKind.MethodDeclaration:
@@ -1913,6 +1918,11 @@ export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAcc
     const kind = node.kind;
     return kind === SyntaxKind.PropertyAccessExpression
         || kind === SyntaxKind.QualifiedName;
+}
+
+/** @internal */
+export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | SignatureDeclaration {
+    return isCallLikeExpression(node) || isFunctionLike(node);
 }
 
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {

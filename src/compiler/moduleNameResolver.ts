@@ -91,14 +91,12 @@ import {
     removeFileExtension,
     removePrefix,
     ResolutionMode,
-    ResolutionNameAndModeGetter,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     some,
     sort,
-    SourceFile,
     startsWith,
     supportedDeclarationExtensions,
     supportedJSExtensionsFlat,
@@ -1091,22 +1089,6 @@ export function createModeAwareCache<T>(): ModeAwareCache<T> {
     }
 }
 
-/** @internal */
-export function zipToModeAwareCache<K, V>(
-    file: SourceFile,
-    keys: readonly K[],
-    values: readonly V[],
-    nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
-): ModeAwareCache<V> {
-    Debug.assert(keys.length === values.length);
-    const map = createModeAwareCache<V>();
-    for (let i = 0; i < keys.length; ++i) {
-        const entry = keys[i];
-        map.set(nameAndModeGetter.getName(entry), nameAndModeGetter.getMode(entry, file), values[i]);
-    }
-    return map;
-}
-
 function getOriginalOrResolvedModuleFileName(result: ResolvedModuleWithFailedLookupLocations) {
     return result.resolvedModule && (result.resolvedModule.originalPath || result.resolvedModule.resolvedFileName);
 }
@@ -1896,7 +1878,6 @@ function realPath(path: string, host: ModuleResolutionHost, traceEnabled: boolea
     if (traceEnabled) {
         trace(host, Diagnostics.Resolving_real_path_for_0_result_1, path, real);
     }
-    Debug.assert(host.fileExists(real), `${path} linked to nonexistent file ${real}`);
     return real;
 }
 
@@ -2231,7 +2212,11 @@ function loadEntrypointsFromExportMap(
                     scope.packageDirectory,
                     extensionsToExtensionsArray(extensions),
                     /*excludes*/ undefined,
-                    [changeAnyExtension(target.replace("*", "**/*"), getDeclarationEmitExtensionForPath(target))],
+                    [
+                        isDeclarationFileName(target)
+                            ? target.replace("*", "**/*")
+                            : changeAnyExtension(target.replace("*", "**/*"), getDeclarationEmitExtensionForPath(target)),
+                    ],
                 ).forEach(entry => {
                     entrypoints = appendIfUnique(entrypoints, {
                         path: entry,

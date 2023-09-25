@@ -6026,7 +6026,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.imports = undefined!;
         node.moduleAugmentations = undefined!;
         node.ambientModuleNames = undefined!;
-        node.resolvedModules = undefined;
         node.classifiableNames = undefined;
         node.impliedNodeFormat = undefined;
         return node;
