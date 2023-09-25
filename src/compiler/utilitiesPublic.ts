@@ -1920,6 +1920,11 @@ export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAcc
         || kind === SyntaxKind.QualifiedName;
 }
 
+/** @internal */
+export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | SignatureDeclaration {
+    return isCallLikeExpression(node) || isFunctionLike(node);
+}
+
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {
     switch (node.kind) {
         case SyntaxKind.JsxOpeningElement:
