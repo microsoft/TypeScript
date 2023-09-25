@@ -1,3 +1,11 @@
+immutable.ts(305,22): error TS2430: Interface 'Set<T>' incorrectly extends interface 'Seq<never, T>'.
+  The types of 'map(...).filter(...).concat(...).toMap().toSeq().toOrderedMap().keySeq().toMap().mapKeys(...).toSeq().toOrderedMap().toSet().union' are incompatible between these types.
+    Type '(...collections: (never[] | Collection<any, never>)[]) => Set<never>' is not assignable to type '(...collections: (any[] | Collection<any, any>)[]) => Set<any>'.
+      Types of parameters 'collections' and 'collections' are incompatible.
+        Type 'any[] | Collection<any, any>' is not assignable to type 'never[] | Collection<any, never>'.
+          Type 'any[]' is not assignable to type 'never[] | Collection<any, never>'.
+            Type 'any[]' is not assignable to type 'never[]'.
+              Type 'any' is not assignable to type 'never'.
 immutable.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Keyed<K, V>' is not assignable to type 'this'.
@@ -33,7 +41,7 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         flatMap<M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any): N2<M>;
         toSeq(): N2<T>;
     }
-==== immutable.ts (3 errors) ====
+==== immutable.ts (4 errors) ====
     // Test that complex recursive collections can pass the `extends` assignability check without
     // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
     // started being checked.
@@ -339,6 +347,15 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         export function Set<T>(): Seq.Set<T>;
         export function Set<T>(collection: Iterable<T>): Seq.Set<T>;
         export interface Set<T> extends Seq<never, T>, Collection.Set<T> {
+                         ~~~
+!!! error TS2430: Interface 'Set<T>' incorrectly extends interface 'Seq<never, T>'.
+!!! error TS2430:   The types of 'map(...).filter(...).concat(...).toMap().toSeq().toOrderedMap().keySeq().toMap().mapKeys(...).toSeq().toOrderedMap().toSet().union' are incompatible between these types.
+!!! error TS2430:     Type '(...collections: (never[] | Collection<any, never>)[]) => Set<never>' is not assignable to type '(...collections: (any[] | Collection<any, any>)[]) => Set<any>'.
+!!! error TS2430:       Types of parameters 'collections' and 'collections' are incompatible.
+!!! error TS2430:         Type 'any[] | Collection<any, any>' is not assignable to type 'never[] | Collection<any, never>'.
+!!! error TS2430:           Type 'any[]' is not assignable to type 'never[] | Collection<any, never>'.
+!!! error TS2430:             Type 'any[]' is not assignable to type 'never[]'.
+!!! error TS2430:               Type 'any' is not assignable to type 'never'.
           toJS(): Array<any>;
           toJSON(): Array<T>;
           toSeq(): this;

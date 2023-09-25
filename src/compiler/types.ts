@@ -1540,7 +1540,7 @@ export interface MutableNodeArray<T extends Node> extends Array<T>, TextRange {
     /** @internal */ transformFlags: TransformFlags; // Flags for transforms, possibly undefined
 }
 
-export interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
+export interface NodeArray<out T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
     readonly hasTrailingComma: boolean;
     /** @internal */ transformFlags: TransformFlags; // Flags for transforms, possibly undefined
 }

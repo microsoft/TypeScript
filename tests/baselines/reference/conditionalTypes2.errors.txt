@@ -33,9 +33,16 @@ conditionalTypes2.ts(74,12): error TS2345: Argument of type 'Extract<T, Foo & Ba
 conditionalTypes2.ts(75,12): error TS2345: Argument of type 'Extract2<T, Foo, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
   Type 'T extends Bar ? T : never' is not assignable to type '{ foo: string; bat: string; }'.
     Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
+conditionalTypes2.ts(91,5): error TS2416: Property 'tail' in type 'Vector<T>' is not assignable to the same property in base type 'Seq<T>'.
+  Type '() => Opt<Vector<T>>' is not assignable to type '() => Opt<Seq<T>>'.
+    Call signature return types 'Opt<Vector<T>>' and 'Opt<Seq<T>>' are incompatible.
+      The types returned by 'toVector().tail().toVector()' are incompatible between these types.
+        Type 'Vector<Vector<Vector<T>>>' is not assignable to type 'Vector<Vector<Seq<T>>>'.
+          Type 'Vector<Seq<T>>' is not assignable to type 'Vector<Vector<T>>'.
+conditionalTypes2.ts(94,5): error TS2394: This overload signature is not compatible with its implementation signature.
 
 
-==== conditionalTypes2.ts (7 errors) ====
+==== conditionalTypes2.ts (9 errors) ====
     interface Covariant<T> {
         foo: T extends string ? T : number;
     }
@@ -177,9 +184,19 @@ conditionalTypes2.ts(75,12): error TS2345: Argument of type 'Extract2<T, Foo, Ba
     
     class Vector<T> implements Seq<T> {
         tail(): Opt<Vector<T>> {
+        ~~~~
+!!! error TS2416: Property 'tail' in type 'Vector<T>' is not assignable to the same property in base type 'Seq<T>'.
+!!! error TS2416:   Type '() => Opt<Vector<T>>' is not assignable to type '() => Opt<Seq<T>>'.
+!!! error TS2416:     Call signature return types 'Opt<Vector<T>>' and 'Opt<Seq<T>>' are incompatible.
+!!! error TS2416:       The types returned by 'toVector().tail().toVector()' are incompatible between these types.
+!!! error TS2416:         Type 'Vector<Vector<Vector<T>>>' is not assignable to type 'Vector<Vector<Seq<T>>>'.
+!!! error TS2416:           Type 'Vector<Seq<T>>' is not assignable to type 'Vector<Vector<T>>'.
             return <any>undefined;
         }
         partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
+        ~~~~~~~~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 conditionalTypes2.ts:96:5: The implementation signature is declared here.
         partition2(predicate:(x:T)=>boolean): [Vector<T>,Vector<T>];
         partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
             return <any>undefined;

@@ -1,3 +1,9 @@
+genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts(9,5): error TS2322: Type 'Fn<T2>' is not assignable to type 'Fn<T1>'.
+  Type 'T1' is not assignable to type 'T2'.
+    'T2' could be instantiated with an arbitrary type which could be unrelated to 'T1'.
+genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts(10,5): error TS2322: Type 'Fn<T1>' is not assignable to type 'Fn<T2>'.
+  Type 'T2' is not assignable to type 'T1'.
+    'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
 genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts(12,5): error TS2322: Type 'Concrete2' is not assignable to type 'Concrete1'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'U' is not assignable to type 'string'.
@@ -16,7 +22,7 @@ genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts(16,5): error TS2
       'T1' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 
 
-==== genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts (4 errors) ====
+==== genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts (6 errors) ====
     type Fn<T> = <U extends T>(x: U) => U;
     
     type Concrete1 = <U extends number>(x: U) => U;
@@ -26,7 +32,17 @@ genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts(16,5): error TS2
         // every single one of these assignments should error
     
         t1 = t2;
+        ~~
+!!! error TS2322: Type 'Fn<T2>' is not assignable to type 'Fn<T1>'.
+!!! error TS2322:   Type 'T1' is not assignable to type 'T2'.
+!!! error TS2322:     'T2' could be instantiated with an arbitrary type which could be unrelated to 'T1'.
+!!! related TS2208 genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts:6:12: This type parameter might need an `extends T2` constraint.
         t2 = t1;
+        ~~
+!!! error TS2322: Type 'Fn<T1>' is not assignable to type 'Fn<T2>'.
+!!! error TS2322:   Type 'T2' is not assignable to type 'T1'.
+!!! error TS2322:     'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
+!!! related TS2208 genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts:6:16: This type parameter might need an `extends T1` constraint.
     
         c1 = c2;
         ~~
