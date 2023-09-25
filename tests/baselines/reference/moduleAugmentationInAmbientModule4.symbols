@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/moduleAugmentationInAmbientModule4.ts] ////
+
+=== main.ts ===
 /// <reference path="O.d.ts" />
 /// <reference path="O2.d.ts" />
 
@@ -24,7 +26,7 @@ x.foo2().x2;
 >foo2 : Symbol(Observable.foo2, Decl(O2.d.ts, 3, 30))
 >x2 : Symbol(Cls2.x2, Decl(O2.d.ts, 1, 16))
 
-=== tests/cases/compiler/O.d.ts ===
+=== O.d.ts ===
 declare module "Observable" {
 >"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O2.d.ts, 1, 29))
 
@@ -59,7 +61,7 @@ declare module "Map" {
     }
 }
 
-=== tests/cases/compiler/O2.d.ts ===
+=== O2.d.ts ===
 declare module "Map" {
 >"Map" : Symbol("Map", Decl(O.d.ts, 6, 1), Decl(O2.d.ts, 0, 0))
 

@@ -1,9 +1,8 @@
-tests/cases/conformance/salsa/a.js(7,17): error TS2322: Type '{ q: number; }' is not assignable to type 'C'.
-  Object literal may only specify known properties, and 'q' does not exist in type 'C'.
-tests/cases/conformance/salsa/a.js(11,3): error TS2339: Property 'q' does not exist on type 'C'.
+a.js(7,17): error TS2353: Object literal may only specify known properties, and 'q' does not exist in type 'C'.
+a.js(11,3): error TS2339: Property 'q' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/salsa/a.js (2 errors) ====
+==== a.js (2 errors) ====
     // mixed prototype-assignment+class declaration
     class C { constructor() { this.p = 1; } }
     // Property assignment does nothing.
@@ -11,9 +10,8 @@ tests/cases/conformance/salsa/a.js(11,3): error TS2339: Property 'q' does not ex
     // and that only works on classes with no superclass.
     // (Object.defineProperty isn't recognised as a JS special assignment right now.)
     C.prototype = { q: 2 };
-                    ~~~~
-!!! error TS2322: Type '{ q: number; }' is not assignable to type 'C'.
-!!! error TS2322:   Object literal may only specify known properties, and 'q' does not exist in type 'C'.
+                    ~
+!!! error TS2353: Object literal may only specify known properties, and 'q' does not exist in type 'C'.
     
     const c = new C()
     c.p

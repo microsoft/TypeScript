@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularResolvedSignature.ts ===
+//// [tests/cases/compiler/circularResolvedSignature.ts] ////
+
+=== circularResolvedSignature.ts ===
 declare function useState<S>(initialState: (() => S)): [S, (s: S) => void];
 >useState : Symbol(useState, Decl(circularResolvedSignature.ts, 0, 0))
 >S : Symbol(S, Decl(circularResolvedSignature.ts, 0, 26))

@@ -1,86 +1,86 @@
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(13,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(14,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(15,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(16,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(17,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(18,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(19,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(20,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(23,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(24,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(25,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(26,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(27,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(28,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(29,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(30,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(33,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(34,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(35,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(36,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(37,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(38,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(39,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(40,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(43,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(44,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(45,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(46,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(47,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(48,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(49,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(50,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(53,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(54,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(55,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(56,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(57,16): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(58,16): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(59,16): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(60,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(63,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(64,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(65,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(66,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(67,16): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(68,16): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(69,16): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(70,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(73,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(74,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(75,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(76,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(77,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(78,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(79,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(80,19): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(83,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(84,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(85,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(86,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(87,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(88,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(89,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(90,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(93,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(94,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(95,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(96,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(97,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(98,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(99,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(100,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(103,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(104,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(105,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(106,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(107,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(108,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(109,15): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts(110,17): error TS2532: Object is possibly 'undefined'.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(13,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(14,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(15,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(16,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(17,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(18,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(19,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(20,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(23,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(24,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(25,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(26,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(27,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(28,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(29,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(30,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(33,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(34,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(35,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(36,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(37,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(38,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(39,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(40,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(43,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(44,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(45,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(46,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(47,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(48,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(49,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(50,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(53,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(54,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(55,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(56,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(57,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(58,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(59,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(60,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(63,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(64,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(65,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(66,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(67,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(68,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(69,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(70,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(73,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(74,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(75,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(76,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(77,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(78,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(79,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(80,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(83,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(84,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(85,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(86,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(87,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(88,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(89,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(90,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(93,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(94,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(95,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(96,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(97,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(98,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(99,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(100,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(103,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(104,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(105,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(106,11): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(107,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(108,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(109,15): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndValidOperands.ts(110,17): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndValidOperands.ts (80 errors) ====
+==== arithmeticOperatorWithUndefinedValueAndValidOperands.ts (80 errors) ====
     // If one operand is the undefined or undefined value, it is treated as having the type of the
     // other operand.
     
@@ -95,259 +95,259 @@ tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeti
     // operator *
     var ra1 = undefined * a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ra2 = undefined * b;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ra3 = undefined * 1;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ra4 = undefined * E.a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ra5 = a * undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ra6 = b * undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ra7 = 0 * undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ra8 = E.b * undefined;
                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator /
     var rb1 = undefined / a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rb2 = undefined / b;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rb3 = undefined / 1;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rb4 = undefined / E.a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rb5 = a / undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rb6 = b / undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rb7 = 0 / undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rb8 = E.b / undefined;
                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator %
     var rc1 = undefined % a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rc2 = undefined % b;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rc3 = undefined % 1;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rc4 = undefined % E.a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rc5 = a % undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rc6 = b % undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rc7 = 0 % undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rc8 = E.b % undefined;
                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator -
     var rd1 = undefined - a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rd2 = undefined - b;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rd3 = undefined - 1;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rd4 = undefined - E.a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rd5 = a - undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rd6 = b - undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rd7 = 0 - undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rd8 = E.b - undefined;
                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator <<
     var re1 = undefined << a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var re2 = undefined << b;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var re3 = undefined << 1;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var re4 = undefined << E.a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var re5 = a << undefined;
                    ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var re6 = b << undefined;
                    ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var re7 = 0 << undefined;
                    ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var re8 = E.b << undefined;
                      ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator >>
     var rf1 = undefined >> a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rf2 = undefined >> b;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rf3 = undefined >> 1;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rf4 = undefined >> E.a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rf5 = a >> undefined;
                    ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rf6 = b >> undefined;
                    ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rf7 = 0 >> undefined;
                    ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rf8 = E.b >> undefined;
                      ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator >>>
     var rg1 = undefined >>> a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rg2 = undefined >>> b;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rg3 = undefined >>> 1;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rg4 = undefined >>> E.a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rg5 = a >>> undefined;
                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rg6 = b >>> undefined;
                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rg7 = 0 >>> undefined;
                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rg8 = E.b >>> undefined;
                       ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator &
     var rh1 = undefined & a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rh2 = undefined & b;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rh3 = undefined & 1;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rh4 = undefined & E.a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rh5 = a & undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rh6 = b & undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rh7 = 0 & undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rh8 = E.b & undefined;
                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator ^
     var ri1 = undefined ^ a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ri2 = undefined ^ b;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ri3 = undefined ^ 1;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ri4 = undefined ^ E.a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ri5 = a ^ undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ri6 = b ^ undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ri7 = 0 ^ undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ri8 = E.b ^ undefined;
                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // operator |
     var rj1 = undefined | a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rj2 = undefined | b;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rj3 = undefined | 1;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rj4 = undefined | E.a;
               ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rj5 = a | undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rj6 = b | undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rj7 = 0 | undefined;
                   ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var rj8 = E.b | undefined;
                     ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.

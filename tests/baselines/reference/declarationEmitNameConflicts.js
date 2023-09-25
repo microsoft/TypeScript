@@ -63,7 +63,7 @@ var f;
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = void 0;
 var im = require("./declarationEmit_nameConflicts_1");
 var M;
@@ -86,7 +86,7 @@ var M;
     M.b = M.C;
     M.c = N;
     M.d = im;
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 (function (M) {
     var P;
     (function (P) {
@@ -111,7 +111,7 @@ var M;
         P.g = M.c.g; // ok
         P.d = M.d; // emitted incorrectly as typeof im
     })(P = M.P || (M.P = {}));
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 (function (M) {
     var Q;
     (function (Q) {
@@ -130,22 +130,22 @@ var M;
             ;
         })(N = Q.N || (Q.N = {}));
     })(Q = M.Q || (M.Q = {}));
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 
 
 //// [declarationEmit_nameConflicts_1.d.ts]
-declare module f {
+declare namespace f {
     class c {
     }
 }
 export = f;
 //// [declarationEmit_nameConflicts_0.d.ts]
 import im = require('./declarationEmit_nameConflicts_1');
-export declare module M {
+export declare namespace M {
     function f(): void;
     class C {
     }
-    module N {
+    namespace N {
         function g(): void;
         interface I {
         }
@@ -155,11 +155,11 @@ export declare module M {
     export import c = N;
     export import d = im;
 }
-export declare module M.P {
+export declare namespace M.P {
     function f(): void;
     class C {
     }
-    module N {
+    namespace N {
         function g(): void;
         interface I {
         }
@@ -171,11 +171,11 @@ export declare module M.P {
     var g: typeof M.N.g;
     var d: typeof M.d;
 }
-export declare module M.Q {
+export declare namespace M.Q {
     function f(): void;
     class C {
     }
-    module N {
+    namespace N {
         function g(): void;
         interface I {
         }
@@ -184,7 +184,7 @@ export declare module M.Q {
     }
     interface I extends M.c.I {
     }
-    module c {
+    namespace c {
         interface I extends M.c.I {
         }
     }

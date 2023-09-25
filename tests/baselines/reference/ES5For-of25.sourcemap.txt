@@ -5,7 +5,7 @@ sourceRoot:
 sources: ES5For-of25.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of25.js
+emittedFile:ES5For-of25.js
 sourceFile:ES5For-of25.ts
 -------------------------------------------------------------------
 >>>var a = [1, 2, 3];
@@ -58,6 +58,7 @@ sourceFile:ES5For-of25.ts
 8 >                                         ^^
 9 >                                           ^^^^
 10>                                               ^^
+11>                                                 ^
 1->
   >
 2 >for (var v of 
@@ -69,6 +70,7 @@ sourceFile:ES5For-of25.ts
 8 >                                         
 9 >                                           a
 10>                                               ) 
+11>                                                 {
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
 2 >Emitted(2, 6) Source(2, 15) + SourceIndex(0)
 3 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
@@ -79,6 +81,7 @@ sourceFile:ES5For-of25.ts
 8 >Emitted(2, 44) Source(2, 15) + SourceIndex(0)
 9 >Emitted(2, 48) Source(2, 16) + SourceIndex(0)
 10>Emitted(2, 50) Source(2, 18) + SourceIndex(0)
+11>Emitted(2, 51) Source(2, 19) + SourceIndex(0)
 ---
 >>>    var v = a_1[_i];
 1 >^^^^
@@ -120,10 +123,13 @@ sourceFile:ES5For-of25.ts
 3 >Emitted(5, 7) Source(4, 7) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >}
-1 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=ES5For-of25.js.map

@@ -1,0 +1,98 @@
+file13.ts(2,1): error TS1434: Unexpected keyword or identifier.
+file13.ts(2,1): error TS2304: Cannot find name 'abstract'.
+file14.ts(2,1): error TS1128: Declaration or statement expected.
+file14.ts(2,8): error TS1434: Unexpected keyword or identifier.
+file14.ts(2,8): error TS2304: Cannot find name 'abstract'.
+file15.ts(2,16): error TS2304: Cannot find name 'abstract'.
+file15.ts(2,25): error TS1005: ';' expected.
+file3.ts(2,8): error TS1206: Decorators are not valid here.
+file6.ts(2,13): error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
+file7.ts(2,21): error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
+
+
+==== global.ts (0 errors) ====
+    /** @type {*} */
+    var dec;
+    
+==== file1.ts (0 errors) ====
+    // ok
+    @dec export class C1 { }
+    
+==== file2.ts (0 errors) ====
+    // ok
+    @dec export default class C2 {}
+    
+==== file3.ts (1 errors) ====
+    // error
+    export @dec default class C3 {}
+           ~~~~
+!!! error TS1206: Decorators are not valid here.
+    
+==== file4.ts (0 errors) ====
+    // ok
+    export @dec class C4 {}
+    
+==== file5.ts (0 errors) ====
+    // ok
+    export default @dec class C5 {}
+    
+==== file6.ts (1 errors) ====
+    // error
+    @dec export @dec class C6 {}
+                ~~~~
+!!! error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
+!!! related TS1486 file6.ts:2:1: Decorator used before 'export' here.
+    
+==== file7.ts (1 errors) ====
+    // error
+    @dec export default @dec class C7 {}
+                        ~~~~
+!!! error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
+!!! related TS1486 file7.ts:2:1: Decorator used before 'export' here.
+    
+==== file8.ts (0 errors) ====
+    // ok
+    @dec abstract class C8 {}
+    
+==== file9.ts (0 errors) ====
+    // ok
+    @dec export abstract class C9 {}
+    
+==== file10.ts (0 errors) ====
+    // ok
+    @dec export default abstract class C10 {}
+    
+==== file11.ts (0 errors) ====
+    // ok
+    export @dec abstract class C11 {}
+    
+==== file12.ts (0 errors) ====
+    // ok
+    export default @dec abstract class C12 {}
+    
+==== file13.ts (2 errors) ====
+    // error
+    abstract @dec class C13 {}
+    ~~~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+    ~~~~~~~~
+!!! error TS2304: Cannot find name 'abstract'.
+    
+==== file14.ts (3 errors) ====
+    // error
+    export abstract @dec class C14 {}
+    ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+           ~~~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+           ~~~~~~~~
+!!! error TS2304: Cannot find name 'abstract'.
+    
+==== file15.ts (2 errors) ====
+    // error
+    export default abstract @dec class C15 {}
+                   ~~~~~~~~
+!!! error TS2304: Cannot find name 'abstract'.
+                            ~
+!!! error TS1005: ';' expected.
+    

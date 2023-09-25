@@ -1,4 +1,6 @@
-=== tests/cases/compiler/abstractPropertyNegative.ts ===
+//// [tests/cases/compiler/abstractPropertyNegative.ts] ////
+
+=== abstractPropertyNegative.ts ===
 interface A {
     prop: string;
 >prop : string
@@ -24,7 +26,7 @@ abstract class B implements A {
     abstract get mismatch(): string;
 >mismatch : string
 
-    abstract set mismatch(val: number); // error, not same type
+    abstract set mismatch(val: number);
 >mismatch : string
 >val : number
 }

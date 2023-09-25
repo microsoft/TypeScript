@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxIntrinsicElementsTypeArgumentErrors.tsx] ////
+
 //// [jsxIntrinsicElementsTypeArgumentErrors.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";
@@ -31,7 +33,7 @@ const l = <div<number>/>; // existing type argument with no internal issues
 
 //// [jsxIntrinsicElementsTypeArgumentErrors.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var React = require("react");
 // opening + closing

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteral.ts] ////
+
 //// [octalIntegerLiteral.ts]
 var oct1 = 0o45436;
 var oct2 = 0O45436;

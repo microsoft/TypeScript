@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts] ////
+
 //// [multiLineContextDiagnosticWithPretty.ts]
 const x: {c: string} = {
     a: {
@@ -9,6 +11,6 @@ const x: {c: string} = {
 //// [multiLineContextDiagnosticWithPretty.js]
 var x = {
     a: {
-        b: ''
+        b: '',
     }
 };

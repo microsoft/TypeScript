@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag3.ts] ////
+
+=== /a.js ===
+/** @type {{ f(s: string): void } & Record<string, unknown> }} */
+let obj = /** @satisfies {{ g(s: string): void } & Record<string, unknown>} */ ({
+>obj : Symbol(obj, Decl(a.js, 1, 3))
+
+    f(s) { }, // "incorrect" implicit any on 's'
+>f : Symbol(f, Decl(a.js, 1, 81))
+>s : Symbol(s, Decl(a.js, 2, 6))
+
+    g(s) { }
+>g : Symbol(g, Decl(a.js, 2, 13))
+>s : Symbol(s, Decl(a.js, 3, 6))
+
+});
+
+// This needs to not crash (outer node is not expression)
+/** @satisfies {{ f(s: string): void }} */ ({ f(x) { } })
+>f : Symbol(f, Decl(a.js, 7, 45))
+>x : Symbol(x, Decl(a.js, 7, 48))
+

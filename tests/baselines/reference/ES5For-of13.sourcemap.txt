@@ -5,7 +5,7 @@ sourceRoot:
 sources: ES5For-of13.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of13.js
+emittedFile:ES5For-of13.js
 sourceFile:ES5For-of13.ts
 -------------------------------------------------------------------
 >>>for (var _i = 0, _a = ['a', 'b', 'c']; _i < _a.length; _i++) {
@@ -25,6 +25,7 @@ sourceFile:ES5For-of13.ts
 14>                                                     ^^
 15>                                                       ^^^^
 16>                                                           ^^
+17>                                                             ^
 1 >
 2 >for (let v of 
 3 >     ['a', 'b', 'c']
@@ -41,6 +42,7 @@ sourceFile:ES5For-of13.ts
 14>                                                     
 15>                                                       ['a', 'b', 'c']
 16>                                                           ) 
+17>                                                             {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 6) Source(1, 15) + SourceIndex(0)
 3 >Emitted(1, 16) Source(1, 30) + SourceIndex(0)
@@ -57,6 +59,7 @@ sourceFile:ES5For-of13.ts
 14>Emitted(1, 56) Source(1, 15) + SourceIndex(0)
 15>Emitted(1, 60) Source(1, 30) + SourceIndex(0)
 16>Emitted(1, 62) Source(1, 32) + SourceIndex(0)
+17>Emitted(1, 63) Source(1, 33) + SourceIndex(0)
 ---
 >>>    var v = _a[_i];
 1 >^^^^
@@ -94,10 +97,13 @@ sourceFile:ES5For-of13.ts
 6 >Emitted(3, 15) Source(2, 15) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >}
-1 >Emitted(4, 2) Source(3, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(4, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(4, 2) Source(3, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=ES5For-of13.js.map

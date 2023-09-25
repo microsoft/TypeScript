@@ -1,12 +1,12 @@
-tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(30,9): error TS18033: Only numeric enums can have computed members, but this expression has type '() => number'. If you do not need exhaustiveness checks, consider using an object literal instead.
-tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(31,16): error TS2332: 'this' cannot be referenced in current location.
-tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(71,13): error TS18033: Only numeric enums can have computed members, but this expression has type '() => number'. If you do not need exhaustiveness checks, consider using an object literal instead.
-tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in current location.
+arrowFunctionContexts.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+arrowFunctionContexts.ts(30,9): error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
+arrowFunctionContexts.ts(31,16): error TS2332: 'this' cannot be referenced in current location.
+arrowFunctionContexts.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+arrowFunctionContexts.ts(71,13): error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
+arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts (6 errors) ====
+==== arrowFunctionContexts.ts (6 errors) ====
     // Arrow function used in with statement
     with (window) {
     ~~~~~~~~~~~~~
@@ -40,7 +40,7 @@ tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(72,20): e
     enum E {
         x = () => 4, // Error expected
             ~~~~~~~
-!!! error TS18033: Only numeric enums can have computed members, but this expression has type '() => number'. If you do not need exhaustiveness checks, consider using an object literal instead.
+!!! error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
         y = (() => this).length // error, can't use this in enum
                    ~~~~
 !!! error TS2332: 'this' cannot be referenced in current location.
@@ -87,7 +87,7 @@ tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(72,20): e
         enum E {
             x = () => 4, // Error expected
                 ~~~~~~~
-!!! error TS18033: Only numeric enums can have computed members, but this expression has type '() => number'. If you do not need exhaustiveness checks, consider using an object literal instead.
+!!! error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
             y = (() => this).length
                        ~~~~
 !!! error TS2332: 'this' cannot be referenced in current location.

@@ -1,8 +1,8 @@
-tests/cases/compiler/a.ts(4,24): error TS2304: Cannot find name 'default'.
-tests/cases/compiler/b.ts(2,24): error TS2304: Cannot find name 'default'.
+a.ts(4,24): error TS2304: Cannot find name 'default'.
+b.ts(2,24): error TS2304: Cannot find name 'default'.
 
 
-==== tests/cases/compiler/a.ts (1 errors) ====
+==== a.ts (1 errors) ====
     export default function () {
         return true;
     }
@@ -10,7 +10,7 @@ tests/cases/compiler/b.ts(2,24): error TS2304: Cannot find name 'default'.
                            ~~~~~~~
 !!! error TS2304: Cannot find name 'default'.
     
-==== tests/cases/compiler/b.ts (1 errors) ====
+==== b.ts (1 errors) ====
     export default { a: true }
     export type X = typeof default; // expect error
                            ~~~~~~~

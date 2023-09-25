@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumMergingErrors.ts] ////
+
 //// [enumMergingErrors.ts]
 // Enum with constant, computed, constant members split across 3 declarations with the same root module
 module M {

@@ -1,8 +1,8 @@
-tests/cases/conformance/es2020/modules/exportAsNamespace_nonExistent.ts(1,21): error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+exportAsNamespace_nonExistent.ts(1,21): error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/conformance/es2020/modules/exportAsNamespace_nonExistent.ts (1 errors) ====
+==== exportAsNamespace_nonExistent.ts (1 errors) ====
     export * as ns from './nonexistent'; // Error
                         ~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module './nonexistent'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     

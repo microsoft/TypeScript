@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClasses.ts] ////
+
 //// [index.js]
 export class A {}
 
@@ -485,7 +487,7 @@ export class E<T, U> {
     /**
      * @param {string} _p
      */
-    static set s1(arg: string);
+    static set s1(_p: string);
     /**
      * @return {string}
      */
@@ -497,7 +499,7 @@ export class E<T, U> {
     /**
      * @param {string} _p
      */
-    static set s3(arg: string);
+    static set s3(_p: string);
     /**
      * @param {T} a
      * @param {U} b
@@ -516,7 +518,7 @@ export class E<T, U> {
     /**
      * @param {U} _p
      */
-    set f1(arg: U);
+    set f1(_p: U);
     /**
      * @return {U}
      */
@@ -528,7 +530,7 @@ export class E<T, U> {
     /**
      * @param {U} _p
      */
-    set f3(arg: U);
+    set f3(_p: U);
 }
 /**
  * @template T,U

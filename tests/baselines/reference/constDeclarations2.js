@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations2.ts] ////
+
 //// [constDeclarations2.ts]
 // No error
 module M {
@@ -18,7 +20,7 @@ var M;
 
 
 //// [constDeclarations2.d.ts]
-declare module M {
+declare namespace M {
     const c1 = false;
     const c2: number;
     const c3 = 0, c4: string, c5: any;

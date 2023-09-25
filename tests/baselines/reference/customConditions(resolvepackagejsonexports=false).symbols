@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/moduleResolution/customConditions.ts] ////
+
+=== /node_modules/lodash/index.d.ts ===
+declare const _: "index";
+>_ : Symbol(_, Decl(index.d.ts, 0, 13))
+
+export = _;
+>_ : Symbol(_, Decl(index.d.ts, 0, 13))
+
+=== /node_modules/lodash/browser.d.ts ===
+declare const _: "browser";
+>_ : Symbol(_, Decl(browser.d.ts, 0, 13))
+
+export default _;
+>_ : Symbol(_, Decl(browser.d.ts, 0, 13))
+
+=== /node_modules/lodash/webpack.d.ts ===
+declare const _: "webpack";
+>_ : Symbol(_, Decl(webpack.d.ts, 0, 13))
+
+export = _;
+>_ : Symbol(_, Decl(webpack.d.ts, 0, 13))
+
+=== /index.ts ===
+import _ from "lodash";
+>_ : Symbol(_, Decl(index.ts, 0, 6))
+

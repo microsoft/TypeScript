@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varianceAnnotationValidation.ts ===
+//// [tests/cases/compiler/varianceAnnotationValidation.ts] ////
+
+=== varianceAnnotationValidation.ts ===
 // Repro from #49607
 
 // Variance annotation error expected

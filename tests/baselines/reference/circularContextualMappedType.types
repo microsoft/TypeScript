@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularContextualMappedType.ts ===
+//// [tests/cases/compiler/circularContextualMappedType.ts] ////
+
+=== circularContextualMappedType.ts ===
 type Func<T> = () => T;
 >Func : Func<T>
 

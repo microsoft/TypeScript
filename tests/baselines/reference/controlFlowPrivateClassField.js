@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowPrivateClassField.ts] ////
+
 //// [controlFlowPrivateClassField.ts]
 class Example {
     #test;
@@ -29,19 +31,19 @@ class Example2 {
 //// [controlFlowPrivateClassField.js]
 "use strict";
 class Example {
+    #test;
     constructor(test) {
         this.#test = test;
     }
-    #test;
     get test() {
         return this.#test;
     }
 }
 class Example2 {
+    #test;
     constructor(test) {
         this.#test = test;
     }
-    #test;
     get test() {
         if (this.#test) {
             return this.#test;

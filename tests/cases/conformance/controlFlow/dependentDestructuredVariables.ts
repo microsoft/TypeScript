@@ -39,6 +39,26 @@ function f12({ kind, payload }: Action) {
     }
 }
 
+// repro #50206
+function f13<T extends Action>({ kind, payload }: T) {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
+function f14<T extends Action>(t: T) {
+    const { kind, payload } = t;
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
 type Action2 =
     | { kind: 'A', payload: number | undefined }
     | { kind: 'B', payload: string | undefined };
@@ -368,5 +388,51 @@ const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) 
         while (!!true) {
             value;  // string
         }
+    }
+}
+
+// Repro from #52152
+
+interface ClientEvents {
+    warn: [message: string];
+    shardDisconnect: [closeEvent: CloseEvent, shardId: number];
+}
+  
+declare class Client {
+    public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+}
+
+const bot = new Client();
+bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
+bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+
+// Destructuring tuple types with different arities
+
+function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
+    if (y === 2) {
+        x;  // 1
+    }
+    if (y === 4) {
+        x;  // 3
+    }
+    if (y === undefined) {
+        x;  // 5
+    }
+    if (x === 1) {
+        y;  // 2
+    }
+    if (x === 3) {
+        y;  // 4
+    }
+    if (x === 5) {
+        y;  // undefined
+    }
+}
+
+// Repro from #55661
+
+function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
+    if (y === undefined) {
+        const shouldNotBeOk: never = x;  // Error
     }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile.ts] ////
+
 //// [emitClassExpressionInDeclarationFile.ts]
 export var simpleExample = class {
     static getTags() { }
@@ -47,7 +49,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = exports.WithTags = exports.FooItem = exports.circularReference = exports.simpleExample = void 0;
 exports.simpleExample = /** @class */ (function () {
     function simpleExample() {

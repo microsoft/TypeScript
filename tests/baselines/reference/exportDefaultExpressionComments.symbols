@@ -1,7 +1,9 @@
-=== tests/cases/conformance/declarationEmit/exportDefaultExpressionComments.ts ===
+//// [tests/cases/conformance/declarationEmit/exportDefaultExpressionComments.ts] ////
+
+=== exportDefaultExpressionComments.ts ===
+
 /**
-No type information for this code. * JSDoc Comments
-No type information for this code. */
-No type information for this code.export default null
-No type information for this code.
-No type information for this code.
+ * JSDoc Comments
+ */
+export default null
+

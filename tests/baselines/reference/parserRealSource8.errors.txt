@@ -1,142 +1,142 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(9,41): error TS2304: Cannot find name 'ScopeChain'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(10,39): error TS2304: Cannot find name 'TypeFlow'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(11,43): error TS2304: Cannot find name 'ModuleDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(15,44): error TS2304: Cannot find name 'SymbolScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(17,15): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(18,20): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(19,14): error TS2304: Cannot find name 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(21,25): error TS2304: Cannot find name 'ScopeChain'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(33,33): error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(42,18): error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(69,48): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(70,27): error TS2304: Cannot find name 'ModuleDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(71,26): error TS2304: Cannot find name 'SymbolTableScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(72,23): error TS2304: Cannot find name 'SymbolAggregateScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(85,27): error TS2304: Cannot find name 'SymbolTableScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(89,24): error TS2304: Cannot find name 'SymbolAggregateScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(99,47): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(100,26): error TS2304: Cannot find name 'InterfaceDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(101,26): error TS2304: Cannot find name 'SymbolTableScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(102,23): error TS2304: Cannot find name 'SymbolAggregateScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(112,28): error TS2304: Cannot find name 'SymbolTableScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(114,28): error TS2304: Cannot find name 'SymbolAggregateScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(122,28): error TS2304: Cannot find name 'SymbolTableScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(125,28): error TS2304: Cannot find name 'SymbolAggregateScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(136,51): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(137,30): error TS2304: Cannot find name 'InterfaceDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(138,26): error TS2304: Cannot find name 'SymbolTableScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(139,23): error TS2304: Cannot find name 'SymbolAggregateScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(146,24): error TS2304: Cannot find name 'SymbolTableScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(148,24): error TS2304: Cannot find name 'SymbolAggregateScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(155,46): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(156,25): error TS2304: Cannot find name 'WithStatement'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(159,27): error TS2304: Cannot find name 'ScopedMembers'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(159,45): error TS2304: Cannot find name 'DualStringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(159,69): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(159,92): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(160,34): error TS2304: Cannot find name 'ScopedMembers'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(160,52): error TS2304: Cannot find name 'DualStringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(160,76): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(160,99): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(162,28): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(163,30): error TS2304: Cannot find name 'WithSymbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(170,40): error TS2339: Property 'SymbolScopeBuilder' does not exist on type 'typeof TypeScript'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(176,50): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(177,25): error TS2304: Cannot find name 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(185,24): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(185,51): error TS2304: Cannot find name 'FncFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(195,41): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(195,68): error TS2304: Cannot find name 'FncFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(198,40): error TS2304: Cannot find name 'TypeFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(198,63): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(198,90): error TS2304: Cannot find name 'FncFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(210,85): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(211,23): error TS2304: Cannot find name 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(231,38): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(231,74): error TS2304: Cannot find name 'SymbolFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(237,27): error TS2304: Cannot find name 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(239,24): error TS2304: Cannot find name 'TypeSymbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(245,64): error TS2339: Property 'getType' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(246,47): error TS2304: Cannot find name 'SymbolScopeBuilder'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(246,68): error TS2304: Cannot find name 'TypeSymbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(255,31): error TS2339: Property 'declAST' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(256,31): error TS2339: Property 'declAST' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(256,51): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(257,23): error TS2304: Cannot find name 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(257,42): error TS2339: Property 'declAST' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(284,38): error TS2304: Cannot find name 'FncFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(286,55): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(289,116): error TS2339: Property 'getType' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(292,43): error TS2304: Cannot find name 'SymbolFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(309,29): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(310,31): error TS2304: Cannot find name 'ScopedMembers'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(310,49): error TS2304: Cannot find name 'DualStringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(310,84): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(311,36): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(312,38): error TS2304: Cannot find name 'ScopedMembers'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(312,56): error TS2304: Cannot find name 'DualStringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(312,98): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(313,35): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(314,37): error TS2304: Cannot find name 'ScopedMembers'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(314,55): error TS2304: Cannot find name 'DualStringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(314,96): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(315,42): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(316,44): error TS2304: Cannot find name 'ScopedMembers'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(316,62): error TS2304: Cannot find name 'DualStringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(316,110): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(321,26): error TS2304: Cannot find name 'SymbolScopeBuilder'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(322,27): error TS2304: Cannot find name 'SymbolScopeBuilder'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(353,26): error TS2304: Cannot find name 'TypeSymbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(354,39): error TS2304: Cannot find name 'FncFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(354,62): error TS2304: Cannot find name 'FncFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(363,35): error TS2304: Cannot find name 'ParameterSymbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(372,40): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(372,67): error TS2304: Cannot find name 'FncFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(373,55): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(373,82): error TS2304: Cannot find name 'FncFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(378,47): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(379,27): error TS2304: Cannot find name 'Catch'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(381,34): error TS2304: Cannot find name 'ScopedMembers'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(381,52): error TS2304: Cannot find name 'DualStringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(381,76): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(381,99): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(382,35): error TS2304: Cannot find name 'SymbolScopeBuilder'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(389,42): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(389,55): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(389,68): error TS2304: Cannot find name 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(394,33): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(395,29): error TS2304: Cannot find name 'ASTList'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(398,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(401,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(404,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(407,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(410,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(413,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(416,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(424,43): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(424,56): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(424,69): error TS2304: Cannot find name 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(428,33): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(429,36): error TS2304: Cannot find name 'ModuleDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(438,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(441,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(444,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(447,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(448,33): error TS2304: Cannot find name 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(449,49): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(449,76): error TS2304: Cannot find name 'FncFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(453,38): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
+parserRealSource8.ts(4,21): error TS6053: File 'typescript.ts' not found.
+parserRealSource8.ts(9,41): error TS2304: Cannot find name 'ScopeChain'.
+parserRealSource8.ts(10,39): error TS2304: Cannot find name 'TypeFlow'.
+parserRealSource8.ts(11,43): error TS2304: Cannot find name 'ModuleDeclaration'.
+parserRealSource8.ts(15,44): error TS2304: Cannot find name 'SymbolScope'.
+parserRealSource8.ts(17,15): error TS2304: Cannot find name 'Type'.
+parserRealSource8.ts(18,20): error TS2304: Cannot find name 'Type'.
+parserRealSource8.ts(19,14): error TS2304: Cannot find name 'FuncDecl'.
+parserRealSource8.ts(21,25): error TS2304: Cannot find name 'ScopeChain'.
+parserRealSource8.ts(33,33): error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
+parserRealSource8.ts(42,18): error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
+parserRealSource8.ts(69,48): error TS2304: Cannot find name 'AST'.
+parserRealSource8.ts(70,27): error TS2304: Cannot find name 'ModuleDeclaration'.
+parserRealSource8.ts(71,26): error TS2304: Cannot find name 'SymbolTableScope'.
+parserRealSource8.ts(72,23): error TS2304: Cannot find name 'SymbolAggregateScope'.
+parserRealSource8.ts(85,27): error TS2304: Cannot find name 'SymbolTableScope'.
+parserRealSource8.ts(89,24): error TS2304: Cannot find name 'SymbolAggregateScope'.
+parserRealSource8.ts(99,47): error TS2304: Cannot find name 'AST'.
+parserRealSource8.ts(100,26): error TS2304: Cannot find name 'InterfaceDeclaration'.
+parserRealSource8.ts(101,26): error TS2304: Cannot find name 'SymbolTableScope'.
+parserRealSource8.ts(102,23): error TS2304: Cannot find name 'SymbolAggregateScope'.
+parserRealSource8.ts(112,28): error TS2304: Cannot find name 'SymbolTableScope'.
+parserRealSource8.ts(114,28): error TS2304: Cannot find name 'SymbolAggregateScope'.
+parserRealSource8.ts(122,28): error TS2304: Cannot find name 'SymbolTableScope'.
+parserRealSource8.ts(125,28): error TS2304: Cannot find name 'SymbolAggregateScope'.
+parserRealSource8.ts(136,51): error TS2304: Cannot find name 'AST'.
+parserRealSource8.ts(137,30): error TS2304: Cannot find name 'InterfaceDeclaration'.
+parserRealSource8.ts(138,26): error TS2304: Cannot find name 'SymbolTableScope'.
+parserRealSource8.ts(139,23): error TS2304: Cannot find name 'SymbolAggregateScope'.
+parserRealSource8.ts(146,24): error TS2304: Cannot find name 'SymbolTableScope'.
+parserRealSource8.ts(148,24): error TS2304: Cannot find name 'SymbolAggregateScope'.
+parserRealSource8.ts(155,46): error TS2304: Cannot find name 'AST'.
+parserRealSource8.ts(156,25): error TS2304: Cannot find name 'WithStatement'.
+parserRealSource8.ts(159,27): error TS2304: Cannot find name 'ScopedMembers'.
+parserRealSource8.ts(159,45): error TS2304: Cannot find name 'DualStringHashTable'.
+parserRealSource8.ts(159,69): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(159,92): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(160,34): error TS2304: Cannot find name 'ScopedMembers'.
+parserRealSource8.ts(160,52): error TS2304: Cannot find name 'DualStringHashTable'.
+parserRealSource8.ts(160,76): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(160,99): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(162,28): error TS2304: Cannot find name 'Type'.
+parserRealSource8.ts(163,30): error TS2304: Cannot find name 'WithSymbol'.
+parserRealSource8.ts(170,40): error TS2339: Property 'SymbolScopeBuilder' does not exist on type 'typeof TypeScript'.
+parserRealSource8.ts(176,50): error TS2304: Cannot find name 'AST'.
+parserRealSource8.ts(177,25): error TS2304: Cannot find name 'FuncDecl'.
+parserRealSource8.ts(185,24): error TS2304: Cannot find name 'hasFlag'.
+parserRealSource8.ts(185,51): error TS2304: Cannot find name 'FncFlags'.
+parserRealSource8.ts(195,41): error TS2304: Cannot find name 'hasFlag'.
+parserRealSource8.ts(195,68): error TS2304: Cannot find name 'FncFlags'.
+parserRealSource8.ts(198,40): error TS2304: Cannot find name 'TypeFlags'.
+parserRealSource8.ts(198,63): error TS2304: Cannot find name 'hasFlag'.
+parserRealSource8.ts(198,90): error TS2304: Cannot find name 'FncFlags'.
+parserRealSource8.ts(210,85): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(211,23): error TS2304: Cannot find name 'FuncDecl'.
+parserRealSource8.ts(231,38): error TS2304: Cannot find name 'hasFlag'.
+parserRealSource8.ts(231,74): error TS2304: Cannot find name 'SymbolFlags'.
+parserRealSource8.ts(237,27): error TS2304: Cannot find name 'FuncDecl'.
+parserRealSource8.ts(239,24): error TS2304: Cannot find name 'TypeSymbol'.
+parserRealSource8.ts(245,64): error TS2339: Property 'getType' does not exist on type 'Symbol'.
+parserRealSource8.ts(246,47): error TS2304: Cannot find name 'SymbolScopeBuilder'.
+parserRealSource8.ts(246,68): error TS2304: Cannot find name 'TypeSymbol'.
+parserRealSource8.ts(255,31): error TS2339: Property 'declAST' does not exist on type 'Symbol'.
+parserRealSource8.ts(256,31): error TS2339: Property 'declAST' does not exist on type 'Symbol'.
+parserRealSource8.ts(256,51): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(257,23): error TS2304: Cannot find name 'FuncDecl'.
+parserRealSource8.ts(257,42): error TS2339: Property 'declAST' does not exist on type 'Symbol'.
+parserRealSource8.ts(284,38): error TS2304: Cannot find name 'FncFlags'.
+parserRealSource8.ts(286,55): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(289,116): error TS2339: Property 'getType' does not exist on type 'Symbol'.
+parserRealSource8.ts(292,43): error TS2304: Cannot find name 'SymbolFlags'.
+parserRealSource8.ts(309,29): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(310,31): error TS2304: Cannot find name 'ScopedMembers'.
+parserRealSource8.ts(310,49): error TS2304: Cannot find name 'DualStringHashTable'.
+parserRealSource8.ts(310,84): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(311,36): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(312,38): error TS2304: Cannot find name 'ScopedMembers'.
+parserRealSource8.ts(312,56): error TS2304: Cannot find name 'DualStringHashTable'.
+parserRealSource8.ts(312,98): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(313,35): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(314,37): error TS2304: Cannot find name 'ScopedMembers'.
+parserRealSource8.ts(314,55): error TS2304: Cannot find name 'DualStringHashTable'.
+parserRealSource8.ts(314,96): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(315,42): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(316,44): error TS2304: Cannot find name 'ScopedMembers'.
+parserRealSource8.ts(316,62): error TS2304: Cannot find name 'DualStringHashTable'.
+parserRealSource8.ts(316,110): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(321,26): error TS2304: Cannot find name 'SymbolScopeBuilder'.
+parserRealSource8.ts(322,27): error TS2304: Cannot find name 'SymbolScopeBuilder'.
+parserRealSource8.ts(353,26): error TS2304: Cannot find name 'TypeSymbol'.
+parserRealSource8.ts(354,39): error TS2304: Cannot find name 'FncFlags'.
+parserRealSource8.ts(354,62): error TS2304: Cannot find name 'FncFlags'.
+parserRealSource8.ts(363,35): error TS2304: Cannot find name 'ParameterSymbol'.
+parserRealSource8.ts(372,40): error TS2304: Cannot find name 'hasFlag'.
+parserRealSource8.ts(372,67): error TS2304: Cannot find name 'FncFlags'.
+parserRealSource8.ts(373,55): error TS2304: Cannot find name 'hasFlag'.
+parserRealSource8.ts(373,82): error TS2304: Cannot find name 'FncFlags'.
+parserRealSource8.ts(378,47): error TS2304: Cannot find name 'AST'.
+parserRealSource8.ts(379,27): error TS2304: Cannot find name 'Catch'.
+parserRealSource8.ts(381,34): error TS2304: Cannot find name 'ScopedMembers'.
+parserRealSource8.ts(381,52): error TS2304: Cannot find name 'DualStringHashTable'.
+parserRealSource8.ts(381,76): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(381,99): error TS2304: Cannot find name 'StringHashTable'.
+parserRealSource8.ts(382,35): error TS2304: Cannot find name 'SymbolScopeBuilder'.
+parserRealSource8.ts(389,42): error TS2304: Cannot find name 'AST'.
+parserRealSource8.ts(389,55): error TS2304: Cannot find name 'AST'.
+parserRealSource8.ts(389,68): error TS2304: Cannot find name 'IAstWalker'.
+parserRealSource8.ts(394,33): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(395,29): error TS2304: Cannot find name 'ASTList'.
+parserRealSource8.ts(398,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(401,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(404,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(407,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(410,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(413,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(416,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(424,43): error TS2304: Cannot find name 'AST'.
+parserRealSource8.ts(424,56): error TS2304: Cannot find name 'AST'.
+parserRealSource8.ts(424,69): error TS2304: Cannot find name 'IAstWalker'.
+parserRealSource8.ts(428,33): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(429,36): error TS2304: Cannot find name 'ModuleDeclaration'.
+parserRealSource8.ts(438,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(441,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(444,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(447,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(448,33): error TS2304: Cannot find name 'FuncDecl'.
+parserRealSource8.ts(449,49): error TS2304: Cannot find name 'hasFlag'.
+parserRealSource8.ts(449,76): error TS2304: Cannot find name 'FncFlags'.
+parserRealSource8.ts(453,38): error TS2304: Cannot find name 'NodeType'.
+parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts (130 errors) ====
+==== parserRealSource8.ts (130 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
                         ~~~~~~~~~~~~~
-!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+!!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
     

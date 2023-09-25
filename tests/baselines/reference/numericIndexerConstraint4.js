@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericIndexerConstraint4.ts] ////
+
 //// [numericIndexerConstraint4.ts]
 class A {
     foo: number;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/multipleDefaultExports04.ts] ////
+
 //// [multipleDefaultExports04.ts]
 export default function f() {
 }

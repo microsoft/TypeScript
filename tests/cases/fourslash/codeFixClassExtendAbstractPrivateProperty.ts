@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @noImplicitOverride: true
 //// abstract class A {
 ////    private abstract x: number;
 ////    m() { this.x; } // Avoid unused private

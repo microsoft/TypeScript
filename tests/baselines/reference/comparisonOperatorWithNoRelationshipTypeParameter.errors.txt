@@ -1,14 +1,46 @@
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(12,14): error TS2365: Operator '<' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(13,14): error TS2365: Operator '>' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(14,14): error TS2365: Operator '<=' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(15,14): error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(16,14): error TS2367: This condition will always return 'false' since the types 'T' and 'U' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(17,14): error TS2367: This condition will always return 'true' since the types 'T' and 'U' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(18,14): error TS2367: This condition will always return 'false' since the types 'T' and 'U' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts(19,14): error TS2367: This condition will always return 'true' since the types 'T' and 'U' have no overlap.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(12,14): error TS2365: Operator '<' cannot be applied to types 'T' and 'U'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(13,14): error TS2365: Operator '>' cannot be applied to types 'T' and 'U'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(14,14): error TS2365: Operator '<=' cannot be applied to types 'T' and 'U'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(15,14): error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(16,14): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(17,14): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(18,14): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(19,14): error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(23,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(26,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(31,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(34,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(40,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(43,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(48,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(51,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(57,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(60,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(65,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(68,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(74,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(77,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(82,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(85,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(91,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(94,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(99,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(102,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(108,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(111,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(116,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(119,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(125,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(128,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(133,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(136,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(142,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(145,16): error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(150,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
+comparisonOperatorWithNoRelationshipTypeParameter.ts(153,16): error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts (8 errors) ====
+==== comparisonOperatorWithNoRelationshipTypeParameter.ts (40 errors) ====
     enum E { a, b, c }
     
     var a: boolean;
@@ -34,150 +66,214 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2365: Operator '>=' cannot be applied to types 'T' and 'U'.
         var r5 = t == u;
                  ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'T' and 'U' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
         var r6 = t != u;
                  ~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'T' and 'U' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
         var r7 = t === u;
                  ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'T' and 'U' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
         var r8 = t !== u;
                  ~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'T' and 'U' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and 'U' have no overlap.
     
         // operator <
         var r1a1 = t < a;
         var r1a2 = t < b;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r1a3 = t < c;
         var r1a4 = t < d;
         var r1a5 = t < e;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r1a6 = t < f;
         var r1a7 = t < g;
     
         var r1b1 = a < t;
         var r1b2 = b < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r1b3 = c < t;
         var r1b4 = d < t;
         var r1b5 = e < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r1b6 = f < t;
         var r1b7 = g < t;
     
         // operator >
         var r2a1 = t < a;
         var r2a2 = t < b;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r2a3 = t < c;
         var r2a4 = t < d;
         var r2a5 = t < e;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r2a6 = t < f;
         var r2a7 = t < g;
     
         var r2b1 = a < t;
         var r2b2 = b < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r2b3 = c < t;
         var r2b4 = d < t;
         var r2b5 = e < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r2b6 = f < t;
         var r2b7 = g < t;
     
         // operator <=
         var r3a1 = t < a;
         var r3a2 = t < b;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r3a3 = t < c;
         var r3a4 = t < d;
         var r3a5 = t < e;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r3a6 = t < f;
         var r3a7 = t < g;
     
         var r3b1 = a < t;
         var r3b2 = b < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r3b3 = c < t;
         var r3b4 = d < t;
         var r3b5 = e < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r3b6 = f < t;
         var r3b7 = g < t;
     
         // operator >=
         var r4a1 = t < a;
         var r4a2 = t < b;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r4a3 = t < c;
         var r4a4 = t < d;
         var r4a5 = t < e;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r4a6 = t < f;
         var r4a7 = t < g;
     
         var r4b1 = a < t;
         var r4b2 = b < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r4b3 = c < t;
         var r4b4 = d < t;
         var r4b5 = e < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r4b6 = f < t;
         var r4b7 = g < t;
     
         // operator ==
         var r5a1 = t < a;
         var r5a2 = t < b;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r5a3 = t < c;
         var r5a4 = t < d;
         var r5a5 = t < e;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r5a6 = t < f;
         var r5a7 = t < g;
     
         var r5b1 = a < t;
         var r5b2 = b < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r5b3 = c < t;
         var r5b4 = d < t;
         var r5b5 = e < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r5b6 = f < t;
         var r5b7 = g < t;
     
         // operator !=
         var r6a1 = t < a;
         var r6a2 = t < b;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r6a3 = t < c;
         var r6a4 = t < d;
         var r6a5 = t < e;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r6a6 = t < f;
         var r6a7 = t < g;
     
         var r6b1 = a < t;
         var r6b2 = b < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r6b3 = c < t;
         var r6b4 = d < t;
         var r6b5 = e < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r6b6 = f < t;
         var r6b7 = g < t;
     
         // operator ===
         var r7a1 = t < a;
         var r7a2 = t < b;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r7a3 = t < c;
         var r7a4 = t < d;
         var r7a5 = t < e;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r7a6 = t < f;
         var r7a7 = t < g;
     
         var r7b1 = a < t;
         var r7b2 = b < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r7b3 = c < t;
         var r7b4 = d < t;
         var r7b5 = e < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r7b6 = f < t;
         var r7b7 = g < t;
     
         // operator !==
         var r8a1 = t < a;
         var r8a2 = t < b;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r8a3 = t < c;
         var r8a4 = t < d;
         var r8a5 = t < e;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'number'.
         var r8a6 = t < f;
         var r8a7 = t < g;
     
         var r8b1 = a < t;
         var r8b2 = b < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r8b3 = c < t;
         var r8b4 = d < t;
         var r8b5 = e < t;
+                   ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'T'.
         var r8b6 = f < t;
         var r8b7 = g < t;
     }

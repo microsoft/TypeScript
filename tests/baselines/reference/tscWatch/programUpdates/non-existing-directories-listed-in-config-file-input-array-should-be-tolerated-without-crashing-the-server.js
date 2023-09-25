@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/file1.ts]
 let t = 10;
@@ -42,21 +43,17 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
-/a/b/app:
-  {"fileName":"/a/b/app","pollingInterval":500}
-/a/b/test:
-  {"fileName":"/a/b/test","pollingInterval":500}
-/a/b/something:
-  {"fileName":"/a/b/something","pollingInterval":500}
+PolledWatches::
+/a/b/app: *new*
+  {"pollingInterval":500}
+/a/b/something: *new*
+  {"pollingInterval":500}
+/a/b/test: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-
-FsWatchesRecursive::
+/a/b/tsconfig.json: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

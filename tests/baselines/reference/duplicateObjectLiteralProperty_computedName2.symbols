@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts] ////
+
+=== duplicateObjectLiteralProperty_computedName2.ts ===
+const n = 1;
+>n : Symbol(n, Decl(duplicateObjectLiteralProperty_computedName2.ts, 0, 5))
+
+const s = "s";
+>s : Symbol(s, Decl(duplicateObjectLiteralProperty_computedName2.ts, 1, 5))
+
+enum E1 { A = "ENUM_KEY" }
+>E1 : Symbol(E1, Decl(duplicateObjectLiteralProperty_computedName2.ts, 1, 14))
+>A : Symbol(E1.A, Decl(duplicateObjectLiteralProperty_computedName2.ts, 2, 9))
+
+enum E2 { B }
+>E2 : Symbol(E2, Decl(duplicateObjectLiteralProperty_computedName2.ts, 2, 26))
+>B : Symbol(E2.B, Decl(duplicateObjectLiteralProperty_computedName2.ts, 3, 9))
+
+const t1 = {
+>t1 : Symbol(t1, Decl(duplicateObjectLiteralProperty_computedName2.ts, 5, 5))
+
+    [n]: 1,
+>[n] : Symbol([n], Decl(duplicateObjectLiteralProperty_computedName2.ts, 5, 12), Decl(duplicateObjectLiteralProperty_computedName2.ts, 6, 11))
+>n : Symbol(n, Decl(duplicateObjectLiteralProperty_computedName2.ts, 0, 5))
+
+    [n]: 1, // duplicate
+>[n] : Symbol([n], Decl(duplicateObjectLiteralProperty_computedName2.ts, 5, 12), Decl(duplicateObjectLiteralProperty_computedName2.ts, 6, 11))
+>n : Symbol(n, Decl(duplicateObjectLiteralProperty_computedName2.ts, 0, 5))
+}
+
+const t2 = {
+>t2 : Symbol(t2, Decl(duplicateObjectLiteralProperty_computedName2.ts, 10, 5))
+
+    [s]: 1,
+>[s] : Symbol([s], Decl(duplicateObjectLiteralProperty_computedName2.ts, 10, 12), Decl(duplicateObjectLiteralProperty_computedName2.ts, 11, 11))
+>s : Symbol(s, Decl(duplicateObjectLiteralProperty_computedName2.ts, 1, 5))
+
+    [s]: 1, // duplicate
+>[s] : Symbol([s], Decl(duplicateObjectLiteralProperty_computedName2.ts, 10, 12), Decl(duplicateObjectLiteralProperty_computedName2.ts, 11, 11))
+>s : Symbol(s, Decl(duplicateObjectLiteralProperty_computedName2.ts, 1, 5))
+}
+
+const t3 = {
+>t3 : Symbol(t3, Decl(duplicateObjectLiteralProperty_computedName2.ts, 15, 5))
+
+    [E1.A]: 1,
+>[E1.A] : Symbol([E1.A], Decl(duplicateObjectLiteralProperty_computedName2.ts, 15, 12), Decl(duplicateObjectLiteralProperty_computedName2.ts, 16, 14))
+>E1.A : Symbol(E1.A, Decl(duplicateObjectLiteralProperty_computedName2.ts, 2, 9))
+>E1 : Symbol(E1, Decl(duplicateObjectLiteralProperty_computedName2.ts, 1, 14))
+>A : Symbol(E1.A, Decl(duplicateObjectLiteralProperty_computedName2.ts, 2, 9))
+
+    [E1.A]: 1, // duplicate
+>[E1.A] : Symbol([E1.A], Decl(duplicateObjectLiteralProperty_computedName2.ts, 15, 12), Decl(duplicateObjectLiteralProperty_computedName2.ts, 16, 14))
+>E1.A : Symbol(E1.A, Decl(duplicateObjectLiteralProperty_computedName2.ts, 2, 9))
+>E1 : Symbol(E1, Decl(duplicateObjectLiteralProperty_computedName2.ts, 1, 14))
+>A : Symbol(E1.A, Decl(duplicateObjectLiteralProperty_computedName2.ts, 2, 9))
+}
+
+const t4 = {
+>t4 : Symbol(t4, Decl(duplicateObjectLiteralProperty_computedName2.ts, 20, 5))
+
+    [E2.B]: 1,
+>[E2.B] : Symbol([E2.B], Decl(duplicateObjectLiteralProperty_computedName2.ts, 20, 12), Decl(duplicateObjectLiteralProperty_computedName2.ts, 21, 14))
+>E2.B : Symbol(E2.B, Decl(duplicateObjectLiteralProperty_computedName2.ts, 3, 9))
+>E2 : Symbol(E2, Decl(duplicateObjectLiteralProperty_computedName2.ts, 2, 26))
+>B : Symbol(E2.B, Decl(duplicateObjectLiteralProperty_computedName2.ts, 3, 9))
+
+    [E2.B]: 1, // duplicate
+>[E2.B] : Symbol([E2.B], Decl(duplicateObjectLiteralProperty_computedName2.ts, 20, 12), Decl(duplicateObjectLiteralProperty_computedName2.ts, 21, 14))
+>E2.B : Symbol(E2.B, Decl(duplicateObjectLiteralProperty_computedName2.ts, 3, 9))
+>E2 : Symbol(E2, Decl(duplicateObjectLiteralProperty_computedName2.ts, 2, 26))
+>B : Symbol(E2.B, Decl(duplicateObjectLiteralProperty_computedName2.ts, 3, 9))
+}
+

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/localTypes/localTypes5.ts ===
+//// [tests/cases/conformance/types/localTypes/localTypes5.ts] ////
+
+=== localTypes5.ts ===
 function foo<A>() {
 >foo : <A>() => X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
 

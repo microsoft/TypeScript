@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty23.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty23.ts] ////
+
+=== symbolProperty23.ts ===
 interface I {
 >I : Symbol(I, Decl(symbolProperty23.ts, 0, 0))
 

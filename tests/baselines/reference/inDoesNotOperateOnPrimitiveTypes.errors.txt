@@ -1,13 +1,31 @@
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(19,17): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(23,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(27,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(34,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(53,14): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(60,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+inDoesNotOperateOnPrimitiveTypes.ts(12,17): error TS2322: Type 'T' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(19,17): error TS2322: Type 'T' is not assignable to type 'object'.
+  Type 'string | number' is not assignable to type 'object'.
+    Type 'string' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(23,12): error TS2322: Type 'T | U' is not assignable to type 'object'.
+  Type 'T' is not assignable to type 'object'.
+    Type 'string | number' is not assignable to type 'object'.
+      Type 'string' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(27,12): error TS2322: Type 'T | U' is not assignable to type 'object'.
+  Type 'U' is not assignable to type 'object'.
+    Type 'string | number' is not assignable to type 'object'.
+      Type 'string' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(34,12): error TS2322: Type 'string | number | T' is not assignable to type 'object'.
+  Type 'string' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(36,14): error TS2322: Type 'T' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(41,12): error TS2322: Type 'T' is not assignable to type 'object'.
+  Type 'object | "hello"' is not assignable to type 'object'.
+    Type 'string' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(53,14): error TS2322: Type 'T | U' is not assignable to type 'object'.
+  Type 'T' is not assignable to type 'object'.
+    Type 'string | object' is not assignable to type 'object'.
+      Type 'string' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(60,12): error TS2322: Type 'T & U' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2322: Type 'T & (0 | 1 | 2)' is not assignable to type 'object'.
+  Type 'T & 0' is not assignable to type 'object'.
 
 
-==== tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts (7 errors) ====
+==== inDoesNotOperateOnPrimitiveTypes.ts (10 errors) ====
     const validHasKey = <T extends object>(
       thing: T,
       key: string,
@@ -20,6 +38,9 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2361: T
       key: string,
     ): boolean => {
       return key in thing; // Ok (as T may be instantiated with a valid type)
+                    ~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! related TS2208 inDoesNotOperateOnPrimitiveTypes.ts:8:26: This type parameter might need an `extends object` constraint.
     };
     
     function invalidHasKey<T extends string | number>(
@@ -28,19 +49,27 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2361: T
     ): boolean {
       return key in thing; // Error (because all possible instantiations are errors)
                     ~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+!!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! error TS2322:   Type 'string | number' is not assignable to type 'object'.
+!!! error TS2322:     Type 'string' is not assignable to type 'object'.
     }
     
     function union1<T extends string | number, U extends boolean>(thing: T | U) {
       "key" in thing; // Error (because all possible instantiations are errors)
                ~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+!!! error TS2322: Type 'T | U' is not assignable to type 'object'.
+!!! error TS2322:   Type 'T' is not assignable to type 'object'.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'object'.
+!!! error TS2322:       Type 'string' is not assignable to type 'object'.
     }
     
     function union2<T extends object, U extends string | number>(thing: T | U) {
       "key" in thing; // Error (because narrowing is possible)
                ~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+!!! error TS2322: Type 'T | U' is not assignable to type 'object'.
+!!! error TS2322:   Type 'U' is not assignable to type 'object'.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'object'.
+!!! error TS2322:       Type 'string' is not assignable to type 'object'.
       if (typeof thing === "object") {
         "key" in thing; // Ok
       }
@@ -49,14 +78,22 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2361: T
     function union3<T>(thing: T | string | number) {
       "key" in thing; // Error (because narrowing is possible)
                ~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+!!! error TS2322: Type 'string | number | T' is not assignable to type 'object'.
+!!! error TS2322:   Type 'string' is not assignable to type 'object'.
       if (typeof thing !== "string" && typeof thing !== "number") {
         "key" in thing; // Ok (because further narrowing is impossible)
+                 ~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! related TS2208 inDoesNotOperateOnPrimitiveTypes.ts:33:17: This type parameter might need an `extends object` constraint.
       }
     }
     
     function union4<T extends object | "hello">(thing: T) {
       "key" in thing; // Ok (because narrowing is impossible)
+               ~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! error TS2322:   Type 'object | "hello"' is not assignable to type 'object'.
+!!! error TS2322:     Type 'string' is not assignable to type 'object'.
     }
     
     function union5<T extends object | string, U extends object | number>(p: T | U) {
@@ -70,7 +107,10 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2361: T
         // error seems very low-value.
         "key" in p;
                  ~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+!!! error TS2322: Type 'T | U' is not assignable to type 'object'.
+!!! error TS2322:   Type 'T' is not assignable to type 'object'.
+!!! error TS2322:     Type 'string | object' is not assignable to type 'object'.
+!!! error TS2322:       Type 'string' is not assignable to type 'object'.
         if (typeof p === "object") {
             "key" in p;
         }
@@ -79,12 +119,13 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2361: T
     function intersection1<T extends number, U extends 0 | 1 | 2>(thing: T & U) {
       "key" in thing; // Error (because all possible instantiations are errors)
                ~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+!!! error TS2322: Type 'T & U' is not assignable to type 'object'.
     }
     
     function intersection2<T>(thing: T & (0 | 1 | 2)) {
       "key" in thing; // Error (because all possible instantations are errors)
                ~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+!!! error TS2322: Type 'T & (0 | 1 | 2)' is not assignable to type 'object'.
+!!! error TS2322:   Type 'T & 0' is not assignable to type 'object'.
     }
     

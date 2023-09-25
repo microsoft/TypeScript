@@ -1,4 +1,6 @@
-=== tests/cases/compiler/returnValueInSetter.ts ===
+//// [tests/cases/compiler/returnValueInSetter.ts] ////
+
+=== returnValueInSetter.ts ===
 class f {
 >f : f
 
@@ -7,7 +9,6 @@ class f {
 >value : any
 
         return null; // Should be an error
->null : null
     }
 }
 

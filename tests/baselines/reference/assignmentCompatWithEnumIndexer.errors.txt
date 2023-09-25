@@ -1,0 +1,12 @@
+assignmentCompatWithEnumIndexer.ts(5,5): error TS2741: Property '[E.A]' is missing in type '{}' but required in type 'Record<E, any>'.
+
+
+==== assignmentCompatWithEnumIndexer.ts (1 errors) ====
+    enum E {
+        A
+    }
+    
+    let foo: Record<E, any> = {}
+        ~~~
+!!! error TS2741: Property '[E.A]' is missing in type '{}' but required in type 'Record<E, any>'.
+    

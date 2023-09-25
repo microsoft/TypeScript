@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSfcReturnNull.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 
@@ -13,7 +15,7 @@ const G = <Greet />;
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var Foo = function (props) { return null; };
     function Greet(x) {
         return null;

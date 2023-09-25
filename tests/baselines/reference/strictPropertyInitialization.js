@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts] ////
+
 //// [strictPropertyInitialization.ts]
 // Properties with non-undefined types require initialization
 
@@ -148,6 +150,17 @@ class C12 {
     }
 }
 
+enum E {
+    A = "A",
+    B = "B"
+}
+class C13 {
+    [E.A]: number;
+    constructor() {
+        this[E.A] = 1;
+    }
+}
+
 
 //// [strictPropertyInitialization.js]
 "use strict";
@@ -259,6 +272,17 @@ class C12 {
         this['c'] = 1;
     }
 }
+var E;
+(function (E) {
+    E["A"] = "A";
+    E["B"] = "B";
+})(E || (E = {}));
+class C13 {
+    constructor() {
+        this[E.A] = 1;
+    }
+}
+E.A;
 
 
 //// [strictPropertyInitialization.d.ts]
@@ -333,5 +357,13 @@ declare class C12 {
     [a]: number;
     [b]: number;
     ['c']: number;
+    constructor();
+}
+declare enum E {
+    A = "A",
+    B = "B"
+}
+declare class C13 {
+    [E.A]: number;
     constructor();
 }

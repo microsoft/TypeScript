@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleCrashBug1.ts ===
+//// [tests/cases/compiler/moduleCrashBug1.ts] ////
+
+=== moduleCrashBug1.ts ===
 module _modes {
 >_modes : Symbol(_modes, Decl(moduleCrashBug1.ts, 0, 0))
 

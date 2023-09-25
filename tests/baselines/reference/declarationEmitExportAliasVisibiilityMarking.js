@@ -16,16 +16,16 @@ export { Suit, Rank } from './Types';
 
 //// [Types.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [Card.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = (function (suit, rank) { return ({ suit: suit, rank: rank }); });
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = (function (suit, rank) { return ({ suit: suit, rank: rank }); });
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyCard = void 0;
-var lazyCard = function () { return Promise.resolve().then(function () { return require('./Card'); }).then(function (a) { return a["default"]; }); };
+var lazyCard = function () { return Promise.resolve().then(function () { return require('./Card'); }).then(function (a) { return a.default; }); };
 exports.lazyCard = lazyCard;
 
 

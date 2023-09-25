@@ -1,5 +1,7 @@
-=== tests/cases/conformance/classes/classDeclarations/classWithPredefinedTypesAsNames2.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classWithPredefinedTypesAsNames2.ts] ////
+
+=== classWithPredefinedTypesAsNames2.ts ===
+
 // classes cannot use predefined types as names
-No type information for this code.
-No type information for this code.class void {}
-No type information for this code.
+
+class void {}

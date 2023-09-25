@@ -81,22 +81,24 @@ for await (const item of arr) {
 
 
 //// [other.js]
-var e_1, _a;
+var _a, e_1, _b, _c;
 const _await = 1;
 // await allowed in aliased export
 export { _await as await };
 // for-await-of
 const arr = [Promise.resolve()];
 try {
-    for (var arr_1 = __asyncValues(arr), arr_1_1; arr_1_1 = await arr_1.next(), !arr_1_1.done;) {
-        const item = arr_1_1.value;
+    for (var _d = true, arr_1 = __asyncValues(arr), arr_1_1; arr_1_1 = await arr_1.next(), _a = arr_1_1.done, !_a; _d = true) {
+        _c = arr_1_1.value;
+        _d = false;
+        const item = _c;
         item;
     }
 }
 catch (e_1_1) { e_1 = { error: e_1_1 }; }
 finally {
     try {
-        if (arr_1_1 && !arr_1_1.done && (_a = arr_1.return)) await _a.call(arr_1);
+        if (!_d && !_a && (_b = arr_1.return)) await _b.call(arr_1);
     }
     finally { if (e_1) throw e_1.error; }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyFunctions.ts ===
+//// [tests/cases/compiler/noImplicitAnyFunctions.ts] ////
+
+=== noImplicitAnyFunctions.ts ===
 declare function f1();
 >f1 : () => any
 
@@ -42,5 +44,4 @@ function f6(x: string, y) {
 >y : any
 
     return null;
->null : null
 }

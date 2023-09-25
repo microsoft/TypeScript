@@ -1,3 +1,5 @@
-=== tests/cases/compiler/exportDefaultMissingName.ts ===
+//// [tests/cases/compiler/exportDefaultMissingName.ts] ////
+
+=== exportDefaultMissingName.ts ===
+
 export default xyzzy;
-No type information for this code.

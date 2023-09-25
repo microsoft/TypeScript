@@ -31,7 +31,7 @@ export module A {
 
 //// [part1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A;
 (function (A) {
@@ -43,10 +43,10 @@ var A;
         Utils.mirror = mirror;
     })(Utils = A.Utils || (A.Utils = {}));
     A.Origin = { x: 0, y: 0 };
-})(A = exports.A || (exports.A = {}));
+})(A || (exports.A = A = {}));
 //// [part2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A;
 (function (A) {
@@ -63,4 +63,4 @@ var A;
         }());
         Utils.Plane = Plane;
     })(Utils = A.Utils || (A.Utils = {}));
-})(A = exports.A || (exports.A = {}));
+})(A || (exports.A = A = {}));

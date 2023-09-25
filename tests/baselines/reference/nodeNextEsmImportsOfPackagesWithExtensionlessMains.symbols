@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/nodeNextEsmImportsOfPackagesWithExtensionlessMains.ts] ////
+
+=== index.ts ===
 import * as ip from 'ip';
 >ip : Symbol(ip, Decl(index.ts, 0, 6))
 
@@ -14,11 +16,11 @@ export function getAddress(): string {
 >ip : Symbol(ip, Decl(index.ts, 0, 6))
 >address : Symbol(ip.address, Decl(index.d.ts, 0, 0))
 }
-=== tests/cases/compiler/node_modules/@types/ip/index.d.ts ===
+=== node_modules/@types/ip/index.d.ts ===
 export function address(): string;
 >address : Symbol(address, Decl(index.d.ts, 0, 0))
 
-=== tests/cases/compiler/node_modules/nullthrows/nullthrows.d.ts ===
+=== node_modules/nullthrows/nullthrows.d.ts ===
 declare function nullthrows(x: any): any;
 >nullthrows : Symbol(nullthrows, Decl(nullthrows.d.ts, 0, 0), Decl(nullthrows.d.ts, 0, 41))
 >x : Symbol(x, Decl(nullthrows.d.ts, 0, 28))

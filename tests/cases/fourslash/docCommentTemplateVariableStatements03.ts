@@ -29,14 +29,14 @@
 ////    }
 ////}))
 
-verify.docCommentTemplateAt("a", /*newTextOffset*/ 8,
+verify.docCommentTemplateAt("a", /*newTextOffset*/ 7,
 `/**
  * 
  * @param x
  * @returns
  */`);
 
-verify.docCommentTemplateAt("b", /*newTextOffset*/ 8,
+verify.docCommentTemplateAt("b", /*newTextOffset*/ 7,
 `/**
  * 
  * @param x
@@ -45,7 +45,7 @@ verify.docCommentTemplateAt("b", /*newTextOffset*/ 8,
  * @returns
  */`);
 
-verify.docCommentTemplateAt("c", /*newTextOffset*/ 8,
+verify.docCommentTemplateAt("c", /*newTextOffset*/ 7,
 `/**
  * 
  * @param x
@@ -55,7 +55,7 @@ verify.docCommentTemplateAt("c", /*newTextOffset*/ 8,
 verify.docCommentTemplateAt("d", /*newTextOffset*/ 3,
 "/** */");
 
-verify.docCommentTemplateAt("e", /*newTextOffset*/ 8,
+verify.docCommentTemplateAt("e", /*newTextOffset*/ 7,
 `/**
  * 
  * @param param0
@@ -65,7 +65,7 @@ verify.docCommentTemplateAt("e", /*newTextOffset*/ 8,
 verify.docCommentTemplateAt("f", /*newTextOffset*/ 3,
 "/** */");
 
-verify.docCommentTemplateAt("g", /*newTextOffset*/ 8,
+verify.docCommentTemplateAt("g", /*newTextOffset*/ 7,
 `/**
  * 
  * @param x

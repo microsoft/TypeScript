@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lib/lib.d.ts ===
+//// [tests/cases/compiler/declarationEmitBundleWithAmbientReferences.ts] ////
+
+=== lib/lib.d.ts ===
 declare module "lib/result" {
 >"lib/result" : Symbol("lib/result", Decl(lib.d.ts, --, --))
 
@@ -24,7 +26,7 @@ declare module "lib/result" {
 >T : Symbol(T, Decl(lib.d.ts, --, --))
 }
 
-=== tests/cases/compiler/src/datastore_result.ts ===
+=== src/datastore_result.ts ===
 import { Result } from "lib/result";
 >Result : Symbol(Result, Decl(datastore_result.ts, 0, 8))
 
@@ -35,7 +37,7 @@ export type T<T> = Result<Error, T>;
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(datastore_result.ts, 2, 14))
 
-=== tests/cases/compiler/src/conditional_directive_field.ts ===
+=== src/conditional_directive_field.ts ===
 import * as DatastoreResult from "src/datastore_result";
 >DatastoreResult : Symbol(DatastoreResult, Decl(conditional_directive_field.ts, 0, 6))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution13.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 
@@ -30,7 +32,7 @@ function ChildComponent({ property1 }: AnotherComponentProps) {
 
 //// [file.jsx]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 function Component(props) {
     var condition1;
@@ -41,7 +43,7 @@ function Component(props) {
         return (<ChildComponent {...props} property1="NewString"/>);
     }
 }
-exports["default"] = Component;
+exports.default = Component;
 function ChildComponent(_a) {
     var property1 = _a.property1;
     return (<span>{property1}</span>);

@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild2.tsx] ////
+
+=== jsxEmptyExpressionNotCountedAsChild2.tsx ===
+// repro from #38108
+
+export {}
+
+declare global {
+>global : Symbol(global, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 2, 9))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 4, 16))
+
+        type Element = any;
+>Element : Symbol(Element, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 5, 19))
+
+        interface ElementAttributesProperty {
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 6, 27))
+
+            __properties__: {};
+>__properties__ : Symbol(ElementAttributesProperty.__properties__, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 7, 45))
+        }
+        interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 9, 9))
+
+            [key: string]: string;
+>key : Symbol(key, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 11, 13))
+        }
+        interface ElementChildrenAttribute {
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 12, 9))
+
+            __children__: {};
+>__children__ : Symbol(ElementChildrenAttribute.__children__, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 13, 44))
+        }
+    }
+}
+
+interface MockComponentInterface {
+>MockComponentInterface : Symbol(MockComponentInterface, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 17, 1))
+
+	new (): {
+        __properties__: { bar?: number } & { __children__: () => number };
+>__properties__ : Symbol(__properties__, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 20, 10))
+>bar : Symbol(bar, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 21, 25))
+>__children__ : Symbol(__children__, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 21, 44))
+
+	};
+}
+
+declare const MockComponent: MockComponentInterface;
+>MockComponent : Symbol(MockComponent, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 25, 13))
+>MockComponentInterface : Symbol(MockComponentInterface, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 17, 1))
+
+<MockComponent>{}</MockComponent>; // error
+>MockComponent : Symbol(MockComponent, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 25, 13))
+>MockComponent : Symbol(MockComponent, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 25, 13))
+

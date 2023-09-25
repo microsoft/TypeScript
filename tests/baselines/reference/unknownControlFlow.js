@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/types/unknown/unknownControlFlow.ts] ////
+
 //// [unknownControlFlow.ts]
-type T01 = {} & string;  // string
+type T01 = {} & string;  // {} & string
 type T02 = {} & 'a';  // 'a'
 type T03 = {} & object;  // object
 type T04 = {} & { x: number };  // { x: number }
@@ -300,6 +302,156 @@ type NullableFoo = Foo | undefined;
 
 type Bar<T extends NullableFoo> = NonNullable<T>[string];
 
+// Generics and intersections with {}
+
+function fx0<T>(value: T & ({} | null)) {
+    if (value === 42) {
+        value;  // T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+    }
+}
+
+function fx1<T extends unknown>(value: T & ({} | null)) {
+    if (value === 42) {
+        value;  // T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+    }
+}
+
+function fx2<T extends {}>(value: T & ({} | null)) {
+    if (value === 42) {
+        value;  // T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+    }
+}
+
+function fx3<T extends {} | undefined>(value: T & ({} | null)) {
+    if (value === 42) {
+        value;  // T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+    }
+}
+
+function fx4<T extends {} | null>(value: T & ({} | null)) {
+    if (value === 42) {
+        value;  // T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+    }
+}
+
+function fx5<T extends {} | null | undefined>(value: T & ({} | null)) {
+    if (value === 42) {
+        value;  // T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+    }
+}
+
+// Double-equals narrowing
+
+function fx10(x: string | number, y: number) {
+    if (x == y) {
+        x;  // string | number
+    }
+    else {
+        x;  // string | number
+    }
+    if (x != y) {
+        x;  // string | number
+    }
+    else {
+        x;  // string | number
+    }
+}
+
+// Repros from #50706
+
+function SendBlob(encoding: unknown) {
+    if (encoding !== undefined && encoding !== 'utf8') {
+        throw new Error('encoding');
+    }
+    encoding;
+};
+
+function doSomething1<T extends unknown>(value: T): T {
+    if (value === undefined) {
+        return value;
+    }
+    if (value === 42) {
+        throw Error('Meaning of life value');
+    }
+    return value;
+}
+
+function doSomething2(value: unknown): void {
+    if (value === undefined) {
+        return;
+    }
+    if (value === 42) {
+        value;
+    }
+}
+
+// Repro from #51009
+
+type TypeA = {
+    A: 'A',
+    B: 'B',
+}
+
+type TypeB = {
+    A: 'A',
+    B: 'B',
+    C: 'C',
+}
+
+type R<T extends keyof TypeA> =
+    T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never;
+
+type R2<T extends PropertyKey> =
+    T extends keyof TypeA ? T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never : never;
+
+// Repro from #51041
+
+type AB = "A" | "B";
+
+function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
+    let r2: never = y as T_AB & undefined;
+} 
+
+// Repro from #51538
+
+type Left = 'left';
+type Right = 'right' & { right: 'right' };
+type Either = Left | Right;
+
+function assertNever(v: never): never {
+    throw new Error('never');
+}
+
+function fx20(value: Either) {
+    if (value === 'left') {
+        const foo: 'left' = value;
+    }
+    else if (value === 'right') {
+        const bar: 'right' = value;
+    }
+    else {
+        assertNever(value);
+    }
+}
+
 
 //// [unknownControlFlow.js]
 "use strict";
@@ -552,6 +704,112 @@ ff1(null, 'foo'); // Error
 ff2(null, 'foo'); // Error
 ff3(null, 'foo');
 ff4(null, 'foo'); // Error
+// Generics and intersections with {}
+function fx0(value) {
+    if (value === 42) {
+        value; // T & {}
+    }
+    else {
+        value; // T & ({} | null)
+    }
+}
+function fx1(value) {
+    if (value === 42) {
+        value; // T & {}
+    }
+    else {
+        value; // T & ({} | null)
+    }
+}
+function fx2(value) {
+    if (value === 42) {
+        value; // T & {}
+    }
+    else {
+        value; // T & ({} | null)
+    }
+}
+function fx3(value) {
+    if (value === 42) {
+        value; // T & {}
+    }
+    else {
+        value; // T & ({} | null)
+    }
+}
+function fx4(value) {
+    if (value === 42) {
+        value; // T & {}
+    }
+    else {
+        value; // T & ({} | null)
+    }
+}
+function fx5(value) {
+    if (value === 42) {
+        value; // T & {}
+    }
+    else {
+        value; // T & ({} | null)
+    }
+}
+// Double-equals narrowing
+function fx10(x, y) {
+    if (x == y) {
+        x; // string | number
+    }
+    else {
+        x; // string | number
+    }
+    if (x != y) {
+        x; // string | number
+    }
+    else {
+        x; // string | number
+    }
+}
+// Repros from #50706
+function SendBlob(encoding) {
+    if (encoding !== undefined && encoding !== 'utf8') {
+        throw new Error('encoding');
+    }
+    encoding;
+}
+;
+function doSomething1(value) {
+    if (value === undefined) {
+        return value;
+    }
+    if (value === 42) {
+        throw Error('Meaning of life value');
+    }
+    return value;
+}
+function doSomething2(value) {
+    if (value === undefined) {
+        return;
+    }
+    if (value === 42) {
+        value;
+    }
+}
+function x(x, y) {
+    var r2 = y;
+}
+function assertNever(v) {
+    throw new Error('never');
+}
+function fx20(value) {
+    if (value === 'left') {
+        var foo_1 = value;
+    }
+    else if (value === 'right') {
+        var bar = value;
+    }
+    else {
+        assertNever(value);
+    }
+}
 
 
 //// [unknownControlFlow.d.ts]
@@ -601,3 +859,33 @@ type Foo = {
 };
 type NullableFoo = Foo | undefined;
 type Bar<T extends NullableFoo> = NonNullable<T>[string];
+declare function fx0<T>(value: T & ({} | null)): void;
+declare function fx1<T extends unknown>(value: T & ({} | null)): void;
+declare function fx2<T extends {}>(value: T & ({} | null)): void;
+declare function fx3<T extends {} | undefined>(value: T & ({} | null)): void;
+declare function fx4<T extends {} | null>(value: T & ({} | null)): void;
+declare function fx5<T extends {} | null | undefined>(value: T & ({} | null)): void;
+declare function fx10(x: string | number, y: number): void;
+declare function SendBlob(encoding: unknown): void;
+declare function doSomething1<T extends unknown>(value: T): T;
+declare function doSomething2(value: unknown): void;
+type TypeA = {
+    A: 'A';
+    B: 'B';
+};
+type TypeB = {
+    A: 'A';
+    B: 'B';
+    C: 'C';
+};
+type R<T extends keyof TypeA> = T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never;
+type R2<T extends PropertyKey> = T extends keyof TypeA ? T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never : never;
+type AB = "A" | "B";
+declare function x<T_AB extends AB>(x: T_AB & undefined, y: any): void;
+type Left = 'left';
+type Right = 'right' & {
+    right: 'right';
+};
+type Either = Left | Right;
+declare function assertNever(v: never): never;
+declare function fx20(value: Either): void;

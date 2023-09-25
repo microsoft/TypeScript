@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag4.ts] ////
+
+=== /a.js ===
+
+/**
+ * @typedef {Object} Foo
+ * @property {number} a
+ */
+export default /** @satisfies {Foo} */ ({});
+
+=== /b.js ===
+/**
+ * @typedef {Object} Foo
+ * @property {number} a
+ */
+
+export default /** @satisfies {Foo} */ ({ a: 1 });
+>a : Symbol(a, Decl(b.js, 5, 41))
+

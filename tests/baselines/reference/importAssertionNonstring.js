@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importAssertionNonstring.ts] ////
+
 //// [mod.mts]
 import * as thing1 from "./mod.mjs" assert {field: 0};
 

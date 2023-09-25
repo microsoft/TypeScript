@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/mod.js ===
+//// [tests/cases/conformance/salsa/moduleExportAssignment7.ts] ////
+
+=== mod.js ===
 class Thing  { x = 1 }
 >Thing : Thing
 >x : number
@@ -46,7 +48,7 @@ module.exports = {
 >literal : string
 >"" : ""
 }
-=== tests/cases/conformance/salsa/main.js ===
+=== main.js ===
 /**
  * @param {import("./mod").Thing} a
  * @param {import("./mod").AnotherThing} b
@@ -63,7 +65,7 @@ function jstypes(a, b, c, d, e, f, g) {
 >c : () => number
 >d : () => number
 >e : () => number
->f : import("tests/cases/conformance/salsa/mod").buz
+>f : import("mod").buz
 >g : string
 
     return a.x + b.y + c() + d() + e() + f() + g.length
@@ -86,7 +88,7 @@ function jstypes(a, b, c, d, e, f, g) {
 >e() : number
 >e : () => number
 >f() : number
->f : import("tests/cases/conformance/salsa/mod").buz
+>f : import("mod").buz
 >g.length : number
 >g : string
 >length : number
@@ -137,7 +139,7 @@ function jsvalues(a, b, c, d, e, f, g) {
 >length : number
 }
 
-=== tests/cases/conformance/salsa/index.ts ===
+=== index.ts ===
 function types(
 >types : (a: any, b: any, c: any, d: any, e: any, f: import('./mod').buz, g: any) => any
 
@@ -157,7 +159,7 @@ function types(
 >e : any
 
     f: import('./mod').buz,
->f : import("tests/cases/conformance/salsa/mod").buz
+>f : import("mod").buz
 
     g: import('./mod').literal,
 >g : any
@@ -183,7 +185,7 @@ function types(
 >e() : any
 >e : any
 >f() : number
->f : import("tests/cases/conformance/salsa/mod").buz
+>f : import("mod").buz
 >g.length : any
 >g : any
 >length : any

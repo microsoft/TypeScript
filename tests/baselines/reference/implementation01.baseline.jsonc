@@ -1,0 +1,12 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/server/implementation01.ts ===
+// interface Fo/*GOTO IMPL*/o {}
+// class [|Bar|] implements Foo {}
+
+  // === Details ===
+  [
+   {
+    "kind": "",
+    "displayParts": []
+   }
+  ]

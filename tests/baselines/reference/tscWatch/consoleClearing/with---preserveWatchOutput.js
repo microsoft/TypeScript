@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/f.ts]
 
@@ -39,15 +40,11 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /f.ts (used version)
 
-WatchedFiles::
-/f.ts:
-  {"fileName":"/f.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
 FsWatches::
-
-FsWatchesRecursive::
+/a/lib/lib.d.ts: *new*
+  {}
+/f.ts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -62,6 +59,9 @@ Input::
 //
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 [[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
 
@@ -81,16 +81,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /f.ts (computed .d.ts)
-
-WatchedFiles::
-/f.ts:
-  {"fileName":"/f.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

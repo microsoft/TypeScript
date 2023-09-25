@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts] ////
+
 //// [catchClauseWithTypeAnnotation.ts]
 type any1 = any;
 type unknown1 = unknown;
@@ -34,8 +36,8 @@ function fn(x: boolean) {
     try { } catch ({ x }) { } // should be OK
     try { } catch ({ x }: any) { x.foo; } // should be OK
     try { } catch ({ x }: any1) { x.foo;} // should be OK
-    try { } catch ({ x }: unknown) { console.log(x); } // should be OK
-    try { } catch ({ x }: unknown1) { console.log(x); } // should be OK
+    try { } catch ({ x }: unknown) { console.log(x); } // error in the destructure
+    try { } catch ({ x }: unknown1) { console.log(x); } // error in the destructure
     try { } catch ({ x }: object) { } // error in the type
     try { } catch ({ x }: Error) { } // error in the type
 }
@@ -124,12 +126,12 @@ function fn(x) {
     catch (_d) {
         var x_5 = _d.x;
         console.log(x_5);
-    } // should be OK
+    } // error in the destructure
     try { }
     catch (_e) {
         var x_6 = _e.x;
         console.log(x_6);
-    } // should be OK
+    } // error in the destructure
     try { }
     catch (_f) {
         var x_7 = _f.x;

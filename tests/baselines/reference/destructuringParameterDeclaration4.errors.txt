@@ -1,17 +1,17 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(14,17): error TS1047: A rest parameter cannot be optional.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(15,16): error TS1048: A rest parameter cannot have an initializer.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(20,19): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(21,7): error TS2552: Cannot find name 'array2'. Did you mean 'Array'?
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(22,11): error TS2322: Type 'string' is not assignable to type '[[any]]'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(23,4): error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]]]'.
+destructuringParameterDeclaration4.ts(14,17): error TS1047: A rest parameter cannot be optional.
+destructuringParameterDeclaration4.ts(15,16): error TS1048: A rest parameter cannot have an initializer.
+destructuringParameterDeclaration4.ts(20,19): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
+destructuringParameterDeclaration4.ts(21,7): error TS2552: Cannot find name 'array2'. Did you mean 'Array'?
+destructuringParameterDeclaration4.ts(22,11): error TS2322: Type 'string' is not assignable to type '[[any]]'.
+destructuringParameterDeclaration4.ts(23,4): error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]]]'.
   Source has 2 element(s) but target requires 3.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(24,11): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(29,17): error TS1317: A parameter property cannot be declared using a rest parameter.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(34,22): error TS2304: Cannot find name 'E1'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(34,28): error TS2304: Cannot find name 'E'.
+destructuringParameterDeclaration4.ts(24,11): error TS2322: Type 'string' is not assignable to type 'number'.
+destructuringParameterDeclaration4.ts(29,17): error TS1317: A parameter property cannot be declared using a rest parameter.
+destructuringParameterDeclaration4.ts(34,22): error TS2304: Cannot find name 'E1'.
+destructuringParameterDeclaration4.ts(34,28): error TS2304: Cannot find name 'E'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts (10 errors) ====
+==== destructuringParameterDeclaration4.ts (10 errors) ====
     // If the parameter is a rest parameter, the parameter type is any[]
     // A type annotation for a rest parameter must denote an array type.
     
@@ -41,7 +41,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(
     a1(...array2);            // Error parameter type is (number|string)[]
           ~~~~~~
 !!! error TS2552: Cannot find name 'array2'. Did you mean 'Array'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1490:13: 'Array' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Array' is declared here.
     a5([1, 2, "string", false, true]);       // Error, parameter type is [any, any, [[any]]]
               ~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type '[[any]]'.

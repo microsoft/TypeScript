@@ -1,4 +1,5 @@
 // @target: ES5
+// @lib: esnext, dom
 function foo0() {
     let a = x;
     let x;
@@ -121,4 +122,31 @@ function foo15() {
 
 function foo16() {
     let [a] = (() => a)();
+}
+
+function foo17() {
+    const promise = (async () => {
+        promise
+        foo
+        await null
+        promise
+        foo
+    })()
+
+    const foo = 1;
+}
+
+// #30907
+function wrapI1() {
+    const iter = (function* foo() {
+        iter;
+        yield 1;
+    })();
+}
+
+function wrapI2() {
+    const iter = (async function* foo() {
+        iter;
+        yield 1;
+    })();
 }

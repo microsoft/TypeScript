@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileEnumUsedAsValue.ts] ////
+
 //// [declFileEnumUsedAsValue.ts]
 enum e {
     a,

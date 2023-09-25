@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/switchStatements/switchStatements.ts ===
+//// [tests/cases/conformance/statements/switchStatements/switchStatements.ts] ////
+
+=== switchStatements.ts ===
 module M {
 >M : typeof M
 
@@ -27,8 +29,6 @@ switch (x) {
 >true : true
 
     case null:
->null : null
-
     case undefined:
 >undefined : undefined
 
@@ -130,8 +130,6 @@ switch (true) { }
 >true : true
 
 switch (null) { }
->null : null
-
 switch (undefined) { }
 >undefined : undefined
 

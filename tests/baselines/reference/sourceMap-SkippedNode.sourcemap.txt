@@ -5,54 +5,66 @@ sourceRoot:
 sources: sourceMap-SkippedNode.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMap-SkippedNode.js
+emittedFile:sourceMap-SkippedNode.js
 sourceFile:sourceMap-SkippedNode.ts
 -------------------------------------------------------------------
 >>>try {
 1 >
 2 >^^^^
-3 >    ^^^^^^^->
+3 >    ^
+4 >     ^^^^^^->
 1 >
 2 >try 
+3 >    {
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
 ---
 >>>    // ...
 1->^^^^
 2 >    ^^^^^^
-1->{
+1->
   >
 2 >    // ...
 1->Emitted(2, 5) Source(2, 1) + SourceIndex(0)
 2 >Emitted(2, 11) Source(2, 7) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^->
 1 >
-  >}
-1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
 ---
 >>>finally {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^^^^^->
 1-> finally 
+2 >        {
 1->Emitted(4, 9) Source(3, 11) + SourceIndex(0)
+2 >Emitted(4, 10) Source(3, 12) + SourceIndex(0)
 ---
 >>>    // N.B. No 'catch' block
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^
-1->{
+1->
   >
 2 >    // N.B. No 'catch' block
 1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
 2 >Emitted(5, 29) Source(4, 25) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >}
-1 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMap-SkippedNode.js.map

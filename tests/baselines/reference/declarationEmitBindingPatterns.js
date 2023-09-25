@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitBindingPatterns.ts] ////
+
 //// [declarationEmitBindingPatterns.ts]
 const k = ({x: z = 'y'}) => { }
 
@@ -18,7 +20,7 @@ function f(_a, _b, _c) {
 
 
 //// [declarationEmitBindingPatterns.d.ts]
-declare const k: ({ x }: {
+declare const k: ({ x: z }: {
     x?: string;
 }) => void;
 declare var a: any;

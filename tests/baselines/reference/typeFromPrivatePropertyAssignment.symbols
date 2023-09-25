@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignment.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignment.ts] ////
+
+=== typeFromPrivatePropertyAssignment.ts ===
 type Foo = { foo?: string };
 >Foo : Symbol(Foo, Decl(typeFromPrivatePropertyAssignment.ts, 0, 0))
 >foo : Symbol(foo, Decl(typeFromPrivatePropertyAssignment.ts, 0, 12))

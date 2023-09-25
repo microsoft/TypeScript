@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedLocalVarsOfTheSameName.ts] ////
+
+=== part1.ts ===
 export module A {
 >A : Symbol(A, Decl(part1.ts, 0, 0))
 
@@ -41,7 +43,7 @@ export module A {
 >y : Symbol(y, Decl(part1.ts, 12, 38))
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
+=== part2.ts ===
 export module A {
 >A : Symbol(A, Decl(part2.ts, 0, 0))
 

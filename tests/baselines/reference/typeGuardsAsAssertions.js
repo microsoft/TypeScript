@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/typeGuardsAsAssertions.ts] ////
+
 //// [typeGuardsAsAssertions.ts]
 // Repro from #8513
 
@@ -129,7 +131,7 @@ function f7() {
 //// [typeGuardsAsAssertions.js]
 "use strict";
 // Repro from #8513
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn = exports.isSome = exports.none = void 0;
 var cond;
 exports.none = { none: '' };

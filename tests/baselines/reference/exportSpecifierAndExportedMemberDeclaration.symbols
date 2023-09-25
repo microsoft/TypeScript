@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportSpecifierAndExportedMemberDeclaration.ts ===
+//// [tests/cases/compiler/exportSpecifierAndExportedMemberDeclaration.ts] ////
+
+=== exportSpecifierAndExportedMemberDeclaration.ts ===
 declare module "m2" {
 >"m2" : Symbol("m2", Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 0), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 7, 1))
 

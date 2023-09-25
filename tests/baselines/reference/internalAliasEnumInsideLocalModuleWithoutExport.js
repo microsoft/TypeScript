@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExport.ts] ////
+
 //// [internalAliasEnumInsideLocalModuleWithoutExport.ts]
 export module a {
     export enum weekend {
@@ -15,7 +17,7 @@ export module c {
 
 //// [internalAliasEnumInsideLocalModuleWithoutExport.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = exports.a = void 0;
 var a;
 (function (a) {
@@ -25,23 +27,23 @@ var a;
         weekend[weekend["Saturday"] = 1] = "Saturday";
         weekend[weekend["Sunday"] = 2] = "Sunday";
     })(weekend = a.weekend || (a.weekend = {}));
-})(a = exports.a || (exports.a = {}));
+})(a || (exports.a = a = {}));
 var c;
 (function (c) {
     var b = a.weekend;
     c.bVal = b.Sunday;
-})(c = exports.c || (exports.c = {}));
+})(c || (exports.c = c = {}));
 
 
 //// [internalAliasEnumInsideLocalModuleWithoutExport.d.ts]
-export declare module a {
+export declare namespace a {
     enum weekend {
         Friday = 0,
         Saturday = 1,
         Sunday = 2
     }
 }
-export declare module c {
+export declare namespace c {
     import b = a.weekend;
     var bVal: b;
 }

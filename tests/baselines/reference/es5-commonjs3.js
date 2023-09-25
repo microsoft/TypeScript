@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-commonjs3.ts] ////
+
 //// [es5-commonjs3.ts]
 export default "test";
 export var __esModule = 1;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayFakeFlatNoCrashInferenceDeclarations.ts ===
+//// [tests/cases/compiler/arrayFakeFlatNoCrashInferenceDeclarations.ts] ////
+
+=== arrayFakeFlatNoCrashInferenceDeclarations.ts ===
 type BadFlatArray<Arr, Depth extends number> = {obj: {
 >BadFlatArray : Symbol(BadFlatArray, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 0))
 >Arr : Symbol(Arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 18))
@@ -12,7 +14,7 @@ type BadFlatArray<Arr, Depth extends number> = {obj: {
     "recur": Arr extends ReadonlyArray<infer InnerArr>
 >"recur" : Symbol("recur", Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 1, 16))
 >Arr : Symbol(Arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 18))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
 >InnerArr : Symbol(InnerArr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 2, 44))
 
     ? BadFlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]>
