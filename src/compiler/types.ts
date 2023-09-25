@@ -1535,7 +1535,7 @@ export type HasContainerFlags =
     | IsObjectLiteralOrClassExpressionMethodOrAccessor;
 
 /** @internal */
-export interface MutableNodeArray<T extends Node> extends Array<T>, TextRange {
+export interface MutableNodeArray<out T extends Node> extends Array<T>, TextRange {
     hasTrailingComma: boolean;
     /** @internal */ transformFlags: TransformFlags; // Flags for transforms, possibly undefined
 }
