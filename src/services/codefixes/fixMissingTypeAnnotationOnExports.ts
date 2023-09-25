@@ -1,6 +1,5 @@
 import {
     ArrayBindingPattern,
-    ArrowFunction,
     BindingElement,
     BindingPattern,
     ClassDeclaration,
@@ -9,21 +8,18 @@ import {
     Expression,
     ExpressionWithTypeArguments,
     factory,
-    FunctionDeclaration,
-    FunctionExpression,
     GeneratedIdentifierFlags,
-    GetAccessorDeclaration,
+    getSourceFileOfNode,
     getTokenAtPosition,
+    getTrailingCommentRanges,
     Identifier,
     isArrayBindingPattern,
     isArrowFunction,
     isComputedPropertyName,
-    isFunctionDeclaration,
     isFunctionExpression,
     isObjectBindingPattern,
     isOmittedExpression,
     isVariableDeclaration,
-    MethodDeclaration,
     Node,
     NodeArray,
     NodeBuilderFlags,
@@ -81,12 +77,15 @@ registerCodeFix({
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
 
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.program.getTypeChecker(), nodeWithDiag));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit, fixId, Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit)];
+        return [
+            createCodeFixAction(fixId, changes, Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit, fixId, Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit),
+        ];
     },
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const nodeWithDiag = getTokenAtPosition(diag.file, diag.start);
-        doChange(changes, diag.file, context.program.getTypeChecker(), nodeWithDiag);
-    })
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const nodeWithDiag = getTokenAtPosition(diag.file, diag.start);
+            doChange(changes, diag.file, context.program.getTypeChecker(), nodeWithDiag);
+        }),
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, typeChecker: TypeChecker, nodeWithDiag: Node): void {
@@ -100,9 +99,11 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, ty
 // If this is coming from an ill-formed AST with syntax errors, you cannot assume that it'll find a node
 // to annotate types, this will return undefined - meaning that it couldn't find the node to annotate types.
 function findNearestParentWithTypeAnnotation(node: Node): Node | undefined {
-    while (node &&
-           (((isObjectBindingPattern(node) || isArrayBindingPattern(node)) &&
-           !isVariableDeclaration(node.parent)) || !canHaveExplicitTypeAnnotation.has(node.kind))) {
+    while (
+        node &&
+        (((isObjectBindingPattern(node) || isArrayBindingPattern(node)) &&
+            !isVariableDeclaration(node.parent)) || !canHaveExplicitTypeAnnotation.has(node.kind))
+    ) {
         node = node.parent;
     }
     return node;
@@ -114,120 +115,68 @@ function findNearestParentWithTypeAnnotation(node: Node): Node | undefined {
  */
 function fixupForIsolatedDeclarations(node: Node, nodeWithDiag: Node, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
     switch (node.kind) {
-    case SyntaxKind.Parameter:
-        const parameter = node as ParameterDeclaration;
-        const newNode = addTypeToParameterDeclaration(parameter, typeChecker);
-        if (newNode) {
-            return changes.replaceNodeWithNodes(sourceFile, node, [newNode]);
-        }
-        break;
-    case SyntaxKind.VariableDeclaration:
-        const variableDeclaration = node as VariableDeclaration;
-        if (!variableDeclaration.type) {
-            if (variableDeclaration.initializer && (isFunctionExpression(variableDeclaration.initializer) || isArrowFunction(variableDeclaration.initializer))) {
-                return addTypeToFunctionLikeDeclaration(variableDeclaration.initializer, sourceFile, typeChecker, changes);
+        case SyntaxKind.Parameter:
+            const parameter = node as ParameterDeclaration;
+            addTypeToParameterDeclaration(changes, parameter, typeChecker);
+            break;
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.VariableDeclaration:
+            const variableDeclaration = node as VariableDeclaration | PropertyDeclaration;
+            if (!variableDeclaration.type) {
+                if (variableDeclaration.initializer && (isFunctionExpression(variableDeclaration.initializer) || isArrowFunction(variableDeclaration.initializer))) {
+                    addTypeToFunctionLikeDeclaration(variableDeclaration.initializer, sourceFile, typeChecker, changes);
+                }
+                else {
+                    const type = typeChecker.getTypeAtLocation(variableDeclaration);
+                    const typeNode = typeToTypeNode(type, variableDeclaration, typeChecker);
+                    if (typeNode) {
+                        changes.tryInsertTypeAnnotation(sourceFile, variableDeclaration, typeNode);
+                    }
+                }
             }
-            const type = typeChecker.getTypeAtLocation(variableDeclaration);
-            const typeNode = typeToTypeNode(type, variableDeclaration, typeChecker);
-            return changes.replaceNodeWithNodes(sourceFile, node,
-                [factory.updateVariableDeclaration(
-                    variableDeclaration,
-                    variableDeclaration.name,
-                    /*exclamationToken*/ undefined,
-                    typeNode,
-                    variableDeclaration.initializer
-                )]);
-        }
-        break;
-    case SyntaxKind.FunctionDeclaration:
-        return addTypeToFunctionLikeDeclaration(node as FunctionDeclaration, sourceFile, typeChecker, changes);
-    case SyntaxKind.PropertyDeclaration:
-        const propDecl = node as PropertyDeclaration;
-        if(!propDecl.type) {
-            if (propDecl.initializer && (isFunctionExpression(propDecl.initializer) || isArrowFunction(propDecl.initializer))) {
-                return addTypeToFunctionLikeDeclaration(propDecl.initializer, sourceFile, typeChecker, changes);
-            }
-            const type = typeChecker.getTypeAtLocation(node);
-            const typeNode = typeToTypeNode(type, propDecl, typeChecker);
-            return changes.replaceNodeWithNodes(sourceFile, node,
-                    [factory.updatePropertyDeclaration(
-                        propDecl,
-                        propDecl.modifiers,
-                        propDecl.name,
-                        propDecl.questionToken ?? propDecl.exclamationToken,
-                        typeNode,
-                        propDecl.initializer)]
-            );
-        }
-        break;
-    case SyntaxKind.MethodDeclaration:
-        const methodDeclaration = node as MethodDeclaration;
-        if(!methodDeclaration.type) {
-            const type = tryGetReturnType(typeChecker, methodDeclaration);
-            if(type) {
+            break;
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+            addTypeToFunctionLikeDeclaration(node as SignatureDeclaration, sourceFile, typeChecker, changes);
+            break;
+        case SyntaxKind.ExportAssignment:
+            const defaultExport = node as ExportAssignment;
+            if (!defaultExport.isExportEquals) {
+                const type = typeChecker.getTypeAtLocation(defaultExport.expression);
                 const typeNode = typeToTypeNode(type, node, typeChecker);
-                return changes.replaceNodeWithNodes(sourceFile, node,
-                    [factory.updateMethodDeclaration(
-                        methodDeclaration,
-                        methodDeclaration.modifiers,
-                        methodDeclaration.asteriskToken,
-                        methodDeclaration.name,
-                        methodDeclaration.questionToken,
-                        methodDeclaration.typeParameters,
-                        updateTypesInNodeArray(methodDeclaration.parameters, typeChecker),
-                        typeNode,
-                        methodDeclaration.body)]
-                );
+                return changes.replaceNodeWithNodes(sourceFile, node, [
+                    factory.createVariableStatement(
+                        /*modifiers*/ undefined,
+                        factory.createVariableDeclarationList(
+                            [factory.createVariableDeclaration(
+                                "__default",
+                                /*exclamationToken*/ undefined,
+                                typeNode,
+                                defaultExport.expression,
+                            )],
+                            NodeFlags.Const,
+                        ),
+                    ),
+                    factory.updateExportAssignment(defaultExport, defaultExport?.modifiers, factory.createIdentifier("__default")),
+                ]);
             }
-        }
-        break;
-    case SyntaxKind.GetAccessor:
-        const getAccessor = node as GetAccessorDeclaration;
-        if(!getAccessor.type) {
-            const returnType = tryGetReturnType(typeChecker, getAccessor);
-            if(returnType) {
-                const typeNode = typeToTypeNode(returnType, node, typeChecker);
-                return changes.replaceNodeWithNodes(sourceFile, node,
-                        [factory.updateGetAccessorDeclaration(
-                            getAccessor,
-                            getAccessor.modifiers,
-                            getAccessor.name,
-                            updateTypesInNodeArray(getAccessor.parameters, typeChecker),
-                            typeNode,
-                            getAccessor.body)]
-                );
-            }
-        }
-        break;
-    case SyntaxKind.ExportAssignment:
-        const defaultExport = node as ExportAssignment;
-        if(!defaultExport.isExportEquals) {
-            const type = typeChecker.getTypeAtLocation(defaultExport.expression);
-            const typeNode = typeToTypeNode(type, node, typeChecker);
-            return changes.replaceNodeWithNodes(sourceFile, node, [
-                factory.createVariableStatement(/*modifiers*/ undefined,
-                    factory.createVariableDeclarationList(
-                        [factory.createVariableDeclaration(
-                            "__default", /*exclamationToken*/ undefined,
-                            typeNode, defaultExport.expression)],
-                        NodeFlags.Const)),
-                factory.updateExportAssignment(defaultExport, defaultExport?.modifiers, factory.createIdentifier("__default")),
-            ]);
-        }
-        break;
-    // Handling expression like heritage clauses e.g. class A extends mixin(B) ..
-    case SyntaxKind.ClassDeclaration:
-        return handleClassDeclaration(node as ClassDeclaration, nodeWithDiag.parent.parent as ExpressionWithTypeArguments, sourceFile, changes, typeChecker);
-    case SyntaxKind.ObjectBindingPattern:
-    case SyntaxKind.ArrayBindingPattern:
-        return transformDestructuringPatterns(node as BindingPattern, sourceFile, typeChecker, changes);
-    default:
-        break;
+            break;
+        // Handling expression like heritage clauses e.g. class A extends mixin(B) ..
+        case SyntaxKind.ClassDeclaration:
+            handleClassDeclaration(node as ClassDeclaration, nodeWithDiag.parent.parent as ExpressionWithTypeArguments, sourceFile, changes, typeChecker);
+            break;
+        case SyntaxKind.ObjectBindingPattern:
+        case SyntaxKind.ArrayBindingPattern:
+            transformDestructuringPatterns(node as BindingPattern, sourceFile, typeChecker, changes);
+            break;
+        default:
+            throw new Error(`Cannot find a fix for the given node ${node.kind}`);
     }
-    throw new Error(`Cannot find a fix for the given node ${node.kind}`);
 }
 
-function addTypeToFunctionLikeDeclaration(func: FunctionDeclaration | FunctionExpression | ArrowFunction, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
+function addTypeToFunctionLikeDeclaration(func: SignatureDeclaration, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
     if (func.type) {
         return;
     }
@@ -237,56 +186,30 @@ function addTypeToFunctionLikeDeclaration(func: FunctionDeclaration | FunctionEx
         return;
     }
     const typeNode = typeToTypeNode(type, func, typeChecker);
-    if (isFunctionDeclaration(func)) {
-        changes.replaceNodeWithNodes(sourceFile, func,
-            [factory.updateFunctionDeclaration(
-                func,
-                func.modifiers,
-                func.asteriskToken,
-                func.name,
-                func.typeParameters,
-                updateTypesInNodeArray(func.parameters, typeChecker),
-                typeNode,
-                func.body)]
+    if (typeNode) {
+        changes.tryInsertTypeAnnotation(
+            sourceFile,
+            func,
+            typeNode,
         );
     }
-    else if (isFunctionExpression(func)) {
-        changes.replaceNodeWithNodes(sourceFile, func,
-            [factory.updateFunctionExpression(
-                func,
-                func.modifiers,
-                func.asteriskToken,
-                func.name,
-                func.typeParameters,
-                updateTypesInNodeArray(func.parameters, typeChecker),
-                typeNode,
-                func.body)]
-        );
-    }
-    else {
-        changes.replaceNodeWithNodes(sourceFile, func,
-            [factory.updateArrowFunction(
-                func,
-                func.modifiers,
-                func.typeParameters,
-                updateTypesInNodeArray(func.parameters, typeChecker),
-                typeNode,
-                factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                func.body)]
-        );
-    }
+    addTypesToParametersArray(changes, func.parameters, typeChecker);
 }
 
 function handleClassDeclaration(classDecl: ClassDeclaration, heritageExpression: ExpressionWithTypeArguments, sourceFile: SourceFile, changes: textChanges.ChangeTracker, typeChecker: TypeChecker) {
-    if (heritageExpression.kind !== SyntaxKind.ExpressionWithTypeArguments){
+    if (heritageExpression.kind !== SyntaxKind.ExpressionWithTypeArguments) {
         throw new Error(`Hey + ${heritageExpression.kind}`);
     }
     const heritageTypeNode = typeToTypeNode(
         typeChecker.getTypeAtLocation(heritageExpression.expression),
         heritageExpression.expression,
-        typeChecker);
+        typeChecker,
+    );
+
     const heritageVariableName = factory.createUniqueName(
-        classDecl.name? classDecl.name.text + "Base" : "Anonymous", GeneratedIdentifierFlags.Optimistic);
+        classDecl.name ? classDecl.name.text + "Base" : "Anonymous",
+        GeneratedIdentifierFlags.Optimistic,
+    );
     // e.g. const Point3DBase: typeof Point2D = mixin(Point2D);
     const heritageVariable = factory.createVariableStatement(
         /*modifiers*/ undefined,
@@ -295,29 +218,26 @@ function handleClassDeclaration(classDecl: ClassDeclaration, heritageExpression:
                 heritageVariableName,
                 /*exclamationToken*/ undefined,
                 heritageTypeNode,
-                heritageExpression,
-                )],
+                heritageExpression.expression,
+            )],
             NodeFlags.Const,
-        )
+        ),
     );
-    changes.replaceNodeWithNodes(sourceFile, classDecl,
-        [heritageVariable,
-            factory.updateClassDeclaration(
-                classDecl,
-                classDecl.modifiers,
-                classDecl.name,
-                classDecl.typeParameters,
-                classDecl.heritageClauses?.map(
-                    (node) => {
-                        if (node === heritageExpression.parent) {
-                            return factory.updateHeritageClause(node,
-                                [factory.createExpressionWithTypeArguments(heritageVariableName, [])]
-                            );
-                        }
-                        return node;
-                    }),
-                classDecl.members)
-            ]);
+    // const touchingToken = getTouchingToken(heritageExpression);
+    changes.insertNodeBefore(sourceFile, classDecl, heritageVariable);
+    const trailingComments = getTrailingCommentRanges(sourceFile.text, heritageExpression.end);
+    const realEnd = trailingComments?.[trailingComments.length - 1]?.end ?? heritageExpression.end;
+    changes.replaceRange(
+        sourceFile,
+        {
+            pos: heritageExpression.getFullStart(),
+            end: realEnd,
+        },
+        heritageVariableName,
+        {
+            prefix: " ",
+        },
+    );
 }
 
 interface ExpressionReverseChain {
@@ -333,15 +253,13 @@ const enum ExpressionType {
     IDENTIFIER = 3,
 }
 
-type SubExpression = {kind: ExpressionType.TEXT, text: string}
-    | {kind: ExpressionType.COMPUTED, computed: Expression}
-    | {kind: ExpressionType.ARRAY_ACCESS, arrayIndex: number}
-    | {kind: ExpressionType.IDENTIFIER, identifier: Identifier};
+type SubExpression =
+    | { kind: ExpressionType.TEXT; text: string; }
+    | { kind: ExpressionType.COMPUTED; computed: Expression; }
+    | { kind: ExpressionType.ARRAY_ACCESS; arrayIndex: number; }
+    | { kind: ExpressionType.IDENTIFIER; identifier: Identifier; };
 
-function transformDestructuringPatterns(bindingPattern: BindingPattern,
-                                        sourceFile: SourceFile,
-                                        typeChecker: TypeChecker,
-                                        changes: textChanges.ChangeTracker) {
+function transformDestructuringPatterns(bindingPattern: BindingPattern, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
     const enclosingVarStmt = bindingPattern.parent.parent.parent as VariableStatement;
     const tempHolderForReturn = factory.createUniqueName("dest", GeneratedIdentifierFlags.Optimistic);
     const baseExpr: ExpressionReverseChain = { expression: { kind: ExpressionType.IDENTIFIER, identifier: tempHolderForReturn } };
@@ -362,10 +280,11 @@ function transformDestructuringPatterns(bindingPattern: BindingPattern,
                     tempHolderForReturn,
                     /*exclamationToken*/ undefined,
                     /*type*/ undefined,
-                    enclosingVarStmt.declarationList.declarations[0].initializer)],
-                NodeFlags.Const
-            )
-        )
+                    enclosingVarStmt.declarationList.declarations[0].initializer,
+                )],
+                NodeFlags.Const,
+            ),
+        ),
     ];
     let i = 0;
     while (i < bindingElements.length) {
@@ -375,7 +294,11 @@ function transformDestructuringPatterns(bindingPattern: BindingPattern,
             const computedExpression = bindingElement.element!.propertyName.expression;
             const identifierForComputedProperty = factory.getGeneratedNameForNode(computedExpression);
             const variableDecl = factory.createVariableDeclaration(
-                identifierForComputedProperty, /*exclamationToken*/ undefined, /*type*/ undefined, computedExpression);
+                identifierForComputedProperty,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                computedExpression,
+            );
             const variableList = factory.createVariableDeclarationList([variableDecl], NodeFlags.Const);
             const variableStatement = factory.createVariableStatement(/*modifiers*/ undefined, variableList);
             newNodes.push(variableStatement);
@@ -400,8 +323,14 @@ function transformDestructuringPatterns(bindingPattern: BindingPattern,
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList(
                         [factory.createVariableDeclaration(
-                            tempName, /*exclamationToken*/ undefined, /*type*/ undefined, variableInitializer)],
-                        NodeFlags.Const)));
+                            tempName,
+                            /*exclamationToken*/ undefined,
+                            /*type*/ undefined,
+                            variableInitializer,
+                        )],
+                        NodeFlags.Const,
+                    ),
+                ));
                 variableInitializer = factory.createConditionalExpression(
                     factory.createBinaryExpression(
                         tempName,
@@ -411,14 +340,21 @@ function transformDestructuringPatterns(bindingPattern: BindingPattern,
                     factory.createToken(SyntaxKind.QuestionToken),
                     bindingElement.element!.initializer,
                     factory.createToken(SyntaxKind.ColonToken),
-                    variableInitializer,);
+                    variableInitializer,
+                );
             }
             newNodes.push(factory.createVariableStatement(
                 [factory.createToken(SyntaxKind.ExportKeyword)],
                 factory.createVariableDeclarationList(
                     [factory.createVariableDeclaration(
-                        name, /*exclamationToken*/ undefined, typeNode, variableInitializer)],
-                    NodeFlags.Const)));
+                        name,
+                        /*exclamationToken*/ undefined,
+                        typeNode,
+                        variableInitializer,
+                    )],
+                    NodeFlags.Const,
+                ),
+            ));
         }
         ++i;
     }
@@ -429,15 +365,15 @@ function transformDestructuringPatterns(bindingPattern: BindingPattern,
             enclosingVarStmt.modifiers,
             factory.updateVariableDeclarationList(
                 enclosingVarStmt.declarationList,
-                enclosingVarStmt.declarationList.declarations.filter((node) => node !== bindingPattern.parent),
-                )
+                enclosingVarStmt.declarationList.declarations.filter(node => node !== bindingPattern.parent),
+            ),
         ));
     }
     changes.replaceNodeWithNodes(sourceFile, enclosingVarStmt, newNodes);
 }
 
 function addArrayBindingPatterns(bindingPattern: ArrayBindingPattern, bindingElements: ExpressionReverseChain[], parent: ExpressionReverseChain) {
-    for (let i = 0 ; i < bindingPattern.elements.length ; ++i) {
+    for (let i = 0; i < bindingPattern.elements.length; ++i) {
         const element = bindingPattern.elements[i];
         if (isOmittedExpression(element)) {
             continue;
@@ -483,26 +419,26 @@ function createChainedExpression(expression: ExpressionReverseChain, expressionT
         expression = expression.parent;
         reverseTraverse.push(expression);
     }
-    let chainedExpression: Expression = ((reverseTraverse[reverseTraverse.length - 1]).expression as {identifier: Identifier}).identifier;
-    for (let i = reverseTraverse.length -2 ; i>= 0; --i) {
+    let chainedExpression: Expression = (reverseTraverse[reverseTraverse.length - 1].expression as { identifier: Identifier; }).identifier;
+    for (let i = reverseTraverse.length - 2; i >= 0; --i) {
         const nextSubExpr = reverseTraverse[i].expression;
         if (nextSubExpr.kind === ExpressionType.TEXT) {
             chainedExpression = factory.createPropertyAccessChain(
                 chainedExpression,
                 /*questionDotToken*/ undefined,
-                factory.createIdentifier(nextSubExpr.text)
+                factory.createIdentifier(nextSubExpr.text),
             );
         }
         else if (nextSubExpr.kind === ExpressionType.COMPUTED) {
             chainedExpression = factory.createElementAccessExpression(
                 chainedExpression,
-                expressionToVar.get(nextSubExpr.computed)!
+                expressionToVar.get(nextSubExpr.computed)!,
             );
         }
         else if (nextSubExpr.kind === ExpressionType.ARRAY_ACCESS) {
             chainedExpression = factory.createElementAccessExpression(
                 chainedExpression,
-                nextSubExpr.arrayIndex
+                nextSubExpr.arrayIndex,
             );
         }
     }
@@ -525,31 +461,19 @@ function tryGetReturnType(typeChecker: TypeChecker, node: SignatureDeclaration):
     }
 }
 
-function updateTypesInNodeArray(nodeArray: NodeArray<ParameterDeclaration>, typeChecker: TypeChecker): NodeArray<ParameterDeclaration>;
-function updateTypesInNodeArray(nodeArray: NodeArray<ParameterDeclaration> | undefined, typeChecker: TypeChecker): NodeArray<ParameterDeclaration> | undefined;
-function updateTypesInNodeArray(nodeArray: NodeArray<ParameterDeclaration> | undefined, typeChecker: TypeChecker) {
-    if(nodeArray === undefined) return undefined;
-    return factory.createNodeArray(
-        nodeArray.map(param => {
-            return addTypeToParameterDeclaration(param, typeChecker) || param;
-        })
-    );
+function addTypesToParametersArray(changes: textChanges.ChangeTracker, nodeArray: NodeArray<ParameterDeclaration> | undefined, typeChecker: TypeChecker) {
+    if (nodeArray === undefined) return undefined;
+    nodeArray.forEach(param => addTypeToParameterDeclaration(changes, param, typeChecker));
 }
 
-function addTypeToParameterDeclaration(parameter: ParameterDeclaration, typeChecker: TypeChecker): ParameterDeclaration | undefined {
+function addTypeToParameterDeclaration(changes: textChanges.ChangeTracker, parameter: ParameterDeclaration, typeChecker: TypeChecker): void {
     if (!parameter.type) {
         const type = typeChecker.getTypeAtLocation(parameter);
         if (type) {
             const typeNode = typeToTypeNode(type, parameter, typeChecker);
-            return factory.updateParameterDeclaration(
-                parameter,
-                parameter.modifiers,
-                parameter.dotDotDotToken,
-                parameter.name,
-                parameter.questionToken,
-                typeNode,
-                parameter.initializer
-            );
+            if (typeNode) {
+                changes.tryInsertTypeAnnotation(getSourceFileOfNode(parameter), parameter, typeNode);
+            }
         }
     }
 }

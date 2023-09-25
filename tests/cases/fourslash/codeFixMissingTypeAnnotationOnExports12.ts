@@ -10,7 +10,6 @@
 
 verify.codeFixAvailable([
     { description: ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.message },
-    { description: ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.message }
 ]);
 
 // TODO: There's no easy way to name the type, so rather promoting this to a classDeclaration is better.
@@ -23,8 +22,8 @@ verify.codeFix({
 }
 class Point2D { x = 0; y = 0; }
 export const Point3D: {
-        new(): {
-            z: number; x: number; y: number;
-        };
-    } = class extends mixin(Point2D) { z = 0; };`
+    new(): {
+        z: number; x: number; y: number;
+    };
+} = class extends mixin(Point2D) {  z = 0; };`
 });

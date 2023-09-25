@@ -1,3 +1,4 @@
+
 /// <reference path='fourslash.ts'/>
 
 // @isolatedDeclarations: true

@@ -15,6 +15,6 @@ verify.codeFix({
     newFileContent:
 `function foo(): number[] {return [42];}
 export const c: {
-        foo: number[];
-    } = { foo: foo() };`,
+    foo: number[];
+} = {foo: foo()};`,
 });
