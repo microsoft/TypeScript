@@ -875,6 +875,7 @@ import {
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     ObjectType,
+    OmittedExpression,
     OptionalChain,
     OptionalTypeNode,
     or,
@@ -41953,6 +41954,71 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkVarDeclaredNamesNotShadowed(node);
             }
             checkCollisionsForDeclarationName(node, node.name);
+        }
+
+        // TODO(jakebailey): copy pasted from declaration.ts; improve
+        type CanHaveLiteralInitializer = VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration;
+        function canHaveLiteralInitializer(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    return !hasEffectiveModifier(node, ModifierFlags.Private);
+                case SyntaxKind.Parameter:
+                case SyntaxKind.VariableDeclaration:
+                    return true;
+            }
+            return false;
+        }
+
+        function shouldPrintWithInitializer(node: Node) {
+            return canHaveLiteralInitializer(node) && isLiteralConstDeclaration(node as CanHaveLiteralInitializer); // TODO: Make safe
+        }
+
+        function getBindingNameVisible(elem: BindingElement | VariableDeclaration | OmittedExpression): boolean {
+            if (isOmittedExpression(elem)) {
+                return false;
+            }
+            if (isBindingPattern(elem.name)) {
+                // If any child binding pattern element has been marked visible (usually by collect linked aliases), then this is visible
+                return some(elem.name.elements, getBindingNameVisible);
+            }
+            else {
+                return isDeclarationVisible(elem);
+            }
+        }
+
+        function isDeclarationAndNotVisible(node: NamedDeclaration) {
+            switch (node.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                    return !isDeclarationVisible(node);
+                // The following should be doing their own visibility checks based on filtering their members
+                case SyntaxKind.VariableDeclaration:
+                    return !getBindingNameVisible(node as VariableDeclaration);
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ExportDeclaration:
+                case SyntaxKind.ExportAssignment:
+                    return false;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return true;
+            }
+            return false;
+        }
+
+        if (
+            !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
+            && !shouldPrintWithInitializer(node)
+            && !isDeclarationAndNotVisible(node)
+        ) {
+            const widenedLiteralType = getWidenedLiteralType(type);
+            if (!isTypeIdenticalTo(type, widenedLiteralType)) {
+                error(node.name, Diagnostics.The_type_of_this_declaration_is_ambiguous_and_may_be_observed_as_either_0_or_1, typeToString(widenedLiteralType), typeToString(type));
+            }
         }
     }
 

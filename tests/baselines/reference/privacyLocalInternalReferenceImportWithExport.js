@@ -302,24 +302,6 @@ var import_private;
 
 //// [privacyLocalInternalReferenceImportWithExport.d.ts]
 declare namespace m_private {
-    class c_private {
-    }
-    enum e_private {
-        Happy = 0,
-        Grumpy = 1
-    }
-    function f_private(): c_private;
-    var v_private: c_private;
-    interface i_private {
-    }
-    namespace mi_private {
-        class c {
-        }
-    }
-    namespace mu_private {
-        interface i {
-        }
-    }
 }
 export declare namespace m_public {
     class c_public {
@@ -372,3 +354,107 @@ export declare namespace import_public {
     var publicUse_im_public_mu_public: im_public_mu_public.i;
 }
 export {};
+
+
+//// [DtsFileErrors]
+
+
+privacyLocalInternalReferenceImportWithExport.d.ts(24,41): error TS2708: Cannot use namespace 'm_private' as a value.
+privacyLocalInternalReferenceImportWithExport.d.ts(24,51): error TS2694: Namespace 'm_private' has no exported member 'c_private'.
+privacyLocalInternalReferenceImportWithExport.d.ts(25,41): error TS2708: Cannot use namespace 'm_private' as a value.
+privacyLocalInternalReferenceImportWithExport.d.ts(25,51): error TS2694: Namespace 'm_private' has no exported member 'e_private'.
+privacyLocalInternalReferenceImportWithExport.d.ts(26,41): error TS2708: Cannot use namespace 'm_private' as a value.
+privacyLocalInternalReferenceImportWithExport.d.ts(26,51): error TS2694: Namespace 'm_private' has no exported member 'f_private'.
+privacyLocalInternalReferenceImportWithExport.d.ts(27,41): error TS2708: Cannot use namespace 'm_private' as a value.
+privacyLocalInternalReferenceImportWithExport.d.ts(27,51): error TS2694: Namespace 'm_private' has no exported member 'v_private'.
+privacyLocalInternalReferenceImportWithExport.d.ts(28,41): error TS2708: Cannot use namespace 'm_private' as a value.
+privacyLocalInternalReferenceImportWithExport.d.ts(28,51): error TS2694: Namespace 'm_private' has no exported member 'i_private'.
+privacyLocalInternalReferenceImportWithExport.d.ts(29,42): error TS2708: Cannot use namespace 'm_private' as a value.
+privacyLocalInternalReferenceImportWithExport.d.ts(29,52): error TS2694: Namespace 'm_private' has no exported member 'mi_private'.
+privacyLocalInternalReferenceImportWithExport.d.ts(30,42): error TS2708: Cannot use namespace 'm_private' as a value.
+privacyLocalInternalReferenceImportWithExport.d.ts(30,52): error TS2694: Namespace 'm_private' has no exported member 'mu_private'.
+
+
+==== privacyLocalInternalReferenceImportWithExport.d.ts (14 errors) ====
+    declare namespace m_private {
+    }
+    export declare namespace m_public {
+        class c_public {
+        }
+        enum e_public {
+            Happy = 0,
+            Grumpy = 1
+        }
+        function f_public(): c_public;
+        var v_public: number;
+        interface i_public {
+        }
+        namespace mi_public {
+            class c {
+            }
+        }
+        namespace mu_public {
+            interface i {
+            }
+        }
+    }
+    export declare namespace import_public {
+        export import im_public_c_private = m_private.c_private;
+                                            ~~~~~~~~~
+!!! error TS2708: Cannot use namespace 'm_private' as a value.
+                                                      ~~~~~~~~~
+!!! error TS2694: Namespace 'm_private' has no exported member 'c_private'.
+        export import im_public_e_private = m_private.e_private;
+                                            ~~~~~~~~~
+!!! error TS2708: Cannot use namespace 'm_private' as a value.
+                                                      ~~~~~~~~~
+!!! error TS2694: Namespace 'm_private' has no exported member 'e_private'.
+        export import im_public_f_private = m_private.f_private;
+                                            ~~~~~~~~~
+!!! error TS2708: Cannot use namespace 'm_private' as a value.
+                                                      ~~~~~~~~~
+!!! error TS2694: Namespace 'm_private' has no exported member 'f_private'.
+        export import im_public_v_private = m_private.v_private;
+                                            ~~~~~~~~~
+!!! error TS2708: Cannot use namespace 'm_private' as a value.
+                                                      ~~~~~~~~~
+!!! error TS2694: Namespace 'm_private' has no exported member 'v_private'.
+        export import im_public_i_private = m_private.i_private;
+                                            ~~~~~~~~~
+!!! error TS2708: Cannot use namespace 'm_private' as a value.
+                                                      ~~~~~~~~~
+!!! error TS2694: Namespace 'm_private' has no exported member 'i_private'.
+        export import im_public_mi_private = m_private.mi_private;
+                                             ~~~~~~~~~
+!!! error TS2708: Cannot use namespace 'm_private' as a value.
+                                                       ~~~~~~~~~~
+!!! error TS2694: Namespace 'm_private' has no exported member 'mi_private'.
+        export import im_public_mu_private = m_private.mu_private;
+                                             ~~~~~~~~~
+!!! error TS2708: Cannot use namespace 'm_private' as a value.
+                                                       ~~~~~~~~~~
+!!! error TS2694: Namespace 'm_private' has no exported member 'mu_private'.
+        var publicUse_im_public_c_private: im_public_c_private;
+        var publicUse_im_public_e_private: im_public_e_private;
+        var publicUse_im_public_f_private: im_public_c_private;
+        var publicUse_im_public_v_private: im_public_c_private;
+        var publicUse_im_public_i_private: im_public_i_private;
+        var publicUse_im_public_mi_private: im_public_mi_private.c;
+        var publicUse_im_public_mu_private: im_public_mu_private.i;
+        export import im_public_c_public = m_public.c_public;
+        export import im_public_e_public = m_public.e_public;
+        export import im_public_f_public = m_public.f_public;
+        export import im_public_v_public = m_public.v_public;
+        export import im_public_i_public = m_public.i_public;
+        export import im_public_mi_public = m_public.mi_public;
+        export import im_public_mu_public = m_public.mu_public;
+        var publicUse_im_public_c_public: im_public_c_public;
+        var publicUse_im_public_e_public: im_public_e_public;
+        var publicUse_im_public_f_public: im_public_c_public;
+        var publicUse_im_public_v_public: number;
+        var publicUse_im_public_i_public: im_public_i_public;
+        var publicUse_im_public_mi_public: im_public_mi_public.c;
+        var publicUse_im_public_mu_public: im_public_mu_public.i;
+    }
+    export {};
+    

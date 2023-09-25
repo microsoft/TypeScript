@@ -3667,6 +3667,10 @@
         "category": "Error",
         "code": 2855
     },
+    "The type of this declaration is ambiguous and may be observed as either '{0}' or '{1}'.": {
+        "category": "Error",
+        "code": 2856
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

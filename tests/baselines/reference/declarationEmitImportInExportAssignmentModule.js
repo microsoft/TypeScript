@@ -30,11 +30,5 @@ module.exports = m;
 
 //// [declarationEmitImportInExportAssignmentModule.d.ts]
 declare namespace m {
-    namespace c {
-        class c {
-        }
-    }
-    import x = c;
-    var a: typeof x;
 }
 export = m;
