@@ -20778,6 +20778,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let skipParentCounter = 0; // How many errors should be skipped 'above' in the elaboration pyramid
         let lastSkippedInfo: [Type, Type] | undefined;
         let incompatibleStack: DiagnosticAndArguments[] | undefined;
+        // In Node.js, the maximum number of elements in a map is 2^24. We limit the number of entries an invocation
+        // of checkTypeRelatedTo can add to a relation to 1/8th of its remaining capacity.
+        let relationCount = (16_000_000 - relation.size) >> 3;
 
         Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -20786,8 +20789,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             reportIncompatibleStack();
         }
         if (overflow) {
+            // Record this relation as having failed such that we don't attempt the overflowing operation again.
+            const id = getRelationKey(source, target, /*intersectionState*/ IntersectionState.None, relation, /*ignoreConstraints*/ false);
+            relation.set(id, RelationComparisonResult.Reported | RelationComparisonResult.Failed);
             tracing?.instant(tracing.Phase.CheckTypes, "checkTypeRelatedTo_DepthLimit", { sourceId: source.id, targetId: target.id, depth: sourceDepth, targetDepth });
-            const diag = error(errorNode || currentNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
+            const message = relationCount <= 0 ?
+                Diagnostics.Excessive_complexity_comparing_types_0_and_1 :
+                Diagnostics.Excessive_stack_depth_comparing_types_0_and_1;
+            const diag = error(errorNode || currentNode, message, typeToString(source), typeToString(target));
             if (errorOutputContainer) {
                 (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
             }
@@ -21420,6 +21429,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // we need to deconstruct unions before intersections (because unions are always at the top),
             // and we need to handle "each" relations before "some" relations for the same kind of type.
             if (source.flags & TypeFlags.Union) {
+                if (target.flags & TypeFlags.Union) {
+                    // Intersections of union types are normalized into unions of intersection types, and such normalized
+                    // unions can get very large and expensive to relate. The following fast path checks if the source union
+                    // originated in an intersection. If so, and if that intersection contains the target type, then we know
+                    // the result to be true (for any two types A and B, A & B is related to both A and B).
+                    const sourceOrigin = (source as UnionType).origin;
+                    if (sourceOrigin && sourceOrigin.flags & TypeFlags.Intersection && target.aliasSymbol && contains((sourceOrigin as IntersectionType).types, target)) {
+                        return Ternary.True;
+                    }
+                    // Similarly, in unions of unions the we preserve the original list of unions. This original list is often
+                    // much shorter than the normalized result, so we scan it in the following fast path.
+                    const targetOrigin = (target as UnionType).origin;
+                    if (targetOrigin && targetOrigin.flags & TypeFlags.Union && source.aliasSymbol && contains((targetOrigin as UnionType).types, source)) {
+                        return Ternary.True;
+                    }
+                }
                 return relation === comparableRelation ?
                     someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState) :
                     eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
@@ -21671,6 +21696,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return entry & RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                 }
             }
+            if (relationCount <= 0) {
+                overflow = true;
+                return Ternary.False;
+            }
             if (!maybeKeys) {
                 maybeKeys = [];
                 maybeKeysSet = new Set();
@@ -21768,6 +21797,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // A false result goes straight into global cache (when something is false under
                 // assumptions it will also be false without assumptions)
                 relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
+                relationCount--;
                 resetMaybeStack(/*markAllAsSucceeded*/ false);
             }
             return result;
@@ -21777,6 +21807,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     maybeKeysSet.delete(maybeKeys[i]);
                     if (markAllAsSucceeded) {
                         relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                        relationCount--;
                     }
                 }
                 maybeCount = maybeStart;
