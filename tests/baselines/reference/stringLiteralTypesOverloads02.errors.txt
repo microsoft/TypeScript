@@ -1,7 +1,7 @@
-stringLiteralTypesOverloads02.ts(33,7): error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "number"'.
-stringLiteralTypesOverloads02.ts(34,7): error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "boolean"'.
-stringLiteralTypesOverloads02.ts(35,7): error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"number" | "boolean"'.
-stringLiteralTypesOverloads02.ts(36,7): error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "number" | "boolean"'.
+stringLiteralTypesOverloads02.ts(33,7): error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "number"'.
+stringLiteralTypesOverloads02.ts(34,7): error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "boolean"'.
+stringLiteralTypesOverloads02.ts(35,7): error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"number" | "boolean"'.
+stringLiteralTypesOverloads02.ts(36,7): error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "number" | "boolean"'.
 
 
 ==== stringLiteralTypesOverloads02.ts (4 errors) ====
@@ -39,16 +39,16 @@ stringLiteralTypesOverloads02.ts(36,7): error TS2856: The type of this declarati
     
     const stringOrNumber = string || number;
           ~~~~~~~~~~~~~~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "number"'.
+!!! error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "number"'.
     const stringOrBoolean = string || boolean;
           ~~~~~~~~~~~~~~~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "boolean"'.
+!!! error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "boolean"'.
     const booleanOrNumber = number || boolean;
           ~~~~~~~~~~~~~~~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"number" | "boolean"'.
+!!! error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"number" | "boolean"'.
     const stringOrBooleanOrNumber = stringOrBoolean || number;
           ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "number" | "boolean"'.
+!!! error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"string" | "number" | "boolean"'.
     
     namespace Consts2 {
         const EMPTY_STRING = getFalsyPrimitive(string);

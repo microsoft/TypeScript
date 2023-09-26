@@ -1,4 +1,4 @@
-strictFunctionTypes1.ts(15,7): error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"def" | "abc"'.
+strictFunctionTypes1.ts(15,7): error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"def" | "abc"'.
 
 
 ==== strictFunctionTypes1.ts (1 errors) ====
@@ -18,7 +18,7 @@ strictFunctionTypes1.ts(15,7): error TS2856: The type of this declaration is amb
     const x2 = f2("abc", fo, fs);  // "abc"
     const x3 = f3("abc", fo, fx);  // "abc" | "def"
           ~~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"def" | "abc"'.
+!!! error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"def" | "abc"'.
     const x4 = f4(fo, fs);  // Func<string>
     
     declare const never: never;

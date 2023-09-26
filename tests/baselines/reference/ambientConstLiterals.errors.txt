@@ -1,5 +1,5 @@
-ambientConstLiterals.ts(20,7): error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"abc" | "def"'.
-ambientConstLiterals.ts(21,7): error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '123 | 456'.
+ambientConstLiterals.ts(20,7): error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"abc" | "def"'.
+ambientConstLiterals.ts(21,7): error TS2859: The type of this declaration is ambiguous and may be observed as either 'number' or '123 | 456'.
 
 
 ==== ambientConstLiterals.ts (2 errors) ====
@@ -24,7 +24,7 @@ ambientConstLiterals.ts(21,7): error TS2856: The type of this declaration is amb
     const c12 = 123 + 456;
     const c13 = Math.random() > 0.5 ? "abc" : "def";
           ~~~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'string' or '"abc" | "def"'.
+!!! error TS2859: The type of this declaration is ambiguous and may be observed as either 'string' or '"abc" | "def"'.
     const c14 = Math.random() > 0.5 ? 123 : 456;
           ~~~
-!!! error TS2856: The type of this declaration is ambiguous and may be observed as either 'number' or '123 | 456'.
+!!! error TS2859: The type of this declaration is ambiguous and may be observed as either 'number' or '123 | 456'.
