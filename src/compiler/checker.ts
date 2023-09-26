@@ -775,6 +775,7 @@ import {
     JSDocSatisfiesTag,
     JSDocSignature,
     JSDocTemplateTag,
+    JSDocThisTag,
     JSDocTypeAssertion,
     JSDocTypedefTag,
     JSDocTypeExpression,
@@ -40989,6 +40990,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkJSDocParameterTag(node: JSDocParameterTag) {
         checkSourceElement(node.typeExpression);
     }
+
     function checkJSDocPropertyTag(node: JSDocPropertyTag) {
         checkSourceElement(node.typeExpression);
     }
@@ -41001,6 +41003,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!node.type && !isJSDocConstructSignature(node)) {
                 reportImplicitAny(node, anyType);
             }
+        }
+    }
+
+    function checkJSDocThisTag(node: JSDocThisTag) {
+        const host = getEffectiveJSDocHost(node);
+        if (host && isArrowFunction(host)) {
+            error(node.tagName, Diagnostics.An_arrow_function_cannot_have_a_this_parameter);
         }
     }
 
@@ -45724,6 +45733,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkJSDocAccessibilityModifiers(node as JSDocPublicTag | JSDocProtectedTag | JSDocPrivateTag);
             case SyntaxKind.JSDocSatisfiesTag:
                 return checkJSDocSatisfiesTag(node as JSDocSatisfiesTag);
+            case SyntaxKind.JSDocThisTag:
+                return checkJSDocThisTag(node as JSDocThisTag);
             case SyntaxKind.IndexedAccessType:
                 return checkIndexedAccessType(node as IndexedAccessTypeNode);
             case SyntaxKind.MappedType:
