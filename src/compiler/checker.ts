@@ -41991,7 +41991,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (
-            !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
+            getEmitDeclarations(compilerOptions)
+            && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
             && !shouldPrintWithInitializer(node)
             && !isPrivateDeclaration(node)
             && isVisibleExternally(node)
