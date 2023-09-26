@@ -3611,7 +3611,7 @@
         "category": "Error",
         "code": 2835
     },
-    "Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.": {
+    "Import assertions are not allowed on statements that compile to CommonJS 'require' calls.": {
         "category": "Error",
         "code": 2836
     },
@@ -3683,7 +3683,7 @@
         "category": "Error",
         "code": 2855
     },
-    "Import attributes are not allowed on statements that transpile to CommonJS 'require' calls.": {
+    "Import attributes are not allowed on statements that compile to CommonJS 'require' calls.": {
         "category": "Error",
         "code": 2856
     },
