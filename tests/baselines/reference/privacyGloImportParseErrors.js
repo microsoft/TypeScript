@@ -255,6 +255,11 @@ declare namespace m1 {
         var v2: c1;
     }
     namespace m1_M2_private {
+        class c1 {
+        }
+        function f1(): c1;
+        var v1: typeof c1;
+        var v2: c1;
     }
     export module "m1_M3_public" {
         function f1(): any;

@@ -42,6 +42,7 @@ declare class c {
 interface i {
 }
 declare namespace m {
+    var x: number;
 }
 declare var x: number;
 declare namespace uninstantiated {

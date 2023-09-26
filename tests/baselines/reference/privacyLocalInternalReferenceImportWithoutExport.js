@@ -304,6 +304,24 @@ define(["require", "exports"], function (require, exports) {
 
 //// [privacyLocalInternalReferenceImportWithoutExport.d.ts]
 declare namespace m_private {
+    class c_private {
+    }
+    enum e_private {
+        Happy = 0,
+        Grumpy = 1
+    }
+    function f_private(): c_private;
+    var v_private: c_private;
+    interface i_private {
+    }
+    namespace mi_private {
+        class c {
+        }
+    }
+    namespace mu_private {
+        interface i {
+        }
+    }
 }
 export declare namespace m_public {
     class c_public {
@@ -352,76 +370,3 @@ export declare namespace import_public {
     var publicUse_im_private_mu_public: im_private_mu_public.i;
 }
 export {};
-
-
-//// [DtsFileErrors]
-
-
-privacyLocalInternalReferenceImportWithoutExport.d.ts(24,45): error TS2694: Namespace 'm_private' has no exported member 'c_private'.
-privacyLocalInternalReferenceImportWithoutExport.d.ts(25,45): error TS2694: Namespace 'm_private' has no exported member 'e_private'.
-privacyLocalInternalReferenceImportWithoutExport.d.ts(26,45): error TS2694: Namespace 'm_private' has no exported member 'i_private'.
-privacyLocalInternalReferenceImportWithoutExport.d.ts(27,46): error TS2694: Namespace 'm_private' has no exported member 'mi_private'.
-privacyLocalInternalReferenceImportWithoutExport.d.ts(28,46): error TS2694: Namespace 'm_private' has no exported member 'mu_private'.
-
-
-==== privacyLocalInternalReferenceImportWithoutExport.d.ts (5 errors) ====
-    declare namespace m_private {
-    }
-    export declare namespace m_public {
-        class c_public {
-        }
-        enum e_public {
-            Happy = 0,
-            Grumpy = 1
-        }
-        function f_public(): c_public;
-        var v_public: number;
-        interface i_public {
-        }
-        namespace mi_public {
-            class c {
-            }
-        }
-        namespace mu_public {
-            interface i {
-            }
-        }
-    }
-    export declare namespace import_public {
-        import im_private_c_private = m_private.c_private;
-                                                ~~~~~~~~~
-!!! error TS2694: Namespace 'm_private' has no exported member 'c_private'.
-        import im_private_e_private = m_private.e_private;
-                                                ~~~~~~~~~
-!!! error TS2694: Namespace 'm_private' has no exported member 'e_private'.
-        import im_private_i_private = m_private.i_private;
-                                                ~~~~~~~~~
-!!! error TS2694: Namespace 'm_private' has no exported member 'i_private'.
-        import im_private_mi_private = m_private.mi_private;
-                                                 ~~~~~~~~~~
-!!! error TS2694: Namespace 'm_private' has no exported member 'mi_private'.
-        import im_private_mu_private = m_private.mu_private;
-                                                 ~~~~~~~~~~
-!!! error TS2694: Namespace 'm_private' has no exported member 'mu_private'.
-        var publicUse_im_private_c_private: im_private_c_private;
-        var publicUse_im_private_e_private: im_private_e_private;
-        var publicUse_im_private_f_private: im_private_c_private;
-        var publicUse_im_private_v_private: im_private_c_private;
-        var publicUse_im_private_i_private: im_private_i_private;
-        var publicUse_im_private_mi_private: im_private_mi_private.c;
-        var publicUse_im_private_mu_private: im_private_mu_private.i;
-        import im_private_c_public = m_public.c_public;
-        import im_private_e_public = m_public.e_public;
-        import im_private_i_public = m_public.i_public;
-        import im_private_mi_public = m_public.mi_public;
-        import im_private_mu_public = m_public.mu_public;
-        var publicUse_im_private_c_public: im_private_c_public;
-        var publicUse_im_private_e_public: im_private_e_public;
-        var publicUse_im_private_f_public: im_private_c_public;
-        var publicUse_im_private_v_public: number;
-        var publicUse_im_private_i_public: im_private_i_public;
-        var publicUse_im_private_mi_public: im_private_mi_public.c;
-        var publicUse_im_private_mu_public: im_private_mu_public.i;
-    }
-    export {};
-    

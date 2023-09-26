@@ -335,86 +335,34 @@ export declare namespace publicModule {
     export {};
 }
 declare namespace privateModule {
-}
-export {};
-
-
-//// [DtsFileErrors]
-
-
-privacyTypeParametersOfInterfaceDeclFile.d.ts(29,99): error TS2694: Namespace 'privateModule' has no exported member 'publicClassInPrivateModule'.
-privacyTypeParametersOfInterfaceDeclFile.d.ts(60,103): error TS2694: Namespace 'privateModule' has no exported member 'publicClassInPrivateModule'.
-
-
-==== privacyTypeParametersOfInterfaceDeclFile.d.ts (2 errors) ====
-    declare class privateClass {
+    class privateClassInPrivateModule {
     }
-    export declare class publicClass {
+    export class publicClassInPrivateModule {
     }
-    declare class privateClassT<T> {
+    class privateClassInPrivateModuleT<T> {
     }
-    export declare class publicClassT<T> {
+    export class publicClassInPrivateModuleT<T> {
     }
-    export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> {
+    export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
         myMethod(val: T): T;
-        myMethod0(): publicClassT<T>;
-        myMethod1(): privateClassT<privateClass>;
-        myMethod2(): privateClassT<publicClass>;
-        myMethod3(): publicClassT<privateClass>;
-        myMethod4(): publicClassT<publicClass>;
+        myMethod0(): publicClassInPrivateModuleT<T>;
+        myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
+        myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
+        myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
+        myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
     }
-    export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> {
+    export interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPrivateModule> {
         myMethod(val: T): T;
-        myMethod0(): publicClassT<T>;
-        myMethod1(): privateClassT<privateClass>;
-        myMethod2(): privateClassT<publicClass>;
-        myMethod3(): publicClassT<privateClass>;
-        myMethod4(): publicClassT<publicClass>;
+        myMethod0(): publicClassInPrivateModuleT<T>;
+        myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
+        myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
+        myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
+        myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
     }
     export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
         myMethod(val: T): T;
-        myMethod0(): publicClassT<T>;
-    }
-    export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> {
-                                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClassInPrivateModule'.
-    }
-    export declare namespace publicModule {
-        class privateClassInPublicModule {
-        }
-        export class publicClassInPublicModule {
-        }
-        class privateClassInPublicModuleT<T> {
-        }
-        export class publicClassInPublicModuleT<T> {
-        }
-        export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> {
-            myMethod(val: T): T;
-            myMethod0(): publicClassInPublicModuleT<T>;
-            myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
-            myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
-            myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
-            myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
-        }
-        export interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPublicModule> {
-            myMethod(val: T): T;
-            myMethod0(): publicClassInPublicModuleT<T>;
-            myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
-            myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
-            myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
-            myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
-        }
-        export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
-            myMethod(val: T): T;
-            myMethod0(): publicClassInPublicModuleT<T>;
-        }
-        export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> {
-                                                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2694: Namespace 'privateModule' has no exported member 'publicClassInPrivateModule'.
-        }
-        export {};
-    }
-    declare namespace privateModule {
+        myMethod0(): publicClassInPrivateModuleT<T>;
     }
     export {};
-    
+}
+export {};

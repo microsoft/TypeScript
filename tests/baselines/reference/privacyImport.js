@@ -717,6 +717,11 @@ export declare namespace m1 {
         var v2: c1;
     }
     namespace m1_M2_private {
+        class c1 {
+        }
+        function f1(): c1;
+        var v1: typeof c1;
+        var v2: c1;
     }
     import m1_im1_private = m1_M1_public;
     export var m1_im1_private_v1_public: typeof m1_im1_private.c1;
@@ -760,76 +765,3 @@ export import glo_im1_public = glo_M1_public;
 export import glo_im2_public = glo_M3_private;
 export declare namespace m3 {
 }
-
-
-//// [DtsFileErrors]
-
-
-privacyImport.d.ts(17,49): error TS2708: Cannot use namespace 'm1_im2_private' as a value.
-privacyImport.d.ts(18,57): error TS2694: Namespace 'm1_M2_private' has no exported member 'c1'.
-privacyImport.d.ts(19,49): error TS2708: Cannot use namespace 'm1_im2_private' as a value.
-privacyImport.d.ts(20,57): error TS2694: Namespace 'm1_M2_private' has no exported member 'c1'.
-
-
-==== privacyImport.d.ts (4 errors) ====
-    export declare namespace m1 {
-        export namespace m1_M1_public {
-            class c1 {
-            }
-            function f1(): c1;
-            var v1: typeof c1;
-            var v2: c1;
-        }
-        namespace m1_M2_private {
-        }
-        import m1_im1_private = m1_M1_public;
-        export var m1_im1_private_v1_public: typeof m1_im1_private.c1;
-        export var m1_im1_private_v2_public: m1_im1_private.c1;
-        export var m1_im1_private_v3_public: typeof m1_im1_private.f1;
-        export var m1_im1_private_v4_public: m1_im1_private.c1;
-        import m1_im2_private = m1_M2_private;
-        export var m1_im2_private_v1_public: typeof m1_im2_private.c1;
-                                                    ~~~~~~~~~~~~~~
-!!! error TS2708: Cannot use namespace 'm1_im2_private' as a value.
-        export var m1_im2_private_v2_public: m1_im2_private.c1;
-                                                            ~~
-!!! error TS2694: Namespace 'm1_M2_private' has no exported member 'c1'.
-        export var m1_im2_private_v3_public: typeof m1_im2_private.f1;
-                                                    ~~~~~~~~~~~~~~
-!!! error TS2708: Cannot use namespace 'm1_im2_private' as a value.
-        export var m1_im2_private_v4_public: m1_im2_private.c1;
-                                                            ~~
-!!! error TS2694: Namespace 'm1_M2_private' has no exported member 'c1'.
-        export import m1_im1_public = m1_M1_public;
-        export import m1_im2_public = m1_M2_private;
-        export {};
-    }
-    export declare namespace glo_M1_public {
-        class c1 {
-        }
-        function f1(): c1;
-        var v1: typeof c1;
-        var v2: c1;
-    }
-    export declare namespace glo_M3_private {
-        class c1 {
-        }
-        function f1(): c1;
-        var v1: typeof c1;
-        var v2: c1;
-    }
-    import glo_im1_private = glo_M1_public;
-    export declare var glo_im1_private_v1_public: typeof glo_im1_private.c1;
-    export declare var glo_im1_private_v2_public: glo_im1_private.c1;
-    export declare var glo_im1_private_v3_public: typeof glo_im1_private.f1;
-    export declare var glo_im1_private_v4_public: glo_im1_private.c1;
-    import glo_im3_private = glo_M3_private;
-    export declare var glo_im3_private_v1_public: typeof glo_im3_private.c1;
-    export declare var glo_im3_private_v2_public: glo_im3_private.c1;
-    export declare var glo_im3_private_v3_public: typeof glo_im3_private.f1;
-    export declare var glo_im3_private_v4_public: glo_im3_private.c1;
-    export import glo_im1_public = glo_M1_public;
-    export import glo_im2_public = glo_M3_private;
-    export declare namespace m3 {
-    }
-    

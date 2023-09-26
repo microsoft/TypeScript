@@ -22,25 +22,8 @@ var Outer;
 //// [privacyCheckTypeOfInvisibleModuleError.d.ts]
 declare namespace Outer {
     namespace Inner {
+        var m: typeof Inner;
     }
     export var f: typeof Inner;
     export {};
 }
-
-
-//// [DtsFileErrors]
-
-
-privacyCheckTypeOfInvisibleModuleError.d.ts(4,26): error TS2708: Cannot use namespace 'Inner' as a value.
-
-
-==== privacyCheckTypeOfInvisibleModuleError.d.ts (1 errors) ====
-    declare namespace Outer {
-        namespace Inner {
-        }
-        export var f: typeof Inner;
-                             ~~~~~
-!!! error TS2708: Cannot use namespace 'Inner' as a value.
-        export {};
-    }
-    

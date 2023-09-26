@@ -83,6 +83,12 @@ export declare class B {
 //// [f3.d.ts]
 import { B } from "./f2";
 declare namespace N {
+    interface Ifc {
+        a: number;
+    }
+    interface Cls {
+        b: number;
+    }
 }
 import I = N.Ifc;
 import C = N.Cls;
@@ -96,43 +102,3 @@ declare module "./f1" {
 export {};
 //// [f4.d.ts]
 import "./f3";
-
-
-//// [DtsFileErrors]
-
-
-f3.d.ts(4,14): error TS2694: Namespace 'N' has no exported member 'Ifc'.
-f3.d.ts(5,14): error TS2694: Namespace 'N' has no exported member 'Cls'.
-
-
-==== f1.d.ts (0 errors) ====
-    export declare class A {
-    }
-    
-==== f2.d.ts (0 errors) ====
-    export declare class B {
-        n: number;
-    }
-    
-==== f3.d.ts (2 errors) ====
-    import { B } from "./f2";
-    declare namespace N {
-    }
-    import I = N.Ifc;
-                 ~~~
-!!! error TS2694: Namespace 'N' has no exported member 'Ifc'.
-    import C = N.Cls;
-                 ~~~
-!!! error TS2694: Namespace 'N' has no exported member 'Cls'.
-    declare module "./f1" {
-        interface A {
-            foo(): B;
-            bar(): I;
-            baz(): C;
-        }
-    }
-    export {};
-    
-==== f4.d.ts (0 errors) ====
-    import "./f3";
-    
