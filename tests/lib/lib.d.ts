@@ -3964,7 +3964,7 @@ declare module Intl {
         locale: string;
         calendar: string;
         numberingSystem: string;
-        timeZone: string;
+        timeZone?: string;
         hour12?: boolean;
         weekday?: string;
         era?: string;
