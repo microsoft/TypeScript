@@ -21,12 +21,15 @@ import {
     getSourceFileOfNode,
     getTokenAtPosition,
     getTrailingCommentRanges,
+    hasSyntacticModifier,
     Identifier,
     isArrayBindingPattern,
     isComputedPropertyName,
+    isIdentifier,
     isObjectBindingPattern,
     isOmittedExpression,
     isVariableDeclaration,
+    ModifierFlags,
     Node,
     NodeArray,
     NodeBuilderFlags,
@@ -42,6 +45,7 @@ import {
     TypeChecker,
     TypeNode,
     VariableDeclaration,
+    VariableDeclarationList,
     VariableStatement,
 } from "../_namespaces/ts";
 import {
@@ -296,10 +300,35 @@ function doChange(
         | { kind: ExpressionType.ARRAY_ACCESS; arrayIndex: number; }
         | { kind: ExpressionType.IDENTIFIER; identifier: Identifier; };
 
-    function transformDestructuringPatterns(bindingPattern: BindingPattern): DiagnosticOrDiagnosticAndArguments {
+    function transformDestructuringPatterns(bindingPattern: BindingPattern): DiagnosticOrDiagnosticAndArguments | undefined {
+        const enclosingVariableDeclaration = bindingPattern.parent as VariableDeclaration;
         const enclosingVarStmt = bindingPattern.parent.parent.parent as VariableStatement;
-        const tempHolderForReturn = factory.createUniqueName("dest", GeneratedIdentifierFlags.Optimistic);
-        const baseExpr: ExpressionReverseChain = { expression: { kind: ExpressionType.IDENTIFIER, identifier: tempHolderForReturn } };
+        if (!enclosingVariableDeclaration.initializer) return undefined;
+
+        let baseExpr: ExpressionReverseChain;
+        const newNodes: Node[] = [];
+        if (!isIdentifier(enclosingVariableDeclaration.initializer)) {
+            // For complex expressions we want to create a temporary variable
+            const tempHolderForReturn = factory.createUniqueName("dest", GeneratedIdentifierFlags.Optimistic);
+            baseExpr = { expression: { kind: ExpressionType.IDENTIFIER, identifier: tempHolderForReturn } };
+            newNodes.push(factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList(
+                    [factory.createVariableDeclaration(
+                        tempHolderForReturn,
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        enclosingVariableDeclaration.initializer,
+                    )],
+                    NodeFlags.Const,
+                ),
+            ));
+        }
+        else {
+            // If we are destructuring an identifier, just use that. No need for temp var.
+            baseExpr = { expression: { kind: ExpressionType.IDENTIFIER, identifier: enclosingVariableDeclaration.initializer } };
+        }
+
         const bindingElements: ExpressionReverseChain[] = [];
         if (isArrayBindingPattern(bindingPattern)) {
             addArrayBindingPatterns(bindingPattern, bindingElements, baseExpr);
@@ -309,20 +338,7 @@ function doChange(
         }
 
         const expressionToVar = new Map<Expression, Identifier>();
-        const newNodes: Node[] = [
-            factory.createVariableStatement(
-                /*modifiers*/ undefined,
-                factory.createVariableDeclarationList(
-                    [factory.createVariableDeclaration(
-                        tempHolderForReturn,
-                        /*exclamationToken*/ undefined,
-                        /*type*/ undefined,
-                        enclosingVarStmt.declarationList.declarations[0].initializer,
-                    )],
-                    NodeFlags.Const,
-                ),
-            ),
-        ];
+
         let i = 0;
         while (i < bindingElements.length) {
             const bindingElement = bindingElements[i];
@@ -355,7 +371,11 @@ function doChange(
                 const typeNode = typeToTypeNode(typeChecker.getTypeAtLocation(name), name);
                 let variableInitializer = createChainedExpression(bindingElement, expressionToVar);
                 if (bindingElement.element!.initializer) {
-                    const tempName = factory.createUniqueName("temp", GeneratedIdentifierFlags.Optimistic);
+                    const propertyName = bindingElement.element?.propertyName;
+                    const tempName = factory.createUniqueName(
+                        propertyName && isIdentifier(propertyName) ? propertyName.text : "temp",
+                        GeneratedIdentifierFlags.Optimistic,
+                    );
                     newNodes.push(factory.createVariableStatement(
                         /*modifiers*/ undefined,
                         factory.createVariableDeclarationList(
@@ -380,8 +400,11 @@ function doChange(
                         variableInitializer,
                     );
                 }
+                const exportModifier = hasSyntacticModifier(enclosingVarStmt, ModifierFlags.Export) ?
+                    [factory.createToken(SyntaxKind.ExportKeyword)] :
+                    undefined;
                 newNodes.push(factory.createVariableStatement(
-                    [factory.createToken(SyntaxKind.ExportKeyword)],
+                    exportModifier,
                     factory.createVariableDeclarationList(
                         [factory.createVariableDeclaration(
                             name,
@@ -486,15 +509,7 @@ function doChange(
     }
 
     function typeToTypeNode(type: Type, enclosingDeclaration: Node) {
-        const typeNode = typeChecker.typeToTypeNode(
-            type,
-            enclosingDeclaration,
-            declarationEmitNodeBuilderFlags,
-        );
-        if (!typeNode) {
-            return undefined;
-        }
-        return typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget);
+        return typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags);
     }
 
     function tryGetReturnType(node: SignatureDeclaration): Type | undefined {
