@@ -194,6 +194,7 @@ import {
     getPathComponents,
     getPathFromPathComponents,
     getRelativePathToDirectoryOrUrl,
+    getResolutionModeOverride,
     getRootLength,
     getSnippetElement,
     getStringComparer,
@@ -553,7 +554,6 @@ import {
     VariableDeclarationList,
     VariableLikeDeclaration,
     VariableStatement,
-    version,
     WhileStatement,
     WithStatement,
     WrappedExpression,
@@ -5976,11 +5976,6 @@ export function getIndentSize() {
 }
 
 /** @internal */
-export function isNightly() {
-    return version.includes("-dev") || version.includes("-insiders");
-}
-
-/** @internal */
 export function createTextWriter(newLine: string): EmitTextWriter {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
@@ -10445,4 +10440,12 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
 /** @internal */
 export function isExpandoPropertyDeclaration(declaration: Declaration | undefined): declaration is PropertyAccessExpression | ElementAccessExpression | BinaryExpression {
     return !!declaration && (isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration) || isBinaryExpression(declaration));
+}
+
+/** @internal */
+export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined) {
+    if (node === undefined) {
+        return false;
+    }
+    return !!getResolutionModeOverride(node.attributes);
 }

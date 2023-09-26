@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributesModeDeclarationEmitErrors.ts] ////
+
+=== /index.ts ===
+// incorrect mode
+import type { RequireInterface } from "pkg" with { "resolution-mode": "foobar" };
+>RequireInterface : RequireInterface
+
+// not type-only
+import { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+>ImportInterface : any
+
+// not exclusively type-only
+import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" with { "resolution-mode": "require" };
+>RequireInterface : any
+>Req : any
+>RequireInterface : any
+>Req2 : any
+
+export interface LocalInterface extends RequireInterface, ImportInterface {}
+
+
+
+
+=== /node_modules/pkg/require.d.ts ===
+
+export interface RequireInterface {}

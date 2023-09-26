@@ -1472,7 +1472,7 @@
         "category": "Message",
         "code": 1449
     },
-    "Dynamic imports can only accept a module specifier and an optional assertion as arguments": {
+    "Dynamic imports can only accept a module specifier and an optional set of attributes as arguments": {
         "category": "Message",
         "code": 1450
     },
@@ -1519,6 +1519,18 @@
     "File is CommonJS module because 'package.json' was not found": {
         "category": "Message",
         "code": 1461
+    },
+    "The 'resolution-mode' attribute is only supported when 'moduleResolution' is 'node16' or 'nodenext'.": {
+        "category": "Error",
+        "code": 1462
+    },
+    "'resolution-mode' is the only valid key for type import attributes.": {
+        "category": "Error",
+        "code": 1463
+    },
+    "Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.": {
+        "category": "Error",
+        "code": 1464
     },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
@@ -1624,6 +1636,10 @@
     "'{0}' modifier cannot appear on an 'await using' declaration.": {
         "category": "Error",
         "code": 1495
+    },
+    "Identifier, string literal, or number literal expected.": {
+        "category": "Error",
+        "code": 1496
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3579,6 +3595,10 @@
         "category": "Error",
         "code": 2822
     },
+    "Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+        "category": "Error",
+        "code": 2823
+    },
     "Cannot find namespace '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2833
@@ -3610,10 +3630,6 @@
     "An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes": {
         "category": "Error",
         "code": 2840
-    },
-    "The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
-        "category": "Error",
-        "code": 2841
     },
     "'{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?": {
         "category": "Error",
@@ -3666,6 +3682,18 @@
     "Class field '{0}' defined by the parent class is not accessible in the child class via super.": {
         "category": "Error",
         "code": 2855
+    },
+    "Import attributes are not allowed on statements that transpile to CommonJS 'require' calls.": {
+        "category": "Error",
+        "code": 2856
+    },
+    "Import attributes cannot be used with type-only imports or exports.": {
+        "category": "Error",
+        "code": 2857
+    },
+    "Import attribute values must be string literal expressions.": {
+        "category": "Error",
+        "code": 2858
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4099,10 +4127,6 @@
     "Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 4124
-    },
-    "'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
-        "category": "Error",
-        "code": 4125
     },
 
     "The current host does not support the '{0}' option.": {
