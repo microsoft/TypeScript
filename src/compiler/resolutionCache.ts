@@ -75,6 +75,7 @@ import {
     startsWith,
     StringLiteralLike,
     trace,
+    TypeReferenceDirectiveResolutionCache,
     updateResolutionField,
     WatchDirectoryFlags,
 } from "./_namespaces/ts";
@@ -156,6 +157,7 @@ export interface ResolutionCache {
     closeTypeRootsWatch(): void;
 
     getModuleResolutionCache(): ModuleResolutionCache;
+    getTypeReferenceDirectiveResolutionCache(): TypeReferenceDirectiveResolutionCache;
 
     clear(): void;
     onChangesAffectModuleResolution(): void;
@@ -535,27 +537,18 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     // The key in the map is source file's path.
     // The values are Map of resolutions with key being name lookedup.
     const resolvedModuleNames = new Map<Path, ModeAwareCache<CachedResolvedModuleWithFailedLookupLocations>>();
-    const moduleResolutionCache = createModuleResolutionCache(
-        getCurrentDirectory(),
-        resolutionHost.getCanonicalFileName,
-        resolutionHost.getCompilationSettings(),
-    );
+    let moduleResolutionCache: ModuleResolutionCache;
 
     const resolvedTypeReferenceDirectives = new Map<Path, ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
-    const typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(
-        getCurrentDirectory(),
-        resolutionHost.getCanonicalFileName,
-        resolutionHost.getCompilationSettings(),
-        moduleResolutionCache.getPackageJsonInfoCache(),
-        moduleResolutionCache.optionsToRedirectsKey,
-    );
+    let typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache;
+    createResolutionCaches();
 
     const resolvedLibraries = new Map<string, CachedResolvedModuleWithFailedLookupLocations>();
     const libraryResolutionCache = createModuleResolutionCache(
         getCurrentDirectory(),
         resolutionHost.getCanonicalFileName,
         getOptionsForLibraryResolution(resolutionHost.getCompilationSettings()),
-        moduleResolutionCache.getPackageJsonInfoCache(),
+        moduleResolutionCache!.getPackageJsonInfoCache(),
     );
 
     const directoryWatchesOfFailedLookups = new Map<Path, DirectoryWatchesOfFailedLookup>();
@@ -579,6 +572,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         fileWatchesOfAffectingLocations,
         watchFailedLookupLocationsOfExternalModuleResolutions,
         getModuleResolutionCache: () => moduleResolutionCache,
+        getTypeReferenceDirectiveResolutionCache: () => typeReferenceDirectiveResolutionCache,
         startRecordingFilesWithChangedResolutions,
         finishRecordingFilesWithChangedResolutions,
         // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
@@ -602,6 +596,22 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         clear,
         onChangesAffectModuleResolution,
     };
+
+    function createResolutionCaches() {
+        moduleResolutionCache = createModuleResolutionCache(
+            getCurrentDirectory(),
+            resolutionHost.getCanonicalFileName,
+            resolutionHost.getCompilationSettings(),
+            moduleResolutionCache?.getPackageJsonInfoCache(),
+        );
+        typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(
+            getCurrentDirectory(),
+            resolutionHost.getCanonicalFileName,
+            resolutionHost.getCompilationSettings(),
+            moduleResolutionCache.getPackageJsonInfoCache(),
+            moduleResolutionCache.optionsToRedirectsKey,
+        );
+    }
 
     function getResolvedModule(resolution: CachedResolvedModuleWithFailedLookupLocations) {
         return resolution.resolvedModule;
@@ -627,10 +637,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         affectingPathChecks = undefined;
         affectingPathChecksForFile = undefined;
         allModuleAndTypeResolutionsAreInvalidated = false;
-        moduleResolutionCache.clear();
-        typeReferenceDirectiveResolutionCache.clear();
-        moduleResolutionCache.update(resolutionHost.getCompilationSettings());
-        typeReferenceDirectiveResolutionCache.update(resolutionHost.getCompilationSettings());
+        createResolutionCaches();
         libraryResolutionCache.clear();
         impliedFormatPackageJsons.clear();
         resolvedLibraries.clear();
@@ -639,10 +646,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
     function onChangesAffectModuleResolution() {
         allModuleAndTypeResolutionsAreInvalidated = true;
-        moduleResolutionCache.clearAllExceptPackageJsonInfoCache();
-        typeReferenceDirectiveResolutionCache.clearAllExceptPackageJsonInfoCache();
-        moduleResolutionCache.update(resolutionHost.getCompilationSettings());
-        typeReferenceDirectiveResolutionCache.update(resolutionHost.getCompilationSettings());
+        createResolutionCaches();
     }
 
     function startRecordingFilesWithChangedResolutions() {
@@ -686,8 +690,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     }
 
     function startCachingPerDirectoryResolution() {
-        moduleResolutionCache.clearAllExceptPackageJsonInfoCache();
-        typeReferenceDirectiveResolutionCache.clearAllExceptPackageJsonInfoCache();
+        // Not all resolutions are re-resolved so wont be in the cache. -- Hmm,
+        createResolutionCaches();
         libraryResolutionCache.clearAllExceptPackageJsonInfoCache();
         // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
         // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)

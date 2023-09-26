@@ -103,6 +103,7 @@ import {
     removeFileExtension,
     ResolutionCache,
     resolutionExtensionIsTSOrJson,
+    ResolutionStorageCaches,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
@@ -729,6 +730,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     getModuleResolutionCache(): ModuleResolutionCache | undefined {
         return this.resolutionCache.getModuleResolutionCache();
+    }
+
+    /** @internal */
+    getResolutionStorageCaches(): ResolutionStorageCaches {
+        return {
+            moduleResolutionCache: this.resolutionCache.getModuleResolutionCache(),
+            typeReferenceDirectiveResolutionCache: this.resolutionCache.getTypeReferenceDirectiveResolutionCache(),
+        };
     }
 
     /** @internal */
@@ -2667,7 +2676,7 @@ export class AutoImportProviderProject extends Project {
     }
 
     /** @internal */
-    override getModuleResolutionCache() {
+    override getModuleResolutionCache() { // This will be wrong when program has its own module resolutionCache?
         return this.hostProject.getCurrentProgram()?.getModuleResolutionCache();
     }
 }

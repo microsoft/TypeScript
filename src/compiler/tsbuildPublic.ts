@@ -393,8 +393,8 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     readonly projectErrorsReported: Map<ResolvedConfigFilePath, true>;
 
     readonly compilerHost: CompilerHost & ReadBuildProgramHost;
-    readonly moduleResolutionCache: ModuleResolutionCache | undefined;
-    readonly typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
+    moduleResolutionCache: ModuleResolutionCache | undefined;
+    typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
     readonly libraryResolutionCache: ModuleResolutionCache | undefined;
 
     // Mutable state
@@ -449,10 +449,10 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
                 options,
                 containingSourceFile,
                 host,
-                moduleResolutionCache,
+                state.moduleResolutionCache,
                 createModuleResolutionLoader,
             );
-        compilerHost.getModuleResolutionCache = () => moduleResolutionCache;
+        compilerHost.getModuleResolutionCache = () => state.moduleResolutionCache;
     }
     if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
         typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(
@@ -470,10 +470,14 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
                 options,
                 containingSourceFile,
                 host,
-                typeReferenceDirectiveResolutionCache,
+                state.typeReferenceDirectiveResolutionCache,
                 createTypeReferenceResolutionLoader,
             );
     }
+    compilerHost.getResolutionStorageCaches = () => ({
+        moduleResolutionCache: state.moduleResolutionCache,
+        typeReferenceDirectiveResolutionCache: state.typeReferenceDirectiveResolutionCache,
+    });
     let libraryResolutionCache: ModuleResolutionCache | undefined;
     if (!compilerHost.resolveLibrary) {
         libraryResolutionCache = createModuleResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
@@ -784,8 +788,24 @@ function disableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) 
     compilerHost.getSourceFile = cache.originalGetSourceFile;
     state.readFileWithCache = cache.originalReadFileWithCache;
     extendedConfigCache.clear();
-    moduleResolutionCache?.clear();
-    typeReferenceDirectiveResolutionCache?.clear();
+    if (moduleResolutionCache) {
+        moduleResolutionCache.getPackageJsonInfoCache().clear();
+        state.moduleResolutionCache = createModuleResolutionCache(
+            compilerHost.getCurrentDirectory(),
+            compilerHost.getCanonicalFileName,
+            /*options*/ undefined,
+            moduleResolutionCache.getPackageJsonInfoCache(),
+        );
+    }
+    if (typeReferenceDirectiveResolutionCache) {
+        state.typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(
+            compilerHost.getCurrentDirectory(),
+            compilerHost.getCanonicalFileName,
+            /*options*/ undefined,
+            moduleResolutionCache?.getPackageJsonInfoCache(),
+            moduleResolutionCache?.optionsToRedirectsKey,
+        );
+    }
     libraryResolutionCache?.clear();
     state.cache = undefined;
 }
