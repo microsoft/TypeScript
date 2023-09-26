@@ -3663,17 +3663,21 @@
         "category": "Error",
         "code": 2854
     },
-    "The left-hand side of an 'instanceof' expression must be assignable to the first argument of the right-hand side's '[Symbol.hasInstance]' method.": {
+    "Class field '{0}' defined by the parent class is not accessible in the child class via super.": {
         "category": "Error",
         "code": 2855
     },
-    "An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression.": {
+    "The left-hand side of an 'instanceof' expression must be assignable to the first argument of the right-hand side's '[Symbol.hasInstance]' method.": {
         "category": "Error",
         "code": 2856
     },
-    "The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.": {
+    "An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression.": {
         "category": "Error",
         "code": 2857
+    },
+    "The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.": {
+        "category": "Error",
+        "code": 2858
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -7576,7 +7580,7 @@
         "category": "Message",
         "code": 95153
     },
-    "Can only convert string concatenation": {
+    "Can only convert string concatenations and string literals": {
         "category": "Message",
         "code": 95154
     },
