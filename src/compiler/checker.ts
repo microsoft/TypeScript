@@ -39764,6 +39764,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkImportType(node: ImportTypeNode) {
         checkSourceElement(node.argument);
+
+        if (node.attributes) {
+            getResolutionModeOverride(node.attributes, grammarErrorOnNode);
+        }
         checkTypeReferenceOrImport(node);
     }
 
