@@ -23276,9 +23276,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getVariances(type: GenericType): VarianceFlags[] {
         // Arrays and tuples are known to be covariant, no need to spend time computing this.
-        return type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple ?
+        return type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple || isArraySubtype(type) ?
             arrayVariances :
             getVariancesWorker(type.symbol, type.typeParameters);
+    }
+
+    /**
+     * If a type inherits from array, it also inherits the covariant type parameter variance, regardless of other type
+     * parameter usages (to allow overriding/writing new collection methods that are just as unsafe as the base array class).
+     */
+    function isArraySubtype(type: GenericType): boolean {
+        return length(type.typeParameters) === 1 && length(getBaseTypes(type)) === 1
+            && isTypeReferenceWithGenericArguments(getBaseTypes(type)[0])
+            && getVariances((getBaseTypes(type)[0] as TypeReference).target) === arrayVariances
+            && length(getTypeArguments(getBaseTypes(type)[0] as TypeReference)) === 1
+            && getTypeArguments(getBaseTypes(type)[0] as TypeReference)[0] === type.typeParameters![0];
     }
 
     function getAliasVariances(symbol: Symbol) {
