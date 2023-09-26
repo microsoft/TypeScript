@@ -3057,8 +3057,7 @@ export type CallLikeExpression =
     | TaggedTemplateExpression
     | Decorator
     | JsxOpeningLikeElement
-    | InstanceofExpression
-    ;
+    | InstanceofExpression;
 
 export interface AsExpression extends Expression {
     readonly kind: SyntaxKind.AsExpression;
