@@ -7,7 +7,6 @@ import {
     CaseClause,
     changeExtension,
     CharacterCodes,
-    CheckMode,
     combinePaths,
     comparePaths,
     comparePatternKeys,
@@ -32,6 +31,7 @@ import {
     endsWith,
     ensureTrailingDirectorySeparator,
     equateStringsCaseSensitive,
+    escapeString,
     Extension,
     fileExtensionIsOneOf,
     filter,
@@ -63,6 +63,7 @@ import {
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
     getTextOfJsxAttributeName,
+    getTextOfNode,
     getTokenAtPosition,
     hasIndexSignature,
     hasProperty,
@@ -117,7 +118,6 @@ import {
     ScriptElementKind,
     ScriptElementKindModifier,
     ScriptTarget,
-    Signature,
     signatureHasRestParameter,
     SignatureHelp,
     singleElementArray,
@@ -262,8 +262,13 @@ function convertStringLiteralCompletions(
             return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, optionalReplacementSpan, entries };
         }
         case StringLiteralCompletionKind.Types: {
+            const quoteChar = contextToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral
+                ? CharacterCodes.backtick
+                : startsWith(getTextOfNode(contextToken), "'")
+                ? CharacterCodes.singleQuote
+                : CharacterCodes.doubleQuote;
             const entries = completion.types.map(type => ({
-                name: type.value,
+                name: escapeString(type.value, quoteChar),
                 kindModifiers: ScriptElementKindModifier.none,
                 kind: ScriptElementKind.string,
                 sortText: SortText.LocationPriority,
@@ -407,7 +412,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 // Get string literal completions from specialized signatures of the target
                 // i.e. declare function f(a: 'A');
                 // f("/*completion position*/")
-                return argumentInfo && (getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker, CheckMode.Normal)) || fromContextualType(ContextFlags.None);
+                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType(ContextFlags.None);
             }
             // falls through (is `require("")` or `require(""` or `import("")`)
 
@@ -497,12 +502,11 @@ function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: 
     return mapDefined(union.types, type => type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
 }
 
-function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker, checkMode = CheckMode.IsForStringLiteralArgumentCompletions): StringLiteralCompletionsFromTypes | undefined {
+function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes | undefined {
     let isNewIdentifier = false;
     const uniques = new Map<string, true>();
-    const candidates: Signature[] = [];
     const editingArgument = isJsxOpeningLikeElement(call) ? Debug.checkDefined(findAncestor(arg.parent, isJsxAttribute)) : arg;
-    checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates, checkMode);
+    const candidates = checker.getCandidateSignaturesForStringLiteralCompletions(call, editingArgument);
     const types = flatMap(candidates, candidate => {
         if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
         let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);

@@ -2427,7 +2427,7 @@ export class TestState {
             baselineFile,
             annotations + "\n\n" + stringify(result, (key, value) => {
                 return key === "exportMapKey"
-                    ? value.replace(/\|[0-9]+/g, "|*")
+                    ? value.replace(/ \d+ /g, " * ")
                     : value;
             }),
         );
@@ -2763,6 +2763,7 @@ export class TestState {
                 this.languageService.getProgram()?.getCompilerOptions() || {},
             ),
             setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
+            jsDocParsingMode: this.languageServiceAdapterHost.jsDocParsingMode,
         };
         const referenceSourceFile = ts.createLanguageServiceSourceFile(
             this.activeFile.fileName,

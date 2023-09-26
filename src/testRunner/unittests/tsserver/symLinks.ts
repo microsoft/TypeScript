@@ -1,6 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    dedent,
+} from "../../_namespaces/Utils";
+import {
     baselineTsserverLogs,
+    closeFilesForSession,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
@@ -203,5 +207,63 @@ new C();`,
 
         verifyModuleResolution(/*withPathMapping*/ false);
         verifyModuleResolution(/*withPathMapping*/ true);
+    });
+
+    it("when not symlink but differs in casing", () => {
+        const host = createServerHost({
+            "C:/temp/replay/axios-src/lib/core/AxiosHeaders.js": dedent`
+                export const b = 10;
+
+            `,
+            "C:/temp/replay/axios-src/lib/core/dispatchRequest.js": dedent`
+                import { b } from "./AxiosHeaders.js";
+                import { b2 } from "./settle.js";
+                import { x } from "follow-redirects";
+                export const y = 10;
+            `,
+            "C:/temp/replay/axios-src/lib/core/mergeConfig.js": dedent`
+                import { b } from "./AxiosHeaders.js";
+                export const y = 10;
+            `,
+            "C:/temp/replay/axios-src/lib/core/settle.js": dedent`
+                export const b2 = 10;
+            `,
+            "C:/temp/replay/axios-src/package.json": JSON.stringify({
+                name: "axios",
+                version: "1.4.0",
+                dependencies: { "follow-redirects": "^1.15.0" },
+            }),
+            "C:/temp/replay/axios-src/node_modules/follow-redirects/package.json": JSON.stringify({
+                name: "follow-redirects",
+                version: "1.15.0",
+            }),
+            "C:/temp/replay/axios-src/node_modules/follow-redirects/index.js": "export const x = 10;",
+        }, { windowsStyleRoot: "C:/" });
+        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host), disableAutomaticTypingAcquisition: true });
+        openFilesForSession(["c:/temp/replay/axios-src/lib/core/AxiosHeaders.js"], session); // Creates InferredProject1 and AutoImportProvider1
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({ // Different content from disk
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
+            arguments: {
+                changedFiles: [{
+                    fileName: "c:/temp/replay/axios-src/lib/core/AxiosHeaders.js",
+                    textChanges: [{
+                        newText: "//comment",
+                        start: { line: 2, offset: 1 },
+                        end: { line: 2, offset: 1 },
+                    }],
+                }],
+            },
+        });
+        // This will create InferredProject2, but will not create AutoImportProvider as it includes follow-redirect import,
+        // contains the file we will be opening after closing changed file
+        // It will also close InferredProject1 and AutoImportProvider1
+        openFilesForSession(["c:/temp/replay/axios-src/lib/core/dispatchRequest.js"], session);
+        // This creates InferredProject3 and AutoImportProvider2
+        openFilesForSession(["c:/temp/replay/axios-src/lib/core/mergeConfig.js"], session);
+        // Closing this file will schedule update for InferredProject2, InferredProject3
+        closeFilesForSession(["c:/temp/replay/axios-src/lib/core/AxiosHeaders.js"], session);
+        // When we open this file, we will update InferredProject2 which contains this file and the follow-redirect will be resolved again
+        openFilesForSession(["c:/temp/replay/axios-src/lib/core/settle.js"], session);
+        baselineTsserverLogs("symLinks", "when not symlink but differs in casing", session);
     });
 });
