@@ -6,7 +6,6 @@ import {
     append,
     ArrayBindingElement,
     arrayFrom,
-    AssertClause,
     BindingElement,
     BindingName,
     BindingPattern,
@@ -70,7 +69,7 @@ import {
     getOutputPathsFor,
     getParseTreeNode,
     getRelativePathToDirectoryOrUrl,
-    getResolutionModeOverrideForClause,
+    getResolutionModeOverride,
     getResolvedExternalModuleName,
     getSetAccessorValueParameter,
     getSourceFileOfNode,
@@ -86,6 +85,7 @@ import {
     hasSyntacticModifier,
     HeritageClause,
     Identifier,
+    ImportAttributes,
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportTypeNode,
@@ -130,7 +130,6 @@ import {
     isMethodSignature,
     isModifier,
     isModuleDeclaration,
-    isNightly,
     isOmittedExpression,
     isPrivateIdentifier,
     isPropertySignature,
@@ -312,7 +311,6 @@ export function transformDeclarations(context: TransformationContext) {
         trackExternalModuleSymbolOfImportTypeNode,
         reportNonlocalAugmentation,
         reportNonSerializableProperty,
-        reportImportTypeNodeResolutionModeOverride,
     };
     let errorNameNode: DeclarationName | undefined;
     let errorFallbackNode: Declaration | undefined;
@@ -453,12 +451,6 @@ export function transformDeclarations(context: TransformationContext) {
     function reportNonSerializableProperty(propertyName: string) {
         if (errorNameNode || errorFallbackNode) {
             context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
-        }
-    }
-
-    function reportImportTypeNodeResolutionModeOverride() {
-        if (!isNightly() && (errorNameNode || errorFallbackNode)) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_expression_cannot_be_named_without_a_resolution_mode_assertion_which_is_an_unstable_feature_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
         }
     }
 
@@ -985,7 +977,7 @@ export function transformDeclarations(context: TransformationContext) {
                 decl.modifiers,
                 decl.importClause,
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                tryGetResolutionModeOverride(decl.attributes),
             );
         }
         // The `importClause` visibility corresponds to the default's visibility.
@@ -1002,7 +994,7 @@ export function transformDeclarations(context: TransformationContext) {
                     /*namedBindings*/ undefined,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                tryGetResolutionModeOverride(decl.attributes),
             );
         }
         if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
@@ -1018,7 +1010,7 @@ export function transformDeclarations(context: TransformationContext) {
                     namedBindings,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                tryGetResolutionModeOverride(decl.attributes),
             ) : undefined;
         }
         // Named imports (optionally with visible default)
@@ -1034,7 +1026,7 @@ export function transformDeclarations(context: TransformationContext) {
                     bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                tryGetResolutionModeOverride(decl.attributes),
             );
         }
         // Augmentation of export depends on import
@@ -1044,21 +1036,15 @@ export function transformDeclarations(context: TransformationContext) {
                 decl.modifiers,
                 /*importClause*/ undefined,
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                tryGetResolutionModeOverride(decl.attributes),
             );
         }
         // Nothing visible
     }
 
-    function getResolutionModeOverrideForClauseInNightly(assertClause: AssertClause | undefined) {
-        const mode = getResolutionModeOverrideForClause(assertClause);
-        if (mode !== undefined) {
-            if (!isNightly()) {
-                context.addDiagnostic(createDiagnosticForNode(assertClause!, Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
-            }
-            return assertClause;
-        }
-        return undefined;
+    function tryGetResolutionModeOverride(node: ImportAttributes | undefined) {
+        const mode = getResolutionModeOverride(node);
+        return node && mode !== undefined ? node : undefined;
     }
 
     function transformAndReplaceLatePaintedStatements(statements: NodeArray<Statement>): NodeArray<Statement> {
@@ -1329,7 +1315,7 @@ export function transformDeclarations(context: TransformationContext) {
                     return cleanup(factory.updateImportTypeNode(
                         input,
                         factory.updateLiteralTypeNode(input.argument, rewriteModuleSpecifier(input, input.argument.literal)),
-                        input.assertions,
+                        input.attributes,
                         input.qualifier,
                         visitNodes(input.typeArguments, visitDeclarationSubtree, isTypeNode),
                         input.isTypeOf,
@@ -1391,7 +1377,7 @@ export function transformDeclarations(context: TransformationContext) {
                     input.isTypeOnly,
                     input.exportClause,
                     rewriteModuleSpecifier(input, input.moduleSpecifier),
-                    getResolutionModeOverrideForClause(input.assertClause) ? input.assertClause : undefined,
+                    tryGetResolutionModeOverride(input.attributes),
                 );
             }
             case SyntaxKind.ExportAssignment: {

@@ -1,5 +1,5 @@
 relationComplexityError.ts(12,5): error TS2322: Type 'T1 & T2' is not assignable to type 'T1 | null'.
-relationComplexityError.ts(12,5): error TS2856: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+relationComplexityError.ts(12,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
 
 
 ==== relationComplexityError.ts (2 errors) ====
@@ -18,6 +18,6 @@ relationComplexityError.ts(12,5): error TS2856: Excessive complexity comparing t
         ~
 !!! error TS2322: Type 'T1 & T2' is not assignable to type 'T1 | null'.
         ~~~~~
-!!! error TS2856: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
+!!! error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
     }
     

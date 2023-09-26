@@ -1655,7 +1655,7 @@ function getNewImports(
                     factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name)),
                 ),
                 quotedModuleSpecifier,
-                /*assertClause*/ undefined,
+                /*attributes*/ undefined,
             );
         statements = combine(statements, declaration);
     }
