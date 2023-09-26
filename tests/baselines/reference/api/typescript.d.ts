@@ -5358,12 +5358,11 @@ declare namespace ts {
         readonly asteriskToken?: AsteriskToken;
         readonly expression?: Expression;
     }
-    interface SyntheticExpression extends LeftHandSideExpression {
+    interface SyntheticExpression extends Expression {
         readonly kind: SyntaxKind.SyntheticExpression;
         readonly isSpread: boolean;
         readonly type: Type;
         readonly tupleNameSource?: ParameterDeclaration | NamedTupleMember;
-        readonly thisArgument?: LeftHandSideExpression;
     }
     type ExponentiationOperator = SyntaxKind.AsteriskAsteriskToken;
     type MultiplicativeOperator = SyntaxKind.AsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken;
@@ -5587,7 +5586,10 @@ declare namespace ts {
         readonly typeArguments?: NodeArray<TypeNode>;
         readonly template: TemplateLiteral;
     }
-    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
+    interface InstanceofExpression extends BinaryExpression {
+        readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
+    }
+    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement | InstanceofExpression;
     interface AsExpression extends Expression {
         readonly kind: SyntaxKind.AsExpression;
         readonly expression: Expression;

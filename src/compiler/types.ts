@@ -2453,12 +2453,11 @@ export interface YieldExpression extends Expression {
     readonly expression?: Expression;
 }
 
-export interface SyntheticExpression extends LeftHandSideExpression {
+export interface SyntheticExpression extends Expression {
     readonly kind: SyntaxKind.SyntheticExpression;
     readonly isSpread: boolean;
     readonly type: Type;
     readonly tupleNameSource?: ParameterDeclaration | NamedTupleMember;
-    readonly thisArgument?: LeftHandSideExpression;
 }
 
 // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
@@ -3048,12 +3047,18 @@ export interface TaggedTemplateExpression extends MemberExpression {
     /** @internal */ questionDotToken?: QuestionDotToken; // NOTE: Invalid syntax, only used to report a grammar error.
 }
 
+export interface InstanceofExpression extends BinaryExpression {
+    readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
+}
+
 export type CallLikeExpression =
     | CallExpression
     | NewExpression
     | TaggedTemplateExpression
     | Decorator
-    | JsxOpeningLikeElement;
+    | JsxOpeningLikeElement
+    | InstanceofExpression
+    ;
 
 export interface AsExpression extends Expression {
     readonly kind: SyntaxKind.AsExpression;
@@ -6501,11 +6506,6 @@ export interface PromiseOrAwaitableType extends ObjectType, UnionType {
 }
 
 /** @internal */
-export interface HasInstanceMethodType extends Type {
-    hasSimpleUnrestrictedSingleCallSignature?: boolean;
-}
-
-/** @internal */
 export interface SyntheticDefaultModuleType extends Type {
     syntheticType?: Type;
     defaultOnlyType?: Type;
@@ -8789,7 +8789,7 @@ export interface NodeFactory {
     //
     // Synthetic Nodes
     //
-    /** @internal */ createSyntheticExpression(type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember, thisArgument?: LeftHandSideExpression): SyntheticExpression;
+    /** @internal */ createSyntheticExpression(type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember): SyntheticExpression;
     /** @internal */ createSyntaxList(children: Node[]): SyntaxList;
 
     //
