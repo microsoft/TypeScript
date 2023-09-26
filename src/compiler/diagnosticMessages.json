@@ -6992,6 +6992,30 @@
         "category": "Message",
         "code": 90060
     },
+    "Add annotation of type '{0}'": {
+        "category": "Message",
+        "code": 90061
+    },
+    "Add return type '{0}'": {
+        "category": "Message",
+        "code": 90062
+    },
+    "Extract base class to variable": {
+        "category": "Message",
+        "code": 90064
+    },
+    "Extract default export to variable": {
+        "category": "Message",
+        "code": 90065
+    },
+    "Extract binding expressions to variable": {
+        "category": "Message",
+        "code": 90066
+    },
+    "Add all missing tye annotations": {
+        "category": "Message",
+        "code": 90067
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",

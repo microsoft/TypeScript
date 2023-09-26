@@ -17,11 +17,11 @@
 ////}
 
 verify.codeFixAvailable([
-    { description: ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.message }
+    { description: ts.Diagnostics.Extract_base_class_to_variable.message }
 ]);
 
 verify.codeFix({
-    description: ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.message,
+    description: ts.Diagnostics.Extract_base_class_to_variable.message,
     index: 0,
     newFileContent:
 `function mixin<T extends new (...a: any) => any>(ctor: T): T {

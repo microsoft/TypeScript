@@ -9,11 +9,11 @@
 ////export = a;
 
 verify.codeFixAvailable([
-    { description: ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.message },
+    { description: "Add annotation of type 'number'" },
 ]);
 
 verify.codeFix({
-    description: ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.message,
+    description: "Add annotation of type 'number'",
     index: 0,
     newFileContent:
 `function foo( ){
