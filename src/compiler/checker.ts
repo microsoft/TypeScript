@@ -39766,16 +39766,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkSourceElement(node.argument);
 
         if (node.attributes) {
-            const override = getResolutionModeOverride(node.attributes, grammarErrorOnNode);
-            const errorNode = node.attributes;
-            if (override && errorNode && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
-                grammarErrorOnNode(
-                    errorNode,
-                    node.attributes.token === SyntaxKind.WithKeyword
-                        ? Diagnostics.The_resolution_mode_attribute_is_only_supported_when_moduleResolution_is_node16_or_nodenext
-                        : Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext,
-                );
-            }
+            getResolutionModeOverride(node.attributes, grammarErrorOnNode);
         }
         checkTypeReferenceOrImport(node);
     }
@@ -45212,14 +45203,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const override = getResolutionModeOverride(node, validForTypeAttributes ? grammarErrorOnNode : undefined);
             const isImportAttributes = declaration.attributes.token === SyntaxKind.WithKeyword;
             if (validForTypeAttributes && override) {
-                if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
-                    return grammarErrorOnNode(
-                        node,
-                        isImportAttributes
-                            ? Diagnostics.The_resolution_mode_attribute_is_only_supported_when_moduleResolution_is_node16_or_nodenext
-                            : Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext,
-                    );
-                }
                 return; // Other grammar checks do not apply to type-only imports with resolution mode assertions
             }
 

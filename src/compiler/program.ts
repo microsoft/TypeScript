@@ -865,7 +865,6 @@ export function getModeForResolutionAtIndex(file: SourceFile, index: number): Re
 // eslint-disable-next-line @typescript-eslint/unified-signatures
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ResolutionMode;
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ResolutionMode {
-    if (file.impliedNodeFormat === undefined) return undefined;
     // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
     // so it's safe to use them even pre-bind
     return getModeForUsageLocation(file, getModuleNameStringLiteralAt(file, index));
@@ -892,7 +891,6 @@ export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | Ex
  * @returns The final resolution mode of the import
  */
 export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike) {
-    if (file.impliedNodeFormat === undefined) return undefined;
     if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
         if (isTypeOnly) {
@@ -908,6 +906,7 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
             return override;
         }
     }
+    if (file.impliedNodeFormat === undefined) return undefined;
     if (file.impliedNodeFormat !== ModuleKind.ESNext) {
         // in cjs files, import call expressions are esm format, otherwise everything is cjs
         return isImportCall(walkUpParenthesizedExpressions(usage.parent)) ? ModuleKind.ESNext : ModuleKind.CommonJS;
@@ -3863,14 +3862,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const fileName = toFileNameLowerCase(ref.fileName);
             resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
             const mode = ref.resolutionMode || file.impliedNodeFormat;
-            if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
-                (fileProcessingDiagnostics ??= []).push({
-                    kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics,
-                    diagnostics: [
-                        createDiagnosticForRange(file, ref, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext),
-                    ],
-                });
-            }
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
         }
     }

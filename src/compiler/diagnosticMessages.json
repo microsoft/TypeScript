@@ -1480,10 +1480,6 @@
         "category": "Error",
         "code": 1451
     },
-    "'resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.": {
-        "category": "Error",
-        "code": 1452
-    },
     "`resolution-mode` should be either `require` or `import`.": {
         "category": "Error",
         "code": 1453
@@ -1519,10 +1515,6 @@
     "File is CommonJS module because 'package.json' was not found": {
         "category": "Message",
         "code": 1461
-    },
-    "The 'resolution-mode' attribute is only supported when 'moduleResolution' is 'node16' or 'nodenext'.": {
-        "category": "Error",
-        "code": 1462
     },
     "'resolution-mode' is the only valid key for type import attributes.": {
         "category": "Error",
