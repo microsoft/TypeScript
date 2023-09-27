@@ -1,5 +1,8 @@
 const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
+const path = require("path");
+
+const srcRoot = path.resolve(__dirname, "../../../src");
 
 const tsNamespaceBarrelRegex = /_namespaces\/ts(?:\.ts|\.js|\.mts|\.mjs|\.cts|\.cjs)?$/;
 
@@ -24,11 +27,25 @@ module.exports = createRule({
         },
         schema: [],
         type: "problem",
+        fixable: "code",
     },
     defaultOptions: [],
 
     create(context) {
+        /**
+         * @param {string} p
+         */
+        function getImportPath(p) {
+            return path.relative(path.dirname(context.filename), path.join(srcRoot, p)).replace(/\\/g, "/");
+        }
+
+        /** @type {any} */
+        let program;
+
         return {
+            Program: node => {
+                program = node;
+            },
             ImportDeclaration: node => {
                 if (node.importKind !== "value" || !tsNamespaceBarrelRegex.test(node.source.value)) return;
 
@@ -42,6 +59,27 @@ module.exports = createRule({
                             messageId: "importError",
                             data: { name: mod.name, path: mod.path },
                             node: specifier,
+                            fix: fixer => {
+                                const newCode = `import * as ${mod.name} from "${getImportPath(mod.path)}";`;
+                                const fixes = [];
+                                if (node.specifiers.length === 1) {
+                                    fixes.push(fixer.replaceText(node, newCode));
+                                }
+                                else {
+                                    const comma = context.sourceCode.getTokenAfter(specifier, token => token.value === ",");
+                                    if (!comma) throw new Error("comma is null");
+                                    const prevNode = context.sourceCode.getTokenBefore(specifier);
+                                    if (!prevNode) throw new Error("prevNode is null");
+                                    fixes.push(
+                                        fixer.removeRange([prevNode.range[1], specifier.range[0]]),
+                                        fixer.remove(specifier),
+                                        fixer.remove(comma),
+                                    );
+                                    fixes.push(fixer.insertTextAfter(node, `\r\n${newCode}`));
+                                }
+
+                                return fixes;
+                            },
                         });
                     }
                 }
@@ -56,6 +94,12 @@ module.exports = createRule({
                         messageId: "importError",
                         data: { name: mod.name, path: mod.path },
                         node,
+                        fix: fixer => {
+                            return [
+                                fixer.replaceText(node, mod.name),
+                                fixer.insertTextBefore(program, `import * as ${mod.name} from "${getImportPath(mod.path)}";\r\n`),
+                            ];
+                        },
                     });
                 }
             },
