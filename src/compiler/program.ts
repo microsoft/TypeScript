@@ -167,6 +167,7 @@ import {
     HeritageClause,
     Identifier,
     identity,
+    ImportAttributes,
     ImportClause,
     ImportDeclaration,
     ImportOrExportSpecifier,
@@ -864,7 +865,6 @@ export function getModeForResolutionAtIndex(file: SourceFile, index: number): Re
 // eslint-disable-next-line @typescript-eslint/unified-signatures
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ResolutionMode;
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ResolutionMode {
-    if (file.impliedNodeFormat === undefined) return undefined;
     // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
     // so it's safe to use them even pre-bind
     return getModeForUsageLocation(file, getModuleNameStringLiteralAt(file, index));
@@ -891,22 +891,22 @@ export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | Ex
  * @returns The final resolution mode of the import
  */
 export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike) {
-    if (file.impliedNodeFormat === undefined) return undefined;
     if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
         if (isTypeOnly) {
-            const override = getResolutionModeOverrideForClause(usage.parent.assertClause);
+            const override = getResolutionModeOverride(usage.parent.attributes);
             if (override) {
                 return override;
             }
         }
     }
     if (usage.parent.parent && isImportTypeNode(usage.parent.parent)) {
-        const override = getResolutionModeOverrideForClause(usage.parent.parent.assertions?.assertClause);
+        const override = getResolutionModeOverride(usage.parent.parent.attributes);
         if (override) {
             return override;
         }
     }
+    if (file.impliedNodeFormat === undefined) return undefined;
     if (file.impliedNodeFormat !== ModuleKind.ESNext) {
         // in cjs files, import call expressions are esm format, otherwise everything is cjs
         return isImportCall(walkUpParenthesizedExpressions(usage.parent)) ? ModuleKind.ESNext : ModuleKind.CommonJS;
@@ -918,16 +918,26 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
 }
 
 /** @internal */
-export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void) {
-    if (!clause) return undefined;
-    if (length(clause.elements) !== 1) {
-        grammarErrorOnNode?.(clause, Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require);
+export function getResolutionModeOverride(node: AssertClause | ImportAttributes | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void) {
+    if (!node) return undefined;
+    if (length(node.elements) !== 1) {
+        grammarErrorOnNode?.(
+            node,
+            node.token === SyntaxKind.WithKeyword
+                ? Diagnostics.Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require
+                : Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require,
+        );
         return undefined;
     }
-    const elem = clause.elements[0];
+    const elem = node.elements[0];
     if (!isStringLiteralLike(elem.name)) return undefined;
     if (elem.name.text !== "resolution-mode") {
-        grammarErrorOnNode?.(elem.name, Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_assertions);
+        grammarErrorOnNode?.(
+            elem.name,
+            node.token === SyntaxKind.WithKeyword
+                ? Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_attributes
+                : Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_assertions,
+        );
         return undefined;
     }
     if (!isStringLiteralLike(elem.value)) return undefined;
@@ -1393,7 +1403,7 @@ export const plainJSErrors = new Set<number>([
     Diagnostics.Classes_may_not_have_a_field_named_constructor.code,
     Diagnostics.Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_part_of_a_destructuring_pattern.code,
     Diagnostics.Duplicate_label_0.code,
-    Diagnostics.Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_assertion_as_arguments.code,
+    Diagnostics.Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_set_of_attributes_as_arguments.code,
     Diagnostics.for_await_loops_cannot_be_used_inside_a_class_static_block.code,
     Diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression.code,
     Diagnostics.JSX_elements_cannot_have_multiple_attributes_with_the_same_name.code,
@@ -3294,7 +3304,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function createSyntheticImport(text: string, file: SourceFile) {
         const externalHelpersModuleReference = factory.createStringLiteral(text);
-        const importDecl = factory.createImportDeclaration(/*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference, /*assertClause*/ undefined);
+        const importDecl = factory.createImportDeclaration(/*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference, /*attributes*/ undefined);
         addInternalEmitFlags(importDecl, InternalEmitFlags.NeverApplyImportHelper);
         setParent(externalHelpersModuleReference, importDecl);
         setParent(importDecl, file);
@@ -3852,14 +3862,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const fileName = toFileNameLowerCase(ref.fileName);
             resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
             const mode = ref.resolutionMode || file.impliedNodeFormat;
-            if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
-                (fileProcessingDiagnostics ??= []).push({
-                    kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics,
-                    diagnostics: [
-                        createDiagnosticForRange(file, ref, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext),
-                    ],
-                });
-            }
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
         }
     }
