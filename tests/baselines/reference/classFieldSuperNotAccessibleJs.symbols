@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/classFieldSuperNotAccessibleJs.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/55884
+
+class YaddaBase {
+>YaddaBase : Symbol(YaddaBase, Decl(index.js, 0, 0))
+
+    constructor() {
+        this.roots = "hi";
+>this.roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
+>this : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
+
+        this.b()
+>this.b : Symbol(YaddaBase.b, Decl(index.js, 6, 5))
+>this : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>b : Symbol(YaddaBase.b, Decl(index.js, 6, 5))
+    }
+    accessor b = () => {
+>b : Symbol(YaddaBase.b, Decl(index.js, 6, 5))
+
+        this.foo = 10
+>this.foo : Symbol(YaddaBase.foo, Decl(index.js, 7, 24))
+>this : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>foo : Symbol(YaddaBase.foo, Decl(index.js, 7, 24))
+    }
+}
+
+class DerivedYadda extends YaddaBase {
+>DerivedYadda : Symbol(DerivedYadda, Decl(index.js, 10, 1))
+>YaddaBase : Symbol(YaddaBase, Decl(index.js, 0, 0))
+
+    get rootTests() {
+>rootTests : Symbol(DerivedYadda.rootTests, Decl(index.js, 12, 38))
+
+        return super.roots;
+>super.roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
+>super : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
+    }
+    get fooTests() {
+>fooTests : Symbol(DerivedYadda.fooTests, Decl(index.js, 15, 5))
+
+        return super.foo;
+>super.foo : Symbol(YaddaBase.foo, Decl(index.js, 7, 24))
+>super : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>foo : Symbol(YaddaBase.foo, Decl(index.js, 7, 24))
+    }
+}
+

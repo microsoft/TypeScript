@@ -1706,7 +1706,9 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
 
 /** @internal */
 export function isClassFieldAndNotAutoAccessor(node: Node): boolean {
-    return node.parent && isClassLike(node.parent) && isPropertyDeclaration(node) && !hasAccessorModifier(node);
+    return node.parent && isClassLike(node.parent) && isPropertyDeclaration(node) && !hasAccessorModifier(node) ||
+        // handles inferred class fields in JS files
+        node.kind === SyntaxKind.BinaryExpression;
 }
 
 /** @internal */

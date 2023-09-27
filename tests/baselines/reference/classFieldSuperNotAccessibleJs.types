@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/classFieldSuperNotAccessibleJs.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/55884
+
+class YaddaBase {
+>YaddaBase : YaddaBase
+
+    constructor() {
+        this.roots = "hi";
+>this.roots = "hi" : "hi"
+>this.roots : any
+>this : this
+>roots : any
+>"hi" : "hi"
+
+        this.b()
+>this.b() : void
+>this.b : () => void
+>this : this
+>b : () => void
+    }
+    accessor b = () => {
+>b : () => void
+>() => {        this.foo = 10    } : () => void
+
+        this.foo = 10
+>this.foo = 10 : 10
+>this.foo : number | undefined
+>this : this
+>foo : number | undefined
+>10 : 10
+    }
+}
+
+class DerivedYadda extends YaddaBase {
+>DerivedYadda : DerivedYadda
+>YaddaBase : YaddaBase
+
+    get rootTests() {
+>rootTests : string
+
+        return super.roots;
+>super.roots : string
+>super : YaddaBase
+>roots : string
+    }
+    get fooTests() {
+>fooTests : number | undefined
+
+        return super.foo;
+>super.foo : number | undefined
+>super : YaddaBase
+>foo : number | undefined
+    }
+}
+

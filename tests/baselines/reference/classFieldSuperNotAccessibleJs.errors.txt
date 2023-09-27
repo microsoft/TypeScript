@@ -1,0 +1,30 @@
+index.js(15,22): error TS2855: Class field 'roots' defined by the parent class is not accessible in the child class via super.
+index.js(18,22): error TS2855: Class field 'foo' defined by the parent class is not accessible in the child class via super.
+
+
+==== index.js (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55884
+    
+    class YaddaBase {
+        constructor() {
+            this.roots = "hi";
+            this.b()
+        }
+        accessor b = () => {
+            this.foo = 10
+        }
+    }
+    
+    class DerivedYadda extends YaddaBase {
+        get rootTests() {
+            return super.roots;
+                         ~~~~~
+!!! error TS2855: Class field 'roots' defined by the parent class is not accessible in the child class via super.
+        }
+        get fooTests() {
+            return super.foo;
+                         ~~~
+!!! error TS2855: Class field 'foo' defined by the parent class is not accessible in the child class via super.
+        }
+    }
+    
