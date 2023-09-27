@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/enums/enumShadowedInfinityNaN2.ts] ////
+
+=== enumShadowedInfinityNaN2.ts ===
+// repro https://github.com/microsoft/TypeScript/issues/55091
+
+let Infinity = 3;
+>Infinity : number
+>3 : 3
+
+let NaN = 5;
+>NaN : number
+>5 : 5
+
+export enum A {
+>A : A
+
+    X = 1 / 0,
+>X : A.X
+>1 / 0 : number
+>1 : 1
+>0 : 0
+
+    Y = -1 / 0,
+>Y : A.Y
+>-1 / 0 : number
+>-1 : -1
+>1 : 1
+>0 : 0
+
+    B = 0 / 0,
+>B : A.B
+>0 / 0 : number
+>0 : 0
+>0 : 0
+}
+

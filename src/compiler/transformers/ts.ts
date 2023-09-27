@@ -1901,9 +1901,24 @@ export function transformTypeScript(context: TransformationContext) {
     function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
         const value = resolver.getConstantValue(member);
         if (value !== undefined) {
-            return typeof value === "string" ? factory.createStringLiteral(value) :
-                value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(value))) :
-                factory.createNumericLiteral(value);
+            if (typeof value === "string") {
+                return factory.createStringLiteral(value);
+            }
+            if (Number.isNaN(value)) {
+                return resolver.isNameReferencingGlobalValueAtLocation("NaN", member)
+                    ? factory.createIdentifier("NaN")
+                    : factory.createBinaryExpression(factory.createNumericLiteral(0), SyntaxKind.SlashToken, factory.createNumericLiteral(0));
+            }
+            if (!isFinite(value)) {
+                if (resolver.isNameReferencingGlobalValueAtLocation("Infinity", member)) {
+                    return value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createIdentifier("Infinity")) : factory.createIdentifier("Infinity");
+                }
+                const dividend = value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(1)) : factory.createNumericLiteral(1);
+                return factory.createBinaryExpression(dividend, SyntaxKind.SlashToken, factory.createNumericLiteral(0));
+            }
+            return value < 0
+                ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(value)))
+                : factory.createNumericLiteral(value);
         }
         else {
             enableSubstitutionForNonQualifiedEnumMembers();

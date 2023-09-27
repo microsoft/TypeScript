@@ -47749,6 +47749,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
             },
             isImportRequiredByAugmentation,
+            isNameReferencingGlobalValueAtLocation: (name, location) => {
+                return resolveEntityName(factory.createIdentifier(name), SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ undefined, location) === getGlobalSymbol(escapeLeadingUnderscores(name), SymbolFlags.Value, /*diagnostic*/ undefined);
+            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {
