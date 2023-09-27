@@ -44,6 +44,12 @@
             "rules": {
                 "no-restricted-globals": "off"
             }
+        },
+        {
+            "files": ["harness/**", "testRunner/**"],
+            "rules": {
+                "local/prefer-direct-import": "off"
+            }
         }
     ]
 }
