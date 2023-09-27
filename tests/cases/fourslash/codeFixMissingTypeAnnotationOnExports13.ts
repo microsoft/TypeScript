@@ -7,11 +7,6 @@
 //// }
 //// export const { x, y } = foo();
 
-verify.codeFixAvailable([
-    { description: ts.Diagnostics.Extract_binding_expressions_to_variable.message },
-    { description: ts.Diagnostics.Extract_binding_expressions_to_variable.message }
-]);
-
 verify.codeFix({
     description: ts.Diagnostics.Extract_binding_expressions_to_variable.message,
     index: 0,

@@ -14,9 +14,9 @@ import {
     Diagnostics,
     EmitHint,
     EntityName,
+    EntityNameExpression,
     ExportAssignment,
     Expression,
-    ExpressionWithTypeArguments,
     factory,
     FileTextChanges,
     findAncestor,
@@ -32,10 +32,14 @@ import {
     isDeclaration,
     isEntityNameExpression,
     isExpression,
+    isHeritageClause,
     isIdentifier,
     isObjectBindingPattern,
+    isObjectLiteralExpression,
     isOmittedExpression,
     isShorthandPropertyAssignment,
+    isSpreadAssignment,
+    isStatement,
     isValueSignatureDeclaration,
     isVariableDeclaration,
     ModifierFlags,
@@ -44,10 +48,13 @@ import {
     NodeBuilderFlags,
     NodeFlags,
     ObjectBindingPattern,
+    ObjectLiteralElementLike,
+    ObjectLiteralExpression,
     ParameterDeclaration,
     PropertyDeclaration,
     SignatureDeclaration,
     SourceFile,
+    SpreadAssignment,
     SyntaxKind,
     textChanges,
     TextSpan,
@@ -178,10 +185,15 @@ function withChanges<T>(
     function addInlineAnnotation(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
         const targetNode = findTargetErrorNode(nodeWithDiag, span) as Expression;
-        if (!targetNode) return;
+        if (!targetNode || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.parent)) return;
         const isExpressionTarget = isExpression(targetNode);
+
+        // No support for typeof in extends clauses
+        if (isExpressionTarget && findAncestor(targetNode, isHeritageClause)) {
+            return undefined;
+        }
         const isShorthandPropertyAssignmentTarget = isIdentifier(targetNode) && isShorthandPropertyAssignment(targetNode.parent);
-        if (!(isExpressionTarget || isShorthandPropertyAssignment)) return undefined;
+        if (!(isExpressionTarget || isShorthandPropertyAssignmentTarget)) return undefined;
 
         const typeNode = inferNodeType(targetNode);
         if (!typeNode) return undefined;
@@ -262,8 +274,8 @@ function withChanges<T>(
             case SyntaxKind.ExportAssignment:
                 const defaultExport = node as ExportAssignment;
                 if (!defaultExport.isExportEquals) {
-                    const type = typeChecker.getTypeAtLocation(defaultExport.expression);
-                    const typeNode = typeToTypeNode(type, node);
+                    const typeNode = inferNodeType(defaultExport.expression);
+                    if (!typeNode) return undefined;
                     changeTracker.replaceNodeWithNodes(sourceFile, node, [
                         factory.createVariableStatement(
                             /*modifiers*/ undefined,
@@ -286,7 +298,7 @@ function withChanges<T>(
                 break;
             // Handling expression like heritage clauses e.g. class A extends mixin(B) ..
             case SyntaxKind.ClassDeclaration:
-                return handleClassDeclaration(node as ClassDeclaration, node.parent.parent as ExpressionWithTypeArguments);
+                return handleClassDeclaration(node as ClassDeclaration);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 return transformDestructuringPatterns(node as BindingPattern);
@@ -299,12 +311,7 @@ function withChanges<T>(
         if (func.type) {
             return;
         }
-
-        const type = tryGetReturnType(func);
-        if (!type) {
-            return;
-        }
-        const typeNode = typeToTypeNode(type, func);
+        const typeNode = inferNodeType(func);
         addTypesToParametersArray(func.parameters);
         if (typeNode) {
             changeTracker.tryInsertTypeAnnotation(
@@ -316,14 +323,19 @@ function withChanges<T>(
         }
     }
 
-    function handleClassDeclaration(classDecl: ClassDeclaration, heritageExpression: ExpressionWithTypeArguments): DiagnosticAndArguments {
-        if (heritageExpression.kind !== SyntaxKind.ExpressionWithTypeArguments) {
-            throw new Error(`Hey + ${heritageExpression.kind}`);
+    function handleClassDeclaration(classDecl: ClassDeclaration): DiagnosticAndArguments | undefined {
+        const extendsHeritage = classDecl.heritageClauses?.find(p => p.token === SyntaxKind.ExtendsKeyword);
+        const heritageExpression = extendsHeritage?.types[0];
+        if (!heritageExpression) {
+            return undefined;
         }
-        const heritageTypeNode = typeToTypeNode(
-            typeChecker.getTypeAtLocation(heritageExpression.expression),
-            heritageExpression.expression,
-        );
+        // if (heritageExpression.kind !== SyntaxKind.ExpressionWithTypeArguments) {
+        //     throw new Error(`Hey + ${heritageExpression.kind}`);
+        // }
+        const heritageTypeNode = inferNodeType(heritageExpression.expression);
+        if (!heritageTypeNode) {
+            return undefined;
+        }
 
         const heritageVariableName = factory.createUniqueName(
             classDecl.name ? classDecl.name.text + "Base" : "Anonymous",
@@ -447,7 +459,7 @@ function withChanges<T>(
                 addObjectBindingPatterns(name, bindingElements, bindingElement);
             }
             else {
-                const typeNode = typeToTypeNode(typeChecker.getTypeAtLocation(name), name);
+                const typeNode = inferNodeType(name);
                 let variableInitializer = createChainedExpression(bindingElement, expressionToVar);
                 if (bindingElement.element!.initializer) {
                     const propertyName = bindingElement.element?.propertyName;
@@ -602,9 +614,80 @@ function withChanges<T>(
         }
     }
 
+    function createTypeOfFromEntityNameExpression(node: EntityNameExpression) {
+        // Convert EntityNameExpression to  EntityName ?
+        return factory.createTypeQueryNode(node as EntityName);
+    }
+    function typeFromObjectSpreadElements(node: ObjectLiteralExpression, name = "temp") {
+        const intersectionTypes: TypeNode[] = [];
+        const newSpreads: SpreadAssignment[] = [];
+        let currentVariableProperties: ObjectLiteralElementLike[] | undefined;
+        const statement = findAncestor(node, isStatement);
+        for (const prop of node.properties) {
+            if (isSpreadAssignment(prop)) {
+                finalizesVariablePart();
+                if (isEntityNameExpression(prop.expression)) {
+                    intersectionTypes.push(createTypeOfFromEntityNameExpression(prop.expression));
+                    newSpreads.push(prop);
+                }
+                else {
+                    makeVariable(prop.expression);
+                }
+            }
+            else {
+                (currentVariableProperties ??= []).push(prop);
+            }
+        }
+        if (newSpreads.length === 0) {
+            return undefined;
+        }
+        finalizesVariablePart();
+        changeTracker.replaceNode(sourceFile, node, factory.createObjectLiteralExpression(newSpreads, /*multiLine*/ true));
+        return factory.createIntersectionTypeNode(intersectionTypes);
+        function makeVariable(expression: Expression) {
+            const tempName = factory.createUniqueName(
+                name + "_Part" + (newSpreads.length + 1),
+                GeneratedIdentifierFlags.Optimistic,
+            );
+            const variableDefinition = factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList([
+                    factory.createVariableDeclaration(
+                        tempName,
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        expression,
+                    ),
+                ], NodeFlags.Const),
+            );
+            changeTracker.insertNodeBefore(sourceFile, statement!, variableDefinition);
+
+            intersectionTypes.push(createTypeOfFromEntityNameExpression(tempName));
+            newSpreads.push(factory.createSpreadAssignment(tempName));
+        }
+        function finalizesVariablePart() {
+            if (currentVariableProperties) {
+                makeVariable(factory.createObjectLiteralExpression(
+                    currentVariableProperties,
+                ));
+                currentVariableProperties = undefined;
+            }
+        }
+    }
     function relativeType(node: Node) {
         if (isEntityNameExpression(node)) {
-            return factory.createTypeQueryNode(node as EntityName);
+            return createTypeOfFromEntityNameExpression(node);
+        }
+        if (isObjectLiteralExpression(node)) {
+            const variableDecl = findAncestor(node, isVariableDeclaration);
+            const partName = variableDecl && isIdentifier(variableDecl.name) ? variableDecl.name.text : undefined;
+            return typeFromObjectSpreadElements(node, partName);
+        }
+        if (
+            isVariableDeclaration(node)
+            && node.initializer
+        ) {
+            return relativeType(node.initializer);
         }
 
         return undefined;
@@ -629,13 +712,10 @@ function withChanges<T>(
     function addTypeAnnotation(decl: ParameterDeclaration | VariableDeclaration | PropertyDeclaration): undefined | DiagnosticOrDiagnosticAndArguments {
         if (decl.type) return undefined;
 
-        const type = typeChecker.getTypeAtLocation(decl);
-        if (type) {
-            const typeNode = typeToTypeNode(type, decl);
-            if (typeNode) {
-                changeTracker.tryInsertTypeAnnotation(getSourceFileOfNode(decl), decl, typeNode);
-                return [Diagnostics.Add_annotation_of_type_0, printTypeNode(typeNode)];
-            }
+        const typeNode = inferNodeType(decl);
+        if (typeNode) {
+            changeTracker.tryInsertTypeAnnotation(getSourceFileOfNode(decl), decl, typeNode);
+            return [Diagnostics.Add_annotation_of_type_0, printTypeNode(typeNode)];
         }
     }
     function printTypeNode(node: TypeNode) {

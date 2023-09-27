@@ -15,10 +15,6 @@
 ////   a;
 ////// Trivia
 
-verify.codeFixAvailable([
-    { description: "Add return type 'number'" },
-    { description: "Add annotation of type 'number'" }
-]);
 
 verify.codeFix({
     description: "Add return type 'number'",

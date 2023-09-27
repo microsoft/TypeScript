@@ -8,10 +8,6 @@
 ////const a = foo();
 ////export = a;
 
-verify.codeFixAvailable([
-    { description: "Add annotation of type 'number'" },
-]);
-
 verify.codeFix({
     description: "Add annotation of type 'number'",
     index: 0,

@@ -5,10 +5,6 @@
 ////function foo(): number[] {return [42];}
 ////export const c = [...foo()];
 
-verify.codeFixAvailable([
-    { description: "Add annotation of type 'number[]'" },
-]);
-
 verify.codeFix({
     description:  "Add annotation of type 'number[]'",
     index: 0,

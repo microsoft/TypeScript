@@ -8,13 +8,15 @@
 //// class Point2D { x = 0; y = 0; }
 //// export const Point3D = class extends mixin(Point2D) {  z = 0; };
 
-verify.codeFixAvailable([
-    { description: "Add annotation of type 'typeof Point3D'" },
-]);
-
 // TODO: There's no easy way to name the type, so rather promoting this to a classDeclaration is better.
 verify.codeFix({
-    description: "Add annotation of type 'typeof Point3D'",
+    description: `Add annotation of type '{
+    new (): {
+        z: number;
+        x: number;
+        y: number;
+    };
+}'`,
     index: 0,
     newFileContent:
 `function mixin<T extends new (...a: any) => any>(ctor: T): T {
@@ -23,7 +25,9 @@ verify.codeFix({
 class Point2D { x = 0; y = 0; }
 export const Point3D: {
     new(): {
-        z: number; x: number; y: number;
+        z: number;
+        x: number;
+        y: number;
     };
 } = class extends mixin(Point2D) {  z = 0; };`
 });

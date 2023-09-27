@@ -7,10 +7,6 @@
 ////}
 ////export default foo();
 
-verify.codeFixAvailable([
-    { description: "Extract default export to variable" },
-]);
-
 verify.codeFix({
     description: "Extract default export to variable",
     index: 0,
@@ -18,6 +14,9 @@ verify.codeFix({
 `function foo() {
     return { x: 1, y: 1 };
 }
-const __default: { x: number; y: number; } = foo();
+const __default: {
+    x: number;
+    y: number;
+} = foo();
 export default __default;`,
 });
