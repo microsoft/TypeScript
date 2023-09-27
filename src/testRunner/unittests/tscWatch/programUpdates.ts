@@ -1875,6 +1875,32 @@ import { x } from "../b";`,
 
     verifyTscWatch({
         scenario,
+        subScenario: "updates emit on jsx option add",
+        commandLineArgs: ["-w"],
+        sys: () => {
+            const index: File = {
+                path: `/user/username/projects/myproject/index.tsx`,
+                content: `declare var React: any;\nconst d = <div />;`,
+            };
+            const configFile: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {},
+                }),
+            };
+            return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Update 'jsx' to 'preserve'",
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, '{ "compilerOptions": { "jsx": "preserve" } }'),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario,
         subScenario: "extended source files are watched",
         commandLineArgs: ["-w", "-p", configFilePath],
         sys: () => {
@@ -2131,6 +2157,46 @@ import { x } from "../b";`,
                             compilerOptions: {
                                 noEmit: true,
                                 allowImportingTsExtensions: true,
+                            },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "when changing checkJs of config file",
+        commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+        sys: () => {
+            const module1: File = {
+                path: `/user/username/projects/myproject/a.js`,
+                content: `export const aNumber: number = "string"`,
+            };
+            const module2: File = {
+                path: `/user/username/projects/myproject/b.ts`,
+                content: `import { aNumber } from "./a.js";`,
+            };
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        checkJs: false,
+                    },
+                }),
+            };
+            return createWatchedSystem([module1, module2, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Change checkJs to true",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        JSON.stringify({
+                            compilerOptions: {
+                                checkJs: true,
                             },
                         }),
                     ),

@@ -1,6 +1,5 @@
 import {
     BaseNodeFactory,
-    CheckMode,
     CreateSourceFileOptions,
     EmitHelperFactory,
     GetCanonicalFileName,
@@ -4277,11 +4276,6 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ classifiableNames?: ReadonlySet<__String>;
     // Comments containing @ts-* directives, in order.
     /** @internal */ commentDirectives?: CommentDirective[];
-    // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
-    // It is used to resolve module names in the checker.
-    // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-    /** @internal */ resolvedModules?: ModeAwareCache<ResolvedModuleWithFailedLookupLocations>;
-    /** @internal */ resolvedTypeReferenceDirectiveNames?: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     /** @internal */ imports: readonly StringLiteralLike[];
     // Identifier only if `declare global`
     /** @internal */ moduleAugmentations: readonly (StringLiteral | Identifier)[];
@@ -4297,6 +4291,8 @@ export interface SourceFile extends Declaration, LocalsContainer {
 
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
+
+    /** @internal */ jsDocParsingMode?: JSDocParsingMode;
 }
 
 /** @internal */
@@ -4650,6 +4646,25 @@ export interface Program extends ScriptReferenceHost {
     /** @internal */
     getFilesByNameMap(): Map<string, SourceFile | false | undefined>;
 
+    /** @internal */
+    resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
+    /** @internal */
+    resolvedTypeReferenceDirectiveNames: Map<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
+    /** @internal */
+    getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+    /** @internal */
+    getResolvedTypeReferenceDirective(f: SourceFile, typeDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+    /** @internal */
+    forEachResolvedModule(
+        callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file?: SourceFile,
+    ): void;
+    /** @internal */
+    forEachResolvedTypeReferenceDirective(
+        callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file?: SourceFile,
+    ): void;
+
     /**
      * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
      * the JavaScript and declaration files will be produced for all the files in this program.
@@ -4866,6 +4881,8 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 
+    getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+
     readonly redirectTargetsMap: RedirectTargetsMap;
 
     typesPackageExists(packageName: string): boolean;
@@ -4992,7 +5009,7 @@ export interface TypeChecker {
      */
     getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
     /** @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
-    /** @internal */ getResolvedSignatureForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node, candidatesOutArray: Signature[], checkMode?: CheckMode): Signature | undefined;
+    /** @internal */ getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node): Signature[];
     /** @internal */ getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
     /** @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
     /** @internal */ containsArgumentsReference(declaration: SignatureDeclaration): boolean;
@@ -6120,6 +6137,7 @@ export interface Type {
 // Intrinsic types (TypeFlags.Intrinsic)
 export interface IntrinsicType extends Type {
     intrinsicName: string; // Name of intrinsic type
+    debugIntrinsicName: string | undefined;
     objectFlags: ObjectFlags;
 }
 
@@ -6205,6 +6223,8 @@ export const enum ObjectFlags {
     RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
     /** @internal */
     PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
+    /** @internal */
+    InstantiatedMapped = Mapped | Instantiated,
     // Object flags that uniquely identify the kind of ObjectType
     /** @internal */
     ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
@@ -6674,7 +6694,6 @@ export interface Signature {
     declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
     typeParameters?: readonly TypeParameter[];   // Type parameters (undefined if non-generic)
     parameters: readonly Symbol[];               // Parameters
-    /** @internal */
     thisParameter?: Symbol;             // symbol of this-type parameter
     /** @internal */
     // See comment in `instantiateSignature` for why these are set lazily.
@@ -7345,6 +7364,7 @@ export interface CommandLineOptionBase {
     showInSimplifiedHelpView?: boolean;
     category?: DiagnosticMessage;
     strictFlag?: true;                                      // true if the option is one of the flag under strict
+    allowJsFlag?: true;
     affectsSourceFile?: true;                               // true if we should recreate SourceFiles after this option changes
     affectsModuleResolution?: true;                         // currently same effect as `affectsSourceFile`
     affectsBindDiagnostics?: true;                          // true if this affects binding (currently same effect as `affectsSourceFile`)
@@ -7779,6 +7799,8 @@ export interface CompilerHost extends ModuleResolutionHost {
     // For testing:
     /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
+
+    jsDocParsingMode?: JSDocParsingMode;
 }
 
 /** true if --out otherwise source file name *
@@ -9454,6 +9476,7 @@ export interface PrinterOptions {
     /** @internal */ sourceMap?: boolean;
     /** @internal */ inlineSourceMap?: boolean;
     /** @internal */ inlineSources?: boolean;
+    /** @internal*/ omitBraceSourceMapPositions?: boolean;
     /** @internal */ extendedDiagnostics?: boolean;
     /** @internal */ onlyPrintJsDocStyle?: boolean;
     /** @internal */ neverAsciiEscape?: boolean;
@@ -9845,6 +9868,34 @@ export const commentPragmas = {
         kind: PragmaKindFlags.MultiLine,
     },
 } as const;
+
+export const enum JSDocParsingMode {
+    /**
+     * Always parse JSDoc comments and include them in the AST.
+     *
+     * This is the default if no mode is provided.
+     */
+    ParseAll,
+    /**
+     * Never parse JSDoc comments, mo matter the file type.
+     */
+    ParseNone,
+    /**
+     * Parse only JSDoc comments which are needed to provide correct type errors.
+     *
+     * This will always parse JSDoc in non-TS files, but only parse JSDoc comments
+     * containing `@see` and `@link` in TS files.
+     */
+    ParseForTypeErrors,
+    /**
+     * Parse only JSDoc comments which are needed to provide correct type info.
+     *
+     * This will always parse JSDoc in non-TS files, but never in TS files.
+     *
+     * Note: Do not use this mode if you require accurate type errors; use {@link ParseForTypeErrors} instead.
+     */
+    ParseForTypeInfo,
+}
 
 /** @internal */
 export type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends { captureSpan: true; } ? { value: string; pos: number; end: number; } : string;

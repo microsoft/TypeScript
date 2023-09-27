@@ -9,12 +9,12 @@ class Test<S> {
     get value(): string {
         return null!;
     }
-    
+
     // -- Replacing the getter such that the getter/setter types match, removes the error:
     // get value(): string | ((item: S) => string) {
     //     return null!;
     // }
-    
+
     // -- Or, replacing the setter such that a concrete type is used, removes the error:
     // set value(value: string | ((item: { property: string }) => string)) {}
 }
@@ -24,6 +24,7 @@ const a = new Test<{
 }>();
 
 a.value = (item) => item.property
+a['value'] = (item) => item.property
 
 
 //// [divergentAccessorsTypes7.js]
@@ -42,3 +43,4 @@ var Test = /** @class */ (function () {
 }());
 var a = new Test();
 a.value = function (item) { return item.property; };
+a['value'] = function (item) { return item.property; };

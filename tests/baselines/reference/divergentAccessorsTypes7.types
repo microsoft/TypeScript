@@ -17,12 +17,12 @@ class Test<S> {
         return null!;
 >null! : null
     }
-    
+
     // -- Replacing the getter such that the getter/setter types match, removes the error:
     // get value(): string | ((item: S) => string) {
     //     return null!;
     // }
-    
+
     // -- Or, replacing the setter such that a concrete type is used, removes the error:
     // set value(value: string | ((item: { property: string }) => string)) {}
 }
@@ -42,6 +42,17 @@ a.value = (item) => item.property
 >a.value : string | ((item: { property: string; }) => string)
 >a : Test<{ property: string; }>
 >value : string | ((item: { property: string; }) => string)
+>(item) => item.property : (item: { property: string; }) => string
+>item : { property: string; }
+>item.property : string
+>item : { property: string; }
+>property : string
+
+a['value'] = (item) => item.property
+>a['value'] = (item) => item.property : (item: { property: string; }) => string
+>a['value'] : string | ((item: { property: string; }) => string)
+>a : Test<{ property: string; }>
+>'value' : "value"
 >(item) => item.property : (item: { property: string; }) => string
 >item : { property: string; }
 >item.property : string
