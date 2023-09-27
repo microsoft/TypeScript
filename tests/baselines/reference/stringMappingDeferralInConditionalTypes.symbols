@@ -45,3 +45,24 @@ let x4: D<"foo"> = 1; // ok
 >x4 : Symbol(x4, Decl(stringMappingDeferralInConditionalTypes.ts, 12, 3))
 >D : Symbol(D, Decl(stringMappingDeferralInConditionalTypes.ts, 9, 21))
 
+type E<S> = Lowercase<`f${S & string}` & `${S & string}f`>;
+>E : Symbol(E, Decl(stringMappingDeferralInConditionalTypes.ts, 12, 21))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 14, 7))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 14, 7))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 14, 7))
+
+type F = E<""> extends "f" ? 1 : 0; // 1
+>F : Symbol(F, Decl(stringMappingDeferralInConditionalTypes.ts, 14, 59))
+>E : Symbol(E, Decl(stringMappingDeferralInConditionalTypes.ts, 12, 21))
+
+type G<S> = E<S> extends "f" ? 1 : 0; 
+>G : Symbol(G, Decl(stringMappingDeferralInConditionalTypes.ts, 15, 35))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 16, 7))
+>E : Symbol(E, Decl(stringMappingDeferralInConditionalTypes.ts, 12, 21))
+>S : Symbol(S, Decl(stringMappingDeferralInConditionalTypes.ts, 16, 7))
+
+let x5: G<""> = 1; // ok
+>x5 : Symbol(x5, Decl(stringMappingDeferralInConditionalTypes.ts, 17, 3))
+>G : Symbol(G, Decl(stringMappingDeferralInConditionalTypes.ts, 15, 35))
+

@@ -14,3 +14,8 @@ let x3: C<"foo"> = 1; // ok
 
 type D<S extends string> = Capitalize<Lowercase<S>> extends "Foo" ? 1 : 0;
 let x4: D<"foo"> = 1; // ok
+
+type E<S> = Lowercase<`f${S & string}` & `${S & string}f`>;
+type F = E<""> extends "f" ? 1 : 0; // 1
+type G<S> = E<S> extends "f" ? 1 : 0; 
+let x5: G<""> = 1; // ok

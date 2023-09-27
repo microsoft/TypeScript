@@ -17906,16 +17906,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             accessNode;
     }
 
-    function isPatternLiteralPlaceholderType(type: Type): boolean {
+    function isPatternLiteralPlaceholderType(type: Type, ignoreGenericIntersections = false): boolean {
         if (type.flags & TypeFlags.Intersection) {
-            return some((type as IntersectionType).types, t => !!(t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) || isPatternLiteralPlaceholderType(t));
+            if (ignoreGenericIntersections && isGenericType(type)) {
+                return false;
+            }
+            return some((type as IntersectionType).types, t => !!(t.flags & (TypeFlags.Literal | TypeFlags.Nullable)) || isPatternLiteralPlaceholderType(t, ignoreGenericIntersections));
         }
-        return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type);
+        return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type, ignoreGenericIntersections);
     }
 
-    function isPatternLiteralType(type: Type) {
-        return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType) ||
-            !!(type.flags & TypeFlags.StringMapping) && everyContainedType((type as StringMappingType).type, isPatternLiteralPlaceholderType);
+    function isPatternLiteralType(type: Type, ignoreGenericIntersections = false) {
+        return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, t => isPatternLiteralPlaceholderType(t, ignoreGenericIntersections)) ||
+            !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type, ignoreGenericIntersections);
     }
 
     function isGenericType(type: Type): boolean {
@@ -17946,7 +17949,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
         }
         return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
-            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
+            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.StringMapping) && !isPatternLiteralType(type, /*ignoreGenericIntersections*/ true) ? ObjectFlags.IsGenericIndexType : 0);
     }
 
     function getSimplifiedType(type: Type, writing: boolean): Type {
