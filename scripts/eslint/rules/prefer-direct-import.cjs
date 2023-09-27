@@ -36,7 +36,9 @@ module.exports = createRule({
          * @param {string} p
          */
         function getImportPath(p) {
-            return path.relative(path.dirname(context.filename), path.join(srcRoot, p)).replace(/\\/g, "/");
+            let out = path.relative(path.dirname(context.filename), path.join(srcRoot, p)).replace(/\\/g, "/");
+            if (!out.startsWith(".")) out = "./" + out;
+            return out;
         }
 
         /** @type {any} */
