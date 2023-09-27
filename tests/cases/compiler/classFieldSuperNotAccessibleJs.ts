@@ -10,6 +10,11 @@
 class YaddaBase {
     constructor() {
         this.roots = "hi";
+        /** @type number */
+        this.justProp;
+        /** @type string */
+        this['literalElementAccess'];
+        
         this.b()
     }
     accessor b = () => {
@@ -23,5 +28,11 @@ class DerivedYadda extends YaddaBase {
     }
     get fooTests() {
         return super.foo;
+    }
+    get justPropTests() {
+        return super.justProp;
+    }
+    get literalElementAccessTests() {
+        return super.literalElementAccess;
     }
 }

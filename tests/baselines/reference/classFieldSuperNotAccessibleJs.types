@@ -14,6 +14,18 @@ class YaddaBase {
 >roots : any
 >"hi" : "hi"
 
+        /** @type number */
+        this.justProp;
+>this.justProp : number
+>this : this
+>justProp : number
+
+        /** @type string */
+        this['literalElementAccess'];
+>this['literalElementAccess'] : any
+>this : this
+>'literalElementAccess' : "literalElementAccess"
+        
         this.b()
 >this.b() : void
 >this.b : () => void
@@ -52,6 +64,22 @@ class DerivedYadda extends YaddaBase {
 >super.foo : number | undefined
 >super : YaddaBase
 >foo : number | undefined
+    }
+    get justPropTests() {
+>justPropTests : number
+
+        return super.justProp;
+>super.justProp : number
+>super : YaddaBase
+>justProp : number
+    }
+    get literalElementAccessTests() {
+>literalElementAccessTests : any
+
+        return super.literalElementAccess;
+>super.literalElementAccess : any
+>super : YaddaBase
+>literalElementAccess : any
     }
 }
 

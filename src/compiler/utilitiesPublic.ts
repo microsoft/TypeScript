@@ -111,6 +111,7 @@ import {
     isClassStaticBlockDeclaration,
     isDecorator,
     isElementAccessExpression,
+    isExpandoPropertyDeclaration,
     isExportAssignment,
     isExportDeclaration,
     isExportSpecifier,
@@ -1705,10 +1706,11 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
 }
 
 /** @internal */
-export function isClassFieldAndNotAutoAccessor(node: Node): boolean {
-    return node.parent && isClassLike(node.parent) && isPropertyDeclaration(node) && !hasAccessorModifier(node) ||
-        // handles inferred class fields in JS files
-        node.kind === SyntaxKind.BinaryExpression;
+export function isClassFieldAndNotAutoAccessor(node: Declaration): boolean {
+    if (isInJSFile(node) && isExpandoPropertyDeclaration(node)) {
+        return true;
+    }
+    return node.parent && isClassLike(node.parent) && isPropertyDeclaration(node) && !hasAccessorModifier(node);
 }
 
 /** @internal */
