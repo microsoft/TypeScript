@@ -7,15 +7,19 @@ import {
     CodeFixAllContext,
     CodeFixContext,
     createPrinterWithRemoveComments,
+    Debug,
     defaultMaximumTruncationLength,
     DiagnosticAndArguments,
     DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
     EmitHint,
+    EntityName,
     ExportAssignment,
     Expression,
     ExpressionWithTypeArguments,
     factory,
+    FileTextChanges,
+    findAncestor,
     GeneratedIdentifierFlags,
     getEmitScriptTarget,
     getSourceFileOfNode,
@@ -25,9 +29,14 @@ import {
     Identifier,
     isArrayBindingPattern,
     isComputedPropertyName,
+    isDeclaration,
+    isEntityNameExpression,
+    isExpression,
     isIdentifier,
     isObjectBindingPattern,
     isOmittedExpression,
+    isShorthandPropertyAssignment,
+    isValueSignatureDeclaration,
     isVariableDeclaration,
     ModifierFlags,
     Node,
@@ -41,11 +50,11 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
+    TextSpan,
     Type,
     TypeChecker,
     TypeNode,
     VariableDeclaration,
-    VariableDeclarationList,
     VariableStatement,
 } from "../_namespaces/ts";
 import {
@@ -53,13 +62,13 @@ import {
     createCombinedCodeActions,
     createImportAdder,
     eachDiagnostic,
-    ImportAdder,
     registerCodeFix,
     typeToAutoImportableTypeNode,
 } from "../_namespaces/ts.codefix";
 
 const fixId = "fixMissingTypeAnnotationOnExports";
-const fixName = "add-annotation";
+const addAnnotationFix = "add-annotation";
+const addInlineTypeAssertion = "add-type-assertion";
 const errorCodes = [
     Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,
     Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
@@ -92,60 +101,130 @@ registerCodeFix({
     errorCodes,
     fixIds: [fixId],
     getCodeActions(context) {
-        const { sourceFile, span } = context;
         const fixes: CodeFixAction[] = [];
-        const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
-        let fixerMessage: DiagnosticOrDiagnosticAndArguments | undefined;
-        const changes = textChanges.ChangeTracker.with(context, t => {
-            const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
-            fixerMessage = doChange(t, context, nodeWithDiag, importAdder);
-            importAdder.writeFixes(t);
-        });
-        if (fixerMessage) {
-            fixes.push(
-                createCodeFixAction(
-                    fixName,
-                    changes,
-                    fixerMessage,
-                    fixId,
-                    Diagnostics.Add_all_missing_tye_annotations,
-                ),
-            );
-        }
+
+        addCodeAction(addAnnotationFix, fixes, context, "full", f => f.addFullAnnotation(context.span));
+        addCodeAction(addAnnotationFix, fixes, context, "relative", f => f.addFullAnnotation(context.span));
+        addCodeAction(addInlineTypeAssertion, fixes, context, "full", f => f.addInlineAnnotation(context.span));
+        addCodeAction(addInlineTypeAssertion, fixes, context, "relative", f => f.addInlineAnnotation(context.span));
+
         return fixes;
     },
     getAllCodeActions: context => {
-        const changes = textChanges.ChangeTracker.with(context, t => {
-            const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
-            const fixedNodes = new Set<Node>();
+        const changes = withChanges(context, "full", f => {
             eachDiagnostic(context, errorCodes, diag => {
-                const nodeWithDiag = getTokenAtPosition(diag.file, diag.start);
-                doChange(t, context, nodeWithDiag, importAdder, fixedNodes);
+                f.addFullAnnotation(diag);
             });
-            importAdder.writeFixes(t);
         });
-        return createCombinedCodeActions(changes);
+        return createCombinedCodeActions(changes.textChanges);
     },
 });
+interface Fixer {
+    addFullAnnotation(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined;
+    addInlineAnnotation(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined;
+}
 
-function doChange(
-    changes: textChanges.ChangeTracker,
+function addCodeAction(
+    fixName: string,
+    fixes: CodeFixAction[],
     context: CodeFixContext | CodeFixAllContext,
-    nodeWithDiag: Node,
-    importAdder: ImportAdder,
-    fixedNodes?: Set<Node>,
-): DiagnosticOrDiagnosticAndArguments | undefined {
-    const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag);
+    typePrinter: "relative" | "full",
+    cb: (fixer: Fixer) => DiagnosticOrDiagnosticAndArguments | undefined,
+) {
+    const changes = withChanges(context, typePrinter, cb);
+    if (changes.result) {
+        fixes.push(
+            createCodeFixAction(
+                fixName,
+                changes.textChanges,
+                changes.result,
+                fixId,
+                Diagnostics.Add_all_missing_tye_annotations,
+            ),
+        );
+    }
+}
+function withChanges<T>(
+    context: CodeFixContext | CodeFixAllContext,
+    typePrinter: "relative" | "full",
+    cb: (fixer: Fixer) => T,
+): {
+    textChanges: FileTextChanges[];
+    result: T;
+} {
+    const changeTracker = textChanges.ChangeTracker.fromContext(context);
     const sourceFile: SourceFile = context.sourceFile;
     const program = context.program;
     const typeChecker: TypeChecker = program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
+    const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
+    const fixedNodes = new Set<Node>();
 
-    if (nodeWithNoType) {
-        return fixupForIsolatedDeclarations(nodeWithNoType);
+    const result = cb({ addFullAnnotation, addInlineAnnotation });
+    importAdder.writeFixes(changeTracker);
+    return {
+        result,
+        textChanges: changeTracker.getChanges(),
+    };
+
+    function addFullAnnotation(span: TextSpan) {
+        const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
+        const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag);
+        if (nodeWithNoType) {
+            return fixupForIsolatedDeclarations(nodeWithNoType);
+        }
+        return undefined;
     }
-    return undefined;
+    function addInlineAnnotation(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
+        const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
+        const targetNode = findTargetErrorNode(nodeWithDiag, span) as Expression;
+        if (!targetNode) return;
+        const isExpressionTarget = isExpression(targetNode);
+        const isShorthandPropertyAssignmentTarget = isIdentifier(targetNode) && isShorthandPropertyAssignment(targetNode.parent);
+        if (!(isExpressionTarget || isShorthandPropertyAssignment)) return undefined;
 
+        const typeNode = inferNodeType(targetNode);
+        if (!typeNode) return undefined;
+
+        let replacementNode: Node;
+        let replacementTarget: Node;
+        if (isShorthandPropertyAssignmentTarget) {
+            replacementTarget = targetNode.parent;
+            replacementNode = factory.createPropertyAssignment(
+                targetNode,
+                factory.createAsExpression(
+                    targetNode,
+                    typeNode,
+                ),
+            );
+        }
+        else if (isExpressionTarget) {
+            replacementTarget = targetNode;
+            replacementNode = factory.createAsExpression(
+                targetNode,
+                typeNode,
+            );
+        }
+        else {
+            Debug.assertNever(targetNode);
+        }
+        changeTracker.replaceNode(
+            sourceFile,
+            replacementTarget,
+            replacementNode,
+        );
+        return [Diagnostics.Add_inline_type_assertion_to_0, printTypeNode(typeNode)];
+    }
+
+    function findTargetErrorNode(node: Node, span: TextSpan) {
+        while (
+            node &&
+            node.end < span.start + span.length
+        ) {
+            node = node.parent;
+        }
+        return node;
+    }
     // Currently, the diagnostics for the error is not given in the exact node of which that needs type annotation.
     // If this is coming from an ill-formed AST with syntax errors, you cannot assume that it'll find a node
     // to annotate types, this will return undefined - meaning that it couldn't find the node to annotate types.
@@ -185,7 +264,7 @@ function doChange(
                 if (!defaultExport.isExportEquals) {
                     const type = typeChecker.getTypeAtLocation(defaultExport.expression);
                     const typeNode = typeToTypeNode(type, node);
-                    changes.replaceNodeWithNodes(sourceFile, node, [
+                    changeTracker.replaceNodeWithNodes(sourceFile, node, [
                         factory.createVariableStatement(
                             /*modifiers*/ undefined,
                             factory.createVariableDeclarationList(
@@ -207,7 +286,7 @@ function doChange(
                 break;
             // Handling expression like heritage clauses e.g. class A extends mixin(B) ..
             case SyntaxKind.ClassDeclaration:
-                return handleClassDeclaration(node as ClassDeclaration, nodeWithDiag.parent.parent as ExpressionWithTypeArguments);
+                return handleClassDeclaration(node as ClassDeclaration, node.parent.parent as ExpressionWithTypeArguments);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 return transformDestructuringPatterns(node as BindingPattern);
@@ -228,7 +307,7 @@ function doChange(
         const typeNode = typeToTypeNode(type, func);
         addTypesToParametersArray(func.parameters);
         if (typeNode) {
-            changes.tryInsertTypeAnnotation(
+            changeTracker.tryInsertTypeAnnotation(
                 sourceFile,
                 func,
                 typeNode,
@@ -264,10 +343,10 @@ function doChange(
             ),
         );
         // const touchingToken = getTouchingToken(heritageExpression);
-        changes.insertNodeBefore(sourceFile, classDecl, heritageVariable);
+        changeTracker.insertNodeBefore(sourceFile, classDecl, heritageVariable);
         const trailingComments = getTrailingCommentRanges(sourceFile.text, heritageExpression.end);
         const realEnd = trailingComments?.[trailingComments.length - 1]?.end ?? heritageExpression.end;
-        changes.replaceRange(
+        changeTracker.replaceRange(
             sourceFile,
             {
                 pos: heritageExpression.getFullStart(),
@@ -429,7 +508,7 @@ function doChange(
                 ),
             ));
         }
-        changes.replaceNodeWithNodes(sourceFile, enclosingVarStmt, newNodes);
+        changeTracker.replaceNodeWithNodes(sourceFile, enclosingVarStmt, newNodes);
         return [
             Diagnostics.Extract_binding_expressions_to_variable,
         ];
@@ -508,6 +587,29 @@ function doChange(
         return chainedExpression;
     }
 
+    function inferNodeType(node: Node) {
+        if (typePrinter === "full") {
+            const type = isValueSignatureDeclaration(node) ?
+                tryGetReturnType(node) :
+                typeChecker.getTypeAtLocation(node);
+            if (!type) {
+                return undefined;
+            }
+            return typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile);
+        }
+        else {
+            return relativeType(node);
+        }
+    }
+
+    function relativeType(node: Node) {
+        if (isEntityNameExpression(node)) {
+            return factory.createTypeQueryNode(node as EntityName);
+        }
+
+        return undefined;
+    }
+
     function typeToTypeNode(type: Type, enclosingDeclaration: Node) {
         return typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags);
     }
@@ -531,7 +633,7 @@ function doChange(
         if (type) {
             const typeNode = typeToTypeNode(type, decl);
             if (typeNode) {
-                changes.tryInsertTypeAnnotation(getSourceFileOfNode(decl), decl, typeNode);
+                changeTracker.tryInsertTypeAnnotation(getSourceFileOfNode(decl), decl, typeNode);
                 return [Diagnostics.Add_annotation_of_type_0, printTypeNode(typeNode)];
             }
         }

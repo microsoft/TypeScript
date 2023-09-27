@@ -7016,6 +7016,10 @@
         "category": "Message",
         "code": 90067
     },
+    "Add inline type assertion to '{0}'": {
+        "category": "Message",
+        "code": 90068
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
