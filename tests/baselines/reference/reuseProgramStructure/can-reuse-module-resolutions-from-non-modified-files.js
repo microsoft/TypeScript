@@ -3,43 +3,31 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 /// <reference path="a1.ts"/>
@@ -48,7 +36,7 @@ File: f1.ts
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -57,7 +45,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs1: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -75,7 +63,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -92,7 +80,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -141,43 +129,31 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 /// <reference path="a1.ts"/>
@@ -185,7 +161,7 @@ File: f1.ts
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -194,7 +170,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs1: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -212,7 +188,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -229,7 +205,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -268,50 +244,38 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 /// <reference path="a1.ts"/>
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -320,7 +284,6 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
 /// <reference path="a2.ts"/>
@@ -328,7 +291,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -345,7 +308,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -379,50 +342,38 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -431,7 +382,6 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
 /// <reference path="a2.ts"/>
@@ -439,7 +389,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -456,7 +406,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -490,49 +440,37 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 
 import { B } from './b1';
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -541,7 +479,6 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
 /// <reference path="a2.ts"/>
@@ -549,7 +486,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -566,7 +503,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -598,49 +535,37 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 
 import { B } from './b1';
 
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -649,7 +574,6 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
 /// <reference path="a2.ts"/>
@@ -657,7 +581,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -674,7 +598,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -709,50 +633,36 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 
 
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
 /// <reference path="a2.ts"/>
@@ -760,7 +670,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -777,7 +687,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,

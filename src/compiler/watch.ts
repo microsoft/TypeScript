@@ -443,7 +443,7 @@ export function getMatchedIncludeSpec(program: Program, fileName: string) {
 export function fileIncludeReasonToDiagnostics(program: Program, reason: FileIncludeReason, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain {
     const options = program.getCompilerOptions();
     if (isReferencedFile(reason)) {
-        const referenceLocation = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason);
+        const referenceLocation = getReferencedFileLocation(program, reason);
         const referenceText = isReferenceFileLocation(referenceLocation) ? referenceLocation.file.text.substring(referenceLocation.pos, referenceLocation.end) : `"${referenceLocation.text}"`;
         let message: DiagnosticMessage;
         Debug.assert(isReferenceFileLocation(referenceLocation) || reason.kind === FileIncludeKind.Import, "Only synthetic references are imports");
@@ -747,7 +747,6 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
             (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
             getCompilerOptions,
             /*setParentNodes*/ undefined,
-            host.skipNonSemanticJSDocParsing,
         ),
         getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
         getDefaultLibFileName: options => host.getDefaultLibFileName(options),
@@ -770,6 +769,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         createHash: maybeBind(host, host.createHash),
         readDirectory: maybeBind(host, host.readDirectory),
         storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
+        jsDocParsingMode: host.jsDocParsingMode,
     };
     return compilerHost;
 }

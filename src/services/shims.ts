@@ -36,6 +36,7 @@ import {
     HostCancellationToken,
     IScriptSnapshot,
     isString,
+    JSDocParsingMode,
     JsTyping,
     LanguageService,
     LanguageServiceHost,
@@ -159,6 +160,8 @@ export interface LanguageServiceShimHost extends Logger {
     getModuleResolutionsForFile?(fileName: string): string;
     getTypeReferenceDirectiveResolutionsForFile?(fileName: string): string;
     directoryExists(directoryName: string): boolean;
+
+    jsDocParsingMode?: JSDocParsingMode;
 }
 
 /**
@@ -437,6 +440,8 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
     public resolveTypeReferenceDirectives: ((typeDirectiveNames: string[] | readonly FileReference[], containingFile: string) => (ResolvedTypeReferenceDirective | undefined)[]) | undefined;
     public directoryExists: ((directoryName: string) => boolean) | undefined;
 
+    public jsDocParsingMode: JSDocParsingMode | undefined;
+
     constructor(private shimHost: LanguageServiceShimHost) {
         // if shimHost is a COM object then property check will become method call with no arguments.
         // 'in' does not have this effect.
@@ -457,6 +462,9 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
                 const typeDirectivesForFile = JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile!(containingFile)) as MapLike<ResolvedTypeReferenceDirective>; // TODO: GH#18217
                 return map(typeDirectiveNames as (string | FileReference)[], name => getProperty(typeDirectivesForFile, isString(name) ? name : toFileNameLowerCase(name.fileName)));
             };
+        }
+        if ("jsDocParsingMode" in this.shimHost) {
+            this.jsDocParsingMode = this.shimHost.jsDocParsingMode;
         }
     }
 

@@ -44,6 +44,8 @@ import {
     isIdentifier,
     isJSDoc,
     isJSDocParameterTag,
+    isJSDocPropertyLikeTag,
+    isJSDocTypeLiteral,
     isWhiteSpaceSingleLine,
     JSDoc,
     JSDocAugmentsTag,
@@ -250,6 +252,12 @@ export function getJsDocTagsFromDeclarations(declarations?: Declaration[], check
         }
         for (const tag of tags) {
             infos.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
+
+            if (isJSDocPropertyLikeTag(tag) && tag.isNameFirst && tag.typeExpression && isJSDocTypeLiteral(tag.typeExpression.type)) {
+                forEach(tag.typeExpression.type.jsDocPropertyTags, propTag => {
+                    infos.push({ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) });
+                });
+            }
         }
     });
     return infos;

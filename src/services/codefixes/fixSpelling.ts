@@ -7,7 +7,6 @@ import {
     getEmitScriptTarget,
     getMeaningFromLocation,
     getModeForUsageLocation,
-    getResolvedModule,
     getTextOfNode,
     getTokenAtPosition,
     hasSyntacticModifier,
@@ -184,7 +183,7 @@ function convertSemanticMeaningToSymbolFlags(meaning: SemanticMeaning): SymbolFl
 function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
     if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
-    const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text, getModeForUsageLocation(sourceFile, importDeclaration.moduleSpecifier));
+    const resolvedModule = context.program.getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text, getModeForUsageLocation(sourceFile, importDeclaration.moduleSpecifier))?.resolvedModule;
     if (!resolvedModule) return undefined;
 
     return context.program.getSourceFile(resolvedModule.resolvedFileName);

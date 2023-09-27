@@ -340,6 +340,7 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 7 >                         ^^^
 8 >                            ^^^
 9 >                               ^^
+10>                                 ^
 1 >
   >
   >    constructor(a = 100) {
@@ -354,6 +355,7 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 7 >                          < 
 8 >                            0.5
 9 >                               ) 
+10>                                 {
 1 >Emitted(35, 9) Source(22, 9) + SourceIndex(0)
 2 >Emitted(35, 13) Source(22, 13) + SourceIndex(0)
 3 >Emitted(35, 17) Source(22, 17) + SourceIndex(0)
@@ -363,12 +365,13 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 7 >Emitted(35, 29) Source(22, 29) + SourceIndex(0)
 8 >Emitted(35, 32) Source(22, 32) + SourceIndex(0)
 9 >Emitted(35, 34) Source(22, 34) + SourceIndex(0)
+10>Emitted(35, 35) Source(22, 35) + SourceIndex(0)
 ---
 >>>            "You win!";
 1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^
 3 >                      ^
-1 >{
+1 >
   >            
 2 >            "You win!"
 3 >                      
@@ -467,11 +470,14 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 2 >Emitted(41, 15) Source(28, 15) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^^
-2 >         ^^^^->
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^->
 1 >
-  >        }
-1 >Emitted(42, 10) Source(29, 10) + SourceIndex(0)
+  >        
+2 >        }
+1 >Emitted(42, 9) Source(29, 9) + SourceIndex(0)
+2 >Emitted(42, 10) Source(29, 10) + SourceIndex(0)
 ---
 >>>        else
 >>>            return null;

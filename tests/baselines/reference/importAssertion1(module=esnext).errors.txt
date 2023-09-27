@@ -1,5 +1,5 @@
-3.ts(8,11): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
-3.ts(9,11): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+3.ts(8,11): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+3.ts(9,11): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 
 
 ==== 0.ts (0 errors) ====
@@ -33,10 +33,10 @@
     const e = import('./0', foo())
     const f = import()
               ~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     const g = import('./0', {}, {})
               ~~~~~~~~~~~~~~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     const h = import('./0', { assert: { type: "json" }},)
     
     

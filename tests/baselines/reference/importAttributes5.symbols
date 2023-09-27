@@ -1,0 +1,6 @@
+//// [tests/cases/conformance/importAttributes/importAttributes5.ts] ////
+
+=== importAttributes5.ts ===
+import * as f from "./first" with {
+>f : Symbol(f, Decl(importAttributes5.ts, 0, 6))
+

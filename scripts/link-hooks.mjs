@@ -11,6 +11,7 @@ const __dirname = path.dirname(__filename);
 
 const hooks = [
     "post-checkout",
+    "pre-commit",
 ];
 
 hooks.forEach(hook => {

@@ -592,6 +592,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 },
             ],
             watchOrSolution: watch,
+            useSourceOfProjectReferenceRedirect: ts.returnTrue,
         });
     });
 

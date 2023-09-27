@@ -49,4 +49,16 @@
 ////trace(`${1}`);
 ////trace(``);
 
+////function func(
+////    param1: number,
+////    param2: string,
+////    param3: boolean,
+////) {}
+////const param1 = 1;
+////func(
+////    param1,
+////    'foo',
+////    true,
+////)
+
 verify.baselineInlayHints(undefined, { includeInlayParameterNameHints: "literals" });

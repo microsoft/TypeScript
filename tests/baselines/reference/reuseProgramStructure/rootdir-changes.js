@@ -3,15 +3,11 @@ File: c.ts
 
 
 var z = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts
 /// <reference path='c.ts'/>
 
 var y = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a.ts
 
@@ -21,8 +17,7 @@ File: a.ts
 
 
 var x = 1
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
     "node_modules/@types/typerefs/package.json",
@@ -51,15 +46,11 @@ File: c.ts
 
 
 var z = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts
 /// <reference path='c.ts'/>
 
 var y = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a.ts
 
@@ -69,8 +60,7 @@ File: a.ts
 
 
 var x = 1
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
     "node_modules/@types/typerefs/package.json",

@@ -3,7 +3,7 @@ File: /a.ts
 
 
 import * as a from "a";a;
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/a.ts",
@@ -12,7 +12,6 @@ a: {
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]
@@ -26,7 +25,7 @@ File: /a.ts
 'use strict';
 
 import * as a from "a";a;
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/a.ts",
@@ -35,7 +34,6 @@ a: {
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]

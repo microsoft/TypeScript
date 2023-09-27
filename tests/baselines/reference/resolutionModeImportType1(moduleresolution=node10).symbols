@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/moduleResolution/resolutionModeImportType1.ts] ////
+
+=== /node_modules/@types/foo/index.d.mts ===
+export declare const x: "module";
+>x : Symbol(x, Decl(index.d.mts, 0, 20))
+
+=== /node_modules/@types/foo/index.d.cts ===
+export declare const x: "script";
+>x : Symbol(x, Decl(index.d.cts, 0, 20))
+
+=== /app.ts ===
+type Default = typeof import("foo").x;
+>Default : Symbol(Default, Decl(app.ts, 0, 0))
+
+type Import = typeof import("foo", { assert: { "resolution-mode": "import" } }).x;
+>Import : Symbol(Import, Decl(app.ts, 0, 38))
+>x : Symbol(x, Decl(index.d.mts, 0, 20))
+
+type Require = typeof import("foo", { assert: { "resolution-mode": "require" } }).x;
+>Require : Symbol(Require, Decl(app.ts, 1, 82))
+>x : Symbol(x, Decl(index.d.cts, 0, 20))
+
+// resolution-mode does not enforce file extension in `bundler`, just sets conditions
+type ImportRelative = typeof import("./other", { assert: { "resolution-mode": "import" } }).x;
+>ImportRelative : Symbol(ImportRelative, Decl(app.ts, 2, 84))
+>x : Symbol(x, Decl(other.ts, 0, 12))
+
+type RequireRelative = typeof import("./other", { assert: { "resolution-mode": "require" } }).x;
+>RequireRelative : Symbol(RequireRelative, Decl(app.ts, 4, 94))
+>x : Symbol(x, Decl(other.ts, 0, 12))
+
+=== /other.ts ===
+export const x = "other";
+>x : Symbol(x, Decl(other.ts, 0, 12))
+

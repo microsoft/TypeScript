@@ -96,6 +96,8 @@ Program files::
 /user/username/projects/myproject/index.tsx
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/index.tsx
 
 No shapes updated in the builder::
 

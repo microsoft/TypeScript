@@ -620,13 +620,21 @@ interface ImportMeta {
  * augmented via interface merging.
  */
 interface ImportCallOptions {
-    assert?: ImportAssertions;
+    /** @deprecated*/ assert?: ImportAssertions;
+    with?: ImportAttributes;
 }
 
 /**
  * The type for the `assert` property of the optional second argument to `import()`.
  */
 interface ImportAssertions {
+    [key: string]: string;
+}
+
+/**
+ * The type for the `with` property of the optional second argument to `import()`.
+ */
+interface ImportAttributes {
     [key: string]: string;
 }
 

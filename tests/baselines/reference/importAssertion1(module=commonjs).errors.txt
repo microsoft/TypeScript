@@ -8,7 +8,7 @@
 3.ts(4,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.
 3.ts(5,26): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.
 3.ts(7,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.
-3.ts(8,11): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+3.ts(8,11): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 3.ts(9,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.
 3.ts(10,25): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.
 3.ts(10,52): error TS1009: Trailing comma not allowed.
@@ -65,7 +65,7 @@
 !!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.
     const f = import()
               ~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     const g = import('./0', {}, {})
                             ~~
 !!! error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.

@@ -49,7 +49,6 @@ import {
     getOutputExtension,
     getQuoteFromPreference,
     getQuotePreference,
-    getResolvedModule,
     getSourceFileOfNode,
     getSymbolId,
     getTokenAtPosition,
@@ -180,7 +179,7 @@ registerCodeFix({
                 symbolName,
                 fix,
                 /*includeSymbolNameInDescription*/ symbolName !== errorIdentifierText,
-                program.getCompilerOptions(),
+                program,
                 preferences,
             )
         );
@@ -527,7 +526,6 @@ export function getImportCompletionAction(
     preferences: UserPreferences,
     cancellationToken: CancellationToken,
 ): { readonly moduleSpecifier: string; readonly codeAction: CodeAction; } {
-    const compilerOptions = program.getCompilerOptions();
     let exportInfos;
 
     if (exportMapKey) {
@@ -555,7 +553,7 @@ export function getImportCompletionAction(
             symbolName,
             fix,
             /*includeSymbolNameInDescription*/ false,
-            compilerOptions,
+            program,
             preferences,
         )),
     };
@@ -567,7 +565,15 @@ export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbo
     const symbolName = single(getSymbolNamesToImport(sourceFile, program.getTypeChecker(), symbolToken, compilerOptions));
     const fix = getTypeOnlyPromotionFix(sourceFile, symbolToken, symbolName, program);
     const includeSymbolNameInDescription = symbolName !== symbolToken.text;
-    return fix && codeFixActionToCodeAction(codeActionForFix({ host, formatContext, preferences }, sourceFile, symbolName, fix, includeSymbolNameInDescription, compilerOptions, preferences));
+    return fix && codeFixActionToCodeAction(codeActionForFix(
+        { host, formatContext, preferences },
+        sourceFile,
+        symbolName,
+        fix,
+        includeSymbolNameInDescription,
+        program,
+        preferences,
+    ));
 }
 
 function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly SymbolExportInfo[], program: Program, position: number | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
@@ -1278,14 +1284,30 @@ function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: C
     return allowSyntheticDefaults ? ImportKind.Default : ImportKind.CommonJS;
 }
 
-function codeActionForFix(context: textChanges.TextChangesContext, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): CodeFixAction {
+function codeActionForFix(
+    context: textChanges.TextChangesContext,
+    sourceFile: SourceFile,
+    symbolName: string,
+    fix: ImportFix,
+    includeSymbolNameInDescription: boolean,
+    program: Program,
+    preferences: UserPreferences,
+): CodeFixAction {
     let diag!: DiagnosticOrDiagnosticAndArguments;
     const changes = textChanges.ChangeTracker.with(context, tracker => {
-        diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription, compilerOptions, preferences);
+        diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription, program, preferences);
     });
     return createCodeFixAction(importFixName, changes, diag, importFixId, Diagnostics.Add_all_missing_imports);
 }
-function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): DiagnosticOrDiagnosticAndArguments {
+function codeActionForFixWorker(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    symbolName: string,
+    fix: ImportFix,
+    includeSymbolNameInDescription: boolean,
+    program: Program,
+    preferences: UserPreferences,
+): DiagnosticOrDiagnosticAndArguments {
     const quotePreference = getQuotePreference(sourceFile, preferences);
     switch (fix.kind) {
         case ImportFixKind.UseNamespace:
@@ -1326,7 +1348,7 @@ function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: 
                     defaultImport,
                     namedImports,
                     namespaceLikeImport,
-                    compilerOptions,
+                    program.getCompilerOptions(),
                 ),
                 /*blankLineBetween*/ true,
                 preferences,
@@ -1340,7 +1362,7 @@ function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: 
         }
         case ImportFixKind.PromoteTypeOnly: {
             const { typeOnlyAliasDeclaration } = fix;
-            const promotedDeclaration = promoteFromTypeOnly(changes, typeOnlyAliasDeclaration, compilerOptions, sourceFile, preferences);
+            const promotedDeclaration = promoteFromTypeOnly(changes, typeOnlyAliasDeclaration, program, sourceFile, preferences);
             return promotedDeclaration.kind === SyntaxKind.ImportSpecifier
                 ? [Diagnostics.Remove_type_from_import_of_0_from_1, symbolName, getModuleSpecifierText(promotedDeclaration.parent.parent)]
                 : [Diagnostics.Remove_type_from_import_declaration_from_0, getModuleSpecifierText(promotedDeclaration)];
@@ -1356,7 +1378,14 @@ function getModuleSpecifierText(promotedDeclaration: ImportClause | ImportEquals
         : cast(promotedDeclaration.parent.moduleSpecifier, isStringLiteral).text;
 }
 
-function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaration: TypeOnlyAliasDeclaration, compilerOptions: CompilerOptions, sourceFile: SourceFile, preferences: UserPreferences) {
+function promoteFromTypeOnly(
+    changes: textChanges.ChangeTracker,
+    aliasDeclaration: TypeOnlyAliasDeclaration,
+    program: Program,
+    sourceFile: SourceFile,
+    preferences: UserPreferences,
+) {
+    const compilerOptions = program.getCompilerOptions();
     // See comment in `doAddExistingFix` on constant with the same name.
     const convertExistingToTypeOnly = importNameElisionDisabled(compilerOptions);
     switch (aliasDeclaration.kind) {
@@ -1364,15 +1393,16 @@ function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaratio
             if (aliasDeclaration.isTypeOnly) {
                 const sortKind = OrganizeImports.detectImportSpecifierSorting(aliasDeclaration.parent.elements, preferences);
                 if (aliasDeclaration.parent.elements.length > 1 && sortKind) {
-                    changes.delete(sourceFile, aliasDeclaration);
                     const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
                     const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
                     const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, comparer);
-                    changes.insertImportSpecifierAtIndex(sourceFile, newSpecifier, aliasDeclaration.parent, insertionIndex);
+                    if (aliasDeclaration.parent.elements.indexOf(aliasDeclaration) !== insertionIndex) {
+                        changes.delete(sourceFile, aliasDeclaration);
+                        changes.insertImportSpecifierAtIndex(sourceFile, newSpecifier, aliasDeclaration.parent, insertionIndex);
+                        return aliasDeclaration;
+                    }
                 }
-                else {
-                    changes.deleteRange(sourceFile, aliasDeclaration.getFirstToken()!);
-                }
+                changes.deleteRange(sourceFile, aliasDeclaration.getFirstToken()!);
                 return aliasDeclaration;
             }
             else {
@@ -1398,7 +1428,7 @@ function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaratio
         // Change .ts extension to .js if necessary
         if (!compilerOptions.allowImportingTsExtensions) {
             const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(importClause.parent);
-            const resolvedModule = moduleSpecifier && getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
+            const resolvedModule = moduleSpecifier && program.getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier))?.resolvedModule;
             if (resolvedModule?.resolvedUsingTsExtension) {
                 const changedExtension = changeAnyExtension(moduleSpecifier!.text, getOutputExtension(moduleSpecifier!.text, compilerOptions));
                 changes.replaceNode(sourceFile, moduleSpecifier!, factory.createStringLiteral(changedExtension));
@@ -1626,7 +1656,7 @@ function getNewImports(
                     factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name)),
                 ),
                 quotedModuleSpecifier,
-                /*assertClause*/ undefined,
+                /*attributes*/ undefined,
             );
         statements = combine(statements, declaration);
     }

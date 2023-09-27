@@ -6,7 +6,6 @@ import {
     ArrayBindingOrAssignmentElement,
     ArrayBindingOrAssignmentPattern,
     AssertionExpression,
-    AssertionKey,
     AssignmentDeclarationKind,
     AssignmentPattern,
     AutoAccessorPropertyDeclaration,
@@ -91,6 +90,7 @@ import {
     hasSyntacticModifier,
     HasType,
     Identifier,
+    ImportAttributeName,
     ImportClause,
     ImportEqualsDeclaration,
     ImportSpecifier,
@@ -404,7 +404,7 @@ export function createTextChangeRange(span: TextSpan, newLength: number): TextCh
     return { span, newLength };
 }
 
-export let unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0); // eslint-disable-line prefer-const
+export const unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
 
 /**
  * Called to merge all the changes that occurred across several versions of a script snapshot
@@ -1519,12 +1519,12 @@ export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnl
     return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
 }
 
-export function isAssertionKey(node: Node): node is AssertionKey {
-    return isStringLiteral(node) || isIdentifier(node);
-}
-
 export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
     return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
+}
+
+export function isImportAttributeName(node: Node): node is ImportAttributeName {
+    return isStringLiteral(node) || isIdentifier(node);
 }
 
 // Identifiers
@@ -1703,6 +1703,11 @@ export function isAccessor(node: Node): node is AccessorDeclaration {
 
 export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAccessorPropertyDeclaration {
     return isPropertyDeclaration(node) && hasAccessorModifier(node);
+}
+
+/** @internal */
+export function isClassFieldAndNotAutoAccessor(node: Node): boolean {
+    return node.parent && isClassLike(node.parent) && isPropertyDeclaration(node) && !hasAccessorModifier(node);
 }
 
 /** @internal */
@@ -1914,6 +1919,11 @@ export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAcc
     const kind = node.kind;
     return kind === SyntaxKind.PropertyAccessExpression
         || kind === SyntaxKind.QualifiedName;
+}
+
+/** @internal */
+export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | SignatureDeclaration {
+    return isCallLikeExpression(node) || isFunctionLike(node);
 }
 
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {

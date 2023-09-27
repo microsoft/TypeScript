@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/importAttributes/importAttributes8.ts] ////
+
+=== /a.ts ===
+export default {
+    a: "a",
+>a : Symbol(a, Decl(a.ts, 0, 16))
+
+    b: "b",
+>b : Symbol(b, Decl(a.ts, 1, 11))
+}
+
+=== /b.ts ===
+import a from "./a" with { a: "a", "b": "b" }; // ok
+>a : Symbol(a, Decl(b.ts, 0, 6))
+

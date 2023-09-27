@@ -67,6 +67,8 @@ import {
     HeritageClause,
     Identifier,
     IfStatement,
+    ImportAttribute,
+    ImportAttributes,
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -847,12 +849,22 @@ export function isImportTypeAssertionContainer(node: Node): node is ImportTypeAs
     return node.kind === SyntaxKind.ImportTypeAssertionContainer;
 }
 
+/** @deprecated */
 export function isAssertClause(node: Node): node is AssertClause {
     return node.kind === SyntaxKind.AssertClause;
 }
 
+/** @deprecated */
 export function isAssertEntry(node: Node): node is AssertEntry {
     return node.kind === SyntaxKind.AssertEntry;
+}
+
+export function isImportAttributes(node: Node): node is ImportAttributes {
+    return node.kind === SyntaxKind.ImportAttributes;
+}
+
+export function isImportAttribute(node: Node): node is ImportAttribute {
+    return node.kind === SyntaxKind.ImportAttribute;
 }
 
 export function isNamespaceImport(node: Node): node is NamespaceImport {

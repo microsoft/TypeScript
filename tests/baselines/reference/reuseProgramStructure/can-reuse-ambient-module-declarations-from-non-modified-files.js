@@ -3,7 +3,7 @@ File: /a/b/app.ts
 
 import * as fs from 'fs'
 
-resolvedModules: 
+resolvedModules:
 fs: {
   "failedLookupLocations": [
     "/a/b/fs.ts",
@@ -32,14 +32,11 @@ fs: {
     "/fs.jsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
 
 
 declare module 'fs' {}
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'fs' from '/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
@@ -80,7 +77,7 @@ File: /a/b/app.ts
 
 import * as fs from 'fs'
 var x = 1;
-resolvedModules: 
+resolvedModules:
 fs: {
   "failedLookupLocations": [
     "/a/b/fs.ts",
@@ -109,14 +106,11 @@ fs: {
     "/fs.jsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
 
 
 declare module 'fs' {}
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 Module 'fs' was resolved as ambient module declared in '/a/b/node.d.ts' since this file was not modified.
 
@@ -130,7 +124,7 @@ File: /a/b/app.ts
 
 import * as fs from 'fs'
 var y = 1;
-resolvedModules: 
+resolvedModules:
 fs: {
   "failedLookupLocations": [
     "/a/b/fs.ts",
@@ -159,14 +153,11 @@ fs: {
     "/fs.jsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
 
 
 declare var process: any
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'fs' from '/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.

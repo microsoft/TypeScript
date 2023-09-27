@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/parseImportAttributesError.ts] ////
+
+=== /index.ts ===
+export type LocalInterface =
+>LocalInterface : any
+
+    & import("pkg", { with: {1234, "resolution-mode": "require"} }).RequireInterface
+>1234, "resolution-mode" : "resolution-mode"
+>1234 : 1234
+>"resolution-mode" : "resolution-mode"
+>"require" : "require"
+>RequireInterface    & import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface : number
+>RequireInterface : any
+
+    & import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface;
+>import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface : any
+>import("pkg", { with: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
+>"pkg" : "pkg"
+>{ with: {1234, "resolution-mode": "import"} } : { with: { 1234: any; "resolution-mode": string; }; }
+>with : { 1234: any; "resolution-mode": string; }
+>{1234, "resolution-mode": "import"} : { 1234: any; "resolution-mode": string; }
+>1234 : any
+> : any
+>"resolution-mode" : string
+>"import" : "import"
+>ImportInterface : any
+
+export const a = (null as any as import("pkg", { with: {1234, "resolution-mode": "require"} }).RequireInterface);
+>a : any
+>(null as any as import("pkg", { with: { : any
+>null as any as import("pkg", { with: { : any
+>null as any : any
+>1234, "resolution-mode" : "resolution-mode"
+>1234 : 1234
+>"resolution-mode" : "resolution-mode"
+>"require" : "require"
+>RequireInterface : any
+
+export const b = (null as any as import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface);
+>b : any
+>(null as any as import("pkg", { with: { : any
+>null as any as import("pkg", { with: { : any
+>null as any : any
+>1234, "resolution-mode" : "resolution-mode"
+>1234 : 1234
+>"resolution-mode" : "resolution-mode"
+>"import" : "import"
+>ImportInterface : any
+
+=== /node_modules/pkg/import.d.ts ===
+
+export interface ImportInterface {}
+
+=== /node_modules/pkg/require.d.ts ===
+
+export interface RequireInterface {}
+

@@ -41,6 +41,7 @@ module.exports = createRule({
 
         /** @type {any} */
         let program;
+        let addedImport = false;
 
         return {
             Program: node => {
@@ -63,7 +64,13 @@ module.exports = createRule({
                                 const newCode = `import * as ${mod.name} from "${getImportPath(mod.path)}";`;
                                 const fixes = [];
                                 if (node.specifiers.length === 1) {
-                                    fixes.push(fixer.replaceText(node, newCode));
+                                    if (addedImport) {
+                                        fixes.push(fixer.remove(node));
+                                    }
+                                    else {
+                                        fixes.push(fixer.replaceText(node, newCode));
+                                        addedImport = true;
+                                    }
                                 }
                                 else {
                                     const comma = context.sourceCode.getTokenAfter(specifier, token => token.value === ",");
@@ -75,7 +82,10 @@ module.exports = createRule({
                                         fixer.remove(specifier),
                                         fixer.remove(comma),
                                     );
-                                    fixes.push(fixer.insertTextAfter(node, `\r\n${newCode}`));
+                                    if (!addedImport) {
+                                        fixes.push(fixer.insertTextBefore(node, newCode + "\r\n"));
+                                        addedImport = true;
+                                    }
                                 }
 
                                 return fixes;
@@ -95,10 +105,14 @@ module.exports = createRule({
                         data: { name: mod.name, path: mod.path },
                         node,
                         fix: fixer => {
-                            return [
-                                fixer.replaceText(node, mod.name),
-                                fixer.insertTextBefore(program, `import * as ${mod.name} from "${getImportPath(mod.path)}";\r\n`),
-                            ];
+                            const fixes = [fixer.replaceText(node, mod.name)];
+
+                            if (!addedImport) {
+                                fixes.push(fixer.insertTextBefore(program, `import * as ${mod.name} from "${getImportPath(mod.path)}";\r\n`));
+                                addedImport = true;
+                            }
+
+                            return fixes;
                         },
                     });
                 }

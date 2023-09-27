@@ -100,13 +100,13 @@ export const a = import("package/cjs");
 >"package/cjs" : "package/cjs"
 
 export const b = import("package/mjs");
->b : Promise<typeof import("index", { assert: { "resolution-mode": "import" } })>
->import("package/mjs") : Promise<typeof import("index", { assert: { "resolution-mode": "import" } })>
+>b : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
+>import("package/mjs") : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
 >"package/mjs" : "package/mjs"
 
 export const c = import("package");
->c : Promise<typeof import("index", { assert: { "resolution-mode": "import" } })>
->import("package") : Promise<typeof import("index", { assert: { "resolution-mode": "import" } })>
+>c : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
+>import("package") : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
 >"package" : "package"
 
 export const f = import("inner");
@@ -122,8 +122,8 @@ export const d = import("inner/cjs");
 >"inner/cjs" : "inner/cjs"
 
 export const e = import("inner/mjs");
->e : Promise<typeof import("node_modules/inner/index", { assert: { "resolution-mode": "import" } })>
->import("inner/mjs") : Promise<typeof import("node_modules/inner/index", { assert: { "resolution-mode": "import" } })>
+>e : Promise<typeof import("node_modules/inner/index", { with: { "resolution-mode": "import" } })>
+>import("inner/mjs") : Promise<typeof import("node_modules/inner/index", { with: { "resolution-mode": "import" } })>
 >"inner/mjs" : "inner/mjs"
 
 === node_modules/inner/index.d.ts ===

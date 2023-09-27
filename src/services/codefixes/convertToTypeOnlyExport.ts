@@ -68,14 +68,14 @@ function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSp
             /*isTypeOnly*/ false,
             factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
             exportDeclaration.moduleSpecifier,
-            /*assertClause*/ undefined,
+            /*attributes*/ undefined,
         );
         const typeExportDeclaration = factory.createExportDeclaration(
             /*modifiers*/ undefined,
             /*isTypeOnly*/ true,
             factory.createNamedExports(typeExportSpecifiers),
             exportDeclaration.moduleSpecifier,
-            /*assertClause*/ undefined,
+            /*attributes*/ undefined,
         );
 
         changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {

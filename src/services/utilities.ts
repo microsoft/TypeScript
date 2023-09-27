@@ -225,6 +225,7 @@ import {
     isRequireVariableStatement,
     isRightSideOfQualifiedNameOrPropertyAccess,
     isRootedDiskPath,
+    isSatisfiesExpression,
     isSetAccessorDeclaration,
     isSourceFile,
     isSourceFileJS,
@@ -2501,7 +2502,7 @@ export function makeImport(defaultImport: Identifier | undefined, namedImports: 
             ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
             : undefined,
         typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier,
-        /*assertClause*/ undefined,
+        /*attributes*/ undefined,
     );
 }
 
@@ -3356,7 +3357,7 @@ function indexInTextChange(change: string, name: string): number {
 export function needsParentheses(expression: Expression): boolean {
     return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken
         || isObjectLiteralExpression(expression)
-        || isAsExpression(expression) && isObjectLiteralExpression(expression.expression);
+        || (isAsExpression(expression) || isSatisfiesExpression(expression)) && isObjectLiteralExpression(expression.expression);
 }
 
 /** @internal */

@@ -1,0 +1,45 @@
+/app.ts(3,1): error TS2552: Cannot find name 'SCRIPT'. Did you mean 'WScript'?
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "noEmit": true,
+        "types": []
+      }
+    }
+    
+==== /app.ts (1 errors) ====
+    /// <reference types="foo" resolution-mode="import" />
+    MODULE; // ok
+    SCRIPT; // error
+    ~~~~~~
+!!! error TS2552: Cannot find name 'SCRIPT'. Did you mean 'WScript'?
+!!! related TS2728 lib.scripthost.d.ts:--:--: 'WScript' is declared here.
+    
+==== /node_modules/@types/foo/package.json (0 errors) ====
+    {
+      "name": "@types/foo",
+      "version": "1.0.0",
+      "exports": {
+        ".": {
+          "import": "./index.d.mts",
+          "require": "./index.d.cts"
+        }
+      }
+    }
+    
+==== /node_modules/@types/foo/index.d.mts (0 errors) ====
+    export {};
+    declare global {
+      const MODULE: any;
+    }
+    
+==== /node_modules/@types/foo/index.d.cts (0 errors) ====
+    export {};
+    declare global {
+      const SCRIPT: any;
+    }
+    

@@ -309,7 +309,7 @@ describe("unittests:: TransformAPI", () => {
                         const exports = [{ name: "x" }];
                         const exportSpecifiers = exports.map(e => ts.factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name));
                         const exportClause = ts.factory.createNamedExports(exportSpecifiers);
-                        const newEd = ts.factory.updateExportDeclaration(ed, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.assertClause);
+                        const newEd = ts.factory.updateExportDeclaration(ed, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.attributes);
 
                         return newEd as ts.Node as T;
                     }
@@ -347,7 +347,7 @@ describe("unittests:: TransformAPI", () => {
                         ts.factory.createNamespaceImport(ts.factory.createIdentifier("i0")),
                     ),
                     /*moduleSpecifier*/ ts.factory.createStringLiteral("./comp1"),
-                    /*assertClause*/ undefined,
+                    /*attributes*/ undefined,
                 );
                 return ts.factory.updateSourceFile(sf, [importStar]);
             }
