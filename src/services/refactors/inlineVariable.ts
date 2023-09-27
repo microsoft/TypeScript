@@ -1,7 +1,6 @@
 import {
     cast,
     Debug,
-    Diagnostics,
     emptyArray,
     Expression,
     factory,
@@ -42,6 +41,8 @@ import {
     RefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const refactorName = "Inline variable";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable);

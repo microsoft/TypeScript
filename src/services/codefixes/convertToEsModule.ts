@@ -12,7 +12,6 @@ import {
     createMultiMap,
     createRange,
     Debug,
-    Diagnostics,
     emptyMap,
     ExportDeclaration,
     ExportSpecifier,
@@ -81,6 +80,8 @@ import {
     moduleSpecifierToValidIdentifier,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 registerCodeFix({
     errorCodes: [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module.code],

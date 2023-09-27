@@ -63,7 +63,6 @@ import {
     Diagnostic,
     DiagnosticArguments,
     DiagnosticMessage,
-    Diagnostics,
     DiagnosticWithDetachedLocation,
     DoStatement,
     DotDotDotToken,
@@ -396,6 +395,8 @@ import {
     YieldExpression,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 const enum SignatureFlags {
     None = 0,

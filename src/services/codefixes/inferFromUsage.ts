@@ -11,7 +11,6 @@ import {
     Debug,
     Declaration,
     DiagnosticMessage,
-    Diagnostics,
     ElementAccessExpression,
     EmitFlags,
     emptyArray,
@@ -110,6 +109,8 @@ import {
     registerCodeFix,
     tryGetAutoImportableReferenceFromTypeNode,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "inferFromUsage";
 const errorCodes = [

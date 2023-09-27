@@ -1,6 +1,5 @@
 import {
     Debug,
-    Diagnostics,
     factory,
     findAncestor,
     getTokenAtPosition,
@@ -13,6 +12,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "addMissingInvocationForDecorator";
 const errorCodes = [Diagnostics._0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write_0.code];

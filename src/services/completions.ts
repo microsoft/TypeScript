@@ -46,7 +46,6 @@ import {
     Debug,
     Declaration,
     Decorator,
-    Diagnostics,
     diagnosticToString,
     displayPart,
     DotDotDotToken,
@@ -388,6 +387,8 @@ import {
 import {
     StringCompletions,
 } from "./_namespaces/ts.Completions";
+
+import * as Diagnostics from "../compiler/diagnosticInformationMap.generated";
 
 // Exported only for tests
 /** @internal */

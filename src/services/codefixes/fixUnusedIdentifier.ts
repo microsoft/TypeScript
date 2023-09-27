@@ -7,7 +7,6 @@ import {
     Debug,
     DiagnosticMessage,
     DiagnosticOrDiagnosticAndArguments,
-    Diagnostics,
     factory,
     FileTextChanges,
     FindAllReferences,
@@ -64,6 +63,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixName = "unusedIdentifier";
 const fixIdPrefix = "unusedIdentifier_prefix";

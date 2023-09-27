@@ -1,6 +1,5 @@
 import {
     Debug,
-    Diagnostics,
     EmitFlags,
     emptyArray,
     factory,
@@ -47,6 +46,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "annotateWithTypeFromJSDoc";
 const errorCodes = [Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types.code];

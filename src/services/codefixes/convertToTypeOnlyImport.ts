@@ -1,5 +1,4 @@
 import {
-    Diagnostics,
     factory,
     FindAllReferences,
     getSynthesizedDeepClone,
@@ -24,6 +23,8 @@ import {
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const errorCodes = [
     Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code,

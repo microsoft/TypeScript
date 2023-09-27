@@ -1,7 +1,6 @@
 import {
     CodeFixContextBase,
     Debug,
-    Diagnostics,
     factory,
     findAncestor,
     getEffectiveBaseTypeNode,
@@ -44,6 +43,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "fixSpelling";
 const errorCodes = [

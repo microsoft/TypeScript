@@ -25,7 +25,6 @@ import {
     Diagnostic,
     DiagnosticArguments,
     DiagnosticMessage,
-    Diagnostics,
     DidYouMeanOptionsDiagnostics,
     directorySeparator,
     emptyArray,
@@ -119,6 +118,8 @@ import {
     WatchFileKind,
     WatchOptions,
 } from "./_namespaces/ts";
+
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 /** @internal */
 export const compileOnSaveCommandLineOption: CommandLineOption = {

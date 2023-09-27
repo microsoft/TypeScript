@@ -1,7 +1,8 @@
+import * as ts from "../../_namespaces/ts";
+
 import {
     IncrementalVerifierCallbacks,
 } from "../../../harness/incrementalUtils";
-import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,

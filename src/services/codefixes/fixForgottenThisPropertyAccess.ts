@@ -1,5 +1,4 @@
 import {
-    Diagnostics,
     factory,
     getContainingClass,
     getTokenAtPosition,
@@ -16,6 +15,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "forgottenThisPropertyAccess";
 const didYouMeanStaticMemberCode = Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;

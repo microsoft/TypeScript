@@ -11,7 +11,6 @@ import {
     createTypeReferenceDirectiveResolutionCache,
     createTypeReferenceResolutionLoader,
     Debug,
-    Diagnostics,
     directorySeparator,
     DirectoryWatcherCallback,
     emptyArray,
@@ -78,6 +77,8 @@ import {
     updateResolutionField,
     WatchDirectoryFlags,
 } from "./_namespaces/ts";
+
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 /** @internal */
 export interface HasInvalidatedFromResolutionCache {

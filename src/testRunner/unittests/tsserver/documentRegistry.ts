@@ -1,7 +1,8 @@
+import * as ts from "../../_namespaces/ts";
+
 import {
     reportDocumentRegistryStats,
 } from "../../../harness/incrementalUtils";
-import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,

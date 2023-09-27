@@ -29,7 +29,6 @@ import {
     Diagnostic,
     DiagnosticMessage,
     DiagnosticReporter,
-    Diagnostics,
     DirectoryStructureHost,
     DirectoryWatcherCallback,
     EmitAndSemanticDiagnosticsBuilderProgram,
@@ -95,6 +94,8 @@ import {
     WatchTypeRegistry,
     WildcardDirectoryWatcher,
 } from "./_namespaces/ts";
+
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 export interface ReadBuildProgramHost {
     useCaseSensitiveFileNames(): boolean;

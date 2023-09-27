@@ -3,7 +3,6 @@ import {
     CancellationToken,
     ClassDeclaration,
     Debug,
-    Diagnostics,
     emptyArray,
     EnumDeclaration,
     ExportAssignment,
@@ -56,6 +55,8 @@ import {
     RefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const refactorName = "Convert export";
 

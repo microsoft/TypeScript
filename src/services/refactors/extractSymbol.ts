@@ -26,7 +26,6 @@ import {
     Diagnostic,
     DiagnosticCategory,
     DiagnosticMessage,
-    Diagnostics,
     EmitFlags,
     emptyArray,
     EntityName,
@@ -164,6 +163,8 @@ import {
     refactorKindBeginsWith,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const refactorName = "Extract Symbol";
 

@@ -1,5 +1,4 @@
 import {
-    Diagnostics,
     factory,
     flatMap,
     getNewLineOrDefaultFromHost,
@@ -29,6 +28,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "convertTypedefToType";
 const errorCodes = [Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type.code];

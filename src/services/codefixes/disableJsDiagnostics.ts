@@ -4,7 +4,6 @@ import {
     createTextSpan,
     createTextSpanFromBounds,
     DiagnosticCategory,
-    Diagnostics,
     getLineAndCharacterOfPosition,
     getNewLineOrDefaultFromHost,
     isCheckJsEnabledForFile,
@@ -21,6 +20,8 @@ import {
     createFileTextChanges,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixName = "disableJsDiagnostics";
 const fixId = "disableJsDiagnostics";

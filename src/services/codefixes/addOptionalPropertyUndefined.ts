@@ -1,5 +1,4 @@
 import {
-    Diagnostics,
     emptyArray,
     factory,
     getFixableErrorSpanExpression,
@@ -31,6 +30,8 @@ import {
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 

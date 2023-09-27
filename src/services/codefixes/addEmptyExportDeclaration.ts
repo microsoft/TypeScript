@@ -1,5 +1,4 @@
 import {
-    Diagnostics,
     factory,
     textChanges,
 } from "../_namespaces/ts";
@@ -7,6 +6,8 @@ import {
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 registerCodeFix({
     errorCodes: [

@@ -36,7 +36,6 @@ import {
     DiagnosticCollection,
     DiagnosticMessage,
     DiagnosticReporter,
-    Diagnostics,
     EmitAndSemanticDiagnosticsBuilderProgram,
     emitFilesAndReportErrors,
     EmitResult,
@@ -130,6 +129,8 @@ import {
     WriteFileCallback,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 const minimumDate = new Date(-8640000000000000);
 const maximumDate = new Date(8640000000000000);

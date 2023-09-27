@@ -1,7 +1,4 @@
 import {
-    getModuleSpecifier,
-} from "../../compiler/moduleSpecifiers";
-import {
     __String,
     AnyImportOrRequireStatement,
     append,
@@ -26,7 +23,6 @@ import {
     Debug,
     Declaration,
     DeclarationStatement,
-    Diagnostics,
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
@@ -144,6 +140,11 @@ import {
     VariableDeclarationList,
     VariableStatement,
 } from "../_namespaces/ts";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
+import {
+    getModuleSpecifier,
+} from "../../compiler/moduleSpecifiers";
 import {
     registerRefactor,
 } from "../refactorProvider";

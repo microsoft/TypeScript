@@ -13,7 +13,6 @@ import {
     concatenate,
     createPropertyNameNodeForIdentifierOrLiteral,
     Debug,
-    Diagnostics,
     emptyArray,
     EnumDeclaration,
     Expression,
@@ -125,6 +124,8 @@ import {
     ImportAdder,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixMissingMember = "fixMissingMember";
 const fixMissingProperties = "fixMissingProperties";

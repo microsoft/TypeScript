@@ -9,7 +9,6 @@ import {
     codefix,
     compilerOptionsIndicateEsModules,
     createDiagnosticForNode,
-    Diagnostics,
     DiagnosticWithLocation,
     Expression,
     ExpressionStatement,
@@ -59,6 +58,8 @@ import {
     TypeChecker,
     VariableStatement,
 } from "./_namespaces/ts";
+
+import * as Diagnostics from "../compiler/diagnosticInformationMap.generated";
 
 const visitedNestedConvertibleFunctions = new Map<string, true>();
 

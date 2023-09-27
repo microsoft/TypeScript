@@ -1,4 +1,3 @@
-import * as protocol from "../server/protocol";
 import * as ts from "./_namespaces/ts";
 import {
     ApplyCodeActionCommandResult,
@@ -75,6 +74,8 @@ import {
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
 } from "./_namespaces/ts.server";
+
+import * as protocol from "../server/protocol";
 
 interface LogOptions {
     file?: string;

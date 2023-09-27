@@ -1,5 +1,4 @@
 import {
-    Diagnostics,
     factory,
     textChanges,
     TsConfigSourceFile,
@@ -10,6 +9,8 @@ import {
     registerCodeFix,
     setJsonCompilerOptionValue,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixID = "fixEnableJsxFlag";
 const errorCodes = [Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided.code];

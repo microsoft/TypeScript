@@ -33,7 +33,6 @@ import {
     DeclarationDiagnosticProducing,
     DeclarationName,
     declarationNameToString,
-    Diagnostics,
     DiagnosticWithLocation,
     EmitFlags,
     EmitHost,
@@ -228,6 +227,8 @@ import {
     VisitResult,
 } from "../_namespaces/ts";
 import * as moduleSpecifiers from "../_namespaces/ts.moduleSpecifiers";
+
+import * as Diagnostics from "../diagnosticInformationMap.generated";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {

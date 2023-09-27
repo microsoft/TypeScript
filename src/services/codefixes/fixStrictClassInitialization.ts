@@ -4,7 +4,6 @@ import {
     CodeFixAction,
     CodeFixContext,
     Debug,
-    Diagnostics,
     Expression,
     factory,
     firstDefined,
@@ -33,6 +32,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixName = "strictClassInitialization";
 const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";

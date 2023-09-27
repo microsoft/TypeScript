@@ -14,7 +14,6 @@ import {
     copyComments,
     Debug,
     deduplicate,
-    Diagnostics,
     ElementAccessExpression,
     EmitFlags,
     emptyArray,
@@ -107,6 +106,8 @@ import {
 import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const refactorName = "Convert parameters to destructured object";
 const minimumParameterLength = 1;

@@ -1,6 +1,5 @@
 import {
     cast,
-    Diagnostics,
     factory,
     getTokenAtPosition,
     isCallExpression,
@@ -15,6 +14,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "addMissingNewOperator";
 const errorCodes = [Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new.code];

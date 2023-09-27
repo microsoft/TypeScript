@@ -3,7 +3,6 @@ import {
     cast,
     ClassElement,
     ClassLikeDeclaration,
-    Diagnostics,
     first,
     getEffectiveBaseTypeNode,
     getNodeId,
@@ -24,6 +23,8 @@ import {
     registerCodeFix,
     TypeConstructionContext,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const errorCodes = [
     Diagnostics.Non_abstract_class_0_does_not_implement_all_abstract_members_of_1.code,

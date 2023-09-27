@@ -1,7 +1,6 @@
 import {
     ConstructorDeclaration,
     Debug,
-    Diagnostics,
     emptyArray,
     factory,
     getTokenAtPosition,
@@ -14,6 +13,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "constructorForDerivedNeedSuperCall";
 const errorCodes = [Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call.code];

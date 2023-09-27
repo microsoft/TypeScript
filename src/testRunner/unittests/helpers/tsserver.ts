@@ -1,11 +1,12 @@
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
     ActionWatchTypingLocations,
 } from "../../_namespaces/ts.server";
+
+import {
+    incrementalVerifier,
+} from "../../../harness/incrementalUtils";
 import {
     ensureErrorFreeBuild,
 } from "./solutionBuilder";
