@@ -41388,7 +41388,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     error(declaration, Diagnostics.Variable_0_is_used_before_being_assigned, idText(declaration.name as Identifier));
                 }
             }
-        })
+        });
     }
 
     function checkPotentialUncheckedRenamedBindingElementsInTypes() {
@@ -45992,11 +45992,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // This relies on the results of other lazy diagnostics, so must be computed after them
                 const checkUnused = !node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters);
                 if (checkUnused || strictNullChecks) {
-                    checkUnusedOrUninitializedIdentifiers(getPotentiallyUnusedOrUninitializedIdentifiers(node), (containingNode, kind, diag) => {
-                        if (!containsParseError(containingNode) && unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
-                            diagnostics.add(diag);
-                        }
-                    }, checkUnused, strictNullChecks);
+                    checkUnusedOrUninitializedIdentifiers(
+                        getPotentiallyUnusedOrUninitializedIdentifiers(node),
+                        (containingNode, kind, diag) => {
+                            if (!containsParseError(containingNode) && unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
+                                diagnostics.add(diag);
+                            }
+                        },
+                        checkUnused,
+                        strictNullChecks,
+                    );
                 }
                 if (!node.isDeclarationFile) {
                     checkPotentialUncheckedRenamedBindingElementsInTypes();
