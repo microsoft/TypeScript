@@ -188,7 +188,7 @@ function f2<T, NonNull extends {}>() {
 function f3() {
 >f3 : Symbol(f3, Decl(unusedLocalsInMethod4.ts, 45, 1))
 
-    let x: number[];
+    let x: number[];    // should error
 >x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 48, 7))
 
     function foo() {
@@ -206,7 +206,7 @@ function f3() {
 function f4() {
 >f4 : Symbol(f4, Decl(unusedLocalsInMethod4.ts, 53, 1))
 
-    let x: number;
+    let x: number;  // should error
 >x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 56, 7))
 
     return {
@@ -221,7 +221,7 @@ function f4() {
     };
 }
 
-declare let x: number;
+declare let x: number;  // should error
 >x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 64, 11))
 
 function f5() {

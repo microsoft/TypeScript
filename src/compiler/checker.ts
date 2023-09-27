@@ -41191,7 +41191,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
-                    if (checkUninitialized) {
+                    if (checkUnused) {
                         checkUnusedClassMembers(node, addDiagnostic);
                         checkUnusedTypeParameters(node, addDiagnostic);
                     }

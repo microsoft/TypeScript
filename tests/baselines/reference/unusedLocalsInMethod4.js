@@ -49,7 +49,7 @@ function f2<T, NonNull extends {}>() {
 }
 
 function f3() {
-    let x: number[];
+    let x: number[];    // should error
     function foo() {
         x.toString();
     }
@@ -57,7 +57,7 @@ function f3() {
 }
 
 function f4() {
-    let x: number;
+    let x: number;  // should error
     return {
         foo() {
             return x.toString();
@@ -65,7 +65,7 @@ function f4() {
     };
 }
 
-declare let x: number;
+declare let x: number;  // should error
 function f5() {
     x.toString();
 }
@@ -120,14 +120,14 @@ function f2() {
     console.log(x9);
 }
 function f3() {
-    var x;
+    var x; // should error
     function foo() {
         x.toString();
     }
     foo();
 }
 function f4() {
-    var x;
+    var x; // should error
     return {
         foo: function () {
             return x.toString();

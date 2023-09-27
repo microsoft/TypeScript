@@ -87,7 +87,7 @@ unusedLocalsInMethod4.ts(57,9): error TS2454: Variable 'x' is used before being 
     }
     
     function f3() {
-        let x: number[];
+        let x: number[];    // should error
             ~
 !!! error TS2454: Variable 'x' is used before being assigned.
         function foo() {
@@ -97,7 +97,7 @@ unusedLocalsInMethod4.ts(57,9): error TS2454: Variable 'x' is used before being 
     }
     
     function f4() {
-        let x: number;
+        let x: number;  // should error
             ~
 !!! error TS2454: Variable 'x' is used before being assigned.
         return {
@@ -107,7 +107,7 @@ unusedLocalsInMethod4.ts(57,9): error TS2454: Variable 'x' is used before being 
         };
     }
     
-    declare let x: number;
+    declare let x: number;  // should error
     function f5() {
         x.toString();
     }

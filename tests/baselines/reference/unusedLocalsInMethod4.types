@@ -199,7 +199,7 @@ function f2<T, NonNull extends {}>() {
 function f3() {
 >f3 : () => void
 
-    let x: number[];
+    let x: number[];    // should error
 >x : number[]
 
     function foo() {
@@ -219,7 +219,7 @@ function f3() {
 function f4() {
 >f4 : () => { foo(): string; }
 
-    let x: number;
+    let x: number;  // should error
 >x : number
 
     return {
@@ -237,7 +237,7 @@ function f4() {
     };
 }
 
-declare let x: number;
+declare let x: number;  // should error
 >x : number
 
 function f5() {
