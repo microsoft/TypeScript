@@ -11,3 +11,43 @@ type B = [42][never]
 type C = Array<42>[never]
 >C : never
 
+
+// -----------------------------------------------------------------
+
+type Indexes<T extends readonly any[]> = keyof T & `${number}`
+>Indexes : Indexes<T>
+
+declare namespace IfNoDuplicateElements {
+    export type Duplicate = "Duplicate"
+>Duplicate : "Duplicate"
+
+    export type NotDuplicate = "NotDuplicate"
+>NotDuplicate : "NotDuplicate"
+
+    export type HasDuplicates<T extends readonly any[]> = {
+>HasDuplicates : HasDuplicates<T>
+
+         [K in Indexes<T>]: T[K] extends T[Exclude<Indexes<T>, K>] ? Duplicate : NotDuplicate
+    }[Indexes<T>]
+}
+
+export type IfNoDuplicateElements<
+>IfNoDuplicateElements : IfNoDuplicateElements<T, True, False>
+
+    T extends readonly any[],
+    True = T,
+    False = never
+> = IfNoDuplicateElements.Duplicate extends IfNoDuplicateElements.HasDuplicates<T> ? False : True
+>IfNoDuplicateElements : any
+>IfNoDuplicateElements : any
+
+type T0 = IfNoDuplicateElements<[1], true, false>
+>T0 : true
+>true : true
+>false : false
+
+type T1 = IfNoDuplicateElements<[1,1], true, false>
+>T1 : false
+>true : true
+>false : false
+

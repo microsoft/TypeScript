@@ -12,3 +12,73 @@ type C = Array<42>[never]
 >C : Symbol(C, Decl(indexIntoArrayTupleObjectWithNever.ts, 2, 20))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
+
+// -----------------------------------------------------------------
+
+type Indexes<T extends readonly any[]> = keyof T & `${number}`
+>Indexes : Symbol(Indexes, Decl(indexIntoArrayTupleObjectWithNever.ts, 4, 25))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 9, 13))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 9, 13))
+
+declare namespace IfNoDuplicateElements {
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 9, 62), Decl(indexIntoArrayTupleObjectWithNever.ts, 17, 1))
+
+    export type Duplicate = "Duplicate"
+>Duplicate : Symbol(Duplicate, Decl(indexIntoArrayTupleObjectWithNever.ts, 11, 41))
+
+    export type NotDuplicate = "NotDuplicate"
+>NotDuplicate : Symbol(NotDuplicate, Decl(indexIntoArrayTupleObjectWithNever.ts, 12, 39))
+
+    export type HasDuplicates<T extends readonly any[]> = {
+>HasDuplicates : Symbol(HasDuplicates, Decl(indexIntoArrayTupleObjectWithNever.ts, 13, 45))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 14, 30))
+
+         [K in Indexes<T>]: T[K] extends T[Exclude<Indexes<T>, K>] ? Duplicate : NotDuplicate
+>K : Symbol(K, Decl(indexIntoArrayTupleObjectWithNever.ts, 15, 10))
+>Indexes : Symbol(Indexes, Decl(indexIntoArrayTupleObjectWithNever.ts, 4, 25))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 14, 30))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 14, 30))
+>K : Symbol(K, Decl(indexIntoArrayTupleObjectWithNever.ts, 15, 10))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 14, 30))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Indexes : Symbol(Indexes, Decl(indexIntoArrayTupleObjectWithNever.ts, 4, 25))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 14, 30))
+>K : Symbol(K, Decl(indexIntoArrayTupleObjectWithNever.ts, 15, 10))
+>Duplicate : Symbol(Duplicate, Decl(indexIntoArrayTupleObjectWithNever.ts, 11, 41))
+>NotDuplicate : Symbol(NotDuplicate, Decl(indexIntoArrayTupleObjectWithNever.ts, 12, 39))
+
+    }[Indexes<T>]
+>Indexes : Symbol(Indexes, Decl(indexIntoArrayTupleObjectWithNever.ts, 4, 25))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 14, 30))
+}
+
+export type IfNoDuplicateElements<
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 17, 1))
+
+    T extends readonly any[],
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 19, 34))
+
+    True = T,
+>True : Symbol(True, Decl(indexIntoArrayTupleObjectWithNever.ts, 20, 29))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 19, 34))
+
+    False = never
+>False : Symbol(False, Decl(indexIntoArrayTupleObjectWithNever.ts, 21, 13))
+
+> = IfNoDuplicateElements.Duplicate extends IfNoDuplicateElements.HasDuplicates<T> ? False : True
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 9, 62), Decl(indexIntoArrayTupleObjectWithNever.ts, 17, 1))
+>Duplicate : Symbol(IfNoDuplicateElements.Duplicate, Decl(indexIntoArrayTupleObjectWithNever.ts, 11, 41))
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 9, 62), Decl(indexIntoArrayTupleObjectWithNever.ts, 17, 1))
+>HasDuplicates : Symbol(IfNoDuplicateElements.HasDuplicates, Decl(indexIntoArrayTupleObjectWithNever.ts, 13, 45))
+>T : Symbol(T, Decl(indexIntoArrayTupleObjectWithNever.ts, 19, 34))
+>False : Symbol(False, Decl(indexIntoArrayTupleObjectWithNever.ts, 21, 13))
+>True : Symbol(True, Decl(indexIntoArrayTupleObjectWithNever.ts, 20, 29))
+
+type T0 = IfNoDuplicateElements<[1], true, false>
+>T0 : Symbol(T0, Decl(indexIntoArrayTupleObjectWithNever.ts, 23, 97))
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 17, 1))
+
+type T1 = IfNoDuplicateElements<[1,1], true, false>
+>T1 : Symbol(T1, Decl(indexIntoArrayTupleObjectWithNever.ts, 25, 49))
+>IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 17, 1))
+
