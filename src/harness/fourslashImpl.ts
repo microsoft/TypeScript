@@ -2427,7 +2427,7 @@ export class TestState {
             baselineFile,
             annotations + "\n\n" + stringify(result, (key, value) => {
                 return key === "exportMapKey"
-                    ? value.replace(/\|[0-9]+/g, "|*")
+                    ? value.replace(/ \d+ /g, " * ")
                     : value;
             }),
         );
@@ -2763,6 +2763,7 @@ export class TestState {
                 this.languageService.getProgram()?.getCompilerOptions() || {},
             ),
             setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
+            jsDocParsingMode: this.languageServiceAdapterHost.jsDocParsingMode,
         };
         const referenceSourceFile = ts.createLanguageServiceSourceFile(
             this.activeFile.fileName,
@@ -3765,8 +3766,9 @@ export class TestState {
     }
 
     public verifyNavigateTo(options: readonly FourSlashInterface.VerifyNavigateToOptions[]): void {
-        for (const { pattern, expected, fileName } of options) {
-            const items = this.languageService.getNavigateToItems(pattern, /*maxResultCount*/ undefined, fileName);
+        for (const { pattern, expected, fileName, excludeLibFiles } of options) {
+            const file = fileName && this.findFile(fileName).fileName;
+            const items = this.languageService.getNavigateToItems(pattern, /*maxResultCount*/ undefined, file, /*excludeDtsFiles*/ undefined, excludeLibFiles);
             this.assertObjectsEqual(
                 items,
                 expected.map((e): ts.NavigateToItem => ({

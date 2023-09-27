@@ -1188,3 +1188,78 @@ bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} 
 >event : CloseEvent
 >reason : string
 
+// Destructuring tuple types with different arities
+
+function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
+>fz1 : ([x, y]: [1, 2] | [3, 4] | [5]) => void
+>x : 1 | 3 | 5
+>y : 2 | 4 | undefined
+
+    if (y === 2) {
+>y === 2 : boolean
+>y : 2 | 4 | undefined
+>2 : 2
+
+        x;  // 1
+>x : 1
+    }
+    if (y === 4) {
+>y === 4 : boolean
+>y : 2 | 4 | undefined
+>4 : 4
+
+        x;  // 3
+>x : 3
+    }
+    if (y === undefined) {
+>y === undefined : boolean
+>y : 2 | 4 | undefined
+>undefined : undefined
+
+        x;  // 5
+>x : 5
+    }
+    if (x === 1) {
+>x === 1 : boolean
+>x : 1 | 3 | 5
+>1 : 1
+
+        y;  // 2
+>y : 2
+    }
+    if (x === 3) {
+>x === 3 : boolean
+>x : 1 | 3 | 5
+>3 : 3
+
+        y;  // 4
+>y : 4
+    }
+    if (x === 5) {
+>x === 5 : boolean
+>x : 1 | 3 | 5
+>5 : 5
+
+        y;  // undefined
+>y : undefined
+    }
+}
+
+// Repro from #55661
+
+function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
+>tooNarrow : ([x, y]: [1, 1] | [1, 2] | [1]) => void
+>x : 1
+>y : 2 | 1 | undefined
+
+    if (y === undefined) {
+>y === undefined : boolean
+>y : 2 | 1 | undefined
+>undefined : undefined
+
+        const shouldNotBeOk: never = x;  // Error
+>shouldNotBeOk : never
+>x : 1
+    }
+}
+

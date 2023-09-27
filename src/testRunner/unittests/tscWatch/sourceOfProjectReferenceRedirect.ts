@@ -50,6 +50,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             oldSnap,
             getPrograms,
             watchOrSolution: watch,
+            useSourceOfProjectReferenceRedirect: ts.returnTrue,
         });
     }
 
