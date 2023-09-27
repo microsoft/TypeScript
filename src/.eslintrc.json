@@ -48,7 +48,7 @@
         {
             "files": ["harness/**", "testRunner/**"],
             "rules": {
-                "local/no-ts-debug": "off"
+                "local/prefer-direct-import": "off"
             }
         }
     ]
