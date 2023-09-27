@@ -479,7 +479,7 @@ function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: 
                 /*modifiers*/ undefined,
                 factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(newNamespaceId)),
                 newModuleString,
-                /*assertClause*/ undefined,
+                /*attributes*/ undefined,
             );
         case SyntaxKind.ImportEqualsDeclaration:
             return factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, newNamespaceId, factory.createExternalModuleReference(newModuleString));
@@ -772,7 +772,7 @@ export function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralL
             const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
             const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
             return defaultImport || namedBindings
-                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings), getSynthesizedDeepClone(moduleSpecifier), /*assertClause*/ undefined)
+                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings), getSynthesizedDeepClone(moduleSpecifier), /*attributes*/ undefined)
                 : undefined;
         }
         case SyntaxKind.ImportEqualsDeclaration:
@@ -1198,7 +1198,7 @@ function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program:
                 }
 
                 if (length(updatedElements) < length(elements)) {
-                    changes.replaceNode(targetFile, exportDeclaration, factory.updateExportDeclaration(exportDeclaration, exportDeclaration.modifiers, exportDeclaration.isTypeOnly, factory.updateNamedExports(exportDeclaration.exportClause, factory.createNodeArray(updatedElements, elements.hasTrailingComma)), exportDeclaration.moduleSpecifier, exportDeclaration.assertClause));
+                    changes.replaceNode(targetFile, exportDeclaration, factory.updateExportDeclaration(exportDeclaration, exportDeclaration.modifiers, exportDeclaration.isTypeOnly, factory.updateNamedExports(exportDeclaration.exportClause, factory.createNodeArray(updatedElements, elements.hasTrailingComma)), exportDeclaration.moduleSpecifier, exportDeclaration.attributes));
                 }
             }
         }

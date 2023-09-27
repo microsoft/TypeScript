@@ -194,6 +194,7 @@ import {
     getPathComponents,
     getPathFromPathComponents,
     getRelativePathToDirectoryOrUrl,
+    getResolutionModeOverride,
     getRootLength,
     getSnippetElement,
     getStringComparer,
@@ -554,7 +555,6 @@ import {
     VariableDeclarationList,
     VariableLikeDeclaration,
     VariableStatement,
-    version,
     WhileStatement,
     WithStatement,
     WrappedExpression,
@@ -5979,11 +5979,6 @@ export function getIndentSize() {
 }
 
 /** @internal */
-export function isNightly() {
-    return version.includes("-dev") || version.includes("-insiders");
-}
-
-/** @internal */
 export function createTextWriter(newLine: string): EmitTextWriter {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
@@ -8814,9 +8809,15 @@ export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
 
 /** @internal */
 export interface SymlinkedDirectory {
-    /** Matches the casing returned by `realpath`.  Used to compute the `realpath` of children. */
+    /**
+     * Matches the casing returned by `realpath`.  Used to compute the `realpath` of children.
+     * Always has trailing directory separator
+     */
     real: string;
-    /** toPath(real).  Stored to avoid repeated recomputation. */
+    /**
+     * toPath(real).  Stored to avoid repeated recomputation.
+     * Always has trailing directory separator
+     */
     realPath: Path;
 }
 
@@ -8871,7 +8872,7 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             if (!containsIgnoredPath(symlinkPath)) {
                 symlinkPath = ensureTrailingDirectorySeparator(symlinkPath);
                 if (real !== false && !symlinkedDirectories?.has(symlinkPath)) {
-                    (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
+                    (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(real.realPath, symlink);
                 }
                 (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
             }
@@ -8894,7 +8895,10 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
         if (commonResolved && commonOriginal) {
             cache.setSymlinkedDirectory(
                 commonOriginal,
-                { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) },
+                {
+                    real: ensureTrailingDirectorySeparator(commonResolved),
+                    realPath: ensureTrailingDirectorySeparator(toPath(commonResolved, cwd, getCanonicalFileName)),
+                },
             );
         }
     }
@@ -10448,4 +10452,12 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
 /** @internal */
 export function isExpandoPropertyDeclaration(declaration: Declaration | undefined): declaration is PropertyAccessExpression | ElementAccessExpression | BinaryExpression {
     return !!declaration && (isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration) || isBinaryExpression(declaration));
+}
+
+/** @internal */
+export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined) {
+    if (node === undefined) {
+        return false;
+    }
+    return !!getResolutionModeOverride(node.attributes);
 }
