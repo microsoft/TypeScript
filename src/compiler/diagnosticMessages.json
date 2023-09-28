@@ -3691,6 +3691,10 @@
         "category": "Error",
         "code": 2859
     },
+    "Type '{0}' cannot be used to index type '{1}', because type '{1}' is generic and an index signature of a constraint of a generic type can only be used for reading.": {
+        "category": "Error",
+        "code": 2860
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
