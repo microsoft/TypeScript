@@ -102,6 +102,7 @@ import {
     isArrowFunction,
     isAssignmentExpression,
     isBinaryExpression,
+    isBindableStaticAccessExpression,
     isBindableStaticElementAccessExpression,
     isBindingElement,
     isBlock,
@@ -154,6 +155,7 @@ import {
     isPropertyAccessExpression,
     isPropertyAssignment,
     isPropertyDeclaration,
+    isPrototypeAccess,
     isRootedDiskPath,
     isSourceFile,
     isStringLiteral,
@@ -1708,7 +1710,7 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
 /** @internal */
 export function isClassFieldAndNotAutoAccessor(node: Declaration): boolean {
     if (isInJSFile(node) && isExpandoPropertyDeclaration(node)) {
-        return true;
+        return !isBindableStaticAccessExpression(node) || !isPrototypeAccess(node.expression);
     }
     return node.parent && isClassLike(node.parent) && isPropertyDeclaration(node) && !hasAccessorModifier(node);
 }
