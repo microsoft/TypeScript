@@ -13,7 +13,7 @@
 // for (<|var { [|property1|]: p1 } of elems|>) {
 // }
 // var p2;
-// for (<|{ [|{| isWriteAccess: true |}property1|] : p2 } of elems|>) {
+// for (<|{ [|property1|] : p2 } of elems|>) {
 // }
 
   // === Definitions ===
@@ -94,7 +94,7 @@
 // for (<|var { [|property1|]: p1 } of elems|>) {
 // }
 // var p2;
-// for (<|{ [|{| isWriteAccess: true |}property1|] : p2 } of elems|>) {
+// for (<|{ [|property1|] : p2 } of elems|>) {
 // }
 
   // === Definitions ===
@@ -180,7 +180,7 @@
 // for (<|var { /*FIND ALL REFS*/[|property1|]: p1 } of elems|>) {
 // }
 // var p2;
-// for (<|{ [|{| isWriteAccess: true |}property1|] : p2 } of elems|>) {
+// for (<|{ [|property1|] : p2 } of elems|>) {
 // }
 
   // === Definitions ===
@@ -270,7 +270,7 @@
 // for (<|var { [|property1|]: p1 } of elems|>) {
 // }
 // var p2;
-// for (<|{ /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}property1|] : p2 } of elems|>) {
+// for (<|{ /*FIND ALL REFS*/[|{| isDefinition: true |}property1|] : p2 } of elems|>) {
 // }
 
   // === Definitions ===
@@ -358,7 +358,7 @@
 // for (<|var { [|{| defId: 0 |}property1|]: p1 } of elems|>) {
 // }
 // var p2;
-// for (<|{ [|{| defId: 0, isWriteAccess: true |}property1|] : p2 } of elems|>) {
+// for (<|{ [|{| defId: 0 |}property1|] : p2 } of elems|>) {
 // }
 
   // === Definitions ===

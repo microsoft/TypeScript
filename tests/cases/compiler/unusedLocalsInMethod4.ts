@@ -70,3 +70,17 @@ function f5() {
 }
 export default {};
 
+function f6() {
+    let key: string;    // should not error
+    for (key in {}) {
+        console.log(key);
+    }
+}
+
+function f7() {
+    let key: string;    // should not error
+    for (key of []) {
+        console.log(key);
+    }
+}
+

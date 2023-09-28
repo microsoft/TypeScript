@@ -234,4 +234,38 @@ function f5() {
 }
 export default {};
 
+function f6() {
+>f6 : Symbol(f6, Decl(unusedLocalsInMethod4.ts, 68, 18))
+
+    let key: string;    // should not error
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 71, 7))
+
+    for (key in {}) {
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 71, 7))
+
+        console.log(key);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 71, 7))
+    }
+}
+
+function f7() {
+>f7 : Symbol(f7, Decl(unusedLocalsInMethod4.ts, 75, 1))
+
+    let key: string;    // should not error
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 78, 7))
+
+    for (key of []) {
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 78, 7))
+
+        console.log(key);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>key : Symbol(key, Decl(unusedLocalsInMethod4.ts, 78, 7))
+    }
+}
+
 

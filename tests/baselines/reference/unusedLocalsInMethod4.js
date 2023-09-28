@@ -71,6 +71,20 @@ function f5() {
 }
 export default {};
 
+function f6() {
+    let key: string;    // should not error
+    for (key in {}) {
+        console.log(key);
+    }
+}
+
+function f7() {
+    let key: string;    // should not error
+    for (key of []) {
+        console.log(key);
+    }
+}
+
 
 
 //// [unusedLocalsInMethod4.js]
@@ -138,3 +152,16 @@ function f5() {
     x.toString();
 }
 exports.default = {};
+function f6() {
+    var key; // should not error
+    for (key in {}) {
+        console.log(key);
+    }
+}
+function f7() {
+    var key; // should not error
+    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        key = _a[_i];
+        console.log(key);
+    }
+}
