@@ -31818,7 +31818,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param prop The symbol for the property being accessed.
      */
     function checkPropertyAccessibility(
-        node: PropertyAccessExpression | QualifiedName | PropertyAccessExpression | VariableDeclaration | ParameterDeclaration | ImportTypeNode | PropertyAssignment | ShorthandPropertyAssignment | BindingElement,
+        node: PropertyAccessExpression | QualifiedName | ElementAccessExpression | VariableDeclaration | ParameterDeclaration | ImportTypeNode | PropertyAssignment | ShorthandPropertyAssignment | BindingElement,
         isSuper: boolean,
         writing: boolean,
         type: Type,
@@ -31828,7 +31828,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const errorNode = !reportError ? undefined :
             node.kind === SyntaxKind.QualifiedName ? node.right :
             node.kind === SyntaxKind.ImportType ? node :
-            node.kind === SyntaxKind.BindingElement && node.propertyName ? node.propertyName : node.name;
+            node.kind === SyntaxKind.BindingElement && node.propertyName ? node.propertyName :
+            node.kind === SyntaxKind.ElementAccessExpression ? node.expression : node.name;
 
         return checkPropertyAccessibilityAtLocation(node, isSuper, writing, type, prop, errorNode);
     }
@@ -32935,7 +32936,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             AccessFlags.Writing | (isGenericObjectType(objectType) && !isThisTypeParameter(objectType) ? AccessFlags.NoIndexSignatures : 0) :
             AccessFlags.ExpressionPosition;
         const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, accessFlags, node) || errorType;
-        return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node);
+        const symbol = getNodeLinks(node).resolvedSymbol;
+        if (symbol) {
+            const apparentType = getApparentType(objectType);
+            checkPropertyAccessibility(node, node.expression.kind === SyntaxKind.SuperKeyword, !!(accessFlags & AccessFlags.Writing), apparentType, symbol);
+        }
+        return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, symbol, indexedAccessType, indexExpression, checkMode), node);
     }
 
     function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement {
