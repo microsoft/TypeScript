@@ -1480,10 +1480,6 @@
         "category": "Error",
         "code": 1451
     },
-    "'resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.": {
-        "category": "Error",
-        "code": 1452
-    },
     "`resolution-mode` should be either `require` or `import`.": {
         "category": "Error",
         "code": 1453
@@ -1519,10 +1515,6 @@
     "File is CommonJS module because 'package.json' was not found": {
         "category": "Message",
         "code": 1461
-    },
-    "The 'resolution-mode' attribute is only supported when 'moduleResolution' is 'node16' or 'nodenext'.": {
-        "category": "Error",
-        "code": 1462
     },
     "'resolution-mode' is the only valid key for type import attributes.": {
         "category": "Error",
@@ -3611,7 +3603,7 @@
         "category": "Error",
         "code": 2835
     },
-    "Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.": {
+    "Import assertions are not allowed on statements that compile to CommonJS 'require' calls.": {
         "category": "Error",
         "code": 2836
     },
@@ -3683,7 +3675,7 @@
         "category": "Error",
         "code": 2855
     },
-    "Import attributes are not allowed on statements that transpile to CommonJS 'require' calls.": {
+    "Import attributes are not allowed on statements that compile to CommonJS 'require' calls.": {
         "category": "Error",
         "code": 2856
     },
@@ -3695,9 +3687,13 @@
         "category": "Error",
         "code": 2858
     },
-    "The type of this declaration is ambiguous and may be observed as either '{0}' or '{1}'.": {
+    "Excessive complexity comparing types '{0}' and '{1}'.": {
         "category": "Error",
         "code": 2859
+    },
+    "The type of this declaration is ambiguous and may be observed as either '{0}' or '{1}'.": {
+        "category": "Error",
+        "code": 2860
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
