@@ -14,7 +14,7 @@ class YaddaBase {
         this.justProp;
         /** @type string */
         this['literalElementAccess'];
-        
+
         this.b()
     }
     accessor b = () => {

@@ -17,6 +17,15 @@ class C extends Array {
     }
 }
 
+class D {
+    accessor b = () => {}
+}
+class E extends D {
+    foo() {
+        super.b()
+    }
+}
+
 
 //// [classFieldSuperAccessible.js]
 class A extends class Expr {
@@ -33,5 +42,13 @@ class B extends Number {
 class C extends Array {
     foo() {
         console.log(super.length);
+    }
+}
+class D {
+    accessor b = () => { };
+}
+class E extends D {
+    foo() {
+        super.b();
     }
 }

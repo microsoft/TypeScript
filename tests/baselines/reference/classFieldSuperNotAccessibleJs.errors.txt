@@ -14,7 +14,7 @@ index.js(29,22): error TS2855: Class field ''literalElementAccess'' defined by t
             this.justProp;
             /** @type string */
             this['literalElementAccess'];
-            
+    
             this.b()
         }
         accessor b = () => {

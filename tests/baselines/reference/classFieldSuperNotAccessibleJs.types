@@ -25,7 +25,7 @@ class YaddaBase {
 >this['literalElementAccess'] : any
 >this : this
 >'literalElementAccess' : "literalElementAccess"
-        
+
         this.b()
 >this.b() : void
 >this.b : () => void

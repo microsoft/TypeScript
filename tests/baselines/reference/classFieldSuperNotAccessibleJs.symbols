@@ -22,7 +22,7 @@ class YaddaBase {
         this['literalElementAccess'];
 >this : Symbol(YaddaBase, Decl(index.js, 0, 0))
 >'literalElementAccess' : Symbol(YaddaBase['literalElementAccess'], Decl(index.js, 6, 22))
-        
+
         this.b()
 >this.b : Symbol(YaddaBase.b, Decl(index.js, 11, 5))
 >this : Symbol(YaddaBase, Decl(index.js, 0, 0))
