@@ -3432,7 +3432,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (isWritten && result) {
-            result.isInitialized = true;
+            result.isAssigned = true;
         }
 
         if (!result) {
@@ -41490,7 +41490,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkUninitializedLocals(nodeWithLocals: HasLocals) {
         nodeWithLocals.locals!.forEach(local => {
-            if (!(local.flags & SymbolFlags.Variable) || local.isInitialized || !local.isReferenced) {
+            if (!(local.flags & SymbolFlags.Variable) || local.isAssigned || !local.isReferenced) {
                 return;
             }
             const declaration = local.valueDeclaration;
