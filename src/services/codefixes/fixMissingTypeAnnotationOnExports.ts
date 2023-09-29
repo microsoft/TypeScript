@@ -1,5 +1,7 @@
 import {
     ArrayBindingPattern,
+    ArrayLiteralExpression,
+    AssertionExpression,
     BindingElement,
     BindingPattern,
     ClassDeclaration,
@@ -23,12 +25,18 @@ import {
     GeneratedIdentifierFlags,
     getEmitScriptTarget,
     getSourceFileOfNode,
+    getSynthesizedDeepClone,
     getTokenAtPosition,
     getTrailingCommentRanges,
     hasSyntacticModifier,
     Identifier,
     isArrayBindingPattern,
+    isArrayLiteralExpression,
+    isAssertionExpression,
+    isCallExpression,
     isComputedPropertyName,
+    isConditionalExpression,
+    isConstTypeReference,
     isDeclaration,
     isEntityNameExpression,
     isExpression,
@@ -39,6 +47,7 @@ import {
     isOmittedExpression,
     isShorthandPropertyAssignment,
     isSpreadAssignment,
+    isSpreadElement,
     isStatement,
     isValueSignatureDeclaration,
     isVariableDeclaration,
@@ -48,18 +57,19 @@ import {
     NodeBuilderFlags,
     NodeFlags,
     ObjectBindingPattern,
-    ObjectLiteralElementLike,
     ObjectLiteralExpression,
     ParameterDeclaration,
     PropertyDeclaration,
     SignatureDeclaration,
     SourceFile,
     SpreadAssignment,
+    SpreadElement,
     SyntaxKind,
     textChanges,
     TextSpan,
     Type,
     TypeChecker,
+    TypeFlags,
     TypeNode,
     VariableDeclaration,
     VariableStatement,
@@ -102,7 +112,7 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     | NodeBuilderFlags.AllowEmptyTuple
     | NodeBuilderFlags.GenerateNamesForShadowedTypeParams
     | NodeBuilderFlags.NoTruncation
-    | NodeBuilderFlags.AllowUniqueESSymbolType;
+    | NodeBuilderFlags.WriteComputedProps;
 
 registerCodeFix({
     errorCodes,
@@ -182,6 +192,16 @@ function withChanges<T>(
         }
         return undefined;
     }
+
+    function createAsExpression(node: Expression, type: TypeNode) {
+        if (!isEntityNameExpression(node) && !isCallExpression(node)) {
+            node = factory.createParenthesizedExpression(node);
+        }
+        return factory.createAsExpression(
+            node,
+            type,
+        );
+    }
     function addInlineAnnotation(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
         const targetNode = findTargetErrorNode(nodeWithDiag, span) as Expression;
@@ -192,6 +212,21 @@ function withChanges<T>(
         if (isExpressionTarget && findAncestor(targetNode, isHeritageClause)) {
             return undefined;
         }
+        // Can't inline type spread elements. Whatever you do isolated declarations will not infer from them
+        if (isSpreadElement(targetNode)) {
+            return undefined;
+        }
+
+        const variableDeclaration = findAncestor(targetNode, isVariableDeclaration);
+        const type = variableDeclaration && typeChecker.getTypeAtLocation(variableDeclaration);
+        // We can't use typeof un an unique symbol. Would result in either
+        // const s = Symbol("") as unique symbol
+        // const s = Symbol("") as typeof s
+        // both of which are not cirrect
+        if (type && type.flags & TypeFlags.UniqueESSymbol) {
+            return undefined;
+        }
+
         const isShorthandPropertyAssignmentTarget = isIdentifier(targetNode) && isShorthandPropertyAssignment(targetNode.parent);
         if (!(isExpressionTarget || isShorthandPropertyAssignmentTarget)) return undefined;
 
@@ -204,16 +239,16 @@ function withChanges<T>(
             replacementTarget = targetNode.parent;
             replacementNode = factory.createPropertyAssignment(
                 targetNode,
-                factory.createAsExpression(
-                    targetNode,
+                createAsExpression(
+                    getSynthesizedDeepClone(targetNode),
                     typeNode,
                 ),
             );
         }
         else if (isExpressionTarget) {
             replacementTarget = targetNode;
-            replacementNode = factory.createAsExpression(
-                targetNode,
+            replacementNode = createAsExpression(
+                getSynthesizedDeepClone(targetNode),
                 typeNode,
             );
         }
@@ -607,7 +642,8 @@ function withChanges<T>(
             if (!type) {
                 return undefined;
             }
-            return typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile);
+            const flags = isVariableDeclaration(node) && type.flags & TypeFlags.UniqueESSymbol ? NodeBuilderFlags.AllowUniqueESSymbolType : NodeBuilderFlags.None;
+            return typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile, flags);
         }
         else {
             return relativeType(node);
@@ -618,13 +654,56 @@ function withChanges<T>(
         // Convert EntityNameExpression to  EntityName ?
         return factory.createTypeQueryNode(node as EntityName);
     }
-    function typeFromObjectSpreadElements(node: ObjectLiteralExpression, name = "temp") {
+    function typeFromArraySpreadElements(
+        node: ArrayLiteralExpression,
+        name = "temp",
+    ) {
+        const isConstContext = !!findAncestor(node, isConstAssertion);
+        if (!isConstContext) return undefined;
+        return typeFromSpreads(
+            node,
+            name,
+            isConstContext,
+            n => n.elements,
+            isSpreadElement,
+            factory.createSpreadElement,
+            props => factory.createArrayLiteralExpression(props, /*multiLine*/ true),
+            types => factory.createTupleTypeNode(types.map(factory.createRestTypeNode)),
+        );
+    }
+
+    function typeFromObjectSpreadAssignment(
+        node: ObjectLiteralExpression,
+        name = "temp",
+    ) {
+        const isConstContext = !!findAncestor(node, isConstAssertion);
+        return typeFromSpreads(
+            node,
+            name,
+            isConstContext,
+            n => n.properties,
+            isSpreadAssignment,
+            factory.createSpreadAssignment,
+            props => factory.createObjectLiteralExpression(props, /*multiLine*/ true),
+            factory.createIntersectionTypeNode,
+        );
+    }
+    function typeFromSpreads<T extends Expression, TSpread extends SpreadAssignment | SpreadElement, TElements extends TSpread | Node>(
+        node: T,
+        name: string,
+        isConstContext: boolean,
+        getChildren: (node: T) => readonly TElements[],
+        isSpread: (node: Node) => node is TSpread,
+        createSpread: (node: Expression) => TSpread,
+        makeNodeOfKind: (newElements: (TSpread | TElements)[]) => T,
+        finalType: (types: TypeNode[]) => TypeNode,
+    ) {
         const intersectionTypes: TypeNode[] = [];
-        const newSpreads: SpreadAssignment[] = [];
-        let currentVariableProperties: ObjectLiteralElementLike[] | undefined;
+        const newSpreads: TSpread[] = [];
+        let currentVariableProperties: TElements[] | undefined;
         const statement = findAncestor(node, isStatement);
-        for (const prop of node.properties) {
-            if (isSpreadAssignment(prop)) {
+        for (const prop of getChildren(node)) {
+            if (isSpread(prop)) {
                 finalizesVariablePart();
                 if (isEntityNameExpression(prop.expression)) {
                     intersectionTypes.push(createTypeOfFromEntityNameExpression(prop.expression));
@@ -642,12 +721,16 @@ function withChanges<T>(
             return undefined;
         }
         finalizesVariablePart();
-        changeTracker.replaceNode(sourceFile, node, factory.createObjectLiteralExpression(newSpreads, /*multiLine*/ true));
-        return factory.createIntersectionTypeNode(intersectionTypes);
+        changeTracker.replaceNode(sourceFile, node, makeNodeOfKind(newSpreads));
+        return finalType(intersectionTypes);
         function makeVariable(expression: Expression) {
             const tempName = factory.createUniqueName(
                 name + "_Part" + (newSpreads.length + 1),
                 GeneratedIdentifierFlags.Optimistic,
+            );
+            const initializer = !isConstContext ? expression : factory.createAsExpression(
+                expression,
+                factory.createTypeReferenceNode("const"),
             );
             const variableDefinition = factory.createVariableStatement(
                 /*modifiers*/ undefined,
@@ -656,32 +739,44 @@ function withChanges<T>(
                         tempName,
                         /*exclamationToken*/ undefined,
                         /*type*/ undefined,
-                        expression,
+                        initializer,
                     ),
                 ], NodeFlags.Const),
             );
             changeTracker.insertNodeBefore(sourceFile, statement!, variableDefinition);
 
             intersectionTypes.push(createTypeOfFromEntityNameExpression(tempName));
-            newSpreads.push(factory.createSpreadAssignment(tempName));
+            newSpreads.push(createSpread(tempName));
         }
         function finalizesVariablePart() {
             if (currentVariableProperties) {
-                makeVariable(factory.createObjectLiteralExpression(
+                makeVariable(makeNodeOfKind(
                     currentVariableProperties,
                 ));
                 currentVariableProperties = undefined;
             }
         }
     }
-    function relativeType(node: Node) {
+    function isConstAssertion(location: Node): location is AssertionExpression {
+        return (isAssertionExpression(location) && isConstTypeReference(location.type));
+    }
+
+    function relativeType(node: Node): TypeNode | undefined {
         if (isEntityNameExpression(node)) {
             return createTypeOfFromEntityNameExpression(node);
+        }
+        if (isConstAssertion(node)) {
+            return relativeType(node.expression);
+        }
+        if (isArrayLiteralExpression(node)) {
+            const variableDecl = findAncestor(node, isVariableDeclaration);
+            const partName = variableDecl && isIdentifier(variableDecl.name) ? variableDecl.name.text : undefined;
+            return typeFromArraySpreadElements(node, partName);
         }
         if (isObjectLiteralExpression(node)) {
             const variableDecl = findAncestor(node, isVariableDeclaration);
             const partName = variableDecl && isIdentifier(variableDecl.name) ? variableDecl.name.text : undefined;
-            return typeFromObjectSpreadElements(node, partName);
+            return typeFromObjectSpreadAssignment(node, partName);
         }
         if (
             isVariableDeclaration(node)
@@ -689,12 +784,19 @@ function withChanges<T>(
         ) {
             return relativeType(node.initializer);
         }
+        if (isConditionalExpression(node)) {
+            const trueType = relativeType(node.whenTrue);
+            if (!trueType) return;
+            const falseType = relativeType(node.whenFalse);
+            if (!falseType) return;
+            return factory.createUnionTypeNode([trueType, falseType]);
+        }
 
         return undefined;
     }
 
-    function typeToTypeNode(type: Type, enclosingDeclaration: Node) {
-        return typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags);
+    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None) {
+        return typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags);
     }
 
     function tryGetReturnType(node: SignatureDeclaration): Type | undefined {

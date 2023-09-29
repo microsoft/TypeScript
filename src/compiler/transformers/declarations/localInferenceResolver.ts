@@ -354,10 +354,14 @@ export function createLocalInferenceResolver({
                     const prop = objectLiteral.properties[propIndex];
 
                     if (isShorthandPropertyAssignment(prop)) {
-                        return invalid(prop);
+                        invalid(prop);
+                        inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
+                        continue;
                     }
                     else if (isSpreadAssignment(prop)) {
-                        return invalid(prop);
+                        invalid(prop);
+                        inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
+                        continue;
                     }
 
                     if (isPrivateIdentifier(prop.name)) {

@@ -44,10 +44,16 @@ function getPart() {
   return { M: "Z"}
 }
 
-const All_Part1_1 = { x: 1 };
-const All_Part3 = { y: 1 };
+const All_Part1_1 = {
+    x: 1
+};
+const All_Part3 = {
+    y: 1
+};
 const All_Part4 = getPart();
-const All_Part6 = { z: 1 };
+const All_Part6 = {
+    z: 1
+};
 export const All: typeof All_Part1_1 & typeof Start & typeof All_Part3 & typeof All_Part4 & typeof End & typeof All_Part6 = {
     ...All_Part1_1,
     ...Start,
