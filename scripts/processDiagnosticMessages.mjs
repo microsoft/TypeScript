@@ -77,6 +77,25 @@ function checkForUniqueCodes(diagnosticTable) {
 }
 
 /**
+ * @param {string} category
+ */
+function categoryToNumber(category) {
+    // Copy of DiagnosticCategory enum from src/compiler/types.ts.
+    switch (category) {
+        case "Warning":
+            return 0;
+        case "Error":
+            return 1;
+        case "Suggestion":
+            return 2;
+        case "Message":
+            return 3;
+        default:
+            throw new Error(`Unknown category ${category}`);
+    }
+}
+
+/**
  * @param {InputDiagnosticMessageTable} messageTable
  * @param {string} inputFilePathRel
  * @returns {string}
@@ -101,7 +120,7 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
         const argReportsDeprecated = reportsDeprecated ? `${!argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""}, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
 
         result.push("/** @internal */");
-        result.push(`export const ${propName}: DiagnosticMessage = /* @__PURE__ */ diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated});`);
+        result.push(`export const ${propName}: DiagnosticMessage = /* @__PURE__ */ diag(${code}, ${categoryToNumber(category)} satisfies DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated});`);
     });
 
     return result.join("\r\n");

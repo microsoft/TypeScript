@@ -6976,6 +6976,7 @@ export interface DiagnosticWithDetachedLocation extends Diagnostic {
     length: number;
 }
 
+// Note: this enum is copied in scripts/processDiagnosticMessages.mjs; update that if this enum changes.
 export enum DiagnosticCategory {
     Warning,
     Error,
