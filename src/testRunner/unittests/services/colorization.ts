@@ -237,7 +237,7 @@ describe("unittests:: services:: Colorization", () => {
         it("LexicallyClassifiesConflictTokens", () => {
             // Test conflict markers.
             testLexicalClassification(
-"class C {\r\n\
+                "class C {\r\n\
 <<<<<<< HEAD\r\n\
     v = 1;\r\n\
 =======\r\n\
@@ -260,7 +260,7 @@ describe("unittests:: services:: Colorization", () => {
             );
 
             testLexicalClassification(
-"<<<<<<< HEAD\r\n\
+                "<<<<<<< HEAD\r\n\
 class C { }\r\n\
 =======\r\n\
 class D { }\r\n\
@@ -277,7 +277,7 @@ class D { }\r\n\
             );
 
             testLexicalClassification(
-"class C {\r\n\
+                "class C {\r\n\
 <<<<<<< HEAD\r\n\
     v = 1;\r\n\
 ||||||| merged common ancestors\r\n\
@@ -303,7 +303,7 @@ class D { }\r\n\
             );
 
             testLexicalClassification(
-"<<<<<<< HEAD\r\n\
+                "<<<<<<< HEAD\r\n\
 class C { }\r\n\
 ||||||| merged common ancestors\r\n\
 class E { }\r\n\
