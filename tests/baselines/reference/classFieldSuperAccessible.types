@@ -50,3 +50,25 @@ class C extends Array {
     }
 }
 
+class D {
+>D : D
+
+    accessor b = () => {}
+>b : () => void
+>() => {} : () => void
+}
+class E extends D {
+>E : E
+>D : D
+
+    foo() {
+>foo : () => void
+
+        super.b()
+>super.b() : void
+>super.b : () => void
+>super : D
+>b : () => void
+    }
+}
+
