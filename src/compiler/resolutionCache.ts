@@ -3,6 +3,7 @@ import {
     clearMap,
     closeFileWatcher,
     closeFileWatcherOf,
+    CompilerHostSupportingResolutionCache,
     CompilerOptions,
     createModeAwareCache,
     createModuleResolutionCache,
@@ -20,6 +21,7 @@ import {
     FileWatcher,
     FileWatcherCallback,
     firstDefinedIterator,
+    getAutomaticTypeDirectiveContainingFile,
     GetCanonicalFileName,
     getDirectoryPath,
     getEffectiveTypeRoots,
@@ -60,6 +62,7 @@ import {
     resolutionExtensionIsTSOrJson,
     ResolutionLoader,
     ResolutionMode,
+    ResolutionNameAndModeGetter,
     ResolutionWithResolvedFileName,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
@@ -72,6 +75,7 @@ import {
     startsWith,
     StringLiteralLike,
     trace,
+    typeReferenceResolutionNameAndModeGetter,
     updateResolutionField,
     WatchDirectoryFlags,
 } from "./_namespaces/ts.js";
@@ -94,7 +98,7 @@ export type CallbackOnNewResolution<T extends ResolutionWithFailedLookupLocation
  *
  * @internal
  */
-export interface ResolutionCache {
+export interface ResolutionCache extends Required<CompilerHostSupportingResolutionCache> {
     rootDirForResolution: string;
     resolvedModuleNames: Map<Path, ModeAwareCache<CachedResolvedModuleWithFailedLookupLocations>>;
     resolvedTypeReferenceDirectives: Map<Path, ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>;
@@ -688,6 +692,8 @@ export function createResolutionCache(
         finishCachingPerDirectoryResolution,
         resolveModuleNameLiterals,
         resolveTypeReferenceDirectiveReferences,
+        onReusedModuleResolutions,
+        onReusedTypeReferenceDirectiveResolutions,
         resolveLibrary,
         resolveSingleModuleNameWithoutWatching,
         removeResolutionsFromProjectReferenceRedirects,
@@ -960,10 +966,48 @@ export function createResolutionCache(
             seenNamesInFile.set(name, mode, true);
             resolvedModules.push(resolution);
         }
+        onReusedResolutions({
+            reusedNames,
+            containingSourceFile,
+            redirectedReference,
+            options,
+            path,
+            resolutionsInFile,
+            seenNamesInFile,
+            nameAndModeGetter: loader.nameAndMode,
+            getResolutionWithResolvedFileName,
+        });
+        return resolvedModules;
+    }
+
+    interface OnReusedResolutionsInput<Entry, SourceFile, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName> {
+        reusedNames: readonly Entry[] | undefined;
+        containingSourceFile: SourceFile;
+        redirectedReference: ResolvedProjectReference | undefined;
+        options: CompilerOptions;
+        path: Path;
+        resolutionsInFile: ModeAwareCache<T> | undefined;
+        seenNamesInFile?: ModeAwareCache<true>;
+        nameAndModeGetter: ResolutionNameAndModeGetter<Entry, SourceFile>;
+        getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
+    }
+    function onReusedResolutions<Entry, SourceFile, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>({
+        reusedNames,
+        containingSourceFile,
+        redirectedReference,
+        options,
+        path,
+        resolutionsInFile,
+        seenNamesInFile,
+        nameAndModeGetter,
+        getResolutionWithResolvedFileName,
+    }: OnReusedResolutionsInput<Entry, SourceFile, T, R>) {
+        if (!resolutionsInFile) return;
+        if (!seenNamesInFile) seenNamesInFile = createModeAwareCache();
         reusedNames?.forEach(entry =>
             seenNamesInFile.set(
-                loader.nameAndMode.getName(entry),
-                loader.nameAndMode.getMode(entry, containingSourceFile, redirectedReference?.commandLine.options || options),
+                nameAndModeGetter.getName(entry),
+                nameAndModeGetter.getMode(entry, containingSourceFile, redirectedReference?.commandLine.options || options),
                 true,
             )
         );
@@ -976,7 +1020,45 @@ export function createResolutionCache(
                 }
             });
         }
-        return resolvedModules;
+    }
+
+    function onReusedModuleResolutions(
+        reusedNames: readonly StringLiteralLike[] | undefined,
+        containingSourceFile: SourceFile,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+    ) {
+        onReusedResolutions({
+            reusedNames,
+            containingSourceFile,
+            redirectedReference,
+            options,
+            path: containingSourceFile.path,
+            resolutionsInFile: resolvedModuleNames.get(containingSourceFile.path),
+            nameAndModeGetter: moduleResolutionNameAndModeGetter,
+            getResolutionWithResolvedFileName: getResolvedModuleFromResolution,
+        });
+    }
+
+    function onReusedTypeReferenceDirectiveResolutions<T extends FileReference | string>(
+        reusedNames: readonly T[] | undefined,
+        containingSourceFile: SourceFile | undefined,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+    ) {
+        const path = containingSourceFile ?
+            containingSourceFile.path :
+            resolutionHost.toPath(getAutomaticTypeDirectiveContainingFile(resolutionHost.getCompilationSettings(), getCurrentDirectory()));
+        onReusedResolutions({
+            reusedNames,
+            containingSourceFile,
+            redirectedReference,
+            options,
+            path,
+            resolutionsInFile: resolvedTypeReferenceDirectives.get(path),
+            nameAndModeGetter: typeReferenceResolutionNameAndModeGetter,
+            getResolutionWithResolvedFileName: getResolvedTypeReferenceDirectiveFromResolution,
+        });
     }
 
     function resolveTypeReferenceDirectiveReferences<T extends FileReference | string>(

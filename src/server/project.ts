@@ -798,7 +798,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    resolveModuleNameLiterals(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
+    resolveModuleNameLiterals(
+        moduleLiterals: readonly StringLiteralLike[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile,
+        reusedNames: readonly StringLiteralLike[] | undefined,
+    ): readonly ResolvedModuleWithFailedLookupLocations[] {
         let invalidated = false;
         return this.resolutionCache.resolveModuleNameLiterals(
             moduleLiterals,
@@ -819,12 +826,34 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
+    onReusedModuleResolutions(
+        reusedNames: readonly ts.StringLiteralLike[] | undefined,
+        containingSourceFile: ts.SourceFile,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+    ): void {
+        return this.resolutionCache.onReusedModuleResolutions(
+            reusedNames,
+            containingSourceFile,
+            redirectedReference,
+            options,
+        );
+    }
+
+    /** @internal */
     getModuleResolutionCache(): ModuleResolutionCache | undefined {
         return this.resolutionCache.getModuleResolutionCache();
     }
 
     /** @internal */
-    resolveTypeReferenceDirectiveReferences<T extends string | FileReference>(typeDirectiveReferences: readonly T[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile | undefined, reusedNames: readonly T[] | undefined): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
+    resolveTypeReferenceDirectiveReferences<T extends string | FileReference>(
+        typeDirectiveReferences: readonly T[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile | undefined,
+        reusedNames: readonly T[] | undefined,
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
         return this.resolutionCache.resolveTypeReferenceDirectiveReferences(
             typeDirectiveReferences,
             containingFile,
@@ -832,6 +861,21 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             options,
             containingSourceFile,
             reusedNames,
+        );
+    }
+
+    /** @internal */
+    onReusedTypeReferenceDirectiveResolutions<T extends string | ts.FileReference>(
+        reusedNames: readonly T[] | undefined,
+        containingSourceFile: ts.SourceFile | undefined,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+    ): void {
+        return this.resolutionCache.onReusedTypeReferenceDirectiveResolutions(
+            reusedNames,
+            containingSourceFile,
+            redirectedReference,
+            options,
         );
     }
 

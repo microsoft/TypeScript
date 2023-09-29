@@ -1759,6 +1759,8 @@ export function createLanguageService(
             resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
             resolveModuleNameLiterals: maybeBind(host, host.resolveModuleNameLiterals),
             resolveTypeReferenceDirectiveReferences: maybeBind(host, host.resolveTypeReferenceDirectiveReferences),
+            onReusedModuleResolutions: maybeBind(host, host.onReusedModuleResolutions),
+            onReusedTypeReferenceDirectiveResolutions: maybeBind(host, host.onReusedTypeReferenceDirectiveResolutions),
             resolveLibrary: maybeBind(host, host.resolveLibrary),
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,

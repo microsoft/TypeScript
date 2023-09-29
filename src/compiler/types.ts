@@ -8113,6 +8113,25 @@ export interface CompilerHost extends ModuleResolutionHost {
     jsDocParsingMode?: JSDocParsingMode;
 }
 
+/** @internal */
+export interface CompilerHostSupportingResolutionCache {
+    onReusedModuleResolutions?(
+        reusedNames: readonly StringLiteralLike[] | undefined,
+        containingSourceFile: SourceFile,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+    ): void;
+    onReusedTypeReferenceDirectiveResolutions?<T extends FileReference | string>(
+        reusedNames: readonly T[] | undefined,
+        containingSourceFile: SourceFile | undefined,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+    ): void;
+}
+/** @internal */
+export interface CompilerHost extends CompilerHostSupportingResolutionCache {
+}
+
 /** true if --out otherwise source file name *
  * @internal
  */
