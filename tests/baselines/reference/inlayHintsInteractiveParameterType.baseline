@@ -1,0 +1,43 @@
+let y = x;
+     ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "Thing",
+      "span": {
+        "start": 10,
+        "length": 5
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterType.ts"
+    }
+  ],
+  "position": 43,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+f(p => {})
+   ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "Thing",
+      "span": {
+        "start": 10,
+        "length": 5
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterType.ts"
+    }
+  ],
+  "position": 100,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
