@@ -2233,7 +2233,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var potentialReflectCollisions: Node[] = [];
     var potentialUnusedRenamedBindingElementsInTypes: BindingElement[] = [];
     var awaitedTypeStack: number[] = [];
-    var hasGlobalSymbolHasInstancePropertyCache: boolean | undefined;
 
     var diagnostics = createDiagnosticCollection();
     var suggestionDiagnostics = createDiagnosticCollection();
@@ -34904,11 +34903,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
             else if (!(typeHasCallOrConstructSignatures(rightType) || isTypeSubtypeOf(rightType, globalFunctionType))) {
-                // Do not indicate that `[Symbol.hasInstance]` is a valid option if it's not known to be present on `SymbolConstructor`.
-                const message = hasGlobalSymbolHasInstanceProperty() ?
-                    Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_either_of_type_any_a_class_function_or_other_type_assignable_to_the_Function_interface_type_or_an_object_type_with_a_Symbol_hasInstance_method :
-                    Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type;
-                error(node.right, message);
+                error(node.right, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_either_of_type_any_a_class_function_or_other_type_assignable_to_the_Function_interface_type_or_an_object_type_with_a_Symbol_hasInstance_method);
                 return resolveErrorCall(node);
             }
         }
@@ -37318,14 +37313,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkTypeAssignableTo(returnType, booleanType, right, Diagnostics.An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_hand_side_of_an_instanceof_expression);
 
         return booleanType;
-    }
-
-    function hasGlobalSymbolHasInstanceProperty() {
-        if (hasGlobalSymbolHasInstancePropertyCache === undefined) {
-            const globalESSymbolConstructorSymbol = getGlobalESSymbolConstructorTypeSymbol(/*reportErrors*/ false);
-            hasGlobalSymbolHasInstancePropertyCache = !!globalESSymbolConstructorSymbol && getMembersOfSymbol(globalESSymbolConstructorSymbol).has("hasInstance" as __String);
-        }
-        return hasGlobalSymbolHasInstancePropertyCache;
     }
 
     function hasEmptyObjectIntersection(type: Type): boolean {
