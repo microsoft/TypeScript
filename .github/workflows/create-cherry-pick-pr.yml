@@ -1,0 +1,144 @@
+name: Create cherry pick PR
+
+on:
+  push:
+    branches:
+      - orta-twoslash-repros
+  workflow_dispatch:
+    inputs:
+      # TODO: Make sure these names work for the triggerer
+      pr:
+        description: PR number to cherry-pick
+        required: true
+        type: number
+      targetBranch:
+        description: Target branch to cherry-pick to
+        required: true
+        type: string
+      requestingUser:
+        description: User who requested the cherry-pick
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+
+      - uses: actions/github-script@v6
+        env:
+          PR: ${{ inputs.pr }}
+          TARGET_BRANCH: ${{ inputs.targetBranch }}
+          REQUESTING_USER: ${{ inputs.requestingUser }}
+        with:
+          retries: 3
+          github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          script: |
+            const { PR } = process.env;
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: +PR,
+            });
+
+            if (!pr.merge_commit_sha) throw new Error("No merge commit sha found");
+
+            const pickBranch = `cherry-pick/${}`
+
+            await exec.exec('git', ['switch', '--detach', TARGET_BRANCH]);
+            await exec.exec('git', ['switch', '-c', pickBranch]);
+            await exec.exec('git', ['cherry-pick', pr.merge_commit_sha]);
+            await exec.exec('git', ['push', '--force', '--set-upstream', 'origin', pickBranch]);
+
+            const matchingPulls = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:${pickBranch}`,
+            });
+            let [existing] = matchingPulls;
+
+            let action = "updated";
+
+            if (existing.data.length === 0) {
+              const message = `This cherry-pick was triggered by a request on #${PR}.\n\nPlease review the diff and merge if no changes are unexpected.`;
+
+              const newPr = await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                base: TARGET_BRANCH,
+                head: pickBranch,
+                title: `🤖 Pick PR #${PR} into ${TARGET_BRANCH}`,
+                body: message,
+                assignees: ["DanielRosenwasser"],
+                reviewers: ["DanielRosenwasser", REQUESTING_USER],
+              });
+
+              action = "created";
+            }
+
+      - run: |
+          MERGE_COMMIT=$(gh pr view $PR --repo ${{ github.repository }} --json 'mergeCommit' --jq '.mergeCommit.oid')
+          PICK_BRANCH="cherry-pick/$PR/$TARGET_BRANCH"
+          git switch --detach "$TARGET_BRANCH"
+          git switch -c "$PICK_BRANCH"
+          git cherry-pick $MERGE_COMMIT
+          git push --force --set-upstream origin "$PICK_BRANCH"
+
+          EXISTING=$(gh pr view "$PICK_BRANCH" --json 'number' --jq '.number' || echo "0")
+          ACTION="updated"
+
+          if [ "$EXISTING" == "0" ]; then
+            MESSAGE="This cherry-pick was triggered by a request on #$PR."
+            MESSAGE+=$'\n\n'
+            MESSAGE+="Please review the diff and merge if no changes are unexpected."
+
+            # TODO(jakebailey): include part of PR title in the below title
+            # TODO(jakebailey): update PR title if it already exists?
+            gh pr create --repo ${{ github.repository }} \
+              --base "$TARGET_BRANCH" --head "$PICK_BRANCH" \
+              --title "🤖 Pick PR #$PR into $TARGET_BRANCH" \
+              --body "$MESSAGE" \
+              --assignee "DanielRosenwasser" |
+              --reviewer "DanielRosenwasser,$REQUESTING_USER"
+
+            EXISTING=$(gh pr view "$PICK_BRANCH" --json 'number' --jq '.number' || echo "0")
+            ACTION="created"
+          fi
+
+          gh pr comment "$PR" --repo ${{ github.repository }} \
+            --body "Hey @$REQUESTING_USER, I've $ACTION #$EXISTING for you."
+        env:
+          # Inputs are untrusted; pass as env and use quoted.
+          PR: ${{ inputs.pr }}
+          TARGET_BRANCH: ${{ inputs.targetBranch }}
+          REQUESTING_USER: ${{ inputs.requestingUser }}
+          GH_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+
+      - run: |
+          MESSAGE="Hey @$REQUESTING_USER, I was unable to cherry-pick this PR."
+          MESSAGE+=$'\n\n'
+          MESSAGE+="Check the logs at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          gh pr comment "$PR" --repo ${{ github.repository }} \
+            --body "$MESSAGE"
+        if: ${{ failure() }}
+        env:
+          PR: ${{ inputs.pr }}
+          TARGET_BRANCH: ${{ inputs.targetBranch }}
+          REQUESTING_USER: ${{ inputs.requestingUser }}
+          GH_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
