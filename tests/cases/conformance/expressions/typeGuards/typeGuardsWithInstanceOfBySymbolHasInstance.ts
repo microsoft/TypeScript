@@ -1,8 +1,8 @@
-//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts] ////
+// @lib: esnext
 
-//// [typeGuardsWithInstanceOfByConstructorSignature.ts]
 interface AConstructor {
     new (): A;
+    [Symbol.hasInstance](value: unknown): value is A;
 }
 interface A {
     foo: string;
@@ -24,6 +24,7 @@ if (obj2 instanceof A) {
 // a construct signature with generics
 interface BConstructor {
     new <T>(): B<T>;
+    [Symbol.hasInstance](value: unknown): value is B<any>;
 }
 interface B<T> {
     foo: T;
@@ -48,6 +49,7 @@ if (obj4 instanceof B) {
 interface CConstructor {
     new (value: string): C1;
     new (value: number): C2;
+    [Symbol.hasInstance](value: unknown): value is C1 | C2;
 }
 interface C1 {
     foo: string;
@@ -80,7 +82,10 @@ if (obj6 instanceof C) {
 interface D {
     foo: string;
 }
-declare var D: { new (): D; };
+declare var D: {
+    new (): D;
+    [Symbol.hasInstance](value: unknown): value is D;
+};
 
 var obj7: D | string;
 if (obj7 instanceof D) { // narrowed to D.
@@ -97,6 +102,7 @@ if (obj8 instanceof D) {
 // a construct signature that returns a union type
 interface EConstructor {
     new (): E1 | E2;
+    [Symbol.hasInstance](value: unknown): value is E1 | E2;
 }
 interface E1 {
     foo: string;
@@ -125,6 +131,7 @@ if (obj10 instanceof E) {
 // a construct signature that returns any
 interface FConstructor {
     new (): any;
+    [Symbol.hasInstance](value: unknown): value is any;
 }
 interface F {
     foo: string;
@@ -148,6 +155,7 @@ if (obj12 instanceof F) {
 interface GConstructor {
     prototype: G1; // high priority
     new (): G2;    // low priority
+    [Symbol.hasInstance](value: unknown): value is G1; // overrides priority
 }
 interface G1 {
     foo1: number;
@@ -173,6 +181,7 @@ if (obj14 instanceof G) {
 interface HConstructor {
     prototype: any; // high priority, but any type is ignored. interface has implicit `prototype: any`.
     new (): H;      // low priority
+    [Symbol.hasInstance](value: unknown): value is H; // overrides priority
 }
 interface H {
     foo: number;
@@ -198,106 +207,6 @@ if (obj17 instanceof Object) { // can't narrow type from 'any' to 'Object'
 }
 
 var obj18: any;
-if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'
-    obj18.foo1;
-    obj18.foo2;
-}
-
-
-//// [typeGuardsWithInstanceOfByConstructorSignature.js]
-var obj1;
-if (obj1 instanceof A) { // narrowed to A.
-    obj1.foo;
-    obj1.bar;
-}
-var obj2;
-if (obj2 instanceof A) {
-    obj2.foo;
-    obj2.bar;
-}
-var obj3;
-if (obj3 instanceof B) { // narrowed to B<number>.
-    obj3.foo = 1;
-    obj3.foo = "str";
-    obj3.bar = "str";
-}
-var obj4;
-if (obj4 instanceof B) {
-    obj4.foo = "str";
-    obj4.foo = 1;
-    obj4.bar = "str";
-}
-var obj5;
-if (obj5 instanceof C) { // narrowed to C1.
-    obj5.foo;
-    obj5.c;
-    obj5.bar1;
-    obj5.bar2;
-}
-var obj6;
-if (obj6 instanceof C) {
-    obj6.foo;
-    obj6.bar1;
-    obj6.bar2;
-}
-var obj7;
-if (obj7 instanceof D) { // narrowed to D.
-    obj7.foo;
-    obj7.bar;
-}
-var obj8;
-if (obj8 instanceof D) {
-    obj8.foo;
-    obj8.bar;
-}
-var obj9;
-if (obj9 instanceof E) { // narrowed to E1
-    obj9.foo;
-    obj9.bar1;
-    obj9.bar2;
-}
-var obj10;
-if (obj10 instanceof E) {
-    obj10.foo;
-    obj10.bar1;
-    obj10.bar2;
-}
-var obj11;
-if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
-    obj11.foo;
-    obj11.bar;
-}
-var obj12;
-if (obj12 instanceof F) {
-    obj12.foo;
-    obj12.bar;
-}
-var obj13;
-if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype property.
-    obj13.foo1;
-    obj13.foo2;
-}
-var obj14;
-if (obj14 instanceof G) {
-    obj14.foo1;
-    obj14.foo2;
-}
-var obj15;
-if (obj15 instanceof H) { // narrowed to H.
-    obj15.foo;
-    obj15.bar;
-}
-var obj16;
-if (obj16 instanceof H) {
-    obj16.foo1;
-    obj16.foo2;
-}
-var obj17;
-if (obj17 instanceof Object) { // can't narrow type from 'any' to 'Object'
-    obj17.foo1;
-    obj17.foo2;
-}
-var obj18;
 if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'
     obj18.foo1;
     obj18.foo2;

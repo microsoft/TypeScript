@@ -11,8 +11,7 @@ interface ClassificationEntry {
 }
 
 describe("unittests:: services:: Colorization", () => {
-    // Use the shim adapter to ensure test coverage of the shim layer for the classifier
-    const languageServiceAdapter = new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false);
+    const languageServiceAdapter = new Harness.LanguageService.NativeLanguageServiceAdapter();
     const classifier = languageServiceAdapter.getClassifier();
 
     function getEntryAtPosition(result: ts.ClassificationResult, position: number) {

@@ -1,34 +1,35 @@
-typeGuardsWithInstanceOfByConstructorSignature.ts(12,10): error TS2339: Property 'bar' does not exist on type 'A'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(18,10): error TS2339: Property 'bar' does not exist on type 'A'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(33,5): error TS2322: Type 'string' is not assignable to type 'number'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(34,10): error TS2339: Property 'bar' does not exist on type 'B<number>'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(41,10): error TS2339: Property 'bar' does not exist on type 'B<any>'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(66,10): error TS2339: Property 'bar2' does not exist on type 'C1'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(72,10): error TS2339: Property 'bar1' does not exist on type 'C1 | C2'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(13,10): error TS2339: Property 'bar' does not exist on type 'A'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(19,10): error TS2339: Property 'bar' does not exist on type 'A'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(35,5): error TS2322: Type 'string' is not assignable to type 'number'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(36,10): error TS2339: Property 'bar' does not exist on type 'B<number>'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(43,10): error TS2339: Property 'bar' does not exist on type 'B<any>'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(69,10): error TS2339: Property 'bar2' does not exist on type 'C1'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(75,10): error TS2339: Property 'bar1' does not exist on type 'C1 | C2'.
   Property 'bar1' does not exist on type 'C2'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(73,10): error TS2339: Property 'bar2' does not exist on type 'C1 | C2'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(76,10): error TS2339: Property 'bar2' does not exist on type 'C1 | C2'.
   Property 'bar2' does not exist on type 'C1'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(85,10): error TS2339: Property 'bar' does not exist on type 'D'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(91,10): error TS2339: Property 'bar' does not exist on type 'D'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(112,10): error TS2339: Property 'bar2' does not exist on type 'E1'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(118,11): error TS2339: Property 'bar1' does not exist on type 'E1 | E2'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(91,10): error TS2339: Property 'bar' does not exist on type 'D'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(97,10): error TS2339: Property 'bar' does not exist on type 'D'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(119,10): error TS2339: Property 'bar2' does not exist on type 'E1'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(125,11): error TS2339: Property 'bar1' does not exist on type 'E1 | E2'.
   Property 'bar1' does not exist on type 'E2'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(119,11): error TS2339: Property 'bar2' does not exist on type 'E1 | E2'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(126,11): error TS2339: Property 'bar2' does not exist on type 'E1 | E2'.
   Property 'bar2' does not exist on type 'E1'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(134,11): error TS2339: Property 'foo' does not exist on type 'string | F'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(142,11): error TS2339: Property 'foo' does not exist on type 'string | F'.
   Property 'foo' does not exist on type 'string'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(135,11): error TS2339: Property 'bar' does not exist on type 'string | F'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(143,11): error TS2339: Property 'bar' does not exist on type 'string | F'.
   Property 'bar' does not exist on type 'string'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(160,11): error TS2339: Property 'foo2' does not exist on type 'G1'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(166,11): error TS2339: Property 'foo2' does not exist on type 'G1'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(182,11): error TS2339: Property 'bar' does not exist on type 'H'.
-typeGuardsWithInstanceOfByConstructorSignature.ts(187,11): error TS2551: Property 'foo1' does not exist on type 'H'. Did you mean 'foo'?
-typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Property 'foo2' does not exist on type 'H'. Did you mean 'foo'?
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(169,11): error TS2339: Property 'foo2' does not exist on type 'G1'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(175,11): error TS2339: Property 'foo2' does not exist on type 'G1'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(192,11): error TS2339: Property 'bar' does not exist on type 'H'.
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(197,11): error TS2551: Property 'foo1' does not exist on type 'H'. Did you mean 'foo'?
+typeGuardsWithInstanceOfBySymbolHasInstance.ts(198,11): error TS2551: Property 'foo2' does not exist on type 'H'. Did you mean 'foo'?
 
 
-==== typeGuardsWithInstanceOfByConstructorSignature.ts (20 errors) ====
+==== typeGuardsWithInstanceOfBySymbolHasInstance.ts (20 errors) ====
     interface AConstructor {
         new (): A;
+        [Symbol.hasInstance](value: unknown): value is A;
     }
     interface A {
         foo: string;
@@ -54,6 +55,7 @@ typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Propert
     // a construct signature with generics
     interface BConstructor {
         new <T>(): B<T>;
+        [Symbol.hasInstance](value: unknown): value is B<any>;
     }
     interface B<T> {
         foo: T;
@@ -84,6 +86,7 @@ typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Propert
     interface CConstructor {
         new (value: string): C1;
         new (value: number): C2;
+        [Symbol.hasInstance](value: unknown): value is C1 | C2;
     }
     interface C1 {
         foo: string;
@@ -124,7 +127,10 @@ typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Propert
     interface D {
         foo: string;
     }
-    declare var D: { new (): D; };
+    declare var D: {
+        new (): D;
+        [Symbol.hasInstance](value: unknown): value is D;
+    };
     
     var obj7: D | string;
     if (obj7 instanceof D) { // narrowed to D.
@@ -145,6 +151,7 @@ typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Propert
     // a construct signature that returns a union type
     interface EConstructor {
         new (): E1 | E2;
+        [Symbol.hasInstance](value: unknown): value is E1 | E2;
     }
     interface E1 {
         foo: string;
@@ -181,6 +188,7 @@ typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Propert
     // a construct signature that returns any
     interface FConstructor {
         new (): any;
+        [Symbol.hasInstance](value: unknown): value is any;
     }
     interface F {
         foo: string;
@@ -210,6 +218,7 @@ typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Propert
     interface GConstructor {
         prototype: G1; // high priority
         new (): G2;    // low priority
+        [Symbol.hasInstance](value: unknown): value is G1; // overrides priority
     }
     interface G1 {
         foo1: number;
@@ -239,6 +248,7 @@ typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Propert
     interface HConstructor {
         prototype: any; // high priority, but any type is ignored. interface has implicit `prototype: any`.
         new (): H;      // low priority
+        [Symbol.hasInstance](value: unknown): value is H; // overrides priority
     }
     interface H {
         foo: number;
@@ -258,11 +268,11 @@ typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Propert
         obj16.foo1;
               ~~~~
 !!! error TS2551: Property 'foo1' does not exist on type 'H'. Did you mean 'foo'?
-!!! related TS2728 typeGuardsWithInstanceOfByConstructorSignature.ts:175:5: 'foo' is declared here.
+!!! related TS2728 typeGuardsWithInstanceOfBySymbolHasInstance.ts:185:5: 'foo' is declared here.
         obj16.foo2;
               ~~~~
 !!! error TS2551: Property 'foo2' does not exist on type 'H'. Did you mean 'foo'?
-!!! related TS2728 typeGuardsWithInstanceOfByConstructorSignature.ts:175:5: 'foo' is declared here.
+!!! related TS2728 typeGuardsWithInstanceOfBySymbolHasInstance.ts:185:5: 'foo' is declared here.
     }
     
     var obj17: any;
