@@ -799,6 +799,16 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
 }
 
 /** @internal */
+export function getResolvedModuleFromResolution(resolution: ResolvedModuleWithFailedLookupLocations) {
+    return resolution.resolvedModule;
+}
+
+/** @internal */
+export function getResolvedTypeReferenceDirectiveFromResolution(resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
+    return resolution.resolvedTypeReferenceDirective;
+}
+
+/** @internal */
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
     const alternateResult = host.getResolvedModule(sourceFile, moduleReference, mode)?.alternateResult;
     const alternateResultMessage = alternateResult && (getEmitModuleResolutionKind(host.getCompilerOptions()) === ModuleResolutionKind.Node10
