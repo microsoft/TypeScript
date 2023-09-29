@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/throwExpression/throwExpression2.ts] ////
+
+=== throwExpression2.ts ===
+function t1(value: number | undefined) {
+>t1 : (value: number | undefined) => void
+>value : number
+
+    const a = value || throw new Error("Unexpected value");
+>a : any
+>value || throw new Error("Unexpected value") : any
+>value : number
+>new Error("Unexpected value") : Error
+>Error : ErrorConstructor
+>"Unexpected value" : "Unexpected value"
+}
+
+function t2(value: number | undefined) {
+>t2 : (value: number | undefined) => void
+>value : number
+
+    const a = value && throw new Error("Unexpected value");
+>a : any
+>value && throw new Error("Unexpected value") : any
+>value : number
+>new Error("Unexpected value") : Error
+>Error : ErrorConstructor
+>"Unexpected value" : "Unexpected value"
+}
+

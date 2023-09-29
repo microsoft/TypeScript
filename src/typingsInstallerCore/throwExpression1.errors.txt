@@ -1,0 +1,11 @@
+throwExpression1.ts(2,14): error TS1005: ';' expected.
+
+
+==== throwExpression1.ts (1 errors) ====
+    function t1(a: any, b: any, c: any) {
+        (throw a ? b : c);
+                 ~
+!!! error TS1005: ';' expected.
+    }
+    
+    

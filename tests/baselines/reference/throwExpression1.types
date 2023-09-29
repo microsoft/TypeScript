@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/throwExpression/throwExpression1.ts] ////
+
+=== throwExpression1.ts ===
+function f(foo = throw new TypeError("Argument required")) {}
+>f : (foo?: any) => void
+>foo : error
+>new TypeError("Argument required") : TypeError
+>TypeError : TypeErrorConstructor
+>"Argument required" : "Argument required"
+
+class C {
+>C : C
+
+    m(foo = throw new TypeError("Argument required")) {}
+>m : (foo?: any) => void
+>foo : error
+>new TypeError("Argument required") : TypeError
+>TypeError : TypeErrorConstructor
+>"Argument required" : "Argument required"
+}
+

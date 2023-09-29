@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/throwExpression/throwExpression1.ts] ////
+
+=== throwExpression1.ts ===
+function f(foo = throw new TypeError("Argument required")) {}
+>f : Symbol(f, Decl(throwExpression1.ts, 0, 0))
+>foo : Symbol(foo, Decl(throwExpression1.ts, 0, 11))
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+class C {
+>C : Symbol(C, Decl(throwExpression1.ts, 0, 61))
+
+    m(foo = throw new TypeError("Argument required")) {}
+>m : Symbol(C.m, Decl(throwExpression1.ts, 2, 9))
+>foo : Symbol(foo, Decl(throwExpression1.ts, 3, 6))
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+

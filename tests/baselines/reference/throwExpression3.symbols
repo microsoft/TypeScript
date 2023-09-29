@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/throwExpression/throwExpression3.ts] ////
+
+=== throwExpression3.ts ===
+function t1(foo: number) {
+>t1 : Symbol(t1, Decl(throwExpression3.ts, 0, 0))
+>foo : Symbol(foo, Decl(throwExpression3.ts, 0, 12))
+
+    const a = foo === 1 ? 1 : throw new Error("Unexpected value");
+>a : Symbol(a, Decl(throwExpression3.ts, 1, 9))
+>foo : Symbol(foo, Decl(throwExpression3.ts, 0, 12))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function t2(foo: number) {
+>t2 : Symbol(t2, Decl(throwExpression3.ts, 2, 1))
+>foo : Symbol(foo, Decl(throwExpression3.ts, 4, 12))
+
+    const a = foo === 1 ? throw new Error("Unexpected value") : 1;
+>a : Symbol(a, Decl(throwExpression3.ts, 5, 9))
+>foo : Symbol(foo, Decl(throwExpression3.ts, 4, 12))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function t3(foo: number | undefined) {
+>t3 : Symbol(t3, Decl(throwExpression3.ts, 6, 1))
+>foo : Symbol(foo, Decl(throwExpression3.ts, 8, 12))
+
+    const a = foo ?? throw new Error("Unexpected value");
+>a : Symbol(a, Decl(throwExpression3.ts, 9, 9))
+>foo : Symbol(foo, Decl(throwExpression3.ts, 8, 12))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+

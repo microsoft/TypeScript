@@ -286,6 +286,7 @@ export const enum SyntaxKind {
     ParenthesizedExpression,
     FunctionExpression,
     ArrowFunction,
+    ThrowExpression,
     DeleteExpression,
     TypeOfExpression,
     VoidExpression,
@@ -1084,6 +1085,7 @@ export type HasChildren =
     | DeleteExpression
     | TypeOfExpression
     | VoidExpression
+    | ThrowExpression
     | AwaitExpression
     | PrefixUnaryExpression
     | PostfixUnaryExpression
@@ -2450,6 +2452,11 @@ export interface VoidExpression extends UnaryExpression {
 
 export interface AwaitExpression extends UnaryExpression {
     readonly kind: SyntaxKind.AwaitExpression;
+    readonly expression: UnaryExpression;
+}
+
+export interface ThrowExpression extends UnaryExpression {
+    readonly kind: SyntaxKind.ThrowExpression;
     readonly expression: UnaryExpression;
 }
 
@@ -8501,6 +8508,8 @@ export interface NodeFactory {
     updateFunctionExpression(node: FunctionExpression, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block): FunctionExpression;
     createArrowFunction(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken | undefined, body: ConciseBody): ArrowFunction;
     updateArrowFunction(node: ArrowFunction, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken, body: ConciseBody): ArrowFunction;
+    createThrowExpression(expression: Expression): ThrowExpression;
+    updateThrowExpression(node: ThrowExpression, expression: Expression): ThrowExpression;
     createDeleteExpression(expression: Expression): DeleteExpression;
     updateDeleteExpression(node: DeleteExpression, expression: Expression): DeleteExpression;
     createTypeOfExpression(expression: Expression): TypeOfExpression;

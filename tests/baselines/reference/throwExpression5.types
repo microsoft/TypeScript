@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/throwExpression/throwExpression5.ts] ////
+
+=== throwExpression5.ts ===
+function t1(a: number, b: number, c: number) {
+>t1 : (a: number, b: number, c: number) => void
+>a : number
+>b : number
+>c : number
+
+    (throw a ? b : c);
+>(throw a ? b : c) : number
+>throw a ? b : c : number
+>a : any
+>b : number
+>c : number
+}
+
+function t2(a: number, b: number) {
+>t2 : (a: number, b: number) => void
+>a : number
+>b : number
+
+    (throw a, b);
+>(throw a, b) : number
+>throw a, b : number
+>a : any
+>b : number
+}
+
+function t3(a: number, b: number) {
+>t3 : (a: number, b: number) => void
+>a : number
+>b : number
+
+    (throw a && b);
+>(throw a && b) : number
+>throw a && b : number
+>a : any
+>b : number
+}
+
+function t4(a: number, b: number) {
+>t4 : (a: number, b: number) => void
+>a : number
+>b : number
+
+    (throw a || b);
+>(throw a || b) : any
+>throw a || b : any
+>a : any
+>b : number
+}
+
+function t5(a: number, b: number, c: number) {
+>t5 : (a: number, b: number, c: number) => void
+>a : number
+>b : number
+>c : number
+
+    (throw (a ? b : c));
+>(throw (a ? b : c)) : any
+>(a ? b : c) : number
+>a ? b : c : number
+>a : number
+>b : number
+>c : number
+}
+

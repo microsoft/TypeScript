@@ -1163,6 +1163,13 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
+    [SyntaxKind.ThrowExpression]: function visitEachChildThrowExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+        return context.factory.updateThrowExpression(
+            node,
+            Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
+        );
+    },
+
     [SyntaxKind.BinaryExpression]: function visitEachChildOfBinaryExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateBinaryExpression(
             node,

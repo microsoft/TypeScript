@@ -438,6 +438,7 @@ import {
     TextRange,
     ThisExpression,
     ThisTypeNode,
+    ThrowExpression,
     ThrowStatement,
     Token,
     TokenFlags,
@@ -679,6 +680,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateFunctionExpression,
         createArrowFunction,
         updateArrowFunction,
+        createThrowExpression,
+        updateThrowExpression,
         createDeleteExpression,
         updateDeleteExpression,
         createTypeOfExpression,
@@ -3314,6 +3317,22 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 || node.equalsGreaterThanToken !== equalsGreaterThanToken
                 || node.body !== body
             ? finishUpdateBaseSignatureDeclaration(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node)
+            : node;
+    }
+
+    // @api
+    function createThrowExpression(expression: Expression) {
+        const node = createBaseNode<ThrowExpression>(SyntaxKind.ThrowExpression);
+        node.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
+        node.transformFlags |= propagateChildFlags(node.expression);
+        node.transformFlags |= TransformFlags.ContainsESNext;
+        return node;
+    }
+
+    // @api
+    function updateThrowExpression(node: ThrowExpression, expression: Expression) {
+        return node.expression !== expression
+            ? update(createThrowExpression(expression), node)
             : node;
     }
 

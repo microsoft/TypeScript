@@ -2006,6 +2006,7 @@ function isUnaryExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.VoidExpression:
         case SyntaxKind.AwaitExpression:
         case SyntaxKind.TypeAssertionExpression:
+        case SyntaxKind.ThrowExpression:
             return true;
         default:
             return isLeftHandSideExpressionKind(kind);

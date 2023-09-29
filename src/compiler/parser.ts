@@ -360,6 +360,7 @@ import {
     textToKeywordObj,
     ThisExpression,
     ThisTypeNode,
+    ThrowExpression,
     ThrowStatement,
     toArray,
     Token,
@@ -990,6 +991,9 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.ExpressionWithTypeArguments]: function forEachChildInExpressionWithTypeArguments<T>(node: ExpressionWithTypeArguments, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
+    },
+    [SyntaxKind.ThrowExpression]: function forEachChildInThrowExpression<T>(node: ThrowExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
     },
     [SyntaxKind.ExternalModuleReference]: function forEachChildInExternalModuleReference<T>(node: ExternalModuleReference, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
@@ -5505,6 +5509,7 @@ namespace Parser {
             token() !== SyntaxKind.SemicolonToken &&
             token() !== SyntaxKind.FunctionKeyword &&
             token() !== SyntaxKind.ClassKeyword &&
+            token() !== SyntaxKind.ThrowKeyword &&
             isStartOfStatement() &&
             !isStartOfExpressionStatement()
         ) {
@@ -5658,6 +5663,64 @@ namespace Parser {
         return finishNode(factory.createPrefixUnaryExpression(token() as PrefixUnaryOperator, nextTokenAnd(parseSimpleUnaryExpression)), pos);
     }
 
+    function parseThrowExpression() {
+        const pos = getNodePos();
+        const expression = nextTokenAnd(parseSimpleUnaryExpression);
+        if (isInfixPunctuationToken()) {
+            parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
+        }
+        return finishNode(factory.createThrowExpression(expression), pos);
+    }
+
+    function isInfixPunctuationToken() {
+        switch (token()) {
+            case SyntaxKind.CommaToken:
+            case SyntaxKind.LessThanToken:
+            case SyntaxKind.GreaterThanToken:
+            case SyntaxKind.EqualsToken:
+            case SyntaxKind.LessThanEqualsToken:
+            case SyntaxKind.GreaterThanEqualsToken:
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+            case SyntaxKind.PlusToken:
+            case SyntaxKind.MinusToken:
+            case SyntaxKind.AsteriskToken:
+            case SyntaxKind.SlashToken:
+            case SyntaxKind.PercentToken:
+            case SyntaxKind.AmpersandToken:
+            case SyntaxKind.BarToken:
+            case SyntaxKind.CaretToken:
+            case SyntaxKind.AsteriskAsteriskToken:
+            case SyntaxKind.LessThanLessThanToken:
+            case SyntaxKind.GreaterThanGreaterThanToken:
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+            case SyntaxKind.AmpersandAmpersandToken:
+            case SyntaxKind.BarBarToken:
+            case SyntaxKind.QuestionQuestionToken:
+            case SyntaxKind.PlusEqualsToken:
+            case SyntaxKind.MinusEqualsToken:
+            case SyntaxKind.AsteriskEqualsToken:
+            case SyntaxKind.SlashEqualsToken:
+            case SyntaxKind.PercentEqualsToken:
+            case SyntaxKind.AmpersandEqualsToken:
+            case SyntaxKind.BarEqualsToken:
+            case SyntaxKind.CaretEqualsToken:
+            case SyntaxKind.AsteriskAsteriskEqualsToken:
+            case SyntaxKind.LessThanLessThanEqualsToken:
+            case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+            case SyntaxKind.AmpersandAmpersandEqualsToken:
+            case SyntaxKind.BarBarEqualsToken:
+            case SyntaxKind.QuestionQuestionEqualsToken:
+            case SyntaxKind.QuestionToken:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     function parseDeleteExpression() {
         const pos = getNodePos();
         return finishNode(factory.createDeleteExpression(nextTokenAnd(parseSimpleUnaryExpression)), pos);
@@ -5769,6 +5832,8 @@ namespace Parser {
                 return parseTypeOfExpression();
             case SyntaxKind.VoidKeyword:
                 return parseVoidExpression();
+            case SyntaxKind.ThrowKeyword:
+                return parseThrowExpression();
             case SyntaxKind.LessThanToken:
                 // Just like in parseUpdateExpression, we need to avoid parsing type assertions when
                 // in JSX and we see an expression like "+ <foo> bar".
@@ -5811,6 +5876,7 @@ namespace Parser {
             case SyntaxKind.TypeOfKeyword:
             case SyntaxKind.VoidKeyword:
             case SyntaxKind.AwaitKeyword:
+            case SyntaxKind.ThrowKeyword:
                 return false;
             case SyntaxKind.LessThanToken:
                 // If we are not in JSX context, we are parsing TypeAssertion which is an UnaryExpression

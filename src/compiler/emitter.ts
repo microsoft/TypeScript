@@ -422,6 +422,7 @@ import {
     TemplateLiteralTypeSpan,
     TemplateSpan,
     TextRange,
+    ThrowExpression,
     ThrowStatement,
     TokenFlags,
     tokenToString,
@@ -2278,6 +2279,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitSpreadElement(node as SpreadElement);
                 case SyntaxKind.ClassExpression:
                     return emitClassExpression(node as ClassExpression);
+                case SyntaxKind.ThrowExpression:
+                    return emitThrowExpression(node as ThrowExpression);
                 case SyntaxKind.OmittedExpression:
                     return;
                 case SyntaxKind.AsExpression:
@@ -3365,6 +3368,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function emitClassExpression(node: ClassExpression) {
         generateNameIfNeeded(node.name);
         emitClassDeclarationOrExpression(node);
+    }
+
+    function emitThrowExpression(node: ThrowExpression) {
+        emitTokenWithComment(SyntaxKind.ThrowKeyword, node.pos, writeKeyword, node);
+        writeSpace();
+        emitExpression(node.expression, parenthesizer.parenthesizeOperandOfPrefixUnary);
     }
 
     function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {

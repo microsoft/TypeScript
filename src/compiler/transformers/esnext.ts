@@ -50,6 +50,7 @@ import {
     Statement,
     SwitchStatement,
     SyntaxKind,
+    ThrowExpression,
     TransformationContext,
     TransformFlags,
     transformNamedEvaluation,
@@ -119,6 +120,9 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
             case SyntaxKind.SwitchStatement:
                 return visitSwitchStatement(node as SwitchStatement);
+
+            case SyntaxKind.ThrowExpression:
+                return visitThrowExpression(node as ThrowExpression);
 
             default:
                 return visitEachChild(node, visitor, context);
@@ -401,6 +405,12 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         }
 
         return visitEachChild(node, visitor, context);
+    }
+
+    function visitThrowExpression(node: ThrowExpression): Expression {
+        return factory.createImmediatelyInvokedArrowFunction([
+            factory.createThrowStatement(node.expression),
+        ]);
     }
 
     /**

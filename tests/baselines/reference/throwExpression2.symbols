@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/throwExpression/throwExpression2.ts] ////
+
+=== throwExpression2.ts ===
+function t1(value: number | undefined) {
+>t1 : Symbol(t1, Decl(throwExpression2.ts, 0, 0))
+>value : Symbol(value, Decl(throwExpression2.ts, 0, 12))
+
+    const a = value || throw new Error("Unexpected value");
+>a : Symbol(a, Decl(throwExpression2.ts, 1, 9))
+>value : Symbol(value, Decl(throwExpression2.ts, 0, 12))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function t2(value: number | undefined) {
+>t2 : Symbol(t2, Decl(throwExpression2.ts, 2, 1))
+>value : Symbol(value, Decl(throwExpression2.ts, 4, 12))
+
+    const a = value && throw new Error("Unexpected value");
+>a : Symbol(a, Decl(throwExpression2.ts, 5, 9))
+>value : Symbol(value, Decl(throwExpression2.ts, 4, 12))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+

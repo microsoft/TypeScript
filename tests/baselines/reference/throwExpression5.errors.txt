@@ -1,0 +1,35 @@
+throwExpression5.ts(2,14): error TS1005: ';' expected.
+throwExpression5.ts(6,13): error TS1005: ';' expected.
+throwExpression5.ts(10,14): error TS1005: ';' expected.
+throwExpression5.ts(14,14): error TS1005: ';' expected.
+
+
+==== throwExpression5.ts (4 errors) ====
+    function t1(a: number, b: number, c: number) {
+        (throw a ? b : c);
+                 ~
+!!! error TS1005: ';' expected.
+    }
+    
+    function t2(a: number, b: number) {
+        (throw a, b);
+                ~
+!!! error TS1005: ';' expected.
+    }
+    
+    function t3(a: number, b: number) {
+        (throw a && b);
+                 ~~
+!!! error TS1005: ';' expected.
+    }
+    
+    function t4(a: number, b: number) {
+        (throw a || b);
+                 ~~
+!!! error TS1005: ';' expected.
+    }
+    
+    function t5(a: number, b: number, c: number) {
+        (throw (a ? b : c));
+    }
+    
