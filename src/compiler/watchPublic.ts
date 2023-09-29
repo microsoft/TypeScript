@@ -529,11 +529,13 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
     if (!compilerHost.resolveModuleNameLiterals && !compilerHost.resolveModuleNames) {
         compilerHost.resolveModuleNameLiterals = resolutionCache.resolveModuleNameLiterals.bind(resolutionCache);
+        compilerHost.onReusedModuleResolutions = resolutionCache.onReusedModuleResolutions.bind(resolutionCache);
     }
     compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(host, host.resolveTypeReferenceDirectiveReferences);
     compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
     if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
         compilerHost.resolveTypeReferenceDirectiveReferences = resolutionCache.resolveTypeReferenceDirectiveReferences.bind(resolutionCache);
+        compilerHost.onReusedTypeReferenceDirectiveResolutions = resolutionCache.onReusedTypeReferenceDirectiveResolutions.bind(resolutionCache);
     }
     compilerHost.resolveLibrary = !host.resolveLibrary ?
         resolutionCache.resolveLibrary.bind(resolutionCache) :

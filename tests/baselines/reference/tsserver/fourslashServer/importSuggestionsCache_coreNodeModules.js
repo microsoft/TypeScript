@@ -4365,6 +4365,10 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "completionInfo"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/workspaces 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspaces 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -4948,6 +4952,54 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After Request
+watchedFiles::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/node/index.d.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/node_modules/@types/node/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/node_modules/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+  {"pollingInterval":250}
+/home/src/workspaces/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectories *deleted*::
+/home/src/workspaces:
+  {}
+/home/src/workspaces/project:
+  {}
+
+watchedDirectoriesRecursive::
+/home/src/workspaces/node_modules:
+  {}
+  {}
+/home/src/workspaces/node_modules/@types:
+  {}
+/home/src/workspaces/project:
+  {}
+/home/src/workspaces/project/node_modules:
+  {}
+  {}
+/home/src/workspaces/project/node_modules/@types:
+  {}
+  {}
+
 Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
