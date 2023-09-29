@@ -44674,8 +44674,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return location ? evaluateEnumMember(expr, symbol, location) : getEnumMemberValue(symbol.valueDeclaration as EnumMember);
                         }
                         if (isConstantVariable(symbol)) {
-                            const declaration = symbol.valueDeclaration as VariableDeclaration | BindingElement | undefined;
-                            if (declaration?.kind === SyntaxKind.VariableDeclaration && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
+                            const declaration = symbol.valueDeclaration;
+                            if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
                                 return evaluate(declaration.initializer, declaration);
                             }
                         }
