@@ -24,6 +24,10 @@
 //// }) => void
 //// const foo5: F2 = (a) => { }
 
+////interface Thing {}
+////function foo4(callback: (thing: Thing) => void) {}
+////foo4(p => {})
+
 verify.baselineInlayHints(undefined, {
     includeInlayFunctionParameterTypeHints: true,
     interactiveInlayHints: true,
