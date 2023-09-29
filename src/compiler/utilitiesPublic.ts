@@ -1709,7 +1709,7 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
 }
 
 /** @internal */
-export function isClassFieldAndNotAutoAccessor(node: Declaration): boolean {
+export function isClassInstanceProperty(node: Declaration): boolean {
     if (isInJSFile(node) && isExpandoPropertyDeclaration(node)) {
         return (!isBindableStaticAccessExpression(node) || !isPrototypeAccess(node.expression)) && !isBindableStaticNameExpression(node, /*excludeThisKeyword*/ true);
     }
