@@ -1,8 +1,9 @@
-//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts] ////
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfBySymbolHasInstance.ts] ////
 
-//// [typeGuardsWithInstanceOfByConstructorSignature.ts]
+//// [typeGuardsWithInstanceOfBySymbolHasInstance.ts]
 interface AConstructor {
     new (): A;
+    [Symbol.hasInstance](value: unknown): value is A;
 }
 interface A {
     foo: string;
@@ -24,6 +25,7 @@ if (obj2 instanceof A) {
 // a construct signature with generics
 interface BConstructor {
     new <T>(): B<T>;
+    [Symbol.hasInstance](value: unknown): value is B<any>;
 }
 interface B<T> {
     foo: T;
@@ -48,6 +50,7 @@ if (obj4 instanceof B) {
 interface CConstructor {
     new (value: string): C1;
     new (value: number): C2;
+    [Symbol.hasInstance](value: unknown): value is C1 | C2;
 }
 interface C1 {
     foo: string;
@@ -80,7 +83,10 @@ if (obj6 instanceof C) {
 interface D {
     foo: string;
 }
-declare var D: { new (): D; };
+declare var D: {
+    new (): D;
+    [Symbol.hasInstance](value: unknown): value is D;
+};
 
 var obj7: D | string;
 if (obj7 instanceof D) { // narrowed to D.
@@ -97,6 +103,7 @@ if (obj8 instanceof D) {
 // a construct signature that returns a union type
 interface EConstructor {
     new (): E1 | E2;
+    [Symbol.hasInstance](value: unknown): value is E1 | E2;
 }
 interface E1 {
     foo: string;
@@ -125,6 +132,7 @@ if (obj10 instanceof E) {
 // a construct signature that returns any
 interface FConstructor {
     new (): any;
+    [Symbol.hasInstance](value: unknown): value is any;
 }
 interface F {
     foo: string;
@@ -148,6 +156,7 @@ if (obj12 instanceof F) {
 interface GConstructor {
     prototype: G1; // high priority
     new (): G2;    // low priority
+    [Symbol.hasInstance](value: unknown): value is G1; // overrides priority
 }
 interface G1 {
     foo1: number;
@@ -173,6 +182,7 @@ if (obj14 instanceof G) {
 interface HConstructor {
     prototype: any; // high priority, but any type is ignored. interface has implicit `prototype: any`.
     new (): H;      // low priority
+    [Symbol.hasInstance](value: unknown): value is H; // overrides priority
 }
 interface H {
     foo: number;
@@ -204,7 +214,7 @@ if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'
 }
 
 
-//// [typeGuardsWithInstanceOfByConstructorSignature.js]
+//// [typeGuardsWithInstanceOfBySymbolHasInstance.js]
 var obj1;
 if (obj1 instanceof A) { // narrowed to A.
     obj1.foo;

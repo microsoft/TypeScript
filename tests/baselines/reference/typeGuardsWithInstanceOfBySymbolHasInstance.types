@@ -1,8 +1,14 @@
-//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts] ////
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfBySymbolHasInstance.ts] ////
 
-=== typeGuardsWithInstanceOfByConstructorSignature.ts ===
+=== typeGuardsWithInstanceOfBySymbolHasInstance.ts ===
 interface AConstructor {
     new (): A;
+    [Symbol.hasInstance](value: unknown): value is A;
+>[Symbol.hasInstance] : (value: unknown) => value is A
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
 }
 interface A {
     foo: string;
@@ -52,6 +58,12 @@ if (obj2 instanceof A) {
 // a construct signature with generics
 interface BConstructor {
     new <T>(): B<T>;
+    [Symbol.hasInstance](value: unknown): value is B<any>;
+>[Symbol.hasInstance] : (value: unknown) => value is B<any>
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
 }
 interface B<T> {
     foo: T;
@@ -127,6 +139,13 @@ interface CConstructor {
 
     new (value: number): C2;
 >value : number
+
+    [Symbol.hasInstance](value: unknown): value is C1 | C2;
+>[Symbol.hasInstance] : (value: unknown) => value is C1 | C2
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
 }
 interface C1 {
     foo: string;
@@ -209,8 +228,18 @@ interface D {
     foo: string;
 >foo : string
 }
-declare var D: { new (): D; };
->D : new () => D
+declare var D: {
+>D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
+
+    new (): D;
+    [Symbol.hasInstance](value: unknown): value is D;
+>[Symbol.hasInstance] : (value: unknown) => value is D
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
+
+};
 
 var obj7: D | string;
 >obj7 : string | D
@@ -218,7 +247,7 @@ var obj7: D | string;
 if (obj7 instanceof D) { // narrowed to D.
 >obj7 instanceof D : boolean
 >obj7 : string | D
->D : new () => D
+>D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
 
     obj7.foo;
 >obj7.foo : string
@@ -237,7 +266,7 @@ var obj8: any;
 if (obj8 instanceof D) {
 >obj8 instanceof D : boolean
 >obj8 : any
->D : new () => D
+>D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
 
     obj8.foo;
 >obj8.foo : string
@@ -253,6 +282,12 @@ if (obj8 instanceof D) {
 // a construct signature that returns a union type
 interface EConstructor {
     new (): E1 | E2;
+    [Symbol.hasInstance](value: unknown): value is E1 | E2;
+>[Symbol.hasInstance] : (value: unknown) => value is E1 | E2
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
 }
 interface E1 {
     foo: string;
@@ -322,6 +357,12 @@ if (obj10 instanceof E) {
 // a construct signature that returns any
 interface FConstructor {
     new (): any;
+    [Symbol.hasInstance](value: unknown): value is any;
+>[Symbol.hasInstance] : (value: unknown) => value is any
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
 }
 interface F {
     foo: string;
@@ -377,6 +418,12 @@ interface GConstructor {
 >prototype : G1
 
     new (): G2;    // low priority
+    [Symbol.hasInstance](value: unknown): value is G1; // overrides priority
+>[Symbol.hasInstance] : (value: unknown) => value is G1
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
 }
 interface G1 {
     foo1: number;
@@ -433,6 +480,12 @@ interface HConstructor {
 >prototype : any
 
     new (): H;      // low priority
+    [Symbol.hasInstance](value: unknown): value is H; // overrides priority
+>[Symbol.hasInstance] : (value: unknown) => value is H
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
 }
 interface H {
     foo: number;
