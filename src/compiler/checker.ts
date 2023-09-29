@@ -44675,7 +44675,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         if (isConstantVariable(symbol)) {
                             const declaration = symbol.valueDeclaration as VariableDeclaration | undefined;
-                            if (declaration && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
+                            if (declaration?.kind === SyntaxKind.VariableDeclaration && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
                                 return evaluate(declaration.initializer, declaration);
                             }
                         }
