@@ -28163,6 +28163,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.AnyOrUnknown) {
                 return candidate;
             }
+
+            // TODO(jakebailey): should this just be type === candidate?
+            if (isTypeIdenticalTo(type, candidate)) {
+                return candidate;
+            }
+
             // We first attempt to filter the current type, narrowing constituents as appropriate and removing
             // constituents that are unrelated to the candidate.
             const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
