@@ -29745,8 +29745,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             const links = getNodeLinks(part);
                             links.flags |= NodeCheckFlags.ContainsCapturedBlockScopeBinding;
 
-                            const capturedBindings = links.capturedBlockScopeBindings || (links.capturedBlockScopeBindings = []);
-                            pushIfUnique(capturedBindings, symbol);
+                            const capturedBindings = links.capturedBlockScopeBindings ??= new Set();
+                            capturedBindings.add(symbol);
 
                             if (part === container.initializer) {
                                 capturesBlockScopeBindingInLoopBody = false; // Initializer is outside of loop body
@@ -29779,7 +29779,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement) {
         const links = getNodeLinks(node);
-        return !!links && contains(links.capturedBlockScopeBindings, getSymbolOfDeclaration(decl));
+        return !!links?.capturedBlockScopeBindings?.has(getSymbolOfDeclaration(decl));
     }
 
     function isAssignedInBodyOfForStatement(node: Identifier, container: ForStatement): boolean {

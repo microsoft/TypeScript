@@ -5981,7 +5981,7 @@ export interface NodeLinks {
     jsxImplicitImportContainer?: Symbol | false; // Resolved module symbol the implicit jsx import of this file should refer to
     contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
     deferredNodes?: Set<Node>;          // Set of nodes whose checking has been deferred
-    capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
+    capturedBlockScopeBindings?: Set<Symbol>; // Block-scoped bindings captured beneath this part of an IterationStatement
     outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
     isExhaustive?: boolean | 0;         // Is node an exhaustive switch statement (0 indicates in-process resolution)
     skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
