@@ -14478,7 +14478,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (type.resolvedBaseConstraint) {
             return type.resolvedBaseConstraint;
         }
-        const stack: object[] = [];
+        const seenIdentities = new Map<object, number>();
+        let seenSize = 0;
         return type.resolvedBaseConstraint = getImmediateBaseConstraint(type);
 
         function getImmediateBaseConstraint(t: Type): Type {
@@ -14494,10 +14495,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // yet triggered the deeply nested limiter. We have no test cases that actually get to 50 levels of
                 // nesting, so it is effectively just a safety stop.
                 const identity = getRecursionIdentity(t);
-                if (stack.length < 10 || stack.length < 50 && !contains(stack, identity)) {
-                    stack.push(identity);
+                if (seenSize < 10 || seenSize < 50 && seenIdentities.get(identity)) {
+                    seenSize++;
+                    const count = seenIdentities.get(identity) ?? 0;
+                    seenIdentities.set(identity, count + 1);
                     result = computeBaseConstraint(getSimplifiedType(t, /*writing*/ false));
-                    stack.pop();
+                    seenSize--;
+                    seenIdentities.set(identity, count);
                 }
                 if (!popTypeResolution()) {
                     if (t.flags & TypeFlags.TypeParameter) {
