@@ -18,11 +18,11 @@ jobs:
       - name: Get repo name
         run: R=${GITHUB_REPOSITORY%?wiki}; echo "BASENAME=${R##*/}" >> $GITHUB_ENV
       - name: Checkout ${{ env.BASENAME }}-wiki
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           repository: '${{ GITHUB.repository_owner }}/${{ env.BASENAME }}-wiki'
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-          filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
+          fetch-depth: 0
       - name: Run sync
         run: ./.github/workflows/sync
         env:
