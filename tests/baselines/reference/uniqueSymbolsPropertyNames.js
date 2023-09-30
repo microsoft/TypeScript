@@ -48,6 +48,24 @@ const t3 = {
   [getUniqueSymbol1()]: "last",
 };
 
+class Cls1 {
+  [uniqueSymbol0] = "first";
+  [uniqueSymbol0] = "last";
+  [uniqueSymbol1] = "first";
+  [uniqueSymbol1] = "last";
+}
+
+class Cls2 {
+  [OpNamespace.equal] = "first";
+  [OpNamespace.equal] = "last";
+}
+
+class Cls3 {
+  [getUniqueSymbol0()] = "first";
+  [getUniqueSymbol0()] = "last";
+  [getUniqueSymbol1()] = "first";
+  [getUniqueSymbol1()] = "last";
+}
 
 //// [uniqueSymbolsPropertyNames.js]
 var OpNamespace;
@@ -83,3 +101,19 @@ const t3 = {
     [getUniqueSymbol1()]: "first",
     [getUniqueSymbol1()]: "last",
 };
+class Cls1 {
+    [uniqueSymbol0] = "first";
+    [uniqueSymbol0] = "last";
+    [uniqueSymbol1] = "first";
+    [uniqueSymbol1] = "last";
+}
+class Cls2 {
+    [OpNamespace.equal] = "first";
+    [OpNamespace.equal] = "last";
+}
+class Cls3 {
+    [getUniqueSymbol0()] = "first";
+    [getUniqueSymbol0()] = "last";
+    [getUniqueSymbol1()] = "first";
+    [getUniqueSymbol1()] = "last";
+}

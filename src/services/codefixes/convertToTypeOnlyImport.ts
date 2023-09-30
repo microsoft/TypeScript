@@ -125,13 +125,13 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
                     factory.createImportClause(/*isTypeOnly*/ true, getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true), /*namedBindings*/ undefined),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
-                    getSynthesizedDeepClone(declaration.assertClause, /*includeTrivia*/ true),
+                    getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
                 factory.createImportDeclaration(
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
                     factory.createImportClause(/*isTypeOnly*/ true, /*name*/ undefined, getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true)),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
-                    getSynthesizedDeepClone(declaration.assertClause, /*includeTrivia*/ true),
+                    getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
             ]);
         }
@@ -142,7 +142,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
                     sameMap(importClause.namedBindings.elements, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name)),
                 )
                 : importClause.namedBindings;
-            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.assertClause);
+            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.attributes);
             changes.replaceNode(sourceFile, declaration, importDeclaration);
         }
     }

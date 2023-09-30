@@ -7,8 +7,6 @@ import {
     ArrayTypeNode,
     ArrowFunction,
     AsExpression,
-    AssertClause,
-    AssertEntry,
     AwaitExpression,
     base64encode,
     BigIntLiteral,
@@ -191,6 +189,8 @@ import {
     Identifier,
     idText,
     IfStatement,
+    ImportAttribute,
+    ImportAttributes,
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -407,7 +407,6 @@ import {
     SpreadElement,
     stableSort,
     Statement,
-    stringContains,
     StringLiteral,
     supportedJSExtensionsFlat,
     SwitchStatement,
@@ -928,6 +927,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             inlineSourceMap: compilerOptions.inlineSourceMap,
             extendedDiagnostics: compilerOptions.extendedDiagnostics,
             onlyPrintJsDocStyle: true,
+            omitBraceSourceMapPositions: true,
             writeBundleFileInfo: !!bundleBuildInfo,
             recordInternalSection: !!bundleBuildInfo,
             relativeToBuildInfo,
@@ -1392,6 +1392,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     } = handlers;
 
     var extendedDiagnostics = !!printerOptions.extendedDiagnostics;
+    var omitBraceSourcePositions = !!printerOptions.omitBraceSourceMapPositions;
     var newLine = getNewLineCharacter(printerOptions);
     var moduleKind = getEmitModuleKind(printerOptions);
     var bundledHelpers = new Map<string, boolean>();
@@ -2054,10 +2055,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitNamedExports(node as NamedExports);
                 case SyntaxKind.ExportSpecifier:
                     return emitExportSpecifier(node as ExportSpecifier);
-                case SyntaxKind.AssertClause:
-                    return emitAssertClause(node as AssertClause);
-                case SyntaxKind.AssertEntry:
-                    return emitAssertEntry(node as AssertEntry);
+                case SyntaxKind.ImportAttributes:
+                    return emitImportAttributes(node as ImportAttributes);
+                case SyntaxKind.ImportAttribute:
+                    return emitImportAttribute(node as ImportAttribute);
                 case SyntaxKind.MissingDeclaration:
                     return;
 
@@ -2947,16 +2948,16 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeKeyword("import");
         writePunctuation("(");
         emit(node.argument);
-        if (node.assertions) {
+        if (node.attributes) {
             writePunctuation(",");
             writeSpace();
             writePunctuation("{");
             writeSpace();
-            writeKeyword("assert");
+            writeKeyword(node.attributes.token === SyntaxKind.AssertKeyword ? "assert" : "with");
             writePunctuation(":");
             writeSpace();
-            const elements = node.assertions.assertClause.elements;
-            emitList(node.assertions.assertClause, elements, ListFormat.ImportClauseEntries);
+            const elements = node.attributes.elements;
+            emitList(node.attributes, elements, ListFormat.ImportAttributes);
             writeSpace();
             writePunctuation("}");
         }
@@ -3065,9 +3066,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
             return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
-                && !stringContains(text, tokenToString(SyntaxKind.DotToken)!)
-                && !stringContains(text, String.fromCharCode(CharacterCodes.E))
-                && !stringContains(text, String.fromCharCode(CharacterCodes.e));
+                && !text.includes(tokenToString(SyntaxKind.DotToken)!)
+                && !text.includes(String.fromCharCode(CharacterCodes.E))
+                && !text.includes(String.fromCharCode(CharacterCodes.e));
         }
         else if (isAccessExpression(expression)) {
             // check if constant enum value is a non-negative integer
@@ -3579,7 +3580,18 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 decreaseIndent();
             }
         }
-        pos = writeTokenText(token, writer, pos);
+
+        // We don't emit source positions for most tokens as it tends to be quite noisy, however
+        // we need to emit source positions for open and close braces so that tools like istanbul
+        // can map branches for code coverage. However, we still omit brace source positions when
+        // the output is a declaration file.
+        if (!omitBraceSourcePositions && (token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken)) {
+            pos = writeToken(token, pos, writer, contextNode);
+        }
+        else {
+            pos = writeTokenText(token, writer, pos);
+        }
+
         if (isSimilarNode && contextNode.end !== pos) {
             const isJsxExprContext = contextNode.kind === SyntaxKind.JsxExpression;
             emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ !isJsxExprContext, /*forceNoNewline*/ isJsxExprContext);
@@ -3991,8 +4003,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
         }
         emitExpression(node.moduleSpecifier);
-        if (node.assertClause) {
-            emitWithLeadingSpace(node.assertClause);
+        if (node.attributes) {
+            emitWithLeadingSpace(node.attributes);
         }
         writeTrailingSemicolon();
     }
@@ -4066,20 +4078,20 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
             emitExpression(node.moduleSpecifier);
         }
-        if (node.assertClause) {
-            emitWithLeadingSpace(node.assertClause);
+        if (node.attributes) {
+            emitWithLeadingSpace(node.attributes);
         }
         writeTrailingSemicolon();
     }
 
-    function emitAssertClause(node: AssertClause) {
-        emitTokenWithComment(SyntaxKind.AssertKeyword, node.pos, writeKeyword, node);
+    function emitImportAttributes(node: ImportAttributes) {
+        emitTokenWithComment(node.token, node.pos, writeKeyword, node);
         writeSpace();
         const elements = node.elements;
-        emitList(node, elements, ListFormat.ImportClauseEntries);
+        emitList(node, elements, ListFormat.ImportAttributes);
     }
 
-    function emitAssertEntry(node: AssertEntry) {
+    function emitImportAttribute(node: ImportAttribute) {
         emit(node.name);
         writePunctuation(":");
         writeSpace();
@@ -5120,6 +5132,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     if ((format & (ListFormat.LinesMask | ListFormat.Indented)) === ListFormat.SingleLine) {
                         increaseIndent();
                         shouldDecreaseIndentAfterEmit = true;
+                    }
+
+                    if (shouldEmitInterveningComments && format & ListFormat.DelimitersMask && !positionIsSynthesized(child.pos)) {
+                        const commentRange = getCommentRange(child);
+                        emitTrailingCommentsOfPosition(commentRange.pos, /*prefixSpace*/ !!(format & ListFormat.SpaceBetweenSiblings), /*forceNoNewline*/ true);
                     }
 
                     writeLine(separatingLineTerminatorCount);

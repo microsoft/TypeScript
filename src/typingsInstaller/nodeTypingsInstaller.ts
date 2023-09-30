@@ -10,7 +10,6 @@ import {
     MapLike,
     normalizePath,
     normalizeSlashes,
-    stringContains,
     sys,
     toPath,
     version,
@@ -123,7 +122,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0], validateDefaultNpmLocation, this.installTypingHost);
 
         // If the NPM path contains spaces and isn't wrapped in quotes, do so.
-        if (stringContains(this.npmPath, " ") && this.npmPath[0] !== `"`) {
+        if (this.npmPath.includes(" ") && this.npmPath[0] !== `"`) {
             this.npmPath = `"${this.npmPath}"`;
         }
         if (this.log.isEnabled()) {

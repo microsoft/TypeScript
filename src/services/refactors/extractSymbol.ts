@@ -2128,7 +2128,7 @@ function collectReadsAndWrites(
 
     function checkForUsedDeclarations(node: Node) {
         // If this node is entirely within the original extraction range, we don't need to do anything.
-        if (node === targetRange.range || (isReadonlyArray(targetRange.range) && targetRange.range.indexOf(node as Statement) >= 0)) {
+        if (node === targetRange.range || (isReadonlyArray(targetRange.range) && targetRange.range.includes(node as Statement))) {
             return;
         }
 
