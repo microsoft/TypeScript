@@ -2130,7 +2130,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /** Key is "/path/to/a.ts|/path/to/b.ts". */
     var amalgamatedDuplicates: Map<string, DuplicateInfoForFiles> | undefined;
     var reverseMappedCache = new Map<string, Type | undefined>();
-    var homomorphicMappedTypeInferenceStack: string[] = [];
+    var homomorphicMappedTypeInferenceStack = new Set<string>();
     var ambientModulesCache: Symbol[] | undefined;
     /**
      * List of every ambient module with a "*" wildcard.
@@ -25380,12 +25380,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return reverseMappedCache.get(cacheKey);
         }
         const recursionKey = source.id + "," + (target.target || target).id;
-        if (contains(homomorphicMappedTypeInferenceStack, recursionKey)) {
+        if (homomorphicMappedTypeInferenceStack.has(recursionKey)) {
             return undefined;
         }
-        homomorphicMappedTypeInferenceStack.push(recursionKey);
+        homomorphicMappedTypeInferenceStack.add(recursionKey);
         const type = createReverseMappedType(source, target, constraint);
-        homomorphicMappedTypeInferenceStack.pop();
+        homomorphicMappedTypeInferenceStack.delete(recursionKey);
         reverseMappedCache.set(cacheKey, type);
         return type;
     }
