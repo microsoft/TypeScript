@@ -293,4 +293,4 @@ jobs:
           fetch-depth: ${{ matrix.fetch-depth }}
 
       - run: git log -20 --oneline
-      - run: git log -20 --oneline release-5.0
+      - run: git log -20 --oneline origin/release-5.0
