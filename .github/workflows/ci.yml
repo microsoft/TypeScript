@@ -274,3 +274,27 @@ jobs:
             print_diff D "Unused baselines"
             exit 1
           fi
+
+  # Temp job to double check git history
+  # TODO(jakebailey): remove
+  git-check:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        full: [true, false]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
+          fetch-depth: 0
+        if: ${{ matrix.full }}
+
+      - uses: actions/checkout@v4
+        with:
+          filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
+        if: ${{ ! matrix.full }}
+
+      - run: git log -20 --oneline
+      - run: git log -20 --oneline release-5.0
