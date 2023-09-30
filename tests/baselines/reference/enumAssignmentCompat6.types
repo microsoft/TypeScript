@@ -1,0 +1,155 @@
+//// [tests/cases/compiler/enumAssignmentCompat6.ts] ////
+
+=== f.ts ===
+// @filename a.ts
+namespace a {
+>a : typeof a
+
+    export enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
+
+        Warning,
+>Warning : DiagnosticCategory.Warning
+
+        Error,
+>Error : DiagnosticCategory.Error
+
+        Suggestion,
+>Suggestion : DiagnosticCategory.Suggestion
+
+        Message,
+>Message : DiagnosticCategory.Message
+    }
+
+    export enum DiagnosticCategory2 {
+>DiagnosticCategory2 : DiagnosticCategory2
+
+        Warning,
+>Warning : DiagnosticCategory2.Warning
+
+        Error,
+>Error : DiagnosticCategory2.Error
+
+        Suggestion,
+>Suggestion : DiagnosticCategory2.Suggestion
+
+        Message,
+>Message : DiagnosticCategory2.Message
+    }
+}
+
+namespace b {
+>b : typeof b
+
+    export enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
+
+        Warning = "Warning",
+>Warning : DiagnosticCategory.Warning
+>"Warning" : "Warning"
+
+        Error = "Error",
+>Error : DiagnosticCategory.Error
+>"Error" : "Error"
+
+        Suggestion = "Suggestion",
+>Suggestion : DiagnosticCategory.Suggestion
+>"Suggestion" : "Suggestion"
+
+        Message = "Message",
+>Message : DiagnosticCategory.Message
+>"Message" : "Message"
+    }
+}
+
+function f(x: a.DiagnosticCategory, y: b.DiagnosticCategory) {
+>f : (x: a.DiagnosticCategory, y: b.DiagnosticCategory) => void
+>x : a.DiagnosticCategory
+>a : any
+>y : b.DiagnosticCategory
+>b : any
+
+    x = y;
+>x = y : b.DiagnosticCategory
+>x : a.DiagnosticCategory
+>y : b.DiagnosticCategory
+
+    y = x;
+>y = x : a.DiagnosticCategory
+>y : b.DiagnosticCategory
+>x : a.DiagnosticCategory
+}
+
+function g(x: a.DiagnosticCategory2, y: b.DiagnosticCategory) {
+>g : (x: a.DiagnosticCategory2, y: b.DiagnosticCategory) => void
+>x : a.DiagnosticCategory2
+>a : any
+>y : b.DiagnosticCategory
+>b : any
+
+    x = y;
+>x = y : b.DiagnosticCategory
+>x : a.DiagnosticCategory2
+>y : b.DiagnosticCategory
+
+    y = x;
+>y = x : a.DiagnosticCategory2
+>y : b.DiagnosticCategory
+>x : a.DiagnosticCategory2
+}
+
+
+export enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
+
+    Warning,
+>Warning : DiagnosticCategory.Warning
+
+    Error,
+>Error : DiagnosticCategory.Error
+
+    Suggestion,
+>Suggestion : DiagnosticCategory.Suggestion
+
+    Message,
+>Message : DiagnosticCategory.Message
+}
+
+export let x: DiagnosticCategory;
+>x : DiagnosticCategory
+
+{
+    enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
+
+        Warning = "Warning",
+>Warning : DiagnosticCategory.Warning
+>"Warning" : "Warning"
+
+        Error = "Error",
+>Error : DiagnosticCategory.Error
+>"Error" : "Error"
+
+        Suggestion = "Suggestion",
+>Suggestion : DiagnosticCategory.Suggestion
+>"Suggestion" : "Suggestion"
+
+        Message = "Message",
+>Message : DiagnosticCategory.Message
+>"Message" : "Message"
+    }
+    function f(y: DiagnosticCategory) {
+>f : (y: DiagnosticCategory) => void
+>y : DiagnosticCategory
+
+        x = y;
+>x = y : DiagnosticCategory
+>x : import("f").DiagnosticCategory
+>y : DiagnosticCategory
+
+        y = x;
+>y = x : import("f").DiagnosticCategory
+>y : DiagnosticCategory
+>x : import("f").DiagnosticCategory
+    }
+}
