@@ -274,23 +274,3 @@ jobs:
             print_diff D "Unused baselines"
             exit 1
           fi
-
-  # Temp job to double check git history
-  # TODO(jakebailey): remove
-  git-check:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        fetch-depth: [0, null]
-        filter: ['blob:none', null]
-      fail-fast: false
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          filter: ${{ matrix.filter }}
-          fetch-depth: ${{ matrix.fetch-depth }}
-
-      - run: git log -20 --oneline
-      - run: git log -20 --oneline origin/release-5.0
