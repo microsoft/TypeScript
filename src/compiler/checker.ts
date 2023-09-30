@@ -25971,8 +25971,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const saveExpandingFlags = expandingFlags;
             (sourceStack ??= []).push(source);
             (targetStack ??= []).push(target);
-            if (isDeeplyNestedType(source, sourceStack, sourceStack.length, 2)) expandingFlags |= ExpandingFlags.Source;
             if (isDeeplyNestedType(target, targetStack, targetStack.length, 2)) expandingFlags |= ExpandingFlags.Target;
+            if (isDeeplyNestedType(source, sourceStack, sourceStack.length, 2)) expandingFlags |= ExpandingFlags.Source;
             if (expandingFlags !== ExpandingFlags.Both) {
                 action(source, target);
             }
@@ -25987,20 +25987,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function inferFromMatchingTypes(sources: Type[], targets: Type[], matches: (s: Type, t: Type) => boolean): [Type[], Type[]] {
-            let matchedSources: Type[] | undefined;
-            let matchedTargets: Type[] | undefined;
+            let matchedSources: Set<Type> | undefined;
+            let matchedTargets: Set<Type> | undefined;
             for (const t of targets) {
                 for (const s of sources) {
                     if (matches(s, t)) {
                         inferFromTypes(s, t);
-                        matchedSources = appendIfUnique(matchedSources, s);
-                        matchedTargets = appendIfUnique(matchedTargets, t);
+                        (matchedSources ??= new Set()).add(s);
+                        (matchedTargets ??= new Set()).add(t);
                     }
                 }
             }
             return [
-                matchedSources ? filter(sources, t => !contains(matchedSources, t)) : sources,
-                matchedTargets ? filter(targets, t => !contains(matchedTargets, t)) : targets,
+                matchedSources ? filter(sources, t => !matchedSources!.has(t)) : sources,
+                matchedTargets ? filter(targets, t => !matchedTargets!.has(t)) : targets,
             ];
         }
 
