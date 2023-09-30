@@ -253,14 +253,14 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        const hints = typeToInlayHintParts(declarationType);
-        if (hints) {
-            const hintText = typeof hints === "string" ? hints : hints.map(part => part.text).join("");
+        const hintParts = typeToInlayHintParts(declarationType);
+        if (hintParts) {
+            const hintText = typeof hintParts === "string" ? hintParts : hintParts.map(part => part.text).join("");
             const isVariableNameMatchesType = preferences.includeInlayVariableTypeHintsWhenTypeMatchesName === false && equateStringsCaseInsensitive(decl.name.getText(), hintText);
             if (isVariableNameMatchesType) {
                 return;
             }
-            addTypeHints(hints, decl.name.end);
+            addTypeHints(hintParts, decl.name.end);
         }
     }
 
@@ -385,9 +385,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        const hint = typeToInlayHintParts(returnType);
-        if (hint) {
-            addTypeHints(hint, getTypeAnnotationPosition(decl));
+        const hintParts = typeToInlayHintParts(returnType);
+        if (hintParts) {
+            addTypeHints(hintParts, getTypeAnnotationPosition(decl));
         }
     }
 
@@ -416,16 +416,16 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 continue;
             }
 
-            const typeDisplayString = getParameterDeclarationTypeDisplayString(signature.parameters[i]);
-            if (!typeDisplayString) {
+            const typeHints = getParameterDeclarationTypeHints(signature.parameters[i]);
+            if (!typeHints) {
                 continue;
             }
 
-            addTypeHints(typeDisplayString, param.questionToken ? param.questionToken.end : param.name.end);
+            addTypeHints(typeHints, param.questionToken ? param.questionToken.end : param.name.end);
         }
     }
 
-    function getParameterDeclarationTypeDisplayString(symbol: Symbol) {
+    function getParameterDeclarationTypeHints(symbol: Symbol) {
         const valueDeclaration = symbol.valueDeclaration;
         if (!valueDeclaration || !isParameter(valueDeclaration)) {
             return undefined;
@@ -435,8 +435,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         if (isModuleReferenceType(signatureParamType)) {
             return undefined;
         }
-
-        return printTypeInSingleLine(signatureParamType);
+        return typeToInlayHintParts(signatureParamType);
     }
 
     function printTypeInSingleLine(type: Type) {

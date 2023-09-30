@@ -231,6 +231,7 @@ import {
     IndexSignatureDeclaration,
     InitializedVariableDeclaration,
     insertSorted,
+    InstanceofExpression,
     InterfaceDeclaration,
     InternalEmitFlags,
     isAccessor,
@@ -3120,6 +3121,8 @@ export function getInvokedExpression(node: CallLikeExpression): Expression | Jsx
         case SyntaxKind.JsxOpeningElement:
         case SyntaxKind.JsxSelfClosingElement:
             return node.tagName;
+        case SyntaxKind.BinaryExpression:
+            return node.right;
         default:
             return node.expression;
     }
@@ -7234,6 +7237,15 @@ export function isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName(node
     return isQualifiedName(node.parent) && node.parent.right === node
         || isPropertyAccessExpression(node.parent) && node.parent.name === node
         || isJSDocMemberName(node.parent) && node.parent.right === node;
+}
+/** @internal */
+export function isInstanceOfExpression(node: Node): node is InstanceofExpression {
+    return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.InstanceOfKeyword;
+}
+
+/** @internal */
+export function isRightSideOfInstanceofExpression(node: Node) {
+    return isInstanceOfExpression(node.parent) && node === node.parent.right;
 }
 
 /** @internal */

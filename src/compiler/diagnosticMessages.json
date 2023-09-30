@@ -1920,7 +1920,7 @@
         "category": "Error",
         "code": 2358
     },
-    "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.": {
+    "The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.": {
         "category": "Error",
         "code": 2359
     },
@@ -3690,6 +3690,14 @@
     "Excessive complexity comparing types '{0}' and '{1}'.": {
         "category": "Error",
         "code": 2859
+    },
+    "The left-hand side of an 'instanceof' expression must be assignable to the first argument of the right-hand side's '[Symbol.hasInstance]' method.": {
+        "category": "Error",
+        "code": 2860
+    },
+    "An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression.": {
+        "category": "Error",
+        "code": 2861
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
