@@ -1,9 +1,17 @@
+f.ts(28,5): error TS2322: Type 'b.DiagnosticCategory' is not assignable to type 'a.DiagnosticCategory'.
+  The values of 'DiagnosticCategory.Warning' differ in their declarations, where '0' was expected but '"Warning"' was given.
+f.ts(29,5): error TS2322: Type 'a.DiagnosticCategory' is not assignable to type 'b.DiagnosticCategory'.
+  The values of 'DiagnosticCategory.Warning' differ in their declarations, where '"Warning"' was expected but '0' was given.
 f.ts(33,5): error TS2322: Type 'DiagnosticCategory' is not assignable to type 'DiagnosticCategory2'.
 f.ts(34,5): error TS2322: Type 'DiagnosticCategory2' is not assignable to type 'DiagnosticCategory'.
 f.ts(54,14): error TS1252: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.
+f.ts(55,9): error TS2322: Type 'DiagnosticCategory' is not assignable to type 'import("f").DiagnosticCategory'.
+  The values of 'DiagnosticCategory.Warning' differ in their declarations, where '0' was expected but '"Warning"' was given.
+f.ts(56,9): error TS2322: Type 'import("f").DiagnosticCategory' is not assignable to type 'DiagnosticCategory'.
+  The values of 'DiagnosticCategory.Warning' differ in their declarations, where '"Warning"' was expected but '0' was given.
 
 
-==== f.ts (3 errors) ====
+==== f.ts (7 errors) ====
     // @filename a.ts
     namespace a {
         export enum DiagnosticCategory {
@@ -32,7 +40,13 @@ f.ts(54,14): error TS1252: Function declarations are not allowed inside blocks i
     
     function f(x: a.DiagnosticCategory, y: b.DiagnosticCategory) {
         x = y;
+        ~
+!!! error TS2322: Type 'b.DiagnosticCategory' is not assignable to type 'a.DiagnosticCategory'.
+!!! error TS2322:   The values of 'DiagnosticCategory.Warning' differ in their declarations, where '0' was expected but '"Warning"' was given.
         y = x;
+        ~
+!!! error TS2322: Type 'a.DiagnosticCategory' is not assignable to type 'b.DiagnosticCategory'.
+!!! error TS2322:   The values of 'DiagnosticCategory.Warning' differ in their declarations, where '"Warning"' was expected but '0' was given.
     }
     
     function g(x: a.DiagnosticCategory2, y: b.DiagnosticCategory) {
@@ -65,6 +79,12 @@ f.ts(54,14): error TS1252: Function declarations are not allowed inside blocks i
                  ~
 !!! error TS1252: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.
             x = y;
+            ~
+!!! error TS2322: Type 'DiagnosticCategory' is not assignable to type 'import("f").DiagnosticCategory'.
+!!! error TS2322:   The values of 'DiagnosticCategory.Warning' differ in their declarations, where '0' was expected but '"Warning"' was given.
             y = x;
+            ~
+!!! error TS2322: Type 'import("f").DiagnosticCategory' is not assignable to type 'DiagnosticCategory'.
+!!! error TS2322:   The values of 'DiagnosticCategory.Warning' differ in their declarations, where '"Warning"' was expected but '0' was given.
         }
     }
