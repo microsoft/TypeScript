@@ -283,6 +283,7 @@ jobs:
     strategy:
       matrix:
         full: [true, false]
+      fail-fast: false
 
     steps:
       - uses: actions/checkout@v4
