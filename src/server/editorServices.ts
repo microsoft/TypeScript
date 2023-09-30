@@ -27,6 +27,7 @@ import {
     Diagnostic,
     directorySeparator,
     DirectoryStructureHost,
+    DirectoryWatcherCallback,
     DocumentPosition,
     DocumentPositionMapper,
     DocumentRegistry,
@@ -37,6 +38,7 @@ import {
     FileExtensionInfo,
     fileExtensionIs,
     FileWatcher,
+    FileWatcherCallback,
     FileWatcherEventKind,
     find,
     flatMap,
@@ -127,6 +129,7 @@ import {
     version,
     WatchDirectoryFlags,
     WatchFactory,
+    WatchFactoryHost,
     WatchLogLevel,
     WatchOptions,
     WatchType,
@@ -193,6 +196,9 @@ export const ConfigFileDiagEvent = "configFileDiag";
 export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
 export const ProjectInfoTelemetryEvent = "projectInfo";
 export const OpenFileInfoTelemetryEvent = "openFileInfo";
+export const CreateFileWatcherEvent: protocol.CreateFileWatcherEventName = "createFileWatcher";
+export const CreateDirectoryWatcherEvent: protocol.CreateDirectoryWatcherEventName = "createDirectoryWatcher";
+export const CloseFileWatcherEvent: protocol.CloseFileWatcherEventName = "closeFileWatcher";
 const ensureProjectForOpenFileSchedule = "*ensureProjectForOpenFiles*";
 
 export interface ProjectsUpdatedInBackgroundEvent {
@@ -320,6 +326,21 @@ export interface OpenFileInfo {
     readonly checkJs: boolean;
 }
 
+export interface CreateFileWatcherEvent {
+    readonly eventName: protocol.CreateFileWatcherEventName;
+    readonly data: protocol.CreateFileWatcherEventBody;
+}
+
+export interface CreateDirectoryWatcherEvent {
+    readonly eventName: protocol.CreateDirectoryWatcherEventName;
+    readonly data: protocol.CreateDirectoryWatcherEventBody;
+}
+
+export interface CloseFileWatcherEvent {
+    readonly eventName: protocol.CloseFileWatcherEventName;
+    readonly data: protocol.CloseFileWatcherEventBody;
+}
+
 export type ProjectServiceEvent =
     | LargeFileReferencedEvent
     | ProjectsUpdatedInBackgroundEvent
@@ -328,7 +349,10 @@ export type ProjectServiceEvent =
     | ConfigFileDiagEvent
     | ProjectLanguageServiceStateEvent
     | ProjectInfoTelemetryEvent
-    | OpenFileInfoTelemetryEvent;
+    | OpenFileInfoTelemetryEvent
+    | CreateFileWatcherEvent
+    | CreateDirectoryWatcherEvent
+    | CloseFileWatcherEvent;
 
 export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -583,6 +607,7 @@ export interface ProjectServiceOptions {
     useInferredProjectPerProjectRoot: boolean;
     typingsInstaller?: ITypingsInstaller;
     eventHandler?: ProjectServiceEventHandler;
+    canUseWatchEvents?: boolean;
     suppressDiagnosticEvents?: boolean;
     throttleWaitMilliseconds?: number;
     globalPlugins?: readonly string[];
@@ -857,6 +882,109 @@ function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => s
     return () => nameFactory(nextId++);
 }
 
+interface HostWatcherMap<T> {
+    idToCallbacks: Map<number, Set<T>>;
+    pathToId: Map<Path, number>;
+}
+
+function getHostWatcherMap<T>(): HostWatcherMap<T> {
+    return { idToCallbacks: new Map(), pathToId: new Map() };
+}
+
+function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseWatchEvents: boolean | undefined): WatchFactoryHost | undefined {
+    if (!canUseWatchEvents || !service.eventHandler || !service.session) return undefined;
+    const watchedFiles = getHostWatcherMap<FileWatcherCallback>();
+    const watchedDirectories = getHostWatcherMap<DirectoryWatcherCallback>();
+    const watchedDirectoriesRecursive = getHostWatcherMap<DirectoryWatcherCallback>();
+    let ids = 1;
+    service.session.addProtocolHandler(protocol.CommandTypes.WatchChange, req => {
+        onWatchChange((req as protocol.WatchChangeRequest).arguments);
+        return { responseRequired: false };
+    });
+    return {
+        watchFile,
+        watchDirectory,
+        getCurrentDirectory: () => service.host.getCurrentDirectory(),
+        useCaseSensitiveFileNames: service.host.useCaseSensitiveFileNames,
+    };
+    function watchFile(path: string, callback: FileWatcherCallback): FileWatcher {
+        return getOrCreateFileWatcher(
+            watchedFiles,
+            path,
+            callback,
+            id => ({ eventName: CreateFileWatcherEvent, data: { id, path } }),
+        );
+    }
+    function watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+        return getOrCreateFileWatcher(
+            recursive ? watchedDirectoriesRecursive : watchedDirectories,
+            path,
+            callback,
+            id => ({ eventName: CreateDirectoryWatcherEvent, data: { id, path, recursive: !!recursive } }),
+        );
+    }
+    function getOrCreateFileWatcher<T>(
+        { pathToId, idToCallbacks }: HostWatcherMap<T>,
+        path: string,
+        callback: T,
+        event: (id: number) => CreateFileWatcherEvent | CreateDirectoryWatcherEvent,
+    ) {
+        const key = service.toPath(path);
+        let id = pathToId.get(key);
+        if (!id) pathToId.set(key, id = ids++);
+        let callbacks = idToCallbacks.get(id);
+        if (!callbacks) {
+            idToCallbacks.set(id, callbacks = new Set());
+            // Add watcher
+            service.eventHandler!(event(id));
+        }
+        callbacks.add(callback);
+        return {
+            close() {
+                const callbacks = idToCallbacks.get(id!);
+                if (!callbacks?.delete(callback)) return;
+                if (callbacks.size) return;
+                idToCallbacks.delete(id!);
+                pathToId.delete(key);
+                service.eventHandler!({ eventName: CloseFileWatcherEvent, data: { id: id! } });
+            },
+        };
+    }
+    function onWatchChange({ id, path, eventType }: protocol.WatchChangeRequestArgs) {
+        // console.log(`typescript-vscode-watcher:: Invoke:: ${id}:: ${path}:: ${eventType}`);
+        onFileWatcherCallback(id, path, eventType);
+        onDirectoryWatcherCallback(watchedDirectories, id, path, eventType);
+        onDirectoryWatcherCallback(watchedDirectoriesRecursive, id, path, eventType);
+    }
+
+    function onFileWatcherCallback(
+        id: number,
+        eventPath: string,
+        eventType: "create" | "delete" | "update",
+    ) {
+        watchedFiles.idToCallbacks.get(id)?.forEach(callback => {
+            const eventKind = eventType === "create" ?
+                FileWatcherEventKind.Created :
+                eventType === "delete" ?
+                FileWatcherEventKind.Deleted :
+                FileWatcherEventKind.Changed;
+            callback(eventPath, eventKind);
+        });
+    }
+
+    function onDirectoryWatcherCallback(
+        { idToCallbacks }: HostWatcherMap<DirectoryWatcherCallback>,
+        id: number,
+        eventPath: string,
+        eventType: "create" | "delete" | "update",
+    ) {
+        if (eventType === "update") return;
+        idToCallbacks.get(id)?.forEach(callback => {
+            callback(eventPath);
+        });
+    }
+}
+
 export class ProjectService {
     /** @internal */
     readonly typingsCache: TypingsCache;
@@ -961,7 +1089,8 @@ export class ProjectService {
     public readonly typingsInstaller: ITypingsInstaller;
     private readonly globalCacheLocationDirectoryPath: Path | undefined;
     public readonly throttleWaitMilliseconds?: number;
-    private readonly eventHandler?: ProjectServiceEventHandler;
+    /** @internal */
+    readonly eventHandler?: ProjectServiceEventHandler;
     private readonly suppressDiagnosticEvents?: boolean;
 
     public readonly globalPlugins: readonly string[];
@@ -999,6 +1128,7 @@ export class ProjectService {
     private currentPluginEnablementPromise?: Promise<void>;
 
     /** @internal */ verifyDocumentRegistry = noop;
+    /** @internal */ verifyProgram: (project: Project) => void = noop;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
@@ -1064,7 +1194,12 @@ export class ProjectService {
                 watchFile: returnNoopFileWatcher,
                 watchDirectory: returnNoopFileWatcher,
             } :
-            getWatchFactory(this.host, watchLogLevel, log, getDetailWatchInfo);
+            getWatchFactory(
+                createWatchFactoryHostUsingWatchEvents(this, opts.canUseWatchEvents) || this.host,
+                watchLogLevel,
+                log,
+                getDetailWatchInfo,
+            );
         opts.incrementalVerifier?.(this);
     }
 

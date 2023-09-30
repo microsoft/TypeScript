@@ -223,6 +223,7 @@ a;b;
                         `,
                         ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    symlinksNotReflected: [`/user/username/projects/myproject/link.ts`],
                 },
             ],
         });
@@ -277,6 +278,7 @@ a;b;
                         `,
                         ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    symlinksNotReflected: [`/user/username/projects/myproject/link/a.ts`],
                 },
             ],
         });

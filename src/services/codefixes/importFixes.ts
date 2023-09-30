@@ -1427,7 +1427,7 @@ function promoteFromTypeOnly(
         // Change .ts extension to .js if necessary
         if (!compilerOptions.allowImportingTsExtensions) {
             const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(importClause.parent);
-            const resolvedModule = moduleSpecifier && program.resolvedModules?.get(sourceFile.path)?.get(moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier))?.resolvedModule;
+            const resolvedModule = moduleSpecifier && program.getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier))?.resolvedModule;
             if (resolvedModule?.resolvedUsingTsExtension) {
                 const changedExtension = changeAnyExtension(moduleSpecifier!.text, getOutputExtension(moduleSpecifier!.text, compilerOptions));
                 changes.replaceNode(sourceFile, moduleSpecifier!, factory.createStringLiteral(changedExtension));
@@ -1655,7 +1655,7 @@ function getNewImports(
                     factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name)),
                 ),
                 quotedModuleSpecifier,
-                /*assertClause*/ undefined,
+                /*attributes*/ undefined,
             );
         statements = combine(statements, declaration);
     }

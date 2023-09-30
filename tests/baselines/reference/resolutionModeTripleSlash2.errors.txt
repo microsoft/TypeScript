@@ -1,0 +1,47 @@
+/app.ts(2,1): error TS2304: Cannot find name 'MODULE'.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "types": []
+      }
+    }
+    
+==== /app.ts (1 errors) ====
+    /// <reference types="foo" resolution-mode="require" />
+    MODULE; // error
+    ~~~~~~
+!!! error TS2304: Cannot find name 'MODULE'.
+    SCRIPT; // ok
+    function foo() {
+        return SCRIPT;
+    }
+==== /node_modules/@types/foo/package.json (0 errors) ====
+    {
+      "name": "@types/foo",
+      "version": "1.0.0",
+      "exports": {
+        ".": {
+          "import": "./index.d.mts",
+          "require": "./index.d.cts"
+        }
+      }
+    }
+    
+==== /node_modules/@types/foo/index.d.mts (0 errors) ====
+    export {};
+    declare global {
+      const MODULE: any;
+    }
+    
+==== /node_modules/@types/foo/index.d.cts (0 errors) ====
+    export {};
+    declare global {
+      const SCRIPT: any;
+    }
+    

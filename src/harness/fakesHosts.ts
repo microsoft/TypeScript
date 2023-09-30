@@ -366,7 +366,12 @@ export class CompilerHost implements ts.CompilerHost {
         // reused across multiple tests. In that case, we cache the SourceFile we parse
         // so that it can be reused across multiple tests to avoid the cost of
         // repeatedly parsing the same file over and over (such as lib.d.ts).
-        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersionOrOptions=${languageVersionOrOptions !== undefined ? JSON.stringify(languageVersionOrOptions) : undefined},setParentNodes=${this._setParentNodes}]`;
+
+        // TODO(jakebailey): the below is totally wrong; languageVersionOrOptions can be an object,
+        // and so any options bag will be keyed as "[object Object]", and we'll incorrectly share
+        // SourceFiles parsed with different options. But fixing this doesn't expose any bugs and
+        // doubles the memory usage of a test run, so I'm leaving it for now.
+        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersionOrOptions=${languageVersionOrOptions},setParentNodes=${this._setParentNodes}]`;
         if (cacheKey) {
             const meta = this.vfs.filemeta(canonicalFileName);
             const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
