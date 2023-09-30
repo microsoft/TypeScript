@@ -141,11 +141,12 @@ export function every<T, U extends T>(array: readonly T[], callback: (element: T
 /** @internal */
 export function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
 /** @internal */
-export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
-export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean {
+export function every<T>(array: Iterable<T> | undefined, callback: (element: T, index: number) => boolean): boolean;
+export function every<T>(array: Iterable<T> | undefined, callback: (element: T, index: number) => boolean): boolean {
     if (array) {
-        for (let i = 0; i < array.length; i++) {
-            if (!callback(array[i], i)) {
+        let i = 0;
+        for (const v of array) {
+            if (!callback(v, i++)) {
                 return false;
             }
         }
@@ -656,9 +657,9 @@ export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined,
 /** @internal */
 export function some<T>(array: readonly T[] | undefined): array is readonly T[];
 /** @internal */
-export function some<T>(array: readonly T[] | undefined, predicate: (value: T) => boolean): boolean;
+export function some<T>(array: Iterable<T> | undefined, predicate: (value: T) => boolean): boolean;
 /** @internal */
-export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) => boolean): boolean {
+export function some<T>(array: Iterable<T> | undefined, predicate?: (value: T) => boolean): boolean {
     if (array) {
         if (predicate) {
             for (const v of array) {
@@ -668,7 +669,7 @@ export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) 
             }
         }
         else {
-            return array.length > 0;
+            return (array as T[]).length > 0;
         }
     }
     return false;

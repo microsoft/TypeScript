@@ -6787,8 +6787,8 @@ export const enum InferencePriority {
 /** @internal */
 export interface InferenceInfo {
     typeParameter: TypeParameter;            // Type parameter for which inferences are being made
-    candidates: Type[] | undefined;          // Candidates in covariant positions (or undefined)
-    contraCandidates: Type[] | undefined;    // Candidates in contravariant positions (or undefined)
+    candidates: Set<Type> | undefined;       // Candidates in covariant positions (or undefined)
+    contraCandidates: Set<Type> | undefined; // Candidates in contravariant positions (or undefined)
     inferredType?: Type;                     // Cache for resolved inferred type
     priority?: InferencePriority;            // Priority of current inference set
     topLevel: boolean;                       // True if all inferences are to top level occurrences

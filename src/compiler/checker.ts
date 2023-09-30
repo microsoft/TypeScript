@@ -25282,8 +25282,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function cloneInferenceInfo(inference: InferenceInfo): InferenceInfo {
         return {
             typeParameter: inference.typeParameter,
-            candidates: inference.candidates && inference.candidates.slice(),
-            contraCandidates: inference.contraCandidates && inference.contraCandidates.slice(),
+            candidates: inference.candidates && new Set(inference.candidates),
+            contraCandidates: inference.contraCandidates && new Set(inference.contraCandidates),
             inferredType: inference.inferredType,
             priority: inference.priority,
             topLevel: inference.topLevel,
@@ -25486,8 +25486,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeFromInference(inference: InferenceInfo) {
-        return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) :
-            inference.contraCandidates ? getIntersectionType(inference.contraCandidates) :
+        return inference.candidates ? getUnionType([...inference.candidates], UnionReduction.Subtype) :
+            inference.contraCandidates ? getIntersectionType([...inference.contraCandidates]) :
             undefined;
     }
 
@@ -25817,13 +25817,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // We make contravariant inferences only if we are in a pure contravariant position,
                             // i.e. only if we have not descended into a bivariant position.
                             if (contravariant && !bivariant) {
-                                if (!contains(inference.contraCandidates, candidate)) {
-                                    inference.contraCandidates = append(inference.contraCandidates, candidate);
+                                if (!inference.contraCandidates?.has(candidate)) {
+                                    (inference.contraCandidates ??= new Set()).add(candidate);
                                     clearCachedInferences(inferences);
                                 }
                             }
-                            else if (!contains(inference.candidates, candidate)) {
-                                inference.candidates = append(inference.candidates, candidate);
+                            else if (!inference.candidates?.has(candidate)) {
+                                (inference.candidates ??= new Set()).add(candidate);
                                 clearCachedInferences(inferences);
                             }
                         }
@@ -26496,12 +26496,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getContravariantInference(inference: InferenceInfo) {
-        return inference.priority! & InferencePriority.PriorityImpliesCombination ? getIntersectionType(inference.contraCandidates!) : getCommonSubtype(inference.contraCandidates!);
+        return inference.priority! & InferencePriority.PriorityImpliesCombination ? getIntersectionType([...inference.contraCandidates!]) : getCommonSubtype([...inference.contraCandidates!]);
     }
 
     function getCovariantInference(inference: InferenceInfo, signature: Signature) {
         // Extract all object and array literal types and replace them with a single widened and normalized type.
-        const candidates = unionObjectAndArrayLiteralCandidates(inference.candidates!);
+        const candidates = unionObjectAndArrayLiteralCandidates([...inference.candidates!]);
         // We widen inferred literal types if
         // all inferences were made to top-level occurrences of the type parameter, and
         // the type parameter has no constraint or its constraint includes no primitive or literal types, and
