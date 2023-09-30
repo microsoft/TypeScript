@@ -5646,7 +5646,10 @@ declare namespace ts {
         readonly typeArguments?: NodeArray<TypeNode>;
         readonly template: TemplateLiteral;
     }
-    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
+    interface InstanceofExpression extends BinaryExpression {
+        readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
+    }
+    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement | InstanceofExpression;
     interface AsExpression extends Expression {
         readonly kind: SyntaxKind.AsExpression;
         readonly expression: Expression;
