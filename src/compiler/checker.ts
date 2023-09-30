@@ -22092,7 +22092,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Similarly, in unions of unions the we preserve the original list of unions. This original list is often
                     // much shorter than the normalized result, so we scan it in the following fast path.
                     const targetOrigin = (target as UnionType).origin;
-                    if (targetOrigin && targetOrigin.flags & TypeFlags.Union && source.aliasSymbol && contains((targetOrigin as UnionType).types, source)) {
+                    if (targetOrigin && targetOrigin.flags & TypeFlags.Union && source.aliasSymbol && containsType((targetOrigin as UnionType).types, source)) {
                         return Ternary.True;
                     }
                 }
