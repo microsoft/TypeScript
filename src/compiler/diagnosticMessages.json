@@ -4132,6 +4132,10 @@
         "category": "Error",
         "code": 4124
     },
+    "The values of '{0}.{1}' differ in their declarations, where '{2}' was expected but '{3}' was given.": {
+        "category": "Error",
+        "code": 4125
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",

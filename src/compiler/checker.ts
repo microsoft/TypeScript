@@ -20601,12 +20601,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return !!(entry & RelationComparisonResult.Succeeded);
         }
         const targetEnumType = getTypeOfSymbol(targetSymbol);
-        for (const property of getPropertiesOfType(getTypeOfSymbol(sourceSymbol))) {
-            if (property.flags & SymbolFlags.EnumMember) {
-                const targetProperty = getPropertyOfType(targetEnumType, property.escapedName);
+        for (const sourceProperty of getPropertiesOfType(getTypeOfSymbol(sourceSymbol))) {
+            if (sourceProperty.flags & SymbolFlags.EnumMember) {
+                const targetProperty = getPropertyOfType(targetEnumType, sourceProperty.escapedName);
                 if (!targetProperty || !(targetProperty.flags & SymbolFlags.EnumMember)) {
                     if (errorReporter) {
-                        errorReporter(Diagnostics.Property_0_is_missing_in_type_1, symbolName(property), typeToString(getDeclaredTypeOfSymbol(targetSymbol), /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
+                        errorReporter(Diagnostics.Property_0_is_missing_in_type_1, symbolName(sourceProperty), typeToString(getDeclaredTypeOfSymbol(targetSymbol), /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
+                        enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
+                    }
+                    else {
+                        enumRelation.set(id, RelationComparisonResult.Failed);
+                    }
+                    return false;
+                }
+                const sourceValue = getEnumMemberValue(getDeclarationOfKind(sourceProperty, SyntaxKind.EnumMember)!);
+                const targetValue = getEnumMemberValue(getDeclarationOfKind(targetProperty, SyntaxKind.EnumMember)!);
+                // TODO: Handle both 'undefined'
+                if (sourceValue !== undefined && targetValue !== undefined && sourceValue !== targetValue) {
+                    if (errorReporter) {
+                        const escapedSource = typeof sourceValue === "string" ? `"${escapeString(sourceValue)}"` : sourceValue;
+                        const escapedTarget = typeof targetValue === "string" ? `"${escapeString(targetValue)}"` : targetValue;
+                        errorReporter(Diagnostics.The_values_of_0_1_differ_in_their_declarations_where_2_was_expected_but_3_was_given, symbolName(targetSymbol), symbolName(targetProperty), escapedTarget, escapedSource);
                         enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                     }
                     else {
