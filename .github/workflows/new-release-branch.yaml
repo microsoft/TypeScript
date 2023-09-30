@@ -40,7 +40,10 @@ jobs:
           npx hereby LKG
           npm test
           git diff
-          git add .
+          git add package.json package-lock.json
+          git add src/compiler/corePublic.ts
+          git add tests/baselines/reference/api/typescript.d.ts
+          git add tests/baselines/reference/api/tsserverlibrary.d.ts
           git add --force ./lib
           git config user.email "typescriptbot@microsoft.com"
           git config user.name "TypeScript Bot"
