@@ -109,7 +109,7 @@ export interface SymLink {
 
 export type FileOrFolderOrSymLink = File | Folder | SymLink;
 export interface FileOrFolderOrSymLinkMap {
-    [path: string]: string | Omit<FileOrFolderOrSymLink, "path">;
+    [path: string]: string | Omit<File, "path"> | Omit<SymLink, "path"> | undefined;
 }
 export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
     return isString((fileOrFolderOrSymLink as File).content);
