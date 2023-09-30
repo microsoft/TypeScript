@@ -24,10 +24,10 @@ jobs:
 
     steps:
       - uses: actions/setup-node@v3
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.branch_name || github.event.client_payload.branch_name }}
-          fetch-depth: 0
+          filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
       # required client_payload members:
       # branch_name - the target branch
