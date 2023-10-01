@@ -30912,16 +30912,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getJsxElementTypeTypeAt(location: JsxOpeningLikeElement): Type | undefined {
+    function getJsxElementTypeTypeAt(location: Node): Type | undefined {
         const ns = getJsxNamespaceAt(location);
         if (!ns) return undefined;
         const sym = getJsxElementTypeSymbol(ns);
         if (!sym) return undefined;
-        const type = instantiateAliasOrInterfaceWithDefaults(
-            sym,
-            isInJSFile(location),
-            ...(location.typeArguments || emptyArray).map(getTypeFromTypeNode)
-        );
+        const type = instantiateAliasOrInterfaceWithDefaults(sym, isInJSFile(location));
         if (!type || isErrorType(type)) return undefined;
         return type;
     }
@@ -31016,7 +31012,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const tagName = jsxOpeningLikeNode.tagName;
                 const tagType = isJsxIntrinsicTagName(tagName)
                     ? getStringLiteralType(intrinsicTagNameToString(tagName))
-                    : checkExpression(tagName);
+                    : intersectTypes(getOrCreateTypeFromSignature(sig), checkExpression(tagName));
                 checkTypeRelatedTo(tagType, elementTypeConstraint, assignableRelation, tagName, Diagnostics.Its_type_0_is_not_a_valid_JSX_element_type, () => {
                     const componentName = getTextOfNode(tagName);
                     return chainDiagnosticMessages(/*details*/ undefined, Diagnostics._0_cannot_be_used_as_a_JSX_component, componentName);
