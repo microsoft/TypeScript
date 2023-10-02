@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/thisInConstructorParameter3.ts] ////
+
+=== thisInConstructorParameter3.ts ===
+class C {
+>C : C
+
+    constructor(cb = (a: { }) => this.m(a)) {
+>cb : (a: {}) => boolean
+>(a: { }) => this.m(a) : (a: {}) => boolean
+>a : {}
+>this.m(a) : boolean
+>this.m : (a: any) => boolean
+>this : this
+>m : (a: any) => boolean
+>a : {}
+
+        cb({ });
+>cb({ }) : boolean
+>cb : (a: {}) => boolean
+>{ } : {}
+    }
+
+    private m(a: any): boolean {
+>m : (a: any) => boolean
+>a : any
+
+        a;
+>a : any
+
+        return true;
+>true : true
+    }
+}
+

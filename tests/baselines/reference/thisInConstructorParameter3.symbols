@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/thisInConstructorParameter3.ts] ////
+
+=== thisInConstructorParameter3.ts ===
+class C {
+>C : Symbol(C, Decl(thisInConstructorParameter3.ts, 0, 0))
+
+    constructor(cb = (a: { }) => this.m(a)) {
+>cb : Symbol(cb, Decl(thisInConstructorParameter3.ts, 1, 16))
+>a : Symbol(a, Decl(thisInConstructorParameter3.ts, 1, 22))
+>this.m : Symbol(C.m, Decl(thisInConstructorParameter3.ts, 3, 5))
+>this : Symbol(C, Decl(thisInConstructorParameter3.ts, 0, 0))
+>m : Symbol(C.m, Decl(thisInConstructorParameter3.ts, 3, 5))
+>a : Symbol(a, Decl(thisInConstructorParameter3.ts, 1, 22))
+
+        cb({ });
+>cb : Symbol(cb, Decl(thisInConstructorParameter3.ts, 1, 16))
+    }
+
+    private m(a: any): boolean {
+>m : Symbol(C.m, Decl(thisInConstructorParameter3.ts, 3, 5))
+>a : Symbol(a, Decl(thisInConstructorParameter3.ts, 5, 14))
+
+        a;
+>a : Symbol(a, Decl(thisInConstructorParameter3.ts, 5, 14))
+
+        return true;
+    }
+}
+

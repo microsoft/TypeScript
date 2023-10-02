@@ -1428,6 +1428,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
         }
 
+        addDefaultValueAssignmentsIfNeeded(statements, constructor);
+        addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
+
         const mayReplaceThis = transformConstructorBodyWorker(
             prologue,
             statements,
@@ -1441,9 +1444,6 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             /*isFirstStatement*/ true, // NOTE: this will be recalculated inside of transformConstructorBodyWorker
         );
 
-        // Add parameter defaults at the beginning of the output, with prologue statements
-        addDefaultValueAssignmentsIfNeeded(prologue, constructor);
-        addRestParameterIfNeeded(prologue, constructor, hasSynthesizedSuper);
         insertCaptureNewTargetIfNeeded(prologue, constructor);
         factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
 
