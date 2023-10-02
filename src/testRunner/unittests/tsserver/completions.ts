@@ -196,4 +196,73 @@ export interface BrowserRouterProps {
         });
         baselineTsserverLogs("completions", "works when files are included from two different drives of windows", session);
     });
+
+    it("in project where there are no imports but has project references setup", () => {
+        const host = createServerHost({
+            "/user/username/projects/app/src/index.ts": "",
+            "/user/username/projects/app/tsconfig.json": JSON.stringify(
+                {
+                    compilerOptions: { outDir: "dist", rootDir: "src" },
+                    include: ["./src/**/*"],
+                    references: [
+                        { path: "../shared" },
+                    ],
+                },
+                undefined,
+                " ",
+            ),
+            "/user/username/projects/app/package.json": JSON.stringify(
+                {
+                    name: "app",
+                    version: "1.0.0",
+                    main: "dist/index.js",
+                    dependencies: {
+                        shared: "1.0.0",
+                    },
+                },
+                undefined,
+                " ",
+            ),
+            "/user/username/projects/shared/src/index.ts": "export class MyClass { }",
+            "/user/username/projects/shared/tsconfig.json": JSON.stringify(
+                {
+                    compilerOptions: { composite: true, outDir: "dist", rootDir: "src" },
+                    include: ["./src/**/*"],
+                },
+                undefined,
+                " ",
+            ),
+            "/user/username/projects/shared/package.json": JSON.stringify(
+                {
+                    name: "shared",
+                    version: "1.0.0",
+                    main: "dist/index.js",
+                },
+                undefined,
+                " ",
+            ),
+            "/user/username/projects/app/node_modules/shared": { symLink: "/user/username/projects/shared" },
+        });
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: {
+                preferences: {
+                    includePackageJsonAutoImports: "auto",
+                },
+            },
+        });
+        openFilesForSession(["/user/username/projects/app/src/index.ts"], session);
+        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionInfo,
+            arguments: {
+                file: "/user/username/projects/app/src/index.ts",
+                line: 1,
+                offset: 1,
+                includeExternalModuleExports: true,
+                includeInsertTextCompletions: true,
+            },
+        });
+        baselineTsserverLogs("completions", "in project where there are no imports but has project references setup", session);
+    });
 });
