@@ -338,7 +338,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     lastFileExceededProgramSize: string | undefined;
 
+    /**
+     * LanguageService before plugins have been applied
+     * @internal
+     */
+    protected originalLanguageService: LanguageService;
+
     // wrapper over the real language service that will suppress all semantic operations
+    // may have plugins applied
     protected languageService: LanguageService;
 
     public languageServiceEnabled: boolean;
@@ -574,7 +581,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.currentDirectory,
             /*logChangesWhenResolvingModule*/ true,
         );
-        this.languageService = createLanguageService(this, this.documentRegistry, this.projectService.serverMode);
+        this.originalLanguageService = createLanguageService(this, this.documentRegistry, this.projectService.serverMode);
+        this.languageService = { ...this.originalLanguageService };
         if (lastFileExceededProgramSize) {
             this.disableLanguageService(lastFileExceededProgramSize);
         }
@@ -2838,6 +2846,9 @@ export class ConfiguredProject extends Project {
 
     /** @internal */
     enablePluginsWithOptions(options: CompilerOptions): void {
+        // if we are reloading, languageService will have already been decorated by plugins
+        // reset it before applying plugins again
+        this.languageService = { ...this.originalLanguageService };
         this.plugins.length = 0;
         if (!options.plugins?.length && !this.projectService.globalPlugins.length) return;
         const host = this.projectService.host;
