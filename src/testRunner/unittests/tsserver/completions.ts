@@ -4,6 +4,7 @@ import {
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
+    TestSession,
     TestTypingsInstaller,
 } from "../helpers/tsserver";
 import {
@@ -264,5 +265,118 @@ export interface BrowserRouterProps {
             },
         });
         baselineTsserverLogs("completions", "in project where there are no imports but has project references setup", session);
+    });
+
+    describe("in project reference setup with path mapping", () => {
+        function completions(session: TestSession) {
+            session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
+                arguments: {
+                    file: "/user/username/projects/app/src/index.ts",
+                    line: 1,
+                    offset: 1,
+                    includeExternalModuleExports: true,
+                    includeInsertTextCompletions: true,
+                },
+            });
+        }
+        function verify(withExistingImport: boolean) {
+            it(`in project reference setup with path mapping${withExistingImport ? " with existing import" : ""}`, () => {
+                const host = createServerHost({
+                    "/user/username/projects/app/src/index.ts": `
+
+${withExistingImport ? "import { MyClass } from 'shared';" : ""}`,
+                    "/user/username/projects/app/tsconfig.json": JSON.stringify(
+                        {
+                            compilerOptions: {
+                                outDir: "dist",
+                                rootDir: "src",
+                                paths: {
+                                    "shared": ["./../shared/src/index.ts"],
+                                    "shared/*": ["./../shared/src/*.ts"],
+                                },
+                            },
+                            include: ["./src/**/*"],
+                            references: [
+                                { path: "../shared" },
+                            ],
+                        },
+                        undefined,
+                        " ",
+                    ),
+                    "/user/username/projects/app/package.json": JSON.stringify(
+                        {
+                            name: "app",
+                            version: "1.0.0",
+                            main: "dist/index.js",
+                            dependencies: {
+                                shared: "1.0.0",
+                            },
+                        },
+                        undefined,
+                        " ",
+                    ),
+                    "/user/username/projects/shared/src/index.ts": "export class MyClass { }",
+                    "/user/username/projects/shared/src/helper.ts": "export class MyHelper { }",
+                    "/user/username/projects/shared/tsconfig.json": JSON.stringify(
+                        {
+                            compilerOptions: { composite: true, outDir: "dist", rootDir: "src" },
+                            include: ["./src/**/*"],
+                            references: [
+                                { path: "../mylib" },
+                            ],
+                        },
+                        undefined,
+                        " ",
+                    ),
+                    "/user/username/projects/shared/package.json": JSON.stringify(
+                        {
+                            name: "shared",
+                            version: "1.0.0",
+                            main: "dist/index.js",
+                        },
+                        undefined,
+                        " ",
+                    ),
+                    // Indirect ones should not be offered through auto import
+                    "/user/username/projects/mylib/src/index.ts": "export class MyLibClass { }",
+                    "/user/username/projects/mylib/tsconfig.json": JSON.stringify(
+                        {
+                            compilerOptions: { composite: true, outDir: "dist", rootDir: "src" },
+                            include: ["./src/**/*"],
+                        },
+                        undefined,
+                        " ",
+                    ),
+                    "/user/username/projects/mylib/package.json": JSON.stringify(
+                        {
+                            name: "mylib",
+                            version: "1.0.0",
+                            main: "dist/index.js",
+                        },
+                        undefined,
+                        " ",
+                    ),
+                });
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                    command: ts.server.protocol.CommandTypes.Configure,
+                    arguments: {
+                        preferences: {
+                            includePackageJsonAutoImports: "auto",
+                        },
+                    },
+                });
+                openFilesForSession(["/user/username/projects/app/src/index.ts"], session);
+                completions(session);
+                host.writeFile("/user/username/projects/shared/src/other.ts", "export class OtherClass { }");
+                completions(session);
+                host.writeFile("/user/username/projects/mylib/src/otherlib.ts", "export class OtherLibClass { }");
+                completions(session);
+                baselineTsserverLogs("completions", `in project reference setup with path mapping${withExistingImport ? " with existing import" : ""}`, session);
+            });
+        }
+        verify(/*withExistingImport*/ true);
+        verify(/*withExistingImport*/ false);
     });
 });
