@@ -2834,7 +2834,7 @@ export function getCompletionEntryDetails(
                 /*formatContext*/ undefined,
             );
 
-            if (snippets && snippets.importAdder.hasFixes()) {
+            if (snippets?.importAdder.hasFixes()) {
                 const { entry, importAdder } = snippets;
                 const changes = textChanges.ChangeTracker.with(
                     { host, formatContext, preferences },
