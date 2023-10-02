@@ -25078,7 +25078,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     target = getIntersectionType(targets);
                 }
             }
-            else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
+            if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
                 target = getActualTypeVariable(target);
             }
             if (target.flags & TypeFlags.TypeVariable) {
