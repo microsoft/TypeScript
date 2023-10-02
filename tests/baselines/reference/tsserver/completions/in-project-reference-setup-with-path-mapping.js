@@ -212,8 +212,29 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 0 dependencies 1 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/helper.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/user/username/projects/shared/src/helper.ts Text-1 "export class MyHelper { }"
+	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
+
+
+	../shared/src/helper.ts
+	  Root file specified for compilation
+	../shared/src/index.ts
+	  Root file specified for compilation
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -239,6 +260,10 @@ FsWatches::
 /user/username/projects/app/tsconfig.json: *new*
   {}
 /user/username/projects/mylib/tsconfig.json: *new*
+  {}
+/user/username/projects/shared/src/helper.ts: *new*
+  {}
+/user/username/projects/shared/src/index.ts: *new*
   {}
 /user/username/projects/shared/tsconfig.json: *new*
   {}
@@ -269,12 +294,18 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 0,
+        "flags": 1,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -674,6 +705,36 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
+          },
+          {
+            "name": "MyClass",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/index",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "MyClass",
+              "exportMapKey": "7 * MyClass ",
+              "fileName": "/user/username/projects/shared/src/index.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "MyHelper",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/helper",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "MyHelper",
+              "exportMapKey": "8 * MyHelper ",
+              "fileName": "/user/username/projects/shared/src/helper.ts",
+              "isPackageJsonImport": true
+            }
           }
         ]
       },
@@ -710,15 +771,44 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	/user/username/projects/app/src/index.ts SVC-1-0 "\n\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 3 root files in 0 dependencies 1 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/other.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/user/username/projects/shared/src/helper.ts Text-1 "export class MyHelper { }"
+	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
+	/user/username/projects/shared/src/other.ts Text-1 "export class OtherClass { }"
+
+
+	../shared/src/helper.ts
+	  Root file specified for compilation
+	../shared/src/index.ts
+	  Root file specified for compilation
+	../shared/src/other.ts
+	  Root file specified for compilation
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 0,
+        "flags": 1,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -1118,12 +1208,89 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
+          },
+          {
+            "name": "MyClass",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/index",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "MyClass",
+              "exportMapKey": "7 * MyClass ",
+              "fileName": "/user/username/projects/shared/src/index.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "MyHelper",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/helper",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "MyHelper",
+              "exportMapKey": "8 * MyHelper ",
+              "fileName": "/user/username/projects/shared/src/helper.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "OtherClass",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/other",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "OtherClass",
+              "exportMapKey": "10 * OtherClass ",
+              "fileName": "/user/username/projects/shared/src/other.ts",
+              "isPackageJsonImport": true
+            }
           }
         ]
       },
       "responseRequired": true
     }
 After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/app/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/app/package.json:
+  {}
+/user/username/projects/app/tsconfig.json:
+  {}
+/user/username/projects/mylib/tsconfig.json:
+  {}
+/user/username/projects/shared/src/helper.ts:
+  {}
+/user/username/projects/shared/src/index.ts:
+  {}
+/user/username/projects/shared/src/other.ts: *new*
+  {}
+/user/username/projects/shared/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/app/src:
+  {}
+/user/username/projects/mylib/src:
+  {}
+/user/username/projects/shared/src:
+  {}
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/mylib/src/otherlib.ts :: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/app/tsconfig.json, Cancelled earlier one
@@ -1154,15 +1321,25 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	/user/username/projects/app/src/index.ts SVC-1-0 "\n\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 0,
+        "flags": 1,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
@@ -1562,6 +1739,51 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
+          },
+          {
+            "name": "MyClass",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/index",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "MyClass",
+              "exportMapKey": "7 * MyClass ",
+              "fileName": "/user/username/projects/shared/src/index.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "MyHelper",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/helper",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "MyHelper",
+              "exportMapKey": "8 * MyHelper ",
+              "fileName": "/user/username/projects/shared/src/helper.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "OtherClass",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/other",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "OtherClass",
+              "exportMapKey": "10 * OtherClass ",
+              "fileName": "/user/username/projects/shared/src/other.ts",
+              "isPackageJsonImport": true
+            }
           }
         ]
       },

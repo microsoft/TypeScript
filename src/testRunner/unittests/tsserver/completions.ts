@@ -267,7 +267,7 @@ export interface BrowserRouterProps {
         baselineTsserverLogs("completions", "in project where there are no imports but has project references setup", session);
     });
 
-    describe("in project reference setup with path mapping", () => {
+    describe("in project reference setup with path mapping sheetal", () => {
         function completions(session: TestSession) {
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.CompletionInfo,
