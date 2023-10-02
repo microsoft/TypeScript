@@ -9,11 +9,13 @@ import {
     CodeFixAllContext,
     CodeFixContext,
     createPrinter,
+    createPrinterWithRemoveComments,
     Debug,
     defaultMaximumTruncationLength,
     DiagnosticAndArguments,
     DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
+    EmitFlags,
     EmitHint,
     EntityName,
     EntityNameExpression,
@@ -69,6 +71,7 @@ import {
     ParameterDeclaration,
     PropertyDeclaration,
     PropertyName,
+    setEmitFlags,
     SignatureDeclaration,
     SourceFile,
     SpreadAssignment,
@@ -969,6 +972,7 @@ function withChanges<T>(
         }
     }
     function printTypeNode(node: Node) {
+        setEmitFlags(node, EmitFlags.SingleLine);
         const printer = createPrinter({
             preserveSourceNewlines: false,
         });
@@ -976,6 +980,7 @@ function withChanges<T>(
         if (result.length > defaultMaximumTruncationLength) {
             return result.substr(0, defaultMaximumTruncationLength - "...".length) + "...";
         }
+        setEmitFlags(node, EmitFlags.None);
         return result;
     }
 }

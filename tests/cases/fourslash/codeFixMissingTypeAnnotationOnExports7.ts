@@ -6,9 +6,7 @@
 ////export const c = {foo: foo()};
 
 verify.codeFix({
-    description: `Add annotation of type '{
-    foo: number[];
-}'`,
+    description: `Add annotation of type '{ foo: number[]; }'`,
     index: 0,
     newFileContent:
 `function foo(): number[] {return [42];}

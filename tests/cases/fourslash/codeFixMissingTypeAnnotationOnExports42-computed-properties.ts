@@ -15,9 +15,7 @@
 
 verify.codeFix({
     description: 
-`Add return type '{
-    [Enum.A]: number;
-}'` ,
+`Add return type '{ [Enum.A]: number; }'` ,
     index: 0,
     newFileContent:
 `const Enum = {

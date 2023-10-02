@@ -8,9 +8,7 @@
 ////} as const;
 
 verify.codeFix({
-    description: `Add annotation of type '{
-    readonly z: symbol;
-}'`,
+    description: `Add annotation of type '{ readonly z: symbol; }'`,
     index: 0,
     newFileContent:
 `export const a: {

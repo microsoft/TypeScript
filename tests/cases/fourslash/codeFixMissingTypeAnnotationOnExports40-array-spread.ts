@@ -27,14 +27,7 @@
 ////  1,
 ////] as const;
 verify.codeFix({
-    description: `Add annotation of type '[
-    ...typeof All_Part1_1,
-    ...typeof Start,
-    ...typeof All_Part3,
-    ...typeof All_Part4,
-    ...typeof End,
-    ...typeof All_Part6
-]'` ,
+    description: `Add annotation of type '[...typeof All_Part1_1, ...typeof Start, ...typeof All_Part3, ...typeof All_Part4, ...typeof End, ...typeof All_Part6]'` ,
     index: 1,
     newFileContent:
 `const Start = [

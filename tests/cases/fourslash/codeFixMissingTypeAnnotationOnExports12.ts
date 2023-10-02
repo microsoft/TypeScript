@@ -10,13 +10,11 @@
 
 // TODO: There's no easy way to name the type, so rather promoting this to a classDeclaration is better.
 verify.codeFix({
-    description: `Add annotation of type '{
-    new (): {
-        z: number;
-        x: number;
-        y: number;
-    };
-}'`,
+    description: `Add annotation of type '{ new (): {
+    z: number;
+    x: number;
+    y: number;
+}; }'`,
     index: 0,
     newFileContent:
 `function mixin<T extends new (...a: any) => any>(ctor: T): T {

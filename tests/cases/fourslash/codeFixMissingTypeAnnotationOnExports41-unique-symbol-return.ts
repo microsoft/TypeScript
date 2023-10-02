@@ -10,9 +10,7 @@
 
 verify.codeFix({
     description: 
-`Add return type '{
-    readonly u: typeof u;
-}'` ,
+`Add return type '{ readonly u: typeof u; }'` ,
     index: 0,
     newFileContent:
 `const u = Symbol();
