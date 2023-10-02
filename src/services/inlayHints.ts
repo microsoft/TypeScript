@@ -59,6 +59,7 @@ import {
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isSpreadElement,
+    isStringLiteral,
     isTypeNode,
     isVarConst,
     isVariableDeclaration,
@@ -473,7 +474,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             }
 
             if (isLiteralExpression(node)) {
-                parts.push({ text: node.text });
+                parts.push({ text: isStringLiteral(node) ? `"${node.text}"` : node.text });
                 return;
             }
 
@@ -488,9 +489,6 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     else {
                         parts.push({ text: identifierText });
                     }
-                    break;
-                case SyntaxKind.StringLiteral:
-                    parts.push({ text: `"${(node as StringLiteral).text}"` });
                     break;
                 case SyntaxKind.QualifiedName:
                     const qualifiedName = node as QualifiedName;
