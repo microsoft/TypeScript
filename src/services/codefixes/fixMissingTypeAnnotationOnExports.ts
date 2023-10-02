@@ -8,7 +8,7 @@ import {
     CodeFixAction,
     CodeFixAllContext,
     CodeFixContext,
-    createPrinterWithRemoveComments,
+    createPrinter,
     Debug,
     defaultMaximumTruncationLength,
     DiagnosticAndArguments,
@@ -33,6 +33,7 @@ import {
     isArrayBindingPattern,
     isArrayLiteralExpression,
     isAssertionExpression,
+    isBindingPattern,
     isCallExpression,
     isComputedPropertyName,
     isConditionalExpression,
@@ -42,13 +43,20 @@ import {
     isExpression,
     isHeritageClause,
     isIdentifier,
+    isIdentifierText,
+    isNumericLiteral,
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isOmittedExpression,
+    isPrefixUnaryExpression,
+    isPropertyAccessExpression,
+    isPropertyAssignment,
+    isPropertyDeclaration,
     isShorthandPropertyAssignment,
     isSpreadAssignment,
     isSpreadElement,
     isStatement,
+    isStringLiteral,
     isValueSignatureDeclaration,
     isVariableDeclaration,
     ModifierFlags,
@@ -60,6 +68,7 @@ import {
     ObjectLiteralExpression,
     ParameterDeclaration,
     PropertyDeclaration,
+    PropertyName,
     SignatureDeclaration,
     SourceFile,
     SpreadAssignment,
@@ -73,6 +82,7 @@ import {
     TypeNode,
     VariableDeclaration,
     VariableStatement,
+    walkUpParenthesizedExpressions,
 } from "../_namespaces/ts";
 import {
     createCodeFixAction,
@@ -86,6 +96,7 @@ import {
 const fixId = "fixMissingTypeAnnotationOnExports";
 const addAnnotationFix = "add-annotation";
 const addInlineTypeAssertion = "add-type-assertion";
+const extractExpression = "extract-expression";
 const errorCodes = [
     Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,
     Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
@@ -124,7 +135,7 @@ registerCodeFix({
         addCodeAction(addAnnotationFix, fixes, context, "relative", f => f.addFullAnnotation(context.span));
         addCodeAction(addInlineTypeAssertion, fixes, context, "full", f => f.addInlineAnnotation(context.span));
         addCodeAction(addInlineTypeAssertion, fixes, context, "relative", f => f.addInlineAnnotation(context.span));
-
+        addCodeAction(extractExpression, fixes, context, "full", f => f.extractAsVariable(context.span));
         return fixes;
     },
     getAllCodeActions: context => {
@@ -139,6 +150,7 @@ registerCodeFix({
 interface Fixer {
     addFullAnnotation(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined;
     addInlineAnnotation(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined;
+    extractAsVariable(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined;
 }
 
 function addCodeAction(
@@ -177,7 +189,7 @@ function withChanges<T>(
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
     const fixedNodes = new Set<Node>();
 
-    const result = cb({ addFullAnnotation, addInlineAnnotation });
+    const result = cb({ addFullAnnotation, addInlineAnnotation, extractAsVariable });
     importAdder.writeFixes(changeTracker);
     return {
         result,
@@ -194,7 +206,7 @@ function withChanges<T>(
     }
 
     function createAsExpression(node: Expression, type: TypeNode) {
-        if (!isEntityNameExpression(node) && !isCallExpression(node)) {
+        if (!isEntityNameExpression(node) && !isCallExpression(node) && !isObjectLiteralExpression(node) && !isArrayLiteralExpression(node)) {
             node = factory.createParenthesizedExpression(node);
         }
         return factory.createAsExpression(
@@ -202,6 +214,7 @@ function withChanges<T>(
             type,
         );
     }
+
     function addInlineAnnotation(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
         const targetNode = findTargetErrorNode(nodeWithDiag, span) as Expression;
@@ -261,6 +274,141 @@ function withChanges<T>(
             replacementNode,
         );
         return [Diagnostics.Add_inline_type_assertion_to_0, printTypeNode(typeNode)];
+    }
+
+    function suggestVariableName(node: Node) {
+        const nameParts: string[] = [];
+        while (!(isVariableDeclaration(node) || isPropertyDeclaration(node) || isStatement(node))) {
+            if (isPropertyAssignment(node)) {
+                const propName = node.name;
+                addPropertyName(propName);
+            }
+            node = node.parent;
+        }
+        if ((isVariableDeclaration(node) || isPropertyDeclaration(node)) && !isBindingPattern(node.name)) {
+            addPropertyName(node.name);
+        }
+        return nameParts.filter(s => isIdentifierText(s, program.getCompilerOptions().target)).reverse().join("_");
+
+        function addPropertyName(name: PropertyName) {
+            if (isIdentifier(name)) {
+                nameParts.push(name.text);
+            }
+            if (isStringLiteral(name)) {
+                nameParts.push(name.text);
+            }
+            if (isNumericLiteral(name)) {
+                nameParts.push(name.text);
+            }
+            if (isComputedPropertyName(name)) {
+                let computedName = name.expression;
+
+                if (isStringLiteral(computedName)) {
+                    nameParts.push(computedName.text);
+                }
+                if (isNumericLiteral(computedName)) {
+                    nameParts.push(computedName.text);
+                }
+                if (
+                    isPrefixUnaryExpression(computedName)
+                    && isNumericLiteral(computedName.operand)
+                ) {
+                    if (computedName.operator === SyntaxKind.MinusToken) {
+                        nameParts.push("M" + computedName.operand.text);
+                    }
+                    else if (computedName.operator === SyntaxKind.PlusToken) {
+                        nameParts.push("M" + computedName.operand.text);
+                    }
+                }
+
+                // We only support dotted identifiers as property keys
+                while (true) {
+                    if (isIdentifier(computedName)) {
+                        nameParts.push(computedName.text);
+                        break;
+                    }
+                    else if (isPropertyAccessExpression(computedName)) {
+                        nameParts.push(computedName.name.text);
+                        computedName = computedName.expression;
+                    }
+                }
+            }
+        }
+    }
+
+    function extractAsVariable(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
+        const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
+        const targetNode = findTargetErrorNode(nodeWithDiag, span) as Expression;
+        if (!targetNode || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.parent)) return;
+
+        const isExpressionTarget = isExpression(targetNode);
+
+        // Only extract expressions
+        if (!isExpressionTarget) return;
+
+        // Before any extracting array literals must be const
+        if (isArrayLiteralExpression(targetNode)) {
+            changeTracker.replaceNode(
+                sourceFile,
+                targetNode,
+                createAsExpression(targetNode, factory.createTypeReferenceNode("const")),
+            );
+            return [Diagnostics.Mark_array_literal_as_const];
+        }
+
+        const parentPropertyAssignment = findAncestor(targetNode, isPropertyAssignment);
+        if (parentPropertyAssignment) {
+            // identifiers or entity names can already just be typeof-ed
+            if (parentPropertyAssignment === targetNode.parent && isEntityNameExpression(targetNode)) return;
+
+            const tempName = factory.createUniqueName(
+                suggestVariableName(targetNode),
+                GeneratedIdentifierFlags.Optimistic,
+            );
+            let replacementTarget = targetNode;
+            if (isSpreadElement(replacementTarget)) {
+                replacementTarget = replacementTarget.parent;
+                replacementTarget = walkUpParenthesizedExpressions(replacementTarget.parent) as Expression;
+                if (isConstAssertion(replacementTarget.parent)) {
+                    replacementTarget = replacementTarget.parent;
+                }
+                else {
+                    createAsExpression(
+                        replacementTarget,
+                        factory.createTypeReferenceNode("const"),
+                    );
+                }
+            }
+
+            if (isEntityNameExpression(replacementTarget)) return undefined;
+
+            const variableDefinition = factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList([
+                    factory.createVariableDeclaration(
+                        tempName,
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        replacementTarget,
+                    ),
+                ], NodeFlags.Const),
+            );
+
+            const statement = findAncestor(targetNode, isStatement);
+            changeTracker.insertNodeBefore(sourceFile, statement!, variableDefinition);
+
+            changeTracker.replaceNode(
+                sourceFile,
+                replacementTarget,
+                factory.createAsExpression(
+                    tempName,
+                    factory.createTypeQueryNode(
+                        tempName,
+                    ),
+                ),
+            );
+            return [Diagnostics.Extract_to_variable_and_replace_with_0_typeof_0, printTypeNode(tempName)];
+        }
     }
 
     function findTargetErrorNode(node: Node, span: TextSpan) {
@@ -820,8 +968,10 @@ function withChanges<T>(
             return [Diagnostics.Add_annotation_of_type_0, printTypeNode(typeNode)];
         }
     }
-    function printTypeNode(node: TypeNode) {
-        const printer = createPrinterWithRemoveComments();
+    function printTypeNode(node: Node) {
+        const printer = createPrinter({
+            preserveSourceNewlines: false,
+        });
         const result = printer.printNode(EmitHint.Unspecified, node, sourceFile);
         if (result.length > defaultMaximumTruncationLength) {
             return result.substr(0, defaultMaximumTruncationLength - "...".length) + "...";

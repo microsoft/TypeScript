@@ -7020,6 +7020,14 @@
         "category": "Message",
         "code": 90068
     },
+    "Extract to variable and replace with '{0} typeof {0}'": {
+        "category": "Message",
+        "code": 90069
+    },
+    "Mark array literal as const": {
+        "category": "Message",
+        "code": 90070
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",

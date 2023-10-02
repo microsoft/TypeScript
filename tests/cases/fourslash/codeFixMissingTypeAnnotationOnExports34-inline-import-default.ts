@@ -22,6 +22,9 @@ verify.codeFixAvailable([
   },
   {
     "description": "Add inline type assertion to 'Person'"
+  },
+  {
+    "description": "Extract to variable and replace with 'person_1 typeof person_1'"
   }
 ])
 
