@@ -28154,6 +28154,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function getNarrowedTypeWorker(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
             if (!assumeTrue) {
+                if (type === candidate) {
+                    return neverType;
+                }
                 if (checkDerived) {
                     return filterType(type, t => !isTypeDerivedFrom(t, candidate));
                 }
@@ -28163,9 +28166,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.AnyOrUnknown) {
                 return candidate;
             }
-
-            // TODO(jakebailey): should this just be type === candidate?
-            if (isTypeIdenticalTo(type, candidate)) {
+            if (type === candidate) {
                 return candidate;
             }
 
