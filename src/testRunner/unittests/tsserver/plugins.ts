@@ -287,3 +287,46 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
         baselineTsserverLogs("plugins", "new files with non ts extensions with wildcard matching", session);
     });
 });
+
+describe("unittests:: tsserver:: plugins:: reloadProjects::", () => {
+    it("LanguageService is not doubly decorated", () => {
+        const aTs: File = {
+            path: "/a.ts",
+            content: `class c { prop = "hello"; foo() { const x = 0; } }`,
+        };
+        const config: File = {
+            path: "/tsconfig.json",
+            content: JSON.stringify({
+                compilerOptions: { plugins: [{ name: "myplugin" }] },
+            }),
+        };
+        const host = createServerHost([aTs, config, libFile]);
+        const loggedMessage = "proxied getCompletionsAtPosition call";
+        host.require = () => {
+            return {
+                module: () => ({
+                    create(info: ts.server.PluginCreateInfo) {
+                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        proxy.getCompletionsAtPosition = (...args) => {
+                            info.project.projectService.logger.info(loggedMessage);
+                            return info.languageService.getCompletionsAtPosition(...args);
+                        };
+                        return proxy;
+                    },
+                }),
+                error: undefined,
+            };
+        };
+
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([aTs], session);
+        // force plugin to be reloaded
+        session.getProjectService().reloadProjects();
+        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionInfo,
+            arguments: { file: aTs.path, line: 1, offset: 0 },
+        });
+        const logs = session.logger.logs!.filter(l => l.includes(loggedMessage));
+        assert.lengthOf(logs, 1);
+    });
+});
