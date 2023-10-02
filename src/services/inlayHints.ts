@@ -2,7 +2,6 @@ import {
     __String,
     ArrayTypeNode,
     ArrowFunction,
-    BigIntLiteral,
     CallExpression,
     ConditionalTypeNode,
     ConstructorTypeNode,
@@ -71,7 +70,6 @@ import {
     Node,
     NodeArray,
     NodeBuilderFlags,
-    NumericLiteral,
     OptionalTypeNode,
     ParameterDeclaration,
     ParenthesizedTypeNode,
@@ -474,6 +472,11 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 return;
             }
 
+            if (isLiteralExpression(node)) {
+                parts.push({ text: node.text });
+                return;
+            }
+
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     const identifier = node as Identifier;
@@ -485,9 +488,6 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     else {
                         parts.push({ text: identifierText });
                     }
-                    break;
-                case SyntaxKind.NumericLiteral:
-                    parts.push({ text: (node as NumericLiteral).text });
                     break;
                 case SyntaxKind.StringLiteral:
                     parts.push({ text: `"${(node as StringLiteral).text}"` });
@@ -736,9 +736,6 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         parts.push({ text: ": " });
                         visitForDisplayParts(propertySignature.type);
                     }
-                    break;
-                case SyntaxKind.BigIntLiteral:
-                    parts.push({ text: (node as BigIntLiteral).text });
                     break;
                 default:
                     Debug.failBadSyntaxKind(node);
