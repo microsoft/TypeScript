@@ -3703,7 +3703,7 @@
         "category": "Error",
         "code": 2862
     },
-    "A class cannot implement a primitive type like '{0}'. It can only extend other named object types.": {
+    "A class cannot implement a primitive type like '{0}'. It can only implement other named object types.": {
         "category": "Error",
         "code": 2863
     },

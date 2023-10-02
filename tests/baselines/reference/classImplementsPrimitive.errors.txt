@@ -1,68 +1,17 @@
-classImplementsPrimitive.ts(3,20): error TS2856: A class cannot implement a primitive type like 'number'. It can only extend other named object types.
-classImplementsPrimitive.ts(4,21): error TS2856: A class cannot implement a primitive type like 'string'. It can only extend other named object types.
-classImplementsPrimitive.ts(5,21): error TS2856: A class cannot implement a primitive type like 'boolean'. It can only extend other named object types.
-classImplementsPrimitive.ts(6,21): error TS2304: Cannot find name 'Void'.
-classImplementsPrimitive.ts(7,7): error TS2300: Duplicate identifier 'C4a'.
-classImplementsPrimitive.ts(7,22): error TS1109: Expression expected.
-classImplementsPrimitive.ts(8,21): error TS2304: Cannot find name 'Null'.
-classImplementsPrimitive.ts(9,7): error TS2300: Duplicate identifier 'C5a'.
-classImplementsPrimitive.ts(9,22): error TS2500: A class can only implement an identifier/qualified-name with optional type arguments.
-classImplementsPrimitive.ts(10,21): error TS2749: 'undefined' refers to a value, but is being used as a type here. Did you mean 'typeof undefined'?
-classImplementsPrimitive.ts(11,21): error TS2304: Cannot find name 'Undefined'.
-classImplementsPrimitive.ts(14,21): error TS2422: A class can only implement an object type or intersection of object types with statically known members.
-classImplementsPrimitive.ts(16,7): error TS2300: Duplicate identifier 'C4a'.
-classImplementsPrimitive.ts(16,22): error TS1109: Expression expected.
-classImplementsPrimitive.ts(17,7): error TS2300: Duplicate identifier 'C5a'.
-classImplementsPrimitive.ts(17,22): error TS2500: A class can only implement an identifier/qualified-name with optional type arguments.
+classImplementsPrimitive.ts(3,20): error TS2863: A class cannot implement a primitive type like 'number'. It can only implement other named object types.
+classImplementsPrimitive.ts(4,21): error TS2863: A class cannot implement a primitive type like 'string'. It can only implement other named object types.
+classImplementsPrimitive.ts(5,21): error TS2863: A class cannot implement a primitive type like 'boolean'. It can only implement other named object types.
 
 
-==== classImplementsPrimitive.ts (16 errors) ====
+==== classImplementsPrimitive.ts (3 errors) ====
     // classes cannot implement primitives
     
     class C implements number { }
                        ~~~~~~
-!!! error TS2856: A class cannot implement a primitive type like 'number'. It can only extend other named object types.
+!!! error TS2863: A class cannot implement a primitive type like 'number'. It can only implement other named object types.
     class C2 implements string { }
                         ~~~~~~
-!!! error TS2856: A class cannot implement a primitive type like 'string'. It can only extend other named object types.
+!!! error TS2863: A class cannot implement a primitive type like 'string'. It can only implement other named object types.
     class C3 implements boolean { }
                         ~~~~~~~
-!!! error TS2856: A class cannot implement a primitive type like 'boolean'. It can only extend other named object types.
-    class C4 implements Void  { }
-                        ~~~~
-!!! error TS2304: Cannot find name 'Void'.
-    class C4a implements void {}
-          ~~~
-!!! error TS2300: Duplicate identifier 'C4a'.
-                         ~~~~
-!!! error TS1109: Expression expected.
-    class C5 implements Null { }
-                        ~~~~
-!!! error TS2304: Cannot find name 'Null'.
-    class C5a implements null { }
-          ~~~
-!!! error TS2300: Duplicate identifier 'C5a'.
-                         ~~~~
-!!! error TS2500: A class can only implement an identifier/qualified-name with optional type arguments.
-    class C6 implements undefined { }
-                        ~~~~~~~~~
-!!! error TS2749: 'undefined' refers to a value, but is being used as a type here. Did you mean 'typeof undefined'?
-    class C7 implements Undefined { }
-                        ~~~~~~~~~
-!!! error TS2304: Cannot find name 'Undefined'.
-    
-    enum E { A }
-    class C8 implements E { }
-                        ~
-!!! error TS2422: A class can only implement an object type or intersection of object types with statically known members.
-    
-    class C4a implements void {}
-          ~~~
-!!! error TS2300: Duplicate identifier 'C4a'.
-                         ~~~~
-!!! error TS1109: Expression expected.
-    class C5a implements null { }
-          ~~~
-!!! error TS2300: Duplicate identifier 'C5a'.
-                         ~~~~
-!!! error TS2500: A class can only implement an identifier/qualified-name with optional type arguments.
+!!! error TS2863: A class cannot implement a primitive type like 'boolean'. It can only implement other named object types.
