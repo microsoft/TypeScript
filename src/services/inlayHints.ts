@@ -2,6 +2,7 @@ import {
     __String,
     ArrayTypeNode,
     ArrowFunction,
+    BigIntLiteral,
     CallExpression,
     ConditionalTypeNode,
     ConstructorTypeNode,
@@ -735,6 +736,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         parts.push({ text: ": " });
                         visitForDisplayParts(propertySignature.type);
                     }
+                    break;
+                case SyntaxKind.BigIntLiteral:
+                    parts.push({ text: (node as BigIntLiteral).text });
                     break;
                 default:
                     Debug.failBadSyntaxKind(node);
