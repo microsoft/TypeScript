@@ -53,6 +53,7 @@ import {
     isArray,
     isIgnoredFileFromWildCardWatching,
     isProgramUptoDate,
+    JSDocParsingMode,
     MapLike,
     maybeBind,
     ModuleResolutionCache,
@@ -64,6 +65,7 @@ import {
     perfLogger,
     PollingInterval,
     ProjectReference,
+    ResolutionCache,
     ResolutionCacheHost,
     ResolutionMode,
     ResolvedModule,
@@ -254,6 +256,8 @@ export interface ProgramHost<T extends BuilderProgram> {
      * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+
+    jsDocParsingMode?: JSDocParsingMode;
 }
 /**
  * Internal interface used to wire emit through same host
@@ -338,6 +342,8 @@ export interface Watch<T> {
     getCurrentProgram(): T;
     /** Closes the watch */
     close(): void;
+    /** @internal */
+    getResolutionCache(): ResolutionCache;
 }
 
 /**
@@ -549,8 +555,8 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     if (configFileName) updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
 
     return configFileName ?
-        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
-        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
+        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close, getResolutionCache } :
+        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close, getResolutionCache };
 
     function close() {
         clearInvalidateResolutionsOfFailedLookupLocations();
@@ -588,6 +594,10 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             });
             parsedConfigs = undefined;
         }
+    }
+
+    function getResolutionCache() {
+        return resolutionCache;
     }
 
     function getCurrentBuilderProgram() {

@@ -417,7 +417,7 @@ const dprintPath = path.resolve(__dirname, "..", "node_modules", "dprint", "bin.
  * @returns {string}
  */
 function dprint(contents) {
-    return cp.execFileSync(
+    const result = cp.execFileSync(
         process.execPath,
         [dprintPath, "fmt", "--stdin", "ts"],
         {
@@ -427,6 +427,7 @@ function dprint(contents) {
             maxBuffer: 100 * 1024 * 1024, // 100 MB "ought to be enough for anyone"; https://github.com/nodejs/node/issues/9829
         },
     );
+    return result.replace(/\r\n/g, "\n");
 }
 
 fs.writeFileSync(output, dprint(publicContents));

@@ -76,15 +76,12 @@ jobs:
           check-latest: true
       - run: npm ci
 
-      # TODO: The cache fails when copied between GHA runners. See:
-      # https://github.com/dprint/dprint/issues/734
-      # https://github.com/dprint/dprint/issues/735
-      # - uses: actions/cache@v3
-      #   with:
-      #     path: ~/.cache/dprint
-      #     key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-dprint-
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache/dprint
+          key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
+          restore-keys: |
+            ${{ runner.os }}-dprint-
 
       - name: Check formatting
         run: npx dprint check
@@ -100,8 +97,8 @@ jobs:
           check-latest: true
       - run: npm ci
 
-      - name: Adding playwright
-        run: npm install --no-save --no-package-lock playwright
+      - name: Installing browsers
+        run: npx playwright install --with-deps
 
       - name: Validate the browser can import TypeScript
         run: npx hereby test-browser-integration
@@ -240,7 +237,7 @@ jobs:
       - name: Self build
         run: npx hereby build-src --built
 
-  unused-baselines:
+  baselines:
     runs-on: ubuntu-latest
 
     steps:
@@ -258,11 +255,22 @@ jobs:
         run: npm test &> /dev/null || exit 0
 
       - name: Accept baselines
-        run: npx hereby baseline-accept
-
-      - name: Check for unused baselines
         run: |
-          if ! git diff --exit-code --quiet; then
-            echo "Unused baselines:"
-            git diff --exit-code --name-only
+          npx hereby baseline-accept
+          git add tests/baselines/reference
+
+      - name: Check baselines
+        run: |
+          function print_diff() {
+            if ! git diff --staged --exit-code --quiet --diff-filter=$1; then
+              echo "$2:"
+              git diff --staged --name-only --diff-filter=$1
+            fi
+          }
+
+          if ! git diff --staged --exit-code --quiet; then
+            print_diff ACR "Missing baselines"
+            print_diff MTUXB "Modified baselines"
+            print_diff D "Unused baselines"
+            exit 1
           fi

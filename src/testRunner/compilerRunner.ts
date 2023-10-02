@@ -329,7 +329,7 @@ class CompilerTest {
     }
 
     public verifyTypesAndSymbols() {
-        if (this.fileName.indexOf("APISample") >= 0) {
+        if (this.fileName.includes("APISample")) {
             return;
         }
 

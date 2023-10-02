@@ -72,12 +72,18 @@ export class ExecError extends Error {
 }
 
 /**
- * Reads JSON data with optional comments using the LKG TypeScript compiler
+ * Reads JSON data with optional comments
  * @param {string} jsonPath
  */
 export function readJson(jsonPath) {
     const jsonText = fs.readFileSync(jsonPath, "utf8");
-    return JSONC.parse(jsonText);
+    /** @type {JSONC.ParseError[]} */
+    const errors = [];
+    const result = JSONC.parse(jsonText, errors);
+    if (errors.length) {
+        throw new Error(`Error parsing ${jsonPath}`);
+    }
+    return result;
 }
 
 /**
@@ -231,4 +237,12 @@ export function memoize(fn) {
         }
         return value;
     };
+}
+
+/**
+ * @param {fs.PathLike} p
+ */
+export function rimraf(p) {
+    // The rimraf package uses maxRetries=10 on Windows, but Node's fs.rm does not have that special case.
+    return fs.promises.rm(p, { recursive: true, force: true, maxRetries: process.platform === "win32" ? 10 : 0 });
 }
