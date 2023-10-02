@@ -9,7 +9,6 @@ import {
     CodeFixAllContext,
     CodeFixContext,
     createPrinter,
-    createPrinterWithRemoveComments,
     Debug,
     defaultMaximumTruncationLength,
     DiagnosticAndArguments,
@@ -133,7 +132,6 @@ registerCodeFix({
     fixIds: [fixId],
     getCodeActions(context) {
         const fixes: CodeFixAction[] = [];
-
         addCodeAction(addAnnotationFix, fixes, context, "full", f => f.addFullAnnotation(context.span));
         addCodeAction(addAnnotationFix, fixes, context, "relative", f => f.addFullAnnotation(context.span));
         addCodeAction(addInlineTypeAssertion, fixes, context, "full", f => f.addInlineAnnotation(context.span));
@@ -165,15 +163,14 @@ function addCodeAction(
 ) {
     const changes = withChanges(context, typePrinter, cb);
     if (changes.result) {
-        fixes.push(
-            createCodeFixAction(
-                fixName,
-                changes.textChanges,
-                changes.result,
-                fixId,
-                Diagnostics.Add_all_missing_tye_annotations,
-            ),
+        const newFix = createCodeFixAction(
+            fixName,
+            changes.textChanges,
+            changes.result,
+            fixId,
+            Diagnostics.Add_all_missing_tye_annotations,
         );
+        if (!fixes.find(f => f.description === newFix.description)) fixes.push(newFix);
     }
 }
 function withChanges<T>(
@@ -369,14 +366,14 @@ function withChanges<T>(
                 GeneratedIdentifierFlags.Optimistic,
             );
             let replacementTarget = targetNode;
+            let initializationNode = targetNode;
             if (isSpreadElement(replacementTarget)) {
-                replacementTarget = replacementTarget.parent;
                 replacementTarget = walkUpParenthesizedExpressions(replacementTarget.parent) as Expression;
                 if (isConstAssertion(replacementTarget.parent)) {
-                    replacementTarget = replacementTarget.parent;
+                    initializationNode = replacementTarget = replacementTarget.parent;
                 }
                 else {
-                    createAsExpression(
+                    initializationNode = createAsExpression(
                         replacementTarget,
                         factory.createTypeReferenceNode("const"),
                     );
@@ -392,7 +389,7 @@ function withChanges<T>(
                         tempName,
                         /*exclamationToken*/ undefined,
                         /*type*/ undefined,
-                        replacementTarget,
+                        initializationNode,
                     ),
                 ], NodeFlags.Const),
             );
