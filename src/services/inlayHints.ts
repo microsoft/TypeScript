@@ -82,7 +82,6 @@ import {
     Signature,
     skipParentheses,
     some,
-    StringLiteral,
     Symbol,
     SymbolFlags,
     SyntaxKind,
