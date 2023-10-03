@@ -2824,7 +2824,7 @@ export function getCompletionEntryDetails(
             return createSimpleDetails(completionNameForLiteral(sourceFile, preferences, literal), ScriptElementKind.string, typeof literal === "string" ? SymbolDisplayPartKind.stringLiteral : SymbolDisplayPartKind.numericLiteral);
         }
         case "cases": {
-            const { entry, importAdder } = getExhaustiveCaseSnippets(
+            const snippets = getExhaustiveCaseSnippets(
                 contextToken!.parent as CaseBlock,
                 sourceFile,
                 preferences,
@@ -2832,8 +2832,10 @@ export function getCompletionEntryDetails(
                 host,
                 program,
                 /*formatContext*/ undefined,
-            )!;
-            if (importAdder.hasFixes()) {
+            );
+
+            if (snippets?.importAdder.hasFixes()) {
+                const { entry, importAdder } = snippets;
                 const changes = textChanges.ChangeTracker.with(
                     { host, formatContext, preferences },
                     importAdder.writeFixes,
@@ -2850,8 +2852,9 @@ export function getCompletionEntryDetails(
                     }],
                 };
             }
+
             return {
-                name: entry.name,
+                name,
                 kind: ScriptElementKind.unknown,
                 kindModifiers: "",
                 displayParts: [],
