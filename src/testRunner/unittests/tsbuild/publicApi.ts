@@ -2,6 +2,9 @@ import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselinePrograms,
     commandLineCallbacks,
     toPathWithSystem,
@@ -18,14 +21,14 @@ describe("unittests:: tsbuild:: Public API with custom transformers when passed 
     let sys: TscCompileSystem;
     before(() => {
         const inputFs = loadProjectFromFiles({
-            "/src/tsconfig.json": JSON.stringify({
+            "/src/tsconfig.json": jsonToReadableText({
                 references: [
                     { path: "./shared/tsconfig.json" },
                     { path: "./webpack/tsconfig.json" },
                 ],
                 files: [],
             }),
-            "/src/shared/tsconfig.json": JSON.stringify({
+            "/src/shared/tsconfig.json": jsonToReadableText({
                 compilerOptions: { composite: true },
             }),
             "/src/shared/index.ts": `export function f1() { }
@@ -33,7 +36,7 @@ export class c { }
 export enum e { }
 // leading
 export function f2() { } // trailing`,
-            "/src/webpack/tsconfig.json": JSON.stringify({
+            "/src/webpack/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                 },

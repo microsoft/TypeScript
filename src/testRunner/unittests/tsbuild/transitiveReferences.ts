@@ -1,5 +1,8 @@
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
@@ -23,7 +26,7 @@ export const b = new A();`,
         );
         fs.writeFileSync(
             "/src/tsconfig.b.json",
-            JSON.stringify({
+            jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     moduleResolution,

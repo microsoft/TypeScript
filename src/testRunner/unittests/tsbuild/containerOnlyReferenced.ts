@@ -1,4 +1,7 @@
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc";
@@ -22,21 +25,21 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
         subScenario: "when solution is referenced indirectly",
         fs: () =>
             loadProjectFromFiles({
-                "/src/project1/tsconfig.json": JSON.stringify({
+                "/src/project1/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     references: [],
                 }),
-                "/src/project2/tsconfig.json": JSON.stringify({
+                "/src/project2/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     references: [],
                 }),
                 "/src/project2/src/b.ts": "export const b = 10;",
-                "/src/project3/tsconfig.json": JSON.stringify({
+                "/src/project3/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     references: [{ path: "../project1" }, { path: "../project2" }],
                 }),
                 "/src/project3/src/c.ts": "export const c = 10;",
-                "/src/project4/tsconfig.json": JSON.stringify({
+                "/src/project4/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     references: [{ path: "../project3" }],
                 }),

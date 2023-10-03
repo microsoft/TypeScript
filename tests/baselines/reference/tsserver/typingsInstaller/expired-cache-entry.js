@@ -5,16 +5,34 @@ Creating project service
 
 
 //// [/a/b/package.json]
-{"name":"test","dependencies":{"jquery":"^3.1.0"}}
+{
+  "name": "test",
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
 
 //// [/a/data/node_modules/@types/jquery/index.d.ts]
 declare const $: { x: number }
 
 //// [/a/data/package.json]
-{"dependencies":{"types-registry":"^0.1.317"},"devDependencies":{"@types/jquery":"^1.0.0"}}
+{
+  "dependencies": {
+    "types-registry": "^0.1.317"
+  },
+  "devDependencies": {
+    "@types/jquery": "^1.0.0"
+  }
+}
 
 //// [/a/data/package-lock.json]
-{"dependencies":{"@types/jquery":{"version":"1.0.0"}}}
+{
+  "dependencies": {
+    "@types/jquery": {
+      "version": "1.0.0"
+    }
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /a/b
@@ -66,19 +84,19 @@ TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {
-  "jquery": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
+  "entries": {
+    "jquery": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
   }
- }
 }
 
 
@@ -155,7 +173,9 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typingsInstallerVersion": "FakeVersion",
       "projectName": "/dev/null/inferredProject1*"
     }
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]'.
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/jquery@tsFakeMajor.Minor"
+]'.
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -163,7 +183,9 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: true
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/jquery@tsFakeMajor.Minor"
+]':: true
 TI:: Before installWorker
 
 PolledWatches::

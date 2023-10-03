@@ -332,7 +332,18 @@ Before running Timeout callback:: count: 2
 5: /user/username/projects/sample1/tests/tsconfig.json
 6: *ensureProjectForOpenFiles*
 //// [/user/username/projects/sample1/logic/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"declarationDir":"decls"},"references":[{"path":"../core"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationDir": "decls"
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/sample1/tests/tsconfig.json

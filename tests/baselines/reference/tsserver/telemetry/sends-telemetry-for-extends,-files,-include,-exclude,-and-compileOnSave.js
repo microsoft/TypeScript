@@ -5,7 +5,20 @@ Before request
 
 
 //// [/tsconfig.json]
-{"compilerOptions":{},"extends":"hunter2.json","files":["hunter2/a.ts"],"include":["hunter2"],"exclude":["hunter2"],"compileOnSave":true}
+{
+  "compilerOptions": {},
+  "extends": "hunter2.json",
+  "files": [
+    "hunter2/a.ts"
+  ],
+  "include": [
+    "hunter2"
+  ],
+  "exclude": [
+    "hunter2"
+  ],
+  "compileOnSave": true
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -159,12 +172,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 33
+              "line": 3,
+              "offset": 14
             },
             "end": {
-              "line": 1,
-              "offset": 47
+              "line": 3,
+              "offset": 28
             },
             "text": "File 'hunter2.json' not found.",
             "code": 6053,

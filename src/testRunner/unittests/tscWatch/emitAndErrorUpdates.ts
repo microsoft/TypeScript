@@ -1,4 +1,7 @@
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     libContent,
 } from "../helpers/contents";
 import {
@@ -251,7 +254,7 @@ getPoint().c.x;`,
     describe("updates errors when file transitively exported file changes", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 files: ["app.ts"],
                 compilerOptions: { baseUrl: "." },
             }),

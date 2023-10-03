@@ -1,6 +1,9 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     commandLineCallbacks,
 } from "./baseline";
 import {
@@ -37,7 +40,7 @@ export function createSolutionBuilder(system: TestServerHost, rootNames: readonl
 export function ensureErrorFreeBuild(host: TestServerHost, rootNames: readonly string[]) {
     // ts build should succeed
     solutionBuildWithBaseline(host, rootNames);
-    assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
+    assert.equal(host.getOutput().length, 0, jsonToReadableText(host.getOutput()));
 }
 
 export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: readonly string[], originalRead?: TestServerHost["readFile"]) {

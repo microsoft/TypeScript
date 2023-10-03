@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     commonFile1,
     commonFile2,
     createBaseline,
@@ -207,7 +210,7 @@ export class someClass2 { }`),
                     const [coreTsconfig, ...otherCoreFiles] = core;
                     const circularCoreConfig: File = {
                         path: coreTsconfig.path,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { composite: true, declaration: true },
                             references: [{ path: "../tests", circular: true }],
                         }),
@@ -266,13 +269,13 @@ export class someClass2 { }`),
             sys: () => {
                 const coreTsConfig: File = {
                     path: core[0].path,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
                     }),
                 };
                 const logicTsConfig: File = {
                     path: logic[0].path,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: { ignoreDeprecations: "5.0", composite: true, declaration: true, outFile: "index.js" },
                         references: [{ path: "../core", prepend: true }],
                     }),
@@ -320,7 +323,7 @@ export function createSomeObject(): SomeObject
             sys: () => {
                 const libraryTsconfig: File = {
                     path: `${subProjectLibrary}/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { composite: true } }),
+                    content: jsonToReadableText({ compilerOptions: { composite: true } }),
                 };
                 const subProjectApp = `${"/user/username/projects"}/sample1/App`;
                 const appTs: File = {
@@ -330,7 +333,7 @@ createSomeObject().message;`,
                 };
                 const appTsconfig: File = {
                     path: `${subProjectApp}/tsconfig.json`,
-                    content: JSON.stringify({ references: [{ path: "../Library" }] }),
+                    content: jsonToReadableText({ references: [{ path: "../Library" }] }),
                 };
 
                 const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
@@ -416,7 +419,7 @@ let x: string = 10;`,
             };
             const tsconfig: File = {
                 path: `${subProjectLocation}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true } }),
+                content: jsonToReadableText({ compilerOptions: { composite: true } }),
             };
 
             const fixError: TscWatchCompileChange = {
@@ -543,7 +546,7 @@ export function someFn() { }`,
             };
             const configFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         noUnusedParameters: true,
                     },
@@ -557,7 +560,7 @@ export function someFn() { }`,
                 edit: sys =>
                     sys.writeFile(
                         `/user/username/projects/myproject/tsconfig.json`,
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 noUnusedParameters: false,
                             },
@@ -590,7 +593,7 @@ export function someFn() { }`,
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.core}`, "-verbose"],
         sys: () => {
             const [coreConfig, ...rest] = core;
-            const newCoreConfig: File = { path: coreConfig.path, content: JSON.stringify({ compilerOptions: { composite: true, outDir: "outDir" } }) };
+            const newCoreConfig: File = { path: coreConfig.path, content: jsonToReadableText({ compilerOptions: { composite: true, outDir: "outDir" } }) };
             return createWatchedSystem([libFile, newCoreConfig, ...rest], { currentDirectory: "/user/username/projects" });
         },
         edits: [
@@ -615,7 +618,7 @@ export function someFn() { }`,
             };
             const project1Config: File = {
                 path: "/a/b/project1.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: "./alpha.tsconfig.json",
                     compilerOptions: {
                         composite: true,
@@ -625,7 +628,7 @@ export function someFn() { }`,
             };
             const bravoExtendedConfigFile: File = {
                 path: "/a/b/bravo.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: "./alpha.tsconfig.json",
                 }),
             };
@@ -635,7 +638,7 @@ export function someFn() { }`,
             };
             const project2Config: File = {
                 path: "/a/b/project2.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: "./bravo.tsconfig.json",
                     compilerOptions: {
                         composite: true,
@@ -649,7 +652,7 @@ export function someFn() { }`,
             };
             const extendsConfigFile1: File = {
                 path: "/a/b/extendsConfig1.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                     },
@@ -657,7 +660,7 @@ export function someFn() { }`,
             };
             const extendsConfigFile2: File = {
                 path: "/a/b/extendsConfig2.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         strictNullChecks: false,
                     },
@@ -665,7 +668,7 @@ export function someFn() { }`,
             };
             const extendsConfigFile3: File = {
                 path: "/a/b/extendsConfig3.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         noImplicitAny: true,
                     },
@@ -673,7 +676,7 @@ export function someFn() { }`,
             };
             const project3Config: File = {
                 path: "/a/b/project3.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json", "./extendsConfig3.tsconfig.json"],
                     compilerOptions: {
                         composite: false,
@@ -703,7 +706,7 @@ export function someFn() { }`,
                 edit: sys =>
                     sys.writeFile(
                         "/a/b/alpha.tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { strict: true },
                         }),
                     ),
@@ -719,7 +722,7 @@ export function someFn() { }`,
                 edit: sys =>
                     sys.writeFile(
                         "/a/b/bravo.tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             extends: "./alpha.tsconfig.json",
                             compilerOptions: { strict: false },
                         }),
@@ -731,7 +734,7 @@ export function someFn() { }`,
                 edit: sys =>
                     sys.writeFile(
                         "/a/b/project2.tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             extends: "./alpha.tsconfig.json",
                         }),
                     ),
@@ -752,7 +755,7 @@ export function someFn() { }`,
                 edit: sys =>
                     sys.writeFile(
                         "/a/b/extendsConfig2.tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { strictNullChecks: true },
                         }),
                     ),
@@ -763,7 +766,7 @@ export function someFn() { }`,
                 edit: sys =>
                     sys.writeFile(
                         "/a/b/project3.tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json"],
                             compilerOptions: { composite: false },
                             files: ["/a/b/other2.ts"],
@@ -786,7 +789,7 @@ export function someFn() { }`,
         sys: () => {
             const alphaExtendedConfigFile: File = {
                 path: "/a/b/alpha.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         strict: true,
                     },
@@ -794,7 +797,7 @@ export function someFn() { }`,
             };
             const project1Config: File = {
                 path: "/a/b/project1.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: "./alpha.tsconfig.json",
                     compilerOptions: {
                         composite: true,
@@ -804,7 +807,7 @@ export function someFn() { }`,
             };
             const bravoExtendedConfigFile: File = {
                 path: "/a/b/bravo.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         strict: true,
                     },
@@ -816,7 +819,7 @@ export function someFn() { }`,
             };
             const project2Config: File = {
                 path: "/a/b/project2.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: "./bravo.tsconfig.json",
                     compilerOptions: {
                         composite: true,
@@ -826,7 +829,7 @@ export function someFn() { }`,
             };
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     references: [
                         {
                             path: "./project1.tsconfig.json",
@@ -856,7 +859,7 @@ export function someFn() { }`,
                 edit: sys =>
                     sys.modifyFile(
                         "/a/b/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             references: [
                                 {
                                     path: "./project1.tsconfig.json",

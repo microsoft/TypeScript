@@ -2,6 +2,9 @@ import {
     dedent,
 } from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc";
@@ -66,7 +69,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
                 edit: fs =>
                     fs.writeFileSync(
                         "/src/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { composite: true, declaration: true },
                             files: ["a.ts", "b.ts"],
                         }),

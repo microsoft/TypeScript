@@ -14,13 +14,32 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/sample1/core/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"outFile":"index.js"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "outFile": "index.js"
+  }
+}
 
 //// [/user/username/projects/sample1/core/index.ts]
 function foo() { return 10; }
 
 //// [/user/username/projects/sample1/logic/tsconfig.json]
-{"compilerOptions":{"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"index.js"},"references":[{"path":"../core","prepend":true}]}
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "composite": true,
+    "declaration": true,
+    "outFile": "index.js"
+  },
+  "references": [
+    {
+      "path": "../core",
+      "prepend": true
+    }
+  ]
+}
 
 //// [/user/username/projects/sample1/logic/index.ts]
 function bar() { return foo() + 1 };
@@ -35,8 +54,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/core/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/core/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -46,8 +73,17 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/logic/index.ts"
+]
+Program options: {
+  "ignoreDeprecations": "5.0",
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/logic/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -303,8 +339,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/core/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/core/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -415,8 +459,17 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/logic/index.ts"
+]
+Program options: {
+  "ignoreDeprecations": "5.0",
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/logic/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -578,8 +631,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/core/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/core/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

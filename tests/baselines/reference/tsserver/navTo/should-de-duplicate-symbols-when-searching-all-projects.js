@@ -26,7 +26,17 @@ import a = require("../a");
 export const ghijkl = a.abcdef;
 
 //// [/tsconfig.json]
-{"references":[{"path":"./a"},{"path":"./b"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./a"
+    },
+    {
+      "path": "./b"
+    }
+  ],
+  "files": []
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

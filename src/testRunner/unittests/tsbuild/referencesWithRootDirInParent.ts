@@ -1,5 +1,8 @@
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
@@ -40,14 +43,14 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
         modifyFs: fs => {
             fs.writeFileSync(
                 "/src/src/main/tsconfig.json",
-                JSON.stringify({
+                jsonToReadableText({
                     compilerOptions: { composite: true, outDir: "../../dist/" },
                     references: [{ path: "../other" }],
                 }),
             );
             fs.writeFileSync(
                 "/src/src/other/tsconfig.json",
-                JSON.stringify({
+                jsonToReadableText({
                     compilerOptions: { composite: true, outDir: "../../dist/" },
                 }),
             );
@@ -64,14 +67,14 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
             fs.renameSync("/src/src/other/tsconfig.json", "/src/src/other/tsconfig.other.json");
             fs.writeFileSync(
                 "/src/src/main/tsconfig.main.json",
-                JSON.stringify({
+                jsonToReadableText({
                     compilerOptions: { composite: true, outDir: "../../dist/" },
                     references: [{ path: "../other/tsconfig.other.json" }],
                 }),
             );
             fs.writeFileSync(
                 "/src/src/other/tsconfig.other.json",
-                JSON.stringify({
+                jsonToReadableText({
                     compilerOptions: { composite: true, outDir: "../../dist/" },
                 }),
             );

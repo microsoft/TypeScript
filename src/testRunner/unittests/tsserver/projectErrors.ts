@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     appendAllScriptInfos,
     baselineTsserverLogs,
     closeFilesForSession,
@@ -76,7 +79,7 @@ describe("unittests:: tsserver:: projectErrors::", () => {
         };
         const config = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ files: [file1, file2].map(f => ts.getBaseFileName(f.path)) }),
+            content: jsonToReadableText({ files: [file1, file2].map(f => ts.getBaseFileName(f.path)) }),
         };
         const host = createServerHost([file1, config, libFile]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -104,7 +107,7 @@ describe("unittests:: tsserver:: projectErrors::", () => {
         };
         const correctConfig = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ files: [file1, file2].map(f => ts.getBaseFileName(f.path)) }),
+            content: jsonToReadableText({ files: [file1, file2].map(f => ts.getBaseFileName(f.path)) }),
         };
         const corruptedConfig = {
             path: correctConfig.path,
@@ -156,7 +159,7 @@ describe("unittests:: tsserver:: projectErrors::", () => {
         };
         const correctConfig = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ files: [file1, file2].map(f => ts.getBaseFileName(f.path)) }),
+            content: jsonToReadableText({ files: [file1, file2].map(f => ts.getBaseFileName(f.path)) }),
         };
         const corruptedConfig = {
             path: correctConfig.path,
@@ -270,7 +273,7 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
         };
         const configFile: File = {
             path: `${projectDir}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { module: "none", targer: "es5" }, exclude: ["node_modules"] }),
+            content: jsonToReadableText({ compilerOptions: { module: "none", targer: "es5" }, exclude: ["node_modules"] }),
         };
         const host = createServerHost([app, foo, configFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
@@ -343,7 +346,7 @@ function foo() {
         };
         const config: File = {
             path: `${projectRootPath}/tsconfig.json`,
-            content: JSON.stringify({ include: ["src"] }),
+            content: jsonToReadableText({ include: ["src"] }),
         };
         const plugin: File = {
             path: `${projectRootPath}/node_modules/@custom/plugin/index.d.ts`,
@@ -708,7 +711,7 @@ console.log(blabla);`,
         };
         const tsconfig: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     resolveJsonModule: true,
                     composite: true,

@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openExternalProjectForSession,
@@ -204,7 +207,7 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
     it("should report semantic errors for configured js project with checkJs=true and skipLibCheck=true", () => {
         const jsconfigFile = {
             path: "/a/jsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     checkJs: true,
                     skipLibCheck: true,

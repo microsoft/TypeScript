@@ -6,6 +6,9 @@ import {
     dedent,
 } from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     libContent,
 } from "../helpers/contents";
 import {
@@ -35,7 +38,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         function setup(packageFileContents: string) {
             const configFile: File = {
                 path: `/user/username/projects/myproject/src/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         target: "es2016",
                         module: "Node16",
@@ -73,12 +76,12 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             };
         }
         it("package json file is edited", () => {
-            const { host, session, packageFile, verifyErr } = setup(JSON.stringify({ name: "app", version: "1.0.0" }));
+            const { host, session, packageFile, verifyErr } = setup(jsonToReadableText({ name: "app", version: "1.0.0" }));
 
             session.logger.info("Modify package json file to add type module");
             host.writeFile(
                 packageFile.path,
-                JSON.stringify({
+                jsonToReadableText({
                     name: "app",
                     version: "1.0.0",
                     type: "module",
@@ -103,7 +106,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             session.logger.info("Modify package json file to add type module");
             host.writeFile(
                 packageFile.path,
-                JSON.stringify({
+                jsonToReadableText({
                     name: "app",
                     version: "1.0.0",
                     type: "module",
@@ -123,14 +126,14 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         });
 
         it("package json file is edited when package json with type module exists", () => {
-            const { host, session, packageFile, verifyErr } = setup(JSON.stringify({
+            const { host, session, packageFile, verifyErr } = setup(jsonToReadableText({
                 name: "app",
                 version: "1.0.0",
                 type: "module",
             }));
 
             session.logger.info("Modify package json file to remove type module");
-            host.writeFile(packageFile.path, JSON.stringify({ name: "app", version: "1.0.0" }));
+            host.writeFile(packageFile.path, jsonToReadableText({ name: "app", version: "1.0.0" }));
             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
@@ -148,7 +151,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             verifyErr();
 
             session.logger.info("Modify package json file to without type module");
-            host.writeFile(packageFile.path, JSON.stringify({ name: "app", version: "1.0.0" }));
+            host.writeFile(packageFile.path, jsonToReadableText({ name: "app", version: "1.0.0" }));
             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
@@ -280,25 +283,21 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             baselineTsserverLogs("moduleResolution", `using referenced project${built ? " built" : ""}`, session);
         }
         function getPackageJson(packageName: string) {
-            return JSON.stringify(
-                {
-                    name: packageName,
-                    version: "1.0.0",
-                    type: "module",
-                    main: "build/index.js",
-                    exports: {
-                        ".": "./build/index.js",
-                        "./package.json": "./package.json",
-                        "./*": ["./build/*/index.js", "./build/*.js"],
-                    },
+            return jsonToReadableText({
+                name: packageName,
+                version: "1.0.0",
+                type: "module",
+                main: "build/index.js",
+                exports: {
+                    ".": "./build/index.js",
+                    "./package.json": "./package.json",
+                    "./*": ["./build/*/index.js", "./build/*.js"],
                 },
-                undefined,
-                " ",
-            );
+            });
         }
 
         function getTsConfig(references?: object[]) {
-            return JSON.stringify({
+            return jsonToReadableText({
                 compilerOptions: {
                     allowSyntheticDefaultImports: true,
                     baseUrl: "./",

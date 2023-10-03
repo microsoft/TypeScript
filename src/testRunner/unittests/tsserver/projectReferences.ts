@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     solutionBuildWithBaseline,
 } from "../helpers/solutionBuilder";
 import {
@@ -126,7 +129,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             const projectLocation = `/user/username/projects/project`;
             const commonConfig: File = {
                 path: `${projectLocation}/src/common/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         declarationMap: true,
@@ -152,7 +155,7 @@ function testEvaluateKeyboardEvent() {
             };
             const srcConfig: File = {
                 path: `${projectLocation}/src/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         declarationMap: true,
@@ -204,7 +207,7 @@ function foo() {
     it("reusing d.ts files from composite and non composite projects", () => {
         const configA: File = {
             path: `/user/username/projects/myproject/compositea/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     outDir: "../dist/",
@@ -236,7 +239,7 @@ function foo() {
         };
         const configC: File = {
             path: `/user/username/projects/myproject/compositec/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     outDir: "../dist/",
@@ -334,7 +337,7 @@ function foo() {
         function config(packageName: string, extraOptions: ts.CompilerOptions, references?: string[]): File {
             return {
                 path: `/user/username/projects/myproject/packages/${packageName}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         outDir: "lib",
                         rootDir: "src",
@@ -358,7 +361,7 @@ function foo() {
             verifySymlinkScenario(`when packageJson has types field and has index.ts${scope ? " with scoped package" : ""}`, () => ({
                 bPackageJson: {
                     path: `/user/username/projects/myproject/packages/B/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         main: "lib/index.js",
                         types: "lib/index.d.ts",
                     }),
@@ -414,7 +417,7 @@ bar();
     it("when the referenced projects have allowJs and emitDeclarationOnly", () => {
         const compositeConfig: File = {
             path: `/user/username/projects/myproject/packages/emit-composite/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     allowJs: true,
@@ -427,7 +430,7 @@ bar();
         };
         const compositePackageJson: File = {
             path: `/user/username/projects/myproject/packages/emit-composite/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "emit-composite",
                 version: "1.0.0",
                 main: "src/index.js",
@@ -454,7 +457,7 @@ module.exports = {
         };
         const consumerConfig: File = {
             path: `/user/username/projects/myproject/packages/consumer/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 include: ["src"],
                 references: [{ path: "../emit-composite" }],
             }),
@@ -480,7 +483,7 @@ testCompositeFunction('why hello there', 42);`,
         const solutionLocation = "/user/username/projects/solution";
         const solution: File = {
             path: `${solutionLocation}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 files: [],
                 include: [],
                 references: [
@@ -491,7 +494,7 @@ testCompositeFunction('why hello there', 42);`,
         };
         const compilerConfig: File = {
             path: `${solutionLocation}/compiler/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     module: "none",
@@ -520,7 +523,7 @@ testCompositeFunction('why hello there', 42);`,
         };
         const servicesConfig: File = {
             path: `${solutionLocation}/services/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                 },
@@ -563,7 +566,7 @@ testCompositeFunction('why hello there', 42);`,
         const solutionLocation = "/user/username/projects/solution";
         const solutionConfig: File = {
             path: `${solutionLocation}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 files: [],
                 include: [],
                 references: [
@@ -576,7 +579,7 @@ testCompositeFunction('why hello there', 42);`,
         };
         const aConfig: File = {
             path: `${solutionLocation}/a/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     module: "none",
@@ -594,7 +597,7 @@ testCompositeFunction('why hello there', 42);`,
 
         const bConfig: File = {
             path: `${solutionLocation}/b/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                 },
@@ -616,7 +619,7 @@ testCompositeFunction('why hello there', 42);`,
 
         const cConfig: File = {
             path: `${solutionLocation}/c/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                 },
@@ -638,7 +641,7 @@ testCompositeFunction('why hello there', 42);`,
 
         const dConfig: File = {
             path: `${solutionLocation}/d/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                 },
@@ -685,7 +688,7 @@ testCompositeFunction('why hello there', 42);`,
                 const solutionLocation = "/user/username/projects/solution";
                 const solution: File = {
                     path: `${solutionLocation}/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         files: [],
                         references: [
                             { path: "./api" },
@@ -695,7 +698,7 @@ testCompositeFunction('why hello there', 42);`,
                 };
                 const apiConfig: File = {
                     path: `${solutionLocation}/api/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             composite: true,
                             outDir: "dist",
@@ -720,7 +723,7 @@ ${usage}`,
                 };
                 const sharedConfig: File = {
                     path: `${solutionLocation}/shared/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             composite: true,
                             outDir: "dist",
@@ -790,7 +793,7 @@ export const foo = local;`,
         const solutionLocation = "/user/username/projects/solution";
         const solution: File = {
             path: `${solutionLocation}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 files: [],
                 include: [],
                 references: [
@@ -801,7 +804,7 @@ export const foo = local;`,
         };
         const compilerConfig: File = {
             path: `${solutionLocation}/compiler/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     module: "none",
@@ -831,7 +834,7 @@ export const foo = local;`,
         };
         const servicesConfig: File = {
             path: `${solutionLocation}/services/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                 },
@@ -888,7 +891,14 @@ export { foo };
         };
         const mainDtsMap: File = {
             path: `/user/username/projects/myproject/target/src/main.d.ts.map`,
-            content: `{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"}`,
+            content: jsonToReadableText({
+                version: 3,
+                file: "main.d.ts",
+                sourceRoot: "",
+                sources: ["../../src/main.ts"],
+                names: [],
+                mappings: "AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC",
+            }),
         };
         const helperDts: File = {
             path: `/user/username/projects/myproject/target/src/helpers/functions.d.ts`,
@@ -897,11 +907,18 @@ export { foo };
         };
         const helperDtsMap: File = {
             path: `/user/username/projects/myproject/target/src/helpers/functions.d.ts.map`,
-            content: `{"version":3,"file":"functions.d.ts","sourceRoot":"","sources":["../../../src/helpers/functions.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"}`,
+            content: jsonToReadableText({
+                version: 3,
+                file: "functions.d.ts",
+                sourceRoot: "",
+                sources: ["../../../src/helpers/functions.ts"],
+                names: [],
+                mappings: "AAAA,eAAO,MAAM,GAAG,IAAI,CAAC",
+            }),
         };
         const tsconfigIndirect3: File = {
             path: `/user/username/projects/myproject/indirect3/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     baseUrl: "../target/src/",
                 },
@@ -919,7 +936,7 @@ export function bar() {}`,
         function setup({ solutionFiles, solutionOptions, configRefs, additionalFiles }: Setup) {
             const tsconfigSrc: File = {
                 path: tsconfigSrcPath,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         outDir: "./target/",
@@ -930,7 +947,7 @@ export function bar() {}`,
             };
             const tsconfig: File = {
                 path: tsconfigPath,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     ...(solutionOptions ? { compilerOptions: solutionOptions } : {}),
                     references: configRefs.map(path => ({ path })),
                     files: solutionFiles || [],
@@ -1010,7 +1027,7 @@ export function bar() {}`,
         function getIndirectProject(postfix: string, optionsToExtend?: ts.CompilerOptions) {
             const tsconfigIndirect: File = {
                 path: `/user/username/projects/myproject/tsconfig-indirect${postfix}.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         outDir: "./target/",
@@ -1198,7 +1215,7 @@ bar;`,
         function setup(extendOptionsProject2?: ts.CompilerOptions) {
             const config1: File = {
                 path: `/user/username/projects/myproject/projects/project1/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
@@ -1216,7 +1233,7 @@ bar;`,
             };
             const config2: File = {
                 path: `/user/username/projects/myproject/projects/project2/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
@@ -1326,7 +1343,7 @@ bar;`,
         function verifyAutoImport(built: boolean, disableSourceOfProjectReferenceRedirect?: boolean) {
             const solnConfig: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     files: [],
                     references: [
                         { path: "shared/src/library" },
@@ -1336,7 +1353,7 @@ bar;`,
             };
             const sharedConfig: File = {
                 path: `/user/username/projects/myproject/shared/src/library/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         outDir: "../../bld/library",
@@ -1349,7 +1366,7 @@ bar;`,
             };
             const sharedPackage: File = {
                 path: `/user/username/projects/myproject/shared/package.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     name: "shared",
                     version: "1.0.0",
                     main: "bld/library/index.js",
@@ -1358,7 +1375,7 @@ bar;`,
             };
             const appConfig: File = {
                 path: `/user/username/projects/myproject/app/src/program/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         outDir: "../../bld/program",
@@ -1422,7 +1439,7 @@ bar;`,
             };
             const config: File = {
                 path: `/user/username/projects/myproject/${packageName}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { composite: true, ...optionsToExtend || {} },
                     references: references?.map(path => ({ path: `../${path}` })),
                 }),
@@ -1490,13 +1507,13 @@ const b: B = new B();`,
 
         const configB: File = {
             path: `/user/username/projects/myproject/b/tsconfig.json`,
-            content: `{
-"compilerOptions": {
-    "declarationMap": true,
-    "outDir": "lib",
-    "composite": true
-}
-}`,
+            content: jsonToReadableText({
+                compilerOptions: {
+                    declarationMap: true,
+                    outDir: "lib",
+                    composite: true,
+                },
+            }),
         };
 
         const indexB: File = {
@@ -1523,7 +1540,14 @@ const b: B = new B();`,
 
         const dtsMapB: File = {
             path: `/user/username/projects/myproject/b/lib/index.d.ts.map`,
-            content: `{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IACV,CAAC;CACJ"}`,
+            content: jsonToReadableText({
+                version: 3,
+                file: "index.d.ts",
+                sourceRoot: "",
+                sources: ["../index.ts"],
+                names: [],
+                mappings: "AAAA,qBAAa,CAAC;IACV,CAAC;CACJ",
+            }),
         };
 
         function baselineDisableReferencedProjectLoad(
@@ -1546,10 +1570,10 @@ const b: B = new B();`,
             it(subScenario, () => {
                 const configA: File = {
                     path: `/user/username/projects/myproject/a/tsconfig.json`,
-                    content: `{
-        "compilerOptions": ${JSON.stringify(compilerOptions)},
-        "references": [{ "path": "../b" }]
-    }`,
+                    content: jsonToReadableText({
+                        compilerOptions,
+                        references: [{ path: "../b" }],
+                    }),
                 };
 
                 const host = createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);

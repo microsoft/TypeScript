@@ -3,6 +3,9 @@ import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     libContent,
 } from "../helpers/contents";
 import {
@@ -72,7 +75,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             modifyFs: fs =>
                 fs.writeFileSync(
                     "/src/logic/tsconfig.json",
-                    JSON.stringify({
+                    jsonToReadableText({
                         compilerOptions: { composite: true, declaration: true, sourceMap: true, outDir: "outDir" },
                         references: [{ path: "../core" }],
                     }),
@@ -87,7 +90,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             modifyFs: fs =>
                 fs.writeFileSync(
                     "/src/logic/tsconfig.json",
-                    JSON.stringify({
+                    jsonToReadableText({
                         compilerOptions: { composite: true, declaration: true, sourceMap: true, declarationDir: "out/decls" },
                         references: [{ path: "../core" }],
                     }),
@@ -285,12 +288,12 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             fs: () => projFs,
             commandLineArgs: ["--b", "/src/tests", "--verbose"],
             modifyFs: fs => {
-                fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: { target: "es3" } }));
+                fs.writeFileSync("/src/tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es3" } }));
                 replaceText(fs, "/src/tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
             },
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: fs => fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: {} })),
+                edit: fs => fs.writeFileSync("/src/tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: {} })),
             }],
         });
 
@@ -358,7 +361,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             function verifyBuildNextResult() {
                 const project = builder.getNextInvalidatedProject();
                 const result = project && project.done();
-                baseline.push(`Project Result:: ${JSON.stringify({ project: project?.project, result })}`);
+                baseline.push(`Project Result:: ${jsonToReadableText({ project: project?.project, result })}`);
                 baselineState();
             }
 
@@ -665,7 +668,7 @@ class someClass2 { }`,
             modifyFs: fs => {
                 fs.writeFileSync(
                     "/src/core/tsconfig.json",
-                    JSON.stringify({
+                    jsonToReadableText({
                         compilerOptions: { composite: true },
                         files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"],
                     }),
@@ -682,7 +685,7 @@ class someClass2 { }`,
             modifyFs: fs => {
                 fs.writeFileSync(
                     "/src/core/tsconfig.json",
-                    JSON.stringify({
+                    jsonToReadableText({
                         compilerOptions: { composite: true },
                         files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"],
                     }),

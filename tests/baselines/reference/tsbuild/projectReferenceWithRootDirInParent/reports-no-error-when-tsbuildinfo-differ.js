@@ -24,14 +24,29 @@ export const b = 0;
 
 
 //// [/src/src/main/tsconfig.main.json]
-{"compilerOptions":{"composite":true,"outDir":"../../dist/"},"references":[{"path":"../other/tsconfig.other.json"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../../dist/"
+  },
+  "references": [
+    {
+      "path": "../other/tsconfig.other.json"
+    }
+  ]
+}
 
 //// [/src/src/other/other.ts]
 export const Other = 0;
 
 
 //// [/src/src/other/tsconfig.other.json]
-{"compilerOptions":{"composite":true,"outDir":"../../dist/"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../../dist/"
+  }
+}
 
 //// [/src/tsconfig.base.json]
 {

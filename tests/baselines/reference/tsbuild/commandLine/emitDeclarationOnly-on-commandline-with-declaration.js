@@ -28,7 +28,11 @@ import { a } from "./a";export const c = a;
 import { b } from "./b";export const d = b;
 
 //// [/src/project1/src/tsconfig.json]
-{"compilerOptions":{"declaration":true}}
+{
+  "compilerOptions": {
+    "declaration": true
+  }
+}
 
 //// [/src/project2/src/e.ts]
 export const e = 10;
@@ -40,7 +44,16 @@ import { a } from "../../project1/src/a"; export const f = a;
 import { b } from "../../project1/src/b"; export const g = b;
 
 //// [/src/project2/src/tsconfig.json]
-{"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
+{
+  "compilerOptions": {
+    "declaration": true
+  },
+  "references": [
+    {
+      "path": "../../project1/src"
+    }
+  ]
+}
 
 
 
@@ -58,17 +71,30 @@ Output::
 
 [[90m12:00:27 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m55[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     {
+[7m [0m [91m    ~[0m
+[7m7[0m       "path": "../../project1/src"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -91,8 +117,16 @@ Shape signatures in builder refreshed for::
 /src/project1/src/c.ts (computed .d.ts during emit)
 /src/project1/src/d.ts (computed .d.ts during emit)
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -141,17 +175,29 @@ Output::
 
 [[90m12:00:31 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m55[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     {
+[7m [0m [91m    ~[0m
+[7m7[0m       "path": "../../project1/src"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -189,17 +235,30 @@ Output::
 
 [[90m12:00:41 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m55[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     {
+[7m [0m [91m    ~[0m
+[7m7[0m       "path": "../../project1/src"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -222,8 +281,16 @@ Shape signatures in builder refreshed for::
 /src/project1/src/c.ts (computed .d.ts during emit)
 /src/project1/src/d.ts (computed .d.ts during emit)
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -265,17 +332,30 @@ Output::
 
 [[90m12:00:51 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m55[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     {
+[7m [0m [91m    ~[0m
+[7m7[0m       "path": "../../project1/src"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -298,8 +378,16 @@ Shape signatures in builder refreshed for::
 /src/project1/src/c.ts (computed .d.ts during emit)
 /src/project1/src/d.ts (computed .d.ts during emit)
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -342,17 +430,29 @@ Output::
 
 [[90m12:01:04 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m55[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     {
+[7m [0m [91m    ~[0m
+[7m7[0m       "path": "../../project1/src"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -375,8 +475,15 @@ Shape signatures in builder refreshed for::
 /src/project1/src/c.ts (computed .d.ts during emit)
 /src/project1/src/d.ts (computed .d.ts during emit)
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -447,17 +554,29 @@ Output::
 
 [[90m12:01:08 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m55[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     {
+[7m [0m [91m    ~[0m
+[7m7[0m       "path": "../../project1/src"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -495,17 +614,29 @@ Output::
 
 [[90m12:01:22 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m55[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     {
+[7m [0m [91m    ~[0m
+[7m7[0m       "path": "../../project1/src"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -528,8 +659,15 @@ Shape signatures in builder refreshed for::
 /src/project1/src/c.ts (computed .d.ts during emit)
 /src/project1/src/d.ts (computed .d.ts during emit)
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -583,17 +721,30 @@ Output::
 
 [[90m12:01:32 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m55[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     {
+[7m [0m [91m    ~[0m
+[7m7[0m       "path": "../../project1/src"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -616,8 +767,16 @@ Shape signatures in builder refreshed for::
 /src/project1/src/c.ts (computed .d.ts during emit)
 /src/project1/src/d.ts (computed .d.ts during emit)
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -659,17 +818,30 @@ Output::
 
 [[90m12:01:42 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m55[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     {
+[7m [0m [91m    ~[0m
+[7m7[0m       "path": "../../project1/src"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -692,8 +864,16 @@ Shape signatures in builder refreshed for::
 /src/project1/src/c.ts (computed .d.ts during emit)
 /src/project1/src/d.ts (computed .d.ts during emit)
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -739,17 +919,29 @@ Output::
 
 [[90m12:01:56 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m55[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"declaration":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m6[0m     {
+[7m [0m [91m    ~[0m
+[7m7[0m       "path": "../../project1/src"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m8[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -772,8 +964,15 @@ Shape signatures in builder refreshed for::
 /src/project1/src/c.ts (computed .d.ts during emit)
 /src/project1/src/d.ts (computed .d.ts during emit)
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

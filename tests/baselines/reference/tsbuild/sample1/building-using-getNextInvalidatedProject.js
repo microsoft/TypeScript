@@ -89,7 +89,10 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Project Result:: {"project":"/user/username/projects/core/tsconfig.json","result":0}
+Project Result:: {
+  "project": "/user/username/projects/core/tsconfig.json",
+  "result": 0
+}
 Output::
 
 //// [/user/username/projects/core/anotherModule.js]
@@ -208,7 +211,10 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
-Project Result:: {"project":"/user/username/projects/logic/tsconfig.json","result":0}
+Project Result:: {
+  "project": "/user/username/projects/logic/tsconfig.json",
+  "result": 0
+}
 Output::
 
 //// [/user/username/projects/logic/index.js.map]
@@ -317,7 +323,10 @@ export declare const m: typeof mod;
 }
 
 
-Project Result:: {"project":"/user/username/projects/tests/tsconfig.json","result":0}
+Project Result:: {
+  "project": "/user/username/projects/tests/tsconfig.json",
+  "result": 0
+}
 Output::
 
 //// [/user/username/projects/tests/index.js]

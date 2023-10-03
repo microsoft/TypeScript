@@ -39,7 +39,20 @@ export class A {}
 
 
 //// [/src/tsconfig.b.json]
-{"compilerOptions":{"composite":true,"moduleResolution":"node"},"files":["b.ts"],"references":[{"path":"tsconfig.a.json"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node"
+  },
+  "files": [
+    "b.ts"
+  ],
+  "references": [
+    {
+      "path": "tsconfig.a.json"
+    }
+  ]
+}
 
 //// [/src/tsconfig.c.json]
 {

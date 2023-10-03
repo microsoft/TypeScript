@@ -2,6 +2,9 @@ import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     createSolutionBuilderHostForBaseline,
 } from "../helpers/solutionBuilder";
 import {
@@ -632,7 +635,7 @@ ${internal} enum internalEnum { a, b, c }`,
                     fs.writeFileSync("/src/third/third_part1.ts", "const B = 2;");
                     fs.writeFileSync(
                         "/src/first/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 composite: true,
                                 declaration: true,
@@ -646,7 +649,7 @@ ${internal} enum internalEnum { a, b, c }`,
                     );
                     fs.writeFileSync(
                         "/src/third/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 ignoreDeprecations: "5.0",
                                 composite: true,

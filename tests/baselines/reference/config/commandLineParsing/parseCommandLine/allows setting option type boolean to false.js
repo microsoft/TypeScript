@@ -1,7 +1,7 @@
 --composite false 0.ts
 CompilerOptions::
 {
- "composite": false
+  "composite": false
 }
 WatchOptions::
 

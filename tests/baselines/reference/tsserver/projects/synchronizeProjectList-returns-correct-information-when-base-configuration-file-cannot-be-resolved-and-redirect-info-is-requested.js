@@ -5,7 +5,9 @@ Before request
 export const foo = 5;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"extends":"./tsconfig_base.json"}
+{
+  "extends": "./tsconfig_base.json"
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

@@ -52,8 +52,18 @@ Output::
 Found 1 error in src/src/main.ts[90m:4[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
-Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"incremental":true,"project":"/src","configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/shared/types/db.ts",
+  "/src/src/main.ts",
+  "/src/src/other.ts"
+]
+Program options: {
+  "outDir": "/src/dev-build",
+  "noEmitOnError": true,
+  "incremental": true,
+  "project": "/src",
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -183,8 +193,18 @@ Output::
 Found 1 error in src/src/main.ts[90m:4[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
-Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"incremental":true,"project":"/src","configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/shared/types/db.ts",
+  "/src/src/main.ts",
+  "/src/src/other.ts"
+]
+Program options: {
+  "outDir": "/src/dev-build",
+  "noEmitOnError": true,
+  "incremental": true,
+  "project": "/src",
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -212,8 +232,18 @@ const a = {
 Output::
 /lib/tsc --incremental -p src
 exitCode:: ExitStatus.Success
-Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
-Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"incremental":true,"project":"/src","configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/shared/types/db.ts",
+  "/src/src/main.ts",
+  "/src/src/other.ts"
+]
+Program options: {
+  "outDir": "/src/dev-build",
+  "noEmitOnError": true,
+  "incremental": true,
+  "project": "/src",
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -334,8 +364,18 @@ Input::
 Output::
 /lib/tsc --incremental -p src
 exitCode:: ExitStatus.Success
-Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
-Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"incremental":true,"project":"/src","configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/shared/types/db.ts",
+  "/src/src/main.ts",
+  "/src/src/other.ts"
+]
+Program options: {
+  "outDir": "/src/dev-build",
+  "noEmitOnError": true,
+  "incremental": true,
+  "project": "/src",
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

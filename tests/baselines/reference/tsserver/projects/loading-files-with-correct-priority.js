@@ -11,7 +11,11 @@ var y = 1
 var y = 1
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"allowJs":true}}
+{
+  "compilerOptions": {
+    "allowJs": true
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] reload projects.

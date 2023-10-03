@@ -1,7 +1,15 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/project/tsconfig.json]
-{"compilerOptions":{"strict":true,"target":"es2020","module":"nodenext","moduleResolution":"nodenext","outDir":"../dist"}}
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es2020",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "../dist"
+  }
+}
 
 //// [/project/src/index.ts]
 import * as Thing from "thing";
@@ -12,7 +20,13 @@ Thing.fn();
 declare module "thing";
 
 //// [/project/package.json]
-{"name":"some-proj","version":"1.0.0","description":"","type":"module","main":"index.js"}
+{
+  "name": "some-proj",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js"
+}
 
 //// [/a/lib/lib.es2020.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -37,8 +51,20 @@ Output::
 
 
 
-Program root files: ["/project/src/deps.d.ts","/project/src/index.ts"]
-Program options: {"strict":true,"target":7,"module":199,"moduleResolution":99,"outDir":"/dist","watch":true,"project":"/project/tsconfig.json","configFilePath":"/project/tsconfig.json"}
+Program root files: [
+  "/project/src/deps.d.ts",
+  "/project/src/index.ts"
+]
+Program options: {
+  "strict": true,
+  "target": 7,
+  "module": 199,
+  "moduleResolution": 99,
+  "outDir": "/dist",
+  "watch": true,
+  "project": "/project/tsconfig.json",
+  "configFilePath": "/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2020.full.d.ts
@@ -96,8 +122,20 @@ Output::
 
 
 
-Program root files: ["/project/src/deps.d.ts","/project/src/index.ts"]
-Program options: {"strict":true,"target":7,"module":199,"moduleResolution":99,"outDir":"/dist","watch":true,"project":"/project/tsconfig.json","configFilePath":"/project/tsconfig.json"}
+Program root files: [
+  "/project/src/deps.d.ts",
+  "/project/src/index.ts"
+]
+Program options: {
+  "strict": true,
+  "target": 7,
+  "module": 199,
+  "moduleResolution": 99,
+  "outDir": "/dist",
+  "watch": true,
+  "project": "/project/tsconfig.json",
+  "configFilePath": "/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.es2020.full.d.ts

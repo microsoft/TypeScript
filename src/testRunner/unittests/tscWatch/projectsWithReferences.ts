@@ -1,4 +1,7 @@
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     createSolutionBuilder,
     createSystemWithSolutionBuild,
 } from "../helpers/solutionBuilder";
@@ -59,7 +62,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                 edit: sys => {
                     sys.writeFile(
                         getTsBuildProjectFilePath("sample1", "logic/tsconfig.json"),
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
                             references: [{ path: "../core" }],
                         }),
@@ -76,7 +79,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
     function changeCompilerOpitonsPaths(sys: TestServerHost, config: string, newPaths: object) {
         const configJson = JSON.parse(sys.readFile(config)!);
         configJson.compilerOptions.paths = newPaths;
-        sys.writeFile(config, JSON.stringify(configJson));
+        sys.writeFile(config, jsonToReadableText(configJson));
     }
 
     verifyTscWatch({
@@ -169,7 +172,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                     getTsBuildProjectFile("transitiveReferences", "tsconfig.a.json"),
                     {
                         path: getTsBuildProjectFilePath("transitiveReferences", "tsconfig.b.json"),
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { composite: true, moduleResolution: "classic" },
                             files: ["b.ts"],
                             references: [{ path: "tsconfig.a.json" }],
@@ -200,14 +203,14 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                     libFile,
                     {
                         path: getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { composite: true },
                             files: ["index.ts"],
                         }),
                     },
                     {
                         path: getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                             files: ["index.ts"],
                             references: [{ path: `../a` }],
@@ -215,7 +218,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                     },
                     {
                         path: getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"),
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                             files: ["index.ts"],
                             references: [{ path: `../b` }],
@@ -288,7 +291,7 @@ X;`,
                 edit: sys =>
                     sys.writeFile(
                         getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                             files: ["index.ts"],
                             references: [{ path: `../a` }],
@@ -306,7 +309,7 @@ X;`,
                 edit: sys =>
                     sys.writeFile(
                         getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { composite: true },
                             files: ["index.ts"],
                         }),
@@ -327,18 +330,18 @@ X;`,
                     libFile,
                     {
                         path: getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
-                        content: JSON.stringify({ compilerOptions: { composite: true } }),
+                        content: jsonToReadableText({ compilerOptions: { composite: true } }),
                     },
                     {
                         path: getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                             references: [{ path: `../a` }],
                         }),
                     },
                     {
                         path: getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"),
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                             references: [{ path: `../b` }],
                         }),
@@ -410,7 +413,7 @@ X;`,
                 edit: sys =>
                     sys.writeFile(
                         getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                             references: [{ path: `../a` }],
                         }),
@@ -427,7 +430,7 @@ X;`,
                 edit: sys =>
                     sys.writeFile(
                         getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
-                        JSON.stringify({ compilerOptions: { composite: true } }),
+                        jsonToReadableText({ compilerOptions: { composite: true } }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },

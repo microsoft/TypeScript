@@ -14,13 +14,46 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 //// [/user/username/projects/transitiveReferences/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../refs/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 //// [/user/username/projects/transitiveReferences/a/index.ts]
 export class A {}
@@ -244,8 +277,23 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -447,8 +495,23 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -493,7 +556,21 @@ Change:: edit on config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../nrefs/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 //// [/user/username/projects/transitiveReferences/nrefs/a.d.ts]
 export class X {}
@@ -549,8 +626,23 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../nrefs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../nrefs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -641,7 +733,21 @@ Change:: Revert config file edit
 
 Input::
 //// [/user/username/projects/transitiveReferences/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../refs/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -691,8 +797,23 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -783,7 +904,22 @@ Change:: edit in referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../nrefs/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -814,8 +950,23 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -903,7 +1054,22 @@ Change:: Revert referenced config file edit
 
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../refs/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -933,8 +1099,23 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1037,10 +1218,14 @@ File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-[96mc/tsconfig.json[0m:[93m1[0m:[93m84[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/b' not found.
+[96mc/tsconfig.json[0m:[93m11[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/b' not found.
 
-[7m1[0m {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
-[7m [0m [91m                                                                                   ~~~~~~~~~~~~~~~[0m
+[7m11[0m     {
+[7m  [0m [91m    ~[0m
+[7m12[0m       "path": "../b"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~[0m
+[7m13[0m     }
+[7m  [0m [91m~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -1055,8 +1240,23 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1139,7 +1339,22 @@ Change:: Revert deleting referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 
 Before running Timeout callback:: count: 2
@@ -1172,8 +1387,23 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1274,10 +1504,14 @@ Output::
 Reusing resolution of module '../b' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'.
-[96mb/tsconfig.json[0m:[93m1[0m:[93m96[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/a' not found.
+[96mb/tsconfig.json[0m:[93m12[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/a' not found.
 
-[7m1[0m {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
-[7m [0m [91m                                                                                               ~~~~~~~~~~~~~~~[0m
+[7m12[0m     {
+[7m  [0m [91m    ~[0m
+[7m13[0m       "path": "../a"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~[0m
+[7m14[0m     }
+[7m  [0m [91m~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -1294,8 +1528,23 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1382,7 +1631,11 @@ Change:: Revert deleting transitively referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 
 Before running Timeout callback:: count: 2
@@ -1412,8 +1665,23 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

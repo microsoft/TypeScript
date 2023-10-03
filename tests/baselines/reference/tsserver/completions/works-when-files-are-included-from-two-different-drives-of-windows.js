@@ -33,7 +33,14 @@ import * as PropTypes from 'prop-types';
 
 
 //// [e:/myproject/package.json]
-{"name":"test","version":"0.1.0","dependencies":{"react":"^16.12.0","react-router-dom":"^5.1.2"}}
+{
+  "name": "test",
+  "version": "0.1.0",
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-router-dom": "^5.1.2"
+  }
+}
 
 //// [c:/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -49,22 +56,37 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [e:/myproject/node_modules/@types/react/package.json]
-{"name":"@types/react","version":"16.9.14"}
+{
+  "name": "@types/react",
+  "version": "16.9.14"
+}
 
 //// [e:/myproject/node_modules/react-router-dom/package.json]
-{"name":"react-router-dom","version":"5.1.2"}
+{
+  "name": "react-router-dom",
+  "version": "5.1.2"
+}
 
 //// [e:/myproject/node_modules/react-router-dom/index.js]
 export function foo() {}
 
 //// [e:/myproject/node_modules/@types/prop-types/package.json]
-{"name":"@types/prop-types","version":"15.7.3"}
+{
+  "name": "@types/prop-types",
+  "version": "15.7.3"
+}
 
 //// [c:/typescript/node_modules/@types/react-router-dom/package.json]
-{"name":"@types/react-router-dom","version":"5.1.2"}
+{
+  "name": "@types/react-router-dom",
+  "version": "5.1.2"
+}
 
 //// [c:/typescript/node_modules/@types/react/package.json]
-{"name":"@types/react","version":"16.9.14"}
+{
+  "name": "@types/react",
+  "version": "16.9.14"
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -182,7 +204,7 @@ TI:: typing installer creation complete
 
 //// [c:/typescript/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 

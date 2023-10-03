@@ -6,6 +6,9 @@ import {
     dedent,
 } from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openFilesForSession,
@@ -76,15 +79,11 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
             `,
         };
         const host = createServerHost({
-            "/user/users/projects/myproject/node_modules/@types/yargs/package.json": JSON.stringify(
-                {
-                    name: "@types/yargs",
-                    version: "1.0.0",
-                    types: "./index.d.ts",
-                },
-                undefined,
-                " ",
-            ),
+            "/user/users/projects/myproject/node_modules/@types/yargs/package.json": jsonToReadableText({
+                name: "@types/yargs",
+                version: "1.0.0",
+                types: "./index.d.ts",
+            }),
             "/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts": dedent`
                 export declare class Yargs { positional(): Yargs; }
             `,
@@ -92,15 +91,11 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 import { Yargs } from "./callback";
                 export declare function command(command: string, cb: (yargs: Yargs) => void): void;
             `,
-            "/user/users/projects/myproject/node_modules/yargs/package.json": JSON.stringify(
-                {
-                    name: "yargs",
-                    version: "1.0.0",
-                    main: "index.js",
-                },
-                undefined,
-                " ",
-            ),
+            "/user/users/projects/myproject/node_modules/yargs/package.json": jsonToReadableText({
+                name: "yargs",
+                version: "1.0.0",
+                main: "index.js",
+            }),
             "/user/users/projects/myproject/node_modules/yargs/callback.js": dedent`
                 export class Yargs { positional() { } }
             `,
@@ -140,15 +135,11 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
             `,
         };
         const host = createServerHost({
-            "/user/users/projects/myproject/node_modules/@types/yargs/package.json": JSON.stringify(
-                {
-                    name: "@types/yargs",
-                    version: "1.0.0",
-                    types: "./index.d.ts",
-                },
-                undefined,
-                " ",
-            ),
+            "/user/users/projects/myproject/node_modules/@types/yargs/package.json": jsonToReadableText({
+                name: "@types/yargs",
+                version: "1.0.0",
+                types: "./index.d.ts",
+            }),
             "/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts": dedent`
                 export declare class Yargs { positional(): Yargs; }
             `,
@@ -156,15 +147,11 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 import { Yargs } from "./callback";
                 export declare function command(command: string, cb: (yargs: Yargs) => void): void;
             `,
-            "/user/users/projects/myproject/node_modules/yargs/package.json": JSON.stringify(
-                {
-                    name: "yargs",
-                    version: "1.0.0",
-                    main: "index.js",
-                },
-                undefined,
-                " ",
-            ),
+            "/user/users/projects/myproject/node_modules/yargs/package.json": jsonToReadableText({
+                name: "yargs",
+                version: "1.0.0",
+                main: "index.js",
+            }),
             "/user/users/projects/myproject/node_modules/yargs/callback.js": dedent`
                 export class Yargs { positional() { } }
             `,

@@ -26,7 +26,16 @@ declare const dts: any;
 
 
 //// [/src/core/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["anotherModule.ts","index.ts","some_decl.d.ts"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "anotherModule.ts",
+    "index.ts",
+    "some_decl.d.ts"
+  ]
+}
 
 //// [/src/logic/index.ts]
 import * as c from '../core/index';
@@ -114,9 +123,9 @@ Output::
   The file is in the program because:
     Part of 'files' list in tsconfig.json
 
-  [96msrc/core/tsconfig.json[0m:[93m1[0m:[93m48[0m
-    [7m1[0m {"compilerOptions":{"composite":true},"files":["anotherModule.ts","index.ts","some_decl.d.ts"]}
-    [7m [0m [96m                                               ~~~~~~~~~~~~~~~~~~[0m
+  [96msrc/core/tsconfig.json[0m:[93m6[0m:[93m5[0m
+    [7m6[0m     "anotherModule.ts",
+    [7m [0m [96m    ~~~~~~~~~~~~~~~~~~[0m
     File is matched by 'files' list specified here.
 
 [[90m12:00:14 AM[0m] Project 'src/logic/tsconfig.json' can't be built because its dependency 'src/core' has errors

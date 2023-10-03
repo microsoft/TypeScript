@@ -52,8 +52,16 @@ Output::
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
-Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/shared/types/db.ts",
+  "/src/src/main.ts",
+  "/src/src/other.ts"
+]
+Program options: {
+  "outDir": "/src/dev-build",
+  "noEmitOnError": true,
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -83,8 +91,16 @@ Output::
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
-Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/shared/types/db.ts",
+  "/src/src/main.ts",
+  "/src/src/other.ts"
+]
+Program options: {
+  "outDir": "/src/dev-build",
+  "noEmitOnError": true,
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -112,8 +128,16 @@ const a = {
 Output::
 /lib/tsc --b /src/tsconfig.json
 exitCode:: ExitStatus.Success
-Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
-Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/shared/types/db.ts",
+  "/src/src/main.ts",
+  "/src/src/other.ts"
+]
+Program options: {
+  "outDir": "/src/dev-build",
+  "noEmitOnError": true,
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

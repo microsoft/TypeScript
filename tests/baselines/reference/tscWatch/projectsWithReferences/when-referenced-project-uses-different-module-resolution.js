@@ -18,7 +18,20 @@ interface Array<T> { length: number; [n: number]: T; }
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.json]
-{"compilerOptions":{"composite":true,"moduleResolution":"classic"},"files":["b.ts"],"references":[{"path":"tsconfig.a.json"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "classic"
+  },
+  "files": [
+    "b.ts"
+  ],
+  "references": [
+    {
+      "path": "tsconfig.a.json"
+    }
+  ]
+}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.c.json]
 {
@@ -251,8 +264,23 @@ c.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program root files: [
+  "/user/username/projects/transitiveReferences/c.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences",
+  "paths": {
+    "@ref/*": [
+      "./refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/tsconfig.c.json",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/tsconfig.c.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

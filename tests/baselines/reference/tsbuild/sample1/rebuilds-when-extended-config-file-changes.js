@@ -75,7 +75,11 @@ export const m = mod;
 
 
 //// [/src/tests/tsconfig.base.json]
-{"compilerOptions":{"target":"es3"}}
+{
+  "compilerOptions": {
+    "target": "es3"
+  }
+}
 
 //// [/src/tests/tsconfig.json]
 {
@@ -462,7 +466,9 @@ exports.m = mod;
 Change:: incremental-declaration-changes
 Input::
 //// [/src/tests/tsconfig.base.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 
 

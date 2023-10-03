@@ -463,8 +463,20 @@ tests/index.ts
 
 
 
-Program root files: ["/user/username/projects/sample1/tests/index.ts"]
-Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/tests","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/tests/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "forceConsistentCasingInFileNames": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "project": "/user/username/projects/sample1/tests",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/sample1/tests/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -800,8 +812,20 @@ tests/index.ts
 
 
 
-Program root files: ["/user/username/projects/sample1/tests/index.ts"]
-Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/tests","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/tests/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "forceConsistentCasingInFileNames": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "project": "/user/username/projects/sample1/tests",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/sample1/tests/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -942,7 +966,18 @@ Change:: change in project reference config file builds correctly
 
 Input::
 //// [/user/username/projects/sample1/logic/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"declarationDir":"decls"},"references":[{"path":"../core"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationDir": "decls"
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
+}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
@@ -1082,8 +1117,20 @@ tests/index.ts
 
 
 
-Program root files: ["/user/username/projects/sample1/tests/index.ts"]
-Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/tests","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/tests/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "forceConsistentCasingInFileNames": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "project": "/user/username/projects/sample1/tests",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/sample1/tests/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

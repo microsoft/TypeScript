@@ -14,7 +14,12 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/sample1/core/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"outDir"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "outDir"
+  }
+}
 
 //// [/user/username/projects/sample1/core/index.ts]
 export const someString: string = "HELLO WORLD";
@@ -43,8 +48,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"outDir":"/user/username/projects/sample1/core/outDir","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/core/anotherModule.ts",
+  "/user/username/projects/sample1/core/index.ts"
+]
+Program options: {
+  "composite": true,
+  "outDir": "/user/username/projects/sample1/core/outDir",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -202,8 +215,17 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/file3.ts","/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"outDir":"/user/username/projects/sample1/core/outDir","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/core/anotherModule.ts",
+  "/user/username/projects/sample1/core/file3.ts",
+  "/user/username/projects/sample1/core/index.ts"
+]
+Program options: {
+  "composite": true,
+  "outDir": "/user/username/projects/sample1/core/outDir",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

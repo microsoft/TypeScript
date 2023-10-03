@@ -2,7 +2,12 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/a/jsconfig.json]
-{"compilerOptions":{"checkJs":true,"skipLibCheck":true}}
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "skipLibCheck": true
+  }
+}
 
 //// [/a/jsFile.js]
 let x = 1;
@@ -99,7 +104,7 @@ TI:: typing installer creation complete
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 

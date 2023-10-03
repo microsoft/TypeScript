@@ -2,6 +2,9 @@ import {
     createLoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openFilesForSession,
@@ -50,7 +53,7 @@ declare class TestLib {
         };
         const testConfig: File = {
             path: `${testProjectLocation}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     module: "amd",
                     typeRoots: ["../lib/@types", "../lib/@app"],
@@ -75,7 +78,7 @@ declare class TestLib {
         };
         const tsconfig: File = {
             path: `${projectPath}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     types: [
                         "../typedefs/filesystem",

@@ -28,7 +28,19 @@ function f() {
 }
 
 //// [/src/first/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true,"sourceMap":true,"outFile":"./bin/first-output.js"},"files":["/src/first/first_PART1.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipDefaultLibCheck": true,
+    "sourceMap": true,
+    "outFile": "./bin/first-output.js"
+  },
+  "files": [
+    "/src/first/first_PART1.ts"
+  ]
+}
 
 //// [/src/second/second_part1.ts]
 namespace N {
@@ -75,7 +87,26 @@ class C {
 const B = 2;
 
 //// [/src/third/tsconfig.json]
-{"compilerOptions":{"ignoreDeprecations":"5.0","composite":true,"declaration":true,"declarationMap":false,"stripInternal":true,"sourceMap":true,"outFile":"./thirdjs/output/third-output.js"},"references":[{"path":"../first","prepend":true}],"files":["/src/third/third_part1.ts"]}
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": false,
+    "stripInternal": true,
+    "sourceMap": true,
+    "outFile": "./thirdjs/output/third-output.js"
+  },
+  "references": [
+    {
+      "path": "../first",
+      "prepend": true
+    }
+  ],
+  "files": [
+    "/src/third/third_part1.ts"
+  ]
+}
 
 
 

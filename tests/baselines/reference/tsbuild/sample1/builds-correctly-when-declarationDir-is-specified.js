@@ -49,7 +49,19 @@ export const m = mod;
 
 
 //// [/src/logic/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"sourceMap":true,"declarationDir":"out/decls"},"references":[{"path":"../core"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "sourceMap": true,
+    "declarationDir": "out/decls"
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
+}
 
 //// [/src/tests/index.ts]
 import * as c from '../core/index';

@@ -2,14 +2,21 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/node_modules/memfs/package.json]
-{ "name": "memfs", "version": "1.0.0", "types": "lib/index.d.ts" }
+{
+  "name": "memfs",
+  "version": "1.0.0",
+  "types": "lib/index.d.ts"
+}
 
 //// [/node_modules/memfs/lib/index.d.ts]
 /// <reference types="node" />
 export declare class Volume {}
 
 //// [/node_modules/@types/node/package.json]
-{ "name": "@types/node", "version": "1.0.0" }
+{
+  "name": "@types/node",
+  "version": "1.0.0"
+}
 
 //// [/node_modules/@types/node/index.d.ts]
 export declare class Stats {}

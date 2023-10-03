@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     libContent,
 } from "../helpers/contents";
 import {
@@ -115,7 +118,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
         function config(packageName: string, extraOptions: ts.CompilerOptions, references?: string[]): File {
             return {
                 path: `/user/username/projects/myproject/packages/${packageName}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         outDir: "lib",
                         rootDir: "src",
@@ -140,7 +143,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
                 verifySymlinkScenario(() => ({
                     bPackageJson: {
                         path: `/user/username/projects/myproject/packages/B/package.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             main: "lib/index.js",
                             types: "lib/index.d.ts",
                         }),
