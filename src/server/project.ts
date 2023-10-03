@@ -1111,6 +1111,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         // signal language service to release source files acquired from document registry
         this.languageService.dispose();
         this.languageService = undefined!;
+        this.originalLanguageService = undefined!;
     }
 
     private detachScriptInfoIfNotRoot(uncheckedFilename: string) {
