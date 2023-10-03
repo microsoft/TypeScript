@@ -7,25 +7,27 @@
 verify.organizeImports(
 `import { type a, A, b } from "foo";
 interface Use extends A {}
-console.log(a, b);`);
+console.log(a, b);`,
+    /*mode*/ undefined,
+    { organizeImportsTypeOrder: "inline" });
 
 verify.organizeImports(
 `import { type a, A, b } from "foo";
 interface Use extends A {}
 console.log(a, b);`,
     /*mode*/ undefined,
-    { organizeImportsIgnoreCase: "auto" });
+    { organizeImportsIgnoreCase: "auto", organizeImportsTypeOrder: "inline" });
 
 verify.organizeImports(
 `import { type a, A, b } from "foo";
 interface Use extends A {}
 console.log(a, b);`,
     /*mode*/ undefined,
-    { organizeImportsIgnoreCase: true });
+    { organizeImportsIgnoreCase: true, organizeImportsTypeOrder: "inline" });
 
 verify.organizeImports(
 `import { A, type a, b } from "foo";
 interface Use extends A {}
 console.log(a, b);`,
     /*mode*/ undefined,
-    { organizeImportsIgnoreCase: false });
+    { organizeImportsIgnoreCase: false, organizeImportsTypeOrder: "inline" });

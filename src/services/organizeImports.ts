@@ -595,10 +595,10 @@ export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifie
     switch (preferences?.organizeImportsTypeOrder){
         case "first":
             return compareBooleans(s2.isTypeOnly, s1.isTypeOnly) || comparer(s1.name.text, s2.name.text);
-        case "last":
-            return compareBooleans(s1.isTypeOnly, s2.isTypeOnly) || comparer(s1.name.text, s2.name.text);
-        default:
+        case "inline":
             return comparer(s1.name.text, s2.name.text);
+        default:
+            return compareBooleans(s1.isTypeOnly, s2.isTypeOnly) || comparer(s1.name.text, s2.name.text);
     }
 }
 
@@ -732,15 +732,15 @@ class ImportSpecifierSortingCache implements MemoizeCache<[readonly ImportSpecif
 /** @internal */
 export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly ImportSpecifier[], preferences: UserPreferences): SortKind => {
     // If types are not sorted as specified, then imports are assumed to be unsorted.
-    // If there is no type sorting specification, then we move on to case sensitivity detection.
-    if (preferences.organizeImportsTypeOrder === "last" && !arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s1.isTypeOnly, s2.isTypeOnly))
-        || preferences.organizeImportsTypeOrder === "first" && !arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s2.isTypeOnly, s1.isTypeOnly))) {
+    // If there is no type sorting specification, we default to "last" and move on to case sensitivity detection.
+    if (preferences.organizeImportsTypeOrder === "first" && !arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s2.isTypeOnly, s1.isTypeOnly))
+        || preferences.organizeImportsTypeOrder !== "inline" && !arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s1.isTypeOnly, s2.isTypeOnly))) {
         return SortKind.None;
     }
     const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
     const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
 
-    if (preferences.organizeImportsTypeOrder === "first" || preferences.organizeImportsTypeOrder === "last") {
+    if (preferences.organizeImportsTypeOrder !== "inline") {
         const { regularImports, typeImports } = getCategorizedSpecifiers(specifiers);
         const regularCaseSensitivity = regularImports.length
             ? detectSortCaseSensitivity(regularImports, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive)
@@ -760,16 +760,22 @@ export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly 
         return typeCaseSensitivity & regularCaseSensitivity;
     }
 
+    // else inline
     return detectSortCaseSensitivity(specifiers, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive);
 }, new ImportSpecifierSortingCache());
 
 function getCategorizedSpecifiers(specifiers: readonly ImportSpecifier[]) {
-    // assumes type imports are at the end
-    const firstType = specifiers.findIndex(s => s.isTypeOnly);
-    return {
-        regularImports: specifiers.slice(0, firstType),
-        typeImports: specifiers.slice(firstType),
+    const regularImports: ImportSpecifier[] = [];
+    const typeImports: ImportSpecifier[] = [];
+    for (const s of specifiers) {
+        if (s.isTypeOnly) {
+            typeImports.push(s);
+        }
+        else {
+            regularImports.push(s);
+        }
     }
+    return { regularImports, typeImports };
 }
 
 /** @internal */

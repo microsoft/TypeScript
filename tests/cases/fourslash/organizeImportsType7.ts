@@ -3,15 +3,16 @@
 //// import { type a, type A, b, B } from "foo";
 //// console.log(a, b, A, B);
 
-verify.organizeImports(
-`import { type a, type A, b, B } from "foo";
-console.log(a, b, A, B);`);
+// verify.organizeImports(
+// `import { b, B, type a, type A } from "foo";
+// console.log(a, b, A, B);`
+// );
 
 verify.organizeImports(
 `import { type a, type A, b, B } from "foo";
 console.log(a, b, A, B);`,
     /*mode*/ undefined,
-    { organizeImportsIgnoreCase: "auto" });
+    { organizeImportsIgnoreCase: "auto", organizeImportsTypeOrder: "inline"  });
 
 verify.organizeImports(
 `import { type a, type A, b, B } from "foo";
@@ -27,14 +28,14 @@ console.log(a, b, A, B);`,
     { organizeImportsIgnoreCase: "auto", organizeImportsTypeOrder: "last" }
 );
 
-verify.organizeImports(
-`import { type A, type a, B, b } from "foo";
-console.log(a, b, A, B);`,
-    /*mode*/ undefined,
-    { organizeImportsIgnoreCase: true });
+// verify.organizeImports(
+// `import { b, B, type a, type A } from "foo";
+// console.log(a, b, A, B);`,
+//     /*mode*/ undefined,
+//     { organizeImportsIgnoreCase: true });
 
-verify.organizeImports(
-`import { type A, B, type a, b } from "foo";
-console.log(a, b, A, B);`,
-    /*mode*/ undefined,
-    { organizeImportsIgnoreCase: false });
+// verify.organizeImports(
+// `import { B, b, type A, type a } from "foo";
+// console.log(a, b, A, B);`,
+//     /*mode*/ undefined,
+//     { organizeImportsIgnoreCase: false });

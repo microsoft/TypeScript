@@ -26,15 +26,15 @@
 //// a/*0*/;
 //// b;
 
-// @Filename: /index2.ts
+// @Filename: /index1.ts
 //// import { A, B, C, type Y, type Z } from "./exports1";
-//// a/*3*/;
+//// a/*1*/;
 //// b;
 
-// @Filename: /index1.ts
+// @Filename: /index2.ts
 //// import { A, a, B, b, type Y, type Z } from "./exports1";
 //// import { E } from "./exports2";
-//// d/*1*/
+//// d/*2*/
 
 // addition of correctly sorted type imports should not affect behavior as shown in autoImportSortCaseSensitivity1.ts
 goTo.marker("0");

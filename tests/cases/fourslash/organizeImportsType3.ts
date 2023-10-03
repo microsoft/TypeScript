@@ -27,7 +27,7 @@ verify.organizeImports(
 } from './foo';
 console.log(A, a, B, b, c, C, d, D);`,
     /*mode*/ undefined,
-    { organizeImportsIgnoreCase: false }
+    { organizeImportsIgnoreCase: false, organizeImportsTypeOrder: "inline" }
 );
 
 verify.organizeImports(
@@ -43,6 +43,6 @@ verify.organizeImports(
 } from './foo';
 console.log(A, a, B, b, c, C, d, D);`,
     /*mode*/ undefined,
-    { organizeImportsIgnoreCase: true }
+    { organizeImportsIgnoreCase: true, organizeImportsTypeOrder: "inline" }
 );
 

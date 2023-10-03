@@ -2894,12 +2894,12 @@ declare namespace ts {
                  */
                 readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
                 /**
-                 * Indicates where named type-only imports should sort. The default order ("inline") sorts imports regardless of if imports are
+                 * Indicates where named type-only imports should sort. "inline" sorts imports without regard to if the import is
                  * type-only.
                  *
-                 * Default: `inline`
+                 * Default: `last`
                  */
-                readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+                readonly organizeImportsTypeOrder?: "last" | "first" | "inline";
                 /**
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */

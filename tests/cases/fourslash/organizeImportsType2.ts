@@ -10,11 +10,12 @@
 //// const C = "hello";
 //// export { A, type B, C };
 
+// default behavior is equivalent to "last"
 verify.organizeImports(
 `type A = string;
 type B = string;
 const C = "hello";
-export { A, type B, C };
+export { A, C, type B };
 `
 );
 

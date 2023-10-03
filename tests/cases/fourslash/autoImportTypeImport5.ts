@@ -29,7 +29,7 @@
 
 // @Filename: /index1.ts
 //// import { A, B, type X, type Y, type Z } from "./exports1";
-//// const foo: x/*3*/;
+//// const foo: x/*1*/;
 //// const bar: y;
 
 // addition of correctly sorted regular imports should not affect correctly sorted type imports

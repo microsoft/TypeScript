@@ -13,8 +13,9 @@
 ////
 //// console.log(A, B, C, D, E);
 
+// default behavior is "last"
 verify.organizeImports(
-`import { A, type B, C, D, type E } from "foo";
+`import { A, C, D, type B, type E } from "foo";
 
 console.log(A, B, C, D, E);`
 );
