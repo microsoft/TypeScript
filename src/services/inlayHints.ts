@@ -26,6 +26,7 @@ import {
     getLanguageVariant,
     getLeadingCommentRanges,
     getNameOfDeclaration,
+    getQuotePreference,
     hasContextSensitiveParameters,
     Identifier,
     idText,
@@ -63,6 +64,7 @@ import {
     isTypeNode,
     isVarConst,
     isVariableDeclaration,
+    LiteralExpression,
     LiteralTypeNode,
     MappedTypeNode,
     MethodDeclaration,
@@ -78,6 +80,7 @@ import {
     PropertyDeclaration,
     PropertySignature,
     QualifiedName,
+    QuotePreference,
     RestTypeNode,
     Signature,
     skipParentheses,
@@ -124,6 +127,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     const { file, program, span, cancellationToken, preferences } = context;
     const sourceFileText = file.text;
     const compilerOptions = program.getCompilerOptions();
+    const quotePreference = getQuotePreference(file, preferences);
 
     const checker = program.getTypeChecker();
     const result: InlayHint[] = [];
@@ -473,7 +477,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             }
 
             if (isLiteralExpression(node)) {
-                parts.push({ text: isStringLiteral(node) ? `"${node.text}"` : node.text });
+                parts.push({ text: getLiteralText(node) });
                 return;
             }
 
@@ -746,6 +750,12 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 }
                 visitForDisplayParts(node);
             });
+        }
+
+        function getLiteralText(node: LiteralExpression) {
+            return isStringLiteral(node)
+                ? quotePreference === QuotePreference.Single ? `'${node.text}'` : `"${node.text}"`
+                : node.text;
         }
     }
 
