@@ -3,6 +3,7 @@ import {
     ArrayTypeNode,
     ArrowFunction,
     CallExpression,
+    CharacterCodes,
     ConditionalTypeNode,
     ConstructorTypeNode,
     createPrinterWithRemoveComments,
@@ -755,8 +756,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
         function getLiteralText(node: LiteralExpression) {
             if (isStringLiteral(node)) {
-                const text = escapeString(node.text);
-                return quotePreference === QuotePreference.Single ? `'${text}'` : `"${text}"`;
+                return quotePreference === QuotePreference.Single ? `'${escapeString(node.text, CharacterCodes.singleQuote)}'` : `"${escapeString(node.text, CharacterCodes.doubleQuote)}"`;
             }
             return node.text;
         }
