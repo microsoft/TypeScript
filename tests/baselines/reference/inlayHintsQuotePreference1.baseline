@@ -7,7 +7,7 @@ export function fn(a = a1, b = b1) {}
       "text": ": "
     },
     {
-      "text": "\"\"\""
+      "text": "\"\\\"\""
     }
   ],
   "position": 64,
@@ -24,7 +24,7 @@ export function fn(a = a1, b = b1) {}
       "text": ": "
     },
     {
-      "text": "\"\\\""
+      "text": "\"\\\\\""
     }
   ],
   "position": 72,

@@ -12,6 +12,7 @@ import {
     EmitHint,
     EnumMember,
     equateStringsCaseInsensitive,
+    escapeString,
     Expression,
     findChildOfKind,
     findIndex,
@@ -753,9 +754,11 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         }
 
         function getLiteralText(node: LiteralExpression) {
-            return isStringLiteral(node)
-                ? quotePreference === QuotePreference.Single ? `'${node.text}'` : `"${node.text}"`
-                : node.text;
+            if (isStringLiteral(node)) {
+                const text = escapeString(node.text);
+                return quotePreference === QuotePreference.Single ? `'${text}'` : `"${text}"`
+            }
+            return node.text;
         }
     }
 
