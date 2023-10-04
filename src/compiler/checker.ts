@@ -4022,7 +4022,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isSyntacticDefault(node: Node) {
-        return ((isExportAssignment(node) && !node.isExportEquals) || hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node));
+        return ((isExportAssignment(node) && !node.isExportEquals)
+            || hasSyntacticModifier(node, ModifierFlags.Default)
+            || isExportSpecifier(node)
+            || isNamespaceExport(node));
     }
 
     function getUsageModeForExpression(usage: Expression) {
