@@ -260,29 +260,40 @@ function withChanges<T>(
         const { typeNode, mutatedTarget } = inferNodeType(targetNode);
         if (!typeNode || mutatedTarget) return undefined;
 
-        let replacementNode: Node;
-        let replacementTarget: Node;
         if (isShorthandPropertyAssignmentTarget) {
-            replacementTarget = targetNode.parent;
-            replacementNode = factory.createPropertyAssignment(
-                targetNode,
+            changeTracker.insertNodeAt(
+                sourceFile,
+                targetNode.end,
                 createAsExpression(
                     getSynthesizedDeepClone(targetNode),
                     typeNode,
                 ),
-            );
-            changeTracker.replaceNode(
-                sourceFile,
-                replacementTarget,
-                replacementNode,
+                {
+                    prefix: ": ",
+                },
             );
         }
         else if (isExpressionTarget) {
-            replacementTarget = targetNode;
-            replacementNode = createAsExpression(
-                getSynthesizedDeepClone(targetNode),
-                typeNode,
-            );
+            if (needsParenthesizedExpressionForAssertion(targetNode)) {
+                changeTracker.replaceNode(
+                    sourceFile,
+                    targetNode,
+                    createAsExpression(
+                        getSynthesizedDeepClone(targetNode),
+                        typeNode,
+                    ),
+                );
+            }
+            else {
+                changeTracker.insertNodeAt(
+                    sourceFile,
+                    targetNode.end,
+                    getSynthesizedDeepClone(typeNode),
+                    {
+                        prefix: " as ",
+                    },
+                );
+            }
         }
         else {
             Debug.assertNever(targetNode);
