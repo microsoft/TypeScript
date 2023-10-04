@@ -41,6 +41,7 @@ import {
     isConstTypeReference,
     isDeclaration,
     isEntityNameExpression,
+    isEnumMember,
     isExpression,
     isHeritageClause,
     isIdentifier,
@@ -162,7 +163,7 @@ function addCodeAction(
     cb: (fixer: Fixer) => DiagnosticOrDiagnosticAndArguments | undefined,
 ) {
     const changes = withChanges(context, typePrinter, cb);
-    if (changes.result) {
+    if (changes.result && changes.textChanges.length) {
         const newFix = createCodeFixAction(
             fixName,
             changes.textChanges,
@@ -181,6 +182,7 @@ function withChanges<T>(
     textChanges: FileTextChanges[];
     result: T;
 } {
+    const emptyInferenceResult: InferenceResult = { typeNode: undefined, mutatedTarget: false };
     const changeTracker = textChanges.ChangeTracker.fromContext(context);
     const sourceFile: SourceFile = context.sourceFile;
     const program = context.program;
@@ -205,8 +207,11 @@ function withChanges<T>(
         return undefined;
     }
 
+    function needsParenthesizedExpressionForAssertion(node: Expression) {
+        return !isEntityNameExpression(node) && !isCallExpression(node) && !isObjectLiteralExpression(node) && !isArrayLiteralExpression(node);
+    }
     function createAsExpression(node: Expression, type: TypeNode) {
-        if (!isEntityNameExpression(node) && !isCallExpression(node) && !isObjectLiteralExpression(node) && !isArrayLiteralExpression(node)) {
+        if (needsParenthesizedExpressionForAssertion(node)) {
             node = factory.createParenthesizedExpression(node);
         }
         return factory.createAsExpression(
@@ -221,6 +226,15 @@ function withChanges<T>(
         if (!targetNode || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.parent)) return;
         const isExpressionTarget = isExpression(targetNode);
 
+        // No inline assertions on binding patterns
+        if (findAncestor(targetNode, isBindingPattern)) {
+            return undefined;
+        }
+
+        // No inline assertions on enum members
+        if (findAncestor(targetNode, isEnumMember)) {
+            return undefined;
+        }
         // No support for typeof in extends clauses
         if (isExpressionTarget && findAncestor(targetNode, isHeritageClause)) {
             return undefined;
@@ -243,8 +257,8 @@ function withChanges<T>(
         const isShorthandPropertyAssignmentTarget = isIdentifier(targetNode) && isShorthandPropertyAssignment(targetNode.parent);
         if (!(isExpressionTarget || isShorthandPropertyAssignmentTarget)) return undefined;
 
-        const typeNode = inferNodeType(targetNode);
-        if (!typeNode) return undefined;
+        const { typeNode, mutatedTarget } = inferNodeType(targetNode);
+        if (!typeNode || mutatedTarget) return undefined;
 
         let replacementNode: Node;
         let replacementTarget: Node;
@@ -257,6 +271,11 @@ function withChanges<T>(
                     typeNode,
                 ),
             );
+            changeTracker.replaceNode(
+                sourceFile,
+                replacementTarget,
+                replacementNode,
+            );
         }
         else if (isExpressionTarget) {
             replacementTarget = targetNode;
@@ -268,11 +287,6 @@ function withChanges<T>(
         else {
             Debug.assertNever(targetNode);
         }
-        changeTracker.replaceNode(
-            sourceFile,
-            replacementTarget,
-            replacementNode,
-        );
         return [Diagnostics.Add_inline_type_assertion_to_0, printTypeNode(typeNode)];
     }
 
@@ -457,7 +471,7 @@ function withChanges<T>(
             case SyntaxKind.ExportAssignment:
                 const defaultExport = node as ExportAssignment;
                 if (!defaultExport.isExportEquals) {
-                    const typeNode = inferNodeType(defaultExport.expression);
+                    const { typeNode } = inferNodeType(defaultExport.expression);
                     if (!typeNode) return undefined;
                     changeTracker.replaceNodeWithNodes(sourceFile, node, [
                         factory.createVariableStatement(
@@ -494,7 +508,7 @@ function withChanges<T>(
         if (func.type) {
             return;
         }
-        const typeNode = inferNodeType(func);
+        const { typeNode } = inferNodeType(func);
         addTypesToParametersArray(func.parameters);
         if (typeNode) {
             changeTracker.tryInsertTypeAnnotation(
@@ -515,7 +529,7 @@ function withChanges<T>(
         // if (heritageExpression.kind !== SyntaxKind.ExpressionWithTypeArguments) {
         //     throw new Error(`Hey + ${heritageExpression.kind}`);
         // }
-        const heritageTypeNode = inferNodeType(heritageExpression.expression);
+        const { typeNode: heritageTypeNode } = inferNodeType(heritageExpression.expression);
         if (!heritageTypeNode) {
             return undefined;
         }
@@ -642,7 +656,7 @@ function withChanges<T>(
                 addObjectBindingPatterns(name, bindingElements, bindingElement);
             }
             else {
-                const typeNode = inferNodeType(name);
+                const { typeNode } = inferNodeType(name);
                 let variableInitializer = createChainedExpression(bindingElement, expressionToVar);
                 if (bindingElement.element!.initializer) {
                     const propertyName = bindingElement.element?.propertyName;
@@ -781,17 +795,23 @@ function withChanges<T>(
         }
         return chainedExpression;
     }
-
-    function inferNodeType(node: Node) {
+    interface InferenceResult {
+        typeNode?: TypeNode | undefined;
+        mutatedTarget: boolean;
+    }
+    function inferNodeType(node: Node): InferenceResult {
         if (typePrinter === "full") {
             const type = isValueSignatureDeclaration(node) ?
                 tryGetReturnType(node) :
                 typeChecker.getTypeAtLocation(node);
             if (!type) {
-                return undefined;
+                return emptyInferenceResult;
             }
             const flags = isVariableDeclaration(node) && type.flags & TypeFlags.UniqueESSymbol ? NodeBuilderFlags.AllowUniqueESSymbolType : NodeBuilderFlags.None;
-            return typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile, flags);
+            return {
+                typeNode: typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile, flags),
+                mutatedTarget: false,
+            };
         }
         else {
             return relativeType(node);
@@ -800,14 +820,14 @@ function withChanges<T>(
 
     function createTypeOfFromEntityNameExpression(node: EntityNameExpression) {
         // Convert EntityNameExpression to  EntityName ?
-        return factory.createTypeQueryNode(node as EntityName);
+        return factory.createTypeQueryNode(getSynthesizedDeepClone(node) as EntityName);
     }
     function typeFromArraySpreadElements(
         node: ArrayLiteralExpression,
         name = "temp",
     ) {
         const isConstContext = !!findAncestor(node, isConstAssertion);
-        if (!isConstContext) return undefined;
+        if (!isConstContext) return emptyInferenceResult;
         return typeFromSpreads(
             node,
             name,
@@ -845,7 +865,7 @@ function withChanges<T>(
         createSpread: (node: Expression) => TSpread,
         makeNodeOfKind: (newElements: (TSpread | TElements)[]) => T,
         finalType: (types: TypeNode[]) => TypeNode,
-    ) {
+    ): InferenceResult {
         const intersectionTypes: TypeNode[] = [];
         const newSpreads: TSpread[] = [];
         let currentVariableProperties: TElements[] | undefined;
@@ -866,11 +886,14 @@ function withChanges<T>(
             }
         }
         if (newSpreads.length === 0) {
-            return undefined;
+            return emptyInferenceResult;
         }
         finalizesVariablePart();
         changeTracker.replaceNode(sourceFile, node, makeNodeOfKind(newSpreads));
-        return finalType(intersectionTypes);
+        return {
+            typeNode: finalType(intersectionTypes),
+            mutatedTarget: true,
+        };
         function makeVariable(expression: Expression) {
             const tempName = factory.createUniqueName(
                 name + "_Part" + (newSpreads.length + 1),
@@ -909,9 +932,12 @@ function withChanges<T>(
         return (isAssertionExpression(location) && isConstTypeReference(location.type));
     }
 
-    function relativeType(node: Node): TypeNode | undefined {
+    function relativeType(node: Node): InferenceResult {
         if (isEntityNameExpression(node)) {
-            return createTypeOfFromEntityNameExpression(node);
+            return {
+                typeNode: createTypeOfFromEntityNameExpression(node),
+                mutatedTarget: false,
+            };
         }
         if (isConstAssertion(node)) {
             return relativeType(node.expression);
@@ -933,14 +959,17 @@ function withChanges<T>(
             return relativeType(node.initializer);
         }
         if (isConditionalExpression(node)) {
-            const trueType = relativeType(node.whenTrue);
-            if (!trueType) return;
-            const falseType = relativeType(node.whenFalse);
-            if (!falseType) return;
-            return factory.createUnionTypeNode([trueType, falseType]);
+            const { typeNode: trueType, mutatedTarget: mTrue } = relativeType(node.whenTrue);
+            if (!trueType) return emptyInferenceResult;
+            const { typeNode: falseType, mutatedTarget: mFalse } = relativeType(node.whenFalse);
+            if (!falseType) return emptyInferenceResult;
+            return {
+                typeNode: factory.createUnionTypeNode([trueType, falseType]),
+                mutatedTarget: mTrue || mFalse,
+            };
         }
 
-        return undefined;
+        return emptyInferenceResult;
     }
 
     function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None) {
@@ -962,7 +991,7 @@ function withChanges<T>(
     function addTypeAnnotation(decl: ParameterDeclaration | VariableDeclaration | PropertyDeclaration): undefined | DiagnosticOrDiagnosticAndArguments {
         if (decl.type) return undefined;
 
-        const typeNode = inferNodeType(decl);
+        const { typeNode } = inferNodeType(decl);
         if (typeNode) {
             changeTracker.tryInsertTypeAnnotation(getSourceFileOfNode(decl), decl, typeNode);
             return [Diagnostics.Add_annotation_of_type_0, printTypeNode(typeNode)];
