@@ -62,7 +62,7 @@ jobs:
           # if runtime is node, npm, else bun
           if [[ "${{ matrix.runtime.name }}" == "node" ]]; then
             npm run test -- --no-lint --bundle=${{ matrix.bundle }}
-          if [[ "${{ matrix.runtime.name }}" == "bun" ]]; then
+          elif [[ "${{ matrix.runtime.name }}" == "bun" ]]; then
             bun run --bun test --no-lint --bundle=${{ matrix.bundle }}
           else
             echo "Unknown runtime: ${{ matrix.runtime.name }}"
