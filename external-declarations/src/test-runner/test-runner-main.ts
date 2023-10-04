@@ -15,7 +15,7 @@ import { IO } from "./tsc-infrastructure/io";
 import { CompilerSettings, TestCaseContent } from "./tsc-infrastructure/test-file-parser";
 import { getFileBasedTestConfigurationDescription, getFileBasedTestConfigurations } from "./tsc-infrastructure/vary-by";
 import { changeExtension } from "./tsc-infrastructure/vpath";
-import { loadTestCase, runIsolated, runTypeScript,TestCompilationResult } from "./utils";
+import { loadTestCase, readDirRecursive, runIsolated, runTypeScript,TestCompilationResult } from "./utils";
 
 
 const excludeFilter =/\/fourslash\//;
@@ -71,21 +71,6 @@ async function main() {
         Object.entries(fileConfiguration?.["test-categories"] ?? {}).forEach(([name, tests]) => tests.forEach(t => testCategories.set(t, name)));
     }
 
-    async function readDirRecursive (dir: string, relativePath = ""): Promise<string[]> {
-        const content = await fs.readdir(dir);
-        const result: string[] = [];
-        for (const entry of content) {
-            const relativeChildPath = path.join(relativePath, entry);
-            const fsPath = path.join(dir, entry)
-            const stat = await fs.stat(fsPath);
-            if(stat.isDirectory()) {
-                result.push(...await readDirRecursive(fsPath, relativeChildPath))
-            } else {
-                result.push(relativeChildPath);
-            }
-        }
-        return result;
-    }
     const libFiles = (await readDirRecursive(libFolder)).map(n => normalizePath(path.join("/.lib", n)));
 
     const testsPerShared = shardCount && Math.round(allTests.length / shardCount);
@@ -122,6 +107,9 @@ async function main() {
             setCompilerOptionsFromHarnessSetting(data.settings, settings);
             setCompilerOptionsFromHarnessSetting(varySettings, settings);
 
+            if(parsedArgs.forceIsolatedDeclarations) {
+                settings.isolatedDeclarations = true;
+            }
             // Not supported
             delete settings.outFile;
             delete settings.out;

@@ -1,0 +1,79 @@
+{
+    "error-categories": {
+    },
+    "test-categories": {
+        "with-unreliable-errors": [
+            // A_computed_property_name_must_be_of_type_string_number_symbol_or_any,
+            "bigintIndex",
+            "parserES5ComputedPropertyName5",
+            "parserES5ComputedPropertyName8",
+            "parserIndexSignature5",
+            "parserES5SymbolProperty1",
+            "parserES5SymbolProperty2",
+            "parserES5SymbolProperty8",
+            "parserES5SymbolProperty9",
+            "parserComputedPropertyName13",
+            "parserComputedPropertyName14",
+            "parserComputedPropertyName15",
+            "parserComputedPropertyName18",
+            "parserComputedPropertyName19",
+            "parserComputedPropertyName2",
+            "parserComputedPropertyName20",
+            "parserComputedPropertyName21",
+            "parserComputedPropertyName37",
+            "symbolProperty52",
+            "symbolProperty53",
+            "symbolProperty54",
+            "symbolProperty58",
+            "symbolProperty59",
+            "computedPropertyNames6_ES5",
+            "computedPropertyNames6_ES6",
+            "parserES5ComputedPropertyName2",
+            "parserIndexSignature11",
+            "ES5SymbolProperty1",
+            "indexSignatureMustHaveTypeAnnotation",
+            // Computed property type is narrowed
+            "computedPropertiesNarrowed",
+            // error on used to be indexer, now it is a computed property
+            "propertyAssignment",
+            "invalidTaggedTemplateEscapeSequences", // Invalid escape sequences 
+        ],
+        "ts-bugs": [
+           // https://github.com/microsoft/TypeScript/issues/55571 
+           "reExportAliasMakesInstantiated"
+       ],
+        // Just Printing differences
+        "print-differences": [
+            "parseBigInt", // number literals are normalized by ts 
+            "templateLiteralsSourceMap", // template literal is evaluated in constant value.
+        ],
+        "enums-issues": [
+            // External eval
+            "constEnumErrors",
+            "constEnums",
+            "enumBasics2",
+            "isolatedModulesGlobalNamespacesAndEnums",
+            "constEnum2",
+            "enumBasics3",
+            "verbatimModuleSyntaxConstEnumUsage",
+            "templateLiteralTypes4",
+            "enumConstantMembers",
+            // merge 
+            "mergedEnumDeclarationCodeGen",
+            "enumExportMergingES6",
+            "mergedDeclarations2",
+        ],
+        // Some 9007 errors will result in differences. This is fine. 
+        "with-isolated-declaration-errors/9007": [
+            // computed property differences
+            "complicatedPrivacy",
+            "giant",
+            "intTypeCheck",
+            "overloadsWithComputedNames",
+            "typeUsedAsTypeLiteralIndex", // computed property errors but in type aliases
+            "forwardRefInEnum", // Circular enums result in different values
+            "enumErrors",
+        ]
+    }
+}
+

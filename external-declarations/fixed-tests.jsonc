@@ -105,20 +105,13 @@
             "parseInvalidNonNullableTypes"
         ],
         "not-fixed-with-unreliable-errors": [
-            "classMemberWithMissingIdentifier",
-            "classMemberWithMissingIdentifier2",
-            "commonMissingSemicolons",
-            "reservedWords3",
-            "negateOperator",
-            "negateOperatorInvalidOperations",
-            "destructuringObjectBindingPatternAndAssignment3",
-            "objectBindingPatternKeywordIdentifiers01",
-            "objectBindingPatternKeywordIdentifiers02",
-            "objectBindingPatternKeywordIdentifiers03",
-            "objectBindingPatternKeywordIdentifiers04",
-            "arrowFunctionExpressions",
-            "declarationEmitDestructuringParameterProperties",
-            "destructuringParameterProperties4",
+            // Language service crash on computing diagnostic (call stack size exceeded)
+            "binderBinaryExpressionStress",
+            // Language service crashes on testing base type abstractness (only in test not in tsc or vs code) 
+            "noCrashOnMixin",
+            // Bad syntax beyond recovery 
+            "destructuringParameterDeclaration6",
+            "thisTypeInFunctionsNegative",
         ],
         "with-unreliable-errors": [
             "thisTypeErrors", // Assertion to this in static context produces this in DTE and any in TSC

@@ -1,14 +1,36 @@
-import { CompilerOptions, Diagnostic } from "typescript";
+import {
+    CompilerOptions,
+    Diagnostic,
+} from "typescript";
 import * as ts from "typescript";
 
-import { compareStringsCaseSensitive, hasProperty,map, startsWith } from "../../compiler/lang-utils";
-import { createGetCanonicalFileName, fileExtensionIs, getNormalizedAbsolutePath, normalizeSlashes, toPath } from "../../compiler/path-utils";
-import { cloneCompilerOptions, getEmitScriptTarget } from "../../compiler/utils";
+import {
+    compareStringsCaseSensitive,
+    hasProperty,
+    map,
+    startsWith,
+} from "../../compiler/lang-utils";
+import {
+    createGetCanonicalFileName,
+    fileExtensionIs,
+    getNormalizedAbsolutePath,
+    normalizeSlashes,
+    toPath,
+} from "../../compiler/path-utils";
+import {
+    cloneCompilerOptions,
+    getEmitScriptTarget,
+} from "../../compiler/utils";
 import * as compiler from "./compiler";
 import * as fakes from "./fakesHosts";
-import { IO } from "./io";
+import {
+    IO,
+} from "./io";
 import * as opts from "./options";
-import { parseCustomTypeOption, parseListTypeOption } from "./options";
+import {
+    parseCustomTypeOption,
+    parseListTypeOption,
+} from "./options";
 import * as documents from "./test-document";
 import * as TestCaseParser from "./test-file-parser";
 import * as vfs from "./vfs";
@@ -71,7 +93,6 @@ export function setCompilerOptionsFromHarnessSetting(settings: TestCaseParser.Co
     }
 }
 
-
 function optionValue(option: opts.CommandLineOption, value: string, errors: Diagnostic[]): any {
     switch (option.type) {
         case "boolean":
@@ -99,15 +120,15 @@ export interface TestFile {
     fileOptions?: any;
 }
 
-export function compileFiles(
+export function prepareTestOptionsAndFs(
     inputFiles: TestFile[],
     otherFiles: TestFile[],
     harnessSettings: TestCaseParser.CompilerSettings | undefined,
     compilerOptions?: ts.CompilerOptions | undefined,
     // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
     currentDirectory?: string | undefined,
-    symlinks?: vfs.FileSet
-): compiler.CompilationResult {
+    symlinks?: vfs.FileSet,
+) {
     const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? cloneCompilerOptions(compilerOptions) : { noResolve: false };
     options.target = getEmitScriptTarget(options);
     options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
@@ -140,19 +161,30 @@ export function compileFiles(
         for (const fileName of options.libFiles.split(",")) {
             programFileNames.push(vpath.combine(vfs.testLibFolder, fileName));
         }
-
     }
     const docs = inputFiles.concat(otherFiles).map(documents.TextDocument.fromTestFile);
     const fs = vfs.createFromFileSystem(IO, !useCaseSensitiveFileNames, { documents: docs, cwd: currentDirectory });
     if (symlinks) {
         fs.apply(symlinks);
     }
+    return { fs, options, programFileNames };
+}
+
+export function compileFiles(
+    inputFiles: TestFile[],
+    otherFiles: TestFile[],
+    harnessSettings: TestCaseParser.CompilerSettings | undefined,
+    compilerOptions?: ts.CompilerOptions | undefined,
+    // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
+    currentDirectory?: string | undefined,
+    symlinks?: vfs.FileSet,
+) {
+    const { fs, options, programFileNames } = prepareTestOptionsAndFs(inputFiles, otherFiles, harnessSettings, compilerOptions, currentDirectory, symlinks);
     const host = new fakes.CompilerHost(fs, options);
     const result = compiler.compileFiles(host, programFileNames, options);
     result.symlinks = symlinks;
     return result;
 }
-
 
 export function* iterateOutputs(outputFiles: Iterable<documents.TextDocument>): IterableIterator<[string, string]> {
     // Collect, test, and sort the fileNames

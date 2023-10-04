@@ -1,25 +1,28 @@
 import * as childProcess from "child_process";
 import * as path from "path";
 
-import { ArgType, parseArgs } from "../utils/cli-parser";
+import {
+    ArgType,
+    parseArgs,
+} from "../../utils/cli-parser";
 
 interface ExecuteResult {
-    error: childProcess.ExecException | undefined
-    stdout: string,
-    stderr: string,
+    error: childProcess.ExecException | undefined;
+    stdout: string;
+    stderr: string;
 }
 
 function exec(cmd: string, dir: string, onStdOut: (s: string) => void) {
-    return new Promise<ExecuteResult>((resolve) => {
+    return new Promise<ExecuteResult>(resolve => {
         console.log(`In ${dir} Executing: ${cmd}`);
 
-        const ls  = childProcess.spawn(cmd, [], {
+        const ls = childProcess.spawn(cmd, [], {
             cwd: path.resolve(path.join(process.cwd(), dir)),
-            shell: true
+            shell: true,
         });
         let stdout = "";
         let stderr = "";
-        ls.stdout.on("data", (data) => {
+        ls.stdout.on("data", data => {
             if (!onStdOut) {
                 process.stdout.write(data.toString());
             }
@@ -29,15 +32,15 @@ function exec(cmd: string, dir: string, onStdOut: (s: string) => void) {
             stdout += data.toString();
         });
 
-        ls.stderr.on("data", (data) => {
+        ls.stderr.on("data", data => {
             process.stderr.write(data.toString());
             stderr += data.toString();
         });
 
-        ls.on("error", (err) => {
+        ls.on("error", err => {
             console.log(err);
         });
-        ls.on("exit", (code) => {
+        ls.on("exit", code => {
             console.log("exited:" + code?.toString());
             resolve({
                 error: !code ? undefined : Object.assign(new Error(""), {
@@ -45,7 +48,7 @@ function exec(cmd: string, dir: string, onStdOut: (s: string) => void) {
                     cmd,
                 }),
                 stderr,
-                stdout
+                stdout,
             });
         });
     });
@@ -65,16 +68,14 @@ const shardCount = parsedArgs.shardCount ?? 6;
 
 async function main() {
     let runCount = 0;
-    const commandLine = `node ./build/code-mod/test-updater.js  ${process.argv.slice(2).join(" ")} ${
-        parsedArgs.shardCount === undefined ? `--shardCount=${shardCount} `: ""
-    }`;
+    const commandLine = `node ./build/code-mod/test-fixer/run-test-updater.js  ${process.argv.slice(2).join(" ")} ${parsedArgs.shardCount === undefined ? `--shardCount=${shardCount} ` : ""}`;
     let lastWrite = new Date().getTime();
     const startTime = new Date().getTime();
     const elapsedTime = (now: number) => `${((now - startTime) / 1000 / 60).toFixed(2)} minutes`;
     const promisees = Array.from({ length: shardCount }).map(async (_, index) => {
         await exec(commandLine + ` --shard=${index}`, "./", out => {
             runCount += (out.match(/Ran:/g) || []).length;
-            if(new Date().getTime() - lastWrite > 2000) {
+            if (new Date().getTime() - lastWrite > 2000) {
                 lastWrite = new Date().getTime();
                 console.log(`Run count: ${runCount} after ${elapsedTime(lastWrite)}`);
             }
