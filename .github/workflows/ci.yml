@@ -25,31 +25,49 @@ jobs:
 
     strategy:
       matrix:
-        node-version:
-          - '20'
-          - '18'
-          - '16'
-          - '14'
+        runtime:
+          - { name: node, version: 20 }
+          - { name: node, version: 18 }
+          - { name: node, version: 16 }
+          - { name: node, version: 14 }
         bundle:
-          - 'true'
+          - true
         include:
-          - node-version: '*'
-            bundle: 'false'
+          - { runtime: { name: node, version: 20 }, bundle: false }
+          - { runtime: { name: bun, version: latest }, bundle: true }
 
-    name: Test Node ${{ matrix.node-version }} with --bundle=${{ matrix.bundle }}
+    name: Test ${{ matrix.runtime.name }} ${{ matrix.runtime.version }} with --bundle=${{ matrix.bundle }}
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use node version ${{ matrix.node-version }}
+
+      - name: Use node version ${{ matrix.runtime.version }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.runtime.version }}
           check-latest: true
+        if: matrix.runtime.name == 'node'
+
+      - name: Use bun version ${{ matrix.runtime.version }}
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ matrix.runtime.version }}
+        if: matrix.runtime.name == 'bun'
+
       - run: npm ci
 
       - name: Tests
         # run tests, but lint separately
-        run: npm run test -- --no-lint --bundle=${{ matrix.bundle }}
+        run: |
+          # if runtime is node, npm, else bun
+          if [[ "${{ matrix.runtime.name }}" == "node" ]]; then
+            npm run test -- --no-lint --bundle=${{ matrix.bundle }}
+          if [[ "${{ matrix.runtime.name }}" == "bun" ]]; then
+            bun run --bun test --no-lint --bundle=${{ matrix.bundle }}
+          else
+            echo "Unknown runtime: ${{ matrix.runtime.name }}"
+            exit 1
+          fi
 
   lint:
     runs-on: ubuntu-latest
