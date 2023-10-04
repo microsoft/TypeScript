@@ -33356,8 +33356,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (arg.kind === SyntaxKind.SyntheticExpression && (arg as SyntheticExpression).tupleNameSource) {
                 names.push((arg as SyntheticExpression).tupleNameSource!);
             }
+            else {
+                names.push(undefined);
+            }
         }
-        return createTupleType(types, flags, inConstContext && !someType(restType, isMutableArrayLikeType), length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, inConstContext && !someType(restType, isMutableArrayLikeType), names);
     }
 
     function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
@@ -35741,12 +35744,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 types.push(restType);
                 flags.push(ElementFlags.Variadic);
             }
-            const name = getNameableDeclarationAtPosition(source, i);
-            if (name) {
-                names.push(name);
-            }
+            names.push(getNameableDeclarationAtPosition(source, i));
         }
-        return createTupleType(types, flags, readonly, length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, readonly, names);
     }
 
     // Return the number of parameters in a signature. The rest parameter, if present, counts as one
