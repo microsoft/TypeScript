@@ -3,6 +3,7 @@ import {
     ArrayTypeNode,
     ArrowFunction,
     CallExpression,
+    CharacterCodes,
     ConditionalTypeNode,
     ConstructorTypeNode,
     createPrinterWithRemoveComments,
@@ -12,6 +13,7 @@ import {
     EmitHint,
     EnumMember,
     equateStringsCaseInsensitive,
+    escapeString,
     Expression,
     findChildOfKind,
     findIndex,
@@ -26,6 +28,7 @@ import {
     getLanguageVariant,
     getLeadingCommentRanges,
     getNameOfDeclaration,
+    getQuotePreference,
     hasContextSensitiveParameters,
     Identifier,
     idText,
@@ -59,9 +62,11 @@ import {
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isSpreadElement,
+    isStringLiteral,
     isTypeNode,
     isVarConst,
     isVariableDeclaration,
+    LiteralExpression,
     LiteralTypeNode,
     MappedTypeNode,
     MethodDeclaration,
@@ -70,7 +75,6 @@ import {
     Node,
     NodeArray,
     NodeBuilderFlags,
-    NumericLiteral,
     OptionalTypeNode,
     ParameterDeclaration,
     ParenthesizedTypeNode,
@@ -78,11 +82,11 @@ import {
     PropertyDeclaration,
     PropertySignature,
     QualifiedName,
+    QuotePreference,
     RestTypeNode,
     Signature,
     skipParentheses,
     some,
-    StringLiteral,
     Symbol,
     SymbolFlags,
     SyntaxKind,
@@ -125,6 +129,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     const { file, program, span, cancellationToken, preferences } = context;
     const sourceFileText = file.text;
     const compilerOptions = program.getCompilerOptions();
+    const quotePreference = getQuotePreference(file, preferences);
 
     const checker = program.getTypeChecker();
     const result: InlayHint[] = [];
@@ -473,6 +478,11 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 return;
             }
 
+            if (isLiteralExpression(node)) {
+                parts.push({ text: getLiteralText(node) });
+                return;
+            }
+
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     const identifier = node as Identifier;
@@ -484,12 +494,6 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     else {
                         parts.push({ text: identifierText });
                     }
-                    break;
-                case SyntaxKind.NumericLiteral:
-                    parts.push({ text: (node as NumericLiteral).text });
-                    break;
-                case SyntaxKind.StringLiteral:
-                    parts.push({ text: `"${(node as StringLiteral).text}"` });
                     break;
                 case SyntaxKind.QualifiedName:
                     const qualifiedName = node as QualifiedName;
@@ -748,6 +752,13 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 }
                 visitForDisplayParts(node);
             });
+        }
+
+        function getLiteralText(node: LiteralExpression) {
+            if (isStringLiteral(node)) {
+                return quotePreference === QuotePreference.Single ? `'${escapeString(node.text, CharacterCodes.singleQuote)}'` : `"${escapeString(node.text, CharacterCodes.doubleQuote)}"`;
+            }
+            return node.text;
         }
     }
 

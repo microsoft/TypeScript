@@ -17747,7 +17747,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function getPropertyNameFromIndex(indexType: Type, accessNode: StringLiteral | Identifier | PrivateIdentifier | ObjectBindingPattern | ArrayBindingPattern | ComputedPropertyName | NumericLiteral | IndexedAccessTypeNode | ElementAccessExpression | SyntheticExpression | undefined) {
+    function getPropertyNameFromIndex(indexType: Type, accessNode: PropertyName | ObjectBindingPattern | ArrayBindingPattern | IndexedAccessTypeNode | ElementAccessExpression | SyntheticExpression | undefined) {
         return isTypeUsableAsPropertyName(indexType) ?
             getPropertyNameFromType(indexType) :
             accessNode && isPropertyName(accessNode) ?
@@ -31281,7 +31281,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Handle children attribute
         const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement : undefined;
         // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
-        if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
+        if (parent && parent.openingElement === openingLikeElement && getSemanticJsxChildren(parent.children).length > 0) {
             const childrenTypes: Type[] = checkJsxChildren(parent, checkMode);
 
             if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
@@ -33376,8 +33376,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (arg.kind === SyntaxKind.SyntheticExpression && (arg as SyntheticExpression).tupleNameSource) {
                 names.push((arg as SyntheticExpression).tupleNameSource!);
             }
+            else {
+                names.push(undefined);
+            }
         }
-        return createTupleType(types, flags, inConstContext && !someType(restType, isMutableArrayLikeType), length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, inConstContext && !someType(restType, isMutableArrayLikeType), names);
     }
 
     function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
@@ -35761,12 +35764,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 types.push(restType);
                 flags.push(ElementFlags.Variadic);
             }
-            const name = getNameableDeclarationAtPosition(source, i);
-            if (name) {
-                names.push(name);
-            }
+            names.push(getNameableDeclarationAtPosition(source, i));
         }
-        return createTupleType(types, flags, readonly, length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, readonly, names);
     }
 
     // Return the number of parameters in a signature. The rest parameter, if present, counts as one

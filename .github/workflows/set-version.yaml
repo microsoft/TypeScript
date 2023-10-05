@@ -16,14 +16,11 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
     steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.client_payload.branch_name }}
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
       - uses: actions/setup-node@v3
       - run: |
           npm --version
@@ -44,10 +41,11 @@ jobs:
           sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ github.event.client_payload.core_major_minor }}"/g' tests/baselines/reference/api/tsserverlibrary.d.ts
           sed -i -e 's/const version\(: string\)\{0,1\} = .*;/const version = "${{ github.event.client_payload.package_version }}" as string;/g' src/compiler/corePublic.ts
           npm ci
+          npm install # update package-lock.json to ensure the version bump is included
           npx hereby LKG
           npm test
           git diff
-          git add package.json
+          git add package.json package-lock.json
           git add src/compiler/corePublic.ts
           git add tests/baselines/reference/api/typescript.d.ts
           git add tests/baselines/reference/api/tsserverlibrary.d.ts

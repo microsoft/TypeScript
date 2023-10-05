@@ -17,13 +17,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 5
+          filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
+          fetch-depth: 0 # Default is 1; need to set to 0 to get the benefits of blob:none.
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
       - uses: actions/setup-node@v3
       - run: |
           npm --version
@@ -38,10 +37,11 @@ jobs:
           sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ github.event.client_payload.core_major_minor }}"/g' tests/baselines/reference/api/tsserverlibrary.d.ts
           sed -i -e 's/const version\(: string\)\{0,1\} = `${versionMajorMinor}.0-.*`/const version = `${versionMajorMinor}.0-${{ github.event.client_payload.core_tag || 'dev' }}`/g' src/compiler/corePublic.ts
           npm ci
+          npm install # update package-lock.json to ensure the version bump is included
           npx hereby LKG
           npm test
           git diff
-          git add package.json
+          git add package.json package-lock.json
           git add src/compiler/corePublic.ts
           git add tests/baselines/reference/api/typescript.d.ts
           git add tests/baselines/reference/api/tsserverlibrary.d.ts
