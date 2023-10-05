@@ -13571,7 +13571,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const checkType = (type as ConditionalType).checkType;
                 const constraint = getLowerBoundOfKeyType(checkType);
                 if (constraint !== checkType) {
-                    return getConditionalTypeInstantiation(type as ConditionalType, prependTypeMapping((type as ConditionalType).root.checkType, constraint, (type as ConditionalType).mapper));
+                    return getConditionalTypeInstantiation(type as ConditionalType, prependTypeMapping((type as ConditionalType).root.checkType, constraint, (type as ConditionalType).mapper), /*forConstraint*/ false);
                 }
             }
             return type;
@@ -14020,7 +14020,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const simplified = getSimplifiedType(type.checkType, /*writing*/ false);
             const constraint = simplified === type.checkType ? getConstraintOfType(simplified) : simplified;
             if (constraint && constraint !== type.checkType) {
-                const instantiated = getConditionalTypeInstantiation(type, prependTypeMapping(type.root.checkType, constraint, type.mapper));
+                const instantiated = getConditionalTypeInstantiation(type, prependTypeMapping(type.root.checkType, constraint, type.mapper), /*forConstraint*/ true);
                 if (!(instantiated.flags & TypeFlags.Never)) {
                     type.resolvedConstraintOfDistributive = instantiated;
                     return instantiated;
@@ -18243,7 +18243,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isGenericType(type) || checkTuples && isTupleType(type) && some(getElementTypes(type), isGenericType);
     }
 
-    function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+    function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, forConstraint: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         let result;
         let extraTypes: Type[] | undefined;
         let tailCount = 0;
@@ -18323,7 +18323,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // then no instantiations will be and we can just return the false branch type.
                 if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && (checkType.flags & TypeFlags.Any || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
                     // Return union of trueType and falseType for 'any' since it matches anything
-                    if (checkType.flags & TypeFlags.Any) {
+                    if (checkType.flags & TypeFlags.Any || forConstraint && areTypesComparable(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
                         (extraTypes || (extraTypes = [])).push(instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper));
                     }
                     // If falseType is an immediately nested conditional type that isn't distributive or has an
@@ -18447,7 +18447,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 aliasSymbol,
                 aliasTypeArguments,
             };
-            links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
+            links.resolvedType = getConditionalType(root, /*mapper*/ undefined, /*forConstraint*/ false);
             if (outerTypeParameters) {
                 root.instantiations = new Map<string, Type>();
                 root.instantiations.set(getTypeListId(outerTypeParameters), links.resolvedType);
@@ -19454,14 +19454,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+    function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper, forConstraint: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         const root = type.root;
         if (root.outerTypeParameters) {
             // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
             // mapper to the type parameters to produce the effective list of type arguments, and compute the
             // instantiation cache key from the type IDs of the type arguments.
             const typeArguments = map(root.outerTypeParameters, t => getMappedType(t, mapper));
-            const id = getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
+            const id = (forConstraint ? "C" : "") + getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
             let result = root.instantiations!.get(id);
             if (!result) {
                 const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
@@ -19471,8 +19471,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
                 // result is (A extends U ? X : Y) | (B extends U ? X : Y).
                 result = distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never) ?
-                    mapTypeWithAlias(getReducedType(distributionType), t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments) :
-                    getConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
+                    mapTypeWithAlias(getReducedType(distributionType), t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint), aliasSymbol, aliasTypeArguments) :
+                    getConditionalType(root, newMapper, forConstraint, aliasSymbol, aliasTypeArguments);
                 root.instantiations!.set(id, result);
             }
             return result;
@@ -19554,7 +19554,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getIndexedAccessType(instantiateType((type as IndexedAccessType).objectType, mapper), instantiateType((type as IndexedAccessType).indexType, mapper), (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
         }
         if (flags & TypeFlags.Conditional) {
-            return getConditionalTypeInstantiation(type as ConditionalType, combineTypeMappers((type as ConditionalType).mapper, mapper), aliasSymbol, aliasTypeArguments);
+            return getConditionalTypeInstantiation(type as ConditionalType, combineTypeMappers((type as ConditionalType).mapper, mapper), /*forConstraint*/ false, aliasSymbol, aliasTypeArguments);
         }
         if (flags & TypeFlags.Substitution) {
             const newBaseType = instantiateType((type as SubstitutionType).baseType, mapper);
