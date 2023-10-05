@@ -31,22 +31,22 @@ export const s = Symbol();
 >Symbol : SymbolConstructor
 
 export const s1 = s as typeof s;
->s1 : symbol
+>s1 : unique symbol
 >s as typeof s : unique symbol
 >s : unique symbol
 >s : unique symbol
 
 export const s2 = s;
->s2 : symbol
+>s2 : unique symbol
 >s : unique symbol
 
 export let s3 = s as typeof s;
->s3 : symbol
+>s3 : unique symbol
 >s as typeof s : unique symbol
 >s : unique symbol
 >s : unique symbol
 
 export let s4 = s;
->s4 : symbol
+>s4 : unique symbol
 >s : unique symbol
 
