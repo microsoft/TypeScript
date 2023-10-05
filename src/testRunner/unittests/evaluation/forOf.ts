@@ -80,7 +80,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
             { downlevelIteration: true, target: ts.ScriptTarget.ES5 },
         );
 
-        assert.throws(() => result.main(), /cannot read property.*Symbol\(Symbol\.iterator\).*/i);
+        assert.throws(() => result.main(), /cannot read property.*Symbol\(Symbol\.iterator\).*|undefined is not an object/i);
     });
 
     it("es5 over object with no Symbol.iterator with no Symbol", () => {
