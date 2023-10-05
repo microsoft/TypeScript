@@ -2,6 +2,7 @@
 
 //// [three.d.ts]
 export type Named = 0;
+declare const Named: 0;
 
 //// [two.d.ts]
 export * as default from "./three";
@@ -9,7 +10,9 @@ export * as default from "./three";
 //// [one.ts]
 import ns from "./two";
 type Alias = ns.Named;
+ns.Named;
 
 
 //// [one.js]
-export {};
+import ns from "./two";
+ns.Named;

@@ -4,6 +4,9 @@
 export type Named = 0;
 >Named : 0
 
+declare const Named: 0;
+>Named : 0
+
 === two.d.ts ===
 export * as default from "./three";
 >default : typeof import("three")
@@ -15,4 +18,9 @@ import ns from "./two";
 type Alias = ns.Named;
 >Alias : 0
 >ns : any
+
+ns.Named;
+>ns.Named : 0
+>ns : typeof ns
+>Named : 0
 
