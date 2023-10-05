@@ -1,4 +1,4 @@
-narrowByClauseExpressionInSwitchTrue3.ts(15,20): error TS2339: Property 'kind' does not exist on type 'never'.
+narrowByClauseExpressionInSwitchTrue3.ts(15,14): error TS2367: This comparison appears to be unintentional because the types '"square"' and '"circle"' have no overlap.
 
 
 ==== narrowByClauseExpressionInSwitchTrue3.ts (1 errors) ====
@@ -17,8 +17,8 @@ narrowByClauseExpressionInSwitchTrue3.ts(15,20): error TS2339: Property 'kind' d
             return Math.PI * shape.radius ** 2;
         }
         else if (shape.kind === "circle") {
-                       ~~~~
-!!! error TS2339: Property 'kind' does not exist on type 'never'.
+                 ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '"square"' and '"circle"' have no overlap.
             //         ~~~~
             // Property 'kind' does not exist on type 'never'.
         }

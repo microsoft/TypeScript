@@ -20,12 +20,12 @@ switch(true) {
 >'b' : "b"
 
         f;
->f : "a"
+>f : "a" | "b"
 
         break
     default:
         f;
->f : "a" | "b" | "c"
+>f : "c"
 }
 
 f;
@@ -53,7 +53,7 @@ switch(true) {
         break
     default:
         f;
->f : "a" | "b" | "c"
+>f : "c"
 }
 
 f;

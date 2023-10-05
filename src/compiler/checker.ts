@@ -27424,11 +27424,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 type = narrowTypeBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
             else if (expr.kind === SyntaxKind.TrueKeyword) {
-                const clause = flow.switchStatement.caseBlock.clauses.find((_, index) => index === flow.clauseStart);
-                const clauseExpression = clause && clause.kind === SyntaxKind.CaseClause ? clause.expression : undefined;
-                if (clauseExpression) {
-                    type = narrowType(type, clauseExpression, /*assumeTrue*/ true);
-                }
+                type = narrowTypeBySwitchOnTrue(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
             else {
                 if (strictNullChecks) {
@@ -28041,6 +28037,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In the non-default cause we create a union of the type narrowed by each of the listed cases.
             const clauseWitnesses = witnesses.slice(clauseStart, clauseEnd);
             return getUnionType(map(clauseWitnesses, text => text ? narrowTypeByTypeName(type, text) : neverType));
+        }
+
+        function narrowTypeBySwitchOnTrue(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
+            const clauses = switchStatement.caseBlock.clauses.slice(clauseStart, clauseEnd);
+            const clausesType = narrowTypeForTrueClauses(type, clauses);
+            const defaultIndex = findIndex(switchStatement.caseBlock.clauses, clause => clause.kind === SyntaxKind.DefaultClause);
+            const hasDefaultClause = clauseStart === clauseEnd || (defaultIndex >= clauseStart && defaultIndex < clauseEnd);
+            if (hasDefaultClause) {
+                // If we have a default in this set of clauses, then the type could also be any of the types
+                // that aren't covered by the other cases.
+
+                const clausesBefore = switchStatement.caseBlock.clauses.slice(0, clauseStart);
+                const clausesAfter = switchStatement.caseBlock.clauses.slice(clauseEnd);
+
+                const before = narrowTypeForTrueClauses(type, clausesBefore);
+                const after = narrowTypeForTrueClauses(type, clausesAfter);
+                const other = getUnionType([before, after]);
+
+                const typeNotOther = filterType(type, t => !isTypeSubsetOf(t, other));
+
+                return getUnionType([clausesType, typeNotOther]);
+            }
+            return clausesType;
+        }
+
+        function narrowTypeForTrueClauses(type: Type, clauses: CaseOrDefaultClause[]) {
+            return getUnionType(map(clauses, clause => clause.kind === SyntaxKind.CaseClause ? narrowType(type, clause.expression, /*assumeTrue*/ true) : neverType));
         }
 
         function isMatchingConstructorReference(expr: Expression) {

@@ -85,7 +85,7 @@ function classy(base: Base, someDerived: Derived1 | Derived2) {
         default:
             const never: never = someDerived;
 >never : never
->someDerived : Derived1 | Derived2
+>someDerived : never
     }
 
     switch (true) {
@@ -116,7 +116,7 @@ function classy(base: Base, someDerived: Derived1 | Derived2) {
         default:
             const never: never = someDerived;
 >never : never
->someDerived : Derived1 | Derived2
+>someDerived : never
     }
 
     switch (true) {
@@ -125,7 +125,7 @@ function classy(base: Base, someDerived: Derived1 | Derived2) {
         default:
             const never: never = someDerived;
 >never : never
->someDerived : Derived1 | Derived2
+>someDerived : never
 
         case someDerived instanceof Derived1:
 >someDerived instanceof Derived1 : boolean
@@ -134,15 +134,55 @@ function classy(base: Base, someDerived: Derived1 | Derived2) {
 
             someDerived.d;
 >someDerived.d : string
->someDerived : Derived1 | Derived2
+>someDerived : Derived1
 >d : string
 
             someDerived.basey;
 >someDerived.basey : string
->someDerived : Derived1 | Derived2
+>someDerived : Derived1
 >basey : string
 
             break
+        case someDerived instanceof Derived2:
+>someDerived instanceof Derived2 : boolean
+>someDerived : Derived1 | Derived2
+>Derived2 : typeof Derived2
+
+            someDerived.d;
+>someDerived.d : string
+>someDerived : Derived2
+>d : string
+
+            someDerived.other;
+>someDerived.other : string
+>someDerived : Derived2
+>other : string
+    }
+
+    switch (true) {
+>true : true
+
+        case someDerived instanceof Derived1:
+>someDerived instanceof Derived1 : boolean
+>someDerived : Derived1 | Derived2
+>Derived1 : typeof Derived1
+
+            someDerived.d;
+>someDerived.d : string
+>someDerived : Derived1
+>d : string
+
+            someDerived.basey;
+>someDerived.basey : string
+>someDerived : Derived1
+>basey : string
+
+            break
+        default:
+            const never: never = someDerived;
+>never : never
+>someDerived : never
+
         case someDerived instanceof Derived2:
 >someDerived instanceof Derived2 : boolean
 >someDerived : Derived1 | Derived2
@@ -178,46 +218,6 @@ function classy(base: Base, someDerived: Derived1 | Derived2) {
 >basey : string
 
             break
-        default:
-            const never: never = someDerived;
->never : never
->someDerived : Derived1 | Derived2
-
-        case someDerived instanceof Derived2:
->someDerived instanceof Derived2 : boolean
->someDerived : Derived1 | Derived2
->Derived2 : typeof Derived2
-
-            someDerived.d;
->someDerived.d : string
->someDerived : Derived1 | Derived2
->d : string
-
-            someDerived.other;
->someDerived.other : any
->someDerived : Derived1 | Derived2
->other : any
-    }
-
-    switch (true) {
->true : true
-
-        case someDerived instanceof Derived1:
->someDerived instanceof Derived1 : boolean
->someDerived : Derived1 | Derived2
->Derived1 : typeof Derived1
-
-            someDerived.d;
->someDerived.d : string
->someDerived : Derived1
->d : string
-
-            someDerived.basey;
->someDerived.basey : string
->someDerived : Derived1
->basey : string
-
-            break
         case someDerived instanceof Derived2:
 >someDerived instanceof Derived2 : boolean
 >someDerived : Derived1 | Derived2
@@ -236,17 +236,17 @@ function classy(base: Base, someDerived: Derived1 | Derived2) {
         default:
             someDerived.d;
 >someDerived.d : string
->someDerived : Derived1 | Derived2
+>someDerived : Derived2
 >d : string
 
             someDerived.other;
->someDerived.other : any
->someDerived : Derived1 | Derived2
->other : any
+>someDerived.other : string
+>someDerived : Derived2
+>other : string
 
             const never: never = someDerived;
 >never : never
->someDerived : Derived1 | Derived2
+>someDerived : Derived2
     }
 
 }

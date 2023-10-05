@@ -53,16 +53,16 @@ function fn1switch(input: All) {
 
             if (input.kind === "A") {
 >input.kind === "A" : boolean
->input.kind : "A"
->input : A
->kind : "A"
+>input.kind : "A" | "B"
+>input : A | B
+>kind : "A" | "B"
 >"A" : "A"
 
                 return;
             }
 
             input; // Should be B;
->input : never
+>input : B
 
             //  ^?
 
@@ -75,19 +75,19 @@ function fn1switch(input: All) {
 >"C" : "C"
 
             input; // Should be B | C
->input : C
+>input : B | C
 
             //  ^?
             break;
         default:
             input; // Should be D | E
->input : All
+>input : D | E
 
             //  ^?
     }
 
     input; // Should not be A
->input : All
+>input : B | C | D | E
 
     //  ^?
 }
@@ -178,16 +178,16 @@ function fn2switch(input: All) {
 
             if (input.kind === "A") {
 >input.kind === "A" : boolean
->input.kind : "A"
->input : A
->kind : "A"
+>input.kind : "A" | "B"
+>input : A | B
+>kind : "A" | "B"
 >"A" : "A"
 
                 return;
             }
 
             input; // Should be B;
->input : never
+>input : B
 
             //  ^?
 
@@ -200,20 +200,20 @@ function fn2switch(input: All) {
 >"C" : "C"
 
             input; // Should be B | C
->input : C
+>input : B | C
 
             //  ^?
             break;
         default:
             input; // Should be D | E
->input : All
+>input : D | E
 
             //  ^?
             return;
     }
 
     input; // Should be B | C
->input : C
+>input : B | C
 
     //  ^?
 }
@@ -305,23 +305,23 @@ function fn3switch(input: All) {
 
             if (input.kind === "A") {
 >input.kind === "A" : boolean
->input.kind : "A"
->input : A
->kind : "A"
+>input.kind : "A" | "B"
+>input : A | B
+>kind : "A" | "B"
 >"A" : "A"
 
                 return;
             }
 
             input; // Should be B;
->input : never
+>input : B
 
             //  ^?
 
             // fallthrough
         default:
             input; // Should be B | D | E
->input : All
+>input : B | D | E
 
             //  ^?
             break;
@@ -341,7 +341,7 @@ function fn3switch(input: All) {
     }
 
     input; // Should not be A
->input : All
+>input : B | C | D | E
 
     //  ^?
 }

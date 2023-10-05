@@ -39,7 +39,7 @@ function isA(x: MyType) {
         default:
             const never: never = x;
 >never : never
->x : MyType
+>x : never
 
         case x.kind === "a":
 >x.kind === "a" : boolean
@@ -49,9 +49,9 @@ function isA(x: MyType) {
 >"a" : "a"
 
             x.aProps;
->x.aProps : any
->x : MyType
->aProps : any
+>x.aProps : string
+>x : A
+>aProps : string
 
             break;
         case x.kind === "b":
@@ -88,7 +88,7 @@ function isA(x: MyType) {
         default:
             const never: never = x;
 >never : never
->x : MyType
+>x : never
 
         case x.kind === "a": {
 >x.kind === "a" : boolean
@@ -98,9 +98,9 @@ function isA(x: MyType) {
 >"a" : "a"
 
             x.aProps;
->x.aProps : any
->x : MyType
->aProps : any
+>x.aProps : string
+>x : A
+>aProps : string
 
             break;
         }
@@ -139,9 +139,9 @@ function isA(x: MyType) {
 
         default:
             x.aProps;
->x.aProps : any
->x : MyType
->aProps : any
+>x.aProps : never
+>x : A
+>aProps : never
 
             break;
         case x.kind === "b":
@@ -178,7 +178,7 @@ function isA(x: MyType) {
         default:
             const never: never = x;
 >never : never
->x : MyType
+>x : never
 
         case x.kind === "a":
 >x.kind === "a" : boolean
@@ -188,9 +188,9 @@ function isA(x: MyType) {
 >"a" : "a"
 
             x.aProps;
->x.aProps : any
->x : MyType
->aProps : any
+>x.aProps : string
+>x : A
+>aProps : string
 
             // fallthrough
         case x.kind === "b":
@@ -202,7 +202,7 @@ function isA(x: MyType) {
 
             x.bProps;
 >x.bProps : any
->x : MyType
+>x : A | B
 >bProps : any
 
             // fallthrough

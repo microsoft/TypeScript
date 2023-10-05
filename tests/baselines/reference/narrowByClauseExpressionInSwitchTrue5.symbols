@@ -52,9 +52,9 @@ function fn1switch(input: All) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 1, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 2, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 3, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 4, 10))
 
             if (input.kind === "A") {
->input.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10))
+>input.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 1, 10))
 >input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 8, 19))
->kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 1, 10))
 
                 return;
             }
@@ -157,9 +157,9 @@ function fn2switch(input: All) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 1, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 2, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 3, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 4, 10))
 
             if (input.kind === "A") {
->input.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10))
+>input.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 1, 10))
 >input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 55, 19))
->kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 1, 10))
 
                 return;
             }
@@ -264,9 +264,9 @@ function fn3switch(input: All) {
 >kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 1, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 2, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 3, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 4, 10))
 
             if (input.kind === "A") {
->input.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10))
+>input.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 1, 10))
 >input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 104, 19))
->kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue5.ts, 0, 10), Decl(narrowByClauseExpressionInSwitchTrue5.ts, 1, 10))
 
                 return;
             }

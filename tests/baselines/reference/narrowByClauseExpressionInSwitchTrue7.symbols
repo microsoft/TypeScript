@@ -118,9 +118,9 @@ function classy(base: Base, someDerived: Derived1 | Derived2) {
 >Derived1 : Symbol(Derived1, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 2, 1))
 
             someDerived.d;
->someDerived.d : Symbol(d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29), Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>someDerived.d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
 >someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
->d : Symbol(d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29), Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
 
             someDerived.basey;
 >someDerived.basey : Symbol(Base.basey, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 12))
@@ -169,12 +169,14 @@ function classy(base: Base, someDerived: Derived1 | Derived2) {
 >Derived2 : Symbol(Derived2, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 6, 1))
 
             someDerived.d;
->someDerived.d : Symbol(d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29), Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>someDerived.d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
 >someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
->d : Symbol(d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29), Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
 
             someDerived.other;
+>someDerived.other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
 >someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
     }
 
     switch (true) {
@@ -209,12 +211,14 @@ function classy(base: Base, someDerived: Derived1 | Derived2) {
 
         default:
             someDerived.d;
->someDerived.d : Symbol(d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29), Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>someDerived.d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
 >someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
->d : Symbol(d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29), Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
 
             someDerived.other;
+>someDerived.other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
 >someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
 
             const never: never = someDerived;
 >never : Symbol(never, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 79, 17))

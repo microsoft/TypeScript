@@ -38,9 +38,9 @@ function wat(shape: Shape) {
     }
 
     if (shape.kind === "circle") {
->shape.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 7))
+>shape.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 7), Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
 >shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
->kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 7))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 7), Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
 
         return Math.PI * shape.radius ** 2;
 >Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
@@ -51,7 +51,9 @@ function wat(shape: Shape) {
 >radius : Symbol(radius, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 23))
     }
     else if (shape.kind === "circle") {
+>shape.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
 >shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
 
         //         ~~~~
         // Property 'kind' does not exist on type 'never'.

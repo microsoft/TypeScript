@@ -1,20 +1,7 @@
-narrowByClauseExpressionInSwitchTrue7.ts(31,19): error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
-  Type 'Derived1' is not assignable to type 'never'.
-narrowByClauseExpressionInSwitchTrue7.ts(42,19): error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
-  Type 'Derived1' is not assignable to type 'never'.
-narrowByClauseExpressionInSwitchTrue7.ts(47,19): error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
-  Type 'Derived1' is not assignable to type 'never'.
-narrowByClauseExpressionInSwitchTrue7.ts(63,19): error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
-  Type 'Derived1' is not assignable to type 'never'.
-narrowByClauseExpressionInSwitchTrue7.ts(66,25): error TS2339: Property 'other' does not exist on type 'Derived1 | Derived2'.
-  Property 'other' does not exist on type 'Derived1'.
-narrowByClauseExpressionInSwitchTrue7.ts(79,25): error TS2339: Property 'other' does not exist on type 'Derived1 | Derived2'.
-  Property 'other' does not exist on type 'Derived1'.
-narrowByClauseExpressionInSwitchTrue7.ts(80,19): error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
-  Type 'Derived1' is not assignable to type 'never'.
+narrowByClauseExpressionInSwitchTrue7.ts(80,19): error TS2322: Type 'Derived2' is not assignable to type 'never'.
 
 
-==== narrowByClauseExpressionInSwitchTrue7.ts (7 errors) ====
+==== narrowByClauseExpressionInSwitchTrue7.ts (1 errors) ====
     class Base {
         basey: string = "";
     }
@@ -46,9 +33,6 @@ narrowByClauseExpressionInSwitchTrue7.ts(80,19): error TS2322: Type 'Derived1 | 
                 break
             default:
                 const never: never = someDerived;
-                      ~~~~~
-!!! error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
-!!! error TS2322:   Type 'Derived1' is not assignable to type 'never'.
         }
     
         switch (true) {
@@ -60,17 +44,11 @@ narrowByClauseExpressionInSwitchTrue7.ts(80,19): error TS2322: Type 'Derived1 | 
                 break
             default:
                 const never: never = someDerived;
-                      ~~~~~
-!!! error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
-!!! error TS2322:   Type 'Derived1' is not assignable to type 'never'.
         }
     
         switch (true) {
             default:
                 const never: never = someDerived;
-                      ~~~~~
-!!! error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
-!!! error TS2322:   Type 'Derived1' is not assignable to type 'never'.
             case someDerived instanceof Derived1:
                 someDerived.d;
                 someDerived.basey;
@@ -87,15 +65,9 @@ narrowByClauseExpressionInSwitchTrue7.ts(80,19): error TS2322: Type 'Derived1 | 
                 break
             default:
                 const never: never = someDerived;
-                      ~~~~~
-!!! error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
-!!! error TS2322:   Type 'Derived1' is not assignable to type 'never'.
             case someDerived instanceof Derived2:
                 someDerived.d;
                 someDerived.other;
-                            ~~~~~
-!!! error TS2339: Property 'other' does not exist on type 'Derived1 | Derived2'.
-!!! error TS2339:   Property 'other' does not exist on type 'Derived1'.
         }
     
         switch (true) {
@@ -109,13 +81,9 @@ narrowByClauseExpressionInSwitchTrue7.ts(80,19): error TS2322: Type 'Derived1 | 
             default:
                 someDerived.d;
                 someDerived.other;
-                            ~~~~~
-!!! error TS2339: Property 'other' does not exist on type 'Derived1 | Derived2'.
-!!! error TS2339:   Property 'other' does not exist on type 'Derived1'.
                 const never: never = someDerived;
                       ~~~~~
-!!! error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
-!!! error TS2322:   Type 'Derived1' is not assignable to type 'never'.
+!!! error TS2322: Type 'Derived2' is not assignable to type 'never'.
         }
     
     }
