@@ -13523,6 +13523,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return instantiateType(instantiable, createTypeMapper([type.indexType, type.objectType], [getNumberLiteralType(0), createTupleType([replacement])]));
     }
 
+    // If the original mapped type had an intersection constraint, we extract its components,
+    // and we make an attempt to do so even if the intersection has been reduced to a union.
+    // This entire process allows us to possibly retrieve the filtering type literals.
+    // e.g. { [K in keyof U & "a" | "b" ] } -> "a" | "b"
     function getLimitedConstraint(type: ReverseMappedType) {
         const constraint = getConstraintTypeFromMappedType(type.mappedType);
         if (!(constraint.flags & TypeFlags.Union || constraint.flags & TypeFlags.Intersection)) {
@@ -13545,6 +13549,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const members = createSymbolTable();
         const limitedConstraint = getLimitedConstraint(type);
         for (const prop of getPropertiesOfType(type.source)) {
+            // In case of a reverse mapped type with an intersection constraint, if we were able to
+            // extract the filtering type literals we skip those properties, because they wouldn't
+            // get through the application of the mapped type anyway
             if (limitedConstraint) {
                 const propertyNameType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
                 if (!isTypeAssignableTo(propertyNameType, limitedConstraint)) {
