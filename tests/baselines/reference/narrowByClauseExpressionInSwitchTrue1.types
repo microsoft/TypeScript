@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue.ts] ////
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue1.ts] ////
 
-=== narrowByClauseExpressionInSwitchTrue.ts ===
+=== narrowByClauseExpressionInSwitchTrue1.ts ===
 // https://github.com/microsoft/TypeScript/issues/37178
 
 type A = { type: "A" };

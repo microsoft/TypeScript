@@ -1,0 +1,26 @@
+narrowByClauseExpressionInSwitchTrue3.ts(15,20): error TS2339: Property 'kind' does not exist on type 'never'.
+
+
+==== narrowByClauseExpressionInSwitchTrue3.ts (1 errors) ====
+    type Shape =
+        | { kind: "circle", radius: number }
+        | { kind: "square", sideLength: number }
+    
+    function wat(shape: Shape) {
+        switch (true) {
+            case shape.kind === "circle":
+                return Math.PI * shape.radius ** 2;
+            case shape.kind === "circle": // should error
+        }
+    
+        if (shape.kind === "circle") {
+            return Math.PI * shape.radius ** 2;
+        }
+        else if (shape.kind === "circle") {
+                       ~~~~
+!!! error TS2339: Property 'kind' does not exist on type 'never'.
+            //         ~~~~
+            // Property 'kind' does not exist on type 'never'.
+        }
+    }
+    

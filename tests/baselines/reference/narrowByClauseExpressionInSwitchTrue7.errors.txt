@@ -1,0 +1,122 @@
+narrowByClauseExpressionInSwitchTrue7.ts(31,19): error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
+  Type 'Derived1' is not assignable to type 'never'.
+narrowByClauseExpressionInSwitchTrue7.ts(42,19): error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
+  Type 'Derived1' is not assignable to type 'never'.
+narrowByClauseExpressionInSwitchTrue7.ts(47,19): error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
+  Type 'Derived1' is not assignable to type 'never'.
+narrowByClauseExpressionInSwitchTrue7.ts(63,19): error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
+  Type 'Derived1' is not assignable to type 'never'.
+narrowByClauseExpressionInSwitchTrue7.ts(66,25): error TS2339: Property 'other' does not exist on type 'Derived1 | Derived2'.
+  Property 'other' does not exist on type 'Derived1'.
+narrowByClauseExpressionInSwitchTrue7.ts(79,25): error TS2339: Property 'other' does not exist on type 'Derived1 | Derived2'.
+  Property 'other' does not exist on type 'Derived1'.
+narrowByClauseExpressionInSwitchTrue7.ts(80,19): error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
+  Type 'Derived1' is not assignable to type 'never'.
+
+
+==== narrowByClauseExpressionInSwitchTrue7.ts (7 errors) ====
+    class Base {
+        basey: string = "";
+    }
+    
+    class Derived1 extends Base {
+        d: string = "";
+    }
+    
+    class Derived2 extends Base {
+        d: string = "";
+        other: string = "";
+    }
+    
+    function classy(base: Base, someDerived: Derived1 | Derived2) {
+        switch (true) {
+            case base instanceof Derived1:
+                base.d
+                // fallthrough
+            default:
+                base.basey
+        }
+    
+        switch (true) {
+            case someDerived instanceof Derived1:
+                someDerived.d
+                break;
+            case someDerived instanceof Derived2:
+                someDerived.d
+                break
+            default:
+                const never: never = someDerived;
+                      ~~~~~
+!!! error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
+!!! error TS2322:   Type 'Derived1' is not assignable to type 'never'.
+        }
+    
+        switch (true) {
+            case someDerived instanceof Derived1:
+                someDerived.d
+                // fallthrough
+            case someDerived instanceof Derived2:
+                someDerived.d
+                break
+            default:
+                const never: never = someDerived;
+                      ~~~~~
+!!! error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
+!!! error TS2322:   Type 'Derived1' is not assignable to type 'never'.
+        }
+    
+        switch (true) {
+            default:
+                const never: never = someDerived;
+                      ~~~~~
+!!! error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
+!!! error TS2322:   Type 'Derived1' is not assignable to type 'never'.
+            case someDerived instanceof Derived1:
+                someDerived.d;
+                someDerived.basey;
+                break
+            case someDerived instanceof Derived2:
+                someDerived.d;
+                someDerived.other;
+        }
+    
+        switch (true) {
+            case someDerived instanceof Derived1:
+                someDerived.d;
+                someDerived.basey;
+                break
+            default:
+                const never: never = someDerived;
+                      ~~~~~
+!!! error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
+!!! error TS2322:   Type 'Derived1' is not assignable to type 'never'.
+            case someDerived instanceof Derived2:
+                someDerived.d;
+                someDerived.other;
+                            ~~~~~
+!!! error TS2339: Property 'other' does not exist on type 'Derived1 | Derived2'.
+!!! error TS2339:   Property 'other' does not exist on type 'Derived1'.
+        }
+    
+        switch (true) {
+            case someDerived instanceof Derived1:
+                someDerived.d;
+                someDerived.basey;
+                break
+            case someDerived instanceof Derived2:
+                someDerived.d;
+                someDerived.other;
+            default:
+                someDerived.d;
+                someDerived.other;
+                            ~~~~~
+!!! error TS2339: Property 'other' does not exist on type 'Derived1 | Derived2'.
+!!! error TS2339:   Property 'other' does not exist on type 'Derived1'.
+                const never: never = someDerived;
+                      ~~~~~
+!!! error TS2322: Type 'Derived1 | Derived2' is not assignable to type 'never'.
+!!! error TS2322:   Type 'Derived1' is not assignable to type 'never'.
+        }
+    
+    }
+    
