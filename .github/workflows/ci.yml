@@ -21,7 +21,7 @@ defaults:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-xl
 
     strategy:
       matrix:
@@ -52,7 +52,7 @@ jobs:
         run: npm run test -- --no-lint --bundle=${{ matrix.bundle }}
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-xl
 
     steps:
       - uses: actions/checkout@v3
