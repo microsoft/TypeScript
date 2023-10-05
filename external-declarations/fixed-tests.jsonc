@@ -29,80 +29,28 @@
             "templateLiteralTypes4",
         ],
         "code-fixer-issues" : [
-            // Only one fix is applied per line, fix need to be applied to both another issue (params, default exports) and return type
-            "ambiguousGenericAssertion1",
-            "arrowFunctionWithObjectLiteralBody1",
-            "arrowFunctionWithObjectLiteralBody2",
-            "arrowFunctionWithObjectLiteralBody3",
-            "arrowFunctionWithObjectLiteralBody4",
-            "commentsAfterFunctionExpression1",
-            "fatarrowfunctions",
-            "genericTypeAssertions3",
-            "taggedTemplateStringsWithCurriedFunction",
-            "unusedParametersWithUnderscore",
-            "arrowFunctionWithParameterNameAsync_es2017",
-            "arrowFunctionWithParameterNameAsync_es5",
-            "arrowFunctionWithParameterNameAsync_es6",
-            "importCallExpressionInExportEqualsAMD",
-            "importCallExpressionInExportEqualsCJS",
-            "importCallExpressionInExportEqualsUMD",
-            "declarationEmitMixinPrivateProtected",
-            "disallowLineTerminatorBeforeArrow",
-            "emitArrowFunctionAsIs",
-            "emitArrowFunctionAsIsES6",
-            "emitArrowFunctionsAsIs",
-            "emitArrowFunctionsAsIsES6",
-            "declarationEmitObjectAssignedDefaultExport",
-            "templateStringInArrowFunction",
-            "templateStringInArrowFunctionES6",
-            "exportAssignDottedName",
-            "exportAssignNonIdentifier",
-            // return type missing
             "arrayFakeFlatNoCrashInferenceDeclarations",
-            "mixingApparentTypeOverrides",
-            "noCrashOnMixin",
-            "overrideBaseIntersectionMethod",
-            "unusedFunctionsinNamespaces6",
-            "mixinAbstractClasses",
-            "mixinAbstractClassesReturnTypeInference",
-            "mixinAccessModifiers",
-            "override1",
-            "override19",
-            "declarationFiles",
-            // Crash on export = in language service. Test not fixed
             "commonJsImportClassExpression",
             "constEnumNamespaceReferenceCausesNoImport2",
-            "declarationEmitInferredDefaultExportType2",
+            "declarationEmitCommonJsModuleReferencedType",
+            "declarationEmitObjectAssignedDefaultExport",
+            "declarationEmitPrivatePromiseLikeInterface",
+            "doubleMixinConditionalTypeBaseClassWorks",
             "exportAssignmentWithoutIdentifier1",
             "exportEqualsProperty",
             "exportEqualsProperty2",
-            "namedEvaluation",
-            "thisInInvalidContextsExternalModule",
-            "reexportClassDefinition",
-            "esDecorators-classExpression-namedEvaluation.9",
-            // Members return types are not fixed
-            "declarationEmitClassMemberWithComputedPropertyName",
-            "declarationEmitLocalClassDeclarationMixin",
-            "thisInPropertyBoundDeclarations",
-            "thisIndexOnExistingReadonlyFieldIsNotNever",
-            // Constant is not fixed
-            "declarationEmitCommonJsModuleReferencedType",
-            // Mixin not fixed. Not sure we can fix them 
-            "mixinPrivateAndProtected",
-            "doubleMixinConditionalTypeBaseClassWorks",
-            "emitClassExpressionInDeclarationFile2",
-            // any, non initialized variable is not fixed
             "moduleAugmentationDisallowedExtensions",
             "moduleAugmentationNoNewNames",
-            // ? 
+            "overrideBaseIntersectionMethod",
+            "thisInPropertyBoundDeclarations",
+            "esDecorators-classExpression-namedEvaluation.9",
+            "thisInInvalidContextsExternalModule",
+            "exportAssignDottedName",
+            "exportAssignNonIdentifier",
+            "reexportClassDefinition",
             "parserEqualsGreaterThanAfterFunction1",
-            "declarationEmitPrivatePromiseLikeInterface",
-            // Parser errors 
             "parserSkippedTokens16",
-            // Symbol const not annotated
-            "declarationEmitPrivateNameCausesError",
-            // Crashes
-            "parseInvalidNonNullableTypes"
+            "declarationFiles",
         ],
         "not-fixed-with-unreliable-errors": [
             // Language service crash on computing diagnostic (call stack size exceeded)
@@ -200,6 +148,11 @@
             "computedPropertyNames12_ES6",
             "computedPropertyNames13_ES5",
             "computedPropertyNames13_ES6",
+            "computedPropertyNames16_ES5",
+            "computedPropertyNames16_ES6",
+            "computedPropertyNames2_ES5",
+            "computedPropertyNames2_ES6",
+            "computedPropertyNamesWithStaticProperty",
             "declarationEmitMappedTypeTemplateTypeofSymbol",
             "declarationEmitReadonlyComputedProperty",
             "ES5For-ofTypeCheck10",
@@ -269,7 +222,7 @@
         // Needs TS Fix
         // Reported as https://github.com/microsoft/TypeScript/issues/55654
         // Fix available
-        "ts-bug/binding-patterns": [
+        "ts-bugs/binding-patterns": [
             "declarationsAndAssignments",
             "excessPropertyCheckWithSpread",
             "destructuringParameterDeclaration1ES5",
@@ -294,11 +247,8 @@
             "correlatedUnions",
             "declarationEmitNoNonRequiredParens",
             "declarationEmitShadowingInferNotRenamed",
-            "declarationEmitTupleRestSignatureLeadingVariadic",
-            "es5SetterparameterDestructuringNotElided",
             "hugeDeclarationOutputGetsTruncatedWithError",
             "inKeywordAndIntersection",
-            "mapConstructor",
             "mappedTypeInferenceAliasSubstitution",
             "mappedTypeWithAsClauseAndLateBoundProperty2",
             "parseArrowFunctionWithFunctionReturnType",
@@ -311,8 +261,6 @@
             "conditionalTypes1",
             "stringLiteralsWithTypeAssertions01",
             "castingTuple",
-            "emptyTuplesTypeAssertion01",
-            "emptyTuplesTypeAssertion02",
             "namedTupleMembers",
             "optionalMethods",
             "optionalParameterProperty",
@@ -346,12 +294,9 @@
             "declarationEmitWithDefaultAsComputedName2",
             "declarationEmitWithDefaultAsComputedName",
             "declarationEmitComputedNameConstEnumAlias",
-            "capturedParametersInInitializers1",
             "declarationEmitPropertyNumericStringKey",
             "templateLiteralsSourceMap", // template literal is evaluated in constant value.
             "nodeModulesImportTypeModeDeclarationEmit1", // resolution-mode in assert from type assertion is preserved
-            "declarationEmitPrefersPathKindBasedOnBundling2", // Import path has .. in it. A similar type written by hand would not.
-            "computedPropertiesNarrowed",
         ],
     }
 }
