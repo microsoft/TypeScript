@@ -1329,7 +1329,11 @@ function completionInfoFromData(
 
     if (keywordFilters !== KeywordCompletionFilters.None) {
         for (const keywordEntry of getKeywordCompletions(keywordFilters, !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile))) {
-            if (isTypeOnlyLocation && isTypeKeyword(stringToToken(keywordEntry.name)!) || !uniqueNames.has(keywordEntry.name)) {
+            if (
+                isTypeOnlyLocation && isTypeKeyword(stringToToken(keywordEntry.name)!) ||
+                !isTypeOnlyLocation && isContextualKeywordInAutoImportableExpressionSpace(keywordEntry.name) ||
+                !uniqueNames.has(keywordEntry.name)
+            ) {
                 uniqueNames.add(keywordEntry.name);
                 insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
             }
@@ -5828,4 +5832,32 @@ function toUpperCharCode(charCode: number) {
         return charCode - 32;
     }
     return charCode;
+}
+
+/**
+ * These are all the contextual keywords that would be valid to auto-import
+ * in expression space and also a valid keyword in the same location, depending
+ * on what gets typed afterwards. In these cases, we want to offer both the
+ * auto-import and the keyword completion. For example,
+ *
+ * ```ts
+ * type
+ * ```
+ *
+ * may be the beginning of a type alias declaration (keyword completion), or
+ * it may be the beginning of
+ *
+ * ```ts
+ * import { type } from "os";
+ * type() === "Darwin" ? doSomething() : doSomethingElse();
+ * ```
+ */
+function isContextualKeywordInAutoImportableExpressionSpace(keyword: string) {
+    return keyword === "abstract" ||
+        keyword === "async" ||
+        keyword === "await" ||
+        keyword === "declare" ||
+        keyword === "module" ||
+        keyword === "namespace" ||
+        keyword === "type";
 }
