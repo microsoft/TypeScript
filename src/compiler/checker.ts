@@ -13550,8 +13550,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const limitedConstraint = getLimitedConstraint(type);
         for (const prop of getPropertiesOfType(type.source)) {
             // In case of a reverse mapped type with an intersection constraint, if we were able to
-            // extract the filtering type literals we skip those properties, because they wouldn't
-            // get through the application of the mapped type anyway
+            // extract the filtering type literals we skip those properties that are not assignable to them,
+            // because the extra properties wouldn't get through the application of the mapped type anyway
             if (limitedConstraint) {
                 const propertyNameType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
                 if (!isTypeAssignableTo(propertyNameType, limitedConstraint)) {
