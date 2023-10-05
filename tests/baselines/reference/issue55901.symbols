@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/issue55901.ts] ////
+
+=== issue55901.ts ===
+export const l = "A";
+>l : Symbol(l, Decl(issue55901.ts, 0, 12))
+
+export const l1 = l as typeof l;
+>l1 : Symbol(l1, Decl(issue55901.ts, 1, 12))
+>l : Symbol(l, Decl(issue55901.ts, 0, 12))
+>l : Symbol(l, Decl(issue55901.ts, 0, 12))
+
+export const l2 = l;
+>l2 : Symbol(l2, Decl(issue55901.ts, 2, 12))
+>l : Symbol(l, Decl(issue55901.ts, 0, 12))
+
+export let l3 = l as typeof l;
+>l3 : Symbol(l3, Decl(issue55901.ts, 3, 10))
+>l : Symbol(l, Decl(issue55901.ts, 0, 12))
+>l : Symbol(l, Decl(issue55901.ts, 0, 12))
+
+export let a4 = l;
+>a4 : Symbol(a4, Decl(issue55901.ts, 4, 10))
+>l : Symbol(l, Decl(issue55901.ts, 0, 12))
+
+export const s = Symbol();
+>s : Symbol(s, Decl(issue55901.ts, 6, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export const s1 = s as typeof s;
+>s1 : Symbol(s1, Decl(issue55901.ts, 7, 12))
+>s : Symbol(s, Decl(issue55901.ts, 6, 12))
+>s : Symbol(s, Decl(issue55901.ts, 6, 12))
+
+export const s2 = s;
+>s2 : Symbol(s2, Decl(issue55901.ts, 8, 12))
+>s : Symbol(s, Decl(issue55901.ts, 6, 12))
+
+export let s3 = s as typeof s;
+>s3 : Symbol(s3, Decl(issue55901.ts, 9, 10))
+>s : Symbol(s, Decl(issue55901.ts, 6, 12))
+>s : Symbol(s, Decl(issue55901.ts, 6, 12))
+
+export let s4 = s;
+>s4 : Symbol(s4, Decl(issue55901.ts, 10, 10))
+>s : Symbol(s, Decl(issue55901.ts, 6, 12))
+

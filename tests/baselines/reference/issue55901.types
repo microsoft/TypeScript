@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/issue55901.ts] ////
+
+=== issue55901.ts ===
+export const l = "A";
+>l : "A"
+>"A" : "A"
+
+export const l1 = l as typeof l;
+>l1 : "A"
+>l as typeof l : "A"
+>l : "A"
+>l : "A"
+
+export const l2 = l;
+>l2 : "A"
+>l : "A"
+
+export let l3 = l as typeof l;
+>l3 : "A"
+>l as typeof l : "A"
+>l : "A"
+>l : "A"
+
+export let a4 = l;
+>a4 : string
+>l : "A"
+
+export const s = Symbol();
+>s : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export const s1 = s as typeof s;
+>s1 : symbol
+>s as typeof s : unique symbol
+>s : unique symbol
+>s : unique symbol
+
+export const s2 = s;
+>s2 : symbol
+>s : unique symbol
+
+export let s3 = s as typeof s;
+>s3 : symbol
+>s as typeof s : unique symbol
+>s : unique symbol
+>s : unique symbol
+
+export let s4 = s;
+>s4 : symbol
+>s : unique symbol
+
