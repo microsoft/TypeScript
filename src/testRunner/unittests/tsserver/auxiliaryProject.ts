@@ -115,6 +115,10 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
             command: ts.server.protocol.CommandTypes.FindSourceDefinition,
             arguments: protocolFileLocationFromSubstring(indexFile, "positional"),
         });
+        session.executeCommandSeq<ts.server.protocol.FindSourceDefinitionRequest>({
+            command: ts.server.protocol.CommandTypes.FindSourceDefinition,
+            arguments: protocolFileLocationFromSubstring(indexFile, "positional"),
+        });
         baselineTsserverLogs("auxiliaryProject", "file is added later through finding definition", session);
     });
 });
