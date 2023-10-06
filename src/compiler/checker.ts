@@ -22303,22 +22303,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                 }
-                else {
-                    // conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
-                    // more assignments than are desirable (since it maps the source check type to its constraint, it loses information)
-                    const distributiveConstraint = hasNonCircularBaseConstraint(source) ? getConstraintOfDistributiveConditionalType(source as ConditionalType) : undefined;
-                    if (distributiveConstraint) {
-                        if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
-                            return result;
-                        }
-                    }
-                }
-
-                // conditionals _can_ be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
+                // conditionals can be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
                 // when `O` is a conditional (`never` is trivially assignable to `O`, as is `O`!).
                 const defaultConstraint = getDefaultConstraintOfConditionalType(source as ConditionalType);
                 if (defaultConstraint) {
                     if (result = isRelatedTo(defaultConstraint, target, RecursionFlags.Source, reportErrors)) {
+                        return result;
+                    }
+                }
+                // conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
+                // more assignments than are desirable (since it maps the source check type to its constraint, it loses information).
+                const distributiveConstraint = !(targetFlags & TypeFlags.Conditional) && hasNonCircularBaseConstraint(source) ? getConstraintOfDistributiveConditionalType(source as ConditionalType) : undefined;
+                if (distributiveConstraint) {
+                    resetErrorInfo(saveErrorInfo);
+                    if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
                         return result;
                     }
                 }
