@@ -13523,10 +13523,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return instantiateType(instantiable, createTypeMapper([type.indexType, type.objectType], [getNumberLiteralType(0), createTupleType([replacement])]));
     }
 
-    // If the original mapped type had an intersection constraint, we extract its components,
+    // If the original mapped type had an intersection constraint we extract its components,
     // and we make an attempt to do so even if the intersection has been reduced to a union.
     // This entire process allows us to possibly retrieve the filtering type literals.
-    // e.g. { [K in keyof U & "a" | "b" ] } -> "a" | "b"
+    // e.g. { [K in keyof U & ("a" | "b") ] } -> "a" | "b"
     function getLimitedConstraint(type: ReverseMappedType) {
         const constraint = getConstraintTypeFromMappedType(type.mappedType);
         if (!(constraint.flags & TypeFlags.Union || constraint.flags & TypeFlags.Intersection)) {
