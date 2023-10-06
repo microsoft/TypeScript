@@ -2185,14 +2185,15 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getNoDtsResolutionProject(rootFileNames: readonly string[]): AuxiliaryProject {
+    getNoDtsResolutionProject(rootFile: NormalizedPath): AuxiliaryProject {
         Debug.assert(this.projectService.serverMode === LanguageServiceMode.Semantic);
         if (!this.noDtsResolutionProject) {
             this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject(), this.currentDirectory);
         }
-
-        this.projectService.setFileNamesOfAutpImportProviderOrAuxillaryProject(this.noDtsResolutionProject, rootFileNames);
-
+        if (this.noDtsResolutionProject.rootFile !== rootFile) {
+            this.projectService.setFileNamesOfAutpImportProviderOrAuxillaryProject(this.noDtsResolutionProject, [rootFile]);
+            this.noDtsResolutionProject.rootFile = rootFile;
+        }
         return this.noDtsResolutionProject;
     }
 
@@ -2373,6 +2374,7 @@ export class InferredProject extends Project {
 
 /** @internal */
 export class AuxiliaryProject extends Project {
+    /** @internal */ rootFile: NormalizedPath | undefined;
     constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
         super(projectService.newAuxiliaryProjectName(), ProjectKind.Auxiliary, projectService, documentRegistry, /*hasExplicitListOfFiles*/ false, /*lastFileExceededProgramSize*/ undefined, compilerOptions, /*compileOnSaveEnabled*/ false, /*watchOptions*/ undefined, projectService.host, currentDirectory);
     }

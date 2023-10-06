@@ -42,7 +42,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
             command: ts.server.protocol.CommandTypes.FindSourceDefinition,
             arguments: protocolFileLocationFromSubstring(aTs, "B"),
         });
-        const auxProject = inferredProject.getNoDtsResolutionProject([aTs.path]);
+        const auxProject = inferredProject.getNoDtsResolutionProject(aTs.path as ts.server.NormalizedPath);
 
         // b.js ScriptInfo is now available because it's contained by the AuxiliaryProject.
         // The AuxiliaryProject should never be the default project for anything, so
@@ -118,6 +118,10 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
         session.executeCommandSeq<ts.server.protocol.FindSourceDefinitionRequest>({
             command: ts.server.protocol.CommandTypes.FindSourceDefinition,
             arguments: protocolFileLocationFromSubstring(indexFile, "positional"),
+        });
+        session.executeCommandSeq<ts.server.protocol.FindSourceDefinitionRequest>({
+            command: ts.server.protocol.CommandTypes.FindSourceDefinition,
+            arguments: protocolFileLocationFromSubstring(indexFile, "command", { index: 1 }),
         });
         baselineTsserverLogs("auxiliaryProject", "file is added later through finding definition", session);
     });

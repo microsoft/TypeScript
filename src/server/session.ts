@@ -1543,7 +1543,7 @@ export class Session<TMessage = string> implements EventSender {
         if (needsJsResolution) {
             const definitionSet = createSet<DefinitionInfo>(d => d.textSpan.start, documentSpansEqual);
             definitions?.forEach(d => definitionSet.add(d));
-            const noDtsProject = project.getNoDtsResolutionProject([file]);
+            const noDtsProject = project.getNoDtsResolutionProject(file);
             const ls = noDtsProject.getLanguageService();
             const jsDefinitions = ls.getDefinitionAtPosition(file, position, /*searchOtherFilesOnly*/ true, /*stopAtAlias*/ false)
                 ?.filter(d => toNormalizedPath(d.fileName) !== file);
