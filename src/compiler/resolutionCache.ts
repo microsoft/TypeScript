@@ -205,6 +205,18 @@ export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
     getCurrentProgram(): Program | undefined;
     fileIsOpen(filePath: Path): boolean;
     onDiscoveredSymlink?(): void;
+
+    // For incremental testing
+    beforeResolveSingleModuleNameWithoutWatching?(
+        moduleResolutionCache: ModuleResolutionCache,
+    ): any;
+    afterResolveSingleModuleNameWithoutWatching?(
+        moduleResolutionCache: ModuleResolutionCache,
+        moduleName: string,
+        containingFile: string,
+        result: ResolvedModuleWithFailedLookupLocations,
+        data: any,
+    ): any;
 }
 
 /** @internal */
@@ -439,6 +451,10 @@ export function getRootPathSplitLength(rootPath: Path) {
     return rootPath.split(directorySeparator).length - (hasTrailingDirectorySeparator(rootPath) ? 1 : 0);
 }
 
+function getModuleResolutionHost(resolutionHost: ResolutionCacheHost) {
+    return resolutionHost.getCompilerHost?.() || resolutionHost;
+}
+
 /** @internal */
 export function createModuleResolutionLoaderUsingGlobalCache(
     containingFile: string,
@@ -471,7 +487,7 @@ function resolveModuleNameUsingGlobalCache(
     redirectedReference?: ResolvedProjectReference,
     mode?: ResolutionMode,
 ): ResolvedModuleWithFailedLookupLocations {
-    const host = resolutionHost.getCompilerHost?.() || resolutionHost;
+    const host = getModuleResolutionHost(resolutionHost);
     const primaryResult = ts_resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
     // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
     if (!resolutionHost.getGlobalCache) {
@@ -828,7 +844,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 }
             }
             else {
-                const host = resolutionHost.getCompilerHost?.() || resolutionHost;
+                const host = getModuleResolutionHost(resolutionHost);
                 if (isTraceEnabled(options, host) && !seenNamesInFile.has(name, mode)) {
                     const resolved = getResolutionWithResolvedFileName(resolution!);
                     trace(
@@ -912,7 +928,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 containingFile,
                 redirectedReference,
                 options,
-                resolutionHost.getCompilerHost?.() || resolutionHost,
+                getModuleResolutionHost(resolutionHost),
                 typeReferenceDirectiveResolutionCache,
             ),
             getResolutionWithResolvedFileName: getResolvedTypeReferenceDirective,
@@ -957,7 +973,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         options: CompilerOptions,
         libFileName: string,
     ) {
-        const host = resolutionHost.getCompilerHost?.() || resolutionHost;
+        const host = getModuleResolutionHost(resolutionHost);
         let resolution = resolvedLibraries?.get(libFileName);
         if (!resolution || resolution.isInvalidated) {
             const existingResolution = resolution;
@@ -994,7 +1010,18 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         const resolutionsInFile = resolvedModuleNames.get(path);
         const resolution = resolutionsInFile?.get(moduleName, /*mode*/ undefined);
         if (resolution && !resolution.isInvalidated) return resolution;
-        return resolveModuleNameUsingGlobalCache(resolutionHost, moduleResolutionCache, moduleName, containingFile, resolutionHost.getCompilationSettings());
+        const data = resolutionHost.beforeResolveSingleModuleNameWithoutWatching?.(moduleResolutionCache);
+        const host = getModuleResolutionHost(resolutionHost);
+        // We are not resolving d.ts so just normal resolution instead of doing resolution pass to global cache
+        const result = ts_resolveModuleName(
+            moduleName,
+            containingFile,
+            resolutionHost.getCompilationSettings(),
+            host,
+            moduleResolutionCache,
+        );
+        resolutionHost.afterResolveSingleModuleNameWithoutWatching?.(moduleResolutionCache, moduleName, containingFile, result, data);
+        return result;
     }
 
     function isNodeModulesAtTypesDirectory(dirPath: Path) {

@@ -850,6 +850,7 @@ export interface PerDirectoryResolutionCache<T> {
      *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
      */
     update(options: CompilerOptions): void;
+    /** @internal */ directoryToModuleNameMap: CacheWithRedirects<Path, ModeAwareCache<T>>;
 }
 
 export interface NonRelativeNameResolutionCache<T> {
@@ -920,6 +921,7 @@ export interface CacheWithRedirects<K, V> {
     getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V>;
     update(newOptions: CompilerOptions): void;
     clear(): void;
+    getOwnMap(): Map<K, V>;
 }
 
 /** @internal */
@@ -936,6 +938,7 @@ export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | und
         getOrCreateMapOfCacheRedirects,
         update,
         clear,
+        getOwnMap: () => ownMap,
     };
 
     function getMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> | undefined {
@@ -1042,6 +1045,7 @@ function createPerDirectoryResolutionCache<T>(
         getOrCreateCacheForDirectory,
         clear,
         update,
+        directoryToModuleNameMap,
     };
 
     function clear() {

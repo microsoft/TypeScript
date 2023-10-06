@@ -582,6 +582,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (!isBackgroundProject(this)) {
             this.projectService.pendingEnsureProjectForOpenFiles = true;
         }
+        this.projectService.onProjectCreation(this);
     }
 
     isKnownTypesPackageName(name: string): boolean {
