@@ -1692,7 +1692,7 @@ export interface QualifiedName extends Node, FlowContainer {
 
 export type EntityName = Identifier | QualifiedName;
 
-export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+export type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
 
 export type MemberName = Identifier | PrivateIdentifier;
 
@@ -3053,12 +3053,17 @@ export interface TaggedTemplateExpression extends MemberExpression {
     /** @internal */ questionDotToken?: QuestionDotToken; // NOTE: Invalid syntax, only used to report a grammar error.
 }
 
+export interface InstanceofExpression extends BinaryExpression {
+    readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
+}
+
 export type CallLikeExpression =
     | CallExpression
     | NewExpression
     | TaggedTemplateExpression
     | Decorator
-    | JsxOpeningLikeElement;
+    | JsxOpeningLikeElement
+    | InstanceofExpression;
 
 export interface AsExpression extends Expression {
     readonly kind: SyntaxKind.AsExpression;

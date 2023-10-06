@@ -1,0 +1,572 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfBySymbolHasInstance.ts] ////
+
+=== typeGuardsWithInstanceOfBySymbolHasInstance.ts ===
+interface AConstructor {
+    new (): A;
+    [Symbol.hasInstance](value: unknown): value is A;
+>[Symbol.hasInstance] : (value: unknown) => value is A
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
+}
+interface A {
+    foo: string;
+>foo : string
+}
+declare var A: AConstructor;
+>A : AConstructor
+
+var obj1: A | string;
+>obj1 : string | A
+
+if (obj1 instanceof A) { // narrowed to A.
+>obj1 instanceof A : boolean
+>obj1 : string | A
+>A : AConstructor
+
+    obj1.foo;
+>obj1.foo : string
+>obj1 : A
+>foo : string
+
+    obj1.bar;
+>obj1.bar : any
+>obj1 : A
+>bar : any
+}
+
+var obj2: any;
+>obj2 : any
+
+if (obj2 instanceof A) {
+>obj2 instanceof A : boolean
+>obj2 : any
+>A : AConstructor
+
+    obj2.foo;
+>obj2.foo : string
+>obj2 : A
+>foo : string
+
+    obj2.bar;
+>obj2.bar : any
+>obj2 : A
+>bar : any
+}
+
+// a construct signature with generics
+interface BConstructor {
+    new <T>(): B<T>;
+    [Symbol.hasInstance](value: unknown): value is B<any>;
+>[Symbol.hasInstance] : (value: unknown) => value is B<any>
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
+}
+interface B<T> {
+    foo: T;
+>foo : T
+}
+declare var B: BConstructor;
+>B : BConstructor
+
+var obj3: B<number> | string;
+>obj3 : string | B<number>
+
+if (obj3 instanceof B) { // narrowed to B<number>.
+>obj3 instanceof B : boolean
+>obj3 : string | B<number>
+>B : BConstructor
+
+    obj3.foo = 1;
+>obj3.foo = 1 : 1
+>obj3.foo : number
+>obj3 : B<number>
+>foo : number
+>1 : 1
+
+    obj3.foo = "str";
+>obj3.foo = "str" : "str"
+>obj3.foo : number
+>obj3 : B<number>
+>foo : number
+>"str" : "str"
+
+    obj3.bar = "str";
+>obj3.bar = "str" : "str"
+>obj3.bar : any
+>obj3 : B<number>
+>bar : any
+>"str" : "str"
+}
+
+var obj4: any;
+>obj4 : any
+
+if (obj4 instanceof B) {
+>obj4 instanceof B : boolean
+>obj4 : any
+>B : BConstructor
+
+    obj4.foo = "str";
+>obj4.foo = "str" : "str"
+>obj4.foo : any
+>obj4 : B<any>
+>foo : any
+>"str" : "str"
+
+    obj4.foo = 1;
+>obj4.foo = 1 : 1
+>obj4.foo : any
+>obj4 : B<any>
+>foo : any
+>1 : 1
+
+    obj4.bar = "str";
+>obj4.bar = "str" : "str"
+>obj4.bar : any
+>obj4 : B<any>
+>bar : any
+>"str" : "str"
+}
+
+// has multiple construct signature
+interface CConstructor {
+    new (value: string): C1;
+>value : string
+
+    new (value: number): C2;
+>value : number
+
+    [Symbol.hasInstance](value: unknown): value is C1 | C2;
+>[Symbol.hasInstance] : (value: unknown) => value is C1 | C2
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
+}
+interface C1 {
+    foo: string;
+>foo : string
+
+    c: string;
+>c : string
+
+    bar1: number;
+>bar1 : number
+}
+interface C2 {
+    foo: string;
+>foo : string
+
+    c: string;
+>c : string
+
+    bar2: number;
+>bar2 : number
+}
+declare var C: CConstructor;
+>C : CConstructor
+
+var obj5: C1 | A;
+>obj5 : A | C1
+
+if (obj5 instanceof C) { // narrowed to C1.
+>obj5 instanceof C : boolean
+>obj5 : A | C1
+>C : CConstructor
+
+    obj5.foo;
+>obj5.foo : string
+>obj5 : C1
+>foo : string
+
+    obj5.c;
+>obj5.c : string
+>obj5 : C1
+>c : string
+
+    obj5.bar1;
+>obj5.bar1 : number
+>obj5 : C1
+>bar1 : number
+
+    obj5.bar2;
+>obj5.bar2 : any
+>obj5 : C1
+>bar2 : any
+}
+
+var obj6: any;
+>obj6 : any
+
+if (obj6 instanceof C) {
+>obj6 instanceof C : boolean
+>obj6 : any
+>C : CConstructor
+
+    obj6.foo;
+>obj6.foo : string
+>obj6 : C1 | C2
+>foo : string
+
+    obj6.bar1;
+>obj6.bar1 : any
+>obj6 : C1 | C2
+>bar1 : any
+
+    obj6.bar2;
+>obj6.bar2 : any
+>obj6 : C1 | C2
+>bar2 : any
+}
+
+// with object type literal
+interface D {
+    foo: string;
+>foo : string
+}
+declare var D: {
+>D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
+
+    new (): D;
+    [Symbol.hasInstance](value: unknown): value is D;
+>[Symbol.hasInstance] : (value: unknown) => value is D
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
+
+};
+
+var obj7: D | string;
+>obj7 : string | D
+
+if (obj7 instanceof D) { // narrowed to D.
+>obj7 instanceof D : boolean
+>obj7 : string | D
+>D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
+
+    obj7.foo;
+>obj7.foo : string
+>obj7 : D
+>foo : string
+
+    obj7.bar;
+>obj7.bar : any
+>obj7 : D
+>bar : any
+}
+
+var obj8: any;
+>obj8 : any
+
+if (obj8 instanceof D) {
+>obj8 instanceof D : boolean
+>obj8 : any
+>D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
+
+    obj8.foo;
+>obj8.foo : string
+>obj8 : D
+>foo : string
+
+    obj8.bar;
+>obj8.bar : any
+>obj8 : D
+>bar : any
+}
+
+// a construct signature that returns a union type
+interface EConstructor {
+    new (): E1 | E2;
+    [Symbol.hasInstance](value: unknown): value is E1 | E2;
+>[Symbol.hasInstance] : (value: unknown) => value is E1 | E2
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
+}
+interface E1 {
+    foo: string;
+>foo : string
+
+    bar1: number;
+>bar1 : number
+}
+interface E2 {
+    foo: string;
+>foo : string
+
+    bar2: number;
+>bar2 : number
+}
+declare var E: EConstructor;
+>E : EConstructor
+
+var obj9: E1 | A;
+>obj9 : A | E1
+
+if (obj9 instanceof E) { // narrowed to E1
+>obj9 instanceof E : boolean
+>obj9 : A | E1
+>E : EConstructor
+
+    obj9.foo;
+>obj9.foo : string
+>obj9 : E1
+>foo : string
+
+    obj9.bar1;
+>obj9.bar1 : number
+>obj9 : E1
+>bar1 : number
+
+    obj9.bar2;
+>obj9.bar2 : any
+>obj9 : E1
+>bar2 : any
+}
+
+var obj10: any;
+>obj10 : any
+
+if (obj10 instanceof E) {
+>obj10 instanceof E : boolean
+>obj10 : any
+>E : EConstructor
+
+    obj10.foo;
+>obj10.foo : string
+>obj10 : E1 | E2
+>foo : string
+
+    obj10.bar1;
+>obj10.bar1 : any
+>obj10 : E1 | E2
+>bar1 : any
+
+    obj10.bar2;
+>obj10.bar2 : any
+>obj10 : E1 | E2
+>bar2 : any
+}
+
+// a construct signature that returns any
+interface FConstructor {
+    new (): any;
+    [Symbol.hasInstance](value: unknown): value is any;
+>[Symbol.hasInstance] : (value: unknown) => value is any
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
+}
+interface F {
+    foo: string;
+>foo : string
+
+    bar: number;
+>bar : number
+}
+declare var F: FConstructor;
+>F : FConstructor
+
+var obj11: F | string;
+>obj11 : string | F
+
+if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
+>obj11 instanceof F : boolean
+>obj11 : string | F
+>F : FConstructor
+
+    obj11.foo;
+>obj11.foo : any
+>obj11 : string | F
+>foo : any
+
+    obj11.bar;
+>obj11.bar : any
+>obj11 : string | F
+>bar : any
+}
+
+var obj12: any;
+>obj12 : any
+
+if (obj12 instanceof F) {
+>obj12 instanceof F : boolean
+>obj12 : any
+>F : FConstructor
+
+    obj12.foo;
+>obj12.foo : any
+>obj12 : any
+>foo : any
+
+    obj12.bar;
+>obj12.bar : any
+>obj12 : any
+>bar : any
+}
+
+// a type with a prototype, it overrides the construct signature
+interface GConstructor {
+    prototype: G1; // high priority
+>prototype : G1
+
+    new (): G2;    // low priority
+    [Symbol.hasInstance](value: unknown): value is G1; // overrides priority
+>[Symbol.hasInstance] : (value: unknown) => value is G1
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
+}
+interface G1 {
+    foo1: number;
+>foo1 : number
+}
+interface G2 {
+    foo2: boolean;
+>foo2 : boolean
+}
+declare var G: GConstructor;
+>G : GConstructor
+
+var obj13: G1 | G2;
+>obj13 : G1 | G2
+
+if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype property.
+>obj13 instanceof G : boolean
+>obj13 : G1 | G2
+>G : GConstructor
+
+    obj13.foo1;
+>obj13.foo1 : number
+>obj13 : G1
+>foo1 : number
+
+    obj13.foo2;
+>obj13.foo2 : any
+>obj13 : G1
+>foo2 : any
+}
+
+var obj14: any;
+>obj14 : any
+
+if (obj14 instanceof G) {
+>obj14 instanceof G : boolean
+>obj14 : any
+>G : GConstructor
+
+    obj14.foo1;
+>obj14.foo1 : number
+>obj14 : G1
+>foo1 : number
+
+    obj14.foo2;
+>obj14.foo2 : any
+>obj14 : G1
+>foo2 : any
+}
+
+// a type with a prototype that has any type
+interface HConstructor {
+    prototype: any; // high priority, but any type is ignored. interface has implicit `prototype: any`.
+>prototype : any
+
+    new (): H;      // low priority
+    [Symbol.hasInstance](value: unknown): value is H; // overrides priority
+>[Symbol.hasInstance] : (value: unknown) => value is H
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>value : unknown
+}
+interface H {
+    foo: number;
+>foo : number
+}
+declare var H: HConstructor;
+>H : HConstructor
+
+var obj15: H | string;
+>obj15 : string | H
+
+if (obj15 instanceof H) { // narrowed to H.
+>obj15 instanceof H : boolean
+>obj15 : string | H
+>H : HConstructor
+
+    obj15.foo;
+>obj15.foo : number
+>obj15 : H
+>foo : number
+
+    obj15.bar;
+>obj15.bar : any
+>obj15 : H
+>bar : any
+}
+
+var obj16: any;
+>obj16 : any
+
+if (obj16 instanceof H) {
+>obj16 instanceof H : boolean
+>obj16 : any
+>H : HConstructor
+
+    obj16.foo1;
+>obj16.foo1 : any
+>obj16 : H
+>foo1 : any
+
+    obj16.foo2;
+>obj16.foo2 : any
+>obj16 : H
+>foo2 : any
+}
+
+var obj17: any;
+>obj17 : any
+
+if (obj17 instanceof Object) { // can't narrow type from 'any' to 'Object'
+>obj17 instanceof Object : boolean
+>obj17 : any
+>Object : ObjectConstructor
+
+    obj17.foo1;
+>obj17.foo1 : any
+>obj17 : any
+>foo1 : any
+
+    obj17.foo2;
+>obj17.foo2 : any
+>obj17 : any
+>foo2 : any
+}
+
+var obj18: any;
+>obj18 : any
+
+if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'
+>obj18 instanceof Function : boolean
+>obj18 : any
+>Function : FunctionConstructor
+
+    obj18.foo1;
+>obj18.foo1 : any
+>obj18 : any
+>foo1 : any
+
+    obj18.foo2;
+>obj18.foo2 : any
+>obj18 : any
+>foo2 : any
+}
+

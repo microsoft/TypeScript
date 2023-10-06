@@ -14,3 +14,12 @@ class C extends Array {
         console.log(super.length);
     }
 }
+
+class D {
+    accessor b = () => {}
+}
+class E extends D {
+    foo() {
+        super.b()
+    }
+}

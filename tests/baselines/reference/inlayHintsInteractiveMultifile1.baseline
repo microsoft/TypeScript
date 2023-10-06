@@ -60,7 +60,7 @@ function bar () { return import('./a') }
       "text": "import("
     },
     {
-      "text": "\"/a\""
+      "text": "'/a'"
     },
     {
       "text": ")"
