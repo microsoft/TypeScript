@@ -17810,7 +17810,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (accessFlags & AccessFlags.NoIndexSignatures && indexInfo.keyType !== numberType) {
                     if (accessExpression) {
                         if (accessFlags & AccessFlags.Writing) {
-                            error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1_because_type_1_is_generic_and_an_index_signature_of_a_constraint_of_a_generic_type_can_only_be_used_for_reading, typeToString(indexType), typeToString(originalObjectType));
+                            error(accessExpression, Diagnostics.Type_0_is_generic_and_can_only_be_indexed_for_reading, typeToString(originalObjectType));
                         }
                         else {
                             error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
