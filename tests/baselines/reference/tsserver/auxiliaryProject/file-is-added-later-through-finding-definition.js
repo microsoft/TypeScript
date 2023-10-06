@@ -167,9 +167,47 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/auxiliaryProject1*
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/auxiliaryProject1*' (Auxiliary)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/user/users/projects/myproject/node_modules/yargs/index.js Text-1 "// Specifically didnt have ./callback import to ensure that resolving module sepcifier adds the file to project at later stage\nexport function command(cmd, cb) { cb(Yargs) }\n"
+	/user/users/projects/myproject/index.ts SVC-1-0 "import { command } from \"yargs\";\ncommand(\"foo\", yargs => {\n    yargs.positional();\n});\n"
+	/user/users/projects/myproject/node_modules/yargs/callback.js Text-1 "export class Yargs { positional() { } }\n"
+
+
+	node_modules/yargs/index.js
+	  Imported via "yargs" from file 'index.ts' with packageId 'yargs/index.js@1.0.0'
+	index.ts
+	  Root file specified for compilation
+	node_modules/yargs/callback.js
+	  Root file specified for compilation
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:
     {
-      "response": [],
+      "response": [
+        {
+          "file": "/user/users/projects/myproject/node_modules/yargs/callback.js",
+          "start": {
+            "line": 1,
+            "offset": 22
+          },
+          "end": {
+            "line": 1,
+            "offset": 32
+          },
+          "contextStart": {
+            "line": 1,
+            "offset": 22
+          },
+          "contextEnd": {
+            "line": 1,
+            "offset": 38
+          },
+          "unverified": true
+        }
+      ],
       "responseRequired": true
     }
 After request
