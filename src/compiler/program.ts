@@ -292,6 +292,8 @@ import {
     setParentRecursive,
     setResolvedModule,
     setResolvedTypeReferenceDirective,
+    Shared,
+    SharedStructBase,
     shouldResolveJsRequire,
     skipTrivia,
     skipTypeChecking,
@@ -420,12 +422,11 @@ export function makeCompilerHostParallel(
     Debug.assert(!host.threadPool && !host.requestSourceFile, "Compiler host may already be parallelized.");
 
     const sharedEntryMap = new Map<SharedSourceFileEntry, SourceFile | false>();
-    const parserState = new SharedParserState();
+    const parserState = new SharedParserState(threadPool.poolSize);
     const savedGetSourceFile = host.getSourceFile;
     host.threadPool = threadPool;
     host.requestSourceFile = (fileName, languageVersionOrOptions, shouldCreateNewSourceFile) => {
         using _measure = performance.measureActivity("Parallel: Request Source File", "beforeParserPausedRequest", "afterParserPausedRequest");
-
         if (!ConcurrentMap.has(parserState.files, fileName)) {
             const entry = new SharedSourceFileEntry(
                 parserState,
@@ -440,42 +441,11 @@ export function makeCompilerHostParallel(
                 threadPool.queueWorkItem("Program.requestSourceFile", entry);
             }
         }
-
-        // // quick check before allocating an entry
-        // {
-        //     using _ = new SharedLock(parserState.sharedMutex);
-        //     if (SharedMap.has(parserState.files, fileName)) {
-        //         return;
-        //     }
-        // }
-
-        // const entry = new SharedSourceFileEntry(
-        //     parserState,
-        //     !!host.createHash,
-        //     !!setParentNodes,
-        //     fileName,
-        //     typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.languageVersion : languageVersionOrOptions,
-        //     typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined,
-        //     shouldCreateNewSourceFile);
-
-        // using _ = new UniqueLock(parserState.sharedMutex);
-        // if (!SharedMap.has(parserState.files, fileName)) {
-        //     SharedMap.set(parserState.files, fileName, entry);
-        //     // we inserted the entry, queue a task to parse it
-        //     threadPool.queueWorkItem("Program.requestSourceFile", entry);
-        // }
     };
     host.getSourceFile = (fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile) => {
         using _ = performance.measureActivity("Parallel: Get Source File", "beforeParserPausedRead", "afterParserPausedRead");
 
         const sharedFileEntry = ConcurrentMap.get(parserState.files, fileName);
-
-        // let sharedFileEntry: SharedSourceFileEntry | undefined;
-        // {
-        //     using _ = new SharedLock(parserState.sharedMutex);
-        //     sharedFileEntry = SharedMap.get(parserState.files, fileName);
-        // }
-
         if (sharedFileEntry) {
             let file = sharedEntryMap.get(sharedFileEntry);
             if (file !== undefined) {
@@ -3706,7 +3676,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         using _ = tracing?.traceActivity(tracing.Phase.Program, "findSourceFile", {
             fileName,
             isDefaultLib: isDefaultLib || undefined,
-            fileIncludeKind: (FileIncludeKind as any)[reason.kind],
+            fileIncludeKind: Debug.formatFileIncludeKind(reason.kind),
         });
 
         const path = toPath(fileName);
@@ -4039,18 +4009,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         reason: FileIncludeReason,
         currentNodeModulesDepth: number
     ) {
-        tracing?.push(tracing.Phase.Program, "processTypeReferenceDirective", { directive: typeReferenceDirective, hasResolved: !!resolution.resolvedTypeReferenceDirective, refKind: reason.kind, refPath: isReferencedFile(reason) ? reason.file : undefined });
-        yield* processTypeReferenceDirectiveWorker(typeReferenceDirective, mode, resolution, reason, currentNodeModulesDepth);
-        tracing?.pop();
-    }
-
-    function* processTypeReferenceDirectiveWorker(
-        typeReferenceDirective: string,
-        mode: ResolutionMode,
-        resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
-        reason: FileIncludeReason,
-        currentNodeModulesDepth: number
-    ) {
+        using _ = tracing?.traceActivity(tracing.Phase.Program, "processTypeReferenceDirective", { directive: typeReferenceDirective, hasResolved: !!resolution.resolvedTypeReferenceDirective, refKind: reason.kind, refPath: isReferencedFile(reason) ? reason.file : undefined });
         let hasRecordedResolutionDiagnostics = false;
         function* recordResolutionDiagnosticsIfNeeded(needsYield = true) {
             if (!hasRecordedResolutionDiagnostics) {

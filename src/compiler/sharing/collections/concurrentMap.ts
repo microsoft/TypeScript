@@ -1,13 +1,12 @@
 import { iterateValues } from "../../core";
 import { Debug } from "../../debug";
 import { sys } from "../../sys";
+import { AtomicValue } from "../../threading/atomicValue";
 import { Mutex } from "../../threading/mutex";
 import { ScopedLock } from "../../threading/scopedLock";
 import { UniqueLock } from "../../threading/uniqueLock";
-import { AtomicValue } from "../atomicValue";
 import { Shared, SharedStructBase } from "../structs/sharedStruct";
 import { Tag, Tagged } from "../structs/taggedStruct";
-import { StructWrapperTypes } from "../structs/wrapper";
 import { generateHashSeed, identityHash } from "./hash";
 import { getPrime } from "./hashData";
 
@@ -62,35 +61,20 @@ type WILDCARD = typeof WILDCARD;
 type EXIST = typeof EXIST;
 type NOT_EXIST = typeof NOT_EXIST;
 
-/** @internal */
+/**
+ * A concurrent Map-like object. Based on https://github.com/dotnet/runtime/blob/main/src/libraries/System.Collections.Concurrent/src/System/Collections/Concurrent/ConcurrentDictionary.cs
+ * @internal
+ */
 @Shared()
 export class ConcurrentMap<K extends NonNullable<Shareable>, V extends NonNullable<Shareable>> extends Tagged(SharedStructBase, Tag.ConcurrentMap) {
-    declare [StructWrapperTypes]: [
-        [typeof ConcurrentMap, {
-            size(): number;
-            has(key: K): boolean;
-            get(key: K): V | undefined;
-            set(key: K, value: V): void;
-            delete(key: K, expectedValue?: V): V | undefined;
-            insert(key: K, value: V): boolean;
-            replace(key: K, expectedValue: V, replacementValue: V): V | undefined;
-            exchange(key: K, value: V | undefined): V | undefined;
-            compareExchange(key: K, expectedValue: V | undefined, replacementValue: V | undefined): V | undefined;
-            clear(): void;
-            keys(): IterableIterator<K>;
-            values(): IterableIterator<V>;
-            entries(): IterableIterator<[K, V]>;
-        }]
-    ];
-
     @Shared() private readonly _tables: AtomicValue<Tables<K, V>>;
     @Shared() private _budget: number;
     @Shared() private readonly _growLockArray: boolean;
 
     constructor();
     constructor(items: ConcurrentMap<K, V> | Iterable<[K, V]>);
+    constructor(concurrencyLevel?: number, capacity?: number);
     constructor(concurrencyLevel: number, items: ConcurrentMap<K, V> | Iterable<[K, V]>);
-    constructor(concurrencyLevel: number, capacity: number);
     constructor(concurrencyLevelOrItems?: number | ConcurrentMap<K, V> | Iterable<[K, V]>, capacityOrItems?: number | ConcurrentMap<K, V> | Iterable<[K, V]>) {
         let concurrencyLevel: number | undefined;
         let capacity: number | undefined;
@@ -513,4 +497,31 @@ function isLockFree(value: Shareable) {
     if (Atomics.isLockFree(8)) return true;
     if (typeof value === "number") return isFinite(value) && (value === (value >>> 0) || value === (value >> 0));
     return true;
+}
+
+/**
+ * A non-shared wrapper for {@link ConcurrentMap} objects.
+ * @internal
+ */
+export class ConcurrentMapWrapper<K extends NonNullable<Shareable>, V extends NonNullable<Shareable>> {
+    private self: ConcurrentMap<K, V>;
+
+    constructor(map: ConcurrentMap<K, V>) {
+        this.self = map;
+    }
+
+    get size(): number { return ConcurrentMap.size(this.self); }
+    has(key: K): boolean { return ConcurrentMap.has(this.self, key); }
+    get(key: K): V | undefined { return ConcurrentMap.get(this.self, key); }
+    set(key: K, value: V): this { return ConcurrentMap.set(this.self, key, value), this; }
+    delete(key: K, expectedValue?: V): V | undefined { return ConcurrentMap.delete(this.self, key, expectedValue); }
+    insert(key: K, value: V): boolean { return ConcurrentMap.insert(this.self, key, value); }
+    replace(key: K, expectedValue: V, replacementValue: V): boolean { return ConcurrentMap.replace(this.self, key, expectedValue, replacementValue); }
+    exchange(key: K, value: V | undefined): V | undefined { return ConcurrentMap.exchange(this.self, key, value); }
+    compareExchange(key: K, expectedValue: V | undefined, replacementValue: V | undefined): V | undefined { return ConcurrentMap.compareExchange(this.self, key, expectedValue, replacementValue); }
+    clear(): void { return ConcurrentMap.clear(this.self); }
+    keys(): IterableIterator<K> { return ConcurrentMap.keys(this.self); }
+    values(): IterableIterator<V> { return ConcurrentMap.values(this.self); }
+    entries(): IterableIterator<[K, V]> { return ConcurrentMap.entries(this.self); }
+    [Symbol.iterator]() { return this.entries(); }
 }

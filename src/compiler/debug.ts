@@ -7,6 +7,7 @@ import {
     compareValues,
     EmitFlags,
     every,
+    FileIncludeKind,
     FlowFlags,
     FlowLabel,
     FlowNode,
@@ -517,6 +518,10 @@ export namespace Debug {
 
     export function formatTypeFacts(facts: TypeFacts | undefined): string {
         return formatEnum(facts, (ts as any).TypeFacts, /*isFlags*/ true);
+    }
+
+    export function formatFileIncludeKind(kind: FileIncludeKind): string {
+        return formatEnum(kind, (ts as any).FileIncludeKind, /*isflags*/ false);
     }
 
     let isDebugInfoEnabled = false;

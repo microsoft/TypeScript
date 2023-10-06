@@ -132,8 +132,9 @@ export function zipWith<T, U, V>(sequenceA: Sequence<T>, sequenceB: Sequence<U>,
     const result: V[] = [];
     const arrayA = getArrayLike(sequenceA);
     const arrayB = getArrayLike(sequenceB);
-    Debug.assertEqual(arrayA.length, arrayB.length);
-    for (let i = 0; i < arrayA.length; i++) {
+    const length = arrayA.length;
+    Debug.assertEqual(length, arrayB.length);
+    for (let i = 0; i < length; i++) {
         result.push(callback(arrayA[i], arrayB[i], i));
     }
     return result;
@@ -289,7 +290,7 @@ export function contains<T>(sequence: Sequence<T> | undefined, value: T, equalit
 export function arraysEqual<T>(sequenceA: Sequence<T>, sequenceB: Sequence<T>, equalityComparer: EqualityComparer<T> = equateValues): boolean {
     const arrayA = getArrayLike(sequenceA);
     const arrayB = getArrayLike(sequenceB);
-    return arrayA.length === arrayB.length && Array.prototype.every.call(arrayA, (x: T, i: number) => equalityComparer(x, arrayB[i]));
+    return arrayA.length === arrayB.length && Array.prototype.every.call(arrayA, (x, i) => equalityComparer(x, arrayB[i]));
 }
 
 /** @internal */
@@ -340,13 +341,22 @@ export function filter<T, U extends T>(array: readonly T[] | undefined, f: (x: T
 /** @internal */
 export function filter<T, U extends T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined;
 /** @internal */
-export function filter<T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined {
+export function filter<T extends Shareable, U extends T>(array: SharedArray<T>, f: (x: T) => x is U): SharedArray<U>;
+/** @internal */
+export function filter<T extends Shareable>(array: SharedArray<T>, f: (x: T) => boolean): SharedArray<T>;
+/** @internal */
+export function filter<T extends SharedNode, U extends T>(array: SharedNodeArray<T>, f: (x: T) => x is U): SharedArray<U> | SharedNodeArray<U>;
+/** @internal */
+export function filter<T extends SharedNode>(array: SharedNodeArray<T>, f: (x: T) => boolean): SharedArray<T> | SharedNodeArray<T>;
+/** @internal */
+export function filter<T>(sequence: Sequence<T> | undefined, f: (x: T) => boolean) {
+    const array = getArrayLike(sequence);
     if (array) {
         const len = array.length;
         let i = 0;
         while (i < len && f(array[i])) i++;
         if (i < len) {
-            const result = array.slice(0, i);
+            const result = Array.prototype.slice.call(array, 0, i);
             i++;
             while (i < len) {
                 const item = array[i];
@@ -355,10 +365,10 @@ export function filter<T>(array: readonly T[] | undefined, f: (x: T) => boolean)
                 }
                 i++;
             }
-            return result;
+            return isShareableNonPrimitive(sequence) ? sharedArrayFrom(result) : result;
         }
     }
-    return array;
+    return sequence;
 }
 
 /** @internal */
@@ -453,7 +463,6 @@ export function flatten<T>(array: T[][] | readonly (T | readonly T[] | undefined
     }
     return result;
 }
-
 
 /**
  * Maps an array. If the mapped value is an array, it is spread into the result.
@@ -1477,6 +1486,26 @@ export function arrayFrom<T, U>(iterator: Iterable<T>, map?: (t: T) => U): (T | 
         result.push(map ? map(value) : value);
     }
     return result;
+}
+
+/**
+ * Shims `Array.from`.
+ *
+ * @internal
+ */
+export function sharedArrayFrom<T, U extends Shareable>(iterator: Iterable<T>, map: (t: T) => U): SharedArray<U>;
+/** @internal */
+export function sharedArrayFrom<T extends Shareable>(iterator: Iterable<T>): SharedArray<T>;
+/** @internal */
+export function sharedArrayFrom<T extends Shareable>(iterator: Iterable<T> | readonly T[] | SharedArray<T>, map?: (t: T) => T): SharedArray<T> {
+    const array: ArrayLike<T> = isArray(iterator) || isSharedArray(iterator) ? iterator : arrayFrom(iterator);
+    const length = array.length;
+    const sharedArray = new SharedArray<T>(length);
+    for (let i = 0; i < length; i++) {
+        const value = array[i];
+        sharedArray[i] = map ? map(value) : value;
+    }
+    return sharedArray;
 }
 
 /** @internal */

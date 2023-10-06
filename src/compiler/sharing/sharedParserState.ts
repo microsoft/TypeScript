@@ -8,9 +8,11 @@ import { Shared, SharedStructBase } from "./structs/sharedStruct";
 /** @internal */
 @Shared()
 export class SharedParserState extends SharedStructBase {
-    // @Shared() sharedMutex = new SharedMutex();
-    // @Shared() files = new SharedMap<string, SharedSourceFileEntry>();
-    @Shared() files = new ConcurrentMap<string, SharedSourceFileEntry>();
+    @Shared() files: ConcurrentMap<string, SharedSourceFileEntry>;
+    constructor(concurrencyLevel?: number) {
+        super();
+        this.files = new ConcurrentMap<string, SharedSourceFileEntry>(concurrencyLevel);
+    }
 }
 
 /** @internal */
