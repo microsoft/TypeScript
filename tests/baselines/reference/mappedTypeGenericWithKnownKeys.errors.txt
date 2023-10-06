@@ -1,5 +1,5 @@
 mappedTypeGenericWithKnownKeys.ts(9,9): error TS2551: Property 'unknownLiteralKey' does not exist on type 'Record<keyof Shape | "knownLiteralKey", number>'. Did you mean 'knownLiteralKey'?
-mappedTypeGenericWithKnownKeys.ts(10,5): error TS2860: Type 'string' cannot be used to index type 'Record<keyof Shape | "knownLiteralKey", number>', because type 'Record<keyof Shape | "knownLiteralKey", number>' is generic and an index signature on a constraint of a generic type only permits reading.
+mappedTypeGenericWithKnownKeys.ts(10,5): error TS2860: Type 'Record<keyof Shape | "knownLiteralKey", number>' is generic and can only be indexed for reading.
 
 
 ==== mappedTypeGenericWithKnownKeys.ts (2 errors) ====
@@ -16,6 +16,6 @@ mappedTypeGenericWithKnownKeys.ts(10,5): error TS2860: Type 'string' cannot be u
 !!! error TS2551: Property 'unknownLiteralKey' does not exist on type 'Record<keyof Shape | "knownLiteralKey", number>'. Did you mean 'knownLiteralKey'?
         obj['' as string] = 4; // error
         ~~~~~~~~~~~~~~~~~
-!!! error TS2860: Type 'string' cannot be used to index type 'Record<keyof Shape | "knownLiteralKey", number>', because type 'Record<keyof Shape | "knownLiteralKey", number>' is generic and an index signature on a constraint of a generic type only permits reading.
+!!! error TS2860: Type 'Record<keyof Shape | "knownLiteralKey", number>' is generic and can only be indexed for reading.
     }
     
