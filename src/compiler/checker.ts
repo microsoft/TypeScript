@@ -28052,6 +28052,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             // If our current set has a default, then none the other cases were hit either.
+            // There's no point in narrowing by the the other cases in the set, since we can
+            // get here through other paths.
             if (hasDefaultClause) {
                 const clausesAfter = switchStatement.caseBlock.clauses.slice(clauseEnd);
                 for (const clause of clausesAfter) {
@@ -28062,12 +28064,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return type;
             }
 
-            // Now, add back what we learned using the current set of cases.
+            // Now, narrow based on the cases in this set.
             const clauses = switchStatement.caseBlock.clauses.slice(clauseStart, clauseEnd);
-            return narrowTypeForTrueClauses(type, clauses);
-        }
-
-        function narrowTypeForTrueClauses(type: Type, clauses: CaseOrDefaultClause[]) {
             return getUnionType(map(clauses, clause => clause.kind === SyntaxKind.CaseClause ? narrowType(type, clause.expression, /*assumeTrue*/ true) : neverType));
         }
 
