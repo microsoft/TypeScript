@@ -28044,8 +28044,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const hasDefaultClause = clauseStart === clauseEnd || (defaultIndex >= clauseStart && defaultIndex < clauseEnd);
 
             // First, narrow away all of the cases that preceded this set of cases.
-            const clausesBefore = switchStatement.caseBlock.clauses.slice(0, clauseStart);
-            for (const clause of clausesBefore) {
+            for (let i = 0; i < clauseStart; i++) {
+                const clause = switchStatement.caseBlock.clauses[i];
                 if (clause.kind === SyntaxKind.CaseClause) {
                     type = narrowType(type, clause.expression, /*assumeTrue*/ false);
                 }
@@ -28055,8 +28055,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // There's no point in narrowing by the the other cases in the set, since we can
             // get here through other paths.
             if (hasDefaultClause) {
-                const clausesAfter = switchStatement.caseBlock.clauses.slice(clauseEnd);
-                for (const clause of clausesAfter) {
+                for (let i = clauseEnd; i < switchStatement.caseBlock.clauses.length; i++) {
+                    const clause = switchStatement.caseBlock.clauses[i];
                     if (clause.kind === SyntaxKind.CaseClause) {
                         type = narrowType(type, clause.expression, /*assumeTrue*/ false);
                     }
