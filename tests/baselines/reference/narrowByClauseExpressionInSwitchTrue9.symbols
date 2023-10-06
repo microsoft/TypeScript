@@ -31,6 +31,9 @@ class Foo {
             default:
                 let x = this.mine;
 >x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 13, 19))
+>this.mine : Symbol(Foo.mine, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 4, 11))
+>this : Symbol(Foo, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 2, 1))
+>mine : Symbol(Foo.mine, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 4, 11))
         }
     }
 }

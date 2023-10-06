@@ -28040,26 +28040,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function narrowTypeBySwitchOnTrue(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
-            const clauses = switchStatement.caseBlock.clauses.slice(clauseStart, clauseEnd);
-            const clausesType = narrowTypeForTrueClauses(type, clauses);
             const defaultIndex = findIndex(switchStatement.caseBlock.clauses, clause => clause.kind === SyntaxKind.DefaultClause);
             const hasDefaultClause = clauseStart === clauseEnd || (defaultIndex >= clauseStart && defaultIndex < clauseEnd);
-            if (hasDefaultClause) {
-                // If we have a default in this set of clauses, then the type could also be any of the types
-                // that aren't covered by the other cases.
 
-                const clausesBefore = switchStatement.caseBlock.clauses.slice(0, clauseStart);
-                const clausesAfter = switchStatement.caseBlock.clauses.slice(clauseEnd);
-
-                const before = narrowTypeForTrueClauses(type, clausesBefore);
-                const after = narrowTypeForTrueClauses(type, clausesAfter);
-                const other = getUnionType([before, after]);
-
-                const typeNotOther = filterType(type, t => !isTypeSubsetOf(t, other));
-
-                return getUnionType([clausesType, typeNotOther]);
+            // First, narrow away all of the cases that preceded this set of cases.
+            const clausesBefore = switchStatement.caseBlock.clauses.slice(0, clauseStart);
+            for (const clause of clausesBefore) {
+                if (clause.kind === SyntaxKind.CaseClause) {
+                    type = narrowType(type, clause.expression, /*assumeTrue*/ false);
+                }
             }
-            return clausesType;
+
+            // If our current set has a default, then none the other cases were hit either.
+            if (hasDefaultClause) {
+                const clausesAfter = switchStatement.caseBlock.clauses.slice(clauseEnd);
+                for (const clause of clausesAfter) {
+                    if (clause.kind === SyntaxKind.CaseClause) {
+                        type = narrowType(type, clause.expression, /*assumeTrue*/ false);
+                    }
+                }
+                return type;
+            }
+
+            // Now, add back what we learned using the current set of cases.
+            const clauses = switchStatement.caseBlock.clauses.slice(clauseStart, clauseEnd);
+            return narrowTypeForTrueClauses(type, clauses);
         }
 
         function narrowTypeForTrueClauses(type: Type, clauses: CaseOrDefaultClause[]) {

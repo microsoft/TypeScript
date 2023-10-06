@@ -30,10 +30,10 @@ class Foo {
                 break;
             default:
                 let x = this.mine;
->x : any
->this.mine : any
->this : never
->mine : any
+>x : string
+>this.mine : string
+>this : this
+>mine : string
         }
     }
 }

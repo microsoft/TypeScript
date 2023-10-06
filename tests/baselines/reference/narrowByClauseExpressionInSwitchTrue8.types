@@ -26,7 +26,7 @@ function foo(cond1: boolean, cond2: boolean) {
 >cond2 : boolean
 
             cond1; // Should be false?
->cond1 : boolean
+>cond1 : false
 
             //  ^?
             cond2; // Should be true
@@ -37,11 +37,11 @@ function foo(cond1: boolean, cond2: boolean) {
 
         default:
             cond1; // Should be false?
->cond1 : never
+>cond1 : false
 
             //  ^?
             cond2; // Should be false?
->cond2 : never
+>cond2 : false
 
             //  ^?
             break;

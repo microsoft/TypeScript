@@ -139,9 +139,9 @@ function isA(x: MyType) {
 
         default:
             x.aProps;
->x.aProps : never
+>x.aProps : string
 >x : A
->aProps : never
+>aProps : string
 
             break;
         case x.kind === "b":

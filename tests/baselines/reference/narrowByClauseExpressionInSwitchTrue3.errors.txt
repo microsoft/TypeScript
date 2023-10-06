@@ -1,7 +1,9 @@
+narrowByClauseExpressionInSwitchTrue3.ts(12,9): error TS2367: This comparison appears to be unintentional because the types '"square"' and '"circle"' have no overlap.
+narrowByClauseExpressionInSwitchTrue3.ts(13,32): error TS2339: Property 'radius' does not exist on type 'never'.
 narrowByClauseExpressionInSwitchTrue3.ts(15,14): error TS2367: This comparison appears to be unintentional because the types '"square"' and '"circle"' have no overlap.
 
 
-==== narrowByClauseExpressionInSwitchTrue3.ts (1 errors) ====
+==== narrowByClauseExpressionInSwitchTrue3.ts (3 errors) ====
     type Shape =
         | { kind: "circle", radius: number }
         | { kind: "square", sideLength: number }
@@ -14,7 +16,11 @@ narrowByClauseExpressionInSwitchTrue3.ts(15,14): error TS2367: This comparison a
         }
     
         if (shape.kind === "circle") {
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '"square"' and '"circle"' have no overlap.
             return Math.PI * shape.radius ** 2;
+                                   ~~~~~~
+!!! error TS2339: Property 'radius' does not exist on type 'never'.
         }
         else if (shape.kind === "circle") {
                  ~~~~~~~~~~~~~~~~~~~~~~~
