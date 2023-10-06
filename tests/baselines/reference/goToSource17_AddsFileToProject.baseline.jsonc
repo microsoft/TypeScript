@@ -1,0 +1,6 @@
+// === goToSourceDefinition ===
+// === /index.ts ===
+// import { command } from "yargs";
+// command("foo", yargs => {
+//     yargs./*GOTO SOURCE DEF*/positional();
+// });
