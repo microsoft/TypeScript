@@ -139,6 +139,7 @@ import {
     WithMetadata,
 } from "./_namespaces/ts";
 import {
+    AuxiliaryProject,
     CloseFileWatcherEvent,
     ConfigFileDiagEvent,
     ConfiguredProject,
@@ -1580,7 +1581,7 @@ export class Session<TMessage = string> implements EventSender {
         definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
         return this.mapDefinitionInfo(definitions, project);
 
-        function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: Project) {
+        function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: AuxiliaryProject) {
             const nodeModulesPathParts = getNodeModulePathParts(fileName);
             if (nodeModulesPathParts && fileName.lastIndexOf(nodeModulesPathPart) === nodeModulesPathParts.topLevelNodeModulesIndex) {
                 // Second check ensures the fileName only contains one `/node_modules/`. If there's more than one I give up.
@@ -1672,7 +1673,7 @@ export class Session<TMessage = string> implements EventSender {
             });
         }
 
-        function ensureRoot(project: Project, fileName: string) {
+        function ensureRoot(project: AuxiliaryProject, fileName: string) {
             const info = project.getScriptInfo(fileName);
             if (!info) return false;
             if (!project.containsScriptInfo(info)) {

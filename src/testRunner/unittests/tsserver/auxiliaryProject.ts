@@ -10,20 +10,20 @@ import {
     File,
 } from "../helpers/virtualFileSystemWithWatch";
 
-const aTs: File = {
-    path: "/a.ts",
-    content: `import { B } from "./b";`,
-};
-const bDts: File = {
-    path: "/b.d.ts",
-    content: `export declare class B {}`,
-};
-const bJs: File = {
-    path: "/b.js",
-    content: `export class B {}`,
-};
 describe("unittests:: tsserver:: auxiliaryProject", () => {
     it("AuxiliaryProject does not remove scrips from InferredProject", () => {
+        const aTs: File = {
+            path: "/a.ts",
+            content: `import { B } from "./b";`,
+        };
+        const bDts: File = {
+            path: "/b.d.ts",
+            content: `export declare class B {}`,
+        };
+        const bJs: File = {
+            path: "/b.js",
+            content: `export class B {}`,
+        };
         const host = createServerHost([aTs, bDts, bJs]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         const projectService = session.getProjectService();
