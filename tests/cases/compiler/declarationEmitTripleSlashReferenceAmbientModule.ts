@@ -7,10 +7,14 @@ declare module "url" {
   export class Url {}
   export function parse(): Url; 
 }
+
 // @Filename: /usage1.ts
-import { parse } from "url";
-export const thing: import("url").Url = parse(); 
+export { parse } from "url";
 
 // @Filename: /usage2.ts
 import { parse } from "url";
-export const thing = parse();  // If type is inferred a /// directive is added
+export const thing: import("url").Url = parse(); 
+
+// @Filename: /usage3.ts
+import { parse } from "url";
+export const thing = parse();

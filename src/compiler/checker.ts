@@ -47904,6 +47904,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
             },
             isImportRequiredByAugmentation,
+            tryFindAmbientModule: moduleReferenceExpression => {
+                const node = getParseTreeNode(moduleReferenceExpression);
+                const moduleSpecifier = node && isStringLiteralLike(node) ? node.text : undefined;
+                return moduleSpecifier !== undefined ? tryFindAmbientModule(moduleSpecifier, /*withAugmentations*/ true) : undefined;
+            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {
