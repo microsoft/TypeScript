@@ -351,7 +351,7 @@ export function transformDeclarations(context: TransformationContext) {
         const symbol = moduleSpecifier && resolver.tryFindAmbientModule(moduleSpecifier);
         if (symbol?.declarations) {
             for (const decl of symbol.declarations) {
-                if (isAmbientModule(decl)) {
+                if (isAmbientModule(decl) && getSourceFileOfNode(decl) !== currentSourceFile) {
                     trackReferencedAmbientModule(decl, symbol);
                 }
             }
