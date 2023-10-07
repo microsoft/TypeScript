@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/simpleRecursionWithBaseCase.ts] ////
+//// [tests/cases/compiler/simpleRecursionWithBaseCase1.ts] ////
 
-//// [simpleRecursionWithBaseCase.ts]
+//// [simpleRecursionWithBaseCase1.ts]
 function fn1(n: number) {
     if (n === 0) {
         return 3;
@@ -36,7 +36,7 @@ function fn5() {
 }
 
 
-//// [simpleRecursionWithBaseCase.js]
+//// [simpleRecursionWithBaseCase1.js]
 "use strict";
 function fn1(n) {
     if (n === 0) {

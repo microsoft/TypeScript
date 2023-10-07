@@ -1,0 +1,69 @@
+error TS2468: Cannot find global value 'Promise'.
+simpleRecursionWithBaseCase2.ts(17,16): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+simpleRecursionWithBaseCase2.ts(21,16): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+
+
+!!! error TS2468: Cannot find global value 'Promise'.
+==== simpleRecursionWithBaseCase2.ts (2 errors) ====
+    async function rec1() {
+      if (Math.random() < 0.5) {
+        return rec1();
+      } else {
+        return "hello";
+      }
+    }
+    
+    async function rec2() {
+      if (Math.random() < 0.5) {
+        return await rec2();
+      } else {
+        return "hello";
+      }
+    }
+    
+    async function rec3() {
+                   ~~~~
+!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+      return rec3();
+    }
+    
+    async function rec4() {
+                   ~~~~
+!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+      return await rec4();
+    }
+    
+    async function rec5() {
+      if (Math.random() < 0.5) {
+        return ((rec1()));
+      } else {
+        return "hello";
+      }
+    }
+    
+    async function rec6() {
+      if (Math.random() < 0.5) {
+        return await ((rec1()));
+      } else {
+        return "hello";
+      }
+    }
+    
+    declare const ps: Promise<string> | number;
+    
+    async function foo1() {
+      if (Math.random() > 0.5) {
+        return ps;
+      } else {
+        return await foo1();
+      }
+    }
+    
+    async function foo2() {
+      if (Math.random() > 0.5) {
+        return ps;
+      } else {
+        return foo2();
+      }
+    }
+    
