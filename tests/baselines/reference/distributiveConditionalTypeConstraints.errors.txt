@@ -6,9 +6,10 @@ distributiveConditionalTypeConstraints.ts(15,9): error TS2322: Type 'IsArray<T>'
   Type 'true' is not assignable to type 'false'.
 distributiveConditionalTypeConstraints.ts(19,9): error TS2322: Type 'IsArray<T>' is not assignable to type 'true'.
   Type 'false' is not assignable to type 'true'.
+distributiveConditionalTypeConstraints.ts(38,9): error TS2322: Type 'boolean' is not assignable to type 'false'.
 
 
-==== distributiveConditionalTypeConstraints.ts (5 errors) ====
+==== distributiveConditionalTypeConstraints.ts (6 errors) ====
     type IsArray<T> = T extends unknown[] ? true : false;
     
     function f1<T extends object>(x: IsArray<T>) {
@@ -54,6 +55,14 @@ distributiveConditionalTypeConstraints.ts(19,9): error TS2322: Type 'IsArray<T>'
     
     function f10<T extends {}>(x: ZeroOf<T>) {
         let t: "" | 0 | false = x;
+    }
+    
+    type Foo<T> = T extends "abc" | 42 ? true : false;
+    
+    function f20<T extends string>(x: Foo<T>) {
+        let t: false = x;  // Error
+            ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'false'.
     }
     
     // Modified repro from #30152

@@ -35,6 +35,12 @@ function f10<T extends {}>(x: ZeroOf<T>) {
     let t: "" | 0 | false = x;
 }
 
+type Foo<T> = T extends "abc" | 42 ? true : false;
+
+function f20<T extends string>(x: Foo<T>) {
+    let t: false = x;  // Error
+}
+
 // Modified repro from #30152
 
 interface A { foo(): void; }

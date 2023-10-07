@@ -104,122 +104,139 @@ function f10<T extends {}>(x: ZeroOf<T>) {
 >x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 30, 27))
 }
 
+type Foo<T> = T extends "abc" | 42 ? true : false;
+>Foo : Symbol(Foo, Decl(distributiveConditionalTypeConstraints.ts, 32, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 34, 9))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 34, 9))
+
+function f20<T extends string>(x: Foo<T>) {
+>f20 : Symbol(f20, Decl(distributiveConditionalTypeConstraints.ts, 34, 50))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 36, 13))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 36, 31))
+>Foo : Symbol(Foo, Decl(distributiveConditionalTypeConstraints.ts, 32, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 36, 13))
+
+    let t: false = x;  // Error
+>t : Symbol(t, Decl(distributiveConditionalTypeConstraints.ts, 37, 7))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 36, 31))
+}
+
 // Modified repro from #30152
 
 interface A { foo(): void; }
->A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 32, 1))
->foo : Symbol(A.foo, Decl(distributiveConditionalTypeConstraints.ts, 36, 13))
+>A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 38, 1))
+>foo : Symbol(A.foo, Decl(distributiveConditionalTypeConstraints.ts, 42, 13))
 
 interface B { bar(): void; }
->B : Symbol(B, Decl(distributiveConditionalTypeConstraints.ts, 36, 28))
->bar : Symbol(B.bar, Decl(distributiveConditionalTypeConstraints.ts, 37, 13))
+>B : Symbol(B, Decl(distributiveConditionalTypeConstraints.ts, 42, 28))
+>bar : Symbol(B.bar, Decl(distributiveConditionalTypeConstraints.ts, 43, 13))
 
 interface C { foo(): void, bar(): void }
->C : Symbol(C, Decl(distributiveConditionalTypeConstraints.ts, 37, 28))
->foo : Symbol(C.foo, Decl(distributiveConditionalTypeConstraints.ts, 38, 13))
->bar : Symbol(C.bar, Decl(distributiveConditionalTypeConstraints.ts, 38, 26))
+>C : Symbol(C, Decl(distributiveConditionalTypeConstraints.ts, 43, 28))
+>foo : Symbol(C.foo, Decl(distributiveConditionalTypeConstraints.ts, 44, 13))
+>bar : Symbol(C.bar, Decl(distributiveConditionalTypeConstraints.ts, 44, 26))
 
 function test1<T extends A>(y: T extends B ? number : string) {
->test1 : Symbol(test1, Decl(distributiveConditionalTypeConstraints.ts, 38, 40))
->T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 40, 15))
->A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 32, 1))
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 40, 28))
->T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 40, 15))
->B : Symbol(B, Decl(distributiveConditionalTypeConstraints.ts, 36, 28))
+>test1 : Symbol(test1, Decl(distributiveConditionalTypeConstraints.ts, 44, 40))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 46, 15))
+>A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 38, 1))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 46, 28))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 46, 15))
+>B : Symbol(B, Decl(distributiveConditionalTypeConstraints.ts, 42, 28))
 
     if (typeof y == 'string') {
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 40, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 46, 28))
 
         y;  // T extends B ? number : string
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 40, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 46, 28))
     }
     else {
         y;  // never
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 40, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 46, 28))
     }
     const newY: string | number = y;
->newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 47, 9))
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 40, 28))
+>newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 53, 9))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 46, 28))
 
     newY;  // string
->newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 47, 9))
+>newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 53, 9))
 }
 
 function test2<T extends A>(y: T extends B ? string : number) {
->test2 : Symbol(test2, Decl(distributiveConditionalTypeConstraints.ts, 49, 1))
->T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 51, 15))
->A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 32, 1))
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 51, 28))
->T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 51, 15))
->B : Symbol(B, Decl(distributiveConditionalTypeConstraints.ts, 36, 28))
+>test2 : Symbol(test2, Decl(distributiveConditionalTypeConstraints.ts, 55, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 57, 15))
+>A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 38, 1))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 57, 28))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 57, 15))
+>B : Symbol(B, Decl(distributiveConditionalTypeConstraints.ts, 42, 28))
 
     if (typeof y == 'string') {
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 51, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 57, 28))
 
         y;  // never
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 51, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 57, 28))
     }
     else {
         y;  // T extends B ? string : number
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 51, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 57, 28))
     }
     const newY: string | number = y;
->newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 58, 9))
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 51, 28))
+>newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 64, 9))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 57, 28))
 
     newY;  // number 
->newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 58, 9))
+>newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 64, 9))
 }
 
 function test3<T extends A>(y: T extends C ? number : string) {
->test3 : Symbol(test3, Decl(distributiveConditionalTypeConstraints.ts, 60, 1))
->T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 62, 15))
->A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 32, 1))
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 62, 28))
->T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 62, 15))
->C : Symbol(C, Decl(distributiveConditionalTypeConstraints.ts, 37, 28))
+>test3 : Symbol(test3, Decl(distributiveConditionalTypeConstraints.ts, 66, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 68, 15))
+>A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 38, 1))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 68, 28))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 68, 15))
+>C : Symbol(C, Decl(distributiveConditionalTypeConstraints.ts, 43, 28))
 
     if (typeof y == 'string') {
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 62, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 68, 28))
 
         y;  // (T extends C ? number : string) & string
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 62, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 68, 28))
     }
     else {
         y;  // T extends C ? number : string
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 62, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 68, 28))
     }
     const newY: string | number = y;
->newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 69, 9))
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 62, 28))
+>newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 75, 9))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 68, 28))
 
     newY;  // string | number
->newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 69, 9))
+>newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 75, 9))
 }
 
 function test4<T extends A>(y: T extends C ? string : number) {
->test4 : Symbol(test4, Decl(distributiveConditionalTypeConstraints.ts, 71, 1))
->T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 73, 15))
->A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 32, 1))
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 73, 28))
->T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 73, 15))
->C : Symbol(C, Decl(distributiveConditionalTypeConstraints.ts, 37, 28))
+>test4 : Symbol(test4, Decl(distributiveConditionalTypeConstraints.ts, 77, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 79, 15))
+>A : Symbol(A, Decl(distributiveConditionalTypeConstraints.ts, 38, 1))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 79, 28))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 79, 15))
+>C : Symbol(C, Decl(distributiveConditionalTypeConstraints.ts, 43, 28))
 
     if (typeof y == 'string') {
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 73, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 79, 28))
 
         y;  // (T extends C ? string : number) & string
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 73, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 79, 28))
     }
     else {
         y;  // T extends C ? string : number
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 73, 28))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 79, 28))
     }
     const newY: string | number = y;
->newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 80, 9))
->y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 73, 28))
+>newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 86, 9))
+>y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 79, 28))
 
     newY;  // string | number
->newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 80, 9))
+>newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 86, 9))
 }
 

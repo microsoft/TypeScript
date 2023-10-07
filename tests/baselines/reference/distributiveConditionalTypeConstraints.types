@@ -88,6 +88,21 @@ function f10<T extends {}>(x: ZeroOf<T>) {
 >x : false | "" | 0
 }
 
+type Foo<T> = T extends "abc" | 42 ? true : false;
+>Foo : Foo<T>
+>true : true
+>false : false
+
+function f20<T extends string>(x: Foo<T>) {
+>f20 : <T extends string>(x: Foo<T>) => void
+>x : Foo<T>
+
+    let t: false = x;  // Error
+>t : false
+>false : false
+>x : boolean
+}
+
 // Modified repro from #30152
 
 interface A { foo(): void; }
