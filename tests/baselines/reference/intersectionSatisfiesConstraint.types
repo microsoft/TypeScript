@@ -29,9 +29,9 @@ const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) 
 >3 : 3
 
     mySecondFunction(newParam)
->mySecondFunction(newParam) : { commonProperty: number; otherProperty: number; }
+>mySecondFunction(newParam) : T & { otherProperty: number; }
 >mySecondFunction : <T extends { commonProperty: number; otherProperty: number; }>(newParam: T) => T
->newParam : (FirstInterface | SecondInterface) & { otherProperty: number; }
+>newParam : T & { otherProperty: number; }
 }
 
 const mySecondFunction = <T extends { commonProperty: number, otherProperty: number }>(newParam: T) => {

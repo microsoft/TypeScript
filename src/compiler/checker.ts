@@ -22373,7 +22373,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const sourceIsPrimitive = !!(sourceFlags & TypeFlags.Primitive);
                 if (relation !== identityRelation) {
+                    const originalSource = source;
                     source = getApparentType(source);
+                    if (!(originalSource.flags & TypeFlags.Union) && source.flags & TypeFlags.Union && (result = unionOrIntersectionRelatedTo(source, target, reportErrors, intersectionState))) {
+                        return result;
+                    }
                     sourceFlags = source.flags;
                 }
                 else if (isGenericMappedType(source)) {

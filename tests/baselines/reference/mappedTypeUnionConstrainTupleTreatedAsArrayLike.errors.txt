@@ -1,4 +1,5 @@
 mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts(9,9): error TS2322: Type 'HomomorphicMappedType<T>' is not assignable to type 'any[]'.
+  The type 'readonly [boolean]' is 'readonly' and cannot be assigned to the mutable type 'any[]'.
 
 
 ==== mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts (1 errors) ====
@@ -13,6 +14,7 @@ mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts(9,9): error TS2322: Type 'Hom
       const arr: any[] = [] as HomomorphicMappedType<T> // error
             ~~~
 !!! error TS2322: Type 'HomomorphicMappedType<T>' is not assignable to type 'any[]'.
+!!! error TS2322:   The type 'readonly [boolean]' is 'readonly' and cannot be assigned to the mutable type 'any[]'.
       const arr2: readonly any[] = [] as HomomorphicMappedType<T>
     }
     
