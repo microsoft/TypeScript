@@ -1,9 +1,10 @@
 /// <reference path="fourslash.ts" />
 
-//// export * /**/;
+//// export * /*1*/;
+//// export {} /*2*/;
 
 verify.completions({
-    marker: [""],
+    marker: ["1", "2"],
     includes: [{
         name: "from",
         sortText: completion.SortText.GlobalsOrKeywords,
