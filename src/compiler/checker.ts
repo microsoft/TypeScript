@@ -27446,7 +27446,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
-            const expr = flow.switchStatement.expression;
+            const expr = skipParentheses(flow.switchStatement.expression);
             const flowType = getTypeAtFlowNode(flow.antecedent);
             let type = getTypeFromFlowType(flowType);
             if (isMatchingReference(reference, expr)) {
