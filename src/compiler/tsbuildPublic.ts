@@ -14,7 +14,6 @@ import {
     CompilerHost,
     CompilerOptions,
     CompilerOptionsValue,
-    ConfigFileProgramReloadLevel,
     convertToRelativePath,
     copyProperties,
     createCompilerDiagnostic,
@@ -95,6 +94,7 @@ import {
     ProgramBundleEmitBuildInfo,
     ProgramHost,
     ProgramMultiFileEmitBuildInfo,
+    ProgramUpdateLevel,
     readBuilderProgram,
     ReadBuildProgramHost,
     resolveConfigFileProjectName,
@@ -287,7 +287,7 @@ export interface SolutionBuilder<T extends BuilderProgram> {
 
     // Testing only
     /** @internal */ getUpToDateStatusOfProject(project: string): UpToDateStatus;
-    /** @internal */ invalidateProject(configFilePath: ResolvedConfigFilePath, reloadLevel?: ConfigFileProgramReloadLevel): void;
+    /** @internal */ invalidateProject(configFilePath: ResolvedConfigFilePath, updateLevel?: ProgramUpdateLevel): void;
     /** @internal */ close(): void;
 }
 
@@ -389,7 +389,7 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
 
     readonly builderPrograms: Map<ResolvedConfigFilePath, T>;
     readonly diagnostics: Map<ResolvedConfigFilePath, readonly Diagnostic[]>;
-    readonly projectPendingBuild: Map<ResolvedConfigFilePath, ConfigFileProgramReloadLevel>;
+    readonly projectPendingBuild: Map<ResolvedConfigFilePath, ProgramUpdateLevel>;
     readonly projectErrorsReported: Map<ResolvedConfigFilePath, true>;
 
     readonly compilerHost: CompilerHost & ReadBuildProgramHost;
@@ -795,13 +795,13 @@ function clearProjectStatus<T extends BuilderProgram>(state: SolutionBuilderStat
     state.diagnostics.delete(resolved);
 }
 
-function addProjToQueue<T extends BuilderProgram>({ projectPendingBuild }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
+function addProjToQueue<T extends BuilderProgram>({ projectPendingBuild }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, updateLevel: ProgramUpdateLevel) {
     const value = projectPendingBuild.get(proj);
     if (value === undefined) {
-        projectPendingBuild.set(proj, reloadLevel);
+        projectPendingBuild.set(proj, updateLevel);
     }
-    else if (value < reloadLevel) {
-        projectPendingBuild.set(proj, reloadLevel);
+    else if (value < updateLevel) {
+        projectPendingBuild.set(proj, updateLevel);
     }
 }
 
@@ -815,7 +815,7 @@ function setupInitialBuild<T extends BuilderProgram>(state: SolutionBuilderState
     buildOrder.forEach(configFileName =>
         state.projectPendingBuild.set(
             toResolvedConfigFilePath(state, configFileName),
-            ConfigFileProgramReloadLevel.None,
+            ProgramUpdateLevel.Update,
         )
     );
 
@@ -1402,8 +1402,8 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
     for (let projectIndex = 0; projectIndex < buildOrder.length; projectIndex++) {
         const project = buildOrder[projectIndex];
         const projectPath = toResolvedConfigFilePath(state, project);
-        const reloadLevel = state.projectPendingBuild.get(projectPath);
-        if (reloadLevel === undefined) continue;
+        const updateLevel = state.projectPendingBuild.get(projectPath);
+        if (updateLevel === undefined) continue;
 
         if (reportQueue) {
             reportQueue = false;
@@ -1417,14 +1417,14 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
             continue;
         }
 
-        if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
+        if (updateLevel === ProgramUpdateLevel.Full) {
             watchConfigFile(state, project, projectPath, config);
             watchExtendedConfigFiles(state, projectPath, config);
             watchWildCardDirectories(state, project, projectPath, config);
             watchInputFiles(state, project, projectPath, config);
             watchPackageJsonFiles(state, project, projectPath, config);
         }
-        else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+        else if (updateLevel === ProgramUpdateLevel.RootNamesAndUpdate) {
             // Update file names
             config.fileNames = getFileNamesFromConfigSpecs(config.options.configFile!.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
             updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
@@ -2169,7 +2169,7 @@ function queueReferencingProjects<T extends BuilderProgram>(
                         break;
                 }
             }
-            addProjToQueue(state, nextProjectPath, ConfigFileProgramReloadLevel.None);
+            addProjToQueue(state, nextProjectPath, ProgramUpdateLevel.Update);
             break;
         }
     }
@@ -2251,7 +2251,7 @@ function cleanWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, p
                 }
                 else {
                     host.deleteFile(output);
-                    invalidateProject(state, resolvedPath, ConfigFileProgramReloadLevel.None);
+                    invalidateProject(state, resolvedPath, ProgramUpdateLevel.Update);
                 }
             }
         }
@@ -2264,24 +2264,24 @@ function cleanWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, p
     return ExitStatus.Success;
 }
 
-function invalidateProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
+function invalidateProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFilePath, updateLevel: ProgramUpdateLevel) {
     // If host implements getParsedCommandLine, we cant get list of files from parseConfigFileHost
-    if (state.host.getParsedCommandLine && reloadLevel === ConfigFileProgramReloadLevel.Partial) {
-        reloadLevel = ConfigFileProgramReloadLevel.Full;
+    if (state.host.getParsedCommandLine && updateLevel === ProgramUpdateLevel.RootNamesAndUpdate) {
+        updateLevel = ProgramUpdateLevel.Full;
     }
-    if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
+    if (updateLevel === ProgramUpdateLevel.Full) {
         state.configFileCache.delete(resolved);
         state.buildOrder = undefined;
     }
     state.needsSummary = true;
     clearProjectStatus(state, resolved);
-    addProjToQueue(state, resolved, reloadLevel);
+    addProjToQueue(state, resolved, updateLevel);
     enableCache(state);
 }
 
-function invalidateProjectAndScheduleBuilds<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolvedPath: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
+function invalidateProjectAndScheduleBuilds<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolvedPath: ResolvedConfigFilePath, updateLevel: ProgramUpdateLevel) {
     state.reportFileChangeDetected = true;
-    invalidateProject(state, resolvedPath, reloadLevel);
+    invalidateProject(state, resolvedPath, updateLevel);
     scheduleBuildInvalidatedProject(state, 250, /*changeDetected*/ true);
 }
 
@@ -2344,7 +2344,7 @@ function watchConfigFile<T extends BuilderProgram>(state: SolutionBuilderState<T
         watchFile(
             state,
             resolved,
-            () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full),
+            () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ProgramUpdateLevel.Full),
             PollingInterval.High,
             parsed?.watchOptions,
             WatchType.ConfigFile,
@@ -2362,7 +2362,7 @@ function watchExtendedConfigFiles<T extends BuilderProgram>(state: SolutionBuild
             watchFile(
                 state,
                 extendedConfigFileName,
-                () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath => invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full)),
+                () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath => invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ProgramUpdateLevel.Full)),
                 PollingInterval.High,
                 parsed?.watchOptions,
                 WatchType.ExtendedConfigFile,
@@ -2395,7 +2395,7 @@ function watchWildCardDirectories<T extends BuilderProgram>(state: SolutionBuild
                         })
                     ) return;
 
-                    invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Partial);
+                    invalidateProjectAndScheduleBuilds(state, resolvedPath, ProgramUpdateLevel.RootNamesAndUpdate);
                 },
                 flags,
                 parsed?.watchOptions,
@@ -2415,7 +2415,7 @@ function watchInputFiles<T extends BuilderProgram>(state: SolutionBuilderState<T
                 watchFile(
                     state,
                     input,
-                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.None),
+                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ProgramUpdateLevel.Update),
                     PollingInterval.Low,
                     parsed?.watchOptions,
                     WatchType.SourceFile,
@@ -2436,7 +2436,7 @@ function watchPackageJsonFiles<T extends BuilderProgram>(state: SolutionBuilderS
                 watchFile(
                     state,
                     path,
-                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.None),
+                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ProgramUpdateLevel.Update),
                     PollingInterval.High,
                     parsed?.watchOptions,
                     WatchType.PackageJson,
@@ -2503,7 +2503,7 @@ function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, h
             const configFilePath = toResolvedConfigFilePath(state, configFileName);
             return getUpToDateStatus(state, parseConfigFile(state, configFileName, configFilePath), configFilePath);
         },
-        invalidateProject: (configFilePath, reloadLevel) => invalidateProject(state, configFilePath, reloadLevel || ConfigFileProgramReloadLevel.None),
+        invalidateProject: (configFilePath, updateLevel) => invalidateProject(state, configFilePath, updateLevel || ProgramUpdateLevel.Update),
         close: () => stopWatching(state),
     };
 }

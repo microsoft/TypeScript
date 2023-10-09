@@ -17,7 +17,6 @@ import {
     CompilerHost,
     CompilerOptions,
     concatenate,
-    ConfigFileProgramReloadLevel,
     containsPath,
     createCacheableExportInfoMap,
     createLanguageService,
@@ -98,6 +97,7 @@ import {
     PluginImport,
     PollingInterval,
     Program,
+    ProgramUpdateLevel,
     ProjectPackageJsonInfo,
     ProjectReference,
     removeFileExtension,
@@ -254,7 +254,7 @@ export interface PluginCreateInfo {
 
 export interface PluginModule {
     create(createInfo: PluginCreateInfo): LanguageService;
-    getExternalFiles?(proj: Project): string[];
+    getExternalFiles?(proj: Project, updateLevel: ProgramUpdateLevel): string[];
     onConfigurationChanged?(config: any): void;
 }
 
@@ -1027,11 +1027,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return { ...newTypeAcquisition, include: this.removeExistingTypings(newTypeAcquisition.include) };
     }
 
-    getExternalFiles(): SortedReadonlyArray<string> {
+    getExternalFiles(updateLevel?: ProgramUpdateLevel): SortedReadonlyArray<string> {
         return sort(flatMap(this.plugins, plugin => {
             if (typeof plugin.module.getExternalFiles !== "function") return;
             try {
-                return plugin.module.getExternalFiles(this);
+                return plugin.module.getExternalFiles(this, updateLevel || ProgramUpdateLevel.Update);
             }
             catch (e) {
                 this.projectService.logger.info(`A plugin threw an exception in getExternalFiles: ${e}`);
@@ -1892,10 +1892,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             }
             // compute and return the difference
             const lastReportedFileNames = this.lastReportedFileNames;
-            const externalFiles = this.getExternalFiles().map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
+            const externalFiles = this.externalFiles?.map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
                 fileName: toNormalizedPath(f),
                 isSourceOfProjectReferenceRedirect: false,
-            }));
+            })) || emptyArray;
             const currentFiles = arrayToMap(
                 this.getFileNamesWithRedirectInfo(!!includeProjectReferenceRedirectInfo).concat(externalFiles),
                 info => info.fileName,
@@ -1945,10 +1945,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         else {
             // unknown version - return everything
             const projectFileNames = this.getFileNamesWithRedirectInfo(!!includeProjectReferenceRedirectInfo);
-            const externalFiles = this.getExternalFiles().map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
+            const externalFiles = this.externalFiles?.map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
                 fileName: toNormalizedPath(f),
                 isSourceOfProjectReferenceRedirect: false,
-            }));
+            })) || emptyArray;
             const allFiles = projectFileNames.concat(externalFiles);
             this.lastReportedFileNames = arrayToMap(
                 allFiles,
@@ -2679,12 +2679,12 @@ export class AutoImportProviderProject extends Project {
  */
 export class ConfiguredProject extends Project {
     /** @internal */
-    pendingReload: ConfigFileProgramReloadLevel | undefined;
+    pendingUpdateLevel: ProgramUpdateLevel | undefined;
     /** @internal */
-    pendingReloadReason: string | undefined;
+    pendingUpdateReason: string | undefined;
 
     /** @internal */
-    openFileWatchTriggered = new Map<string, ConfigFileProgramReloadLevel>();
+    openFileWatchTriggered = new Map<string, ProgramUpdateLevel>();
 
     /** @internal */
     canConfigFileJsonReportNoInputFiles = false;
@@ -2775,18 +2775,18 @@ export class ConfiguredProject extends Project {
     override updateGraph(): boolean {
         const isInitialLoad = this.isInitialLoadPending();
         this.isInitialLoadPending = returnFalse;
-        const reloadLevel = this.pendingReload;
-        this.pendingReload = ConfigFileProgramReloadLevel.None;
+        const updateLevel = this.pendingUpdateLevel;
+        this.pendingUpdateLevel = ProgramUpdateLevel.Update;
         let result: boolean;
-        switch (reloadLevel) {
-            case ConfigFileProgramReloadLevel.Partial:
+        switch (updateLevel) {
+            case ProgramUpdateLevel.RootNamesAndUpdate:
                 this.openFileWatchTriggered.clear();
                 result = this.projectService.reloadFileNamesOfConfiguredProject(this);
                 break;
-            case ConfigFileProgramReloadLevel.Full:
+            case ProgramUpdateLevel.Full:
                 this.openFileWatchTriggered.clear();
-                const reason = Debug.checkDefined(this.pendingReloadReason);
-                this.pendingReloadReason = undefined;
+                const reason = Debug.checkDefined(this.pendingUpdateReason);
+                this.pendingUpdateReason = undefined;
                 this.projectService.reloadConfiguredProject(this, reason, isInitialLoad, /*clearSemanticCache*/ false);
                 result = true;
                 break;
