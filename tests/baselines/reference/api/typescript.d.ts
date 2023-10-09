@@ -3450,7 +3450,6 @@ declare namespace ts {
             getLanguageService(): never;
             getHostForAutoImportProvider(): never;
             getProjectReferences(): readonly ts.ProjectReference[] | undefined;
-            getTypeAcquisition(): TypeAcquisition;
         }
         /**
          * If a file is opened, the server will look for a tsconfig (or jsconfig)

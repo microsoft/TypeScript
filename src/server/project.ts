@@ -2640,10 +2640,6 @@ export class AutoImportProviderProject extends Project {
         return PackageJsonAutoImportPreference.Off;
     }
 
-    override getTypeAcquisition(): TypeAcquisition {
-        return { enable: false };
-    }
-
     /** @internal */
     override getSymlinkCache() {
         return this.hostProject.getSymlinkCache();
