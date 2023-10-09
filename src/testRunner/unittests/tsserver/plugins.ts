@@ -225,6 +225,10 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
             path: "/user/username/projects/myproject/a.ts",
             content: `export const a = 10;`,
         };
+        const dTs: File = {
+            path: "/user/username/projects/myproject/d.ts",
+            content: `export const d = 10;`,
+        };
         const bVue: File = {
             path: "/user/username/projects/myproject/b.vue",
             content: "bVue file",
@@ -240,7 +244,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                 " ",
             ),
         };
-        const host = createServerHost([aTs, bVue, config, libFile]);
+        const host = createServerHost([aTs, dTs, bVue, config, libFile]);
         host.require = () => {
             return {
                 module: () => ({
@@ -260,6 +264,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                     },
                     getExternalFiles: (project: ts.server.Project) => {
                         if (project.projectKind !== ts.server.ProjectKind.Configured) return [];
+                        session.logger.log(`getExternalFiles:: Getting new list of .vue files`);
                         const configFile = project.getProjectName();
                         const config = ts.readJsonConfigFile(configFile, project.readFile.bind(project));
                         const parseHost: ts.ParseConfigHost = {
@@ -282,6 +287,9 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
         openFilesForSession([aTs], session);
 
         host.writeFile("/user/username/projects/myproject/c.vue", "cVue file");
+        host.runQueuedTimeoutCallbacks();
+
+        host.appendFile(dTs.path, "export const x = 10;");
         host.runQueuedTimeoutCallbacks();
 
         baselineTsserverLogs("plugins", "new files with non ts extensions with wildcard matching", session);
