@@ -22993,13 +22993,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const sourceObjectFlags = getObjectFlags(source);
             const targetObjectFlags = getObjectFlags(target);
             if (
-                sourceObjectFlags & ObjectFlags.Instantiated && targetObjectFlags & ObjectFlags.Instantiated && source.symbol === target.symbol ||
-                sourceObjectFlags & ObjectFlags.Reference && targetObjectFlags & ObjectFlags.Reference && (source as TypeReference).target === (target as TypeReference).target
+                // sourceSignatures.length === targetSignatures.length &&
+                (sourceObjectFlags & ObjectFlags.Instantiated && targetObjectFlags & ObjectFlags.Instantiated && source.symbol === target.symbol ||
+                    sourceObjectFlags & ObjectFlags.Reference && targetObjectFlags & ObjectFlags.Reference && (source as TypeReference).target === (target as TypeReference).target)
             ) {
                 // We have instantiations of the same anonymous type (which typically will be the type of a
                 // method). Simply do a pairwise comparison of the signatures in the two signature lists instead
                 // of the much more expensive N * M comparison matrix we explore below. We erase type parameters
                 // as they are known to always be the same.
+                // Debug.assertIsDefined(source.symbol);
+                Debug.assertEqual(sourceSignatures.length, targetSignatures.length);
                 for (let i = 0; i < targetSignatures.length; i++) {
                     const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors, intersectionState, incompatibleReporter(sourceSignatures[i], targetSignatures[i]));
                     if (!related) {
