@@ -36676,11 +36676,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         forEachReturnStatement(func.body as Block, returnStatement => {
             let expr = returnStatement.expression;
             if (expr) {
-                expr = skipParentheses(expr);
+                expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
                 // Bare calls to this same function don't contribute to inference
                 // and `return await` is also safe to unwrap here
                 if (functionFlags & FunctionFlags.Async && expr.kind === SyntaxKind.AwaitExpression) {
-                    expr = skipParentheses((expr as AwaitExpression).expression);
+                    expr = skipParentheses((expr as AwaitExpression).expression, /*excludeJSDocTypeAssertions*/ true);
                 }
                 if (
                     expr.kind === SyntaxKind.CallExpression &&
