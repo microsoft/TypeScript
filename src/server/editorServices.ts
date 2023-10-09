@@ -1677,6 +1677,13 @@ export class ProjectService {
                     const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
                     if (!project) return;
 
+                    if (configuredProjectForConfig !== project) {
+                        const path = this.toPath(configFileName);
+                        if (find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)) {
+                            project.markAutoImportProviderAsDirty();
+                        }
+                    }
+
                     // Load root file names for configured project with the config file name
                     // But only schedule update if project references this config file
                     const reloadLevel = configuredProjectForConfig === project ? ConfigFileProgramReloadLevel.Partial : ConfigFileProgramReloadLevel.None;
@@ -1726,11 +1733,16 @@ export class ProjectService {
                 project.pendingReload = ConfigFileProgramReloadLevel.Full;
                 project.pendingReloadReason = reloadReason;
                 this.delayUpdateProjectGraph(project);
+                project.markAutoImportProviderAsDirty();
             }
             else {
                 // Change in referenced project config file
-                project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(this.toPath(canonicalConfigFilePath));
+                const path = this.toPath(canonicalConfigFilePath);
+                project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(path);
                 this.delayUpdateProjectGraph(project);
+                if (find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)) {
+                    project.markAutoImportProviderAsDirty();
+                }
             }
         });
         return scheduledAnyProjectUpdate;
