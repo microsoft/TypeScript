@@ -3354,7 +3354,6 @@ declare namespace ts {
             readFile(fileName: string): string | undefined;
             writeFile(fileName: string, content: string): void;
             fileExists(file: string): boolean;
-            getModuleResolutionCache(): ModuleResolutionCache | undefined;
             directoryExists(path: string): boolean;
             getDirectories(path: string): string[];
             log(s: string): void;

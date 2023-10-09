@@ -728,6 +728,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return this.resolutionCache.resolveModuleNameLiterals(moduleLiterals, containingFile, redirectedReference, options, containingSourceFile, reusedNames);
     }
 
+    /** @internal */
     getModuleResolutionCache(): ModuleResolutionCache | undefined {
         return this.resolutionCache.getModuleResolutionCache();
     }
