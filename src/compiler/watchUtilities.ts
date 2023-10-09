@@ -372,10 +372,11 @@ export enum ProgramUpdateLevel {
     RootNamesAndUpdate,
     /**
      * Loads program completely, including:
-     *   re-reading contents of config file from disk
-     *   calculating root file names for the program
-     *   Updating the program
+     *  - re-reading contents of config file from disk
+     *  - calculating root file names for the program
+     *  - Updating the program
      */
+
     Full,
 }
 
