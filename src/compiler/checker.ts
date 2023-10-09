@@ -27446,7 +27446,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
-            const expr = flow.switchStatement.expression;
+            const expr = skipParentheses(flow.switchStatement.expression);
             const flowType = getTypeAtFlowNode(flow.antecedent);
             let type = getTypeFromFlowType(flowType);
             if (isMatchingReference(reference, expr)) {
@@ -27456,11 +27456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 type = narrowTypeBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
             else if (expr.kind === SyntaxKind.TrueKeyword) {
-                const clause = flow.switchStatement.caseBlock.clauses.find((_, index) => index === flow.clauseStart);
-                const clauseExpression = clause && clause.kind === SyntaxKind.CaseClause ? clause.expression : undefined;
-                if (clauseExpression) {
-                    type = narrowType(type, clauseExpression, /*assumeTrue*/ true);
-                }
+                type = narrowTypeBySwitchOnTrue(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
             else {
                 if (strictNullChecks) {
@@ -28073,6 +28069,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In the non-default cause we create a union of the type narrowed by each of the listed cases.
             const clauseWitnesses = witnesses.slice(clauseStart, clauseEnd);
             return getUnionType(map(clauseWitnesses, text => text ? narrowTypeByTypeName(type, text) : neverType));
+        }
+
+        function narrowTypeBySwitchOnTrue(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
+            const defaultIndex = findIndex(switchStatement.caseBlock.clauses, clause => clause.kind === SyntaxKind.DefaultClause);
+            const hasDefaultClause = clauseStart === clauseEnd || (defaultIndex >= clauseStart && defaultIndex < clauseEnd);
+
+            // First, narrow away all of the cases that preceded this set of cases.
+            for (let i = 0; i < clauseStart; i++) {
+                const clause = switchStatement.caseBlock.clauses[i];
+                if (clause.kind === SyntaxKind.CaseClause) {
+                    type = narrowType(type, clause.expression, /*assumeTrue*/ false);
+                }
+            }
+
+            // If our current set has a default, then none the other cases were hit either.
+            // There's no point in narrowing by the the other cases in the set, since we can
+            // get here through other paths.
+            if (hasDefaultClause) {
+                for (let i = clauseEnd; i < switchStatement.caseBlock.clauses.length; i++) {
+                    const clause = switchStatement.caseBlock.clauses[i];
+                    if (clause.kind === SyntaxKind.CaseClause) {
+                        type = narrowType(type, clause.expression, /*assumeTrue*/ false);
+                    }
+                }
+                return type;
+            }
+
+            // Now, narrow based on the cases in this set.
+            const clauses = switchStatement.caseBlock.clauses.slice(clauseStart, clauseEnd);
+            return getUnionType(map(clauses, clause => clause.kind === SyntaxKind.CaseClause ? narrowType(type, clause.expression, /*assumeTrue*/ true) : neverType));
         }
 
         function isMatchingConstructorReference(expr: Expression) {
@@ -47904,6 +47930,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
             },
             isImportRequiredByAugmentation,
+            tryFindAmbientModule: moduleReferenceExpression => {
+                const node = getParseTreeNode(moduleReferenceExpression);
+                const moduleSpecifier = node && isStringLiteralLike(node) ? node.text : undefined;
+                return moduleSpecifier !== undefined ? tryFindAmbientModule(moduleSpecifier, /*withAugmentations*/ true) : undefined;
+            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {

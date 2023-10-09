@@ -1,0 +1,222 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue6.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue6.ts ===
+interface A {
+    kind: "a";
+>kind : "a"
+
+    aProps: string;
+>aProps : string
+}
+
+interface B {
+    kind: "b";
+>kind : "b"
+
+    bProps: string;
+>bProps : string
+}
+
+interface C {
+    kind: "c";
+>kind : "c"
+
+    cProps: string;
+>cProps : string
+}
+
+
+type MyType = A | B | C;
+>MyType : A | B | C
+
+function isA(x: MyType) {
+>isA : (x: MyType) => void
+>x : MyType
+
+    switch (true) {
+>true : true
+
+        default:
+            const never: never = x;
+>never : never
+>x : never
+
+        case x.kind === "a":
+>x.kind === "a" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"a" : "a"
+
+            x.aProps;
+>x.aProps : string
+>x : A
+>aProps : string
+
+            break;
+        case x.kind === "b":
+>x.kind === "b" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"b" : "b"
+
+            x.bProps;
+>x.bProps : string
+>x : B
+>bProps : string
+
+            break;
+        case x.kind === "c":
+>x.kind === "c" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"c" : "c"
+
+            x.cProps;
+>x.cProps : string
+>x : C
+>cProps : string
+
+            break;
+    }
+
+    switch (true) {
+>true : true
+
+        default:
+            const never: never = x;
+>never : never
+>x : never
+
+        case x.kind === "a": {
+>x.kind === "a" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"a" : "a"
+
+            x.aProps;
+>x.aProps : string
+>x : A
+>aProps : string
+
+            break;
+        }
+        case x.kind === "b": {
+>x.kind === "b" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"b" : "b"
+
+            x.bProps;
+>x.bProps : string
+>x : B
+>bProps : string
+
+            break;
+        }
+        case x.kind === "c": {
+>x.kind === "c" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"c" : "c"
+
+            x.cProps;
+>x.cProps : string
+>x : C
+>cProps : string
+
+            break;
+        }
+    }
+    
+    switch (true) {
+>true : true
+
+        default:
+            x.aProps;
+>x.aProps : string
+>x : A
+>aProps : string
+
+            break;
+        case x.kind === "b":
+>x.kind === "b" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"b" : "b"
+
+            x.bProps;
+>x.bProps : string
+>x : B
+>bProps : string
+
+            break;
+        case x.kind === "c":
+>x.kind === "c" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"c" : "c"
+
+            x.cProps;
+>x.cProps : string
+>x : C
+>cProps : string
+
+            break;
+    }
+
+    switch (true) {
+>true : true
+
+        default:
+            const never: never = x;
+>never : never
+>x : never
+
+        case x.kind === "a":
+>x.kind === "a" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"a" : "a"
+
+            x.aProps;
+>x.aProps : string
+>x : A
+>aProps : string
+
+            // fallthrough
+        case x.kind === "b":
+>x.kind === "b" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"b" : "b"
+
+            x.bProps;
+>x.bProps : any
+>x : A | B
+>bProps : any
+
+            // fallthrough
+        case x.kind === "c":
+>x.kind === "c" : boolean
+>x.kind : "a" | "b" | "c"
+>x : MyType
+>kind : "a" | "b" | "c"
+>"c" : "c"
+
+            x.cProps;
+>x.cProps : any
+>x : MyType
+>cProps : any
+    }
+}
+
