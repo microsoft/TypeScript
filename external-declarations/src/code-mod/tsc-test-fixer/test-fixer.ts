@@ -34,7 +34,7 @@ export async function fixTestCase(caseData: TestCaseWithBOM, settings: ts.Compil
     const toBeCompiled = caseData.testUnitData.map(unit => {
         return createHarnessTestFile(unit);
     });
-    
+
     try {
         return await fixTestFiles(toBeCompiled, settings);
     }
@@ -43,7 +43,7 @@ export async function fixTestCase(caseData: TestCaseWithBOM, settings: ts.Compil
     }
 }
 
-export async function fixTestFiles(toBeCompiled: TestFile[], settings: ts.CompilerOptions) {
+async function fixTestFiles(toBeCompiled: TestFile[], settings: ts.CompilerOptions) {
     const { fs, options, programFileNames } = prepareTestOptionsAndFs(
         toBeCompiled,
         [],
@@ -56,14 +56,14 @@ export async function fixTestFiles(toBeCompiled: TestFile[], settings: ts.Compil
         /**currentDirectory=*/ undefined,
     );
     const host = new fake.CompilerHost(fs, options);
-    
+
     const snapShotRegistry = createSnapshotRegistry(host);
     const langHost = createLanguageHost(snapShotRegistry, {
         fileNames: programFileNames,
         options,
         errors: [],
     }, host);
-    
+
     await fixProjectRaw(
         langHost,
         /*documentRegistry*/ undefined,
@@ -71,7 +71,7 @@ export async function fixTestFiles(toBeCompiled: TestFile[], settings: ts.Compil
         isolatedDeclarationsErrors,
         async () => 0,
     );
-    
+
     return toBeCompiled.map(unit => ({
         ...unit,
         content: fs.readFileSync(unit.unitName, "utf-8"),

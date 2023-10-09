@@ -510,7 +510,7 @@ function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node
                 if (hasTabstop(parent)) {
                     continue;
                 }
-                // Not sure why this is here. When I try to make text change that contains only a property assigment this kicks in
+                // TODO: Not sure why this is here. When I try to make text change that contains only a property assigment this kicks in
                 // Ex: x: x
                 // Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
             }

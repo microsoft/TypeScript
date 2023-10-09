@@ -1,5 +1,5 @@
 import * as fsp from "fs/promises";
-import * as JSON from 'json5';
+import * as JSON from "json5";
 import * as path from "path";
 import * as ts from "typescript";
 import {
@@ -69,19 +69,12 @@ export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings
         .filter(isRelevantTestFile)
         .flatMap(file => {
             const declarationFile = changeExtension(file.name, getDeclarationExtension(file.name));
-            // const declarationMapFile = declarationFile + ".map";
             const resolvedDeclarationFile = vpath.resolve(result.vfs.cwd(), declarationFile);
-            // const resolvedDeclarationMapFile = vpath.resolve(result.vfs.cwd(), declarationMapFile);
             const declaration = result.dts.get(resolvedDeclarationFile);
-            // const declarationMap = result.maps.get(resolvedDeclarationMapFile)
             return [{
                 content: declaration?.text ?? "",
                 fileName: declarationFile,
-            }// , {
-                //     content: declarationMap?.text ?? "",
-                //     fileName: declarationMapFile,
-                // }
-            ];
+            }];
         });
     return {
         files,
@@ -127,17 +120,17 @@ export function runIsolated(caseData: TestCaseParser.TestCaseContent, libFiles: 
     return { files, diagnostics };
 }
 
-
-export async function readDirRecursive (dir: string, relativePath = ""): Promise<string[]> {
+export async function readDirRecursive(dir: string, relativePath = ""): Promise<string[]> {
     const content = await fsp.readdir(dir);
     const result: string[] = [];
     for (const entry of content) {
         const relativeChildPath = path.join(relativePath, entry);
-        const fsPath = path.join(dir, entry)
+        const fsPath = path.join(dir, entry);
         const stat = await fsp.stat(fsPath);
-        if(stat.isDirectory()) {
-            result.push(...await readDirRecursive(fsPath, relativeChildPath))
-        } else {
+        if (stat.isDirectory()) {
+            result.push(...await readDirRecursive(fsPath, relativeChildPath));
+        }
+        else {
             result.push(relativeChildPath);
         }
     }

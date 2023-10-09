@@ -478,7 +478,6 @@ function withChanges<T>(
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
                 return addTypeToFunctionLikeDeclaration(node as SignatureDeclaration, sourceFile);
             case SyntaxKind.ExportAssignment:
                 const defaultExport = node as ExportAssignment;
@@ -538,9 +537,6 @@ function withChanges<T>(
         if (!heritageExpression) {
             return undefined;
         }
-        // if (heritageExpression.kind !== SyntaxKind.ExpressionWithTypeArguments) {
-        //     throw new Error(`Hey + ${heritageExpression.kind}`);
-        // }
         const { typeNode: heritageTypeNode } = inferNodeType(heritageExpression.expression);
         if (!heritageTypeNode) {
             return undefined;
