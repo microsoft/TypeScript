@@ -3,18 +3,6 @@ import { sleep } from "./sleep";
 
 const cpuCount = sys.cpuCount?.() ?? 1;
 
-export class SpinWait {
-    private _count = 0;
-
-    reset() {
-        this._count = 0;
-    }
-
-    spinOnce() {
-        this._count = spin(this._count);
-    }
-}
-
 /**
  * Periodically puts the current thread to sleep in an effort to reduce lock contention.
  * @param currentCount an unsigned 32-bit integer value used to determine the current spin count.
@@ -26,6 +14,8 @@ export class SpinWait {
  *   spinCounter = spin(spinCounter);
  * }
  * ```
+ *
+ * @internal
  */
 export function spin(currentCount: number) {
     currentCount >>>= 0;

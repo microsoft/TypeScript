@@ -5,7 +5,10 @@ import { Lockable } from "./lockable";
 import { Mutex } from "./mutex";
 import { SharedMutex } from "./sharedMutex";
 
-/** @internal */
+/**
+ * Establishes an exclusive lock on a mutex, inspired by `std::unique_lock` in C++.
+ * @internal
+ */
 export class UniqueLock<T extends Mutex | SharedMutex> {
     private _mutex: T | undefined;
     private _lockable: Lockable | undefined;

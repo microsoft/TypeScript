@@ -5993,6 +5993,14 @@ export const enum InternalSymbolName {
  */
 export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
 
+declare global {
+    // Due to the intersection in `__String`, the type system cannot determine whether `__String` is actually shareable,
+    // so we must extend the `ShareablePrimitive` open-ended union:
+    interface OtherShareablePrimitive {
+        __String: __String;
+    }
+}
+
 /** @deprecated Use ReadonlyMap<__String, T> instead. */
 export type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
 

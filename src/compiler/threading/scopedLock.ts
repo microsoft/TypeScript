@@ -5,7 +5,11 @@ import { Lockable } from "./lockable";
 import { Mutex } from "./mutex";
 import { SharedMutex } from "./sharedMutex";
 
-/** @internal */
+/**
+ * An RAII wrapper for block-scoped locking of multiple mutexes using a deadlock prevention algorithm. Inspired by
+ * `std::scoped_lock` in C++.
+ * @internal
+ */
 export class ScopedLock {
     private _mutexes: readonly Lockable[] | undefined;
 
@@ -14,8 +18,8 @@ export class ScopedLock {
         for (const mutex of Array.from(mutexes)) {
             array.push(
                 mutex instanceof Mutex ? Mutex.asLockable(mutex) :
-                    mutex instanceof SharedMutex ? SharedMutex.asLockable(mutex) :
-                        mutex);
+                mutex instanceof SharedMutex ? SharedMutex.asLockable(mutex) :
+                mutex);
         }
 
         let remaining = array.length;

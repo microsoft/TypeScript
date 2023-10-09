@@ -1,16 +1,9 @@
 import { __String, SymbolFlags } from "../types";
-import { SharedResizableArray } from "./collections/sharedResizableArray";
 import { SharedMap } from "./collections/sharedMap";
-import { Identifiable } from "./structs/identifiableStruct";
 import { SharedDeclaration } from "./sharedNode";
+import { Identifiable } from "./structs/identifiableStruct";
 import { Shared, SharedStructBase } from "./structs/sharedStruct";
 import { Tag, Tagged } from "./structs/taggedStruct";
-
-declare global {
-    interface OtherShareablePrimitive {
-        __String: __String;
-    }
-}
 
 /** @internal */
 export interface SharedSymbolTable extends SharedMap<__String, SharedSymbol> {
@@ -21,7 +14,7 @@ export interface SharedSymbolTable extends SharedMap<__String, SharedSymbol> {
 export class SharedSymbol extends Identifiable(Tagged(SharedStructBase, Tag.Symbol)) {
     @Shared() flags!: SymbolFlags;
     @Shared() escapedName!: __String;
-    @Shared() declarations: SharedResizableArray<SharedDeclaration> | undefined;
+    @Shared() declarations: SharedArray<SharedDeclaration> | undefined;
     @Shared() valueDeclaration: SharedDeclaration | undefined;
     @Shared() members: SharedSymbolTable | undefined;
     @Shared() exports: SharedSymbolTable | undefined;

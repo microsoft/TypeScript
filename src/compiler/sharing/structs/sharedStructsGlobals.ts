@@ -1,7 +1,7 @@
-export { };
-
 // NOTE: These types relate to the origin trial implementation of the shared structs proposal and may not be indicative
 //       of the final proposal. To use these types you must pass `--shared-string-table --harmony-struct` to NodeJS.
+
+export { };
 
 // the following brands are used to distinguish Shared Structs-related objects from other objects since they are not
 // interchangeable with `object`:

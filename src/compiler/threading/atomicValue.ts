@@ -1,5 +1,5 @@
-import { spin } from "./spinWait";
 import { Shared, SharedStructBase } from "../sharing/structs/sharedStruct";
+import { spin } from "./spin";
 
 /**
  * Atomically read and write a shared value. While this isn't strictly necessary as `Atomics` methods can be used
@@ -53,10 +53,6 @@ export class AtomicValue<T extends Shareable> extends SharedStructBase {
         return Atomics.compareExchange(self, "unsafeValue", expectedValue, replacementValue);
     }
 
-    static compareAndSet<T extends Shareable>(self: AtomicValue<T>, expectedValue: T, replacementValue: T) {
-        return expectedValue === AtomicValue.compareExchange(self, expectedValue, replacementValue);
-    }
-
     /**
      * Performs 32-bit signed integer addition via an atomic read-modify-write operation.
      * @returns the value prior to addition.
@@ -64,7 +60,7 @@ export class AtomicValue<T extends Shareable> extends SharedStructBase {
     static add(self: AtomicValue<number>, value: number) {
         let spinCounter = 0;
         let currentValue = AtomicValue.load(self);
-        while (currentValue !== AtomicValue.compareExchange(self, currentValue, (currentValue + value) >> 0)) {
+        while (currentValue !== AtomicValue.compareExchange(self, currentValue, (currentValue + value) | 0 /* i32 wrapping add */)) {
             spinCounter = spin(spinCounter);
             currentValue = AtomicValue.load(self);
         }
@@ -78,7 +74,7 @@ export class AtomicValue<T extends Shareable> extends SharedStructBase {
     static sub(self: AtomicValue<number>, value: number) {
         let spinCounter = 0;
         let currentValue = AtomicValue.load(self);
-        while (currentValue !== AtomicValue.compareExchange(self, currentValue, (currentValue - value) >> 0)) {
+        while (currentValue !== AtomicValue.compareExchange(self, currentValue, (currentValue - value) | 0 /* i32 wrapping subtract */)) {
             spinCounter = spin(spinCounter);
             currentValue = AtomicValue.load(self);
         }
@@ -87,7 +83,7 @@ export class AtomicValue<T extends Shareable> extends SharedStructBase {
 
     /**
      * Atomically increments a 32-bit signed integer value.
-     * @returns the value prior to subtraction.
+     * @returns the pre-incremented value.
      */
     static increment(self: AtomicValue<number>) {
         return AtomicValue.add(self, 1);
@@ -95,83 +91,9 @@ export class AtomicValue<T extends Shareable> extends SharedStructBase {
 
     /**
      * Atomically decrements a 32-bit signed integer value.
-     * @returns the value prior to subtraction.
+     * @returns the pre-decremented value.
      */
     static decrement(self: AtomicValue<number>) {
         return AtomicValue.sub(self, 1);
-    }
-}
-
-/**
- * A non-shared wrapper for an {@link AtomicValue}.
- * @internal
- */
-export class AtomicRef<T extends Shareable> implements Disposable {
-    private _value: AtomicValue<T> | undefined;
-
-    constructor(value: AtomicValue<T> | undefined) {
-        this._value = value;
-    }
-
-    get disposed() {
-        return !this._value;
-    }
-
-    get value() {
-        if (!this._value) throw new ReferenceError("Object is disposed");
-        return AtomicValue.load(this._value);
-    }
-
-    set value(value) {
-        if (!this._value) throw new ReferenceError("Object is disposed");
-        AtomicValue.store(this._value, value);
-    }
-
-    unsafeGet() {
-        if (!this._value) throw new ReferenceError("Object is disposed");
-        return this._value.unsafeValue;
-    }
-
-    unsafeSet(value: T) {
-        if (!this._value) throw new ReferenceError("Object is disposed");
-        this._value.unsafeValue = value;
-    }
-
-    exchange(value: T) {
-        if (!this._value) throw new ReferenceError("Object is disposed");
-        return AtomicValue.exchange(this._value, value);
-    }
-
-    compareExchange(expectedValue: T, replacementValue: T) {
-        if (!this._value) throw new ReferenceError("Object is disposed");
-        return AtomicValue.compareExchange(this._value, expectedValue, replacementValue);
-    }
-
-    increment(this: AtomicRef<number>) {
-        if (!this._value) throw new ReferenceError("Object is disposed");
-        return AtomicValue.increment(this._value);
-    }
-
-    decrement(this: AtomicRef<number>) {
-        if (!this._value) throw new ReferenceError("Object is disposed");
-        return AtomicValue.decrement(this._value);
-    }
-
-    add(this: AtomicRef<number>, value: number) {
-        if (!this._value) throw new ReferenceError("Object is disposed");
-        return AtomicValue.add(this._value, value);
-    }
-
-    sub(this: AtomicRef<number>, value: number) {
-        if (!this._value) throw new ReferenceError("Object is disposed");
-        return AtomicValue.sub(this._value, value);
-    }
-
-    dispose() {
-        this._value = undefined;
-    }
-
-    [Symbol.dispose]() {
-        this._value = undefined;
     }
 }

@@ -130,6 +130,10 @@ function getOrCreateMetadata(target: AbstractConstructor) {
 /**
  * A decorator used to mark a `class` or a non-static public class field as "shared". This is intended to be used to
  * emulate syntax for shared structs and provide a mechanism to associate types with shared struct fields.
+ *
+ * NOTE: This only works as long as we use either `useDefineForClassFields: false` or `experimentalDecorators: true`,
+ * as you cannot reconfigure a class field introduced by a shared struct. If we change to `useDefineForClassFields: true`
+ * we must replace all decorated fields with `declare` fields, which do not work with ES native decorators at present.
  * @internal
  */
 export function Shared(): SharedClassDecorator & SharedFieldDecorator;
@@ -219,7 +223,7 @@ export function Shared(options?: SharedClassOptions) {
         sharedFields.push(context.name);
     }
 
-    function decorator(...args: 
+    function decorator(...args:
             | [target: AbstractConstructor]
             | [target: AbstractConstructor, context: ClassDecoratorContext]
             | [target: undefined, context: ClassFieldDecoratorContext]

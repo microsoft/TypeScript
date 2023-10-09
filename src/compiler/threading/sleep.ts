@@ -2,7 +2,10 @@ let mutex: Atomics.Mutex;
 let condition: Atomics.Condition;
 let timeout: number;
 
-/** @internal */
+/**
+ * Puts the current thread to sleep for the specified number of milliseconds.
+ * @internal
+ */
 export function sleep(ms: number) {
     mutex ??= new Atomics.Mutex();
     condition ??= new Atomics.Condition();

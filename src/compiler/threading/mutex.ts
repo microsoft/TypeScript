@@ -1,7 +1,6 @@
-import { Debug } from "../debug";
 import { Identifiable } from "../sharing/structs/identifiableStruct";
 import { Shared, SharedStructBase } from "../sharing/structs/sharedStruct";
-import { isTaggedStruct, Tag, Tagged } from "../sharing/structs/taggedStruct";
+import { Tag, Tagged } from "../sharing/structs/taggedStruct";
 import { Lockable } from "./lockable";
 
 let tryLock: (self: Mutex, cacheKey?: object) => boolean;
@@ -26,6 +25,8 @@ export class Mutex extends Identifiable(Tagged(SharedStructBase, Tag.Mutex)) {
     @Shared() private _locked = false;
 
     static {
+        // maintain a to avoid the overhead of reallocating callback functions to interact with the callback-based
+        // API in `Atomics.Mutex`.
         const callbackCache = new WeakMap<object, CallbackCache>();
 
         // we reuse the same lockTaken variable for each call to tryLock in a thread because its not
@@ -86,6 +87,11 @@ export class Mutex extends Identifiable(Tagged(SharedStructBase, Tag.Mutex)) {
         };
     }
 
+    /**
+     * Tries to lock the mutex and invoke `cb` in the context of the lock. The mutex will always be unlocked when the method
+     * returns, regardless as to whether `cb` throws an exception.
+     * @returns `true` if the lock was taken and the callback executed; otherwise `false`.
+     */
     static tryLock(self: Mutex, cb: () => void): boolean {
         if (!tryLock(self, /*cacheKey*/ undefined)) {
             return false;
@@ -114,38 +120,30 @@ export class Mutex extends Identifiable(Tagged(SharedStructBase, Tag.Mutex)) {
         }
     }
 
+    /**
+     * Wraps the mutex in a {@link Lockable} wrapper object for use with other APIs.
+     */
     static asLockable(self: Mutex): Lockable {
         return new LockableMutex(self);
-    }
-
-    static [Symbol.hasInstance](value: unknown): value is Mutex {
-        return isTaggedStruct(value, Tag.Mutex);
     }
 }
 
 class LockableMutex implements Lockable {
     private _mutex: Mutex;
-    private _ownsLock = false;
 
     constructor(mutex: Mutex) {
         this._mutex = mutex;
     }
 
     tryLock(): boolean {
-        Debug.assert(!this._ownsLock, "cannot take a lock you aleady own.");
-        this._ownsLock = tryLock(this._mutex, this);
-        return this._ownsLock;
+        return tryLock(this._mutex, this);
     }
 
     lock(): void {
-        Debug.assert(!this._ownsLock, "cannot take a lock you aleady own.");
         lock(this._mutex, this);
-        this._ownsLock = true;
     }
 
     unlock(): void {
-        Debug.assert(this._ownsLock, "cannot release a lock you do not own.");
         unlock(this._mutex, this);
-        this._ownsLock = false;
     }
 }

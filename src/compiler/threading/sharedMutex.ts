@@ -26,7 +26,10 @@ interface CallbackCache {
     unlockShared?: () => void;
 }
 
-/** @internal */
+/**
+ * A mutex that allows both exclusive and non-exclusive locking. Inspired by `std::shared_mutex` in C++.
+ * @internal
+ */
 @Shared()
 export class SharedMutex extends Identifiable(Tagged(SharedStructBase, Tag.SharedMutex)) {
     @Shared() private _mutex = new Atomics.Mutex();

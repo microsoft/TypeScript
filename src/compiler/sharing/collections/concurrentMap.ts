@@ -62,7 +62,9 @@ type EXIST = typeof EXIST;
 type NOT_EXIST = typeof NOT_EXIST;
 
 /**
- * A concurrent Map-like object. Based on https://github.com/dotnet/runtime/blob/main/src/libraries/System.Collections.Concurrent/src/System/Collections/Concurrent/ConcurrentDictionary.cs
+ * A concurrent Map-like object. Based on [ConcurrentDictionary][] from .NET Core.
+ *
+ * [ConcurrentDictionary]: https://github.com/dotnet/runtime/blob/main/src/libraries/System.Collections.Concurrent/src/System/Collections/Concurrent/ConcurrentDictionary.cs
  * @internal
  */
 @Shared()
@@ -298,7 +300,7 @@ export class ConcurrentMap<K extends NonNullable<Shareable>, V extends NonNullab
                                 tables.countsPerLock[lockNo]--;
                             }
                             else {
-                                // performing unconditional set or update update
+                                // performing unconditional set or update
                                 if (isLockFree(replacementValue)) {
                                     node.value = replacementValue;
                                 }

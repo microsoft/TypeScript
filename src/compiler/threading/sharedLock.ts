@@ -4,7 +4,10 @@ import { Debug } from "../debug";
 import { SharedLockable } from "./sharedLockable";
 import { SharedMutex } from "./sharedMutex";
 
-/** @internal */
+/**
+ * Establishes a non-exclusive lock on a shared mutex, inspired by `std::shared_lock` in C++.
+ * @internal 
+ */
 export class SharedLock<T extends SharedLockable | SharedMutex> {
     private _mutex: T | undefined;
     private _lockable: SharedLockable | undefined;

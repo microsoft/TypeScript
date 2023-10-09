@@ -1,5 +1,3 @@
-// Brand used to identify a fake shared struct, so that we can emulate the restriction that shared struct fields
-
 import { isNull } from "../../core";
 
 // can only contain shareable primitives and other shared structs.

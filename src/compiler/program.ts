@@ -1551,6 +1551,57 @@ function createCreateProgramOptions(rootNames: readonly string[], options: Compi
     };
 }
 
+// - [ ] host.trace()
+// - [ ] host.realpath()
+// - [ ] host.getCanonicalFileName()
+// - [ ] host.getSourceFile()
+// - [ ] host.useCaseSensitiveFileNames()
+// - [ ] host.hasInvalidatedLibResolutions()
+// - [ ] host.resolveTypeReferenceDirectiveReferences()
+// - [ ] host.resolveTypeReferenceDirectives()
+// - [ ] host.resolveLibrary()
+// - [ ] host.hasInvalidatedResolutions();
+// - [ ] getCreateSourceFileOptions() - calls into module resolution with a full host, will be tricky...
+// - [ ] tracing
+// - [x] supportedExtensionsWithJsonIfResolveJsonModule
+// - [x] supportedExtensions
+// - [x] currentDirectory
+// - [ ] performance?
+// - [ ] useSourceOfProjectReferenceRedirect
+// - [ ] mapFromToProjectReferenceRedirectSource
+// - [ ] mapFromFileToProjectReferenceRedirects
+// - [ ] resolvedProjectReferences
+// - [ ] projectReferenceRedirects
+// - [ ] options
+// - [ ] filesByName
+// - [ ] fileReasons
+// - [ ] fileProcessingDiagnostics
+// - [ ] sourceFilesFoundSearchingNodeModules
+// - [ ] modulesWithElidedImports
+// - [ ] packageIdToSourceFile
+// - [ ] redirectTargetsMap
+// - [ ] sourceFileToPackageName
+// - [ ] processingOtherFiles
+// - [ ] filesByNameIgnoreCase
+// - [ ] skipDefaultLib
+// - [ ] processingDefaultLibFiles
+// - [ ] resolvedTypeReferenceDirectives
+// - [ ] host.readFile
+// - [ ] getSourceFile
+// - [ ] resolvedLibReferences
+// - [ ] resolvedLibProcessing
+// - [ ] moduleResolutionCache
+// - [ ] structureIsReused
+// - [ ] oldProgram - what do we need from oldProgram? Can we generate a shared snapshot?
+// - [ ] usesUriStyleNodeCoreModules
+@Shared()
+// @ts-ignore
+class SharedProgramState extends SharedStructBase {
+    @Shared() currentDirectory!: string;
+    @Shared() supportedExtensions!: SharedArray<SharedArray<Extension>>;
+    @Shared() supportedExtensionsWithJsonIfResolveJsonModule!: SharedArray<SharedArray<Extension>>;
+}
+
 /**
  * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
  * that represent a compilation unit.
