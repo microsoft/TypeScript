@@ -273,6 +273,7 @@ export function verifyResolutionCache(
     verifyFileWatchesOfAffectingLocations(expected.fileWatchesOfAffectingLocations, actual.fileWatchesOfAffectingLocations);
 
     // Stop watching resolutions to verify everything gets closed.
+    expected.startCachingPerDirectoryResolution();
     actual.resolvedModuleNames.forEach((_resolutions, path) => expected.removeResolutionsOfFile(path));
     actual.resolvedTypeReferenceDirectives.forEach((_resolutions, path) => expected.removeResolutionsOfFile(path));
     expected.finishCachingPerDirectoryResolution(/*newProgram*/ undefined, actualProgram);

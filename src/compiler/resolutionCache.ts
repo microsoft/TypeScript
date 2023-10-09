@@ -702,6 +702,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     }
 
     function startCachingPerDirectoryResolution() {
+        moduleResolutionCache.isReadonly = undefined;
+        typeReferenceDirectiveResolutionCache.isReadonly = undefined;
+        libraryResolutionCache.isReadonly = undefined;
+        moduleResolutionCache.getPackageJsonInfoCache().isReadonly = undefined;
         moduleResolutionCache.clearAllExceptPackageJsonInfoCache();
         typeReferenceDirectiveResolutionCache.clearAllExceptPackageJsonInfoCache();
         libraryResolutionCache.clearAllExceptPackageJsonInfoCache();
@@ -756,6 +760,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         directoryWatchesOfFailedLookups.forEach(closeDirectoryWatchesOfFailedLookup);
         fileWatchesOfAffectingLocations.forEach(closeFileWatcherOfAffectingLocation);
         hasChangedAutomaticTypeDirectiveNames = false;
+        moduleResolutionCache.isReadonly = true;
+        typeReferenceDirectiveResolutionCache.isReadonly = true;
+        libraryResolutionCache.isReadonly = true;
+        moduleResolutionCache.getPackageJsonInfoCache().isReadonly = true;
     }
 
     function closeDirectoryWatchesOfFailedLookup(watcher: DirectoryWatchesOfFailedLookup, path: Path) {
