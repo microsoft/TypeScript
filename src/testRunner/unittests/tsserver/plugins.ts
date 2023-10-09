@@ -245,6 +245,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
             ),
         };
         const host = createServerHost([aTs, dTs, bVue, config, libFile]);
+        const externalFiles = new Map<ts.server.Project, string[]>();
         host.require = () => {
             return {
                 module: () => ({
@@ -262,8 +263,15 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                                 originalGetScriptSnapshot(fileName);
                         return proxy;
                     },
-                    getExternalFiles: (project: ts.server.Project) => {
+                    getExternalFiles: (project: ts.server.Project, updateLevel: ts.ProgramUpdateLevel) => {
                         if (project.projectKind !== ts.server.ProjectKind.Configured) return [];
+                        if (updateLevel === ts.ProgramUpdateLevel.Update) {
+                            const existing = externalFiles.get(project);
+                            if (existing) {
+                                session.logger.log(`getExternalFiles:: Returning cached .vue files`);
+                                return existing;
+                            }
+                        }
                         session.logger.log(`getExternalFiles:: Getting new list of .vue files`);
                         const configFile = project.getProjectName();
                         const config = ts.readJsonConfigFile(configFile, project.readFile.bind(project));
@@ -277,6 +285,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                             },
                         };
                         const parsed = ts.parseJsonSourceFileConfigFileContent(config, parseHost, project.getCurrentDirectory());
+                        externalFiles.set(project, parsed.fileNames);
                         return parsed.fileNames;
                     },
                 }),

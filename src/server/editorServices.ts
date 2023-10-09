@@ -14,7 +14,6 @@ import {
     CommandLineOption,
     CompilerOptions,
     CompletionInfo,
-    ConfigFileProgramReloadLevel,
     contains,
     containsPath,
     convertCompilerOptionsForTelemetry,
@@ -95,6 +94,7 @@ import {
     PerformanceEvent,
     PluginImport,
     PollingInterval,
+    ProgramUpdateLevel,
     ProjectPackageJsonInfo,
     ProjectReference,
     ReadMapFile,
@@ -874,7 +874,7 @@ export interface ParsedConfig {
      * true if watchedDirectories need to be updated as per parsedCommandLine's updated watched directories
      */
     watchedDirectoriesStale?: boolean;
-    reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
+    updateLevel?: ProgramUpdateLevel.RootNamesAndUpdate | ProgramUpdateLevel.Full;
 }
 
 function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => string) {
@@ -1671,7 +1671,7 @@ export class ProjectService {
                 ) return;
 
                 // Reload is pending, do the reload
-                if (config.reloadLevel !== ConfigFileProgramReloadLevel.Full) config.reloadLevel = ConfigFileProgramReloadLevel.Partial;
+                if (config.updateLevel !== ProgramUpdateLevel.Full) config.updateLevel = ProgramUpdateLevel.RootNamesAndUpdate;
                 config.projects.forEach((watchWildcardDirectories, projectCanonicalPath) => {
                     if (!watchWildcardDirectories) return;
                     const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
@@ -1679,23 +1679,23 @@ export class ProjectService {
 
                     // Load root file names for configured project with the config file name
                     // But only schedule update if project references this config file
-                    const reloadLevel = configuredProjectForConfig === project ? ConfigFileProgramReloadLevel.Partial : ConfigFileProgramReloadLevel.None;
-                    if (project.pendingReload !== undefined && project.pendingReload > reloadLevel) return;
+                    const updateLevel = configuredProjectForConfig === project ? ProgramUpdateLevel.RootNamesAndUpdate : ProgramUpdateLevel.Update;
+                    if (project.pendingUpdateLevel !== undefined && project.pendingUpdateLevel > updateLevel) return;
 
                     // don't trigger callback on open, existing files
                     if (this.openFiles.has(fileOrDirectoryPath)) {
                         const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
                         if (info.isAttached(project)) {
-                            const loadLevelToSet = Math.max(reloadLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ConfigFileProgramReloadLevel.None) as ConfigFileProgramReloadLevel;
+                            const loadLevelToSet = Math.max(updateLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ProgramUpdateLevel.Update) as ProgramUpdateLevel;
                             project.openFileWatchTriggered.set(fileOrDirectoryPath, loadLevelToSet);
                         }
                         else {
-                            project.pendingReload = reloadLevel;
+                            project.pendingUpdateLevel = updateLevel;
                             this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
                         }
                     }
                     else {
-                        project.pendingReload = reloadLevel;
+                        project.pendingUpdateLevel = updateLevel;
                         this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
                     }
                 });
@@ -1708,12 +1708,12 @@ export class ProjectService {
     }
 
     /** @internal */
-    private delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalConfigFilePath: NormalizedPath, reloadReason: string) {
+    private delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalConfigFilePath: NormalizedPath, loadReason: string) {
         const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
         if (!configFileExistenceInfo?.config) return false;
         let scheduledAnyProjectUpdate = false;
         // Update projects watching cached config
-        configFileExistenceInfo.config.reloadLevel = ConfigFileProgramReloadLevel.Full;
+        configFileExistenceInfo.config.updateLevel = ProgramUpdateLevel.Full;
 
         configFileExistenceInfo.config.projects.forEach((_watchWildcardDirectories, projectCanonicalPath) => {
             const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
@@ -1723,8 +1723,8 @@ export class ProjectService {
             if (projectCanonicalPath === canonicalConfigFilePath) {
                 // Skip refresh if project is not yet loaded
                 if (project.isInitialLoadPending()) return;
-                project.pendingReload = ConfigFileProgramReloadLevel.Full;
-                project.pendingReloadReason = reloadReason;
+                project.pendingUpdateLevel = ProgramUpdateLevel.Full;
+                project.pendingUpdateReason = loadReason;
                 this.delayUpdateProjectGraph(project);
             }
             else {
@@ -1922,11 +1922,11 @@ export class ProjectService {
 
                 // If project had open file affecting
                 // Reload the root Files from config if its not already scheduled
-                const reloadLevel = p.openFileWatchTriggered.get(info.path);
-                if (reloadLevel !== undefined) {
+                const updateLevel = p.openFileWatchTriggered.get(info.path);
+                if (updateLevel !== undefined) {
                     p.openFileWatchTriggered.delete(info.path);
-                    if (p.pendingReload !== undefined && p.pendingReload < reloadLevel) {
-                        p.pendingReload = reloadLevel;
+                    if (p.pendingUpdateLevel !== undefined && p.pendingUpdateLevel < updateLevel) {
+                        p.pendingUpdateLevel = updateLevel;
                         p.markFileAsDirty(info.path);
                     }
                 }
@@ -2438,7 +2438,7 @@ export class ProjectService {
             configFileExistenceInfo.config = {
                 cachedDirectoryStructureHost: createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!,
                 projects: new Map(),
-                reloadLevel: ConfigFileProgramReloadLevel.Full,
+                updateLevel: ProgramUpdateLevel.Full,
             };
         }
 
@@ -2457,8 +2457,8 @@ export class ProjectService {
     /** @internal */
     private createConfiguredProjectWithDelayLoad(configFileName: NormalizedPath, reason: string) {
         const project = this.createConfiguredProject(configFileName);
-        project.pendingReload = ConfigFileProgramReloadLevel.Full;
-        project.pendingReloadReason = reason;
+        project.pendingUpdateLevel = ProgramUpdateLevel.Full;
+        project.pendingUpdateReason = reason;
         return project;
     }
 
@@ -2521,7 +2521,7 @@ export class ProjectService {
             this.watchWildcards(configFilename, configFileExistenceInfo, project);
         }
         project.enablePluginsWithOptions(compilerOptions);
-        const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
+        const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles(ProgramUpdateLevel.Full));
         this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
         tracing?.pop();
     }
@@ -2529,8 +2529,8 @@ export class ProjectService {
     /** @internal */
     ensureParsedConfigUptoDate(configFilename: NormalizedPath, canonicalConfigFilePath: NormalizedPath, configFileExistenceInfo: ConfigFileExistenceInfo, forProject: ConfiguredProject): ConfigFileExistenceInfo {
         if (configFileExistenceInfo.config) {
-            if (!configFileExistenceInfo.config.reloadLevel) return configFileExistenceInfo;
-            if (configFileExistenceInfo.config.reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+            if (!configFileExistenceInfo.config.updateLevel) return configFileExistenceInfo;
+            if (configFileExistenceInfo.config.updateLevel === ProgramUpdateLevel.RootNamesAndUpdate) {
                 this.reloadFileNamesOfParsedConfig(configFilename, configFileExistenceInfo.config);
                 return configFileExistenceInfo;
             }
@@ -2580,7 +2580,7 @@ export class ProjectService {
         else {
             configFileExistenceInfo.config.parsedCommandLine = parsedCommandLine;
             configFileExistenceInfo.config.watchedDirectoriesStale = true;
-            configFileExistenceInfo.config.reloadLevel = undefined;
+            configFileExistenceInfo.config.updateLevel = undefined;
         }
 
         // If watch options different than older options when setting for the first time, update the config file watcher
@@ -2761,14 +2761,14 @@ export class ProjectService {
     reloadFileNamesOfConfiguredProject(project: ConfiguredProject) {
         const fileNames = this.reloadFileNamesOfParsedConfig(project.getConfigFilePath(), this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!.config!);
         project.updateErrorOnNoInputFiles(fileNames);
-        this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
+        this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles(ProgramUpdateLevel.RootNamesAndUpdate)), fileNamePropertyReader);
         return project.updateGraph();
     }
 
     /** @internal */
     private reloadFileNamesOfParsedConfig(configFileName: NormalizedPath, config: ParsedConfig) {
-        if (config.reloadLevel === undefined) return config.parsedCommandLine!.fileNames;
-        Debug.assert(config.reloadLevel === ConfigFileProgramReloadLevel.Partial);
+        if (config.updateLevel === undefined) return config.parsedCommandLine!.fileNames;
+        Debug.assert(config.updateLevel === ProgramUpdateLevel.RootNamesAndUpdate);
         const configFileSpecs = config.parsedCommandLine!.options.configFile!.configFileSpecs!;
         const fileNames = getFileNamesFromConfigSpecs(
             configFileSpecs,
@@ -3398,7 +3398,7 @@ export class ProjectService {
                     this.configuredProjects.forEach(project => {
                         if (
                             project.hasExternalProjectRef() &&
-                            project.pendingReload === ConfigFileProgramReloadLevel.Full &&
+                            project.pendingUpdateLevel === ProgramUpdateLevel.Full &&
                             !this.pendingProjectUpdates.has(project.getProjectName())
                         ) {
                             project.updateGraph();
@@ -3468,7 +3468,7 @@ export class ProjectService {
 
         // Ensure everything is reloaded for cached configs
         this.configFileExistenceInfoCache.forEach(info => {
-            if (info.config) info.config.reloadLevel = ConfigFileProgramReloadLevel.Full;
+            if (info.config) info.config.updateLevel = ProgramUpdateLevel.Full;
         });
 
         // Reload Projects
@@ -3517,8 +3517,8 @@ export class ProjectService {
                 if (!updatedProjects.has(project.canonicalConfigFilePath)) {
                     updatedProjects.set(project.canonicalConfigFilePath, true);
                     if (delayReload) {
-                        project.pendingReload = ConfigFileProgramReloadLevel.Full;
-                        project.pendingReloadReason = reason;
+                        project.pendingUpdateLevel = ProgramUpdateLevel.Full;
+                        project.pendingUpdateReason = reason;
                         if (clearSemanticCache) this.clearSemanticCache(project);
                         this.delayUpdateProjectGraph(project);
                     }

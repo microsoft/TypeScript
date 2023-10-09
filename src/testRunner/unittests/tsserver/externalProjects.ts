@@ -685,10 +685,10 @@ describe("unittests:: tsserver:: externalProjects", () => {
             options: {},
         } as ts.server.protocol.ExternalProject);
         const project = service.configuredProjects.get(config.path)!;
-        assert.equal(project.pendingReload, ts.ConfigFileProgramReloadLevel.Full); // External project referenced configured project pending to be reloaded
+        assert.equal(project.pendingUpdateLevel, ts.ProgramUpdateLevel.Full); // External project referenced configured project pending to be reloaded
 
         service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject: false } });
-        assert.equal(project.pendingReload, ts.ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded
+        assert.equal(project.pendingUpdateLevel, ts.ProgramUpdateLevel.Update); // External project referenced configured project loaded
 
         service.closeExternalProject(projectFileName);
 
@@ -698,7 +698,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
             options: {},
         } as ts.server.protocol.ExternalProject);
         const project2 = service.configuredProjects.get(config.path)!;
-        assert.equal(project2.pendingReload, ts.ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded
+        assert.equal(project2.pendingUpdateLevel, ts.ProgramUpdateLevel.Update); // External project referenced configured project loaded
         baselineTsserverLogs("externalProjects", "handles loads existing configured projects of external projects when lazyConfiguredProjectsFromExternalProject is disabled", service);
     });
 
