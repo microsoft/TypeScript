@@ -15,12 +15,10 @@ import { IO } from "./tsc-infrastructure/io";
 import { CompilerSettings, TestCaseContent } from "./tsc-infrastructure/test-file-parser";
 import { getFileBasedTestConfigurationDescription, getFileBasedTestConfigurations } from "./tsc-infrastructure/vary-by";
 import { changeExtension } from "./tsc-infrastructure/vpath";
-import { loadTestCase, readDirRecursive, runIsolated, runTypeScript,TestCompilationResult } from "./utils";
+import { loadTestCase, readDirRecursive, runIsolated as runDeclarationTransformEmitter, runTypeScript,TestCompilationResult } from "./utils";
 
 
 const excludeFilter =/\/fourslash\//;
-
-
 
 const shard = parsedArgs.shard;
 const shardCount = parsedArgs.shardCount;
@@ -33,14 +31,15 @@ if(prefixed) {
     testVersionFilter = prefixed.groups?.options;
 }
 
+const outputPath = parsedArgs.outputPath ?? "./tsc-tests/run"
 const rootCasePaths = parsedArgs.rootPaths ?? [ "./tests/source" ];
 const libFolder = parsedArgs.libPath ?? path.join(rootCasePaths[0], "../lib");
 
 const filter = parsedArgs.default ? new RegExp(parsedArgs.default) : /.*\.ts/;
 const runType =
-    parsedArgs.type === "all" ? { tsc: true, isolated: true } :
-    parsedArgs.type === "tsc" ? { tsc: true, isolated: false } :
-    { tsc: false, isolated: true };
+    parsedArgs.type === "all" ? { tsc: true, dte: true } :
+    parsedArgs.type === "tsc" ? { tsc: true, dte: false } :
+    { tsc: false, dte: true };
 
 const allTests = rootCasePaths
     .map(r => readAllFiles(r, filter))
@@ -48,9 +47,6 @@ const allTests = rootCasePaths
     .filter(f => !excludeFilter.exec(f));
 
 (ts as any).Debug.enableDebugInfo();
-
-const date = new Date();
-const historical = (parsedArgs.histFolder && `/${parsedArgs.histFolder}/`) ?? `/${date.toISOString().replace(/:/g, "-")}-${parsedArgs.type}/`;
 
 function pad(num: number, size: number) {
     return ("000000000" + num).substr(-size);
@@ -95,9 +91,9 @@ async function main() {
             if (testVersionFilter && varConfigDescription !== testVersionFilter) continue;
             const file = (prefix ?? pad(count, 5)) + "-" + changeExtension(path.basename(testFile), varConfigDescription + ".d.ts");
 
-            if (runType.tsc) runAndWrite(testName, path.join("./tsc-tests/$now/tsc", file), varConfig, runTypeScript);
+            if (runType.tsc) runAndWrite(testName, path.join(outputPath, "tsc", file), varConfig, runTypeScript);
 
-            if (runType.isolated) runAndWrite(testName, path.join("./tsc-tests/$now/isolated", file), varConfig, (t, s) => runIsolated(t, libFiles, s));
+            if (runType.dte) runAndWrite(testName, path.join(outputPath, "dte", file), varConfig, (t, s) => runDeclarationTransformEmitter(t, libFiles, s));
 
         }
         console.log(`    Ran: ${pad(count, 5)}/${allTests.length}`);
@@ -154,9 +150,6 @@ async function main() {
                         path.basename(file)
                     );
                 }
-            }
-            if (allTests.length > 5 && parsedArgs.keepHistory) {
-                writeResults(file.replace("/$now/", historical), resultText);
             }
             writeResults(file, resultText);
         }

@@ -1359,7 +1359,6 @@ export type HasIllegalModifiers =
     | MissingDeclaration
     | NamespaceExportDeclaration;
 
-
 export type HasInferredType =
     | FunctionDeclaration
     | MethodDeclaration

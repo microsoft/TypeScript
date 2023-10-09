@@ -33,6 +33,7 @@ import {
     BindableStaticNameExpression,
     BindingElement,
     BindingElementOfBareOrAccessedRequire,
+    BindingPattern,
     Block,
     BundleFileSection,
     BundleFileSectionKind,
@@ -5080,7 +5081,6 @@ export function isDynamicName(name: DeclarationName): boolean {
 }
 
 /**
- *
  * @internal
  */
 export function hasIdentifierComputedName(declaration: Declaration): declaration is DynamicNamedDeclaration | DynamicNamedBinaryExpression {
@@ -5093,12 +5093,11 @@ export function isIdentifierComputedName(name: DeclarationName): boolean {
         return false;
     }
     let expr = isElementAccessExpression(name) ? skipParentheses(name.argumentExpression) : name.expression;
-    while(isPropertyAccessExpression(expr)) {
+    while (isPropertyAccessExpression(expr)) {
         expr = expr.expression;
     }
     return isIdentifier(expr);
 }
-
 
 /** @internal */
 export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttributeName): __String | undefined {
@@ -10452,4 +10451,120 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
         return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
     }
     return Debug.fail();
+}
+
+export function getDeclarationContainer(node: Node): Node {
+    return findAncestor(getRootDeclaration(node), node => {
+        switch (node.kind) {
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.VariableDeclarationList:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.NamedImports:
+            case SyntaxKind.NamespaceImport:
+            case SyntaxKind.ImportClause:
+                return false;
+            default:
+                return true;
+        }
+    })!.parent;
+}
+export function isGlobalSourceFile(node: Node) {
+    return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(node as SourceFile);
+}
+
+export function determineIfDeclarationIsVisible(node: Node, isDeclarationVisible: (node: Node) => boolean) {
+    switch (node.kind) {
+        case SyntaxKind.JSDocCallbackTag:
+        case SyntaxKind.JSDocTypedefTag:
+        case SyntaxKind.JSDocEnumTag:
+            // Top-level jsdoc type aliases are considered exported
+            // First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
+            return !!(node.parent && node.parent.parent && node.parent.parent.parent && isSourceFile(node.parent.parent.parent));
+        case SyntaxKind.BindingElement:
+            return isDeclarationVisible(node.parent.parent);
+        case SyntaxKind.VariableDeclaration:
+            if (
+                isBindingPattern((node as VariableDeclaration).name) &&
+                !((node as VariableDeclaration).name as BindingPattern).elements.length
+            ) {
+                // If the binding pattern is empty, this variable declaration is not visible
+                return false;
+            }
+            // falls through
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+            // external module augmentation is always visible
+            if (isExternalModuleAugmentation(node)) {
+                return true;
+            }
+            const parent = getDeclarationContainer(node);
+            // If the node is not exported or it is not ambient module element (except import declaration)
+            if (
+                !(getCombinedModifierFlags(node as Declaration) & ModifierFlags.Export) &&
+                !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && parent.flags & NodeFlags.Ambient)
+            ) {
+                return isGlobalSourceFile(parent);
+            }
+            // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
+            return isDeclarationVisible(parent);
+
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+            if (hasEffectiveModifier(node, ModifierFlags.Private | ModifierFlags.Protected)) {
+                // Private/protected properties/methods are not visible
+                return false;
+            }
+            // Public properties/methods are visible if its parents are visible, so:
+            // falls through
+
+        case SyntaxKind.Constructor:
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.ModuleBlock:
+        case SyntaxKind.FunctionType:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.TypeLiteral:
+        case SyntaxKind.TypeReference:
+        case SyntaxKind.ArrayType:
+        case SyntaxKind.TupleType:
+        case SyntaxKind.UnionType:
+        case SyntaxKind.IntersectionType:
+        case SyntaxKind.ParenthesizedType:
+        case SyntaxKind.NamedTupleMember:
+            return isDeclarationVisible(node.parent);
+
+        // Default binding, import specifier and namespace import is visible
+        // only on demand so by default it is not visible
+        case SyntaxKind.ImportClause:
+        case SyntaxKind.NamespaceImport:
+        case SyntaxKind.ImportSpecifier:
+            return false;
+
+        // Type parameters are always visible
+        case SyntaxKind.TypeParameter:
+
+        // Source file and namespace export are always visible
+        // falls through
+        case SyntaxKind.SourceFile:
+        case SyntaxKind.NamespaceExportDeclaration:
+            return true;
+
+        // Export assignments do not create name bindings outside the module
+        case SyntaxKind.ExportAssignment:
+            return false;
+
+        default:
+            return false;
+    }
 }

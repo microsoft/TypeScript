@@ -6,12 +6,12 @@
   "scripts": {
     "build": "node ../built/local/tsc.js -p ./src",
     "watch": "node ../built/local/tsc.js -w -p ./src",
-    "run-tests-parallel": "node ./build/test-runner/parallel-run.js --rootPaths=../tests/cases --libPath=../tests/lib --type=all --shardCount=8 --forceIsolatedDeclarations",
-    "run-tests": "node ./build/test-runner/test-runner-main.js --type=all --rootPaths=c:/dev/TSC/TypeScript/tests/cases ",
+    "run-tests-parallel": "node ./build/test-runner/parallel-run.js --rootPaths=../tests/cases --libPath=../tests/lib --type=all --shardCount=8 --forceIsolatedDeclarations --outputPath=./tsc-tests/$original  --configFile=./original-tests.jsonc",
+    "run-tests": "node ./build/test-runner/test-runner-main.js --type=all --rootPaths=../tests/cases --outputPath=./tsc-tests/$original --configFile=./original-tests.jsonc",
     "transform-tests-parallel": "node ./build/code-mod/tsc-test-fixer/run-test-updater-parallel.js --rootPaths=../tests/cases --shardCount=8",
     "transform-tests": "node ./build/code-mod/tsc-test-fixer/run-test-updater.js --rootPaths=../tests/cases",
-    "run-transformed-tests-parallel": "node ./build/test-runner/parallel-run.js --rootPaths=./tsc-tests/updated-tests --libPath=../tests/lib --type=all --shardCount=8",
-    "run-transformed-tests": "node ./build/test-runner/test-runner-main.js --type=all --rootPaths=c:/dev/TSC/TypeScript/tests/cases ",
+    "run-transformed-tests-parallel": "node ./build/test-runner/parallel-run.js --rootPaths=./tsc-tests/updated-tests --libPath=../tests/lib --type=all --shardCount=8 --outputPath=./tsc-tests/$transformed --configFile=./fixed-tests.jsonc",
+    "run-transformed-tests": "node ./build/test-runner/test-runner-main.js --type=all --rootPaths=./tsc-tests/updated-tests  --libPath=../tests/lib --outputPath=./tsc-tests/$transformed --configFile=./fixed-tests.jsonc",
     "fixer-tests": "node ./build/code-mod/fixer-test.js --rootPaths=./fixer-test/source ",
     "fixer-tests-update": "node ./build/code-mod/fixer-test.js --rootPaths=./fixer-test/source --update "
   },

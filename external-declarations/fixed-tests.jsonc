@@ -64,6 +64,7 @@
         "with-unreliable-errors": [
             "thisTypeErrors", // Assertion to this in static context produces this in DTE and any in TSC
             "parseInvalidNonNullableTypes", // Prefix ! operator
+            "thisInConstructorParameter2", // this type used in invalid context 
             "parseInvalidNullableTypes",  // Prefix ? operator
             "ArrowFunction1", // Missing type annotation syntax error
             "parserX_ArrowFunction1", // Missing type annotation syntax error
@@ -85,6 +86,7 @@
             "augmentedTypesVar",
             "objectLiteralErrors",
             "duplicateObjectLiteralProperty_computedName2", 
+            "arrowFunctionExpressions",
             "castingTuple", // contains both duplicate variables and print differences.
             // Identifier expected.
             "FunctionPropertyAssignments2_es6",
@@ -106,12 +108,14 @@
             "computedPropertyNames17_ES6",
             "parserES5ComputedPropertyName5",
             "parserIndexSignature5",
+            "parserIndexSignature11",
             "parserES5SymbolProperty1",
             "parserES5SymbolProperty2",
             "parserComputedPropertyName20",
             "parserComputedPropertyName21",
             "typeUsedAsTypeLiteralIndex",
             "parser.asyncGenerators.classMethods.es2018",
+            "decoratorsOnComputedProperties",
             // Invalid escape sequences 
             "invalidTaggedTemplateEscapeSequences",
             "objectTypeWithStringNamedPropertyOfIllegalCharacters",
@@ -123,6 +127,7 @@
             "classExtendingNonConstructor", // Not reported as isolated declaration error, but the extends clause is invalid.
             "nodeModulesImportTypeModeDeclarationEmitErrors1", // Invalid import asserts
             "wellKnownSymbolExpando", // Expando function with well known symbols error in TS, but generate the expando function namepsace, DTE does not. 
+            "genericsWithDuplicateTypeParameters1", // Duplicate type parameters
         ],
         "with-isolated-declaration-errors/9008": [
             "declarationEmitHasTypesRefOnNamespaceUse",
@@ -174,6 +179,7 @@
             "parserComputedPropertyName19",
             "parserComputedPropertyName22",
             "parserComputedPropertyName23",
+            "parserComputedPropertyName24",
             "parserComputedPropertyName25",
             "parserComputedPropertyName27",
             "parserComputedPropertyName28",
@@ -214,6 +220,7 @@
             "objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts",
             "objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames",
             "objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts",
+            "typeAssertionToGenericFunctionType",
             // Default type parameters is written in declarations
             "conditionalTypesSimplifyWhenTrivial", 
             // https://github.com/microsoft/TypeScript/issues/55571 
@@ -237,6 +244,7 @@
             "renamingDestructuredPropertyInFunctionType",
             "restParameterWithBindingPattern3",
             "destructuringInFunctionType",
+            "contextuallyTypedBindingInitializerNegative"
         ],
         // Just Printing differences
         "print-differences": [
@@ -297,6 +305,7 @@
             "declarationEmitPropertyNumericStringKey",
             "templateLiteralsSourceMap", // template literal is evaluated in constant value.
             "nodeModulesImportTypeModeDeclarationEmit1", // resolution-mode in assert from type assertion is preserved
+            "literalTypesAndTypeAssertions", // (0 | 1) written in code is preserved by dte
         ],
     }
 }
