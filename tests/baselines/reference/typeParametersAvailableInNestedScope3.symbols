@@ -19,32 +19,48 @@ function foo<T>(v: T) {
 >T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 0, 13))
 >v : Symbol(v, Decl(typeParametersAvailableInNestedScope3.ts, 0, 16))
 
+    type Alias = T;
+>Alias : Symbol(Alias, Decl(typeParametersAvailableInNestedScope3.ts, 2, 33))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 0, 13))
+
     function c<T>(v: T) {
->c : Symbol(c, Decl(typeParametersAvailableInNestedScope3.ts, 2, 33))
->T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 4, 15))
->v : Symbol(v, Decl(typeParametersAvailableInNestedScope3.ts, 4, 18))
->T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 4, 15))
+>c : Symbol(c, Decl(typeParametersAvailableInNestedScope3.ts, 4, 19))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 5, 15))
+>v : Symbol(v, Decl(typeParametersAvailableInNestedScope3.ts, 5, 18))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 5, 15))
+
+        type Alias2 = T;
+>Alias2 : Symbol(Alias2, Decl(typeParametersAvailableInNestedScope3.ts, 5, 25))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 5, 15))
 
         function a<T>(a: T) { return a; }
->a : Symbol(a, Decl(typeParametersAvailableInNestedScope3.ts, 4, 25))
->T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 5, 19))
->a : Symbol(a, Decl(typeParametersAvailableInNestedScope3.ts, 5, 22))
->T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 5, 19))
->a : Symbol(a, Decl(typeParametersAvailableInNestedScope3.ts, 5, 22))
+>a : Symbol(a, Decl(typeParametersAvailableInNestedScope3.ts, 6, 24))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 7, 19))
+>a : Symbol(a, Decl(typeParametersAvailableInNestedScope3.ts, 7, 22))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 7, 19))
+>a : Symbol(a, Decl(typeParametersAvailableInNestedScope3.ts, 7, 22))
 
         function b(): T { return v; }
->b : Symbol(b, Decl(typeParametersAvailableInNestedScope3.ts, 5, 41))
->T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 4, 15))
->v : Symbol(v, Decl(typeParametersAvailableInNestedScope3.ts, 4, 18))
+>b : Symbol(b, Decl(typeParametersAvailableInNestedScope3.ts, 7, 41))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 5, 15))
+>v : Symbol(v, Decl(typeParametersAvailableInNestedScope3.ts, 5, 18))
 
-        return { a, b };
->a : Symbol(a, Decl(typeParametersAvailableInNestedScope3.ts, 7, 16))
->b : Symbol(b, Decl(typeParametersAvailableInNestedScope3.ts, 7, 19))
+        function c<T>(): [Alias, Alias2, T] { return null as any; }
+>c : Symbol(c, Decl(typeParametersAvailableInNestedScope3.ts, 8, 37))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 9, 19))
+>Alias : Symbol(Alias, Decl(typeParametersAvailableInNestedScope3.ts, 2, 33))
+>Alias2 : Symbol(Alias2, Decl(typeParametersAvailableInNestedScope3.ts, 5, 25))
+>T : Symbol(T, Decl(typeParametersAvailableInNestedScope3.ts, 9, 19))
+
+        return { a, b, c };
+>a : Symbol(a, Decl(typeParametersAvailableInNestedScope3.ts, 10, 16))
+>b : Symbol(b, Decl(typeParametersAvailableInNestedScope3.ts, 10, 19))
+>c : Symbol(c, Decl(typeParametersAvailableInNestedScope3.ts, 10, 22))
     }
 
     return { a, b, c };
->a : Symbol(a, Decl(typeParametersAvailableInNestedScope3.ts, 10, 12))
->b : Symbol(b, Decl(typeParametersAvailableInNestedScope3.ts, 10, 15))
->c : Symbol(c, Decl(typeParametersAvailableInNestedScope3.ts, 10, 18))
+>a : Symbol(a, Decl(typeParametersAvailableInNestedScope3.ts, 13, 12))
+>b : Symbol(b, Decl(typeParametersAvailableInNestedScope3.ts, 13, 15))
+>c : Symbol(c, Decl(typeParametersAvailableInNestedScope3.ts, 13, 18))
 }
 

@@ -31,7 +31,7 @@ interface Refinement<A, B extends A> {
 }
 
 declare const filter: {
->filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: readonly A[]) => readonly B[]; <A>(predicate: Predicate<A>): <B extends A>(bs: readonly B[]) => readonly B[]; <A>(predicate: Predicate<A>): (as: readonly A[]) => readonly A[]; }
+>filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>; <A>(predicate: Predicate<A>): <B extends A>(bs: readonly B[]) => readonly B[]; <A>(predicate: Predicate<A>): (as: ReadonlyArray<A>) => ReadonlyArray<A>; }
 
     <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>
 >refinement : Refinement<A, B>

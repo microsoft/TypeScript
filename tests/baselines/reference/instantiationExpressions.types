@@ -459,7 +459,7 @@ type A<U> = InstanceType<typeof Array<U>>;  // U[]
 >Array : ArrayConstructor
 
 declare const g1: {
->g1 : { <T>(a: T): { a: T; }; new <U>(b: U): { b: U; }; }
+>g1 : { <T>(a: T): {    a: T;}; new <U>(b: U): {    b: U;}; }
 
     <T>(a: T): { a: T };
 >a : T

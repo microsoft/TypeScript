@@ -765,8 +765,8 @@ function f60<T>(source: T, target: T) {
 }
 
 function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
->f70 : (func: <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void) => void
->func : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void
+>f70 : (func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) => void
+>func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
 >k1 : keyof T & keyof U
 >k2 : keyof T | keyof U
 

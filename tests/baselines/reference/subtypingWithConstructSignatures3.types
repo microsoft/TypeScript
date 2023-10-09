@@ -349,7 +349,7 @@ module Errors {
 >r6arg2 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
 
     var r7arg1: new <T>(x: { a: T; b: T }) => T;
->r7arg1 : new <T>(x: { a: T; b: T; }) => T
+>r7arg1 : new <T>(x: {    a: T;    b: T;}) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -379,7 +379,7 @@ module Errors {
 >r7arg2 : new (x: { a: string; b: number; }) => number
 
     var r7arg3: new <T extends Base>(x: { a: T; b: T }) => number;
->r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
+>r7arg3 : new <T extends Base>(x: {    a: T;    b: T;}) => number
 >x : { a: T; b: T; }
 >a : T
 >b : T
