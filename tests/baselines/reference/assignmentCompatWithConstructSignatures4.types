@@ -52,7 +52,7 @@ module Errors {
 >x : Base[]
 
         var a11: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
->a11 : new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
+>a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >x : { foo: string; }
 >foo : string
 >y : { foo: string; bar: string; }
@@ -75,7 +75,7 @@ module Errors {
 
             };
         var a15: new (x: { a: string; b: number }) => number;
->a15 : new (x: {    a: string;    b: number;}) => number
+>a15 : new (x: { a: string; b: number; }) => number
 >x : { a: string; b: number; }
 >a : string
 >b : number
@@ -160,10 +160,10 @@ module Errors {
 >a7 : new (x: (arg: Base) => Derived) => (r: Base) => Derived2
 
         var b8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
->b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: {    foo: number;}) => U) => (r: T) => U
+>b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
 >x : (arg: T) => U
 >arg : T
->y : (arg2: {    foo: number;}) => U
+>y : (arg2: { foo: number; }) => U
 >arg2 : { foo: number; }
 >foo : number
 >r : T
@@ -224,7 +224,7 @@ module Errors {
 >a12 : new (x: Base[], y: Derived2[]) => Derived[]
 
         var b15: new <T>(x: { a: T; b: T }) => T; 
->b15 : new <T>(x: {    a: T;    b: T;}) => T
+>b15 : new <T>(x: { a: T; b: T; }) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -240,7 +240,7 @@ module Errors {
 >a15 : new (x: { a: string; b: number; }) => number
 
         var b15a: new <T extends Base>(x: { a: T; b: T }) => number; 
->b15a : new <T extends Base>(x: {    a: T;    b: T;}) => number
+>b15a : new <T extends Base>(x: { a: T; b: T; }) => number
 >x : { a: T; b: T; }
 >a : T
 >b : T

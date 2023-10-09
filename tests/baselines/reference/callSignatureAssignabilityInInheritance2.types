@@ -78,7 +78,7 @@ interface A { // T
 >x : Derived[]
 
     a11: (x: { foo: string }, y: { foo: string; bar: string }) => Base;
->a11 : (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
+>a11 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >x : { foo: string; }
 >foo : string
 >y : { foo: string; bar: string; }
@@ -96,7 +96,7 @@ interface A { // T
 >y : Derived[]
 
     a14: (x: { a: string; b: number }) => Object;
->a14 : (x: {    a: string;    b: number;}) => Object
+>a14 : (x: { a: string; b: number; }) => Object
 >x : { a: string; b: number; }
 >a : string
 >b : number
@@ -204,10 +204,10 @@ interface I extends A {
 >r : T
 
     a9: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => (r: T) => U; // ok, same as a8 with compatible object literal
->a9 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: {    foo: string;    bing: number;}) => U) => (r: T) => U
+>a9 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
 >x : (arg: T) => U
 >arg : T
->y : (arg2: {    foo: string;    bing: number;}) => U
+>y : (arg2: { foo: string; bing: number; }) => U
 >arg2 : { foo: string; bing: number; }
 >foo : string
 >bing : number
@@ -233,7 +233,7 @@ interface I extends A {
 >y : T
 
     a14: <T, U>(x: { a: T; b: U }) => T; // ok
->a14 : <T, U>(x: {    a: T;    b: U;}) => T
+>a14 : <T, U>(x: { a: T; b: U; }) => T
 >x : { a: T; b: U; }
 >a : T
 >b : U

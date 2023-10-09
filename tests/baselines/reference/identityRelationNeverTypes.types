@@ -24,7 +24,7 @@ declare class State<TContext> {
 }
 
 function f1(state: State<{ foo: number }>) {
->f1 : (state: State<{    foo: number;}>) => void
+>f1 : (state: State<{ foo: number; }>) => void
 >state : State<{ foo: number; }>
 >foo : number
 

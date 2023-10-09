@@ -4,7 +4,7 @@
 interface F { (): string }
 
 function test(x: number & { _foo: string }) {
->test : (x: number & {    _foo: string;}) => void
+>test : (x: number & { _foo: string; }) => void
 >x : number & { _foo: string; }
 >_foo : string
 
@@ -20,7 +20,7 @@ function test(x: number & { _foo: string }) {
 }
 
 function f1(x: F & { foo: number }) {
->f1 : (x: F & {    foo: number;}) => void
+>f1 : (x: F & { foo: number; }) => void
 >x : F & { foo: number; }
 >foo : number
 

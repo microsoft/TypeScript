@@ -2,12 +2,12 @@
 
 === excessPropertiesInOverloads.ts ===
 declare function fn(a: { x: string }): void;
->fn : { (a: {    x: string;}): void; (a: { y: string; }): void; }
+>fn : { (a: { x: string; }): void; (a: { y: string; }): void; }
 >a : { x: string; }
 >x : string
 
 declare function fn(a: { y: string }): void;
->fn : { (a: { x: string; }): void; (a: {    y: string;}): void; }
+>fn : { (a: { x: string; }): void; (a: { y: string; }): void; }
 >a : { y: string; }
 >y : string
 

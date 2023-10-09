@@ -76,7 +76,7 @@ var a10: (...x: Derived[]) => Derived;
 >x : Derived[]
 
 var a11: (x: { foo: string }, y: { foo: string; bar: string }) => Base;
->a11 : (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
+>a11 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >x : { foo: string; }
 >foo : string
 >y : { foo: string; bar: string; }
@@ -94,7 +94,7 @@ var a13: (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
 >y : Derived[]
 
 var a14: (x: { a: string; b: number }) => Object;
->a14 : (x: {    a: string;    b: number;}) => Object
+>a14 : (x: { a: string; b: number; }) => Object
 >x : { a: string; b: number; }
 >a : string
 >b : number
@@ -276,10 +276,10 @@ b8 = a8; // ok
 >a8 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 
 var b9: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => (r: T) => U; 
->b9 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: {    foo: string;    bing: number;}) => U) => (r: T) => U
+>b9 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
 >x : (arg: T) => U
 >arg : T
->y : (arg2: {    foo: string;    bing: number;}) => U
+>y : (arg2: { foo: string; bing: number; }) => U
 >arg2 : { foo: string; bing: number; }
 >foo : string
 >bing : number
@@ -355,7 +355,7 @@ b13 = a13; // ok
 >a13 : (x: Base[], y: Derived[]) => Derived[]
 
 var b14: <T>(x: { a: T; b: T }) => T; 
->b14 : <T>(x: {    a: T;    b: T;}) => T
+>b14 : <T>(x: { a: T; b: T; }) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T

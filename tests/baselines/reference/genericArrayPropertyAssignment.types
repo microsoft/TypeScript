@@ -2,7 +2,7 @@
 
 === genericArrayPropertyAssignment.ts ===
 function isEmpty(list: {length:number;})
->isEmpty : (list: {    length: number;}) => boolean
+>isEmpty : (list: { length: number; }) => boolean
 >list : { length: number; }
 >length : number
 {

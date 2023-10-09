@@ -13,7 +13,7 @@ type T3 = () => void;
 >T3 : () => void
 
 type T4 = new () => { a: number };
->T4 : new () => {    a: number;}
+>T4 : new () => { a: number; }
 >a : number
 
 type T5 = number[];

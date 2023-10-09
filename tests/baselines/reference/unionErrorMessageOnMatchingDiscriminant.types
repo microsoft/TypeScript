@@ -2,7 +2,7 @@
 
 === unionErrorMessageOnMatchingDiscriminant.ts ===
 type A = {
->A : { type: 'a'; data: {    a: string;}; }
+>A : { type: 'a'; data: { a: string; }; }
 
     type: 'a',
 >type : "a"

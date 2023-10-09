@@ -17,7 +17,7 @@ interface IAsyncEnumerator<T> {
 >next3 : () => Promise<T | {}>
 
     next4(): Promise<T | { x: string }>;
->next4 : () => Promise<T | {    x: string;}>
+>next4 : () => Promise<T | { x: string; }>
 >x : string
 }
 

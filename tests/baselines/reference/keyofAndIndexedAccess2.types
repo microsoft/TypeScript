@@ -2,7 +2,7 @@
 
 === keyofAndIndexedAccess2.ts ===
 function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
->f1 : (obj: {    a: number;    b: 0 | 1;    c: string;}, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') => void
+>f1 : (obj: { a: number; b: 0 | 1; c: string; }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') => void
 >obj : { a: number; b: 0 | 1; c: string; }
 >a : number
 >b : 0 | 1
@@ -76,7 +76,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 }
 
 function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b: { [key: string]: number }, c: T, k: keyof T) {
->f2 : <T extends { [key: string]: number; }>(a: {    x: number;    y: number;}, b: { [key: string]: number; }, c: T, k: keyof T) => void
+>f2 : <T extends { [key: string]: number; }>(a: { x: number; y: number; }, b: { [key: string]: number; }, c: T, k: keyof T) => void
 >key : string
 >a : { x: number; y: number; }
 >x : number

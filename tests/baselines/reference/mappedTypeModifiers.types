@@ -107,7 +107,7 @@ type Boxified<T> = { [P in keyof T]: { x: T[P] } };
 >x : T[P]
 
 type B = { a: { x: number }, b: { x: string } };
->B : { a: {    x: number;}; b: {    x: string;}; }
+>B : { a: { x: number; }; b: { x: string; }; }
 >a : { x: number; }
 >x : number
 >b : { x: string; }
@@ -121,7 +121,7 @@ type BP = { a?: { x: number }, b?: { x: string } };
 >x : string
 
 type BR = { readonly a: { x: number }, readonly b: { x: string } };
->BR : { readonly a: {    x: number;}; readonly b: {    x: string;}; }
+>BR : { readonly a: { x: number; }; readonly b: { x: string; }; }
 >a : { x: number; }
 >x : number
 >b : { x: string; }

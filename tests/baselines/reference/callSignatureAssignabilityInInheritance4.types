@@ -52,7 +52,7 @@ interface A { // T
 >arg : T
 
     a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
->a11 : <T>(x: {    foo: T;}, y: {    foo: T;    bar: T;}) => Base
+>a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: T; bar: T; }
@@ -60,13 +60,13 @@ interface A { // T
 >bar : T
 
     a15: <T>(x: { a: T; b: T }) => T[];
->a15 : <T>(x: {    a: T;    b: T;}) => T[]
+>a15 : <T>(x: { a: T; b: T; }) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
->a16 : <T extends Base>(x: {    a: T;    b: T;}) => T[]
+>a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -140,7 +140,7 @@ interface I extends A {
 >arg : T
 
     a11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; // ok
->a11 : <T, U>(x: {    foo: T;}, y: {    foo: U;    bar: U;}) => Base
+>a11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: U; bar: U; }
@@ -148,13 +148,13 @@ interface I extends A {
 >bar : U
 
     a15: <U, V>(x: { a: U; b: V; }) => U[]; // ok, T = U, T = V
->a15 : <U, V>(x: {    a: U;    b: V;}) => U[]
+>a15 : <U, V>(x: { a: U; b: V; }) => U[]
 >x : { a: U; b: V; }
 >a : U
 >b : V
 
     a16: <T>(x: { a: T; b: T }) => T[]; // ok, more general parameter type
->a16 : <T>(x: {    a: T;    b: T;}) => T[]
+>a16 : <T>(x: { a: T; b: T; }) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T

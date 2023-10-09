@@ -202,7 +202,7 @@ type Task = {
 };
 
 type Schema = {
->Schema : { root: {    title: string;    task: Task;}; Task: Task; }
+>Schema : { root: { title: string; task: Task; }; Task: Task; }
 
   root: {
 >root : { title: string; task: Task; }

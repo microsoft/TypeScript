@@ -4,7 +4,7 @@
 // Repros from #53998
 
 type ApiPost =
->ApiPost : { path: "/login"; body: {}; } | { path: "/user"; body: {    name: string;}; }
+>ApiPost : { path: "/login"; body: {}; } | { path: "/user"; body: { name: string; }; }
 
     | {
         path: "/login";
@@ -64,7 +64,7 @@ const tmp = <PATH extends PostPath>(
 }
 
 function fx1<P extends PostPath>(x: { body: PostBody<P> }, y: { body: PostBody<P> }) {
->fx1 : <P extends "/login" | "/user">(x: {    body: PostBody<P>;}, y: {    body: PostBody<P>;}) => void
+>fx1 : <P extends "/login" | "/user">(x: { body: PostBody<P>; }, y: { body: PostBody<P>; }) => void
 >x : { body: PostBody<P>; }
 >body : PostBody<P>
 >y : { body: PostBody<P>; }

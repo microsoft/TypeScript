@@ -8406,7 +8406,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     includePrivateSymbol?.(sym);
                 }
                 if (isIdentifier(node)) {
-                    const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(getDeclaredTypeOfSymbol(sym), context) : factory.cloneNode(node);
+                    const name = sym.flags & SymbolFlags.TypeParameter && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams ? typeParameterToName(getDeclaredTypeOfSymbol(sym), context) : factory.cloneNode(node);
                     name.symbol = sym; // for quickinfo, which uses identifier symbol information
                     return { introducesError, node: setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping) };
                 }
@@ -8548,6 +8548,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 if (file && isTupleTypeNode(node) && (getLineAndCharacterOfPosition(file, node.pos).line === getLineAndCharacterOfPosition(file, node.end).line)) {
                     setEmitFlags(node, EmitFlags.SingleLine);
+                }
+
+                if (isTypeLiteralNode(node) && !(context.flags & NodeBuilderFlags.MultilineObjectLiterals)) {
+                    // always clone to add node builder format flags
+                    let visited = visitEachChild(node, visitExistingNodeTreeSymbols, nullTransformationContext);
+                    visited = visited === node ? factory.cloneNode(visited) : visited;
+                    setEmitFlags(visited, EmitFlags.SingleLine);
+                    return visited;
                 }
 
                 return visitEachChild(node, visitExistingNodeTreeSymbols, nullTransformationContext);

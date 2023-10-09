@@ -7,20 +7,20 @@ type Id<T> = { [K in keyof T]: Id<T[K]> };
 >Id : Id<T>
 
 type Foo1 = Id<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
->Foo1 : Id<{ x: {    y: {        z: {            a: {                b: {                    c: number;                };            };        };    };}; }>
->x : { y: {    z: {        a: {            b: {                c: number;            };        };    };}; }
->y : { z: {    a: {        b: {            c: number;        };    };}; }
->z : { a: {    b: {        c: number;    };}; }
->a : { b: {    c: number;}; }
+>Foo1 : Id<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+>x : { y: { z: { a: { b: { c: number; }; }; }; }; }
+>y : { z: { a: { b: { c: number; }; }; }; }
+>z : { a: { b: { c: number; }; }; }
+>a : { b: { c: number; }; }
 >b : { c: number; }
 >c : number
 
 type Foo2 = Id<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
->Foo2 : Id<{ x: {    y: {        z: {            a: {                b: {                    c: string;                };            };        };    };}; }>
->x : { y: {    z: {        a: {            b: {                c: string;            };        };    };}; }
->y : { z: {    a: {        b: {            c: string;        };    };}; }
->z : { a: {    b: {        c: string;    };}; }
->a : { b: {    c: string;}; }
+>Foo2 : Id<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>
+>x : { y: { z: { a: { b: { c: string; }; }; }; }; }
+>y : { z: { a: { b: { c: string; }; }; }; }
+>z : { a: { b: { c: string; }; }; }
+>a : { b: { c: string; }; }
 >b : { c: string; }
 >c : string
 
@@ -35,20 +35,20 @@ type Id2<T> = { [K in keyof T]: Id2<Id2<T[K]>> };
 >Id2 : Id2<T>
 
 type Foo3 = Id2<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
->Foo3 : Id2<{ x: {    y: {        z: {            a: {                b: {                    c: number;                };            };        };    };}; }>
->x : { y: {    z: {        a: {            b: {                c: number;            };        };    };}; }
->y : { z: {    a: {        b: {            c: number;        };    };}; }
->z : { a: {    b: {        c: number;    };}; }
->a : { b: {    c: number;}; }
+>Foo3 : Id2<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+>x : { y: { z: { a: { b: { c: number; }; }; }; }; }
+>y : { z: { a: { b: { c: number; }; }; }; }
+>z : { a: { b: { c: number; }; }; }
+>a : { b: { c: number; }; }
 >b : { c: number; }
 >c : number
 
 type Foo4 = Id2<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
->Foo4 : Id2<{ x: {    y: {        z: {            a: {                b: {                    c: string;                };            };        };    };}; }>
->x : { y: {    z: {        a: {            b: {                c: string;            };        };    };}; }
->y : { z: {    a: {        b: {            c: string;        };    };}; }
->z : { a: {    b: {        c: string;    };}; }
->a : { b: {    c: string;}; }
+>Foo4 : Id2<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>
+>x : { y: { z: { a: { b: { c: string; }; }; }; }; }
+>y : { z: { a: { b: { c: string; }; }; }; }
+>z : { a: { b: { c: string; }; }; }
+>a : { b: { c: string; }; }
 >b : { c: string; }
 >c : string
 
@@ -65,19 +65,19 @@ type RequiredDeep<T> = { [K in keyof T]-?: RequiredDeep<T[K]> };
 >RequiredDeep : RequiredDeep<T>
 
 type A = { a?: { b: { c: 1 | { d: 2000 } }}}
->A : { a?: { b: {    c: 1 | {        d: 2000;    };}; } | undefined; }
->a : { b: {    c: 1 | {        d: 2000;    };}; } | undefined
->b : { c: 1 | {    d: 2000;}; }
+>A : { a?: { b: { c: 1 | { d: 2000; }; }; } | undefined; }
+>a : { b: { c: 1 | { d: 2000; }; }; } | undefined
+>b : { c: 1 | { d: 2000; }; }
 >c : { d: 2000; } | 1
 >d : 2000
 
 type B = { a?: { b: { c: { d: { e: { f: { g: 2 }}}}, x: 1000 }}}
->B : { a?: { b: {    c: {        d: {            e: {                f: {                    g: 2;                };            };        };    };    x: 1000;}; } | undefined; }
->a : { b: {    c: {        d: {            e: {                f: {                    g: 2;                };            };        };    };    x: 1000;}; } | undefined
->b : { c: {    d: {        e: {            f: {                g: 2;            };        };    };}; x: 1000; }
->c : { d: {    e: {        f: {            g: 2;        };    };}; }
->d : { e: {    f: {        g: 2;    };}; }
->e : { f: {    g: 2;}; }
+>B : { a?: { b: { c: { d: { e: { f: { g: 2; }; }; }; }; x: 1000; }; } | undefined; }
+>a : { b: { c: { d: { e: { f: { g: 2; }; }; }; }; x: 1000; }; } | undefined
+>b : { c: { d: { e: { f: { g: 2; }; }; }; }; x: 1000; }
+>c : { d: { e: { f: { g: 2; }; }; }; }
+>d : { e: { f: { g: 2; }; }; }
+>e : { f: { g: 2; }; }
 >f : { g: 2; }
 >g : 2
 >x : 1000

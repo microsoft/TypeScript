@@ -2,7 +2,7 @@
 
 === unionTypeWithIndexSignature.ts ===
 type Two = { foo: { bar: true }, baz: true } | { [s: string]: string };
->Two : { foo: {    bar: true;}; baz: true; } | { [s: string]: string; }
+>Two : { foo: { bar: true; }; baz: true; } | { [s: string]: string; }
 >foo : { bar: true; }
 >bar : true
 >true : true

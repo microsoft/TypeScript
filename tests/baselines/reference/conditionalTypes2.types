@@ -151,13 +151,13 @@ type Bar = { bar: string };
 >bar : string
 
 declare function fooBar(x: { foo: string, bar: string }): void;
->fooBar : (x: {    foo: string;    bar: string;}) => void
+>fooBar : (x: { foo: string; bar: string; }) => void
 >x : { foo: string; bar: string; }
 >foo : string
 >bar : string
 
 declare function fooBat(x: { foo: string, bat: string }): void;
->fooBat : (x: {    foo: string;    bat: string;}) => void
+>fooBat : (x: { foo: string; bat: string; }) => void
 >x : { foo: string; bat: string; }
 >foo : string
 >bat : string

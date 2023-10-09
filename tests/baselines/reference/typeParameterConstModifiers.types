@@ -126,7 +126,7 @@ const x42 = f4([{ a: 1, b: 'x' }, { a: 2, b: 'y' }]);
 >'y' : "y"
 
 declare function f5<const T>(obj: { x: T, y: T }): T;
->f5 : <const T>(obj: {    x: T;    y: T;}) => T
+>f5 : <const T>(obj: { x: T; y: T; }) => T
 >obj : { x: T; y: T; }
 >x : T
 >y : T
@@ -308,8 +308,8 @@ type T5 = { new <const T>(x: T): T };
 // Corrected repro from #51745
 
 type Obj = { a: { b: { c: "123" } } };
->Obj : { a: {    b: {        c: "123";    };}; }
->a : { b: {    c: "123";}; }
+>Obj : { a: { b: { c: "123"; }; }; }
+>a : { b: { c: "123"; }; }
 >b : { c: "123"; }
 >c : "123"
 
@@ -450,7 +450,7 @@ const t1_55033 = factory_55033((a: { test: number }, b: string) => {})(
 >factory_55033((a: { test: number }, b: string) => {})(    { test: 123 },    "some string") : readonly [{ readonly test: 123; }, "some string"]
 >factory_55033((a: { test: number }, b: string) => {}) : <const K extends readonly [a: { test: number; }, b: string]>(...args: K) => K
 >factory_55033 : <const T extends readonly unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
->(a: { test: number }, b: string) => {} : (a: {    test: number;}, b: string) => void
+>(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
 >a : { test: number; }
 >test : number
 >b : string
@@ -470,7 +470,7 @@ const t2_55033 = factory_55033((a: { test: number }, b: string) => {})(
 >factory_55033((a: { test: number }, b: string) => {})(    { test: 123 } as const,    "some string") : readonly [{ readonly test: 123; }, "some string"]
 >factory_55033((a: { test: number }, b: string) => {}) : <const K extends readonly [a: { test: number; }, b: string]>(...args: K) => K
 >factory_55033 : <const T extends readonly unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
->(a: { test: number }, b: string) => {} : (a: {    test: number;}, b: string) => void
+>(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
 >a : { test: number; }
 >test : number
 >b : string
@@ -510,7 +510,7 @@ const t1_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
 >factory_55033_2((a: { test: number }, b: string) => {})(    { test: 123 },    "some string") : [{ readonly test: 123; }, "some string"]
 >factory_55033_2((a: { test: number }, b: string) => {}) : <const K extends [a: { test: number; }, b: string]>(...args: K) => K
 >factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
->(a: { test: number }, b: string) => {} : (a: {    test: number;}, b: string) => void
+>(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
 >a : { test: number; }
 >test : number
 >b : string
@@ -530,7 +530,7 @@ const t2_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
 >factory_55033_2((a: { test: number }, b: string) => {})(    { test: 123 } as const,    "some string") : [{ readonly test: 123; }, "some string"]
 >factory_55033_2((a: { test: number }, b: string) => {}) : <const K extends [a: { test: number; }, b: string]>(...args: K) => K
 >factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
->(a: { test: number }, b: string) => {} : (a: {    test: number;}, b: string) => void
+>(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
 >a : { test: number; }
 >test : number
 >b : string

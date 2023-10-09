@@ -977,7 +977,7 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 }
 
 function f80<T extends { a: { x: any } }>(obj: T) {
->f80 : <T extends { a: {    x: any;}; }>(obj: T) => void
+>f80 : <T extends { a: { x: any; }; }>(obj: T) => void
 >a : { x: any; }
 >x : any
 >obj : T
@@ -1028,7 +1028,7 @@ function f80<T extends { a: { x: any } }>(obj: T) {
 }
 
 function f81<T extends { a: { x: any } }>(obj: T) {
->f81 : <T extends { a: {    x: any;}; }>(obj: T) => T["a"]["x"]
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
 >a : { x: any; }
 >x : any
 >obj : T
@@ -1448,7 +1448,7 @@ function path(obj: any, ...keys: (string | number)[]): any {
 }
 
 type Thing = {
->Thing : { a: {    x: number;    y: string;}; b: boolean; }
+>Thing : { a: { x: number; y: string; }; b: boolean; }
 
     a: { x: number, y: string },
 >a : { x: number; y: string; }
@@ -1719,7 +1719,7 @@ type Handler<T> = {
 };
 
 function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
->onChangeGenericFunction : <T>(handler: Handler<T & {    preset: number;}>) => void
+>onChangeGenericFunction : <T>(handler: Handler<T & { preset: number; }>) => void
 >handler : Handler<T & { preset: number; }>
 >preset : number
 
@@ -1973,7 +1973,7 @@ type Example<T extends { [K in keyof T]: { prop: any } }> = { [K in keyof T]: T[
 >prop : any
 
 type Result = Example<{ a: { prop: string }; b: { prop: number } }>;
->Result : Example<{ a: {    prop: string;}; b: {    prop: number;}; }>
+>Result : Example<{ a: { prop: string; }; b: { prop: number; }; }>
 >a : { prop: string; }
 >prop : string
 >b : { prop: number; }
@@ -1987,7 +1987,7 @@ type Example2<T> = { [K in keyof Helper2<T>]: Helper2<T>[K]["prop"] };
 >Example2 : Example2<T>
 
 type Result2 = Example2<{ 1: { prop: string }; 2: { prop: number } }>;
->Result2 : Example2<{ 1: {    prop: string;}; 2: {    prop: number;}; }>
+>Result2 : Example2<{ 1: { prop: string; }; 2: { prop: number; }; }>
 >1 : { prop: string; }
 >prop : string
 >2 : { prop: number; }

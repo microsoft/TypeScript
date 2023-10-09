@@ -2,7 +2,7 @@
 
 === unionTypeReduction2.ts ===
 function f1(x: { f(): void }, y: { f(x?: string): void }) {
->f1 : (x: {    f(): void;}, y: { f(x?: string): void; }) => void
+>f1 : (x: { f(): void; }, y: { f(x?: string): void; }) => void
 >x : { f(): void; }
 >f : () => void
 >y : { f(x?: string): void; }

@@ -23,7 +23,7 @@ interface TodoListProps {
 >todos : TodoProp[]
 }
 function Todo(prop: { key: number, todo: string }) {
->Todo : (prop: {    key: number;    todo: string;}) => any
+>Todo : (prop: { key: number; todo: string; }) => any
 >prop : { key: number; todo: string; }
 >key : number
 >todo : string

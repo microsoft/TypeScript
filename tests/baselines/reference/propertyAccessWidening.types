@@ -56,7 +56,7 @@ function g2(headerNames: any) {
 // Object in property or element access is widened when target of assignment
 
 function foo(options?: { a: string, b: number }) {
->foo : (options?: {    a: string;    b: number;}) => void
+>foo : (options?: { a: string; b: number; }) => void
 >options : { a: string; b: number; } | undefined
 >a : string
 >b : number

@@ -617,7 +617,7 @@ function f18() {
 // Repro from #39470
 
 declare function foo(arg: { val: number }[]): void;
->foo : (arg: {    val: number;}[]) => void
+>foo : (arg: { val: number; }[]) => void
 >arg : { val: number; }[]
 >val : number
 

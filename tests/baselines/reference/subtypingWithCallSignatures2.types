@@ -136,8 +136,8 @@ declare function foo10(a: any): any;
 >a : any
 
 declare function foo11(a: (x: { foo: string }, y: { foo: string; bar: string }) => Base): typeof a;
->foo11 : { (a: (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base): typeof a; (a: any): any; }
->a : (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
+>foo11 : { (a: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): typeof a; (a: any): any; }
+>a : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >x : { foo: string; }
 >foo : string
 >y : { foo: string; bar: string; }
@@ -172,8 +172,8 @@ declare function foo13(a: any): any;
 >a : any
 
 declare function foo14(a: (x: { a: string; b: number }) => Object): typeof a;
->foo14 : { (a: (x: {    a: string;    b: number;}) => Object): typeof a; (a: any): any; }
->a : (x: {    a: string;    b: number;}) => Object
+>foo14 : { (a: (x: { a: string; b: number; }) => Object): typeof a; (a: any): any; }
+>a : (x: { a: string; b: number; }) => Object
 >x : { a: string; b: number; }
 >a : string
 >b : number
@@ -533,11 +533,11 @@ var r8b = [r8arg2, r8arg1];
 >r8arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U
 
 var r9arg1 = <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => (r: T) => <U>null;
->r9arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: {    foo: string;    bing: number;}) => U) => (r: T) => U
-><T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => (r: T) => <U>null : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: {    foo: string;    bing: number;}) => U) => (r: T) => U
+>r9arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
+><T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => (r: T) => <U>null : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
 >x : (arg: T) => U
 >arg : T
->y : (arg2: {    foo: string;    bing: number;}) => U
+>y : (arg2: { foo: string; bing: number; }) => U
 >arg2 : { foo: string; bing: number; }
 >foo : string
 >bing : number
@@ -614,8 +614,8 @@ var r11arg1 = <T extends Base>(x: T, y: T) => x;
 >x : T
 
 var r11arg2 = (x: { foo: string }, y: { foo: string; bar: string }) => <Base>null;
->r11arg2 : (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
->(x: { foo: string }, y: { foo: string; bar: string }) => <Base>null : (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
+>r11arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+>(x: { foo: string }, y: { foo: string; bar: string }) => <Base>null : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >x : { foo: string; }
 >foo : string
 >y : { foo: string; bar: string; }
@@ -706,8 +706,8 @@ var r13b = [r13arg2, r13arg1];
 >r13arg1 : <T extends Derived[]>(x: Base[], y: T) => T
 
 var r14arg1 = <T>(x: { a: T; b: T }) => x.a;
->r14arg1 : <T>(x: {    a: T;    b: T;}) => T
-><T>(x: { a: T; b: T }) => x.a : <T>(x: {    a: T;    b: T;}) => T
+>r14arg1 : <T>(x: { a: T; b: T; }) => T
+><T>(x: { a: T; b: T }) => x.a : <T>(x: { a: T; b: T; }) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -716,8 +716,8 @@ var r14arg1 = <T>(x: { a: T; b: T }) => x.a;
 >a : T
 
 var r14arg2 = (x: { a: string; b: number }) => <Object>null;
->r14arg2 : (x: {    a: string;    b: number;}) => Object
->(x: { a: string; b: number }) => <Object>null : (x: {    a: string;    b: number;}) => Object
+>r14arg2 : (x: { a: string; b: number; }) => Object
+>(x: { a: string; b: number }) => <Object>null : (x: { a: string; b: number; }) => Object
 >x : { a: string; b: number; }
 >a : string
 >b : number

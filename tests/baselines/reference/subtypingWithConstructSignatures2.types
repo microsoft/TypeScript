@@ -136,8 +136,8 @@ declare function foo10(a: any): any;
 >a : any
 
 declare function foo11(a: new (x: { foo: string }, y: { foo: string; bar: string }) => Base): typeof a;
->foo11 : { (a: new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base): typeof a; (a: any): any; }
->a : new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
+>foo11 : { (a: new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): typeof a; (a: any): any; }
+>a : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >x : { foo: string; }
 >foo : string
 >y : { foo: string; bar: string; }
@@ -172,8 +172,8 @@ declare function foo13(a: any): any;
 >a : any
 
 declare function foo14(a: new (x: { a: string; b: number }) => Object): typeof a;
->foo14 : { (a: new (x: {    a: string;    b: number;}) => Object): typeof a; (a: any): any; }
->a : new (x: {    a: string;    b: number;}) => Object
+>foo14 : { (a: new (x: { a: string; b: number; }) => Object): typeof a; (a: any): any; }
+>a : new (x: { a: string; b: number; }) => Object
 >x : { a: string; b: number; }
 >a : string
 >b : number
@@ -494,10 +494,10 @@ var r8b = [r8arg2, r8arg1];
 >r8arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: new (arg2: T) => U) => new (r: T) => U
 
 var r9arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => new (r: T) => U;
->r9arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: {    foo: string;    bing: number;}) => U) => new (r: T) => U
+>r9arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => new (r: T) => U
 >x : new (arg: T) => U
 >arg : T
->y : (arg2: {    foo: string;    bing: number;}) => U
+>y : (arg2: { foo: string; bing: number; }) => U
 >arg2 : { foo: string; bing: number; }
 >foo : string
 >bing : number
@@ -561,7 +561,7 @@ var r11arg1: new <T extends Base>(x: T, y: T) => T;
 >y : T
 
 var r11arg2: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
->r11arg2 : new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
+>r11arg2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >x : { foo: string; }
 >foo : string
 >y : { foo: string; bar: string; }
@@ -643,13 +643,13 @@ var r13b = [r13arg2, r13arg1];
 >r13arg1 : new <T extends Derived[]>(x: Base[], y: T) => T
 
 var r14arg1: new <T>(x: { a: T; b: T }) => T;
->r14arg1 : new <T>(x: {    a: T;    b: T;}) => T
+>r14arg1 : new <T>(x: { a: T; b: T; }) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T
 
 var r14arg2: new (x: { a: string; b: number }) => Object;
->r14arg2 : new (x: {    a: string;    b: number;}) => Object
+>r14arg2 : new (x: { a: string; b: number; }) => Object
 >x : { a: string; b: number; }
 >a : string
 >b : number

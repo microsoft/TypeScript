@@ -20,7 +20,7 @@ interface B {
 }
 
 declare const x: {
->x : { bar: {    #baz: string;    #taz(): string;}; }
+>x : { bar: { #baz: string; #taz(): string; }; }
 
     #foo: number;
 >#foo : number
@@ -40,7 +40,7 @@ declare const x: {
 };
 
 declare const y: [{ qux: { #quux: 3 } }];
->y : [{ qux: {    #quux: 3;}; }]
+>y : [{ qux: { #quux: 3; }; }]
 >qux : {}
 >#quux : 3
 

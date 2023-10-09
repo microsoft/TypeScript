@@ -216,7 +216,7 @@ export type IsOptionUniqueHandler<TValue = OptionValues> = (arg: { option: Optio
 >valueKey : string
 
 export type IsValidNewOptionHandler = (arg: { label: string }) => boolean;
->IsValidNewOptionHandler : (arg: {    label: string;}) => boolean
+>IsValidNewOptionHandler : (arg: { label: string; }) => boolean
 >arg : { label: string; }
 >label : string
 
@@ -232,7 +232,7 @@ export type PromptTextCreatorHandler = (filterText: string) => string;
 >filterText : string
 
 export type ShouldKeyDownEventCreateNewOptionHandler = (arg: { keyCode: number }) => boolean;
->ShouldKeyDownEventCreateNewOptionHandler : (arg: {    keyCode: number;}) => boolean
+>ShouldKeyDownEventCreateNewOptionHandler : (arg: { keyCode: number; }) => boolean
 >arg : { keyCode: number; }
 >keyCode : number
 

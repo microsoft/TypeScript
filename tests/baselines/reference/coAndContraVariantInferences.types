@@ -20,10 +20,10 @@ declare function fab(arg: A | B): void;
 >arg : A | B
 
 declare function foo<T>(x: { kind: T }, f: (arg: { kind: T }) => void): void;
->foo : <T>(x: {    kind: T;}, f: (arg: {    kind: T;}) => void) => void
+>foo : <T>(x: { kind: T; }, f: (arg: { kind: T; }) => void) => void
 >x : { kind: T; }
 >kind : T
->f : (arg: {    kind: T;}) => void
+>f : (arg: { kind: T; }) => void
 >arg : { kind: T; }
 >kind : T
 
