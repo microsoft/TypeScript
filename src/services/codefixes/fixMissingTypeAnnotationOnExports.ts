@@ -29,6 +29,7 @@ import {
     getSynthesizedDeepClone,
     getTokenAtPosition,
     getTrailingCommentRanges,
+    hasStaticModifier,
     hasSyntacticModifier,
     Identifier,
     isArrayBindingPattern,
@@ -818,7 +819,11 @@ function withChanges<T>(
             if (!type) {
                 return emptyInferenceResult;
             }
-            const flags = isVariableDeclaration(node) && type.flags & TypeFlags.UniqueESSymbol ? NodeBuilderFlags.AllowUniqueESSymbolType : NodeBuilderFlags.None;
+            const flags = (
+                    isVariableDeclaration(node) ||
+                    (isPropertyDeclaration(node) && hasSyntacticModifier(node, ModifierFlags.Static | ModifierFlags.Readonly))
+                ) && type.flags & TypeFlags.UniqueESSymbol ?
+                NodeBuilderFlags.AllowUniqueESSymbolType : NodeBuilderFlags.None;
             return {
                 typeNode: typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile, flags),
                 mutatedTarget: false,
