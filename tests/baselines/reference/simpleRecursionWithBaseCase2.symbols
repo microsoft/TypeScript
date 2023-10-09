@@ -6,7 +6,7 @@ async function rec1() {
 
   if (Math.random() < 0.5) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     return rec1();
@@ -22,7 +22,7 @@ async function rec2() {
 
   if (Math.random() < 0.5) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     return await rec2();
@@ -52,7 +52,7 @@ async function rec5() {
 
   if (Math.random() < 0.5) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     return ((rec1()));
@@ -68,7 +68,7 @@ async function rec6() {
 
   if (Math.random() < 0.5) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     return await ((rec1()));
@@ -81,14 +81,14 @@ async function rec6() {
 
 declare const ps: Promise<string> | number;
 >ps : Symbol(ps, Decl(simpleRecursionWithBaseCase2.ts, 40, 13))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
 async function foo1() {
 >foo1 : Symbol(foo1, Decl(simpleRecursionWithBaseCase2.ts, 40, 43))
 
   if (Math.random() > 0.5) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     return ps;
@@ -105,7 +105,7 @@ async function foo2() {
 
   if (Math.random() > 0.5) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     return ps;

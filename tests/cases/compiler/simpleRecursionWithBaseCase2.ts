@@ -1,5 +1,6 @@
 // @strict: true
 // @noImplicitAny: true
+// @lib: esnext
 // @noEmit: true
 
 async function rec1() {
