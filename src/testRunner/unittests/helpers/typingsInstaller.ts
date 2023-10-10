@@ -13,6 +13,7 @@ import {
 } from "./tsserver";
 import {
     changeToHostTrackingWrittenFiles,
+    File,
     TestServerHost,
 } from "./virtualFileSystemWithWatch";
 
@@ -90,6 +91,16 @@ function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): strin
     return ts.combinePaths(ts.normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
 }
 
+export type InstallActionThrowingError = string;
+export type InstallActionWithTypingFiles = [installedTypings: string[] | string, typingFiles: File[]];
+export type CustomInstallAction = (
+    installer: TestTypingsInstallerWorker,
+    requestId: number,
+    packageNames: string[],
+    cb: ts.server.typingsInstaller.RequestCompletedAction,
+) => void;
+
+export type InstallAction = InstallActionThrowingError | InstallActionWithTypingFiles | CustomInstallAction;
 export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.TypingsInstaller {
     readonly typesRegistry: Map<string, ts.MapLike<string>>;
     protected projectService!: ts.server.ProjectService;
@@ -98,7 +109,8 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         throttleLimit: number,
         installTypingHost: TestServerHost,
         logger: Logger,
-        typesRegistry?: string | readonly string[],
+        typesRegistry: string | readonly string[] | undefined,
+        private installAction: InstallAction | undefined,
     ) {
         const log = loggerToTypingsInstallerLog(logger);
         if (log?.isEnabled()) {
@@ -171,7 +183,42 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         if (this.log.isEnabled()) {
             this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
         }
-        this.addPostExecAction("success", requestId, packageNames, cb);
+        if (!this.installAction) {
+            this.addPostExecAction("success", requestId, packageNames, cb);
+        }
+        else if (ts.isString(this.installAction)) {
+            assert(false, this.installAction);
+        }
+        else if (ts.isArray(this.installAction)) {
+            this.executeInstallWithTypingFiles(
+                requestId,
+                packageNames,
+                this.installAction[0],
+                this.installAction[1],
+                cb,
+            );
+        }
+        else {
+            this.installAction(this, requestId, packageNames, cb);
+        }
+    }
+
+    executeInstallWithTypingFiles(
+        requestId: number,
+        packageNames: string[],
+        installedTypings: string[] | string,
+        typingFiles: File[],
+        cb: ts.server.typingsInstaller.RequestCompletedAction,
+    ): void {
+        this.addPostExecAction(installedTypings, requestId, packageNames, success => {
+            const host = this.getInstallTypingHost() as TestSessionAndServiceHost;
+            host.baselineHost("TI:: Before installWorker");
+            for (const file of typingFiles) {
+                host.ensureFileOrFolder(file);
+            }
+            host.baselineHost("TI:: After installWorker");
+            cb(success);
+        });
     }
 
     sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.WatchTypingLocations) {
@@ -199,29 +246,29 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
     }
 }
 
-export interface TestTypingsInstallerOptions<T extends TestTypingsInstallerWorker = TestTypingsInstallerWorker> {
+export interface TestTypingsInstallerOptions {
     globalTypingsCacheLocation?: string;
     throttleLimit?: number;
-    workerConstructor?: new (...args: ConstructorParameters<typeof TestTypingsInstallerWorker>) => T;
+    installAction?: InstallAction;
     typesRegistry?: string | readonly string[];
 }
 
-export class TestTypingsInstaller<T extends TestTypingsInstallerWorker = TestTypingsInstallerWorker> implements ts.server.ITypingsInstaller {
+export class TestTypingsInstaller implements ts.server.ITypingsInstaller {
     protected projectService!: ts.server.ProjectService;
-    public installer!: T;
+    public installer!: TestTypingsInstallerWorker;
     readonly globalTypingsCacheLocation: string;
     private readonly throttleLimit: number;
-    private workerConstructor?: new (...args: ConstructorParameters<typeof TestTypingsInstallerWorker>) => T;
+    private installAction?: InstallAction;
     private typesRegistry?: string | readonly string[];
 
     constructor(
         private installTypingHost: TestServerHost,
         private logger: Logger,
-        options?: TestTypingsInstallerOptions<T>,
+        options?: TestTypingsInstallerOptions,
     ) {
         this.globalTypingsCacheLocation = options?.globalTypingsCacheLocation || this.installTypingHost.getHostSpecificPath("/a/data");
         this.throttleLimit = options?.throttleLimit || 5;
-        this.workerConstructor = options?.workerConstructor;
+        this.installAction = options?.installAction;
         this.typesRegistry = options?.typesRegistry;
     }
 
@@ -238,12 +285,14 @@ export class TestTypingsInstaller<T extends TestTypingsInstallerWorker = TestTyp
 
     enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
         if (!this.installer) {
-            if (this.workerConstructor) {
-                this.installer = new this.workerConstructor(this.globalTypingsCacheLocation, this.throttleLimit, this.installTypingHost, this.logger, this.typesRegistry);
-            }
-            else {
-                this.installer = new TestTypingsInstallerWorker(this.globalTypingsCacheLocation, this.throttleLimit, this.installTypingHost, this.logger, this.typesRegistry) as T;
-            }
+            this.installer = new TestTypingsInstallerWorker(
+                this.globalTypingsCacheLocation,
+                this.throttleLimit,
+                this.installTypingHost,
+                this.logger,
+                this.typesRegistry,
+                this.installAction,
+            );
             this.installer.attach(this.projectService);
         }
         this.installer.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
