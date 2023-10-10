@@ -43,7 +43,7 @@ export const customTypesMap = {
         }`,
 };
 
-function replaceAll(source: string, searchValue: string, replaceValue: string): string {
+export function replaceAll(source: string, searchValue: string, replaceValue: string): string {
     let result: string | undefined = (source as string & { replaceAll: typeof source.replace; }).replaceAll?.(searchValue, replaceValue);
 
     if (result !== undefined) {
@@ -189,7 +189,7 @@ export function appendAllScriptInfos(session: TestSession) {
     session.logger.log("");
 }
 
-function loggerToTypingsInstallerLog(logger: Logger): ts.server.typingsInstaller.Log | undefined {
+export function loggerToTypingsInstallerLog(logger: Logger): ts.server.typingsInstaller.Log | undefined {
     return logger?.loggingEnabled() ? {
         isEnabled: ts.returnTrue,
         writeLine: s => {
@@ -427,7 +427,7 @@ export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
     baselineHost(title: string): void;
     logTimeoutQueueLength(): void;
 };
-function patchHostTimeouts(
+export function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
     logger: Logger,
 ) {
