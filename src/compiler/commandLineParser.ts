@@ -2667,10 +2667,6 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
     const compilerOptionsMap = getSerializedCompilerOption(options);
     return writeConfigurations();
 
-    function makePadding(paddingLength: number): string {
-        return Array(paddingLength + 1).join(" ");
-    }
-
     function isAllowedOptionForOutput({ category, name, isCommandLineOnly }: CommandLineOption): boolean {
         // Skip options which do not have a category or have categories which are more niche
         const categoriesToSkip = [Diagnostics.Command_line_Options, Diagnostics.Editor_Support, Diagnostics.Compiler_Diagnostics, Diagnostics.Backwards_Compatibility, Diagnostics.Watch_and_Build_Modes, Diagnostics.Output_Formatting];
@@ -2697,57 +2693,19 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
             }
         }
 
-        // Serialize all options and their descriptions
-        let marginLength = 0;
-        let seenKnownKeys = 0;
-        const entries: { value: string; description?: string; }[] = [];
-        categorizedOptions.forEach((options, category) => {
-            if (entries.length !== 0) {
-                entries.push({ value: "" });
-            }
-            entries.push({ value: `/* ${getLocaleSpecificMessage(category)} */` });
-            for (const option of options) {
-                let optionName;
-                if (compilerOptionsMap.has(option.name)) {
-                    optionName = `"${option.name}": ${JSON.stringify(compilerOptionsMap.get(option.name))}${(seenKnownKeys += 1) === compilerOptionsMap.size ? "" : ","}`;
-                }
-                else {
-                    optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
-                }
-                entries.push({
-                    value: optionName,
-                    description: `/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */`,
-                });
-                marginLength = Math.max(optionName.length, marginLength);
-            }
-        });
-
-        // Write the output
-        const tab = makePadding(2);
-        const result: string[] = [];
-        result.push(`{`);
-        result.push(`${tab}"compilerOptions": {`);
-        result.push(`${tab}${tab}/* ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)} */`);
-        result.push("");
-        // Print out each row, aligning all the descriptions on the same column.
-        for (const entry of entries) {
-            const { value, description = "" } = entry;
-            result.push(value && `${tab}${tab}${value}${description && (makePadding(marginLength - value.length + 2) + description)}`);
-        }
+        // Serialize all options
+        const tsconfig: Partial<TSConfig> = {};
+        tsconfig.compilerOptions = {
+            ...optionMapToObject(compilerOptionsMap),
+        };
         if (fileNames.length) {
-            result.push(`${tab}},`);
-            result.push(`${tab}"files": [`);
-            for (let i = 0; i < fileNames.length; i++) {
-                result.push(`${tab}${tab}${JSON.stringify(fileNames[i])}${i === fileNames.length - 1 ? "" : ","}`);
-            }
-            result.push(`${tab}]`);
+            tsconfig.files = fileNames;
         }
-        else {
-            result.push(`${tab}}`);
-        }
-        result.push(`}`);
-
-        return result.join(newLine) + newLine;
+        const message = `/* ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)} */`;
+        return [
+            message,
+            JSON.stringify(tsconfig, undefined, 2),
+        ].join(newLine) + newLine;
     }
 }
 
