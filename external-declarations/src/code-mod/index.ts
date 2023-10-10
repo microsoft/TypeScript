@@ -1,34 +1,26 @@
-// Import TypeScript module
-import * as ts from "typescript";
+import ts from "typescript";
 
-import { isDeclarationFileName } from "../compiler/utils";
-import { addTypeAnnotationTransformer } from "./code-transform";
+import {
+    fixProject,
+} from "./fixer/code-fixer-applier";
+import {
+    isolatedDeclarationsErrors,
+} from "./fixer/isolated-declarations-errors";
 
-(ts as any).Debug .enableDebugInfo();
-// Read tsconfig.json file from disk
-const tsconfig = ts.readConfigFile("tsconfig.json", ts.sys.readFile);
-// Parse JSON content to get compiler options and file names
-const parsed = ts.parseJsonConfigFileContent(tsconfig.config, ts.sys, "./");
-const options = parsed.options;
-// Pass compiler options and file names to createProgram
-const program = ts.createProgram(parsed.fileNames, options);
+(ts as any).Debug.enableDebugInfo();
 
-program.getSemanticDiagnostics();
-const files = program.getSourceFiles();
-for (const file of files) {
-    if (isDeclarationFileName(file.fileName)) continue;
-
-    const transformedFile = ts.transform(file, [
-        addTypeAnnotationTransformer(file, program),
-    ]);
-
-    const printer = ts.createPrinter({
-        onlyPrintJsDocStyle: true,
-        newLine: options.newLine,
-        target: options.target,
-    } as ts.PrinterOptions);
-    const resultStr = printer.printFile(
-        transformedFile.transformed[0] as ts.SourceFile
-    );
-    console.log(resultStr);
+async function main() {
+    const config = process.argv[2] ?? "./tsconfig.json";
+    if (process.argv.includes("--interactive")) {
+        const { interactiveFixSelector, interactiveFixValidator } = await import("./fixer/interactive-fix-selector");
+        const { makeWatcher } = await import("./fixer/watch");
+        const watcher = makeWatcher();
+        await fixProject(config, isolatedDeclarationsErrors, interactiveFixSelector, interactiveFixValidator, watcher.startWatcher);
+        watcher.close();
+    }
+    else {
+        await fixProject(config, isolatedDeclarationsErrors, async () => 0);
+    }
 }
+
+main();

@@ -7227,12 +7227,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 anyType : getNonMissingTypeOfSymbol(propertySymbol);
             const saveEnclosingDeclaration = context.enclosingDeclaration;
             context.enclosingDeclaration = undefined;
-            if (context.tracker.canTrackSymbol && isLateBoundName(propertySymbol.escapedName)) {
-                if (propertySymbol.declarations) {
-                    const decl = first(propertySymbol.declarations);
+            const decl = propertySymbol.declarations && first(propertySymbol.declarations);
+
+            function hasAccessibleLateBindableName(decl: Declaration, enclosingDeclaration: Node | undefined) {
+                const name = getNameOfDeclaration(decl);
+                if (!name || !isLateBindableName(name)) {
+                    return false;
+                }
+                const firstIdentifier = getFirstIdentifier(name.expression);
+                const nameSymbol = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+                if (!nameSymbol) {
+                    return false;
+                }
+                const result = isSymbolAccessible(nameSymbol, enclosingDeclaration, SymbolFlags.Value, /*shouldComputeAliasesToMakeVisible*/ false);
+                return result.accessibility === SymbolAccessibility.Accessible;
+            }
+
+            const isAccessibleLateBindableName = context.flags & NodeBuilderFlags.WriteComputedProps && decl && hasAccessibleLateBindableName(decl, saveEnclosingDeclaration);
+            if (
+                context.tracker.canTrackSymbol &&
+                (isAccessibleLateBindableName || isLateBoundName(propertySymbol.escapedName))
+            ) {
+                if (decl) {
                     if (hasLateBindableName(decl)) {
+                        const name = getNameOfDeclaration(decl);
                         if (isBinaryExpression(decl)) {
-                            const name = getNameOfDeclaration(decl);
                             if (name && isElementAccessExpression(name) && isPropertyAccessEntityNameExpression(name.argumentExpression)) {
                                 trackComputedName(name.argumentExpression, saveEnclosingDeclaration, context);
                             }
@@ -7247,8 +7266,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             context.enclosingDeclaration = propertySymbol.valueDeclaration || propertySymbol.declarations?.[0] || saveEnclosingDeclaration;
+            const savedFlags = context.flags;
+            context.flags &= !isAccessibleLateBindableName ? ~NodeBuilderFlags.WriteComputedProps : ~NodeBuilderFlags.None;
             const propertyName = getPropertyNameNodeForSymbol(propertySymbol, context);
             context.enclosingDeclaration = saveEnclosingDeclaration;
+            context.flags = savedFlags;
             context.approximateLength += symbolName(propertySymbol).length + 1;
             const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
             if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length && !isReadonlySymbol(propertySymbol)) {
@@ -8204,6 +8226,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const nameType = getSymbolLinks(symbol).nameType;
             if (nameType) {
                 if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
+                    if (context.flags & NodeBuilderFlags.WriteComputedProps) {
+                        const nameExpression = symbol.valueDeclaration && getNameOfDeclaration(symbol.valueDeclaration);
+                        if (nameExpression && isLateBindableName(nameExpression)) {
+                            return nameExpression;
+                        }
+                    }
                     const name = "" + (nameType as StringLiteralType | NumberLiteralType).value;
                     if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions)) && (stringNamed || !isNumericLiteralName(name))) {
                         return factory.createStringLiteral(name, !!singleQuote);

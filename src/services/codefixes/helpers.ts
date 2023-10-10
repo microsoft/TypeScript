@@ -47,7 +47,6 @@ import {
     isFunctionExpression,
     isGetAccessorDeclaration,
     isIdentifier,
-    isImportTypeNode,
     isInJSFile,
     isLiteralImportTypeNode,
     isMethodDeclaration,
@@ -592,7 +591,7 @@ function createTypeParameterName(index: number) {
 /** @internal */
 export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
     let typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
-    if (typeNode && isImportTypeNode(typeNode)) {
+    if (typeNode) {
         const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
         if (importableReference) {
             importSymbols(importAdder, importableReference.symbols);

@@ -1,3 +1,4 @@
+
 /// <reference path='fourslash.ts'/>
 
 // @isolatedDeclarations: true
@@ -10,13 +11,8 @@
 //// }
 //// export const { x: a , y: { [foo3()]: {dd: e} } } = foo();
 
-verify.codeFixAvailable([
-    { description: ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.message },
-    { description: ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.message }
-]);
-
 verify.codeFix({
-    description: ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.message,
+    description: ts.Diagnostics.Extract_binding_expressions_to_variable.message,
     index: 0,
     newFileContent:
 `function foo() {
