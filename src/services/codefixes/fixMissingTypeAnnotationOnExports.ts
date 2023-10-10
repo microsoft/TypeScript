@@ -29,7 +29,6 @@ import {
     getSynthesizedDeepClone,
     getTokenAtPosition,
     getTrailingCommentRanges,
-    hasStaticModifier,
     hasSyntacticModifier,
     Identifier,
     isArrayBindingPattern,
@@ -170,7 +169,7 @@ function addCodeAction(
             changes.textChanges,
             changes.result,
             fixId,
-            Diagnostics.Add_all_missing_tye_annotations,
+            Diagnostics.Add_all_missing_type_annotations,
         );
         if (!fixes.find(f => f.description === newFix.description)) fixes.push(newFix);
     }
