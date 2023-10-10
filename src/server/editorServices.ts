@@ -140,6 +140,7 @@ import {
     ActionSet,
     asNormalizedPath,
     AutoImportProviderProject,
+    AuxiliaryProject,
     BeginEnablePluginResult,
     BeginInstallTypes,
     ConfiguredProject,
@@ -153,6 +154,7 @@ import {
     hasNoTypeScriptSource,
     InferredProject,
     InvalidateCachedTypings,
+    isBackgroundProject,
     isConfiguredProject,
     isDynamicFileName,
     isInferredProject,
@@ -1129,6 +1131,7 @@ export class ProjectService {
 
     /** @internal */ verifyDocumentRegistry = noop;
     /** @internal */ verifyProgram: (project: Project) => void = noop;
+    /** @internal */ onProjectCreation: (project: Project) => void = noop;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
@@ -1325,15 +1328,14 @@ export class ProjectService {
 
     private delayUpdateProjectGraph(project: Project) {
         project.markAsDirty();
-        if (project.projectKind !== ProjectKind.AutoImportProvider && project.projectKind !== ProjectKind.Auxiliary) {
-            const projectName = project.getProjectName();
-            this.pendingProjectUpdates.set(projectName, project);
-            this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
-                if (this.pendingProjectUpdates.delete(projectName)) {
-                    updateProjectIfDirty(project);
-                }
-            });
-        }
+        if (isBackgroundProject(project)) return;
+        const projectName = project.getProjectName();
+        this.pendingProjectUpdates.set(projectName, project);
+        this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
+            if (this.pendingProjectUpdates.delete(projectName)) {
+                updateProjectIfDirty(project);
+            }
+        });
     }
 
     /** @internal */
@@ -2418,6 +2420,7 @@ export class ProjectService {
     private addFilesToNonInferredProject<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, typeAcquisition: TypeAcquisition): void {
         this.updateNonInferredProjectFiles(project, files, propertyReader);
         project.setTypeAcquisition(typeAcquisition);
+        project.markAsDirty();
     }
 
     /** @internal */
@@ -2669,7 +2672,7 @@ export class ProjectService {
         configFileExistenceInfo.config.watchedDirectoriesStale = undefined;
     }
 
-    private updateNonInferredProjectFiles<T>(project: Project, files: T[], propertyReader: FilePropertyReader<T>) {
+    private updateNonInferredProjectFiles<T>(project: Project, files: readonly T[], propertyReader: FilePropertyReader<T>) {
         const projectRootFilesMap = project.getRootFilesMap();
         const newRootScriptInfoMap = new Map<string, true>();
 
@@ -2736,10 +2739,6 @@ export class ProjectService {
                 }
             });
         }
-
-        // Just to ensure that even if root files dont change, the changes to the non root file are picked up,
-        // mark the project as dirty unconditionally
-        project.markAsDirty();
     }
 
     private updateRootAndOptionsOfNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean | undefined, watchOptions: WatchOptions | undefined) {
@@ -2762,6 +2761,7 @@ export class ProjectService {
         const fileNames = this.reloadFileNamesOfParsedConfig(project.getConfigFilePath(), this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!.config!);
         project.updateErrorOnNoInputFiles(fileNames);
         this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles(ProgramUpdateLevel.RootNamesAndUpdate)), fileNamePropertyReader);
+        project.markAsDirty();
         return project.updateGraph();
     }
 
@@ -2782,7 +2782,7 @@ export class ProjectService {
     }
 
     /** @internal */
-    setFileNamesOfAutoImportProviderProject(project: AutoImportProviderProject, fileNames: string[]) {
+    setFileNamesOfAutpImportProviderOrAuxillaryProject(project: AutoImportProviderProject | AuxiliaryProject, fileNames: readonly string[]) {
         this.updateNonInferredProjectFiles(project, fileNames, fileNamePropertyReader);
     }
 

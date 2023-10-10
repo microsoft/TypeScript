@@ -139,6 +139,7 @@ import {
     WithMetadata,
 } from "./_namespaces/ts";
 import {
+    AuxiliaryProject,
     CloseFileWatcherEvent,
     ConfigFileDiagEvent,
     ConfiguredProject,
@@ -1542,7 +1543,7 @@ export class Session<TMessage = string> implements EventSender {
         if (needsJsResolution) {
             const definitionSet = createSet<DefinitionInfo>(d => d.textSpan.start, documentSpansEqual);
             definitions?.forEach(d => definitionSet.add(d));
-            const noDtsProject = project.getNoDtsResolutionProject([file]);
+            const noDtsProject = project.getNoDtsResolutionProject(file);
             const ls = noDtsProject.getLanguageService();
             const jsDefinitions = ls.getDefinitionAtPosition(file, position, /*searchOtherFilesOnly*/ true, /*stopAtAlias*/ false)
                 ?.filter(d => toNormalizedPath(d.fileName) !== file);
@@ -1564,8 +1565,16 @@ export class Session<TMessage = string> implements EventSender {
                 const ambientCandidates = definitions.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient);
                 for (const candidate of some(ambientCandidates) ? ambientCandidates : getAmbientCandidatesByClimbingAccessChain()) {
                     const fileNameToSearch = findImplementationFileFromDtsFileName(candidate.fileName, file, noDtsProject);
-                    if (!fileNameToSearch || !ensureRoot(noDtsProject, fileNameToSearch)) {
-                        continue;
+                    if (!fileNameToSearch) continue;
+                    const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+                        fileNameToSearch,
+                        noDtsProject.currentDirectory,
+                        noDtsProject.directoryStructureHost,
+                    );
+                    if (!info) continue;
+                    if (!noDtsProject.containsScriptInfo(info)) {
+                        noDtsProject.addRoot(info);
+                        noDtsProject.updateGraph();
                     }
                     const noDtsProgram = ls.getProgram()!;
                     const fileToSearch = Debug.checkDefined(noDtsProgram.getSourceFile(fileNameToSearch));
@@ -1580,7 +1589,7 @@ export class Session<TMessage = string> implements EventSender {
         definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
         return this.mapDefinitionInfo(definitions, project);
 
-        function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: Project) {
+        function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: AuxiliaryProject) {
             const nodeModulesPathParts = getNodeModulePathParts(fileName);
             if (nodeModulesPathParts && fileName.lastIndexOf(nodeModulesPathPart) === nodeModulesPathParts.topLevelNodeModulesIndex) {
                 // Second check ensures the fileName only contains one `/node_modules/`. If there's more than one I give up.
@@ -1670,16 +1679,6 @@ export class Session<TMessage = string> implements EventSender {
                     return GoToDefinition.createDefinitionInfo(decl, noDtsProgram.getTypeChecker(), symbol, decl, /*unverified*/ true);
                 }
             });
-        }
-
-        function ensureRoot(project: Project, fileName: string) {
-            const info = project.getScriptInfo(fileName);
-            if (!info) return false;
-            if (!project.containsScriptInfo(info)) {
-                project.addRoot(info);
-                project.updateGraph();
-            }
-            return true;
         }
     }
 
