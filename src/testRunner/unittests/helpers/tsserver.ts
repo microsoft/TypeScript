@@ -349,14 +349,19 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
 export class TestTypingsInstaller<T extends TestTypingsInstallerWorker = TestTypingsInstallerWorker> implements ts.server.ITypingsInstaller {
     protected projectService!: ts.server.ProjectService;
     public installer!: T;
+    readonly globalTypingsCacheLocation: string;
+    private readonly throttleLimit: number;
+
     constructor(
-        readonly globalTypingsCacheLocation: string,
-        private throttleLimit: number,
         private installTypingHost: TestServerHost,
         private logger: Logger,
+        globalTypingsCacheLocation?: string,
+        throttleLimit?: number,
         private workerConstructor?: new (...args: ConstructorParameters<typeof TestTypingsInstallerWorker>) => T,
         private typesRegistry?: string | readonly string[],
     ) {
+        this.globalTypingsCacheLocation = globalTypingsCacheLocation || this.installTypingHost.getHostSpecificPath("/a/data");
+        this.throttleLimit = throttleLimit || 5;
     }
 
     isKnownTypesPackageName = ts.notImplemented;
@@ -491,6 +496,7 @@ export interface TestSessionOptions extends ts.server.SessionOptions {
     logger: Logger;
     allowNonBaseliningLogger?: boolean;
     disableAutomaticTypingAcquisition?: boolean;
+    globalTypingsCacheLocation?: string;
 }
 
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
@@ -546,7 +552,11 @@ export class TestSession extends ts.server.Session {
 export function createSession(host: TestServerHost, opts: Partial<TestSessionOptions> = {}) {
     const logger = opts.logger || createHasErrorMessageLogger();
     if (!opts.disableAutomaticTypingAcquisition && opts.typingsInstaller === undefined) {
-        opts.typingsInstaller = new TestTypingsInstaller(host.getHostSpecificPath("/a/data/"), /*throttleLimit*/ 5, host, logger);
+        opts.typingsInstaller = new TestTypingsInstaller(
+            host,
+            logger,
+            opts.globalTypingsCacheLocation,
+        );
     }
 
     if (opts.eventHandler !== undefined) {

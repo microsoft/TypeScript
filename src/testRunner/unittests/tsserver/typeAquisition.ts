@@ -55,7 +55,7 @@ describe("unittests:: tsserver:: typeAquisition:: prefer typings to js", () => {
         const host = createServerHost([f1, barjs, barTypings, config]);
         const logger = createLoggerWithInMemoryLogs(host);
         const projectService = createProjectService(host, {
-            typingsInstaller: new TestTypingsInstaller(typingsCacheLocation, /*throttleLimit*/ 5, host, logger),
+            typingsInstaller: new TestTypingsInstaller(host, logger, typingsCacheLocation),
             logger,
         });
 

@@ -67,10 +67,10 @@ FsWatches::
 c:/a/lib/lib.d.ts: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data/'
+TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data'
 TI:: [hh:mm:ss:mss] Trying to find 'c:/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location 'c:/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location 'c:/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: c:/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: 'c:/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
@@ -108,11 +108,11 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "c:/myprojects/project",
-      "cachePath": "c:/a/data/",
+      "cachePath": "c:/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path 'c:/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data/'
+TI:: [hh:mm:ss:mss] Request specifies cache path 'c:/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
@@ -244,10 +244,10 @@ FsWatches::
 //vda1cs4850/a/lib/lib.d.ts: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
@@ -285,11 +285,11 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "//vda1cs4850/myprojects/project",
-      "cachePath": "//vda1cs4850/a/data/",
+      "cachePath": "//vda1cs4850/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '//vda1cs4850/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Request specifies cache path '//vda1cs4850/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
@@ -429,10 +429,10 @@ FsWatches::
 //vda1cs4850/a/lib/lib.d.ts: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
@@ -470,11 +470,11 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "//vda1cs4850/c$/myprojects/project",
-      "cachePath": "//vda1cs4850/a/data/",
+      "cachePath": "//vda1cs4850/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '//vda1cs4850/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Request specifies cache path '//vda1cs4850/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
@@ -622,10 +622,10 @@ FsWatches::
 c:/a/lib/lib.d.ts: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data/'
+TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data'
 TI:: [hh:mm:ss:mss] Trying to find 'c:/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location 'c:/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location 'c:/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: c:/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: 'c:/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
@@ -663,11 +663,11 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "c:/users/username/myprojects/project",
-      "cachePath": "c:/a/data/",
+      "cachePath": "c:/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path 'c:/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data/'
+TI:: [hh:mm:ss:mss] Request specifies cache path 'c:/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
@@ -815,10 +815,10 @@ FsWatches::
 //vda1cs4850/a/lib/lib.d.ts: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
@@ -856,11 +856,11 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "//vda1cs4850/c$/users/username/myprojects/project",
-      "cachePath": "//vda1cs4850/a/data/",
+      "cachePath": "//vda1cs4850/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '//vda1cs4850/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Request specifies cache path '//vda1cs4850/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []

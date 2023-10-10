@@ -49,12 +49,12 @@ function createTestTypingInstaller<T extends TestTypingsInstallerWorker>(
     p?: InstallerParams,
 ) {
     return new TestTypingsInstaller<T>(
-        (p && p.globalTypingsCacheLocation) || "/a/data",
-        (p && p.throttleLimit) || 5,
         host,
         logger,
+        p?.globalTypingsCacheLocation,
+        p?.throttleLimit,
         workerConstructor,
-        p && p.typesRegistry,
+        p?.typesRegistry,
     );
 }
 function createTestTypingInstallerWithInstallWorker(
@@ -2578,7 +2578,7 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
         const host = createServerHost(files, { currentDirectory });
         const logger = createLoggerWithInMemoryLogs(host);
 
-        const typingsInstaller = new TestTypingsInstaller(typingsCache, /*throttleLimit*/ 5, host, logger, /*workerConstructor*/ undefined, "pkgcurrentdirectory");
+        const typingsInstaller = new TestTypingsInstaller(host, logger, typingsCache, /*throttleLimit*/ undefined, /*workerConstructor*/ undefined, "pkgcurrentdirectory");
 
         const projectService = createProjectService(host, { typingsInstaller, logger });
 
