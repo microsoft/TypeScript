@@ -10,10 +10,12 @@ import {
     createSession,
     openExternalProjectForSession,
     openFilesForSession,
-    TestTypingsInstaller,
     toExternalFiles,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
+import {
+    TestTypingsInstaller,
+} from "../helpers/typingsInstaller";
 import {
     createServerHost,
     File,
@@ -33,7 +35,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra r
         const host = createServerHost([file1, lib]);
         const logger = createLoggerWithInMemoryLogs(host);
         const projectService = createProjectService(host, {
-            typingsInstaller: new TestTypingsInstaller(host, logger, "/a/cache"),
+            typingsInstaller: new TestTypingsInstaller(host, logger, { globalTypingsCacheLocation: "/a/cache" }),
             logger,
         });
 

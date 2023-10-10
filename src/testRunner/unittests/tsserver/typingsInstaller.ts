@@ -5,19 +5,22 @@ import {
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    createTypesRegistry,
-    customTypesMap,
     Logger,
-    loggerToTypingsInstallerLog,
     openFilesForSession,
     patchHostTimeouts,
     replaceAll,
     TestSessionAndServiceHost,
     TestSessionRequest,
-    TestTypingsInstaller,
-    TestTypingsInstallerWorker,
     toExternalFile,
 } from "../helpers/tsserver";
+import {
+    createTypesRegistry,
+    customTypesMap,
+    loggerToTypingsInstallerLog,
+    TestTypingsInstaller,
+    TestTypingsInstallerOptions,
+    TestTypingsInstallerWorker,
+} from "../helpers/typingsInstaller";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
@@ -32,55 +35,36 @@ import {
     stringifyIndented,
 } from "../../_namespaces/ts.server";
 
-interface InstallerParams {
-    globalTypingsCacheLocation?: string;
-    throttleLimit?: number;
-    typesRegistry?: string | readonly string[];
-}
-
 type InstallWorkerThrowingError = string;
 type InstallWorkerExecutingCommand = [installedTypings: string[] | string, typingFiles: File[]];
 type CustomInstallWorker = (installer: TestTypingsInstallerWorker, requestId: number, packageNames: string[], cb: ts.server.typingsInstaller.RequestCompletedAction) => void;
 
-function createTestTypingInstaller<T extends TestTypingsInstallerWorker>(
-    host: TestServerHost,
-    logger: Logger,
-    workerConstructor: new (...args: ConstructorParameters<typeof TestTypingsInstallerWorker>) => T,
-    p?: InstallerParams,
-) {
-    return new TestTypingsInstaller<T>(
-        host,
-        logger,
-        p?.globalTypingsCacheLocation,
-        p?.throttleLimit,
-        workerConstructor,
-        p?.typesRegistry,
-    );
-}
 function createTestTypingInstallerWithInstallWorker(
     host: TestServerHost,
     logger: Logger,
     installWorker: InstallWorkerThrowingError | InstallWorkerExecutingCommand | CustomInstallWorker,
-    p?: InstallerParams,
+    options?: TestTypingsInstallerOptions,
 ) {
-    return createTestTypingInstaller(
+    return new TestTypingsInstaller(
         host,
         logger,
-        class extends TestTypingsInstallerWorker {
-            override installWorker(requestId: number, packageNames: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
-                this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
-                if (ts.isString(installWorker)) {
-                    assert(false, installWorker);
+        {
+            workerConstructor: class extends TestTypingsInstallerWorker {
+                override installWorker(requestId: number, packageNames: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
+                    this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
+                    if (ts.isString(installWorker)) {
+                        assert(false, installWorker);
+                    }
+                    else if (ts.isArray(installWorker)) {
+                        executeCommand(this, requestId, packageNames, host, installWorker[0], installWorker[1], cb);
+                    }
+                    else {
+                        installWorker(this, requestId, packageNames, cb);
+                    }
                 }
-                else if (ts.isArray(installWorker)) {
-                    executeCommand(this, requestId, packageNames, host, installWorker[0], installWorker[1], cb);
-                }
-                else {
-                    installWorker(this, requestId, packageNames, cb);
-                }
-            }
+            },
+            ...options,
         },
-        p,
     );
 }
 
@@ -261,13 +245,15 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file1]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstaller(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            class extends TestTypingsInstallerWorker {
-                override enqueueInstallTypingsRequest() {
-                    assert(false, "auto discovery should not be enabled");
-                }
+            {
+                workerConstructor: class extends TestTypingsInstallerWorker {
+                    override enqueueInstallTypingsRequest() {
+                        assert(false, "auto discovery should not be enabled");
+                    }
+                },
             },
         );
 
@@ -319,15 +305,17 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file1]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstaller(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            class extends TestTypingsInstallerWorker {
-                override enqueueInstallTypingsRequest() {
-                    assert(false, "auto discovery should not be enabled");
-                }
+            {
+                workerConstructor: class extends TestTypingsInstallerWorker {
+                    override enqueueInstallTypingsRequest() {
+                        assert(false, "auto discovery should not be enabled");
+                    }
+                },
+                typesRegistry: "jquery",
             },
-            { typesRegistry: "jquery" },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -2578,7 +2566,10 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
         const host = createServerHost(files, { currentDirectory });
         const logger = createLoggerWithInMemoryLogs(host);
 
-        const typingsInstaller = new TestTypingsInstaller(host, logger, typingsCache, /*throttleLimit*/ undefined, /*workerConstructor*/ undefined, "pkgcurrentdirectory");
+        const typingsInstaller = new TestTypingsInstaller(host, logger, {
+            globalTypingsCacheLocation: typingsCache,
+            typesRegistry: "pkgcurrentdirectory",
+        });
 
         const projectService = createProjectService(host, { typingsInstaller, logger });
 
