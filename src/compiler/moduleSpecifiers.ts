@@ -112,6 +112,15 @@ import {
     UserPreferences,
 } from "./_namespaces/ts";
 
+function safeJsonRead(packageJsonPath: string, readFile: (path: string) => string | undefined) {
+    try {
+        return JSON.parse(readFile(packageJsonPath)!);
+    }
+    catch {
+        return {};
+    }
+}
+
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 
 const enum RelativePreference {
@@ -920,7 +929,7 @@ function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDi
     if (typeof cachedPackageJson !== "object" && cachedPackageJson !== undefined || !host.fileExists(packageJsonPath)) {
         return undefined;
     }
-    const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile(packageJsonPath)!);
+    const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || safeJsonRead(packageJsonPath, host.readFile);
     const imports = packageJsonContent?.imports;
     if (!imports) {
         return undefined;
@@ -1022,7 +1031,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         let maybeBlockedByTypesVersions = false;
         const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
         if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
-            const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
+            const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || safeJsonRead(packageJsonPath, host.readFile!);
             const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
             if (getResolvePackageJsonExports(options)) {
                 // The package name that we found in node_modules could be different from the package
