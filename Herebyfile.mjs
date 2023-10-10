@@ -223,7 +223,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             //
             // See: https://github.com/evanw/esbuild/issues/1905
             const require = "require";
-            const fakeName = "_".repeat(require.length);
+            const fakeName = "Q".repeat(require.length);
             const fakeNameRegExp = new RegExp(fakeName, "g");
             options.define = { [require]: fakeName };
             options.plugins = [
