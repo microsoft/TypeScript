@@ -10,8 +10,6 @@ import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
 export const enum FourSlashTestType {
     Native,
-    Shims,
-    ShimsWithPreprocess,
     Server,
 }
 
@@ -202,6 +200,32 @@ const enum CallHierarchyItemDirection {
     Outgoing,
 }
 
+interface RealizedDiagnostic {
+    message: string;
+    start: number;
+    length: number;
+    category: string;
+    code: number;
+    reportsUnnecessary?: {};
+    reportsDeprecated?: {};
+}
+
+function realizeDiagnostics(diagnostics: readonly ts.Diagnostic[], newLine: string): RealizedDiagnostic[] {
+    return diagnostics.map(d => realizeDiagnostic(d, newLine));
+}
+
+function realizeDiagnostic(diagnostic: ts.Diagnostic, newLine: string): RealizedDiagnostic {
+    return {
+        message: ts.flattenDiagnosticMessageText(diagnostic.messageText, newLine),
+        start: diagnostic.start!, // TODO: GH#18217
+        length: diagnostic.length!, // TODO: GH#18217
+        category: ts.diagnosticCategoryName(diagnostic),
+        code: diagnostic.code,
+        reportsUnnecessary: diagnostic.reportsUnnecessary,
+        reportsDeprecated: diagnostic.reportsDeprecated,
+    };
+}
+
 export class TestState {
     // Language service instance
     private languageServiceAdapterHost: Harness.LanguageService.LanguageServiceAdapterHost;
@@ -267,10 +291,6 @@ export class TestState {
         switch (testType) {
             case FourSlashTestType.Native:
                 return new Harness.LanguageService.NativeLanguageServiceAdapter(cancellationToken, compilationOptions);
-            case FourSlashTestType.Shims:
-                return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
-            case FourSlashTestType.ShimsWithPreprocess:
-                return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
             case FourSlashTestType.Server:
                 return new Harness.LanguageService.ServerLanguageServiceAdapter(cancellationToken, compilationOptions);
             default:
@@ -1764,8 +1784,8 @@ export class TestState {
 
     private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {
         assert.deepEqual(
-            ts.realizeDiagnostics(diagnostics, "\n"),
-            expected.map((e): ts.RealizedDiagnostic => {
+            realizeDiagnostics(diagnostics, "\n"),
+            expected.map((e): RealizedDiagnostic => {
                 const range = e.range || this.getRangesInFile()[0];
                 if (!range) {
                     this.raiseError("Must provide a range for each expected diagnostic, or have one range in the fourslash source.");
@@ -2427,7 +2447,7 @@ export class TestState {
             baselineFile,
             annotations + "\n\n" + stringify(result, (key, value) => {
                 return key === "exportMapKey"
-                    ? value.replace(/\|[0-9]+/g, "|*")
+                    ? value.replace(/ \d+ /g, " * ")
                     : value;
             }),
         );
@@ -2763,6 +2783,7 @@ export class TestState {
                 this.languageService.getProgram()?.getCompilerOptions() || {},
             ),
             setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
+            jsDocParsingMode: this.languageServiceAdapterHost.jsDocParsingMode,
         };
         const referenceSourceFile = ts.createLanguageServiceSourceFile(
             this.activeFile.fileName,

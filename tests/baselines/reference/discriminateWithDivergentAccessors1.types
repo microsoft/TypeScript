@@ -27,7 +27,7 @@ if (weirdoBox.done) {
 
   weirdoBox.value;
 >weirdoBox.value : number
->weirdoBox : { done: true; value: number; }
+>weirdoBox : { get done(): true; set done(v: T | null); value: number; }
 >value : number
 }
 
@@ -64,7 +64,7 @@ if (weirdoBox2.done) {
 
   weirdoBox2.value;
 >weirdoBox2.value : string | number
->weirdoBox2 : { done: true; value: string; } | { done: true; value: number; }
+>weirdoBox2 : { get done(): true; set done(v: T | null); value: string; } | { get done(): true; set done(v: T | null | undefined); value: number; }
 >value : string | number
 }
 

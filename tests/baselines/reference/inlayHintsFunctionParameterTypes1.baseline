@@ -46,7 +46,7 @@ foo2((a) => { })
 foo3(a => {
       ^
 {
-  "text": ": (c: (d: 2 | 3) => void) => ...",
+  "text": ": (c: (d: 2 | 3) => void) => void",
   "position": 331,
   "kind": "Type",
   "whitespaceBefore": true
