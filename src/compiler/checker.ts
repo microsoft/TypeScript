@@ -6867,13 +6867,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else {
-                    const isInstantiationExpressionType = !!(getObjectFlags(type) & ObjectFlags.InstantiationExpressionType);
-                    if (isInstantiationExpressionType) {
-                        if (context.visitedTypes?.has(typeId)) {
-                            return createElidedInformationPlaceholder(context);
-                        }
-                        return visitAndTransformType(type, createTypeNodeFromObjectType);
-                    }
                     // Anonymous types without a symbol are never circular.
                     return createTypeNodeFromObjectType(type);
                 }
