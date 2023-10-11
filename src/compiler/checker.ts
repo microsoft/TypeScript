@@ -16782,7 +16782,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // a subtype of just `A` or just `B`. When we encounter such a type parameter, we therefore check if the
                 // type parameter is a subtype of a union of all the other types.
                 if (source.flags & TypeFlags.TypeParameter && getBaseConstraintOrType(source).flags & TypeFlags.Union) {
-                    if (isTypeRelatedTo(source, getUnionType(map(types, t => t === source ? neverType : t)), strictSubtypeRelation)) {
+                    if (isTypeStrictSubtypeOf(source, getUnionType(map(types, t => t === source ? neverType : t)))) {
                         orderedRemoveItemAt(types, i);
                     }
                     continue;
@@ -16816,7 +16816,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                         if (
-                            isTypeRelatedTo(source, target, strictSubtypeRelation) && (
+                            isTypeStrictSubtypeOf(source, target) && (
                                 !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
                                 !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
                                 isTypeDerivedFrom(source, target)
@@ -28042,7 +28042,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // the constituent based on its type facts. We use the strict subtype relation because it treats `object`
                 // as a subtype of `{}`, and we need the type facts check because function types are subtypes of `object`,
                 // but are classified as "function" according to `typeof`.
-                isTypeRelatedTo(t, impliedType, strictSubtypeRelation) ? hasTypeFacts(t, facts) ? t : neverType :
+                isTypeStrictSubtypeOf(t, impliedType) ? hasTypeFacts(t, facts) ? t : neverType :
                     // We next check if the consituent is a supertype of the implied type. If so, we substitute the implied
                     // type. This handles top types like `unknown` and `{}`, and supertypes like `{ toString(): string }`.
                     isTypeSubtypeOf(impliedType, t) ? impliedType :
@@ -28240,7 +28240,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     matching || type,
                     checkDerived ?
                         t => isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType :
-                        t => isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType,
+                        t => {
+                            // isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType;
+
+                            if (t.flags & TypeFlags.Literal && c.flags & TypeFlags.Literal) {
+                                if (t.flags & TypeFlags.BooleanLiteral && c.flags & TypeFlags.BooleanLiteral) {
+                                    return t === c ? t : neverType;
+                                }
+                                return (t as LiteralType).value === (c as LiteralType).value ? t : neverType;
+                            }
+
+                            if (isTypeStrictSubtypeOf(t, c)) return t;
+                            if (isTypeStrictSubtypeOf(c, t)) return c;
+
+                            if (t.flags & TypeFlags.Unit && c.flags & TypeFlags.Unit) return neverType;
+
+                            if (isTypeSubtypeOf(t, c)) return t;
+                            if (isTypeSubtypeOf(c, t)) return c;
+
+                            return neverType;
+                        },
                 );
                 // If no constituents are directly related, create intersections for any generic constituents that
                 // are related by constraint.
@@ -28256,6 +28275,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 isTypeAssignableTo(candidate, type) ? candidate :
                 getIntersectionType([type, candidate]);
         }
+
+        // function strictSubtypeImpliesSubtype(source: Type, target: Type) {
+        //     const s = source.flags;
+        //     const t = target.flags;
+        //     if (
+        //         !(t & TypeFlags.Unknown && !(s & TypeFlags.Any))
+        //         || !(s & TypeFlags.Object && t & TypeFlags.NonPrimitive && !(isEmptyAnonymousObjectType(source) && !(getObjectFlags(source) & ObjectFlags.FreshLiteral)))
+        //     ) return false;
+
+        //     return true;
+        // }
 
         function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
             if (hasMatchingArgument(callExpression, reference)) {
