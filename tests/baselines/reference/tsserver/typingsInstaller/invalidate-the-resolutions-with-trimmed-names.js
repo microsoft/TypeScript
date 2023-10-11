@@ -624,7 +624,8 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /home/src/Library/Caches/typescript/node_modules/foo/index.d.ts *new*
     version: Text-1
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/projects/project/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -767,6 +768,36 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+
+ScriptInfos::
+/home/src/Library/Caches/typescript/node_modules/foo/a/a.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/Library/Caches/typescript/node_modules/foo/a/b.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/Library/Caches/typescript/node_modules/foo/a/c.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/home/src/projects/project/app.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/home/src/projects/project/node_modules/fooo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {

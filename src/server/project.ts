@@ -33,6 +33,8 @@ import {
     DocumentPositionMapper,
     ensureTrailingDirectorySeparator,
     enumerateInsertsAndDeletes,
+    equateStringsCaseInsensitive,
+    equateStringsCaseSensitive,
     every,
     explainFiles,
     ExportInfoMap,
@@ -88,7 +90,6 @@ import {
     ModuleResolutionCache,
     ModuleResolutionHost,
     ModuleSpecifierCache,
-    noop,
     noopFileWatcher,
     normalizePath,
     normalizeSlashes,
@@ -1520,7 +1521,23 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             unresolvedImports,
         };
         const typingFiles = !typeAcquisition || !typeAcquisition.enable ? emptyArray : toSorted(newTypings);
-        if (enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()), /*inserted*/ noop, removed => this.detachScriptInfoFromProject(removed))) {
+        // The typings files are result of types acquired based on unresolved imports and other structure
+        // With respect to unresolved imports:
+        // The first time we see unresolved import the TI will fetch the typing into cache and return it as part of typings file
+        // This makes typings file set as files to be included as root
+        // Program update on this will resolve the unresolved imports from the previous pass
+        // Because resolution has changed, this will enqueue TI request without the previously unresolved imports
+        // As a result TI will send new Typings files that does not contain the typing files we got before
+        // So our root files will change as part of that but we dont want to detach the typing files that are no more typings file
+        // but rather let program update do that
+        // This ensures that if nothing else changes, program will still have that file and the update doesnt mark file as added or removed unncessarily
+        if (
+            !arrayIsEqualTo(
+                typingFiles,
+                this.typingFiles,
+                this.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive,
+            )
+        ) {
             // If typing files changed, then only schedule project update
             this.typingFiles = typingFiles;
             // Invalidate files with unresolved imports
