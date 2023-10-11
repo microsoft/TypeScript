@@ -604,7 +604,8 @@ Projects::
 ScriptInfos::
 /home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts *new*
     version: Text-1
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.d.ts
     version: Text-1
     containingProjects: 1

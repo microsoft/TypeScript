@@ -540,7 +540,8 @@ Projects::
 ScriptInfos::
 /home/src/Library/Caches/typescript/node_modules/node/index.d.ts *new*
     version: Text-1
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/projects/project/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -584,7 +585,8 @@ After request
 ScriptInfos::
 /home/src/Library/Caches/typescript/node_modules/node/index.d.ts
     version: Text-1
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/projects/project/app.js (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
@@ -606,14 +608,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/Library/Caches/typescript/node_modules/node/index.d.ts Text-1 "\ndeclare module \"net\" {\n    export type n = number;\n}\ndeclare module \"stream\" {\n    export type s = string;\n}"
 	/home/src/projects/project/app.js SVC-1-1 "// @ts-check\n\nconst net = require(\"net\");\nconst stream = require(\"s tream\");"
-
-
-	../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
-	../../Library/Caches/typescript/node_modules/node/index.d.ts
-	  Imported via "net" from file 'app.js'
-	app.js
-	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
@@ -751,20 +745,6 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
-
-ScriptInfos::
-/home/src/Library/Caches/typescript/node_modules/node/index.d.ts *changed*
-    version: Text-1
-    containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
-/home/src/projects/project/app.js (Open)
-    version: SVC-1-1
-    containingProjects: 1
-        /dev/null/inferredProject1* *default*
-/home/src/tslibs/TS/Lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 
 Before request
 

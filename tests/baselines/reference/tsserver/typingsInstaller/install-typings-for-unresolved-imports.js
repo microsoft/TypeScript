@@ -583,14 +583,16 @@ Projects::
 ScriptInfos::
 /home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts *new*
     version: Text-1
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/Library/Caches/typescript/node_modules/@types/ember__component/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 /home/src/Library/Caches/typescript/node_modules/@types/node/index.d.ts *new*
     version: Text-1
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/projects/project/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
