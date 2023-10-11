@@ -230,9 +230,6 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  File is ECMAScript module because 'package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 1
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/foo.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 1 Done: []
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /home/src/workspaces/project
@@ -1448,10 +1445,6 @@ Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoIm
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/foo.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: []
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -1776,9 +1769,6 @@ Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoIm
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 1
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/foo.ts:: ["dependency"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 1 Done: ["dependency"]
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,

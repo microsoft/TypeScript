@@ -96,10 +96,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  File is CommonJS module because 'package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /a/b/node_modules/lodash/index.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /a/b/c/d/e/index.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

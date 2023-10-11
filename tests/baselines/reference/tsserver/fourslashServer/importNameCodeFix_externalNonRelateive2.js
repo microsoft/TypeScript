@@ -139,16 +139,6 @@ Info seq  [hh:mm:ss:mss] 	Files (8)
 	  Matched by include pattern '../../shared' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 8
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.decorators.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/apps/app1/src/app.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/apps/app1/src/index.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/apps/app1/src/utils.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/shared/constants.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/shared/data.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 8 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

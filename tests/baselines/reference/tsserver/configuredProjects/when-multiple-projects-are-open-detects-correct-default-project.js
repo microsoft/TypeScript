@@ -129,11 +129,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by include pattern 'index.ts' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.es2017.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /user/username/projects/myproject/bar/index.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /user/username/projects/myproject/foo/index.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -334,11 +329,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by include pattern 'index.ts' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.es2017.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.dom.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /user/username/projects/myproject/bar/index.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

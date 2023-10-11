@@ -125,11 +125,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/bar.ts:: ["dependency"]
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/foo.cts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/foo.mts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: ["dependency"]
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

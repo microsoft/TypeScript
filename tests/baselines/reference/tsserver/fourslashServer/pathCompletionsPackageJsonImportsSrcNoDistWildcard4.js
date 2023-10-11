@@ -136,14 +136,6 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  File is CommonJS module because 'package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 6
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/nope.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/a.mts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/blah.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/index.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/foo/onlyinfoofolder.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/subfolder/one.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 6 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1154,9 +1146,6 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/workspaces/project/src/subfolder/one.ts Text-1 "export const one = 0;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 6
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/a.mts:: ["#foo"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 6 Done: ["#foo"]
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -1727,9 +1716,6 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/workspaces/project/src/subfolder/one.ts Text-1 "export const one = 0;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 6
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/a.mts:: ["#foo"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 6 Done: ["#foo"]
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,

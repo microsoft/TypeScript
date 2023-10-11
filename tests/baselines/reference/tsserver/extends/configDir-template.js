@@ -245,13 +245,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Matched by include pattern '${configDir}/src' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/myproject/types/sometype.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/myproject/main.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/myproject/root2/other/sometype2/index.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/myproject/src/secondary.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -523,13 +516,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/projects/myproject/src/secondary.ts SVC-1-0 "// some comment\nexport const z = 10;\nimport { k } from \"other/sometype2\";\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/myproject/types/sometype.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/myproject/main.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/myproject/root2/other/sometype2/index.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/myproject/src/secondary.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

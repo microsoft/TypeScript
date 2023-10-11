@@ -85,11 +85,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/username/projects/project/modulefile.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/username/projects/project/file1.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -297,10 +292,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/username/projects/project/file1.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/username/projects/project/modulefile1.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
@@ -519,10 +510,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/username/projects/project/modulefile.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/username/projects/project/file1.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],

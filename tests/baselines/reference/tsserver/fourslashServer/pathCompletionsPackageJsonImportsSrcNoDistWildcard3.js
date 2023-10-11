@@ -129,13 +129,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  File is CommonJS module because 'package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/nope.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/a.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/components/blah.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/components/index.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/components/subfolder/one.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -2411,9 +2404,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/workspaces/project/src/components/subfolder/one.ts Text-1 "export const one = 0;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/a.ts:: ["#component-subfolder"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: ["#component-subfolder"]
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,

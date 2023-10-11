@@ -126,12 +126,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  File is CommonJS module because 'package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/blah.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/index.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/m.mts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/arguments/index.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

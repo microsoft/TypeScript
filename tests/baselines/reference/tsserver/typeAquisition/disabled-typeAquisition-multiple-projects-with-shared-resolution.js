@@ -201,11 +201,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/node_modules/bar/index.js:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/project1/app.js:: ["bar"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: ["bar"]
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -947,12 +942,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/node_modules/bar/index.js:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/project3/app.js:: ["bar"]
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/project3/app2.js:: ["foo"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4 Done: ["bar","foo"]
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

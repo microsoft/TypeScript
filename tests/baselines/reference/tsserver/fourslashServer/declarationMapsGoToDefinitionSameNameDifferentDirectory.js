@@ -276,13 +276,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Matched by include pattern '../BaseClass/Source.d.ts' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.decorators.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /tests/cases/fourslash/server/buttonclass/source.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /tests/cases/fourslash/server/baseclass/source.d.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

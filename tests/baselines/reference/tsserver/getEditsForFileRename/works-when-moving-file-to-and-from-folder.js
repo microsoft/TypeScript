@@ -120,11 +120,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.es2016.full.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/myprojects/project/components/whatever/alert.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/myprojects/project/index.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -339,10 +334,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/myprojects/project/index.ts:: ["@app/components"]
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/myprojects/project/functions/whatever/alert.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: ["@app/components"]
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components/whatever/alert.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -558,9 +549,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/myprojects/project/index.ts SVC-1-1 "import { alert } from '@app/functions/whatever/alert';\nalert('Hello, world!');\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/myprojects/project/index.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
@@ -705,10 +693,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/myprojects/project/index.ts:: ["@app/functions"]
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/myprojects/project/components/whatever/alert.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: ["@app/functions"]
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 

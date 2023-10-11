@@ -106,10 +106,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  File is ECMAScript module because 'package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /tests/cases/fourslash/server/src/example.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /tests/cases/fourslash/server/src/index.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

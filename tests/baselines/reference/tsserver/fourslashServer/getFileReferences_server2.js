@@ -304,12 +304,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.decorators.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/packages/shared/src/referenced.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -477,8 +471,6 @@ Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (C
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 0
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 0 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -557,14 +549,6 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 6
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.decorators.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/packages/shared/src/referenced.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/packages/server/index.js:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/packages/server/router.js:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 6 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -647,13 +631,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.decorators.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.decorators.legacy.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/packages/shared/src/referenced.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/packages/client/index.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

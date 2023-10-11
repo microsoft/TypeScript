@@ -102,10 +102,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  File is CommonJS module because 'package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/index.mts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/action/pageobjects/actionrenderer.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1139,9 +1135,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	/home/src/workspaces/project/src/action/pageObjects/actionRenderer.ts Text-1 "export const actionRenderer = 0;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/index.mts:: ["#action"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: ["#action"]
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -2158,9 +2151,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	/home/src/workspaces/project/src/action/pageObjects/actionRenderer.ts Text-1 "export const actionRenderer = 0;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/workspaces/project/src/index.mts:: ["#action"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: ["#action"]
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,

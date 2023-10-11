@@ -1064,12 +1064,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/project3/node_modules/bar/index.js:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/project3/app.js:: ["bar"]
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/project3/app2.js:: ["foo"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4 Done: ["bar","foo"]
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1616,6 +1610,113 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/users/user/projects/project1/app.js SVC-1-0 "var x = require('bar');"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/library/caches/typescript/node_modules/@types/bar/index.d.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/project1/app.js:: []
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/users/user/projects/project1/jsconfig.json",
+      "fileNames": [
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/users/user/projects/project1/app.js"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "traceResolution": true,
+        "configFilePath": "/users/user/projects/project1/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/users/user/projects/project1",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Searching for typing names in /users/user/projects/project1/node_modules; all files: []
+TI:: [hh:mm:ss:mss]     Found package names: []
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/users/user/projects/project1/bower_components",
+        "/users/user/projects/project1/node_modules"
+      ]
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/users/user/projects/project1/jsconfig.json",
+      "files": [
+        "/users/user/projects/project1/bower_components",
+        "/users/user/projects/project1/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/bower_components 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/bower_components 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/users/user/projects/project1/jsconfig.json",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "traceResolution": true,
+        "configFilePath": "/users/user/projects/project1/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/users/user/projects/project1/jsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "maxNodeModuleJsDepth": 2,
+          "allowSyntheticDefaultImports": true,
+          "skipLibCheck": true,
+          "noEmit": true,
+          "traceResolution": true,
+          "configFilePath": "/users/user/projects/project1/jsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
+TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1692,6 +1793,70 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+PolledWatches::
+/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json:
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/foo/package.json:
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/package.json:
+  {"pollingInterval":2000}
+/users/user/projects/node_modules:
+  {"pollingInterval":500}
+/users/user/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/user/projects/package.json:
+  {"pollingInterval":2000}
+/users/user/projects/project1/bower_components: *new*
+  {"pollingInterval":500}
+/users/user/projects/project1/node_modules/@types:
+  {"pollingInterval":500}
+/users/user/projects/project2/bower_components:
+  {"pollingInterval":500}
+/users/user/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/users/user/projects/project3/node_modules/@types:
+  {"pollingInterval":500}
+/users/user/projects/project3/node_modules/bar/package.json:
+  {"pollingInterval":2000}
+/users/user/projects/project3/node_modules/package.json:
+  {"pollingInterval":2000}
+/users/user/projects/project3/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/Library/Caches/typescript/package.json:
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/users/user/projects/project1/jsconfig.json:
+  {}
+/users/user/projects/project2/app2.js:
+  {}
+/users/user/projects/project2/jsconfig.json:
+  {}
+/users/user/projects/project3/app2.js:
+  {}
+/users/user/projects/project3/jsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/home/src/Library/Caches/typescript/node_modules:
+  {}
+/users/user/projects/project1:
+  {}
+/users/user/projects/project1/node_modules:
+  {}
+/users/user/projects/project2:
+  {}
+/users/user/projects/project2/node_modules:
+  {}
+/users/user/projects/project3:
+  {}
+/users/user/projects/project3/node_modules:
+  {}
 
 Projects::
 /users/user/projects/project1/jsconfig.json (Configured) *changed*
