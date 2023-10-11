@@ -79,6 +79,7 @@ import {
     ClassStaticBlockDeclaration,
     clear,
     combinePaths,
+    compact,
     compareDiagnostics,
     comparePaths,
     compareValues,
@@ -26743,21 +26744,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const origin = (type as UnionType).origin;
         const types = origin && origin.flags & TypeFlags.Union ? (origin as UnionType).types : (type as UnionType).types;
-        let mappedTypes: Type[] | undefined;
-        let changed = false;
-        for (const t of types) {
-            const mapped = t.flags & TypeFlags.Union ? mapType(t, mapper, noReductions) : mapper(t);
-            changed ||= t !== mapped;
-            if (mapped) {
-                if (!mappedTypes) {
-                    mappedTypes = [mapped];
-                }
-                else {
-                    mappedTypes.push(mapped);
-                }
-            }
+        const mappedTypes = compact(sameMap(types, t => t.flags & TypeFlags.Union ? mapType(t, mapper, noReductions) : mapper(t)));
+        if (mappedTypes.length === 0) {
+            return undefined;
         }
-        return changed ? mappedTypes && getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal) : type;
+        if (mappedTypes !== types) {
+            return getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal);
+        }
+        return type;
     }
 
     function mapTypeWithAlias(type: Type, mapper: (t: Type) => Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
