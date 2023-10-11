@@ -798,7 +798,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     resolveModuleNameLiterals(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
-        return this.resolutionCache.resolveModuleNameLiterals(moduleLiterals, containingFile, redirectedReference, options, containingSourceFile, reusedNames);
+        return this.resolutionCache.resolveModuleNameLiterals(
+            moduleLiterals,
+            containingFile,
+            redirectedReference,
+            options,
+            containingSourceFile,
+            reusedNames,
+        );
     }
 
     /** @internal */
@@ -1427,9 +1434,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     useTypingsFromGlobalCache(): boolean {
-        return this.languageServiceEnabled &&
+        return !this.isOrphan() &&
+            !!this.languageServiceEnabled &&
             this.projectService.serverMode === LanguageServiceMode.Semantic &&
-            !this.isOrphan();
+            this.projectService.typingsInstaller !== nullTypingsInstaller &&
+            !!this.getTypeAcquisition().enable;
     }
 
     /**
@@ -1438,30 +1447,27 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      */
     updateGraph(): boolean {
         tracing?.push(tracing.Phase.Session, "updateGraph", { name: this.projectName, kind: ProjectKind[this.projectKind] });
-        this.resolutionCache.startRecordingFilesWithChangedResolutions();
+        const recordChangesToResolution = this.useTypingsFromGlobalCache();
+        if (recordChangesToResolution && this.cachedUnresolvedImportsPerFile.size) this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
         const hasNewProgram = this.updateGraphWorker();
         const hasAddedorRemovedFiles = this.hasAddedorRemovedFiles;
         this.hasAddedorRemovedFiles = false;
         this.hasAddedOrRemovedSymlinks = false;
 
-        const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
-
-        for (const file of changedFiles) {
-            // delete cached information for changed files
-            this.cachedUnresolvedImportsPerFile.delete(file);
-        }
-
-        // update builder only if language service is enabled
-        // otherwise tell it to drop its internal state
-        if (this.useTypingsFromGlobalCache()) {
+        if (recordChangesToResolution) {
+            const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
+            for (const file of changedFiles) {
+                // delete cached information for changed files
+                this.cachedUnresolvedImportsPerFile.delete(file);
+            }
             // 1. no changes in structure, no changes in unresolved imports - do nothing
             // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
             // (can reuse cached imports for files that were not changed)
             // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
             // (can reuse cached imports for files that were not changed)
             // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
-            if (hasNewProgram || changedFiles.length) {
+            if (!this.lastCachedUnresolvedImportsList || hasNewProgram || changedFiles.length) {
                 this.lastCachedUnresolvedImportsList = getUnresolvedImports(
                     this.program!,
                     this.cachedUnresolvedImportsPerFile,
@@ -1473,6 +1479,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
         else {
             this.lastCachedUnresolvedImportsList = undefined;
+            this.cachedUnresolvedImportsPerFile.clear();
+            this.typingsCache = undefined;
         }
         this.projectService.verifyUnresovedImports(this);
 
