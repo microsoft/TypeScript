@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/aliasInstantiationExpressionGenericIntersectionNoCrash.ts] ////
+//// [tests/cases/compiler/aliasInstantiationExpressionGenericIntersectionNoCrash1.ts] ////
 
-=== aliasInstantiationExpressionGenericIntersectionNoCrash.ts ===
+=== aliasInstantiationExpressionGenericIntersectionNoCrash1.ts ===
 class ErrImpl<E> {
 >ErrImpl : ErrImpl<E>
 

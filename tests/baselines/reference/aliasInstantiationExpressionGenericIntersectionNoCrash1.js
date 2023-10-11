@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/aliasInstantiationExpressionGenericIntersectionNoCrash.ts] ////
+//// [tests/cases/compiler/aliasInstantiationExpressionGenericIntersectionNoCrash1.ts] ////
 
-//// [aliasInstantiationExpressionGenericIntersectionNoCrash.ts]
+//// [aliasInstantiationExpressionGenericIntersectionNoCrash1.ts]
 class ErrImpl<E> {
   e!: E;
 }
@@ -13,7 +13,7 @@ declare const e: ErrAlias<number>;
 e as ErrAlias<string>;
 
 
-//// [aliasInstantiationExpressionGenericIntersectionNoCrash.js]
+//// [aliasInstantiationExpressionGenericIntersectionNoCrash1.js]
 "use strict";
 var ErrImpl = /** @class */ (function () {
     function ErrImpl() {
