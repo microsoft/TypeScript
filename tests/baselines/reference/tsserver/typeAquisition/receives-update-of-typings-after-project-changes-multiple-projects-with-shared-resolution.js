@@ -1458,8 +1458,6 @@ TI:: [hh:mm:ss:mss] Sending response:
       ],
       "kind": "action::set"
     }
-Info seq  [hh:mm:ss:mss] Scheduled: /users/user/projects/project1/jsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1519,25 +1517,6 @@ TI:: Installation #2 with arguments:: [
   "@types/bar@tsFakeMajor.Minor"
 ] complete with success::true
 
-Timeout callback:: count: 3
-4: /users/user/projects/project2/jsconfig.jsonFailedLookupInvalidation
-5: /users/user/projects/project1/jsconfig.json *new*
-6: *ensureProjectForOpenFiles* *new*
-
-Projects::
-/users/user/projects/project1/jsconfig.json (Configured) *changed*
-    projectStateVersion: 3 *changed*
-    projectProgramVersion: 1
-    dirty: true *changed*
-/users/user/projects/project2/jsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    autoImportProviderHost: false
-/users/user/projects/project3/jsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    autoImportProviderHost: false
-
 TI:: [hh:mm:ss:mss] Installed typings ["@types/bar@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
@@ -1567,7 +1546,7 @@ TI:: [hh:mm:ss:mss] Sending response:
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /users/user/projects/project2/jsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1625,18 +1604,15 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running PendingInstalls callback:: count: 0
 
-Timeout callback:: count: 4
-6: *ensureProjectForOpenFiles* *deleted*
+Timeout callback:: count: 3
 4: /users/user/projects/project2/jsconfig.jsonFailedLookupInvalidation
-5: /users/user/projects/project1/jsconfig.json
-7: /users/user/projects/project2/jsconfig.json *new*
-8: *ensureProjectForOpenFiles* *new*
+5: /users/user/projects/project2/jsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /users/user/projects/project1/jsconfig.json (Configured)
-    projectStateVersion: 3
+    projectStateVersion: 2
     projectProgramVersion: 1
-    dirty: true
 /users/user/projects/project2/jsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
@@ -1647,75 +1623,12 @@ Projects::
     projectProgramVersion: 1
     autoImportProviderHost: false
 
-Before running Timeout callback:: count: 4
+Before running Timeout callback:: count: 3
 4: /users/user/projects/project2/jsconfig.jsonFailedLookupInvalidation
-5: /users/user/projects/project1/jsconfig.json
-7: /users/user/projects/project2/jsconfig.json
-8: *ensureProjectForOpenFiles*
+5: /users/user/projects/project2/jsconfig.json
+6: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /users/user/projects/project2/jsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Running: /users/user/projects/project1/jsconfig.json
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json
-Info seq  [hh:mm:ss:mss] ======== Resolving module 'bar' from '/users/user/projects/project1/app.js'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/users/user/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/index.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/users/user/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/users/user/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/users/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: JavaScript.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Info seq  [hh:mm:ss:mss] Directory '/users/user/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar.js' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/index.js' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/users/user/projects/node_modules/bar/index.js', result '/users/user/projects/node_modules/bar/index.js'.
-Info seq  [hh:mm:ss:mss] ======== Module name 'bar' was successfully resolved to '/users/user/projects/node_modules/bar/index.js'. ========
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/user/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/Library/Caches/typescript/package.json'.
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/bar/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/users/user/projects/node_modules/bar/index.js Text-1 "export const x = 1"
-	/users/user/projects/project1/app.js SVC-1-0 "var x = require('bar');"
-	/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts Text-1 "export const x = 1;"
-
-
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
-	../node_modules/bar/index.js
-	  Imported via 'bar' from file 'app.js'
-	app.js
-	  Matched by default include pattern '**/*'
-	../../../../home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/library/caches/typescript/node_modules/@types/bar/index.d.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4 Done: ["bar"]
 Info seq  [hh:mm:ss:mss] Running: /users/user/projects/project2/jsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/user/projects/project2/jsconfig.json
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'bar' from '/users/user/projects/project2/app.js'. ========
@@ -1972,15 +1885,14 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 2
-8: *ensureProjectForOpenFiles* *deleted*
-9: /users/user/projects/project2/jsconfig.json *new*
-10: *ensureProjectForOpenFiles* *new*
+6: *ensureProjectForOpenFiles* *deleted*
+7: /users/user/projects/project2/jsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/users/user/projects/project1/jsconfig.json (Configured) *changed*
-    projectStateVersion: 3
-    projectProgramVersion: 2 *changed*
-    dirty: false *changed*
+/users/user/projects/project1/jsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
 /users/user/projects/project2/jsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 3 *changed*
@@ -1994,8 +1906,7 @@ Projects::
 ScriptInfos::
 /home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts *new*
     version: Text-1
-    containingProjects: 2
-        /users/user/projects/project1/jsconfig.json
+    containingProjects: 1
         /users/user/projects/project2/jsconfig.json
 /home/src/Library/Caches/typescript/node_modules/@types/foo/index.d.ts
     version: Text-1
@@ -2035,14 +1946,14 @@ ScriptInfos::
         /users/user/projects/project3/jsconfig.json
 
 Before running Timeout callback:: count: 2
-9: /users/user/projects/project2/jsconfig.json
-10: *ensureProjectForOpenFiles*
+7: /users/user/projects/project2/jsconfig.json
+8: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /users/user/projects/project2/jsconfig.json
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project2/jsconfig.json' (Configured)
@@ -2062,7 +1973,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/user/projects/project3/app.js Project
 Info seq  [hh:mm:ss:mss] 		Projects: /users/user/projects/project3/jsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project2/jsconfig.json' (Configured)
@@ -2106,8 +2017,8 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/user/projects/p
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /users/user/projects/project1/jsconfig.json 1:: WatchInfo: /users/user/projects/project1/jsconfig.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
-11: /users/user/projects/project1/jsconfig.json
-12: *ensureProjectForOpenFiles*
+9: /users/user/projects/project1/jsconfig.json
+10: *ensureProjectForOpenFiles*
 //// [/users/user/projects/project1/jsconfig.json]
 {
   "compilerOptions": {
@@ -2118,13 +2029,13 @@ Before running Timeout callback:: count: 2
 
 
 Timeout callback:: count: 2
-11: /users/user/projects/project1/jsconfig.json *new*
-12: *ensureProjectForOpenFiles* *new*
+9: /users/user/projects/project1/jsconfig.json *new*
+10: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /users/user/projects/project1/jsconfig.json (Configured) *changed*
-    projectStateVersion: 4 *changed*
-    projectProgramVersion: 2
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
     dirty: true *changed*
 /users/user/projects/project2/jsconfig.json (Configured)
     projectStateVersion: 3
@@ -2166,16 +2077,12 @@ Info seq  [hh:mm:ss:mss] File '/users/user/projects/package.json' does not exist
 Info seq  [hh:mm:ss:mss] File '/users/user/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/users/user/projects/node_modules/bar/index.js Text-1 "export const x = 1"
 	/users/user/projects/project1/app.js SVC-1-0 "var x = require('bar');"
-	/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts Text-1 "export const x = 1;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -2201,7 +2108,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project2/jsconfig.json' (Configured)
@@ -2221,7 +2128,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/user/projects/project3/app.js Project
 Info seq  [hh:mm:ss:mss] 		Projects: /users/user/projects/project3/jsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project2/jsconfig.json' (Configured)
@@ -2257,8 +2164,8 @@ After running Timeout callback:: count: 0
 
 Projects::
 /users/user/projects/project1/jsconfig.json (Configured) *changed*
-    projectStateVersion: 4
-    projectProgramVersion: 2
+    projectStateVersion: 3
+    projectProgramVersion: 1
     dirty: false *changed*
 /users/user/projects/project2/jsconfig.json (Configured)
     projectStateVersion: 3
