@@ -16782,7 +16782,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // a subtype of just `A` or just `B`. When we encounter such a type parameter, we therefore check if the
                 // type parameter is a subtype of a union of all the other types.
                 if (source.flags & TypeFlags.TypeParameter && getBaseConstraintOrType(source).flags & TypeFlags.Union) {
-                    if (isTypeStrictSubtypeOf(source, getUnionType(map(types, t => t === source ? neverType : t)))) {
+                    if (isTypeRelatedTo(source, getUnionType(map(types, t => t === source ? neverType : t)), strictSubtypeRelation)) {
                         orderedRemoveItemAt(types, i);
                     }
                     continue;
@@ -16816,7 +16816,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                         if (
-                            isTypeStrictSubtypeOf(source, target) && (
+                            isTypeRelatedTo(source, target, strictSubtypeRelation) && (
                                 !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
                                 !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
                                 isTypeDerivedFrom(source, target)
@@ -28042,7 +28042,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // the constituent based on its type facts. We use the strict subtype relation because it treats `object`
                 // as a subtype of `{}`, and we need the type facts check because function types are subtypes of `object`,
                 // but are classified as "function" according to `typeof`.
-                isTypeStrictSubtypeOf(t, impliedType) ? hasTypeFacts(t, facts) ? t : neverType :
+                isTypeRelatedTo(t, impliedType, strictSubtypeRelation) ? hasTypeFacts(t, facts) ? t : neverType :
                     // We next check if the consituent is a supertype of the implied type. If so, we substitute the implied
                     // type. This handles top types like `unknown` and `{}`, and supertypes like `{ toString(): string }`.
                     isTypeSubtypeOf(impliedType, t) ? impliedType :
@@ -28275,17 +28275,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 isTypeAssignableTo(candidate, type) ? candidate :
                 getIntersectionType([type, candidate]);
         }
-
-        // function strictSubtypeImpliesSubtype(source: Type, target: Type) {
-        //     const s = source.flags;
-        //     const t = target.flags;
-        //     if (
-        //         !(t & TypeFlags.Unknown && !(s & TypeFlags.Any))
-        //         || !(s & TypeFlags.Object && t & TypeFlags.NonPrimitive && !(isEmptyAnonymousObjectType(source) && !(getObjectFlags(source) & ObjectFlags.FreshLiteral)))
-        //     ) return false;
-
-        //     return true;
-        // }
 
         function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
             if (hasMatchingArgument(callExpression, reference)) {
