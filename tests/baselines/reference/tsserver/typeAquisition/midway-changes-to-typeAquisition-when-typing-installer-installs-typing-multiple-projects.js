@@ -1788,6 +1788,18 @@ Info seq  [hh:mm:ss:mss] Config: /users/user/projects/project1/jsconfig.json : {
   "configFilePath": "/users/user/projects/project1/jsconfig.json"
  }
 }
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/users/user/projects/project1/jsconfig.json'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/users/user/projects/project1/jsconfig.json",
+      "files": []
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/project1/bower_components 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/project1/bower_components 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/users/user/projects/project1/jsconfig.json' - done.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/project1/node_modules/bar/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/project1/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -1874,8 +1886,6 @@ PolledWatches::
   {"pollingInterval":500}
 /users/user/projects/package.json:
   {"pollingInterval":2000}
-/users/user/projects/project1/bower_components:
-  {"pollingInterval":500}
 /users/user/projects/project1/node_modules/@types:
   {"pollingInterval":500}
 /users/user/projects/project1/node_modules/bar/package.json:
@@ -1898,6 +1908,8 @@ PolledWatches::
   {"pollingInterval":2000}
 
 PolledWatches *deleted*::
+/users/user/projects/project1/bower_components:
+  {"pollingInterval":500}
 /users/user/projects/project2/node_modules/bar/package.json:
   {"pollingInterval":2000}
 /users/user/projects/project2/node_modules/package.json:
