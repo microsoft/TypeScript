@@ -7,7 +7,6 @@ import {
     arrayFrom,
     arrayIsEqualTo,
     AsExpression,
-    AssertClause,
     BuilderProgram,
     CancellationToken,
     canHaveDecorators,
@@ -918,7 +917,7 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
 }
 
 /** @internal */
-export function getResolutionModeOverride(node: AssertClause | ImportAttributes | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void) {
+export function getResolutionModeOverride(node: ImportAttributes | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void) {
     if (!node) return undefined;
     if (length(node.elements) !== 1) {
         grammarErrorOnNode?.(
