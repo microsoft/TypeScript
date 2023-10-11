@@ -28,6 +28,9 @@ import {
 
 import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;
+import {
+    stringifyIndented,
+} from "../../_namespaces/ts.server";
 
 interface InstallerParams {
     globalTypingsCacheLocation?: string;
@@ -1715,27 +1718,23 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             typesRegistry: ReadonlyMap<string, ts.MapLike<string>>,
             compilerOptions: ts.CompilerOptions,
         ) {
-            logger.log(`ts.JsTyping.discoverTypings:: ${
+            logger.log(`ts.JsTyping.discoverTypings::${
                 replaceAll(
-                    JSON.stringify(
-                        {
-                            fileNames,
-                            projectRootPath,
-                            safeList: toMapLike(safeList),
-                            packageNameToTypingLocation: toMapLike(packageNameToTypingLocation),
-                            typeAcquisition,
-                            unresolvedImports,
-                            typesRegistry: toMapLike(typesRegistry),
-                            compilerOptions,
-                        },
-                        undefined,
-                        " ",
-                    ),
-                    `ts${ts.versionMajorMinor}`,
-                    "tsFakeMajor.Minor",
+                    stringifyIndented({
+                        fileNames,
+                        projectRootPath,
+                        safeList: toMapLike(safeList),
+                        packageNameToTypingLocation: toMapLike(packageNameToTypingLocation),
+                        typeAcquisition,
+                        unresolvedImports,
+                        typesRegistry: toMapLike(typesRegistry),
+                        compilerOptions,
+                    }),
+                    `"ts${ts.versionMajorMinor}"`,
+                    `"tsFakeMajor.Minor"`,
                 )
             }`);
-            const result = ts.JsTyping.discoverTypings(
+            ts.JsTyping.discoverTypings(
                 host,
                 log.writeLine,
                 fileNames,
@@ -1747,7 +1746,6 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
                 typesRegistry,
                 compilerOptions,
             );
-            logger.log(`Result: ${JSON.stringify(result, undefined, " ")}`);
             logger.log("");
         }
 

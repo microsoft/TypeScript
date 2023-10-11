@@ -143,7 +143,35 @@ TI:: typing installer creation complete
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/a/app/test1.csproj","fileNames":["/a/b/file3.d.ts","/a/b/lodash.js","/a/b/commander.js"],"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"include":["jquery","cordova","lodash","commander"],"exclude":[],"enable":true},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/a/app/test1.csproj",
+      "fileNames": [
+        "/a/b/file3.d.ts",
+        "/a/b/lodash.js",
+        "/a/b/commander.js"
+      ],
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "include": [
+          "jquery",
+          "cordova",
+          "lodash",
+          "commander"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/app",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
@@ -151,10 +179,33 @@ TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","cordova","lodash","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","cordova","lodash","commander"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["jquery","cordova","lodash","commander"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "jquery",
+        "cordova",
+        "lodash",
+        "commander"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/a/app/test1.csproj","files":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/a/app/test1.csproj",
+      "files": [
+        "/a/b/bower_components",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
@@ -166,7 +217,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 TI:: [hh:mm:ss:mss] Installing typings ["jquery","cordova","lodash","commander"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::beginInstallTypes","eventId":1,"typingsInstallerVersion":"FakeVersion","projectName":"/a/app/test1.csproj"}
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 1,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/a/app/test1.csproj"
+    }
 TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor","@types/cordova@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor"]'.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test2.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test2.csproj WatchType: Missing file
@@ -180,16 +236,57 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/a/app/test2.csproj","fileNames":["/a/b/file3.d.ts"],"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"include":["grunt","gulp"],"exclude":[],"enable":true},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/a/app/test2.csproj",
+      "fileNames": [
+        "/a/b/file3.d.ts"
+      ],
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "include": [
+          "grunt",
+          "gulp"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/app",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: ["grunt","gulp"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["grunt","gulp"],"filesToWatch":["/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["grunt","gulp"],"filesToWatch":["/a/app/bower_components","/a/app/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "grunt",
+        "gulp"
+      ],
+      "filesToWatch": [
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/a/app/test2.csproj","files":["/a/app/bower_components","/a/app/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/a/app/test2.csproj",
+      "files": [
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test2.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test2.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test2.csproj WatchType: Directory location for typing installer
@@ -197,7 +294,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 TI:: [hh:mm:ss:mss] Installing typings ["grunt","gulp"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::beginInstallTypes","eventId":2,"typingsInstallerVersion":"FakeVersion","projectName":"/a/app/test2.csproj"}
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 2,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/a/app/test2.csproj"
+    }
 TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor","@types/cordova@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor"]':: true
 TI:: Before installWorker
 
@@ -234,10 +336,48 @@ declare const cordova: { x: number }
 TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor","@types/cordova@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/cordova/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/a/app/test1.csproj","typeAcquisition":{"include":["jquery","cordova","lodash","commander"],"exclude":[],"enable":true},"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/cordova/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/a/app/test1.csproj",
+      "typeAcquisition": {
+        "include": [
+          "jquery",
+          "cordova",
+          "lodash",
+          "commander"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [
+        "/a/data/node_modules/@types/jquery/index.d.ts",
+        "/a/data/node_modules/@types/cordova/index.d.ts",
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/commander/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Scheduled: /a/app/test1.csproj
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::endInstallTypes","eventId":1,"projectName":"/a/app/test1.csproj","packagesToInstall":["@types/jquery@tsFakeMajor.Minor","@types/cordova@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 1,
+      "projectName": "/a/app/test1.csproj",
+      "packagesToInstall": [
+        "@types/jquery@tsFakeMajor.Minor",
+        "@types/cordova@tsFakeMajor.Minor",
+        "@types/lodash@tsFakeMajor.Minor",
+        "@types/commander@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }
 TI:: [hh:mm:ss:mss] #2 with arguments'["@types/grunt@tsFakeMajor.Minor","@types/gulp@tsFakeMajor.Minor"]'.
 TI:: [hh:mm:ss:mss] #2 with arguments'["@types/grunt@tsFakeMajor.Minor","@types/gulp@tsFakeMajor.Minor"]':: true
 TI:: Before installWorker
@@ -253,10 +393,42 @@ declare const gulp: { x: number }
 TI:: [hh:mm:ss:mss] Installed typings ["@types/grunt@tsFakeMajor.Minor","@types/gulp@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/a/data/node_modules/@types/grunt/index.d.ts","/a/data/node_modules/@types/gulp/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/a/app/test2.csproj","typeAcquisition":{"include":["grunt","gulp"],"exclude":[],"enable":true},"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/grunt/index.d.ts","/a/data/node_modules/@types/gulp/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/a/app/test2.csproj",
+      "typeAcquisition": {
+        "include": [
+          "grunt",
+          "gulp"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [
+        "/a/data/node_modules/@types/grunt/index.d.ts",
+        "/a/data/node_modules/@types/gulp/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Scheduled: /a/app/test2.csproj
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::endInstallTypes","eventId":2,"projectName":"/a/app/test2.csproj","packagesToInstall":["@types/grunt@tsFakeMajor.Minor","@types/gulp@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 2,
+      "projectName": "/a/app/test2.csproj",
+      "packagesToInstall": [
+        "@types/grunt@tsFakeMajor.Minor",
+        "@types/gulp@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }
 Before running Timeout callback:: count: 2
 1: /a/app/test1.csproj
 2: /a/app/test2.csproj
@@ -285,19 +457,94 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/a/app/test1.csproj","fileNames":["/a/b/file3.d.ts","/a/data/node_modules/@types/commander/index.d.ts","/a/data/node_modules/@types/cordova/index.d.ts","/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/b/lodash.js","/a/b/commander.js"],"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"include":["jquery","cordova","lodash","commander"],"exclude":[],"enable":true},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/a/app/test1.csproj",
+      "fileNames": [
+        "/a/b/file3.d.ts",
+        "/a/data/node_modules/@types/commander/index.d.ts",
+        "/a/data/node_modules/@types/cordova/index.d.ts",
+        "/a/data/node_modules/@types/jquery/index.d.ts",
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/b/lodash.js",
+        "/a/b/commander.js"
+      ],
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "include": [
+          "jquery",
+          "cordova",
+          "lodash",
+          "commander"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/app",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","cordova","lodash","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/cordova/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/cordova/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [
+        "/a/data/node_modules/@types/jquery/index.d.ts",
+        "/a/data/node_modules/@types/cordova/index.d.ts",
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/commander/index.d.ts"
+      ],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/a/app/test1.csproj"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/a/app/test1.csproj"
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/a/app/test1.csproj","typeAcquisition":{"include":["jquery","cordova","lodash","commander"],"exclude":[],"enable":true},"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/cordova/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/a/app/test1.csproj",
+      "typeAcquisition": {
+        "include": [
+          "jquery",
+          "cordova",
+          "lodash",
+          "commander"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [
+        "/a/data/node_modules/@types/jquery/index.d.ts",
+        "/a/data/node_modules/@types/cordova/index.d.ts",
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/commander/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Running: /a/app/test2.csproj
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test2.csproj
@@ -317,17 +564,78 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/a/app/test2.csproj","fileNames":["/a/b/file3.d.ts","/a/data/node_modules/@types/grunt/index.d.ts","/a/data/node_modules/@types/gulp/index.d.ts"],"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"include":["grunt","gulp"],"exclude":[],"enable":true},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/a/app/test2.csproj",
+      "fileNames": [
+        "/a/b/file3.d.ts",
+        "/a/data/node_modules/@types/grunt/index.d.ts",
+        "/a/data/node_modules/@types/gulp/index.d.ts"
+      ],
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "include": [
+          "grunt",
+          "gulp"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/app",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: ["grunt","gulp"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":["/a/data/node_modules/@types/grunt/index.d.ts","/a/data/node_modules/@types/gulp/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":["/a/data/node_modules/@types/grunt/index.d.ts","/a/data/node_modules/@types/gulp/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/app/bower_components","/a/app/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [
+        "/a/data/node_modules/@types/grunt/index.d.ts",
+        "/a/data/node_modules/@types/gulp/index.d.ts"
+      ],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/a/app/test2.csproj"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/a/app/test2.csproj"
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/a/app/test2.csproj","typeAcquisition":{"include":["grunt","gulp"],"exclude":[],"enable":true},"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/grunt/index.d.ts","/a/data/node_modules/@types/gulp/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/a/app/test2.csproj",
+      "typeAcquisition": {
+        "include": [
+          "grunt",
+          "gulp"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [
+        "/a/data/node_modules/@types/grunt/index.d.ts",
+        "/a/data/node_modules/@types/gulp/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 0

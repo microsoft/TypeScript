@@ -95,12 +95,12 @@ Before running Timeout callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 2
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 2
+      }
     }
 TestServerCancellationToken:: resetRequest:: 2 is as expected
 After running Timeout callback:: count: 0
@@ -156,12 +156,12 @@ Before running Timeout callback:: count: 1
 TestServerCancellationToken:: Cancellation is requested
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 3
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 3
+      }
     }
 TestServerCancellationToken:: resetRequest:: 3 is as expected
 After running Timeout callback:: count: 0
@@ -192,13 +192,13 @@ Before running Timeout callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/a/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/app.ts",
+        "diagnostics": []
+      }
     }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
 After running Timeout callback:: count: 0
@@ -210,12 +210,12 @@ Before running Immedidate callback:: count: 1
 TestServerCancellationToken:: Cancellation is requested
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 5
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 5
+      }
     }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
 After running Immedidate callback:: count: 0
@@ -246,13 +246,13 @@ Before running Timeout callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/a/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/app.ts",
+        "diagnostics": []
+      }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Timeout callback:: count: 0
@@ -262,13 +262,13 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/a/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/a/app.ts",
+        "diagnostics": []
+      }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Immedidate callback:: count: 1
@@ -279,22 +279,22 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "/a/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/a/app.ts",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 6
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 6
+      }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Immedidate callback:: count: 0
@@ -325,13 +325,13 @@ Before running Timeout callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/a/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/app.ts",
+        "diagnostics": []
+      }
     }
 TestServerCancellationToken:: resetRequest:: 7 is as expected
 After running Timeout callback:: count: 0
@@ -352,12 +352,12 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 7
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 7
+      }
     }
 TestServerCancellationToken:: resetRequest:: 8 is as expected
 Info seq  [hh:mm:ss:mss] response:

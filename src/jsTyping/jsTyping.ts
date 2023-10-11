@@ -30,6 +30,9 @@ import {
     Version,
     versionMajorMinor,
 } from "./_namespaces/ts";
+import {
+    stringifyIndented,
+} from "./_namespaces/ts.server";
 
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
@@ -236,7 +239,7 @@ export function discoverTypings(
         }
     });
     const result = { cachedTypingPaths, newTypingNames, filesToWatch };
-    if (log) log(`Result: ${JSON.stringify(result)}`);
+    if (log) log(`Finished typings discovery:${stringifyIndented(result)}`);
     return result;
 
     function addInferredTyping(typingName: string) {

@@ -5,6 +5,7 @@ import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
     ActionWatchTypingLocations,
+    stringifyIndented,
 } from "../../_namespaces/ts.server";
 import {
     ensureErrorFreeBuild,
@@ -322,7 +323,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
 
     sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.WatchTypingLocations) {
         if (this.log.isEnabled()) {
-            this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
+            this.log.writeLine(`Sending response:${stringifyIndented(response)}`);
         }
         if (response.kind !== ActionWatchTypingLocations) this.projectService.updateTypingsForProject(response);
         else this.projectService.watchTypingLocations(response);
