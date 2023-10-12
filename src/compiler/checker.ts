@@ -20719,17 +20719,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (source === target) {
             return true;
         }
-        // TODO(jakebailey): just trying this out; passes all tests and is interesting
-        if (
-            source.flags & TypeFlags.Literal
-            && (source.flags & TypeFlags.Literal) === (target.flags & TypeFlags.Literal)
-            && !(source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.EnumLiteral)
-        ) {
-            if (source.flags & TypeFlags.BooleanLiteral) {
-                return source === target;
-            }
-            return (source as LiteralType).value === (target as LiteralType).value;
-        }
 
         if (relation !== identityRelation) {
             if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) || isSimpleTypeRelatedTo(source, target, relation)) {
