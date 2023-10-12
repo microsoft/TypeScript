@@ -206,7 +206,7 @@ export function verifyResolutionCache(
     projectName: string,
 ): void {
     const currentDirectory = resolutionHostCacheHost.getCurrentDirectory!();
-    const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution, /*logChangesWhenResolvingModule*/ false);
+    const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution);
     expected.startCachingPerDirectoryResolution();
 
     type ExpectedResolution = ts.CachedResolvedModuleWithFailedLookupLocations & ts.CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations;
@@ -269,6 +269,14 @@ export function verifyResolutionCache(
     verifyFileWatchesOfAffectingLocations(expected.fileWatchesOfAffectingLocations, actual.fileWatchesOfAffectingLocations);
     verifyPackageDirWatchers(expected.packageDirWatchers, actual.packageDirWatchers);
     verifyDirPathToSymlinkPackageRefCount(expected.dirPathToSymlinkPackageRefCount, actual.dirPathToSymlinkPackageRefCount);
+    ts.Debug.assert(
+        expected.countResolutionsResolvedWithGlobalCache() === actual.countResolutionsResolvedWithGlobalCache(),
+        `${projectName}:: Expected ResolutionsResolvedWithGlobalCache count ${expected.countResolutionsResolvedWithGlobalCache()} but got ${actual.countResolutionsResolvedWithGlobalCache()}`,
+    );
+    ts.Debug.assert(
+        expected.countResolutionsResolvedWithoutGlobalCache() === actual.countResolutionsResolvedWithoutGlobalCache(),
+        `${projectName}:: Expected ResolutionsResolvedWithoutGlobalCache count ${expected.countResolutionsResolvedWithoutGlobalCache()} but got ${actual.countResolutionsResolvedWithoutGlobalCache()}`,
+    );
 
     // Stop watching resolutions to verify everything gets closed.
     expected.startCachingPerDirectoryResolution();
@@ -284,6 +292,8 @@ export function verifyResolutionCache(
     ts.Debug.assert(expected.resolutionsWithOnlyAffectingLocations.size === 0, `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`);
     ts.Debug.assert(expected.directoryWatchesOfFailedLookups.size === 0, `${projectName}:: directoryWatchesOfFailedLookups should be released`);
     ts.Debug.assert(expected.fileWatchesOfAffectingLocations.size === 0, `${projectName}:: fileWatchesOfAffectingLocations should be released`);
+    ts.Debug.assert(expected.countResolutionsResolvedWithGlobalCache() === 0, `${projectName}:: ResolutionsResolvedWithGlobalCache should be cleared`);
+    ts.Debug.assert(expected.countResolutionsResolvedWithoutGlobalCache() === 0, `${projectName}:: ResolutionsResolvedWithoutGlobalCache should be cleared`);
 
     function collectResolutionToRefFromCache<T extends ts.ResolutionWithFailedLookupLocations>(
         cacheType: string,
@@ -329,6 +339,7 @@ export function verifyResolutionCache(
                 failedLookupLocations: resolved.failedLookupLocations,
                 affectingLocations: resolved.affectingLocations,
                 alternateResult: resolved.alternateResult,
+                globalCacheResolution: resolved.globalCacheResolution,
             };
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);
