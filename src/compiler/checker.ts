@@ -20719,6 +20719,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (source === target) {
             return true;
         }
+        // TODO(jakebailey): just trying this out; passes all tests and is interesting
+        if (
+            source.flags & TypeFlags.Literal
+            && (source.flags & TypeFlags.Literal) === (target.flags & TypeFlags.Literal)
+            && !(source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.EnumLiteral)
+        ) {
+            if (source.flags & TypeFlags.BooleanLiteral) {
+                return source === target;
+            }
+            return (source as LiteralType).value === (target as LiteralType).value;
+        }
+
         if (relation !== identityRelation) {
             if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) || isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
@@ -28245,7 +28257,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                             // Avoid going through relations for comparison between literals of the same types;
                             // if they're not equal then they're not related and we can skip doing a bunch of work.
-                            if (t.flags & TypeFlags.Literal && (t.flags & TypeFlags.Literal) === (c.flags & TypeFlags.Literal)) {
+                            if (
+                                t.flags & TypeFlags.Literal
+                                && (t.flags & TypeFlags.Literal) === (c.flags & TypeFlags.Literal)
+                                && !(t.flags & TypeFlags.EnumLiteral && c.flags & TypeFlags.EnumLiteral)
+                            ) {
                                 if (t.flags & TypeFlags.BooleanLiteral) {
                                     const tIsTrue = t === trueType || t === regularTrueType;
                                     const cIsTrue = c === trueType || c === regularTrueType;
