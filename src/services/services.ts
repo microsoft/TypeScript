@@ -3284,7 +3284,7 @@ export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementW
     }
     // by eliminating duplicates we might even end up with a single symbol
     // that helps with displaying better quick infos on properties of union types
-    return Array.from(new Set(discriminatedPropertySymbols));
+    return deduplicate(discriminatedPropertySymbols, equateValues);
 }
 
 function isArgumentOfElementAccessExpression(node: Node) {
