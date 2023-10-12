@@ -389,6 +389,7 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
                 namedImports && arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
                 namespaceLikeImport,
                 compilerOptions,
+                preferences,
             );
             newDeclarations = combine(newDeclarations, declarations);
         });
@@ -1348,6 +1349,7 @@ function codeActionForFixWorker(
                     namedImports,
                     namespaceLikeImport,
                     program.getCompilerOptions(),
+                    preferences,
                 ),
                 /*blankLineBetween*/ true,
                 preferences,
@@ -1505,7 +1507,7 @@ function doAddExistingFix(
         const newSpecifiers = stableSort(
             namedImports.map(namedImport =>
                 factory.createImportSpecifier(
-                    (!clause.isTypeOnly || promoteFromTypeOnly) && needsTypeOnly(namedImport),
+                    (!clause.isTypeOnly || promoteFromTypeOnly) && shouldUseTypeOnly(namedImport, preferences),
                     /*propertyName*/ undefined,
                     factory.createIdentifier(namedImport.name),
                 )
@@ -1604,6 +1606,10 @@ function needsTypeOnly({ addAsTypeOnly }: { addAsTypeOnly: AddAsTypeOnly; }): bo
     return addAsTypeOnly === AddAsTypeOnly.Required;
 }
 
+function shouldUseTypeOnly(info: { addAsTypeOnly: AddAsTypeOnly; }, preferences: UserPreferences): boolean {
+    return needsTypeOnly(info) || !!preferences.preferTypeOnlyAutoImports && info.addAsTypeOnly !== AddAsTypeOnly.NotAllowed;
+}
+
 function getNewImports(
     moduleSpecifier: string,
     quotePreference: QuotePreference,
@@ -1611,6 +1617,7 @@ function getNewImports(
     namedImports: readonly Import[] | undefined,
     namespaceLikeImport: Import & { importKind: ImportKind.CommonJS | ImportKind.Namespace; } | undefined,
     compilerOptions: CompilerOptions,
+    preferences: UserPreferences,
 ): AnyImportSyntax | readonly AnyImportSyntax[] {
     const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
     let statements: AnyImportSyntax | readonly AnyImportSyntax[] | undefined;
@@ -1618,18 +1625,18 @@ function getNewImports(
         // `verbatimModuleSyntax` should prefer top-level `import type` -
         // even though it's not an error, it would add unnecessary runtime emit.
         const topLevelTypeOnly = (!defaultImport || needsTypeOnly(defaultImport)) && every(namedImports, needsTypeOnly) ||
-            compilerOptions.verbatimModuleSyntax &&
+            (compilerOptions.verbatimModuleSyntax || preferences.preferTypeOnlyAutoImports) &&
                 defaultImport?.addAsTypeOnly !== AddAsTypeOnly.NotAllowed &&
                 !some(namedImports, i => i.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
         statements = combine(
             statements,
             makeImport(
                 defaultImport && factory.createIdentifier(defaultImport.name),
-                namedImports?.map(({ addAsTypeOnly, name }) =>
+                namedImports?.map(namedImport =>
                     factory.createImportSpecifier(
-                        !topLevelTypeOnly && addAsTypeOnly === AddAsTypeOnly.Required,
+                        !topLevelTypeOnly && shouldUseTypeOnly(namedImport, preferences),
                         /*propertyName*/ undefined,
-                        factory.createIdentifier(name),
+                        factory.createIdentifier(namedImport.name),
                     )
                 ),
                 moduleSpecifier,
@@ -1643,14 +1650,14 @@ function getNewImports(
         const declaration = namespaceLikeImport.importKind === ImportKind.CommonJS
             ? factory.createImportEqualsDeclaration(
                 /*modifiers*/ undefined,
-                needsTypeOnly(namespaceLikeImport),
+                shouldUseTypeOnly(namespaceLikeImport, preferences),
                 factory.createIdentifier(namespaceLikeImport.name),
                 factory.createExternalModuleReference(quotedModuleSpecifier),
             )
             : factory.createImportDeclaration(
                 /*modifiers*/ undefined,
                 factory.createImportClause(
-                    needsTypeOnly(namespaceLikeImport),
+                    shouldUseTypeOnly(namespaceLikeImport, preferences),
                     /*name*/ undefined,
                     factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name)),
                 ),
