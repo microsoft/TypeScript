@@ -1534,6 +1534,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         scheduleUpdate: boolean,
     ): void {
         if (setTypings) {
+            if (!this.getTypeAcquisition().enable) return;
             this.typingsCache = {
                 compilerOptions: setTypings.compilerOptions,
                 typeAcquisition: setTypings.typeAcquisition,
