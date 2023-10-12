@@ -37,6 +37,8 @@
             // error on used to be indexer, now it is a computed property
             "propertyAssignment",
             "invalidTaggedTemplateEscapeSequences", // Invalid escape sequences 
+            // duplicate field/accessor
+            "symbolDeclarationEmit12"
         ],
         "ts-bugs": [
            // https://github.com/microsoft/TypeScript/issues/55571 
