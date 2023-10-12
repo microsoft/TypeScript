@@ -28247,7 +28247,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // if they're not equal then they're not related and we can skip doing a bunch of work.
                             if (t.flags & TypeFlags.Literal && (t.flags & TypeFlags.Literal) === (c.flags & TypeFlags.Literal)) {
                                 if (t.flags & TypeFlags.BooleanLiteral) {
-                                    return t === c ? t : neverType;
+                                    const tIsTrue = t === trueType || t === regularTrueType;
+                                    const cIsTrue = c === trueType || c === regularTrueType;
+                                    return tIsTrue === cIsTrue ? t : neverType;
                                 }
                                 return (t as LiteralType).value === (c as LiteralType).value ? t : neverType;
                             }
@@ -28256,6 +28258,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             if (isTypeStrictSubtypeOf(c, t)) return c;
 
                             // Strict subtyping is equivalent to subtyping for these types (and likely others).
+                            // TODO(jakebailey): what other things can we quickly check here?
                             if (t.flags & TypeFlags.Unit && c.flags & TypeFlags.Unit) return neverType;
 
                             if (isTypeSubtypeOf(t, c)) return t;
