@@ -6,18 +6,17 @@ export const testRunnerCLIConfiguration = parserConfiguration({
         description: "Test filter to run",
     },
     type: {
-        type: ArgType.Enum("all", "tsc", "i"),
+        type: ArgType.Enum("all", "tsc", "dte"),
         description: "Type of run (Typescript, all, or isolated)",
     },
     shard: ArgType.Number(),
     shardCount: ArgType.Number(),
-    histFolder: ArgType.String(),
     libPath: ArgType.String(),
+    outputPath: ArgType.String(),
     rootPaths: ArgType.StringArray(),
     configFile: ArgType.String(),
     category: ArgType.String(),
     forceIsolatedDeclarations: ArgType.Boolean(),
-    keepHistory: ArgType.Boolean(),
 });
 
 

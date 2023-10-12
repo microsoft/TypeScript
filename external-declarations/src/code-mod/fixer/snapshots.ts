@@ -30,7 +30,7 @@ export function createSnapshotRegistry(sys: Pick<System, "readFile" | "writeFile
             return snapShot;
         }
         const text = sys.readFile(filePath);
-        if (!text) return undefined;
+        if (text === undefined) return undefined;
         if (snapShot && text === snapShot.getText(0, snapShot.getLength())) {
             return snapShot;
         }

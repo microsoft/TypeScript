@@ -1,55 +1,35 @@
-import { AccessorDeclaration, AsExpression, BinaryExpression, ClassDeclaration, CompilerOptions, ComputedPropertyName, Declaration, DiagnosticWithLocation, ElementAccessExpression, EntityNameExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, Expression, FileReference, FunctionDeclaration, GetAccessorDeclaration, ImportDeclaration, InterfaceDeclaration, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedDeclaration, Node, NonNullExpression, ParameterDeclaration, ParenthesizedExpression, PartiallyEmittedExpression, Path, PropertyAccessExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SatisfiesExpression, SetAccessorDeclaration,SignatureDeclaration, SourceFile, StringLiteralLike, Symbol, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, TypeAssertion, VariableDeclaration, VariableStatement } from "typescript";
+import {
+    AccessorDeclaration,
+    AsExpression,
+    BinaryExpression,
+    ComputedPropertyName,
+    ElementAccessExpression,
+    EntityNameExpression,
+    GetAccessorDeclaration,
+    ModifierFlags,
+    ModuleBlock,
+    ModuleDeclaration,
+    NamedDeclaration,
+    Node,
+    NonNullExpression,
+    ParenthesizedExpression,
+    PartiallyEmittedExpression,
+    Path,
+    SatisfiesExpression,
+    SetAccessorDeclaration,
+    SourceFile,
+    Symbol,
+    SymbolFlags,
+    TransformationContext as _TransformationContext,
+    TypeAssertion,
+} from "typescript";
 
-import { AnyImportSyntax } from "./utils";
-
-
-/** @internal */
-interface ResolveModuleNameResolutionHost {
-    getCanonicalFileName(p: string): string;
-    getCommonSourceDirectory(): string;
-    getCurrentDirectory(): string;
-}
-
-
-export interface TransformationContext extends _TransformationContext {
-    addDiagnostic(diag: DiagnosticWithLocation): void;
-    /** @internal */ getEmitResolver(): IsolatedEmitResolver;
-    /** @internal */ getEmitHost(): IsolatedEmitHost;
-}
-
-export interface IsolatedEmitHost extends ModuleSpecifierResolutionHost, ResolveModuleNameResolutionHost {
-    getCommonSourceDirectory(): string
-    getCompilerOptions(): CompilerOptions
-    getSourceFiles(): SourceFile[]
-    /** @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
-    /** @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
-    isSourceOfProjectReferenceRedirect(fileName: string): boolean;
-}
-
-export interface IsolatedEmitResolver {
-    isLiteralComputedName(node: ComputedPropertyName): boolean;
-    isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
-    isLateBound(node: Declaration): node is LateBoundDeclaration;
-    isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
-    isExpandoFunction(node: VariableDeclaration | FunctionDeclaration): boolean;
-    getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
-    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
-    isOptionalParameter(node: ParameterDeclaration): boolean;
-    getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode | undefined][] | undefined;
-    isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
-    getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
-    isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
-    getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined
-    getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
-}
 export interface AllAccessorDeclarations {
     firstAccessor: AccessorDeclaration;
     secondAccessor: AccessorDeclaration | undefined;
     getAccessor: GetAccessorDeclaration | undefined;
     setAccessor: SetAccessorDeclaration | undefined;
 }
-
 
 /** @internal */
 export interface AmbientModuleDeclaration extends ModuleDeclaration {
@@ -83,52 +63,22 @@ interface ModuleSpecifierResolutionHost {
 export type RedirectTargetsMap = ReadonlyMap<Path, readonly string[]>;
 
 /** @internal */
-export interface SymbolVisibilityResult {
-    accessibility: SymbolAccessibility;
-    aliasesToMakeVisible?: LateVisibilityPaintedStatement[]; // aliases that need to have this symbol visible
-    errorSymbolName?: string; // Optional symbol name that results in error
-    errorNode?: Node; // optional node that results in error
-}
-
-
-/** @internal */
-export const enum SymbolAccessibility {
-    Accessible,
-    NotAccessible,
-    CannotBeNamed
-}
-
-/** @internal */
-export type LateVisibilityPaintedStatement =
-    | AnyImportSyntax
-    | VariableStatement
-    | ClassDeclaration
-    | FunctionDeclaration
-    | ModuleDeclaration
-    | TypeAliasDeclaration
-    | InterfaceDeclaration
-    | EnumDeclaration;
-
-
-/** @internal */
 export type GetCanonicalFileName = (fileName: string) => string;
-
-
 
 /** @internal */
 export const enum CharacterCodes {
     nullCharacter = 0,
     maxAsciiCharacter = 0x7F,
 
-    lineFeed = 0x0A,              // \n
-    carriageReturn = 0x0D,        // \r
+    lineFeed = 0x0A, // \n
+    carriageReturn = 0x0D, // \r
     lineSeparator = 0x2028,
     paragraphSeparator = 0x2029,
     nextLine = 0x0085,
 
     // Unicode 3.0 space characters
-    space = 0x0020,   // " "
-    nonBreakingSpace = 0x00A0,   //
+    space = 0x0020, // " "
+    nonBreakingSpace = 0x00A0, //
     enQuad = 0x2000,
     emQuad = 0x2001,
     enSpace = 0x2002,
@@ -214,44 +164,43 @@ export const enum CharacterCodes {
     Y = 0x59,
     Z = 0x5a,
 
-    ampersand = 0x26,             // &
-    asterisk = 0x2A,              // *
-    at = 0x40,                    // @
-    backslash = 0x5C,             // \
-    backtick = 0x60,              // `
-    bar = 0x7C,                   // |
-    caret = 0x5E,                 // ^
-    closeBrace = 0x7D,            // }
-    closeBracket = 0x5D,          // ]
-    closeParen = 0x29,            // )
-    colon = 0x3A,                 // :
-    comma = 0x2C,                 // ,
-    dot = 0x2E,                   // .
-    doubleQuote = 0x22,           // "
-    equals = 0x3D,                // =
-    exclamation = 0x21,           // !
-    greaterThan = 0x3E,           // >
-    hash = 0x23,                  // #
-    lessThan = 0x3C,              // <
-    minus = 0x2D,                 // -
-    openBrace = 0x7B,             // {
-    openBracket = 0x5B,           // [
-    openParen = 0x28,             // (
-    percent = 0x25,               // %
-    plus = 0x2B,                  // +
-    question = 0x3F,              // ?
-    semicolon = 0x3B,             // ;
-    singleQuote = 0x27,           // '
-    slash = 0x2F,                 // /
-    tilde = 0x7E,                 // ~
+    ampersand = 0x26, // &
+    asterisk = 0x2A, // *
+    at = 0x40, // @
+    backslash = 0x5C, // \
+    backtick = 0x60, // `
+    bar = 0x7C, // |
+    caret = 0x5E, // ^
+    closeBrace = 0x7D, // }
+    closeBracket = 0x5D, // ]
+    closeParen = 0x29, // )
+    colon = 0x3A, // :
+    comma = 0x2C, // ,
+    dot = 0x2E, // .
+    doubleQuote = 0x22, // "
+    equals = 0x3D, // =
+    exclamation = 0x21, // !
+    greaterThan = 0x3E, // >
+    hash = 0x23, // #
+    lessThan = 0x3C, // <
+    minus = 0x2D, // -
+    openBrace = 0x7B, // {
+    openBracket = 0x5B, // [
+    openParen = 0x28, // (
+    percent = 0x25, // %
+    plus = 0x2B, // +
+    question = 0x3F, // ?
+    semicolon = 0x3B, // ;
+    singleQuote = 0x27, // '
+    slash = 0x2F, // /
+    tilde = 0x7E, // ~
 
-    backspace = 0x08,             // \b
-    formFeed = 0x0C,              // \f
+    backspace = 0x08, // \b
+    formFeed = 0x0C, // \f
     byteOrderMark = 0xFEFF,
-    tab = 0x09,                   // \t
-    verticalTab = 0x0B,           // \v
+    tab = 0x09, // \t
+    verticalTab = 0x0B, // \v
 }
-
 
 /** @internal */
 export interface DynamicNamedDeclaration extends NamedDeclaration {
@@ -262,7 +211,6 @@ export interface DynamicNamedDeclaration extends NamedDeclaration {
 export interface DynamicNamedBinaryExpression extends BinaryExpression {
     readonly left: ElementAccessExpression;
 }
-
 
 /** @internal */
 export interface JSDocTypeAssertion extends ParenthesizedExpression {
@@ -283,19 +231,16 @@ interface LateBoundName extends ComputedPropertyName {
     readonly expression: EntityNameExpression;
 }
 
-
 export type InternalSymbol = Symbol;
 type InternalModifierFlags = ModifierFlags;
 declare module "typescript" {
     interface Node {
         symbol: InternalSymbol;
         original: this;
-        modifierFlagsCache: InternalModifierFlags
+        modifierFlagsCache: InternalModifierFlags;
     }
     interface Symbol {
         isReferenced: boolean;
         parent: InternalSymbol;
     }
-
 }
-

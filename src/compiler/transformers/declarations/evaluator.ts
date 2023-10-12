@@ -1,11 +1,23 @@
-import { __String, BinaryExpression, Declaration, ElementAccessExpression, EntityNameExpression, Expression, NumericLiteral, ParenthesizedExpression, PrefixUnaryExpression, StringLiteralLike, SyntaxKind, TemplateExpression } from "typescript";
+import {
+    BinaryExpression,
+    Declaration,
+    ElementAccessExpression,
+    EntityNameExpression,
+    Expression,
+    NumericLiteral,
+    ParenthesizedExpression,
+    PrefixUnaryExpression,
+    StringLiteralLike,
+    SyntaxKind,
+    TemplateExpression,
+} from "../../_namespaces/ts";
 
 interface EvaluationResolver {
     evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): string | number | undefined;
     evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): string | number | undefined;
     onNumericLiteral(expr: NumericLiteral): void;
 }
-export function makeEvaluator ({ evaluateElementAccessExpression, evaluateEntityNameExpression, onNumericLiteral }: EvaluationResolver) {
+export function makeEvaluator({ evaluateElementAccessExpression, evaluateEntityNameExpression, onNumericLiteral }: EvaluationResolver) {
     function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
         switch (expr.kind) {
             case SyntaxKind.PrefixUnaryExpression:
@@ -70,7 +82,7 @@ export function makeEvaluator ({ evaluateElementAccessExpression, evaluateEntity
                 return +(expr as NumericLiteral).text;
             case SyntaxKind.ParenthesizedExpression:
                 return evaluate((expr as ParenthesizedExpression).expression, location);
-            case SyntaxKind.Identifier: 
+            case SyntaxKind.Identifier:
             case SyntaxKind.PropertyAccessExpression:
                 return evaluateEntityNameExpression(expr as EntityNameExpression, location);
             case SyntaxKind.ElementAccessExpression:

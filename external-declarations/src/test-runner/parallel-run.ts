@@ -59,9 +59,7 @@ const shardCount = parsedArgs.shardCount ?? 6;
 
 async function main() {
     let runCount = 0;
-    const date = new Date();
-    const histFolder = `${date.toISOString().replace(/:/g, "-")}-${parsedArgs.type}`;
-    const commandLine = `node ./build/test-runner/test-runner-main.js --histFolder=${histFolder} ${process.argv.slice(2).join(" ")} `;
+    const commandLine = `node ./build/test-runner/test-runner-main.js ${process.argv.slice(2).join(" ")} `;
     let lastWrite = new Date().getTime();
     const startTime = new Date().getTime();
     const elapsedTime = (now: number) => `${((now - startTime) / 1000 / 60).toFixed(2)} minutes`;

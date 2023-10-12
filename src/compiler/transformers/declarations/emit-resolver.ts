@@ -1,24 +1,32 @@
 import {
-    __String,
-    AccessorDeclaration,
-    BindingPattern,
-    CompilerOptions,
+    AnyImportSyntax,
+    appendIfUnique,
     ComputedPropertyName,
+    Debug,
     Declaration,
     DeclarationName,
+    determineIfDeclarationIsVisible,
     ElementAccessExpression,
+    emptyArray,
     EntityNameOrEntityNameExpression,
     EnumDeclaration,
     EnumMember,
+    every,
     Expression,
     factory,
+    filter,
     findAncestor,
     FunctionDeclaration,
     FunctionLikeDeclaration,
     getCombinedModifierFlags,
     getCombinedNodeFlags,
+    getFirstIdentifier,
     getNameOfDeclaration,
     getParseTreeNode,
+    getTextOfNode,
+    hasDynamicName,
+    hasProperty,
+    hasSyntacticModifier,
     Identifier,
     ImportClause,
     ImportEqualsDeclaration,
@@ -29,6 +37,7 @@ import {
     isBinaryExpression,
     isBindingElement,
     isElementAccessExpression,
+    isEntityNameExpression,
     isEnumDeclaration,
     isEnumMember,
     isExpressionStatement,
@@ -38,80 +47,59 @@ import {
     isGetAccessor,
     isGetAccessorDeclaration,
     isIdentifier,
+    isInJSFile,
+    isLateVisibilityPaintedStatement,
     isNumericLiteral,
     isParameterPropertyDeclaration,
+    isPartOfTypeNode,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
     isSetAccessor,
     isSetAccessorDeclaration,
-    isSourceFile,
     isStringLiteralLike,
     isTemplateExpression,
+    isThisIdentifier,
     isVariableDeclaration,
     isVariableStatement,
+    LateBoundDeclaration,
+    LateVisibilityPaintedStatement,
     ModifierFlags,
     NamespaceImport,
     Node,
     NodeArray,
     NodeFlags,
+    nodeIsPresent,
     NoSubstitutionTemplateLiteral,
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
     PropertySignature,
-    ResolutionMode,
+    skipParentheses,
     SourceFile,
     Statement,
+    SymbolAccessibility,
     SymbolFlags,
+    SymbolVisibilityResult,
     SyntaxKind,
     VariableDeclaration,
     VariableDeclarationList,
-} from "typescript";
-
+} from "../../_namespaces/ts";
 import {
-    Debug,
-} from "./debug";
-import {
-    BasicSymbol,
-    bindSourceFile,
-    NodeLinks,
+    bindSourceFileForDeclarationEmit,
+    EmitDeclarationNodeLinks,
+    EmitDeclarationSymbol,
 } from "./emit-binder";
 import {
     makeEvaluator,
 } from "./evaluator";
 import {
-    appendIfUnique,
-    emptyArray,
-    every,
-    filter,
-    hasProperty,
-} from "./lang-utils";
-import {
+    IsolatedEmitHost,
     IsolatedEmitResolver,
-    LateBoundDeclaration,
-    LateVisibilityPaintedStatement,
-    SymbolAccessibility,
-    SymbolVisibilityResult,
 } from "./types";
 import {
-    AnyImportSyntax,
-    getFirstIdentifier,
     getMemberKey,
-    hasDynamicName,
-    hasEffectiveModifier,
-    hasSyntacticModifier,
-    isAmbientDeclaration,
-    isBindingPattern,
-    isEntityNameExpression,
-    isExternalModuleAugmentation,
-    isInJSFile,
-    isLateVisibilityPaintedStatement,
-    isPartOfTypeNode,
-    isThisIdentifier,
     MemberKey,
-    nodeIsPresent,
-    skipParentheses,
 } from "./utils";
 
 const knownFunctionMembers = new Set([
@@ -122,8 +110,8 @@ const knownFunctionMembers = new Set([
     "I:prototype",
     "I:length",
 ]);
-export function createEmitResolver(file: SourceFile, options: CompilerOptions, packageModuleType: ResolutionMode): IsolatedEmitResolver {
-    const { getNodeLinks, resolveMemberKey, resolveName } = bindSourceFile(file, options, packageModuleType);
+export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEmitHost): IsolatedEmitResolver {
+    const { getNodeLinks, resolveMemberKey, resolveName } = bindSourceFileForDeclarationEmit(file, host);
 
     function getEnumValueFromName(name: PropertyName | NoSubstitutionTemplateLiteral, location: EnumDeclaration) {
         const enumKey = getMemberKey(name);
@@ -328,16 +316,16 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             const declaredAccessors = symbol?.declarations.filter(isAccessor);
             const declarations = declaredAccessors?.length ? declaredAccessors : [declaration];
             return {
-                firstAccessor: declarations[0] as AccessorDeclaration,
-                secondAccessor: declarations[1] as AccessorDeclaration,
+                firstAccessor: declarations[0],
+                secondAccessor: declarations[1],
                 getAccessor: declarations.find(isGetAccessorDeclaration),
                 setAccessor: declarations.find(isSetAccessorDeclaration),
             };
         },
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined {
             function updateEnumValues(node: EnumDeclaration) {
-                let prevEnumValueLinks: NodeLinks | undefined;
-                const isDeclaration = isAmbientDeclaration(node) && !hasSyntacticModifier(node, ModifierFlags.Const);
+                let prevEnumValueLinks: EmitDeclarationNodeLinks | undefined;
+                const isDeclaration = node.flags & NodeFlags.Ambient && !hasSyntacticModifier(node, ModifierFlags.Const);
                 for (const enumValue of node.members) {
                     const links = getNodeLinks(enumValue);
                     if (enumValue.initializer) {
@@ -384,11 +372,8 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             const name = getNameOfDeclaration(node);
             return !hasDynamicName(node) || isIdentifierComputedName(name);
         },
-        getPropertiesOfContainerFunction(node: Declaration) {
-            return [];
-        },
         isImplementationOfOverload(node) {
-            function getSignaturesOfSymbol(symbol: BasicSymbol | undefined): Node[] {
+            function getSignaturesOfSymbol(symbol: EmitDeclarationSymbol | undefined): Node[] {
                 if (!symbol) return emptyArray;
                 if (symbol.signatureDeclarations) return symbol.signatureDeclarations;
 
@@ -422,8 +407,8 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
 
             if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
                 if (isGetAccessor(node) || isSetAccessor(node)) return false; // Get or set accessors can never be overload implementations, but can have up to 2 signatures
-                const symbol = node.symbol;
-                const signaturesOfSymbol = getSignaturesOfSymbol(symbol as unknown as BasicSymbol);
+                const symbol = getNodeLinks(node).symbol;
+                const signaturesOfSymbol = getSignaturesOfSymbol(symbol);
                 // If this function body corresponds to function with multiple signature, it is implementation of overload
                 // e.g.: function foo(a: string): string;
                 //       function foo(a: number): number;
@@ -456,7 +441,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             return true;
         },
         isEntityNameVisible,
-        getTypeReferenceDirectivesForEntityName(name) {
+        getTypeReferenceDirectivesForEntityName() {
             return undefined;
         },
         isExpandoFunction,
@@ -481,114 +466,17 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         if (node) {
             const links = getNodeLinks(node);
             if (links.isVisible === undefined) {
-                links.isVisible = links.symbol?.isVisible ?? !!determineIfDeclarationIsVisible();
+                links.isVisible = links.symbol?.isVisible ?? !!determineIfDeclarationIsVisible(node, isDeclarationVisible);
             }
             return links.isVisible;
         }
 
         return false;
-
-        function determineIfDeclarationIsVisible() {
-            switch (node.kind) {
-                case SyntaxKind.JSDocCallbackTag:
-                case SyntaxKind.JSDocTypedefTag:
-                case SyntaxKind.JSDocEnumTag:
-                    // Top-level jsdoc type aliases are considered exported
-                    // First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
-                    return !!(node.parent && node.parent.parent && node.parent.parent.parent && isSourceFile(node.parent.parent.parent));
-                case SyntaxKind.BindingElement:
-                    return isDeclarationVisible(node.parent.parent);
-                case SyntaxKind.VariableDeclaration:
-                    if (
-                        isBindingPattern((node as VariableDeclaration).name) &&
-                        !((node as VariableDeclaration).name as BindingPattern).elements.length
-                    ) {
-                        // If the binding pattern is empty, this variable declaration is not visible
-                        return false;
-                    }
-                    // falls through
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ImportEqualsDeclaration:
-                    // external module augmentation is always visible
-                    if (isExternalModuleAugmentation(node)) {
-                        return true;
-                    }
-                    const parent = getDeclarationContainer(node);
-                    // If the node is not exported or it is not ambient module element (except import declaration)
-                    if (
-                        !(getCombinedModifierFlags(node as Declaration) & ModifierFlags.Export) &&
-                        !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && isAmbientDeclaration(parent))
-                    ) {
-                        return isGlobalSourceFile(parent);
-                    }
-                    // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
-                    return isDeclarationVisible(parent);
-
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                    if (hasEffectiveModifier(node, ModifierFlags.Private | ModifierFlags.Protected)) {
-                        // Private/protected properties/methods are not visible
-                        return false;
-                    }
-                    // Public properties/methods are visible if its parents are visible, so:
-                    // falls through
-
-                case SyntaxKind.Constructor:
-                case SyntaxKind.ConstructSignature:
-                case SyntaxKind.CallSignature:
-                case SyntaxKind.IndexSignature:
-                case SyntaxKind.Parameter:
-                case SyntaxKind.ModuleBlock:
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                case SyntaxKind.TypeLiteral:
-                case SyntaxKind.TypeReference:
-                case SyntaxKind.ArrayType:
-                case SyntaxKind.TupleType:
-                case SyntaxKind.UnionType:
-                case SyntaxKind.IntersectionType:
-                case SyntaxKind.ParenthesizedType:
-                case SyntaxKind.NamedTupleMember:
-                    return isDeclarationVisible(node.parent);
-
-                // Default binding, import specifier and namespace import is visible
-                // only on demand so by default it is not visible
-                case SyntaxKind.ImportClause:
-                case SyntaxKind.NamespaceImport:
-                case SyntaxKind.ImportSpecifier:
-                    return false;
-
-                // Type parameters are always visible
-                case SyntaxKind.TypeParameter:
-
-                // Source file and namespace export are always visible
-                // falls through
-                case SyntaxKind.SourceFile:
-                case SyntaxKind.NamespaceExportDeclaration:
-                    return true;
-
-                // Export assignments do not create name bindings outside the module
-                case SyntaxKind.ExportAssignment:
-                    return false;
-
-                default:
-                    return false;
-            }
-        }
     }
 
-    function hasVisibleDeclarations(symbol: BasicSymbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
+    function hasVisibleDeclarations(symbol: EmitDeclarationSymbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
         let aliasesToMakeVisible: LateVisibilityPaintedStatement[] | undefined;
-        if (!every(filter(symbol.declarations, d => d.kind !== SyntaxKind.Identifier), getIsDeclarationVisible)) {
+        if (!every(filter(symbol.declarations, d => d.kind !== SyntaxKind.Identifier), n => getIsDeclarationVisible(n))) {
             return undefined;
         }
         return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
@@ -706,41 +594,10 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             // We don't actually keep enough information for full accessibility,
             // We just do this to mark accessible imports
             accessibility: SymbolAccessibility.Accessible,
-            errorSymbolName: firstIdentifier.text,
+            errorSymbolName: getTextOfNode(firstIdentifier),
             errorNode: firstIdentifier,
         };
     }
-}
-
-function getRootDeclaration(node: Node): Node {
-    while (node.kind === SyntaxKind.BindingElement) {
-        node = node.parent.parent;
-    }
-    return node;
-}
-
-function getDeclarationContainer(node: Node): Node {
-    return findAncestor(getRootDeclaration(node), node => {
-        switch (node.kind) {
-            case SyntaxKind.VariableDeclaration:
-            case SyntaxKind.VariableDeclarationList:
-            case SyntaxKind.ImportSpecifier:
-            case SyntaxKind.NamedImports:
-            case SyntaxKind.NamespaceImport:
-            case SyntaxKind.ImportClause:
-                return false;
-            default:
-                return true;
-        }
-    })!.parent;
-}
-
-// Isolated declarations never support global source files.
-function isGlobalSourceFile(node: Node) {
-    return isSourceFile(node) && !isExternalModule(node);
-}
-function isExternalModule(file: SourceFile): boolean {
-    return file.externalModuleIndicator !== undefined;
 }
 
 function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {

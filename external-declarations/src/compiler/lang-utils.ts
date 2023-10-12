@@ -23,23 +23,6 @@ export function forEach<T, U>(array: readonly T[] | undefined, callback: (elemen
 }
 
 
-
-/** @internal */
-export function concatenate<T>(array1: T[], array2: T[]): T[];
-/** @internal */
-export function concatenate<T>(array1: readonly T[], array2: readonly T[]): readonly T[];
-/** @internal */
-export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined): T[];
-/** @internal */
-export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[];
-/** @internal */
-export function concatenate<T>(array1: undefined | readonly T[], array2: undefined | readonly T[]): undefined | T[] | readonly T[] {
-    if (!some(array2)) return array1;
-    if (!some(array1)) return array2;
-    return [...array1, ...array2];
-}
-
-
 /** @internal */
 export function some<T>(array: readonly T[] | undefined): array is readonly T[];
 /** @internal */
@@ -67,49 +50,6 @@ export function stringContains(str: string, substring: string): boolean {
     return str.indexOf(substring) !== -1;
 }
 
-
-/**
- * Filters an array by a predicate function. Returns the same array instance if the predicate is
- * true for all elements, otherwise returns a new array instance containing the filtered subset.
- *
- * @internal
- */
- export function filter<T, U extends T>(array: T[], f: (x: T) => x is U): U[];
- /** @internal */
- export function filter<T>(array: T[], f: (x: T) => boolean): T[];
- /** @internal */
- export function filter<T, U extends T>(array: readonly T[], f: (x: T) => x is U): readonly U[];
- /** @internal */
- export function filter<T, U extends T>(array: readonly T[], f: (x: T) => boolean): readonly T[];
- /** @internal */
- export function filter<T, U extends T>(array: T[] | undefined, f: (x: T) => x is U): U[] | undefined;
- /** @internal */
- export function filter<T>(array: T[] | undefined, f: (x: T) => boolean): T[] | undefined;
- /** @internal */
- export function filter<T, U extends T>(array: readonly T[] | undefined, f: (x: T) => x is U): readonly U[] | undefined;
- /** @internal */
- export function filter<T, U extends T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined;
- /** @internal */
- export function filter<T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined {
-     if (array) {
-         const len = array.length;
-         let i = 0;
-         while (i < len && f(array[i])) i++;
-         if (i < len) {
-             const result = array.slice(0, i);
-             i++;
-             while (i < len) {
-                 const item = array[i];
-                 if (f(item)) {
-                     result.push(item);
-                 }
-                 i++;
-             }
-             return result;
-         }
-     }
-     return array;
- }
 
  /**
   * @return Whether the value was added.
@@ -830,21 +770,6 @@ export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T
 }
 
 export const trimString = (s: string) => s.trim();
-
-/**
- * Unlike `pushIfUnique`, this can take `undefined` as an input, and returns a new array.
- *
- * @internal
- */
- export function appendIfUnique<T>(array: T[] | undefined, toAdd: T, equalityComparer?: EqualityComparer<T>): T[] {
-    if (array) {
-        pushIfUnique(array, toAdd, equalityComparer);
-        return array;
-    }
-    else {
-        return [toAdd];
-    }
-}
 
 export function isNullOrUndefined(x: any): x is null | undefined {
     return x === undefined || x === null; // eslint-disable-line no-null/no-null

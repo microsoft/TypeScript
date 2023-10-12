@@ -1,19 +1,12 @@
 import * as fsp from "fs/promises";
-import * as JSON from "json5";
 import * as path from "path";
 import * as ts from "typescript";
-import {
-    ModuleKind,
-} from "typescript";
 
 import {
     getDeclarationExtension,
     isDeclarationFile,
     isTypeScriptFile,
 } from "../compiler/path-utils";
-import {
-    transformFile,
-} from "../compiler/transform-file";
 import {
     compileFiles,
     TestFile,
@@ -85,19 +78,13 @@ export function isRelevantTestFile(f: TestCaseParser.TestUnitData) {
     return isTypeScriptFile(f.name) && !isDeclarationFile(f.name) && f.content !== undefined;
 }
 
-export function runIsolated(caseData: TestCaseParser.TestCaseContent, libFiles: string[], settings: ts.CompilerOptions): TestCompilationResult {
+export function runDeclarationTransformEmitter(caseData: TestCaseParser.TestCaseContent, libFiles: string[], settings: ts.CompilerOptions): TestCompilationResult {
     const toSrc = (n: string) => vpath.combine("/src", n);
     const projectFiles = [...caseData.testUnitData.map(o => toSrc(o.name)), ...libFiles];
     settings = {
         ...settings,
         isolatedDeclarations: true,
     };
-
-    const packageJson = caseData.testUnitData.find(f => f.name === "/package.json");
-    let packageResolution: ts.ResolutionMode = ts.ModuleKind.CommonJS;
-    if (packageJson) {
-        packageResolution = JSON.parse(packageJson.content)?.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
-    }
 
     const diagnostics: ts.Diagnostic[] = [];
     const files = caseData.testUnitData
@@ -110,10 +97,10 @@ export function runIsolated(caseData: TestCaseParser.TestCaseContent, libFiles: 
                 /*setParentNodes*/ true,
                 file.name.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
             );
-            const declaration = transformFile(sourceFile, projectFiles, libs, settings, packageResolution);
+            const declaration = ts.emitDeclarationsForFile(sourceFile, projectFiles, libs, settings);
             diagnostics.push(...declaration.diagnostics);
             return {
-                content: declaration.code,
+                content: settings.emitBOM ? Utils.addUTF8ByteOrderMark(declaration.code) : declaration.code,
                 fileName: changeExtension(file.name, getDeclarationExtension(file.name)),
             };
         });

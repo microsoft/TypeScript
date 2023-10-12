@@ -133,10 +133,19 @@ registerCodeFix({
     fixIds: [fixId],
     getCodeActions(context) {
         const fixes: CodeFixAction[] = [];
+        const { includeRelativeTypeFixes, includeInlineTypeFixes } = context.preferences;
+
         addCodeAction(addAnnotationFix, fixes, context, "full", f => f.addFullAnnotation(context.span));
-        addCodeAction(addAnnotationFix, fixes, context, "relative", f => f.addFullAnnotation(context.span));
-        addCodeAction(addInlineTypeAssertion, fixes, context, "full", f => f.addInlineAnnotation(context.span));
-        addCodeAction(addInlineTypeAssertion, fixes, context, "relative", f => f.addInlineAnnotation(context.span));
+
+        if (includeRelativeTypeFixes !== false) {
+            addCodeAction(addAnnotationFix, fixes, context, "relative", f => f.addFullAnnotation(context.span));
+        }
+        if (includeInlineTypeFixes !== false) {
+            addCodeAction(addInlineTypeAssertion, fixes, context, "full", f => f.addInlineAnnotation(context.span));
+        }
+        if (includeInlineTypeFixes !== false && includeRelativeTypeFixes !== false) {
+            addCodeAction(addInlineTypeAssertion, fixes, context, "relative", f => f.addInlineAnnotation(context.span));
+        }
         addCodeAction(extractExpression, fixes, context, "full", f => f.extractAsVariable(context.span));
         return fixes;
     },

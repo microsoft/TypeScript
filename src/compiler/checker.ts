@@ -133,6 +133,7 @@ import {
     defaultMaximumTruncationLength,
     DeferredTypeReference,
     DeleteExpression,
+    determineIfDeclarationIsVisible,
     Diagnostic,
     DiagnosticAndArguments,
     DiagnosticArguments,
@@ -252,6 +253,7 @@ import {
     getContainingClassStaticBlock,
     getContainingFunction,
     getContainingFunctionOrClassStaticBlock,
+    getDeclarationContainer,
     getDeclarationModifierFlagsFromSymbol,
     getDeclarationOfKind,
     getDeclarationsOfKind,
@@ -540,6 +542,7 @@ import {
     isGetAccessorDeclaration,
     isGetOrSetAccessorDeclaration,
     isGlobalScopeAugmentation,
+    isGlobalSourceFile,
     isHeritageClause,
     isIdentifier,
     isIdentifierText,
@@ -2705,10 +2708,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getNodeLinks(node: Node): NodeLinks {
         const nodeId = getNodeId(node);
         return nodeLinks[nodeId] || (nodeLinks[nodeId] = new (NodeLinks as any)());
-    }
-
-    function isGlobalSourceFile(node: Node) {
-        return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(node as SourceFile);
     }
 
     function getSymbol(symbols: SymbolTable, name: __String, meaning: SymbolFlags): Symbol | undefined {
@@ -10264,109 +10263,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node) {
             const links = getNodeLinks(node);
             if (links.isVisible === undefined) {
-                links.isVisible = !!determineIfDeclarationIsVisible();
+                links.isVisible = !!determineIfDeclarationIsVisible(node, isDeclarationVisible);
             }
             return links.isVisible;
         }
 
         return false;
-
-        function determineIfDeclarationIsVisible() {
-            switch (node.kind) {
-                case SyntaxKind.JSDocCallbackTag:
-                case SyntaxKind.JSDocTypedefTag:
-                case SyntaxKind.JSDocEnumTag:
-                    // Top-level jsdoc type aliases are considered exported
-                    // First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
-                    return !!(node.parent && node.parent.parent && node.parent.parent.parent && isSourceFile(node.parent.parent.parent));
-                case SyntaxKind.BindingElement:
-                    return isDeclarationVisible(node.parent.parent);
-                case SyntaxKind.VariableDeclaration:
-                    if (
-                        isBindingPattern((node as VariableDeclaration).name) &&
-                        !((node as VariableDeclaration).name as BindingPattern).elements.length
-                    ) {
-                        // If the binding pattern is empty, this variable declaration is not visible
-                        return false;
-                    }
-                    // falls through
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ImportEqualsDeclaration:
-                    // external module augmentation is always visible
-                    if (isExternalModuleAugmentation(node)) {
-                        return true;
-                    }
-                    const parent = getDeclarationContainer(node);
-                    // If the node is not exported or it is not ambient module element (except import declaration)
-                    if (
-                        !(getCombinedModifierFlagsCached(node as Declaration) & ModifierFlags.Export) &&
-                        !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && parent.flags & NodeFlags.Ambient)
-                    ) {
-                        return isGlobalSourceFile(parent);
-                    }
-                    // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
-                    return isDeclarationVisible(parent);
-
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                    if (hasEffectiveModifier(node, ModifierFlags.Private | ModifierFlags.Protected)) {
-                        // Private/protected properties/methods are not visible
-                        return false;
-                    }
-                    // Public properties/methods are visible if its parents are visible, so:
-                    // falls through
-
-                case SyntaxKind.Constructor:
-                case SyntaxKind.ConstructSignature:
-                case SyntaxKind.CallSignature:
-                case SyntaxKind.IndexSignature:
-                case SyntaxKind.Parameter:
-                case SyntaxKind.ModuleBlock:
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                case SyntaxKind.TypeLiteral:
-                case SyntaxKind.TypeReference:
-                case SyntaxKind.ArrayType:
-                case SyntaxKind.TupleType:
-                case SyntaxKind.UnionType:
-                case SyntaxKind.IntersectionType:
-                case SyntaxKind.ParenthesizedType:
-                case SyntaxKind.NamedTupleMember:
-                    return isDeclarationVisible(node.parent);
-
-                // Default binding, import specifier and namespace import is visible
-                // only on demand so by default it is not visible
-                case SyntaxKind.ImportClause:
-                case SyntaxKind.NamespaceImport:
-                case SyntaxKind.ImportSpecifier:
-                    return false;
-
-                // Type parameters are always visible
-                case SyntaxKind.TypeParameter:
-
-                // Source file and namespace export are always visible
-                // falls through
-                case SyntaxKind.SourceFile:
-                case SyntaxKind.NamespaceExportDeclaration:
-                    return true;
-
-                // Export assignments do not create name bindings outside the module
-                case SyntaxKind.ExportAssignment:
-                    return false;
-
-                default:
-                    return false;
-            }
-        }
     }
 
     function collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined {
@@ -10485,22 +10387,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         resolutionTargets.pop();
         resolutionPropertyNames.pop();
         return resolutionResults.pop()!;
-    }
-
-    function getDeclarationContainer(node: Node): Node {
-        return findAncestor(getRootDeclaration(node), node => {
-            switch (node.kind) {
-                case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.VariableDeclarationList:
-                case SyntaxKind.ImportSpecifier:
-                case SyntaxKind.NamedImports:
-                case SyntaxKind.NamespaceImport:
-                case SyntaxKind.ImportClause:
-                    return false;
-                default:
-                    return true;
-            }
-        })!.parent;
     }
 
     function getTypeOfPrototypeProperty(prototype: Symbol): Type {
@@ -10833,7 +10719,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (
             (noImplicitAny || isInJSFile(declaration)) &&
             isVariableDeclaration(declaration) && !isBindingPattern(declaration.name) &&
-            !(getCombinedModifierFlagsCached(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)
+            !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)
         ) {
             // If --noImplicitAny is on or the declaration is in a Javascript file,
             // use control flow tracked 'any' type for non-ambient, non-exported var or let variables with no

@@ -1,8 +1,13 @@
 import * as ts from "typescript";
 
 import * as lang from "../../compiler/lang-utils";
-import { fileExtensionIs } from "../../compiler/path-utils";
-import { getDeclarationEmitExtensionForPath, getOutputExtension } from "../../compiler/utils";
+import {
+    fileExtensionIs,
+} from "../../compiler/path-utils";
+import {
+    getDeclarationEmitExtensionForPath,
+    getOutputExtension,
+} from "../../compiler/utils";
 import * as collections from "./collections";
 import * as fakes from "./fakesHosts";
 import * as documents from "./test-document";
@@ -25,7 +30,7 @@ export function readProject(host: fakes.ParseConfigHost, project: string | undef
     }
     else {
         [project] = host.vfs.scanSync(".", "ancestors-or-self", {
-            accept: (path, stats) => stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0
+            accept: (path, stats) => stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0,
         });
     }
 
@@ -112,7 +117,7 @@ export class CompilationResult {
                     inputs,
                     js: js.get(outFile),
                     dts: dts.get(vpath.changeExtension(outFile, ".d.ts")),
-                    map: maps.get(outFile + ".map")
+                    map: maps.get(outFile + ".map"),
                 };
 
                 if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
@@ -134,7 +139,7 @@ export class CompilationResult {
                                 inputs: [input],
                                 js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
                                 dts: dts.get(this.getOutputPath(sourceFile.fileName, getDeclarationEmitExtensionForPath(sourceFile.fileName))),
-                                map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map"))
+                                map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map")),
                             };
 
                             this._inputsAndOutputs.set(sourceFile.fileName, outputs);
@@ -251,24 +256,26 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     const skipErrorComparison = lang.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
 
     const preProgram = !skipErrorComparison ? ts.createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
-    const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
+    const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
     const program = ts.createProgram(rootFiles || [], compilerOptions, host);
+
     const emitResult = program.emit(
         /*targetSourceFile*/ undefined,
         (fileName, text, writeByteOrderMark) => {
             // If there are errors TS will ot emit declaration files. We want then regardless of errors.
-            if(!vpath.isAbsolute(fileName)) {
+            if (!vpath.isAbsolute(fileName)) {
                 fileName = vpath.resolve(host.vfs.cwd(), fileName);
             }
-            if(host.outputs.some(d => d.file === fileName)) return;
+            if (host.outputs.some(d => d.file === fileName)) return;
             host.writeFile(fileName, text, writeByteOrderMark);
         },
         /*cancellationToken*/ undefined,
         /*emitOnlyDtsFiles*/ undefined,
         /*customTransformers*/ undefined,
         // @ts-expect-error We use forceDts emit documented flag
-        /*forceEmit*/ true);
+        /*forceEmit*/ true,
+    );
     const postErrors = ts.getPreEmitDiagnostics(program);
     const longerErrors = lang.length(preErrors) > postErrors.length ? preErrors : postErrors;
     const shorterErrors = longerErrors === preErrors ? postErrors : preErrors;
