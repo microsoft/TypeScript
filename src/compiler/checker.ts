@@ -28241,10 +28241,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkDerived ?
                         t => isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType :
                         t => {
-                            // isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType;
+                            // WAS: isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType;
 
-                            if (t.flags & TypeFlags.Literal && c.flags & TypeFlags.Literal) {
-                                if (t.flags & TypeFlags.BooleanLiteral && c.flags & TypeFlags.BooleanLiteral) {
+                            // Avoid going through relations for comparison between literals of the same types;
+                            // if they're not equal then they're not related and we can skip doing a bunch of work.
+                            if (t.flags & TypeFlags.Literal && (t.flags & TypeFlags.Literal) === (c.flags & TypeFlags.Literal)) {
+                                if (t.flags & TypeFlags.BooleanLiteral) {
                                     return t === c ? t : neverType;
                                 }
                                 return (t as LiteralType).value === (c as LiteralType).value ? t : neverType;
@@ -28253,6 +28255,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             if (isTypeStrictSubtypeOf(t, c)) return t;
                             if (isTypeStrictSubtypeOf(c, t)) return c;
 
+                            // Strict subtyping is equivalent to subtyping for these types (and likely others).
                             if (t.flags & TypeFlags.Unit && c.flags & TypeFlags.Unit) return neverType;
 
                             if (isTypeSubtypeOf(t, c)) return t;
