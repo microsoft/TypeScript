@@ -337,342 +337,6 @@ Info seq  [hh:mm:ss:mss] File '/users/user/projects/package.json' does not exist
 Info seq  [hh:mm:ss:mss] File '/users/user/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/users/user/projects/project1/node_modules/bar/index.js Text-1 "export const x = 1"
-	/users/user/projects/project1/app.js SVC-1-0 "var x = require('bar');"
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/project1/node_modules/bar/index.js:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/project1/app.js:: ["bar"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: ["bar"]
-TI:: Creating typing installer
-
-Projects::
-/users/user/projects/project1/jsconfig.json (Configured) *changed*
-    projectStateVersion: 2
-    projectProgramVersion: 1
-    dirty: false *changed*
-
-TI:: [hh:mm:ss:mss] Global cache location '/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/home/src/Library/Caches/typescript'
-TI:: [hh:mm:ss:mss] Trying to find '/home/src/Library/Caches/typescript/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
-TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
-TI:: [hh:mm:ss:mss] Updating types-registry npm package...
-TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/home/src/Library/Caches/typescript/package.json]
-{ "private": true }
-
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
-{
-  "entries": {
-    "bar": {
-      "latest": "1.3.0",
-      "ts2.0": "1.0.0",
-      "ts2.1": "1.0.0",
-      "ts2.2": "1.2.0",
-      "ts2.3": "1.3.0",
-      "ts2.4": "1.3.0",
-      "ts2.5": "1.3.0",
-      "ts2.6": "1.3.0",
-      "ts2.7": "1.3.0"
-    }
-  }
-}
-
-
-TI:: [hh:mm:ss:mss] Got install request
-    {
-      "projectName": "/users/user/projects/project1/jsconfig.json",
-      "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
-        "/users/user/projects/project1/app.js"
-      ],
-      "compilerOptions": {
-        "allowJs": true,
-        "maxNodeModuleJsDepth": 2,
-        "allowSyntheticDefaultImports": true,
-        "skipLibCheck": true,
-        "noEmit": true,
-        "traceResolution": true,
-        "configFilePath": "/users/user/projects/project1/jsconfig.json",
-        "allowNonTsExtensions": true
-      },
-      "typeAcquisition": {
-        "enable": true,
-        "include": [],
-        "exclude": []
-      },
-      "unresolvedImports": [
-        "bar"
-      ],
-      "projectRootPath": "/users/user/projects/project1",
-      "kind": "discover"
-    }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
-TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Searching for typing names in /users/user/projects/project1/node_modules; all files: []
-TI:: [hh:mm:ss:mss]     Found package names: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["bar"]
-TI:: [hh:mm:ss:mss] Finished typings discovery:
-    {
-      "cachedTypingPaths": [],
-      "newTypingNames": [
-        "bar"
-      ],
-      "filesToWatch": [
-        "/users/user/projects/project1/bower_components",
-        "/users/user/projects/project1/node_modules"
-      ]
-    }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/users/user/projects/project1/jsconfig.json",
-      "files": [
-        "/users/user/projects/project1/bower_components",
-        "/users/user/projects/project1/node_modules"
-      ]
-    }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/bower_components 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/bower_components 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
-TI:: [hh:mm:ss:mss] Installing typings ["bar"]
-TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "event::beginInstallTypes",
-      "eventId": 1,
-      "typingsInstallerVersion": "FakeVersion",
-      "projectName": "/users/user/projects/project1/jsconfig.json"
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "beginInstallTypes",
-      "body": {
-        "eventId": 1
-      }
-    }
-TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/Library/Caches/typescript arguments: [
-  "@types/bar@tsFakeMajor.Minor"
-]
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingFinish",
-      "body": {
-        "projectName": "/users/user/projects/project1/jsconfig.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/users/user/projects/project1/jsconfig.json",
-        "configFile": "/users/user/projects/project1/jsconfig.json",
-        "diagnostics": []
-      }
-    }
-Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /users/user/projects/project1/app.js ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /users/user/projects/project1/jsconfig.json
-Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /users/user/projects/project1/app.js ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /users/user/projects/project1/jsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background /users/user/projects/project1/app.js
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectsUpdatedInBackground",
-      "body": {
-        "openFiles": [
-          "/users/user/projects/project1/app.js"
-        ]
-      }
-    }
-After running Timeout callback:: count: 0
-
-PolledWatches::
-/users/user/projects/node_modules:
-  {"pollingInterval":500}
-/users/user/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/user/projects/package.json:
-  {"pollingInterval":2000}
-/users/user/projects/project1/bower_components: *new*
-  {"pollingInterval":500}
-/users/user/projects/project1/node_modules/@types:
-  {"pollingInterval":500}
-/users/user/projects/project1/node_modules/bar/package.json:
-  {"pollingInterval":2000}
-/users/user/projects/project1/node_modules/package.json:
-  {"pollingInterval":2000}
-/users/user/projects/project1/package.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-/users/user/projects/project1/jsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/users/user/projects/project1:
-  {}
-/users/user/projects/project1/node_modules:
-  {}
-
-PendingInstalls callback:: count: 1
-1: #1 with arguments:: [
-  "@types/bar@tsFakeMajor.Minor"
-] *new*
-
-Before running Timeout callback:: count: 0
-
-After running Timeout callback:: count: 0
-
-Before running Timeout callback:: count: 0
-
-After running Timeout callback:: count: 0
-
-Before running PendingInstalls callback:: count: 1
-1: #1 with arguments:: [
-  "@types/bar@tsFakeMajor.Minor"
-]
-
-TI:: Installation #1 with arguments:: [
-  "@types/bar@tsFakeMajor.Minor"
-] complete with success::true
-
-TI:: [hh:mm:ss:mss] Installed typings ["@types/bar@tsFakeMajor.Minor"]
-TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts"]
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "projectName": "/users/user/projects/project1/jsconfig.json",
-      "typeAcquisition": {
-        "enable": true,
-        "include": [],
-        "exclude": []
-      },
-      "compilerOptions": {
-        "allowJs": true,
-        "maxNodeModuleJsDepth": 2,
-        "allowSyntheticDefaultImports": true,
-        "skipLibCheck": true,
-        "noEmit": true,
-        "traceResolution": true,
-        "configFilePath": "/users/user/projects/project1/jsconfig.json",
-        "allowNonTsExtensions": true
-      },
-      "typings": [
-        "/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts"
-      ],
-      "unresolvedImports": [
-        "bar"
-      ],
-      "kind": "action::set"
-    }
-Info seq  [hh:mm:ss:mss] Scheduled: /users/user/projects/project1/jsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "setTypings",
-      "body": {
-        "projectName": "/users/user/projects/project1/jsconfig.json",
-        "typeAcquisition": {
-          "enable": true,
-          "include": [],
-          "exclude": []
-        },
-        "compilerOptions": {
-          "allowJs": true,
-          "maxNodeModuleJsDepth": 2,
-          "allowSyntheticDefaultImports": true,
-          "skipLibCheck": true,
-          "noEmit": true,
-          "traceResolution": true,
-          "configFilePath": "/users/user/projects/project1/jsconfig.json",
-          "allowNonTsExtensions": true
-        },
-        "typings": [
-          "/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts"
-        ],
-        "unresolvedImports": [
-          "bar"
-        ],
-        "kind": "action::set"
-      }
-    }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "event::endInstallTypes",
-      "eventId": 1,
-      "projectName": "/users/user/projects/project1/jsconfig.json",
-      "packagesToInstall": [
-        "@types/bar@tsFakeMajor.Minor"
-      ],
-      "installSuccess": true,
-      "typingsInstallerVersion": "FakeVersion"
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "endInstallTypes",
-      "body": {
-        "eventId": 1,
-        "packages": [
-          "@types/bar@tsFakeMajor.Minor"
-        ],
-        "success": true
-      }
-    }
-After running PendingInstalls callback:: count: 0
-
-Timeout callback:: count: 2
-3: /users/user/projects/project1/jsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
-
-Projects::
-/users/user/projects/project1/jsconfig.json (Configured) *changed*
-    projectStateVersion: 3 *changed*
-    projectProgramVersion: 1
-    dirty: true *changed*
-
-Before running Timeout callback:: count: 2
-3: /users/user/projects/project1/jsconfig.json
-4: *ensureProjectForOpenFiles*
-
-Info seq  [hh:mm:ss:mss] Running: /users/user/projects/project1/jsconfig.json
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'bar' from '/users/user/projects/project1/app.js'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -705,7 +369,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/Library/Caches/typescript/package.json'.
+Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/bar/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
@@ -716,7 +380,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/user/projects/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/user/projects/project1/node_modules/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/user/projects/project1/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/user/projects/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -728,21 +392,167 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Default library for target 'es5'
 	../../../../home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts
 	  Imported via 'bar' from file 'app.js'
-	  Matched by default include pattern '**/*'
 	app.js
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
 Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/library/caches/typescript/node_modules/@types/bar/index.d.ts:: []
 Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /users/user/projects/project1/app.js:: []
 Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
+TI:: Creating typing installer
+
+PolledWatches::
+/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/package.json: *new*
+  {"pollingInterval":2000}
+/users/user/projects/node_modules:
+  {"pollingInterval":500}
+/users/user/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/user/projects/project1/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/users/user/projects/package.json:
+  {"pollingInterval":2000}
+/users/user/projects/project1/node_modules/bar/package.json:
+  {"pollingInterval":2000}
+/users/user/projects/project1/node_modules/package.json:
+  {"pollingInterval":2000}
+/users/user/projects/project1/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/users/user/projects/project1/jsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/home/src/Library/Caches/typescript/node_modules: *new*
+  {}
+/users/user/projects/project1:
+  {}
+/users/user/projects/project1/node_modules:
+  {}
+
+Projects::
+/users/user/projects/project1/jsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/user/projects/project1/jsconfig.json
+/home/src/tslibs/TS/Lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/user/projects/project1/jsconfig.json
+/users/user/projects/project1/app.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/user/projects/project1/jsconfig.json *default*
+/users/user/projects/project1/node_modules/bar/index.js *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /users/user/projects/project1/jsconfig.json *deleted*
+
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/Library/Caches/typescript/package.json 0:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Scheduled: /users/user/projects/project1/jsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/Library/Caches/typescript/package.json 0:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/Library/Caches/typescript/package.json 0:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Scheduled: /users/user/projects/project1/jsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/Library/Caches/typescript/package.json 0:: WatchInfo: /home/src/Library/Caches/typescript/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
+TI:: [hh:mm:ss:mss] Updating types-registry npm package...
+TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/Library/Caches/typescript/node_modules/types-registry :: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /users/user/projects/project1/jsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/Library/Caches/typescript/node_modules/types-registry :: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/Library/Caches/typescript/node_modules/types-registry/index.json :: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /users/user/projects/project1/jsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/Library/Caches/typescript/node_modules/types-registry/index.json :: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/home/src/Library/Caches/typescript/package.json]
+{ "private": true }
+
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
+{
+  "entries": {
+    "bar": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
+  }
+}
+
+
+PolledWatches::
+/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json:
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/home/src/Library/Caches/typescript/node_modules/package.json:
+  {"pollingInterval":2000}
+/users/user/projects/node_modules:
+  {"pollingInterval":500}
+/users/user/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/user/projects/project1/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/home/src/Library/Caches/typescript/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/Library/Caches/typescript/package.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/users/user/projects/project1/jsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/home/src/Library/Caches/typescript/node_modules:
+  {}
+/users/user/projects/project1:
+  {}
+/users/user/projects/project1/node_modules:
+  {}
+
+Timeout callback:: count: 2
+2: *ensureProjectForOpenFiles*
+6: /users/user/projects/project1/jsconfig.jsonFailedLookupInvalidation *new*
+
 TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/users/user/projects/project1/jsconfig.json",
       "fileNames": [
         "/home/src/tslibs/TS/Lib/lib.d.ts",
-        "/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts",
         "/users/user/projects/project1/app.js"
       ],
       "compilerOptions": {
@@ -764,6 +574,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "/users/user/projects/project1",
       "kind": "discover"
     }
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Searching for typing names in /users/user/projects/project1/node_modules; all files: []
 TI:: [hh:mm:ss:mss]     Found package names: []
@@ -780,8 +591,16 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "action::watchTypingLocations",
-      "projectName": "/users/user/projects/project1/jsconfig.json"
+      "projectName": "/users/user/projects/project1/jsconfig.json",
+      "files": [
+        "/users/user/projects/project1/bower_components",
+        "/users/user/projects/project1/node_modules"
+      ]
     }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/bower_components 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/bower_components 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/users/user/projects/project1/jsconfig.json",
@@ -804,8 +623,6 @@ TI:: [hh:mm:ss:mss] Sending response:
       "unresolvedImports": [],
       "kind": "action::set"
     }
-Info seq  [hh:mm:ss:mss] Scheduled: /users/user/projects/project1/jsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -834,13 +651,27 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/users/user/projects/project1/jsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json
+Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/Library/Caches/typescript/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/users/user/projects/project1/app.js' of old program, it was successfully resolved to '/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -850,36 +681,37 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
 Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
-After running Timeout callback:: count: 2
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/users/user/projects/project1/jsconfig.json",
+        "configFile": "/users/user/projects/project1/jsconfig.json",
+        "diagnostics": []
+      }
+    }
+After running Timeout callback:: count: 1
 
 PolledWatches::
-/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json: *new*
+/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json:
   {"pollingInterval":2000}
-/home/src/Library/Caches/typescript/node_modules/@types/package.json: *new*
+/home/src/Library/Caches/typescript/node_modules/@types/package.json:
   {"pollingInterval":2000}
-/home/src/Library/Caches/typescript/node_modules/package.json: *new*
+/home/src/Library/Caches/typescript/node_modules/package.json:
   {"pollingInterval":2000}
 /users/user/projects/node_modules:
   {"pollingInterval":500}
 /users/user/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/user/projects/project1/bower_components:
+/users/user/projects/project1/bower_components: *new*
   {"pollingInterval":500}
 /users/user/projects/project1/node_modules/@types:
   {"pollingInterval":500}
 
-PolledWatches *deleted*::
-/users/user/projects/package.json:
-  {"pollingInterval":2000}
-/users/user/projects/project1/node_modules/bar/package.json:
-  {"pollingInterval":2000}
-/users/user/projects/project1/node_modules/package.json:
-  {"pollingInterval":2000}
-/users/user/projects/project1/package.json:
-  {"pollingInterval":2000}
-
 FsWatches::
-/home/src/Library/Caches/typescript/package.json: *new*
+/home/src/Library/Caches/typescript/package.json:
   {}
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
@@ -887,47 +719,26 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/home/src/Library/Caches/typescript/node_modules: *new*
+/home/src/Library/Caches/typescript/node_modules:
   {}
 /users/user/projects/project1:
   {}
 /users/user/projects/project1/node_modules:
   {}
 
-Timeout callback:: count: 2
-4: *ensureProjectForOpenFiles* *deleted*
-5: /users/user/projects/project1/jsconfig.json *new*
-6: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 1
+2: *ensureProjectForOpenFiles* *deleted*
+6: /users/user/projects/project1/jsconfig.jsonFailedLookupInvalidation *deleted*
+7: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /users/user/projects/project1/jsconfig.json (Configured) *changed*
-    projectStateVersion: 4 *changed*
+    projectStateVersion: 3 *changed*
     projectProgramVersion: 3 *changed*
-    dirty: false *changed*
 
-ScriptInfos::
-/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /users/user/projects/project1/jsconfig.json
-/home/src/tslibs/TS/Lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /users/user/projects/project1/jsconfig.json
-/users/user/projects/project1/app.js (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/user/projects/project1/jsconfig.json *default*
-/users/user/projects/project1/node_modules/bar/index.js *changed*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /users/user/projects/project1/jsconfig.json *deleted*
+Before running Timeout callback:: count: 1
+7: *ensureProjectForOpenFiles*
 
-Before running Timeout callback:: count: 2
-5: /users/user/projects/project1/jsconfig.json
-6: *ensureProjectForOpenFiles*
-
-Info seq  [hh:mm:ss:mss] Running: /users/user/projects/project1/jsconfig.json
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
@@ -957,6 +768,22 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+After running Timeout callback:: count: 0
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
+Before running PendingInstalls callback:: count: 0
+
+After running PendingInstalls callback:: count: 0
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
+Before running Timeout callback:: count: 0
+
 After running Timeout callback:: count: 0
 
 Before running Timeout callback:: count: 0
