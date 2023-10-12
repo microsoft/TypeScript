@@ -26,14 +26,11 @@ body:
       description: |
         When did you start seeing this bug occur?
 
-        "Bugs" that have existed in TS for a long time are very likely to be FAQs; please refer to the
-        [FAQ wiki page](https://github.com/Microsoft/TypeScript/wiki/FAQ#common-bugs-that-arent-bugs).
+        "Bugs" that have existed in TS for a long time are very likely to be FAQs; please refer to the [FAQ wiki page](https://github.com/Microsoft/TypeScript/wiki/FAQ#common-bugs-that-arent-bugs).
 
-        Please try the nightly version of TS to see if it's already been fixed.
-        Install `typescript@next` or use the [Playground](http://www.typescriptlang.org/play/?ts=Nightly).
+        Please try the nightly version of TS to see if it's already been fixed. Install `typescript@next` or use the [Playground](http://www.typescriptlang.org/play/?ts=Nightly).
 
-        If possible, try bisecting the issue using [every-ts](https://www.npmjs.com/package/every-ts#bisecting),
-        which should narrow down the problem to a specific change.
+        If possible, try bisecting the issue using [every-ts](https://www.npmjs.com/package/every-ts#bisecting), which should narrow down the problem to a specific change.
 
         The Playground also supports versions of TypeScript back to TypeScript 3.3.
 
