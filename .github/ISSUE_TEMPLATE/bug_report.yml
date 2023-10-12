@@ -41,7 +41,7 @@ body:
       value: |
         - This is a crash
         - This changed between versions ______ and _______
-        - This change bisected to commit or PR _______
+        - This changed in commit or PR _______
         - This is the behavior in every version I tried, and I reviewed the FAQ for entries about _________
         - I was unable to test this on prior versions because _______
     validations:
