@@ -1,43 +1,73 @@
 import "source-map-support/register";
 
 import * as fs from "fs/promises";
-import * as JSON from 'json5';
+import * as JSON from "json5";
 import * as path from "path";
 import * as ts from "typescript";
 
-import { firstDefined } from "../compiler/lang-utils";
-import { normalizePath, removeExtension } from "../compiler/path-utils";
-import { addToQueue, ensureDir, flushQueue, readAllFiles } from "../utils/fs-utils";
-import { parsedCliArgs as parsedArgs } from "./cli-arg-config";
-import { excludedTsTests } from "./excluded-ts-tests";
-import { setCompilerOptionsFromHarnessSetting } from "./tsc-infrastructure/compiler-run";
-import { IO } from "./tsc-infrastructure/io";
-import { CompilerSettings, TestCaseContent } from "./tsc-infrastructure/test-file-parser";
-import { getFileBasedTestConfigurationDescription, getFileBasedTestConfigurations } from "./tsc-infrastructure/vary-by";
-import { changeExtension } from "./tsc-infrastructure/vpath";
-import { loadTestCase, readDirRecursive, runIsolated as runDeclarationTransformEmitter, runTypeScript,TestCompilationResult } from "./utils";
+import {
+    firstDefined,
+} from "../compiler/lang-utils";
+import {
+    normalizePath,
+    removeExtension,
+} from "../compiler/path-utils";
+import {
+    addToQueue,
+    ensureDir,
+    flushQueue,
+    readAllFiles,
+} from "../utils/fs-utils";
+import {
+    parsedCliArgs as parsedArgs,
+} from "./cli-arg-config";
+import {
+    excludedTsTests,
+} from "./excluded-ts-tests";
+import {
+    setCompilerOptionsFromHarnessSetting,
+} from "./tsc-infrastructure/compiler-run";
+import {
+    IO,
+} from "./tsc-infrastructure/io";
+import {
+    CompilerSettings,
+    TestCaseContent,
+} from "./tsc-infrastructure/test-file-parser";
+import {
+    getFileBasedTestConfigurationDescription,
+    getFileBasedTestConfigurations,
+} from "./tsc-infrastructure/vary-by";
+import {
+    changeExtension,
+} from "./tsc-infrastructure/vpath";
+import {
+    loadTestCase,
+    readDirRecursive,
+    runDeclarationTransformEmitter,
+    runTypeScript,
+    TestCompilationResult,
+} from "./utils";
 
-
-const excludeFilter =/\/fourslash\//;
+const excludeFilter = /\/fourslash\//;
 
 const shard = parsedArgs.shard;
 const shardCount = parsedArgs.shardCount;
 let prefix: string | undefined;
 const prefixed = parsedArgs.default && /(?<index>[0-9]{5})-(((?<name>.*)\.(?<options>(.*=.*)+)(\.d\.ts))|(?<nameSimple>.*))/.exec(parsedArgs.default);
 let testVersionFilter: string | undefined;
-if(prefixed) {
+if (prefixed) {
     prefix = prefixed.groups?.index;
     parsedArgs.default = prefixed.groups?.name ?? prefixed.groups?.nameSimple;
     testVersionFilter = prefixed.groups?.options;
 }
 
-const outputPath = parsedArgs.outputPath ?? "./tsc-tests/run"
-const rootCasePaths = parsedArgs.rootPaths ?? [ "./tests/source" ];
+const outputPath = parsedArgs.outputPath ?? "./tsc-tests/run";
+const rootCasePaths = parsedArgs.rootPaths ?? ["./tests/source"];
 const libFolder = parsedArgs.libPath ?? path.join(rootCasePaths[0], "../lib");
 
 const filter = parsedArgs.default ? new RegExp(parsedArgs.default) : /.*\.ts/;
-const runType =
-    parsedArgs.type === "all" ? { tsc: true, dte: true } :
+const runType = parsedArgs.type === "all" ? { tsc: true, dte: true } :
     parsedArgs.type === "tsc" ? { tsc: true, dte: false } :
     { tsc: false, dte: true };
 
@@ -52,16 +82,14 @@ function pad(num: number, size: number) {
     return ("000000000" + num).substr(-size);
 }
 
-
 async function main() {
-
     let fileConfiguration: undefined | {
-        "error-categories": Record<string, number[]>,
-        "test-categories": Record<string, string[]>,
+        "error-categories": Record<string, number[]>;
+        "test-categories": Record<string, string[]>;
     };
     const testCategories = new Map<string, string>();
     const errorCategories = new Map<number, string>();
-    if(parsedArgs.configFile) {
+    if (parsedArgs.configFile) {
         fileConfiguration = JSON.parse(await fs.readFile(parsedArgs.configFile, { encoding: "utf8" }));
         Object.entries(fileConfiguration?.["error-categories"] ?? {}).forEach(([name, codes]) => codes.forEach(c => errorCategories.set(c, name)));
         Object.entries(fileConfiguration?.["test-categories"] ?? {}).forEach(([name, tests]) => tests.forEach(t => testCategories.set(t, name)));
@@ -77,16 +105,16 @@ async function main() {
     for (let count = start; count < end; count++) {
         const testFile = normalizePath(allTests[count]);
         const testFileNoExtension = removeExtension(path.basename(testFile), path.extname(testFile));
-        if(excludedTsTests.has(testFileNoExtension)) {
+        if (excludedTsTests.has(testFileNoExtension)) {
             continue;
         }
         const testName = removeExtension(path.basename(testFile), path.extname(testFile));
-        if(parsedArgs.category && testCategories.get(testName) !== parsedArgs.category) {
+        if (parsedArgs.category && testCategories.get(testName) !== parsedArgs.category) {
             continue;
         }
         const data = await loadTestCase(testFile);
         const variedConfiguration = getFileBasedTestConfigurations(data.settings) ?? [{}];
-        for(const varConfig of variedConfiguration) {
+        for (const varConfig of variedConfiguration) {
             const varConfigDescription = getFileBasedTestConfigurationDescription(varConfig);
             if (testVersionFilter && varConfigDescription !== testVersionFilter) continue;
             const file = (prefix ?? pad(count, 5)) + "-" + changeExtension(path.basename(testFile), varConfigDescription + ".d.ts");
@@ -94,7 +122,6 @@ async function main() {
             if (runType.tsc) runAndWrite(testName, path.join(outputPath, "tsc", file), varConfig, runTypeScript);
 
             if (runType.dte) runAndWrite(testName, path.join(outputPath, "dte", file), varConfig, (t, s) => runDeclarationTransformEmitter(t, libFiles, s));
-
         }
         console.log(`    Ran: ${pad(count, 5)}/${allTests.length}`);
 
@@ -103,7 +130,7 @@ async function main() {
             setCompilerOptionsFromHarnessSetting(data.settings, settings);
             setCompilerOptionsFromHarnessSetting(varySettings, settings);
 
-            if(parsedArgs.forceIsolatedDeclarations) {
+            if (parsedArgs.forceIsolatedDeclarations) {
                 settings.isolatedDeclarations = true;
             }
             // Not supported
@@ -113,13 +140,14 @@ async function main() {
             delete settings.declarationDir;
 
             const results = safeRun(d => fn(d, settings));
-            file = normalizePath(file)
+            file = normalizePath(file);
             const resultText = results.files
                 .flatMap(r => [
                     "// " + r.fileName,
-                    r.content
+                    r.content,
                 ])
-                .join(IO.newLine()) + `
+                .join(IO.newLine()) +
+                `
 // ==================
 // Original test file: ${testFile}
 // ` + data.code.split("\n").join(`
@@ -129,25 +157,25 @@ async function main() {
                 file = path.join(
                     path.dirname(file),
                     "critical-errors",
-                    path.basename(file)
+                    path.basename(file),
                 );
-            } else {
-                
+            }
+            else {
                 let category = testCategories.get(testName);
-                if(!category) {
+                if (!category) {
                     const error = firstDefined(results.diagnostics, d => {
                         const category = errorCategories.get(d.code);
-                        return category ? { category, code: d.code }: undefined;
+                        return category ? { category, code: d.code } : undefined;
                     });
-                    if(error) {
+                    if (error) {
                         category = path.join(error.category, error.code.toString());
                     }
                 }
-                if(category) {
+                if (category) {
                     file = path.join(
                         path.dirname(file),
                         category,
-                        path.basename(file)
+                        path.basename(file),
                     );
                 }
             }
@@ -168,7 +196,7 @@ async function main() {
 message: ${e.message},
 ${e.stack},
 `,
-                    }]
+                    }],
                 };
             }
         }

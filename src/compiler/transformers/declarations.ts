@@ -373,7 +373,7 @@ export function transformDeclarations(context: TransformationContext) {
         // If it is visible via `// <reference types="..."/>`, then we should just use that
         const directives = resolver.getTypeReferenceDirectivesForSymbol(symbol, SymbolFlags.All);
         if (length(directives)) {
-            return recordTypeReferenceDirectivesIfNecessary(directives, node);
+            return recordTypeReferenceDirectivesIfNecessary(directives, /*requestingNode*/ undefined);
         }
         // Otherwise we should emit a path-based reference
         const container = getSourceFileOfNode(node);

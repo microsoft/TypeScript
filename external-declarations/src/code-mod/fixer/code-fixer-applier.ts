@@ -4,6 +4,7 @@ import ts, {
     createCompilerHost,
     createDocumentRegistry,
     DocumentRegistry,
+    UserPreferences,
 } from "typescript";
 import {
     CodeFixAction,
@@ -31,20 +32,20 @@ export async function fixProjectRaw(
     documentRegistry: DocumentRegistry | undefined,
     snapShotRegistry: VersionedFileRegistry,
     fixableErrors: Set<number>,
-    selectFix: (service: LanguageService, diag: Diagnostic, fixes: readonly CodeFixAction[], files: VersionedFileRegistry, signal: BasicAbortSignal) => Promise<number | undefined>,
+    userPreferences: ts.UserPreferences,
+    selectFix: (service: LanguageService, diag: Diagnostic, fixes: readonly CodeFixAction[], files: VersionedFileRegistry, signal: BasicAbortSignal) => Promise<number | undefined> | (number | undefined),
     validateFix?: (service: LanguageService) => Promise<boolean>,
     onProjectLoaded?: (service: LanguageService, documentRegistry: DocumentRegistry, files: VersionedFileRegistry, signal: BasicAbortSignal) => Promise<void>,
 ) {
     documentRegistry = documentRegistry ?? createDocumentRegistry(
         host.useCaseSensitiveFileNames?.(),
         host.getCurrentDirectory(),
-    )
+    );
     const service = ts.createLanguageService(host, documentRegistry);
-
     const program = service.getProgram()!;
     const signal: BasicAbortSignal = { isAborted: false };
 
-    await onProjectLoaded?.(service, documentRegistry, snapShotRegistry, signal);
+    onProjectLoaded && (await onProjectLoaded?.(service, documentRegistry, snapShotRegistry, signal));
     const files = program.getSourceFiles();
     const skips = new Map<string, number>();
     const defaultFormatOptions = ts.getDefaultFormatCodeSettings();
@@ -61,7 +62,6 @@ export async function fixProjectRaw(
         let stuckCount = 0;
         while (diagnostics.length > skipCount) {
             const diag = diagnostics[skipCount];
-
             // Ensure we break out of a unfixable loop
             if (lastFixedDiagnostic?.start === diag.start) {
                 stuckCount++;
@@ -76,11 +76,12 @@ TS${diag.code}: ${diag.messageText}
 ${diag.file?.text.substring(diag.start ?? 0, (diag.start ?? 0) + (diag.length ?? 0))}
 `);
             }
-            const fixes = service.getCodeFixesAtPosition(file.fileName, diag.start!, diag.start! + diag.length!, [diag.code], defaultFormatOptions, {});
+            const fixes = service.getCodeFixesAtPosition(file.fileName, diag.start!, diag.start! + diag.length!, [diag.code], defaultFormatOptions, userPreferences);
             signal.isAborted = false;
             let selectedFix: number | undefined = -1;
             if (fixes.length) {
-                selectedFix = await selectFix(service, diag, fixes, snapShotRegistry, signal);
+                const fixResult = selectFix(service, diag, fixes, snapShotRegistry, signal);
+                selectedFix = typeof fixResult === "number" || fixResult === undefined ? fixResult : (await fixResult);
                 if (signal.isAborted || selectedFix === undefined) {
                     // Restart files.
                     index = -1;
@@ -99,6 +100,7 @@ ${diag.file?.text.substring(diag.start ?? 0, (diag.start ?? 0) + (diag.length ??
                 old: VersionedScriptSnapshot;
                 new: VersionedScriptSnapshot;
             }[] = [];
+
             for (const fileChanges of fix.changes) {
                 const snapshot = snapShotRegistry.getSnapshot(fileChanges.fileName)!;
                 const newSnapShot = applyChangesSnapShot(snapshot, fileChanges.textChanges);
@@ -121,13 +123,17 @@ ${diag.file?.text.substring(diag.start ?? 0, (diag.start ?? 0) + (diag.length ??
     }
     service.dispose();
     function getIsolatedDeclarationsErrors(fileName: string) {
-        return service.getSemanticDiagnostics(fileName).filter(d => fixableErrors.has(d.code));
+        const program = service.getProgram();
+        if (!program) return [];
+        const sourceFile = program.getSourceFile(fileName);
+        return program.getDeclarationDiagnostics(sourceFile).filter(d => fixableErrors.has(d.code)) ?? [];
     }
 }
 
 export async function fixProject(
     tsconfigPath: string,
     fixableErrors: Set<number>,
+    userPreferences: UserPreferences,
     selectFix: (service: LanguageService, diag: Diagnostic, fixes: readonly CodeFixAction[], files: VersionedFileRegistry, signal: BasicAbortSignal) => Promise<number | undefined>,
     validateFix?: (service: LanguageService) => Promise<boolean>,
     onProjectLoaded?: (service: LanguageService, documentRegistry: DocumentRegistry, files: VersionedFileRegistry, signal: BasicAbortSignal) => Promise<void>,
@@ -146,7 +152,7 @@ export async function fixProject(
     const compilerHost = createCompilerHost(cmdLine.options);
     const langHost = createLanguageHost(snapShotRegistry, cmdLine, compilerHost);
 
-    fixProjectRaw(langHost, /*documentRegistry*/ undefined, snapShotRegistry, fixableErrors, selectFix, validateFix, onProjectLoaded);
+    fixProjectRaw(langHost, /*documentRegistry*/ undefined, snapShotRegistry, fixableErrors, userPreferences, selectFix, validateFix, onProjectLoaded);
 }
 
 export function createLanguageHost(
@@ -179,6 +185,12 @@ export function createLanguageHost(
         getProjectReferences: () => cmdLine.projectReferences,
         writeFile(fileName, content) {
             compilerHost.writeFile(fileName, content, !!cmdLine.options.emitBOM);
+        },
+        directoryExists(directoryName) {
+            return compilerHost.directoryExists!(directoryName);
+        },
+        getDirectories(directoryName) {
+            return compilerHost.getDirectories!(directoryName);
         },
     };
     return langHost;

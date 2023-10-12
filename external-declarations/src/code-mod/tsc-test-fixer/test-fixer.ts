@@ -1,4 +1,8 @@
-import ts from "typescript";
+import ts, {
+    DocumentRegistry,
+    Path,
+    SourceFile,
+} from "typescript";
 
 import {
     prepareTestOptionsAndFs,
@@ -43,6 +47,29 @@ export async function fixTestCase(caseData: TestCaseWithBOM, settings: ts.Compil
     }
 }
 
+export interface ExternalDocumentCache {
+    setDocument(key: string, path: Path, sourceFile: SourceFile): void;
+    getDocument(key: string, path: Path): SourceFile | undefined;
+}
+const cache = new Map<string, Map<string, SourceFile>>();
+const isCashablePath = (path: string) => path.startsWith("/.ts") || path.startsWith("/.lib");
+const registry: ExternalDocumentCache = {
+    getDocument(key, path) {
+        if (!isCashablePath(path)) return;
+        const sourceFile = cache.get(key)?.get(path);
+        return sourceFile;
+    },
+    setDocument(key, path, sourceFile) {
+        if (!isCashablePath(path)) return;
+        let byKey = cache.get(key);
+        if (!byKey) {
+            cache.set(key, byKey = new Map());
+        }
+        byKey.set(path, sourceFile);
+    },
+};
+const createDocumentRegistryInternal: (useCaseSensitiveFileNames: boolean, currentDirectory: string, externalCache?: ExternalDocumentCache) => DocumentRegistry = (ts as any).createDocumentRegistryInternal;
+
 async function fixTestFiles(toBeCompiled: TestFile[], settings: ts.CompilerOptions) {
     const { fs, options, programFileNames } = prepareTestOptionsAndFs(
         toBeCompiled,
@@ -66,10 +93,11 @@ async function fixTestFiles(toBeCompiled: TestFile[], settings: ts.CompilerOptio
 
     await fixProjectRaw(
         langHost,
-        /*documentRegistry*/ undefined,
+        createDocumentRegistryInternal(host.useCaseSensitiveFileNames(), host.getCurrentDirectory(), registry),
         snapShotRegistry,
         isolatedDeclarationsErrors,
-        async () => 0,
+        { includeRelativeTypeFixes: false, includeInlineTypeFixes: false },
+        () => 0,
     );
 
     return toBeCompiled.map(unit => ({

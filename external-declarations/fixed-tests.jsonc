@@ -55,8 +55,6 @@
         "not-fixed-with-unreliable-errors": [
             // Language service crash on computing diagnostic (call stack size exceeded)
             "binderBinaryExpressionStress",
-            // Language service crashes on testing base type abstractness (only in test not in tsc or vs code) 
-            "noCrashOnMixin",
             // Bad syntax beyond recovery 
             "destructuringParameterDeclaration6",
             "thisTypeInFunctionsNegative",
@@ -99,6 +97,7 @@
             "overloadsWithComputedNames",
             // A_computed_property_name_must_be_of_type_string_number_symbol_or_any,
             "bigintIndex",
+            "giant",
             "symbolProperty59",
             "computedPropertyNames14_ES5",
             "computedPropertyNames14_ES6",
@@ -116,6 +115,8 @@
             "typeUsedAsTypeLiteralIndex",
             "parser.asyncGenerators.classMethods.es2018",
             "decoratorsOnComputedProperties",
+            "indexSignatureMustHaveTypeAnnotation",
+            "intTypeCheck",
             // Invalid escape sequences 
             "invalidTaggedTemplateEscapeSequences",
             "objectTypeWithStringNamedPropertyOfIllegalCharacters",

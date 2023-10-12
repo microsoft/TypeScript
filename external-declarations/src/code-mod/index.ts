@@ -15,11 +15,11 @@ async function main() {
         const { interactiveFixSelector, interactiveFixValidator } = await import("./fixer/interactive-fix-selector");
         const { makeWatcher } = await import("./fixer/watch");
         const watcher = makeWatcher();
-        await fixProject(config, isolatedDeclarationsErrors, interactiveFixSelector, interactiveFixValidator, watcher.startWatcher);
+        await fixProject(config, isolatedDeclarationsErrors, {}, interactiveFixSelector, interactiveFixValidator, watcher.startWatcher);
         watcher.close();
     }
     else {
-        await fixProject(config, isolatedDeclarationsErrors, async () => 0);
+        await fixProject(config, isolatedDeclarationsErrors, {}, async () => 0);
     }
 }
 

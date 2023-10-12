@@ -68,7 +68,7 @@ const shardCount = parsedArgs.shardCount ?? 6;
 
 async function main() {
     let runCount = 0;
-    const commandLine = `node ./build/code-mod/test-fixer/run-test-updater.js  ${process.argv.slice(2).join(" ")} ${parsedArgs.shardCount === undefined ? `--shardCount=${shardCount} ` : ""}`;
+    const commandLine = `node ./build/code-mod/tsc-test-fixer/run-test-updater.js  ${process.argv.slice(2).join(" ")} ${parsedArgs.shardCount === undefined ? `--shardCount=${shardCount} ` : ""}`;
     let lastWrite = new Date().getTime();
     const startTime = new Date().getTime();
     const elapsedTime = (now: number) => `${((now - startTime) / 1000 / 60).toFixed(2)} minutes`;

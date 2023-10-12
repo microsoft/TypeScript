@@ -60,6 +60,7 @@ export * from "../transformers/declarations/diagnostics";
 export * from "../transformers/declarations/emit-binder";
 export * from "../transformers/declarations/emit-host";
 export * from "../transformers/declarations/emit-resolver";
+export * from "../transformers/declarations/transform-project";
 export * from "../transformers/declarations/types";
 export * from "../transformers/declarations";
 export * from "../transformer";
