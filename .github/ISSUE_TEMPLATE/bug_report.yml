@@ -32,8 +32,8 @@ body:
         Please try the nightly version of TS to see if it's already been fixed.
         Install `typescript@next` or use the [Playground](http://www.typescriptlang.org/play/?ts=Nightly).
 
-        If possible, try bisecting the issue using [every-ts](https://www.npmjs.com/package/every-ts), which
-        should narrow down the problem to a specific PR.
+        If possible, try bisecting the issue using [every-ts](https://www.npmjs.com/package/every-ts#bisecting),
+        which should narrow down the problem to a specific change.
 
         The Playground also supports versions of TypeScript back to TypeScript 3.3.
 
