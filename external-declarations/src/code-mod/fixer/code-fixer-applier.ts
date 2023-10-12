@@ -45,7 +45,7 @@ export async function fixProjectRaw(
     const program = service.getProgram()!;
     const signal: BasicAbortSignal = { isAborted: false };
 
-    onProjectLoaded && (await onProjectLoaded?.(service, documentRegistry, snapShotRegistry, signal));
+    onProjectLoaded && (await onProjectLoaded(service, documentRegistry, snapShotRegistry, signal));
     const files = program.getSourceFiles();
     const skips = new Map<string, number>();
     const defaultFormatOptions = ts.getDefaultFormatCodeSettings();
