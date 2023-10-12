@@ -4,11 +4,13 @@ import {
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
-    ActionWatchTypingLocations,
-} from "../../_namespaces/ts.server";
-import {
     ensureErrorFreeBuild,
 } from "./solutionBuilder";
+import {
+    customTypesMap,
+    TestTypingsInstaller,
+    TestTypingsInstallerOptions,
+} from "./typingsInstaller";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
@@ -19,31 +21,7 @@ import {
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch";
 
-export const customTypesMap = {
-    path: "/typesMap.json" as ts.Path,
-    content: `{
-            "typesMap": {
-                "jquery": {
-                    "match": "jquery(-(\\\\.?\\\\d+)+)?(\\\\.intellisense)?(\\\\.min)?\\\\.js$",
-                    "types": ["jquery"]
-                },
-                "quack": {
-                    "match": "/duckquack-(\\\\d+)\\\\.min\\\\.js",
-                    "types": ["duck-types"]
-                }
-            },
-            "simpleMap": {
-                "Bacon": "baconjs",
-                "bliss": "blissfuljs",
-                "commander": "commander",
-                "cordova": "cordova",
-                "react": "react",
-                "lodash": "lodash"
-            }
-        }`,
-};
-
-function replaceAll(source: string, searchValue: string, replaceValue: string): string {
+export function replaceAll(source: string, searchValue: string, replaceValue: string): string {
     let result: string | undefined = (source as string & { replaceAll: typeof source.replace; }).replaceAll?.(searchValue, replaceValue);
 
     if (result !== undefined) {
@@ -63,13 +41,6 @@ function replaceAll(source: string, searchValue: string, replaceValue: string): 
     }
     result += source;
     return result;
-}
-
-export interface PostExecAction {
-    readonly success: boolean;
-    requestId: number;
-    readonly packageNames: readonly string[];
-    readonly callback: ts.server.typingsInstaller.RequestCompletedAction;
 }
 
 export interface Logger extends ts.server.Logger {
@@ -127,7 +98,7 @@ function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Lo
     }
 }
 
-function nowString(host: TestServerHost) {
+export function nowString(host: TestServerHost) {
     // E.g. "12:34:56.789"
     host.now(); // To increment the time but not print it to avoid the baseline updates
     return `hh:mm:ss:mss`;
@@ -144,7 +115,7 @@ export function createLoggerWritingToConsole(host: TestServerHost): Logger {
     }, host);
 }
 
-function sanitizeLog(s: string): string {
+export function sanitizeLog(s: string): string {
     s = s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms");
     s = s.replace(/"updateGraphDurationMs":\s*\d+(?:\.\d+)?/g, `"updateGraphDurationMs": *`);
     s = s.replace(/"createAutoImportProviderProgramDurationMs":\s*\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs": *`);
@@ -189,231 +160,6 @@ export function appendAllScriptInfos(session: TestSession) {
     session.logger.log("");
 }
 
-function loggerToTypingsInstallerLog(logger: Logger): ts.server.typingsInstaller.Log | undefined {
-    return logger?.loggingEnabled() ? {
-        isEnabled: ts.returnTrue,
-        writeLine: s => {
-            // This is a VERY VERY NAIVE sanitization strategy.
-            // If a substring containing the exact TypeScript version is found,
-            // even if it's unrelated to TypeScript itself, then it will be replaced,
-            // leaving us with two options:
-            //
-            //  1. Deal with flip-flopping baselines.
-            //  2. Change the TypeScript version until no matching substring is found.
-            //
-            const initialLog = sanitizeLog(s);
-            const pseudoSanitizedLog = replaceAll(initialLog, `@ts${ts.versionMajorMinor}`, `@tsFakeMajor.Minor`);
-            return logger.log(`TI:: [${nowString(logger.host!)}] ${pseudoSanitizedLog}`);
-        },
-    } : undefined;
-}
-
-interface TypesRegistryFile {
-    entries: ts.MapLike<ts.MapLike<string>>;
-}
-
-function loadTypesRegistryFile(typesRegistryFilePath: string, host: TestServerHost, log: ts.server.typingsInstaller.Log): Map<string, ts.MapLike<string>> {
-    if (!host.fileExists(typesRegistryFilePath)) {
-        if (log.isEnabled()) {
-            log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
-        }
-        return new Map<string, ts.MapLike<string>>();
-    }
-    try {
-        const content = JSON.parse(host.readFile(typesRegistryFilePath)!) as TypesRegistryFile;
-        return new Map(Object.entries(content.entries));
-    }
-    catch (e) {
-        if (log.isEnabled()) {
-            log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`);
-        }
-        return new Map<string, ts.MapLike<string>>();
-    }
-}
-
-const typesRegistryPackageName = "types-registry";
-function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
-    return ts.combinePaths(ts.normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
-}
-
-export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.TypingsInstaller {
-    readonly typesRegistry: Map<string, ts.MapLike<string>>;
-    protected projectService!: ts.server.ProjectService;
-    constructor(
-        readonly globalTypingsCacheLocation: string,
-        throttleLimit: number,
-        installTypingHost: TestServerHost,
-        logger: Logger,
-        typesRegistry?: string | readonly string[],
-    ) {
-        const log = loggerToTypingsInstallerLog(logger);
-        if (log?.isEnabled()) {
-            patchHostTimeouts(
-                changeToHostTrackingWrittenFiles(installTypingHost),
-                logger,
-            );
-            (installTypingHost as TestSessionAndServiceHost).baselineHost("TI:: Creating typing installer");
-        }
-        super(
-            installTypingHost,
-            globalTypingsCacheLocation,
-            "/safeList.json" as ts.Path,
-            customTypesMap.path,
-            throttleLimit,
-            log,
-        );
-
-        this.ensurePackageDirectoryExists(globalTypingsCacheLocation);
-
-        if (this.log.isEnabled()) {
-            this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
-            this.log.writeLine(`npm install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`);
-        }
-        installTypingHost.ensureFileOrFolder({
-            path: getTypesRegistryFileLocation(globalTypingsCacheLocation),
-            content: JSON.stringify(
-                createTypesRegistryFileContent(
-                    typesRegistry ?
-                        ts.isString(typesRegistry) ?
-                            [typesRegistry] :
-                            typesRegistry :
-                        ts.emptyArray,
-                ),
-                undefined,
-                " ",
-            ),
-        });
-        if (this.log.isEnabled()) {
-            this.log.writeLine(`TI:: Updated ${typesRegistryPackageName} npm package`);
-        }
-        this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), installTypingHost, this.log);
-        if (this.log.isEnabled()) {
-            (installTypingHost as TestSessionAndServiceHost).baselineHost("TI:: typing installer creation complete");
-        }
-    }
-
-    protected postExecActions: PostExecAction[] = [];
-
-    executePendingCommands() {
-        const actionsToRun = this.postExecActions;
-        this.postExecActions = [];
-        for (const action of actionsToRun) {
-            if (this.log.isEnabled()) {
-                this.log.writeLine(`#${action.requestId} with arguments'${JSON.stringify(action.packageNames)}':: ${action.success}`);
-            }
-            action.callback(action.success);
-        }
-    }
-
-    attach(projectService: ts.server.ProjectService) {
-        this.projectService = projectService;
-    }
-
-    getInstallTypingHost() {
-        return this.installTypingHost;
-    }
-
-    installWorker(requestId: number, packageNames: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
-        if (this.log.isEnabled()) {
-            this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
-        }
-        this.addPostExecAction("success", requestId, packageNames, cb);
-    }
-
-    sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.WatchTypingLocations) {
-        if (this.log.isEnabled()) {
-            this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
-        }
-        if (response.kind !== ActionWatchTypingLocations) this.projectService.updateTypingsForProject(response);
-        else this.projectService.watchTypingLocations(response);
-    }
-
-    enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
-        const request = ts.server.createInstallTypingsRequest(project, typeAcquisition, unresolvedImports, this.globalTypingsCacheLocation);
-        this.install(request);
-    }
-
-    addPostExecAction(stdout: string | string[], requestId: number, packageNames: string[], cb: ts.server.typingsInstaller.RequestCompletedAction) {
-        const out = ts.isString(stdout) ? stdout : createNpmPackageJsonString(stdout);
-        const action: PostExecAction = {
-            success: !!out,
-            requestId,
-            packageNames,
-            callback: cb,
-        };
-        this.postExecActions.push(action);
-    }
-}
-
-export class TestTypingsInstaller<T extends TestTypingsInstallerWorker = TestTypingsInstallerWorker> implements ts.server.ITypingsInstaller {
-    protected projectService!: ts.server.ProjectService;
-    public installer!: T;
-    constructor(
-        readonly globalTypingsCacheLocation: string,
-        private throttleLimit: number,
-        private installTypingHost: TestServerHost,
-        private logger: Logger,
-        private workerConstructor?: new (...args: ConstructorParameters<typeof TestTypingsInstallerWorker>) => T,
-        private typesRegistry?: string | readonly string[],
-    ) {
-    }
-
-    isKnownTypesPackageName = ts.notImplemented;
-    installPackage = ts.notImplemented;
-
-    attach(projectService: ts.server.ProjectService) {
-        this.projectService = projectService;
-    }
-
-    onProjectClosed(p: ts.server.Project) {
-        this.installer?.closeProject({ projectName: p.getProjectName(), kind: "closeProject" });
-    }
-
-    enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
-        if (!this.installer) {
-            if (this.workerConstructor) {
-                this.installer ??= new this.workerConstructor(this.globalTypingsCacheLocation, this.throttleLimit, this.installTypingHost, this.logger, this.typesRegistry);
-            }
-            else {
-                this.installer = new TestTypingsInstallerWorker(this.globalTypingsCacheLocation, this.throttleLimit, this.installTypingHost, this.logger, this.typesRegistry) as T;
-            }
-            this.installer.attach(this.projectService);
-        }
-        this.installer.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
-    }
-}
-
-function createNpmPackageJsonString(installedTypings: string[]): string {
-    const dependencies: ts.MapLike<any> = {};
-    for (const typing of installedTypings) {
-        dependencies[typing] = "1.0.0";
-    }
-    return JSON.stringify({ dependencies });
-}
-
-function createTypesRegistryFileContent(list: readonly string[]): TypesRegistryFile {
-    const versionMap = {
-        "latest": "1.3.0",
-        "ts2.0": "1.0.0",
-        "ts2.1": "1.0.0",
-        "ts2.2": "1.2.0",
-        "ts2.3": "1.3.0",
-        "ts2.4": "1.3.0",
-        "ts2.5": "1.3.0",
-        "ts2.6": "1.3.0",
-        "ts2.7": "1.3.0",
-    };
-    const entries: ts.MapLike<ts.MapLike<string>> = {};
-    for (const l of list) {
-        entries[l] = versionMap;
-    }
-    return { entries };
-}
-
-export function createTypesRegistry(...list: string[]) {
-    return new Map(Object.entries(createTypesRegistryFileContent(list).entries));
-}
-
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
     return { fileName };
 }
@@ -427,7 +173,7 @@ export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
     baselineHost(title: string): void;
     logTimeoutQueueLength(): void;
 };
-function patchHostTimeouts(
+export function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
     logger: Logger,
 ) {
@@ -486,7 +232,7 @@ function patchHostTimeouts(
     }
 }
 
-export interface TestSessionOptions extends ts.server.SessionOptions {
+export interface TestSessionOptions extends ts.server.SessionOptions, TestTypingsInstallerOptions {
     logger: Logger;
     allowNonBaseliningLogger?: boolean;
     disableAutomaticTypingAcquisition?: boolean;
@@ -545,7 +291,11 @@ export class TestSession extends ts.server.Session {
 export function createSession(host: TestServerHost, opts: Partial<TestSessionOptions> = {}) {
     const logger = opts.logger || createHasErrorMessageLogger();
     if (!opts.disableAutomaticTypingAcquisition && opts.typingsInstaller === undefined) {
-        opts.typingsInstaller = new TestTypingsInstaller(host.getHostSpecificPath("/a/data/"), /*throttleLimit*/ 5, host, logger);
+        opts.typingsInstaller = new TestTypingsInstaller(
+            host,
+            logger,
+            opts,
+        );
     }
 
     if (opts.eventHandler !== undefined) {

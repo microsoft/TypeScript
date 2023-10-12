@@ -10,15 +10,16 @@ import {
     createSession,
     openExternalProjectForSession,
     openFilesForSession,
-    TestTypingsInstaller,
     toExternalFiles,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
+    TestTypingsInstaller,
+} from "../helpers/typingsInstaller";
+import {
     createServerHost,
     File,
     libFile,
-    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
@@ -31,10 +32,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra r
             path: "/a/cache/node_modules/@types/lib/index.d.ts",
             content: "export let x = 1",
         };
-        const host: TestServerHost & ts.ModuleResolutionHost = createServerHost([file1, lib]);
+        const host = createServerHost([file1, lib]);
         const logger = createLoggerWithInMemoryLogs(host);
         const projectService = createProjectService(host, {
-            typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/ 5, host, logger),
+            typingsInstaller: new TestTypingsInstaller(host, logger, { globalTypingsCacheLocation: "/a/cache" }),
             logger,
         });
 

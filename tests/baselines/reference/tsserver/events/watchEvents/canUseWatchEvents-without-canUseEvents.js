@@ -337,18 +337,27 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Err:: Unrecognized JSON command:
-    {"command":"watchChange","arguments":{"id":1,"path":"/user/username/projects/myproject/b.ts","eventType":"update"},"seq":4,"type":"request"}
+    {
+      "command": "watchChange",
+      "arguments": {
+        "id": 1,
+        "path": "/user/username/projects/myproject/b.ts",
+        "eventType": "update"
+      },
+      "seq": 4,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "unknown",
-     "request_seq": 4,
-     "success": false,
-     "performanceData": {
-      "updateGraphDurationMs": *
-     },
-     "message": "Unrecognized JSON command: watchChange"
+      "seq": 0,
+      "type": "response",
+      "command": "unknown",
+      "request_seq": 4,
+      "success": false,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      },
+      "message": "Unrecognized JSON command: watchChange"
     }
 Info seq  [hh:mm:ss:mss] response:
     {

@@ -9,7 +9,6 @@ import {
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    customTypesMap,
     logConfiguredProjectsHasOpenRefStatus,
     logInferredProjectsOrphanStatus,
     openExternalProjectForSession,
@@ -20,6 +19,9 @@ import {
     toExternalFiles,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
+import {
+    customTypesMap,
+} from "../helpers/typingsInstaller";
 import {
     createServerHost,
     File,

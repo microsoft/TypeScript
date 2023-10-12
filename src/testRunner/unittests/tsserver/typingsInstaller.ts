@@ -5,100 +5,30 @@ import {
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    createTypesRegistry,
-    customTypesMap,
-    Logger,
     openFilesForSession,
-    TestSessionAndServiceHost,
+    patchHostTimeouts,
+    replaceAll,
     TestSessionRequest,
-    TestTypingsInstaller,
-    TestTypingsInstallerWorker,
     toExternalFile,
 } from "../helpers/tsserver";
 import {
+    createTypesRegistry,
+    customTypesMap,
+    loggerToTypingsInstallerLog,
+    TestTypingsInstaller,
+} from "../helpers/typingsInstaller";
+import {
+    changeToHostTrackingWrittenFiles,
     createServerHost,
     File,
     libFile,
-    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch";
 
 import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;
-
-interface InstallerParams {
-    globalTypingsCacheLocation?: string;
-    throttleLimit?: number;
-    typesRegistry?: string | readonly string[];
-}
-
-type InstallWorkerThrowingError = string;
-type InstallWorkerExecutingCommand = [installedTypings: string[] | string, typingFiles: File[]];
-type CustomInstallWorker = (installer: TestTypingsInstallerWorker, requestId: number, packageNames: string[], cb: ts.server.typingsInstaller.RequestCompletedAction) => void;
-
-function createTestTypingInstaller<T extends TestTypingsInstallerWorker>(
-    host: TestServerHost,
-    logger: Logger,
-    workerConstructor: new (...args: ConstructorParameters<typeof TestTypingsInstallerWorker>) => T,
-    p?: InstallerParams,
-) {
-    return new TestTypingsInstaller<T>(
-        (p && p.globalTypingsCacheLocation) || "/a/data",
-        (p && p.throttleLimit) || 5,
-        host,
-        logger,
-        workerConstructor,
-        p && p.typesRegistry,
-    );
-}
-function createTestTypingInstallerWithInstallWorker(
-    host: TestServerHost,
-    logger: Logger,
-    installWorker: InstallWorkerThrowingError | InstallWorkerExecutingCommand | CustomInstallWorker,
-    p?: InstallerParams,
-) {
-    return createTestTypingInstaller(
-        host,
-        logger,
-        class extends TestTypingsInstallerWorker {
-            override installWorker(requestId: number, packageNames: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction) {
-                this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
-                if (ts.isString(installWorker)) {
-                    assert(false, installWorker);
-                }
-                else if (ts.isArray(installWorker)) {
-                    executeCommand(this, requestId, packageNames, host, installWorker[0], installWorker[1], cb);
-                }
-                else {
-                    installWorker(this, requestId, packageNames, cb);
-                }
-            }
-        },
-        p,
-    );
-}
-
-function executeCommand(self: TestTypingsInstallerWorker, requestId: number, packageNames: string[], host: TestServerHost, installedTypings: string[] | string, typingFiles: File[], cb: ts.server.typingsInstaller.RequestCompletedAction): void {
-    self.addPostExecAction(installedTypings, requestId, packageNames, success => {
-        (host as TestSessionAndServiceHost).baselineHost("TI:: Before installWorker");
-        for (const file of typingFiles) {
-            host.ensureFileOrFolder(file);
-        }
-        (host as TestSessionAndServiceHost).baselineHost("TI:: After installWorker");
-        cb(success);
-    });
-}
-
-function trackingLogger(): { log(message: string): void; finish(): string[]; } {
-    const logs: string[] = [];
-    return {
-        log(message) {
-            logs.push(message);
-        },
-        finish() {
-            return logs;
-        },
-    };
-}
+import {
+    stringifyIndented,
+} from "../../_namespaces/ts.server";
 
 describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
     it("should not be picked up", () => {
@@ -124,11 +54,14 @@ describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
         };
         const host = createServerHost([f1, f2, config, typesConfig]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            "should not be called",
-            { typesRegistry: "config", globalTypingsCacheLocation: typesCache },
+            {
+                installAction: "should not be called",
+                typesRegistry: "config",
+                globalTypingsCacheLocation: typesCache,
+            },
         );
         const service = createProjectService(host, { typingsInstaller, logger });
         service.openClientFile(f1.path);
@@ -170,11 +103,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file1, tsconfig, packageJson]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/jquery"], [jquery]],
-            { typesRegistry: "jquery" },
+            {
+                installAction: [["@types/jquery"], [jquery]],
+                typesRegistry: "jquery",
+            },
         );
 
         const projectService = createProjectService(host, {
@@ -211,11 +146,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file1, packageJson]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/jquery"], [jquery]],
-            { typesRegistry: "jquery" },
+            {
+                installAction: [["@types/jquery"], [jquery]],
+                typesRegistry: "jquery",
+            },
         );
 
         const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller, logger });
@@ -237,11 +174,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         const host = createServerHost([jqueryJs]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [[], []],
-            { typesRegistry: "jquery" },
+            {
+                installAction: [[], []],
+                typesRegistry: "jquery",
+            },
         );
 
         const projectService = createProjectService(host, { typingsInstaller, logger });
@@ -266,14 +205,9 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file1]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstaller(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            class extends TestTypingsInstallerWorker {
-                override enqueueInstallTypingsRequest() {
-                    assert(false, "auto discovery should not be enabled");
-                }
-            },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -299,11 +233,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([appJs, nodeDts]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            "nothing should get installed",
-            { typesRegistry: "node" },
+            {
+                installAction: "nothing should get installed",
+                typesRegistry: "node",
+            },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -324,14 +260,9 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file1]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstaller(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            class extends TestTypingsInstallerWorker {
-                override enqueueInstallTypingsRequest() {
-                    assert(false, "auto discovery should not be enabled");
-                }
-            },
             { typesRegistry: "jquery" },
         );
 
@@ -359,11 +290,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file1]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/node"], [jquery]],
-            { typesRegistry: "jquery" },
+            {
+                installAction: [["@types/node"], [jquery]],
+                typesRegistry: "jquery",
+            },
         );
         const projectFileName = "/a/app/test.csproj";
         const projectService = createProjectService(host, { typingsInstaller, logger });
@@ -409,11 +342,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         const host = createServerHost([lodashJs, file2Jsx, file3dts, customTypesMap]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/lodash", "@types/react"], [lodashDts, reactDts]],
-            { typesRegistry: ["lodash", "react"] },
+            {
+                installAction: [["@types/lodash", "@types/react"], [lodashDts, reactDts]],
+                typesRegistry: ["lodash", "react"],
+            },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -441,11 +376,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         const host = createServerHost([jqueryJs]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [[], []],
-            { typesRegistry: "jquery" },
+            {
+                installAction: [[], []],
+                typesRegistry: "jquery",
+            },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -470,11 +407,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         const host = createServerHost([jqueryJs]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [[], []],
-            { typesRegistry: "jquery" },
+            {
+                installAction: [[], []],
+                typesRegistry: "jquery",
+            },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -505,11 +444,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         const host = createServerHost([jqueryJs, file2Ts]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [[], []],
-            { typesRegistry: "jquery" },
+            {
+                installAction: [[], []],
+                typesRegistry: "jquery",
+            },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -570,11 +511,16 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         const host = createServerHost([lodashJs, commanderJs, file3dts, packageJson, customTypesMap]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/commander", "@types/express", "@types/jquery", "@types/moment"], [commander, express, jquery, moment]],
-            { typesRegistry: ["jquery", "commander", "moment", "express"] },
+            {
+                installAction: [
+                    ["@types/commander", "@types/express", "@types/jquery", "@types/moment"],
+                    [commander, express, jquery, moment],
+                ],
+                typesRegistry: ["jquery", "commander", "moment", "express"],
+            },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -644,11 +590,17 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const typingFiles = [commander, express, jquery, moment, lodash];
         const host = createServerHost([lodashJs, commanderJs, file3, packageJson, customTypesMap]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash"], typingFiles],
-            { throttleLimit: 3, typesRegistry: ["commander", "express", "jquery", "moment", "lodash"] },
+            {
+                installAction: [
+                    ["@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash"],
+                    typingFiles,
+                ],
+                throttleLimit: 3,
+                typesRegistry: ["commander", "express", "jquery", "moment", "lodash"],
+            },
         );
 
         const projectFileName = "/a/app/test.csproj";
@@ -712,20 +664,29 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         const host = createServerHost([lodashJs, commanderJs, file3, customTypesMap]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            (installer, requestId, packageNames, cb) => {
-                let typingFiles: (File & { typings: string; })[] = [];
-                if (packageNames.includes(ts.server.typingsInstaller.typingsName("commander"))) {
-                    typingFiles = [commander, jquery, lodash, cordova];
-                }
-                else {
-                    typingFiles = [grunt, gulp];
-                }
-                executeCommand(installer, requestId, packageNames, host, typingFiles.map(f => f.typings), typingFiles, cb);
+            {
+                installAction: (installer, requestId, packageNames, cb) => {
+                    let typingFiles: (File & { typings: string; })[] = [];
+                    if (packageNames.includes(ts.server.typingsInstaller.typingsName("commander"))) {
+                        typingFiles = [commander, jquery, lodash, cordova];
+                    }
+                    else {
+                        typingFiles = [grunt, gulp];
+                    }
+                    installer.executeInstallWithTypingFiles(
+                        requestId,
+                        packageNames,
+                        typingFiles.map(f => f.typings),
+                        typingFiles,
+                        cb,
+                    );
+                },
+                throttleLimit: 1,
+                typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"],
             },
-            { throttleLimit: 1, typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"] },
         );
 
         // Create project #1 with 4 typings
@@ -802,11 +763,14 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([app, jsconfig, pkgJson, commander, commanderPackage, cacache, cacachePackage]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/zkat__cacache"], [cacacheDTS]],
-            { globalTypingsCacheLocation: "/tmp", typesRegistry: ["zkat__cacache", "nested", "commander"] },
+            {
+                installAction: [["@types/zkat__cacache"], [cacacheDTS]],
+                globalTypingsCacheLocation: "/tmp",
+                typesRegistry: ["zkat__cacache", "nested", "commander"],
+            },
         );
 
         const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller, logger });
@@ -872,11 +836,14 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             };
             const host = createServerHost([app, jsconfig, pkgJson, commander, commanderPackage, jquery, jqueryPackage, nestedPackage]);
             const logger = createLoggerWithInMemoryLogs(host);
-            const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+            const typingsInstaller = new TestTypingsInstaller(
                 host,
                 logger,
-                [["@types/jquery"], [jqueryDTS]],
-                { globalTypingsCacheLocation: "/tmp", typesRegistry: ["jquery", "nested", "commander"] },
+                {
+                    installAction: [["@types/jquery"], [jqueryDTS]],
+                    globalTypingsCacheLocation: "/tmp",
+                    typesRegistry: ["jquery", "nested", "commander"],
+                },
             );
 
             const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller, logger });
@@ -929,11 +896,14 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([app, jsconfig, jquery, jqueryPackage]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/jquery"], [jqueryDTS]],
-            { globalTypingsCacheLocation: "/tmp", typesRegistry: "jquery" },
+            {
+                installAction: [["@types/jquery"], [jqueryDTS]],
+                globalTypingsCacheLocation: "/tmp",
+                typesRegistry: "jquery",
+            },
         );
 
         const projectService = createProjectService(host, {
@@ -972,11 +942,14 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([app, jsconfig, bowerJson]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/jquery"], [jqueryDTS]],
-            { globalTypingsCacheLocation: "/tmp", typesRegistry: "jquery" },
+            {
+                installAction: [["@types/jquery"], [jqueryDTS]],
+                globalTypingsCacheLocation: "/tmp",
+                typesRegistry: "jquery",
+            },
         );
 
         const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller, logger });
@@ -1008,11 +981,14 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([f, brokenPackageJson]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/commander"], [commander]],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: "commander" },
+            {
+                installAction: [["@types/commander"], [commander]],
+                globalTypingsCacheLocation: cachePath,
+                typesRegistry: "commander",
+            },
         );
         const service = createProjectService(host, { typingsInstaller, logger });
         service.openClientFile(f.path);
@@ -1049,11 +1025,17 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/node", "@types/commander", `@types/${emberComponentDirectory}`], [node, commander, emberComponent]],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: ["node", "commander"] },
+            {
+                installAction: [
+                    ["@types/node", "@types/commander", `@types/${emberComponentDirectory}`],
+                    [node, commander, emberComponent],
+                ],
+                globalTypingsCacheLocation: cachePath,
+                typesRegistry: ["node", "commander"],
+            },
         );
         const service = createProjectService(host, { typingsInstaller, logger });
         service.openClientFile(file.path);
@@ -1080,11 +1062,17 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
         const host = createServerHost([file, commanderJS]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [typeNames.map(name => `@types/${name}`), typeNames.map((name): File => ({ path: typePath(name), content: "" }))],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: typeNames },
+            {
+                installAction: [
+                    typeNames.map(name => `@types/${name}`),
+                    typeNames.map((name): File => ({ path: typePath(name), content: "" })),
+                ],
+                globalTypingsCacheLocation: cachePath,
+                typesRegistry: typeNames,
+            },
         );
         const service = createProjectService(host, {
             typingsInstaller,
@@ -1113,11 +1101,14 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         const host = createServerHost([f1]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["foo"], []],
-            { globalTypingsCacheLocation: "/tmp", typesRegistry: "foo" },
+            {
+                installAction: [["foo"], []],
+                globalTypingsCacheLocation: "/tmp",
+                typesRegistry: "foo",
+            },
         );
         const projectService = createProjectService(host, { typingsInstaller, logger });
         projectService.openClientFile(f1.path);
@@ -1238,20 +1229,28 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file1, tsconfig, packageJson, file2, tsconfig2, packageJson2, libFile]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            (installer, requestId, packageNames, cb) => {
-                let typingFiles: (File & { typings: string; })[] = [];
-                if (packageNames.includes(ts.server.typingsInstaller.typingsName("commander"))) {
-                    typingFiles = [commander];
-                }
-                else {
-                    typingFiles = [jquery];
-                }
-                executeCommand(installer, requestId, packageNames, host, typingFiles.map(f => f.typings), typingFiles, cb);
+            {
+                installAction: (installer, requestId, packageNames, cb) => {
+                    let typingFiles: (File & { typings: string; })[] = [];
+                    if (packageNames.includes(ts.server.typingsInstaller.typingsName("commander"))) {
+                        typingFiles = [commander];
+                    }
+                    else {
+                        typingFiles = [jquery];
+                    }
+                    installer.executeInstallWithTypingFiles(
+                        requestId,
+                        packageNames,
+                        typingFiles.map(f => f.typings),
+                        typingFiles,
+                        cb,
+                    );
+                },
+                typesRegistry: ["jquery", "commander"],
             },
-            { typesRegistry: ["jquery", "commander"] },
         );
 
         const session = createSession(host, {
@@ -1310,11 +1309,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file1, packageJson, jquery, cacheConfig, cacheLockConfig]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/jquery"], [jquery]],
-            { typesRegistry: "jquery" },
+            {
+                installAction: [["@types/jquery"], [jquery]],
+                typesRegistry: "jquery",
+            },
         );
 
         const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller, logger });
@@ -1366,11 +1367,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const host = createServerHost([file1, packageJson, cacheConfig, cacheLockConfig, jquery]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [[], []],
-            { typesRegistry: "jquery" },
+            {
+                installAction: [[], []],
+                typesRegistry: "jquery",
+            },
         );
 
         const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller, logger });
@@ -1444,11 +1447,13 @@ describe("unittests:: tsserver:: typingsInstaller:: Invalid package names", () =
         };
         const host = createServerHost([f1, packageJson]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            "installWorker should not be invoked",
-            { globalTypingsCacheLocation: "/tmp" },
+            {
+                installAction: "installWorker should not be invoked",
+                globalTypingsCacheLocation: "/tmp",
+            },
         );
         const projectService = createProjectService(host, { typingsInstaller, logger });
         projectService.openClientFile(f1.path);
@@ -1458,7 +1463,6 @@ describe("unittests:: tsserver:: typingsInstaller:: Invalid package names", () =
 
 describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
     const emptySafeList = ts.emptyMap;
-
     it("should use mappings from safe list", () => {
         const app = {
             path: "/a/b/app.js",
@@ -1475,16 +1479,18 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
 
         const safeList = new Map(Object.entries({ jquery: "jquery", chroma: "chroma-js" }));
 
-        const host = createServerHost([app, jquery, chroma]);
-        const logger = trackingLogger();
-        const result = ts.JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], ts.getDirectoryPath(app.path as ts.Path), safeList, ts.emptyMap, { enable: true }, ts.emptyArray, ts.emptyMap, ts.emptyOptions);
-        const finish = logger.finish();
-        assert.deepEqual(finish, [
-            'Inferred typings from file names: ["jquery","chroma-js"]',
-            "Inferred typings from unresolved imports: []",
-            'Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","chroma-js"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
-        ], finish.join("\r\n"));
-        assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
+        const { discoverTypings, baseline } = setup([app, jquery, chroma]);
+        discoverTypings(
+            [app.path, jquery.path, chroma.path],
+            ts.getDirectoryPath(app.path as ts.Path),
+            safeList,
+            ts.emptyMap,
+            { enable: true },
+            ts.emptyArray,
+            ts.emptyMap,
+            ts.emptyOptions,
+        );
+        baseline("should use mappings from safe list");
     });
 
     it("should return node for core modules", () => {
@@ -1492,18 +1498,22 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             path: "/a/b/app.js",
             content: "",
         };
-        const host = createServerHost([f]);
+        const { discoverTypings, baseline } = setup([f]);
         const cache = new Map<string, ts.JsTyping.CachedTyping>();
 
         for (const name of ts.JsTyping.nodeCoreModuleList) {
-            const logger = trackingLogger();
-            const result = ts.JsTyping.discoverTypings(host, logger.log, [f.path], ts.getDirectoryPath(f.path as ts.Path), emptySafeList, cache, { enable: true }, [name, "somename"], ts.emptyMap, ts.emptyOptions);
-            assert.deepEqual(logger.finish(), [
-                'Inferred typings from unresolved imports: ["node","somename"]',
-                'Result: {"cachedTypingPaths":[],"newTypingNames":["node","somename"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
-            ]);
-            assert.deepEqual(result.newTypingNames.sort(), ["node", "somename"]);
+            discoverTypings(
+                [f.path],
+                ts.getDirectoryPath(f.path as ts.Path),
+                emptySafeList,
+                cache,
+                { enable: true },
+                [name, "somename"],
+                ts.emptyMap,
+                ts.emptyOptions,
+            );
         }
+        baseline("should return node for core modules");
     });
 
     it("should use cached locations", () => {
@@ -1515,17 +1525,11 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             path: "/a/b/node.d.ts",
             content: "",
         };
-        const host = createServerHost([f, node]);
+        const { discoverTypings, baseline } = setup([f, node]);
         const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
         const registry = createTypesRegistry("node");
-        const logger = trackingLogger();
-        const result = ts.JsTyping.discoverTypings(host, logger.log, [f.path], ts.getDirectoryPath(f.path as ts.Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry, ts.emptyOptions);
-        assert.deepEqual(logger.finish(), [
-            'Inferred typings from unresolved imports: ["node","bar"]',
-            'Result: {"cachedTypingPaths":["/a/b/node.d.ts"],"newTypingNames":["bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
-        ]);
-        assert.deepEqual(result.cachedTypingPaths, [node.path]);
-        assert.deepEqual(result.newTypingNames, ["bar"]);
+        discoverTypings([f.path], ts.getDirectoryPath(f.path as ts.Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry, ts.emptyOptions);
+        baseline("should use cached locations");
     });
 
     it("should gracefully handle packages that have been removed from the types-registry", () => {
@@ -1537,16 +1541,19 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             path: "/a/b/node.d.ts",
             content: "",
         };
-        const host = createServerHost([f, node]);
+        const { discoverTypings, baseline } = setup([f, node]);
         const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
-        const logger = trackingLogger();
-        const result = ts.JsTyping.discoverTypings(host, logger.log, [f.path], ts.getDirectoryPath(f.path as ts.Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], ts.emptyMap, ts.emptyOptions);
-        assert.deepEqual(logger.finish(), [
-            'Inferred typings from unresolved imports: ["node","bar"]',
-            'Result: {"cachedTypingPaths":[],"newTypingNames":["node","bar"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
-        ]);
-        assert.deepEqual(result.cachedTypingPaths, []);
-        assert.deepEqual(result.newTypingNames, ["node", "bar"]);
+        discoverTypings(
+            [f.path],
+            ts.getDirectoryPath(f.path as ts.Path),
+            emptySafeList,
+            cache,
+            { enable: true },
+            ["fs", "bar"],
+            ts.emptyMap,
+            ts.emptyOptions,
+        );
+        baseline("should gracefully handle packages that have been removed from the types-registry");
     });
 
     it("should search only 2 levels deep", () => {
@@ -1562,21 +1569,19 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             path: "/node_modules/a/b/package.json",
             content: JSON.stringify({ name: "b" }),
         };
-        const host = createServerHost([app, a, b]);
+        const { discoverTypings, baseline } = setup([app, a, b]);
         const cache = new Map<string, ts.JsTyping.CachedTyping>();
-        const logger = trackingLogger();
-        const result = ts.JsTyping.discoverTypings(host, logger.log, [app.path], ts.getDirectoryPath(app.path as ts.Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], ts.emptyMap, ts.emptyOptions);
-        assert.deepEqual(logger.finish(), [
-            'Searching for typing names in /node_modules; all files: ["/node_modules/a/package.json"]',
-            '    Found package names: ["a"]',
-            "Inferred typings from unresolved imports: []",
-            'Result: {"cachedTypingPaths":[],"newTypingNames":["a"],"filesToWatch":["/bower_components","/node_modules"]}',
-        ]);
-        assert.deepEqual(result, {
-            cachedTypingPaths: [],
-            newTypingNames: ["a"], // But not "b"
-            filesToWatch: ["/bower_components", "/node_modules"],
-        });
+        discoverTypings(
+            [app.path],
+            ts.getDirectoryPath(app.path as ts.Path),
+            emptySafeList,
+            cache,
+            { enable: true },
+            /*unresolvedImports*/ [],
+            ts.emptyMap,
+            ts.emptyOptions,
+        );
+        baseline("should search only 2 levels deep");
     });
 
     it("should support scoped packages", () => {
@@ -1588,21 +1593,19 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             path: "/node_modules/@a/b/package.json",
             content: JSON.stringify({ name: "@a/b" }),
         };
-        const host = createServerHost([app, a]);
+        const { discoverTypings, baseline } = setup([app, a]);
         const cache = new Map<string, ts.JsTyping.CachedTyping>();
-        const logger = trackingLogger();
-        const result = ts.JsTyping.discoverTypings(host, logger.log, [app.path], ts.getDirectoryPath(app.path as ts.Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], ts.emptyMap, ts.emptyOptions);
-        assert.deepEqual(logger.finish(), [
-            'Searching for typing names in /node_modules; all files: ["/node_modules/@a/b/package.json"]',
-            '    Found package names: ["@a/b"]',
-            "Inferred typings from unresolved imports: []",
-            'Result: {"cachedTypingPaths":[],"newTypingNames":["@a/b"],"filesToWatch":["/bower_components","/node_modules"]}',
-        ]);
-        assert.deepEqual(result, {
-            cachedTypingPaths: [],
-            newTypingNames: ["@a/b"],
-            filesToWatch: ["/bower_components", "/node_modules"],
-        });
+        discoverTypings(
+            [app.path],
+            ts.getDirectoryPath(app.path as ts.Path),
+            emptySafeList,
+            cache,
+            { enable: true },
+            /*unresolvedImports*/ [],
+            ts.emptyMap,
+            ts.emptyOptions,
+        );
+        baseline("should support scoped packages");
     });
     it("should install expired typings", () => {
         const app = {
@@ -1618,20 +1621,23 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             path: cachePath + "node_modules/@types/node/index.d.ts",
             content: "export let y: number",
         };
-        const host = createServerHost([app]);
+        const { discoverTypings, baseline } = setup([app]);
         const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({
             node: { typingLocation: node.path, version: new ts.Version("1.3.0") },
             commander: { typingLocation: commander.path, version: new ts.Version("1.0.0") },
         }));
         const registry = createTypesRegistry("node", "commander");
-        const logger = trackingLogger();
-        const result = ts.JsTyping.discoverTypings(host, logger.log, [app.path], ts.getDirectoryPath(app.path as ts.Path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry, ts.emptyOptions);
-        assert.deepEqual(logger.finish(), [
-            'Inferred typings from unresolved imports: ["node","commander"]',
-            'Result: {"cachedTypingPaths":["/a/cache/node_modules/@types/node/index.d.ts"],"newTypingNames":["commander"],"filesToWatch":["/a/bower_components","/a/node_modules"]}',
-        ]);
-        assert.deepEqual(result.cachedTypingPaths, [node.path]);
-        assert.deepEqual(result.newTypingNames, ["commander"]);
+        discoverTypings(
+            [app.path],
+            ts.getDirectoryPath(app.path as ts.Path),
+            emptySafeList,
+            cache,
+            { enable: true },
+            ["http", "commander"],
+            registry,
+            ts.emptyOptions,
+        );
+        baseline("should install expired typings");
     });
 
     it("should install expired typings with prerelease version of tsserver", () => {
@@ -1644,20 +1650,23 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             path: cachePath + "node_modules/@types/node/index.d.ts",
             content: "export let y: number",
         };
-        const host = createServerHost([app]);
+        const { discoverTypings, baseline } = setup([app]);
         const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({
             node: { typingLocation: node.path, version: new ts.Version("1.0.0") },
         }));
         const registry = createTypesRegistry("node");
         registry.delete(`ts${ts.versionMajorMinor}`);
-        const logger = trackingLogger();
-        const result = ts.JsTyping.discoverTypings(host, logger.log, [app.path], ts.getDirectoryPath(app.path as ts.Path), emptySafeList, cache, { enable: true }, ["http"], registry, ts.emptyOptions);
-        assert.deepEqual(logger.finish(), [
-            'Inferred typings from unresolved imports: ["node"]',
-            'Result: {"cachedTypingPaths":[],"newTypingNames":["node"],"filesToWatch":["/a/bower_components","/a/node_modules"]}',
-        ]);
-        assert.deepEqual(result.cachedTypingPaths, []);
-        assert.deepEqual(result.newTypingNames, ["node"]);
+        discoverTypings(
+            [app.path],
+            ts.getDirectoryPath(app.path as ts.Path),
+            emptySafeList,
+            cache,
+            { enable: true },
+            ["http"],
+            registry,
+            ts.emptyOptions,
+        );
+        baseline("should install expired typings with prerelease version of tsserver");
     });
 
     it("prerelease typings are properly handled", () => {
@@ -1674,22 +1683,88 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             path: cachePath + "node_modules/@types/node/index.d.ts",
             content: "export let y: number",
         };
-        const host = createServerHost([app]);
+        const { discoverTypings, baseline } = setup([app]);
         const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({
             node: { typingLocation: node.path, version: new ts.Version("1.3.0-next.0") },
             commander: { typingLocation: commander.path, version: new ts.Version("1.3.0-next.0") },
         }));
         const registry = createTypesRegistry("node", "commander");
         registry.get("node")![`ts${ts.versionMajorMinor}`] = "1.3.0-next.1";
-        const logger = trackingLogger();
-        const result = ts.JsTyping.discoverTypings(host, logger.log, [app.path], ts.getDirectoryPath(app.path as ts.Path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry, ts.emptyOptions);
-        assert.deepEqual(logger.finish(), [
-            'Inferred typings from unresolved imports: ["node","commander"]',
-            'Result: {"cachedTypingPaths":[],"newTypingNames":["node","commander"],"filesToWatch":["/a/bower_components","/a/node_modules"]}',
-        ]);
-        assert.deepEqual(result.cachedTypingPaths, []);
-        assert.deepEqual(result.newTypingNames, ["node", "commander"]);
+        discoverTypings(
+            [app.path],
+            ts.getDirectoryPath(app.path as ts.Path),
+            emptySafeList,
+            cache,
+            { enable: true },
+            ["http", "commander"],
+            registry,
+            ts.emptyOptions,
+        );
+        baseline("prerelease typings are properly handled");
     });
+
+    function setup(files: readonly File[]) {
+        const host = createServerHost(files);
+        const logger = createLoggerWithInMemoryLogs(host);
+        const log = loggerToTypingsInstallerLog(logger)!;
+        const testhost = patchHostTimeouts(
+            changeToHostTrackingWrittenFiles(host),
+            logger,
+        );
+        testhost.baselineHost("");
+        return { discoverTypings, baseline };
+
+        function baseline(scenario: string) {
+            baselineTsserverLogs("typingsInstaller", `discover typings ${scenario}`, { logger });
+        }
+
+        function discoverTypings(
+            fileNames: string[],
+            projectRootPath: ts.Path,
+            safeList: ts.JsTyping.SafeList,
+            packageNameToTypingLocation: ReadonlyMap<string, ts.JsTyping.CachedTyping>,
+            typeAcquisition: ts.TypeAcquisition,
+            unresolvedImports: readonly string[],
+            typesRegistry: ReadonlyMap<string, ts.MapLike<string>>,
+            compilerOptions: ts.CompilerOptions,
+        ) {
+            logger.log(`ts.JsTyping.discoverTypings::${
+                replaceAll(
+                    stringifyIndented({
+                        fileNames,
+                        projectRootPath,
+                        safeList: toMapLike(safeList),
+                        packageNameToTypingLocation: toMapLike(packageNameToTypingLocation),
+                        typeAcquisition,
+                        unresolvedImports,
+                        typesRegistry: toMapLike(typesRegistry),
+                        compilerOptions,
+                    }),
+                    `"ts${ts.versionMajorMinor}"`,
+                    `"tsFakeMajor.Minor"`,
+                )
+            }`);
+            ts.JsTyping.discoverTypings(
+                host,
+                log.writeLine,
+                fileNames,
+                projectRootPath,
+                safeList,
+                packageNameToTypingLocation,
+                typeAcquisition,
+                unresolvedImports,
+                typesRegistry,
+                compilerOptions,
+            );
+            logger.log("");
+        }
+
+        function toMapLike<T>(map: ReadonlyMap<string, T>) {
+            const result: ts.MapLike<T> = {};
+            map.forEach((value, key) => result[key] = value);
+            return result;
+        }
+    }
 });
 
 describe("unittests:: tsserver:: typingsInstaller:: telemetry events", () => {
@@ -1709,11 +1784,14 @@ describe("unittests:: tsserver:: typingsInstaller:: telemetry events", () => {
         };
         const host = createServerHost([f1, packageFile]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/commander"], [commander]],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: "commander" },
+            {
+                installAction: [["@types/commander"], [commander]],
+                globalTypingsCacheLocation: cachePath,
+                typesRegistry: "commander",
+            },
         );
         const projectService = createProjectService(host, { typingsInstaller, logger });
         projectService.openClientFile(f1.path);
@@ -1751,11 +1829,14 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
         };
         const host = createServerHost([f1, packageFile, packageLockFile]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["@types/commander"], [commander]],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: "commander" },
+            {
+                installAction: [["@types/commander"], [commander]],
+                globalTypingsCacheLocation: cachePath,
+                typesRegistry: "commander",
+            },
         );
         const projectService = createProjectService(host, { typingsInstaller, logger });
         projectService.openClientFile(f1.path);
@@ -1777,11 +1858,14 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
         const cachePath = "/a/cache/";
         const host = createServerHost([f1, packageFile]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            ["", []],
-            { globalTypingsCacheLocation: cachePath, typesRegistry: "commander" },
+            {
+                installAction: ["", []],
+                globalTypingsCacheLocation: cachePath,
+                typesRegistry: "commander",
+            },
         );
         const projectService = createProjectService(host, { typingsInstaller, logger });
         projectService.openClientFile(f1.path);
@@ -2331,11 +2415,14 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
 
         const host = createServerHost([app, fooo]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [typingNames, typingFiles],
-            { globalTypingsCacheLocation, typesRegistry: "foo" },
+            {
+                installAction: [typingNames, typingFiles],
+                globalTypingsCacheLocation,
+                typesRegistry: "foo",
+            },
         );
         const projectService = createProjectService(host, { typingsInstaller, logger });
         projectService.openClientFile(app.path);
@@ -2418,11 +2505,14 @@ declare module "stream" {
 
         const host = createServerHost([file, libFile]);
         const logger = createLoggerWithInMemoryLogs(host);
-        const typingsInstaller = createTestTypingInstallerWithInstallWorker(
+        const typingsInstaller = new TestTypingsInstaller(
             host,
             logger,
-            [["node"], [nodeTyping]],
-            { globalTypingsCacheLocation, typesRegistry: "node" },
+            {
+                installAction: [["node"], [nodeTyping]],
+                globalTypingsCacheLocation,
+                typesRegistry: "node",
+            },
         );
         const projectService = createProjectService(host, { typingsInstaller, logger });
         projectService.openClientFile(file.path);
@@ -2513,7 +2603,10 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
         const host = createServerHost(files, { currentDirectory });
         const logger = createLoggerWithInMemoryLogs(host);
 
-        const typingsInstaller = new TestTypingsInstaller(typingsCache, /*throttleLimit*/ 5, host, logger, /*workerConstructor*/ undefined, "pkgcurrentdirectory");
+        const typingsInstaller = new TestTypingsInstaller(host, logger, {
+            globalTypingsCacheLocation: typingsCache,
+            typesRegistry: "pkgcurrentdirectory",
+        });
 
         const projectService = createProjectService(host, { typingsInstaller, logger });
 

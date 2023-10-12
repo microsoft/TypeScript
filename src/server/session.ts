@@ -323,7 +323,7 @@ export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger
 
     const json = JSON.stringify(msg);
     if (verboseLogging) {
-        logger.info(`${msg.type}:${indent(JSON.stringify(msg, undefined, " "))}`);
+        logger.info(`${msg.type}:${stringifyIndented(msg)}`);
     }
 
     const len = byteLength(json, "utf8");

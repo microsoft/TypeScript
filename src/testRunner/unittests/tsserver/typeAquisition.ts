@@ -3,9 +3,11 @@ import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createProjectService,
-    TestTypingsInstaller,
     toExternalFile,
 } from "../helpers/tsserver";
+import {
+    TestTypingsInstaller,
+} from "../helpers/typingsInstaller";
 import {
     createServerHost,
 } from "../helpers/virtualFileSystemWithWatch";
@@ -35,7 +37,7 @@ describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {
 
 describe("unittests:: tsserver:: typeAquisition:: prefer typings to js", () => {
     it("during second resolution pass", () => {
-        const typingsCacheLocation = "/a/typings";
+        const globalTypingsCacheLocation = "/a/typings";
         const f1 = {
             path: "/a/b/app.js",
             content: "var x = require('bar')",
@@ -45,7 +47,7 @@ describe("unittests:: tsserver:: typeAquisition:: prefer typings to js", () => {
             content: "export let x = 1",
         };
         const barTypings = {
-            path: `${typingsCacheLocation}/node_modules/@types/bar/index.d.ts`,
+            path: `${globalTypingsCacheLocation}/node_modules/@types/bar/index.d.ts`,
             content: "export let y: number",
         };
         const config = {
@@ -55,7 +57,7 @@ describe("unittests:: tsserver:: typeAquisition:: prefer typings to js", () => {
         const host = createServerHost([f1, barjs, barTypings, config]);
         const logger = createLoggerWithInMemoryLogs(host);
         const projectService = createProjectService(host, {
-            typingsInstaller: new TestTypingsInstaller(typingsCacheLocation, /*throttleLimit*/ 5, host, logger),
+            typingsInstaller: new TestTypingsInstaller(host, logger, { globalTypingsCacheLocation }),
             logger,
         });
 
