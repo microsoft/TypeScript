@@ -1133,6 +1133,7 @@ export namespace Completion {
         interfaceEntry("ImportMeta"),
         interfaceEntry("ImportCallOptions"),
         interfaceEntry("ImportAssertions"),
+        interfaceEntry("ImportAttributes"),
         varEntry("Math"),
         varEntry("Date"),
         interfaceEntry("DateConstructor"),
@@ -1809,6 +1810,7 @@ export interface VerifyNavigateToOptions {
     readonly pattern: string;
     readonly fileName?: string;
     readonly expected: readonly ExpectedNavigateToItem[];
+    readonly excludeLibFiles?: boolean;
 }
 
 export interface ExpectedNavigateToItem {

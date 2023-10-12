@@ -189,6 +189,7 @@ import {
     JSDoc,
     JsDoc,
     JSDocContainer,
+    JSDocParsingMode,
     JSDocTagInfo,
     JsonSourceFile,
     JsxAttributes,
@@ -212,7 +213,6 @@ import {
     mapOneOrMany,
     maybeBind,
     maybeSetLocalizedDiagnosticMessages,
-    ModeAwareCache,
     ModifierFlags,
     ModuleDeclaration,
     NavigateToItem,
@@ -256,9 +256,7 @@ import {
     RenameInfo,
     RenameInfoOptions,
     RenameLocation,
-    ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
-    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     returnFalse,
     scanner,
     ScriptElementKind,
@@ -1044,8 +1042,6 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public languageVariant!: LanguageVariant;
     public identifiers!: Map<string, string>;
     public nameTable: Map<__String, number> | undefined;
-    public resolvedModules: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
-    public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     public imports!: readonly StringLiteralLike[];
     public moduleAugmentations!: StringLiteral[];
     private namedDeclarations: Map<string, Declaration[]> | undefined;
@@ -1363,6 +1359,8 @@ class SyntaxTreeCache {
                     this.host.getCompilationSettings(),
                 ),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(this.host.getCompilationSettings()),
+                // These files are used to produce syntax-based highlighting, which reads JSDoc, so we must use ParseAll.
+                jsDocParsingMode: JSDocParsingMode.ParseAll,
             };
             sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind);
         }
@@ -1389,7 +1387,14 @@ function setSourceFileFields(sourceFile: SourceFile, scriptSnapshot: IScriptSnap
     sourceFile.scriptSnapshot = scriptSnapshot;
 }
 
-export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile {
+export function createLanguageServiceSourceFile(
+    fileName: string,
+    scriptSnapshot: IScriptSnapshot,
+    scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions,
+    version: string,
+    setNodeParents: boolean,
+    scriptKind?: ScriptKind,
+): SourceFile {
     const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, setNodeParents, scriptKind);
     setSourceFileFields(sourceFile, scriptSnapshot, version);
     return sourceFile;
@@ -1450,6 +1455,7 @@ export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSn
         languageVersion: sourceFile.languageVersion,
         impliedNodeFormat: sourceFile.impliedNodeFormat,
         setExternalModuleIndicator: sourceFile.setExternalModuleIndicator,
+        jsDocParsingMode: sourceFile.jsDocParsingMode,
     };
     // Otherwise, just create a new source file.
     return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind);
@@ -1689,6 +1695,7 @@ export function createLanguageService(
             resolveLibrary: maybeBind(host, host.resolveLibrary),
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,
+            jsDocParsingMode: host.jsDocParsingMode,
         };
 
         const originalGetSourceFile = compilerHost.getSourceFile;
@@ -2194,10 +2201,10 @@ export function createLanguageService(
         return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(FindAllReferences.toReferenceEntry);
     }
 
-    function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {
+    function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false, excludeLibFiles = false): NavigateToItem[] {
         synchronizeHostData();
         const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
-        return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
+        return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles, excludeLibFiles);
     }
 
     function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean) {

@@ -45,6 +45,13 @@ Determines if given directory or file can be watched
 | c:/home/username/folderAtRoot/folder1/folder2/folder3                               | true                    |
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4                       | true                    |
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5               | true                    |
+| c:/workspaces                                                                       | false                   |
+| c:/workspaces/folderAtRoot                                                          | true                    |
+| c:/workspaces/folderAtRoot/folder1                                                  | true                    |
+| c:/workspaces/folderAtRoot/folder1/folder2                                          | true                    |
+| c:/workspaces/folderAtRoot/folder1/folder2/folder3                                  | true                    |
+| c:/workspaces/folderAtRoot/folder1/folder2/folder3/folder4                          | true                    |
+| c:/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5                  | true                    |
 
 | File                                                                                | canWatchDirectoryOrFile |
 | ----------------------------------------------------------------------------------- | ----------------------- |
@@ -87,4 +94,11 @@ Determines if given directory or file can be watched
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                    |
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                    |
 | c:/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                    |
+| c:/workspaces/package.json                                                          | true                    |
+| c:/workspaces/folderAtRoot/package.json                                             | true                    |
+| c:/workspaces/folderAtRoot/folder1/package.json                                     | true                    |
+| c:/workspaces/folderAtRoot/folder1/folder2/package.json                             | true                    |
+| c:/workspaces/folderAtRoot/folder1/folder2/folder3/package.json                     | true                    |
+| c:/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/package.json             | true                    |
+| c:/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json     | true                    |
 

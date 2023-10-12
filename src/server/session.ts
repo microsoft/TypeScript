@@ -139,11 +139,15 @@ import {
     WithMetadata,
 } from "./_namespaces/ts";
 import {
+    AuxiliaryProject,
+    CloseFileWatcherEvent,
     ConfigFileDiagEvent,
     ConfiguredProject,
     convertFormatOptions,
     convertScriptKindName,
     convertUserPreferences,
+    CreateDirectoryWatcherEvent,
+    CreateFileWatcherEvent,
     EmitResult,
     emptyArray,
     Errors,
@@ -949,6 +953,7 @@ export interface SessionOptions {
      * If falsy, all events are suppressed.
      */
     canUseEvents: boolean;
+    canUseWatchEvents?: boolean;
     eventHandler?: ProjectServiceEventHandler;
     /** Has no effect if eventHandler is also specified. */
     suppressDiagnosticEvents?: boolean;
@@ -1026,6 +1031,7 @@ export class Session<TMessage = string> implements EventSender {
             typesMapLocation: opts.typesMapLocation,
             serverMode: opts.serverMode,
             session: this,
+            canUseWatchEvents: opts.canUseWatchEvents,
             incrementalVerifier: opts.incrementalVerifier,
         };
         this.projectService = new ProjectService(settings);
@@ -1080,39 +1086,37 @@ export class Session<TMessage = string> implements EventSender {
     private defaultEventHandler(event: ProjectServiceEvent) {
         switch (event.eventName) {
             case ProjectsUpdatedInBackgroundEvent:
-                const { openFiles } = event.data;
-                this.projectsUpdatedInBackgroundEvent(openFiles);
+                this.projectsUpdatedInBackgroundEvent(event.data.openFiles);
                 break;
             case ProjectLoadingStartEvent:
-                const { project, reason } = event.data;
-                this.event<protocol.ProjectLoadingStartEventBody>(
-                    { projectName: project.getProjectName(), reason },
-                    ProjectLoadingStartEvent,
-                );
+                this.event<protocol.ProjectLoadingStartEventBody>({
+                    projectName: event.data.project.getProjectName(),
+                    reason: event.data.reason,
+                }, event.eventName);
                 break;
             case ProjectLoadingFinishEvent:
-                const { project: finishProject } = event.data;
-                this.event<protocol.ProjectLoadingFinishEventBody>({ projectName: finishProject.getProjectName() }, ProjectLoadingFinishEvent);
+                this.event<protocol.ProjectLoadingFinishEventBody>({
+                    projectName: event.data.project.getProjectName(),
+                }, event.eventName);
                 break;
             case LargeFileReferencedEvent:
-                const { file, fileSize, maxFileSize } = event.data;
-                this.event<protocol.LargeFileReferencedEventBody>({ file, fileSize, maxFileSize }, LargeFileReferencedEvent);
+            case CreateFileWatcherEvent:
+            case CreateDirectoryWatcherEvent:
+            case CloseFileWatcherEvent:
+                this.event(event.data, event.eventName);
                 break;
             case ConfigFileDiagEvent:
-                const { triggerFile, configFileName: configFile, diagnostics } = event.data;
-                const bakedDiags = map(diagnostics, diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true));
                 this.event<protocol.ConfigFileDiagnosticEventBody>({
-                    triggerFile,
-                    configFile,
-                    diagnostics: bakedDiags,
-                }, ConfigFileDiagEvent);
+                    triggerFile: event.data.triggerFile,
+                    configFile: event.data.configFileName,
+                    diagnostics: map(event.data.diagnostics, diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true)),
+                }, event.eventName);
                 break;
             case ProjectLanguageServiceStateEvent: {
-                const eventName: protocol.ProjectLanguageServiceStateEventName = ProjectLanguageServiceStateEvent;
                 this.event<protocol.ProjectLanguageServiceStateEventBody>({
                     projectName: event.data.project.getProjectName(),
                     languageServiceEnabled: event.data.languageServiceEnabled,
-                }, eventName);
+                }, event.eventName);
                 break;
             }
             case ProjectInfoTelemetryEvent: {
@@ -1539,7 +1543,7 @@ export class Session<TMessage = string> implements EventSender {
         if (needsJsResolution) {
             const definitionSet = createSet<DefinitionInfo>(d => d.textSpan.start, documentSpansEqual);
             definitions?.forEach(d => definitionSet.add(d));
-            const noDtsProject = project.getNoDtsResolutionProject([file]);
+            const noDtsProject = project.getNoDtsResolutionProject(file);
             const ls = noDtsProject.getLanguageService();
             const jsDefinitions = ls.getDefinitionAtPosition(file, position, /*searchOtherFilesOnly*/ true, /*stopAtAlias*/ false)
                 ?.filter(d => toNormalizedPath(d.fileName) !== file);
@@ -1561,8 +1565,16 @@ export class Session<TMessage = string> implements EventSender {
                 const ambientCandidates = definitions.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient);
                 for (const candidate of some(ambientCandidates) ? ambientCandidates : getAmbientCandidatesByClimbingAccessChain()) {
                     const fileNameToSearch = findImplementationFileFromDtsFileName(candidate.fileName, file, noDtsProject);
-                    if (!fileNameToSearch || !ensureRoot(noDtsProject, fileNameToSearch)) {
-                        continue;
+                    if (!fileNameToSearch) continue;
+                    const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+                        fileNameToSearch,
+                        noDtsProject.currentDirectory,
+                        noDtsProject.directoryStructureHost,
+                    );
+                    if (!info) continue;
+                    if (!noDtsProject.containsScriptInfo(info)) {
+                        noDtsProject.addRoot(info);
+                        noDtsProject.updateGraph();
                     }
                     const noDtsProgram = ls.getProgram()!;
                     const fileToSearch = Debug.checkDefined(noDtsProgram.getSourceFile(fileNameToSearch));
@@ -1577,7 +1589,7 @@ export class Session<TMessage = string> implements EventSender {
         definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
         return this.mapDefinitionInfo(definitions, project);
 
-        function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: Project) {
+        function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: AuxiliaryProject) {
             const nodeModulesPathParts = getNodeModulePathParts(fileName);
             if (nodeModulesPathParts && fileName.lastIndexOf(nodeModulesPathPart) === nodeModulesPathParts.topLevelNodeModulesIndex) {
                 // Second check ensures the fileName only contains one `/node_modules/`. If there's more than one I give up.
@@ -1667,16 +1679,6 @@ export class Session<TMessage = string> implements EventSender {
                     return GoToDefinition.createDefinitionInfo(decl, noDtsProgram.getTypeChecker(), symbol, decl, /*unverified*/ true);
                 }
             });
-        }
-
-        function ensureRoot(project: Project, fileName: string) {
-            const info = project.getScriptInfo(fileName);
-            if (!info) return false;
-            if (!project.containsScriptInfo(info)) {
-                project.addRoot(info);
-                project.updateGraph();
-            }
-            return true;
         }
     }
 
@@ -2613,6 +2615,7 @@ export class Session<TMessage = string> implements EventSender {
             const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
             return [{ project, navigateToItems: project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file) }];
         }
+        const preferences = this.getHostPreferences();
 
         const outputs: ProjectNavigateToItems[] = [];
 
@@ -2646,7 +2649,13 @@ export class Session<TMessage = string> implements EventSender {
 
         // Mutates `outputs`
         function addItemsForProject(project: Project) {
-            const projectItems = project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject());
+            const projectItems = project.getLanguageService().getNavigateToItems(
+                searchValue,
+                maxResultCount,
+                /*fileName*/ undefined,
+                /*excludeDts*/ project.isNonTsProject(),
+                /*excludeLibFiles*/ preferences.excludeLibrarySymbolsInNavTo,
+            );
             const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !getMappedLocationForProject(documentSpanLocation(item), project));
             if (unseenItems.length) {
                 outputs.push({ project, navigateToItems: unseenItems });

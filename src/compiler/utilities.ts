@@ -63,6 +63,7 @@ import {
     CommentDirectivesMap,
     CommentDirectiveType,
     CommentRange,
+    comparePaths,
     compareStringsCaseSensitive,
     compareValues,
     Comparison,
@@ -79,7 +80,6 @@ import {
     contains,
     containsPath,
     createGetCanonicalFileName,
-    createModeAwareCache,
     createMultiMap,
     createScanner,
     createTextSpan,
@@ -163,6 +163,7 @@ import {
     GetCanonicalFileName,
     getCombinedModifierFlags,
     getCombinedNodeFlags,
+    getCommonSourceDirectory,
     getContainerFlags,
     getDirectoryPath,
     getJSDocAugmentsTag,
@@ -194,6 +195,7 @@ import {
     getPathComponents,
     getPathFromPathComponents,
     getRelativePathToDirectoryOrUrl,
+    getResolutionModeOverride,
     getRootLength,
     getSnippetElement,
     getStringComparer,
@@ -230,6 +232,7 @@ import {
     IndexSignatureDeclaration,
     InitializedVariableDeclaration,
     insertSorted,
+    InstanceofExpression,
     InterfaceDeclaration,
     InternalEmitFlags,
     isAccessor,
@@ -553,7 +556,6 @@ import {
     VariableDeclarationList,
     VariableLikeDeclaration,
     VariableStatement,
-    version,
     WhileStatement,
     WithStatement,
     WrappedExpression,
@@ -744,34 +746,6 @@ export function getFullWidth(node: Node) {
 }
 
 /** @internal */
-export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string, mode: ResolutionMode): ResolvedModuleFull | undefined {
-    return sourceFile?.resolvedModules?.get(moduleNameText, mode)?.resolvedModule;
-}
-
-/** @internal */
-export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleWithFailedLookupLocations, mode: ResolutionMode): void {
-    if (!sourceFile.resolvedModules) {
-        sourceFile.resolvedModules = createModeAwareCache();
-    }
-
-    sourceFile.resolvedModules.set(moduleNameText, mode, resolvedModule);
-}
-
-/** @internal */
-export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, mode: ResolutionMode): void {
-    if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
-        sourceFile.resolvedTypeReferenceDirectiveNames = createModeAwareCache();
-    }
-
-    sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, mode, resolvedTypeReferenceDirective);
-}
-
-/** @internal */
-export function getResolvedTypeReferenceDirective(sourceFile: SourceFile | undefined, typeReferenceDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirective | undefined {
-    return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode)?.resolvedTypeReferenceDirective;
-}
-
-/** @internal */
 export function projectReferenceIsEqualTo(oldRef: ProjectReference, newRef: ProjectReference) {
     return oldRef.path === newRef.path &&
         !oldRef.prepend === !newRef.prepend &&
@@ -794,7 +768,7 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
 
 /** @internal */
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
-    const node10Result = sourceFile.resolvedModules?.get(moduleReference, mode)?.node10Result;
+    const node10Result = host.getResolvedModule(sourceFile, moduleReference, mode)?.node10Result;
     const result = node10Result
         ? chainDiagnosticMessages(
             /*details*/ undefined,
@@ -856,7 +830,7 @@ export function hasChangesInResolutions<K, V>(
     names: readonly K[],
     newSourceFile: SourceFile,
     newResolutions: readonly V[],
-    oldResolutions: ModeAwareCache<V> | undefined,
+    getOldResolution: (name: string, mode: ResolutionMode) => V | undefined,
     comparer: (oldResolution: V, newResolution: V) => boolean,
     nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
 ): boolean {
@@ -867,7 +841,7 @@ export function hasChangesInResolutions<K, V>(
         const entry = names[i];
         const name = nameAndModeGetter.getName(entry);
         const mode = nameAndModeGetter.getMode(entry, newSourceFile);
-        const oldResolution = oldResolutions && oldResolutions.get(name, mode);
+        const oldResolution = getOldResolution(name, mode);
         const changed = oldResolution
             ? !newResolution || !comparer(oldResolution, newResolution)
             : newResolution;
@@ -3148,6 +3122,8 @@ export function getInvokedExpression(node: CallLikeExpression): Expression | Jsx
         case SyntaxKind.JsxOpeningElement:
         case SyntaxKind.JsxSelfClosingElement:
             return node.tagName;
+        case SyntaxKind.BinaryExpression:
+            return node.right;
         default:
             return node.expression;
     }
@@ -4000,12 +3976,13 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.BindingElement:
             return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
         case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ExportDeclaration:
             return tryCast(node.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportEqualsDeclaration:
             return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
@@ -4017,6 +3994,8 @@ export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAcce
             return tryCast(node.parent.parent.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportSpecifier:
             return tryCast(node.parent.parent.parent.moduleSpecifier, isStringLiteralLike);
+        case SyntaxKind.ImportType:
+            return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
         default:
             Debug.assertNever(node);
     }
@@ -5106,6 +5085,7 @@ export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttri
         case SyntaxKind.PrivateIdentifier:
             return name.escapedText;
         case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
         case SyntaxKind.NumericLiteral:
             return escapeLeadingUnderscores(name.text);
         case SyntaxKind.ComputedPropertyName:
@@ -6023,11 +6003,6 @@ export function getIndentSize() {
 }
 
 /** @internal */
-export function isNightly() {
-    return version.includes("-dev") || version.includes("-insiders");
-}
-
-/** @internal */
 export function createTextWriter(newLine: string): EmitTextWriter {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
@@ -6388,13 +6363,31 @@ export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFi
  */
 export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileMayBeEmittedHost, forceDtsEmit?: boolean) {
     const options = host.getCompilerOptions();
-    return !(options.noEmitForJsFiles && isSourceFileJS(sourceFile)) &&
-        !sourceFile.isDeclarationFile &&
-        !host.isSourceFileFromExternalLibrary(sourceFile) &&
-        (forceDtsEmit || (
-            !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
-            !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)
-        ));
+    // Js files are emitted only if option is enabled
+    if (options.noEmitForJsFiles && isSourceFileJS(sourceFile)) return false;
+    // Declaration files are not emitted
+    if (sourceFile.isDeclarationFile) return false;
+    // Source file from node_modules are not emitted
+    if (host.isSourceFileFromExternalLibrary(sourceFile)) return false;
+    // forcing dts emit => file needs to be emitted
+    if (forceDtsEmit) return true;
+    // Check other conditions for file emit
+    // Source files from referenced projects are not emitted
+    if (host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)) return false;
+    // Any non json file should be emitted
+    if (!isJsonSourceFile(sourceFile)) return true;
+    if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
+    // Emit json file if outFile is specified
+    if (outFile(options)) return true;
+    // Json file is not emitted if outDir is not specified
+    if (!options.outDir) return false;
+    // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
+    if (options.rootDir || (options.composite && options.configFilePath)) {
+        const commonDir = getNormalizedAbsolutePath(getCommonSourceDirectory(options, () => [], host.getCurrentDirectory(), host.getCanonicalFileName), host.getCurrentDirectory());
+        const outputPath = getSourceFilePathInNewDirWorker(sourceFile.fileName, options.outDir, host.getCurrentDirectory(), commonDir, host.getCanonicalFileName);
+        if (comparePaths(sourceFile.fileName, outputPath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) return false;
+    }
+    return true;
 }
 
 /** @internal */
@@ -7259,8 +7252,8 @@ export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
 
 /** @internal */
 export function isRightSideOfAccessExpression(node: Node) {
-    return isPropertyAccessExpression(node.parent) && node.parent.name === node
-        || isElementAccessExpression(node.parent) && node.parent.argumentExpression === node;
+    return !!node.parent && (isPropertyAccessExpression(node.parent) && node.parent.name === node
+        || isElementAccessExpression(node.parent) && node.parent.argumentExpression === node);
 }
 
 /** @internal */
@@ -7268,6 +7261,15 @@ export function isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName(node
     return isQualifiedName(node.parent) && node.parent.right === node
         || isPropertyAccessExpression(node.parent) && node.parent.name === node
         || isJSDocMemberName(node.parent) && node.parent.right === node;
+}
+/** @internal */
+export function isInstanceOfExpression(node: Node): node is InstanceofExpression {
+    return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.InstanceOfKeyword;
+}
+
+/** @internal */
+export function isRightSideOfInstanceofExpression(node: Node) {
+    return isInstanceOfExpression(node.parent) && node === node.parent.right;
 }
 
 /** @internal */
@@ -8784,7 +8786,9 @@ export function compilerOptionsAffectDeclarationPath(newOptions: CompilerOptions
 
 /** @internal */
 export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
-    return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
+    return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) :
+        option.allowJsFlag ? getAllowJSCompilerOption(options) :
+        options[option.name];
 }
 
 /** @internal */
@@ -8829,9 +8833,15 @@ export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
 
 /** @internal */
 export interface SymlinkedDirectory {
-    /** Matches the casing returned by `realpath`.  Used to compute the `realpath` of children. */
+    /**
+     * Matches the casing returned by `realpath`.  Used to compute the `realpath` of children.
+     * Always has trailing directory separator
+     */
     real: string;
-    /** toPath(real).  Stored to avoid repeated recomputation. */
+    /**
+     * toPath(real).  Stored to avoid repeated recomputation.
+     * Always has trailing directory separator
+     */
     realPath: Path;
 }
 
@@ -8851,7 +8861,15 @@ export interface SymlinkCache {
      * don't include automatic type reference directives. Must be called only when
      * `hasProcessedResolutions` returns false (once per cache instance).
      */
-    setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>): void;
+    setSymlinksFromResolutions(
+        forEachResolvedModule: (
+            callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        ) => void,
+        forEachResolvedTypeReferenceDirective: (
+            callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        ) => void,
+        typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>,
+    ): void;
     /**
      * @internal
      * Whether `setSymlinksFromResolutions` has already been called.
@@ -8878,18 +8896,16 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             if (!containsIgnoredPath(symlinkPath)) {
                 symlinkPath = ensureTrailingDirectorySeparator(symlinkPath);
                 if (real !== false && !symlinkedDirectories?.has(symlinkPath)) {
-                    (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
+                    (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(real.realPath, symlink);
                 }
                 (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
             }
         },
-        setSymlinksFromResolutions(files, typeReferenceDirectives) {
+        setSymlinksFromResolutions(forEachResolvedModule, forEachResolvedTypeReferenceDirective, typeReferenceDirectives) {
             Debug.assert(!hasProcessedResolutions);
             hasProcessedResolutions = true;
-            for (const file of files) {
-                file.resolvedModules?.forEach(resolution => processResolution(this, resolution.resolvedModule));
-                file.resolvedTypeReferenceDirectiveNames?.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
-            }
+            forEachResolvedModule(resolution => processResolution(this, resolution.resolvedModule));
+            forEachResolvedTypeReferenceDirective(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
             typeReferenceDirectives.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
@@ -8903,7 +8919,10 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
         if (commonResolved && commonOriginal) {
             cache.setSymlinkedDirectory(
                 commonOriginal,
-                { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) },
+                {
+                    real: ensureTrailingDirectorySeparator(commonResolved),
+                    realPath: ensureTrailingDirectorySeparator(toPath(commonResolved, cwd, getCanonicalFileName)),
+                },
             );
         }
     }
@@ -10216,9 +10235,10 @@ export function isNumericLiteralName(name: string | __String) {
 }
 
 /** @internal */
-export function createPropertyNameNodeForIdentifierOrLiteral(name: string, target: ScriptTarget, singleQuote?: boolean, stringNamed?: boolean) {
-    return isIdentifierText(name, target) ? factory.createIdentifier(name) :
-        !stringNamed && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
+export function createPropertyNameNodeForIdentifierOrLiteral(name: string, target: ScriptTarget, singleQuote: boolean, stringNamed: boolean, isMethod: boolean) {
+    const isMethodNamedNew = isMethod && name === "new";
+    return !isMethodNamedNew && isIdentifierText(name, target) ? factory.createIdentifier(name) :
+        !stringNamed && !isMethodNamedNew && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
         factory.createStringLiteral(name, !!singleQuote);
 }
 
@@ -10451,6 +10471,19 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
         return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
     }
     return Debug.fail();
+}
+
+/** @internal */
+export function isExpandoPropertyDeclaration(declaration: Declaration | undefined): declaration is PropertyAccessExpression | ElementAccessExpression | BinaryExpression {
+    return !!declaration && (isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration) || isBinaryExpression(declaration));
+}
+
+/** @internal */
+export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined) {
+    if (node === undefined) {
+        return false;
+    }
+    return !!getResolutionModeOverride(node.attributes);
 }
 
 export function getDeclarationContainer(node: Node): Node {
