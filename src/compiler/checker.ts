@@ -5665,7 +5665,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (getSymbolIfSameReference(exported, symbol)) {
                 return exported;
             }
-            if (symbol.flags & SymbolFlags.TypeAlias) {
+            if (symbol.flags & SymbolFlags.TypeAlias && exported.declarations?.find(isTypeAlias)) {
                 const aliasSymbol = getDeclaredTypeOfTypeAlias(exported).aliasSymbol;
                 if (aliasSymbol && getSymbolIfSameReference(aliasSymbol, symbol)) {
                     return exported;
