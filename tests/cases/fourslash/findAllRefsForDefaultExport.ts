@@ -11,6 +11,4 @@
 ////import { f } from "./a";
 
 verify.baselineFindAllReferences('def', 'deg');
-verify.baselineCommands(
-    { type: "goToDefinition", markerOrRange: "ref" },
-);
+verify.baselineGoToDefinition("ref");

@@ -20,7 +20,5 @@ verify.quickInfoIs("(parameter) foo: I", "I pity the foo");
 verify.baselineFindAllReferences("use", "def", "use2");
 verify.baselineRename(ranges);
 verify.baselineDocumentHighlights(ranges);
-verify.baselineCommands(
-    { type: "goToType", markerOrRange: "use" },
-    { type: "getDefinitionAtPosition", markerOrRange: "use" },
-);
+verify.baselineGoToType("use");
+verify.baselineGetDefinitionAtPosition("use");

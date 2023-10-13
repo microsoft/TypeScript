@@ -869,6 +869,71 @@ export class TestState {
         return baseline;
     }
 
+    public baselineGoToDefinition(
+        markerOrRange: MarkerOrNameOrRange[] | undefined,
+        rangeText: string[] | undefined,
+    ) {
+        this.baselineEachMarkerOrRange("goToDefinition", markerOrRange, rangeText, markerOrRange =>
+            this.baselineGoToDefs(
+                "/*GOTO DEF*/",
+                markerOrRange,
+                () => this.getGoToDefinitionAndBoundSpan(),
+            ));
+    }
+
+    public baselineGetDefinitionAtPosition(
+        markerOrRange: MarkerOrNameOrRange[] | undefined,
+        rangeText: string[] | undefined,
+    ) {
+        this.baselineEachMarkerOrRange("getDefinitionAtPosition", markerOrRange, rangeText, markerOrRange =>
+            this.baselineGoToDefs(
+                "/*GOTO DEF POS*/",
+                markerOrRange,
+                () => this.getGoToDefinition(),
+            ));
+    }
+
+    public baselineGoToSourceDefinition(
+        markerOrRange: MarkerOrNameOrRange[] | undefined,
+        rangeText: string[] | undefined,
+    ) {
+        if (this.testType !== FourSlashTestType.Server) {
+            this.raiseError("goToSourceDefinition may only be used in fourslash/server tests.");
+        }
+        this.baselineEachMarkerOrRange("goToSourceDefinition", markerOrRange, rangeText, markerOrRange =>
+            this.baselineGoToDefs(
+                "/*GOTO SOURCE DEF*/",
+                markerOrRange,
+                () =>
+                    (this.languageService as ts.server.SessionClient)
+                        .getSourceDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition),
+            ));
+    }
+
+    public baselineGoToType(
+        markerOrRange: MarkerOrNameOrRange[] | undefined,
+        rangeText: string[] | undefined,
+    ) {
+        this.baselineEachMarkerOrRange("goToType", markerOrRange, rangeText, markerOrRange =>
+            this.baselineGoToDefs(
+                "/*GOTO TYPE*/",
+                markerOrRange,
+                () => this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition),
+            ));
+    }
+
+    public baselineGoToImplementation(
+        markerOrRange: MarkerOrNameOrRange[] | undefined,
+        rangeText: string[] | undefined,
+    ) {
+        this.baselineEachMarkerOrRange("goToImplementation", markerOrRange, rangeText, markerOrRange =>
+            this.baselineGoToDefs(
+                "/*GOTO IMPL*/",
+                markerOrRange,
+                () => this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition),
+            ));
+    }
+
     public verifyGetEmitOutputForCurrentFile(expected: string): void {
         const emit = this.languageService.getEmitOutput(this.activeFile.fileName);
         if (emit.outputFiles.length !== 1) {
@@ -1261,115 +1326,48 @@ export class TestState {
         }
     }
 
-    private baselineCommand(
-        command: FourSlashInterface.BaselineCommand,
+    private baselineEachMarkerOrRangeArrayOrSingle(
+        command: string,
+        markerOrRange: ArrayOrSingle<MarkerOrNameOrRange> | undefined,
+        rangeText: ArrayOrSingle<string> | undefined,
         worker: (markerORange: MarkerOrNameOrRange) => string,
     ) {
-        let done = false;
-        if (command.markerOrRange !== undefined) {
-            done = this.baselineArrayOrSingle(command.type, command.markerOrRange, worker);
-        }
-        if (command.rangeText !== undefined) {
-            toArray(command.rangeText).forEach(text => done = this.baselineArrayOrSingle(command.type, this.rangesByText().get(text)!, worker) || done);
-        }
-        if (!done) {
-            this.baselineArrayOrSingle(command.type, this.getRanges(), worker);
-        }
+        return this.baselineEachMarkerOrRange(
+            command,
+            markerOrRange !== undefined ? toArray(markerOrRange) : undefined,
+            rangeText !== undefined ? toArray(rangeText) : undefined,
+            worker,
+        );
     }
 
     private baselineEachMarkerOrRange(
         command: string,
-        markerOrRange: ArrayOrSingle<MarkerOrNameOrRange> | undefined,
-        rangeText: ArrayOrSingle<string> | undefined,
+        markerOrRange: readonly MarkerOrNameOrRange[] | undefined,
+        rangeText: readonly string[] | undefined,
         worker: (markerORange: MarkerOrNameOrRange) => string,
     ) {
         let done = false;
         if (markerOrRange !== undefined) {
-            done = this.baselineArrayOrSingle(command, markerOrRange, worker);
+            done = this.baselineArray(command, markerOrRange, worker);
         }
         if (rangeText !== undefined) {
-            toArray(rangeText).forEach(text => done = this.baselineArrayOrSingle(command, this.rangesByText().get(text)!, worker) || done);
+            toArray(rangeText).forEach(text => done = this.baselineArray(command, this.rangesByText().get(text)!, worker) || done);
         }
-        if (!done) this.baselineArrayOrSingle(command, this.getRanges(), worker);
+        if (!done) this.baselineArray(command, this.getRanges(), worker);
     }
 
-    private baselineArrayOrSingle<T>(
+    private baselineArray<T>(
         command: string,
-        arrayOrSingle: ArrayOrSingle<T>,
+        array: readonly T[],
         worker: (single: T) => string,
     ) {
-        const array = toArray(arrayOrSingle);
         array.forEach(single => this.baseline(command, worker(single), ".baseline.jsonc"));
         return !!array.length;
     }
 
-    public verifyBaselineCommands(...commands: FourSlashInterface.BaselineCommand[]) {
-        commands.forEach(command => {
-            switch (command.type) {
-                case "goToDefinition":
-                    return this.baselineCommand(
-                        command,
-                        markerOrRange =>
-                            this.baselineGoToDefs(
-                                "/*GOTO DEF*/",
-                                markerOrRange,
-                                () => this.getGoToDefinitionAndBoundSpan(),
-                            ),
-                    );
-                case "getDefinitionAtPosition":
-                    return this.baselineCommand(
-                        command,
-                        markerOrRange =>
-                            this.baselineGoToDefs(
-                                "/*GOTO DEF POS*/",
-                                markerOrRange,
-                                () => this.getGoToDefinition(),
-                            ),
-                    );
-                case "goToSourceDefinition":
-                    if (this.testType !== FourSlashTestType.Server) {
-                        this.raiseError("goToSourceDefinition may only be used in fourslash/server tests.");
-                    }
-                    return this.baselineCommand(
-                        command,
-                        markerOrRange =>
-                            this.baselineGoToDefs(
-                                "/*GOTO SOURCE DEF*/",
-                                markerOrRange,
-                                () =>
-                                    (this.languageService as ts.server.SessionClient)
-                                        .getSourceDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition),
-                            ),
-                    );
-                case "goToType":
-                    return this.baselineCommand(
-                        command,
-                        markerOrRange =>
-                            this.baselineGoToDefs(
-                                "/*GOTO TYPE*/",
-                                markerOrRange,
-                                () => this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition),
-                            ),
-                    );
-                case "goToImplementation":
-                    return this.baselineCommand(
-                        command,
-                        markerOrRange =>
-                            this.baselineGoToDefs(
-                                "/*GOTO IMPL*/",
-                                markerOrRange,
-                                () => this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition),
-                            ),
-                    );
-                default:
-                    ts.Debug.assertNever(command.type);
-            }
-        });
-    }
-
     public baselineFindAllReferences(
-        markerOrRange: ArrayOrSingle<MarkerOrNameOrRange> | undefined,
-        rangeText: ArrayOrSingle<string> | undefined,
+        markerOrRange: MarkerOrNameOrRange[] | undefined,
+        rangeText: string[] | undefined,
     ) {
         this.baselineEachMarkerOrRange("findAllReferences", markerOrRange, rangeText, markerOrRange => {
             this.goToMarkerOrNameOrRange(markerOrRange);
@@ -1420,8 +1418,8 @@ export class TestState {
         });
     }
 
-    public baselineGetFileReferences(fileNames: ArrayOrSingle<string>) {
-        this.baselineArrayOrSingle("getFileReferences", fileNames, fileName => {
+    public baselineGetFileReferences(fileNames: string[]) {
+        this.baselineArray("getFileReferences", fileNames, fileName => {
             const references = this.languageService.getFileReferences(fileName);
             return `// fileName: ${fileName}\n\n` + this.getBaselineForDocumentSpansWithFileContents(
                 references,
@@ -1904,7 +1902,7 @@ export class TestState {
         rangeText: ArrayOrSingle<string> | undefined,
         options: FourSlashInterface.RenameOptions | undefined,
     ) {
-        this.baselineEachMarkerOrRange("findRenameLocations", markerOrRange, rangeText, markerOrRange => {
+        this.baselineEachMarkerOrRangeArrayOrSingle("findRenameLocations", markerOrRange, rangeText, markerOrRange => {
             const { fileName, position } = ts.isString(markerOrRange) ?
                 this.getMarkerByName(markerOrRange) :
                 isMarker(markerOrRange) ?
@@ -3887,7 +3885,7 @@ export class TestState {
         rangeText: ArrayOrSingle<string> | undefined,
         options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined,
     ) {
-        this.baselineEachMarkerOrRange(
+        this.baselineEachMarkerOrRangeArrayOrSingle(
             "documentHighlights",
             markerOrRange,
             rangeText,

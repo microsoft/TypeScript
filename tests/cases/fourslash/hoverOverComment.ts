@@ -7,6 +7,4 @@
 goTo.marker();
 verify.quickInfoIs("");
 verify.baselineFindAllReferences("");
-verify.baselineCommands(
-    { type: "getDefinitionAtPosition", markerOrRange: "" },
-);
+verify.baselineGetDefinitionAtPosition("");

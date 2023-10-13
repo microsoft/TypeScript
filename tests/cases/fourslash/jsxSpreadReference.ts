@@ -18,6 +18,4 @@
 //// var x = <MyClass {...[|n/*src*/n|]}></MyClass>;
 
 verify.baselineRenameAtRangesWithText("nn")
-verify.baselineCommands(
-    { type: "goToDefinition", markerOrRange: "src" },
-);
+verify.baselineGoToDefinition("src");
