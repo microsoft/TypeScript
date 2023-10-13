@@ -499,25 +499,19 @@ export class TestState {
         }
     }
 
-    private baselineFromTest: BaselineTest | BaselineTest[] | undefined;
+    private baselineFromTest: BaselineTest[] | undefined;
 
     private baseline(command: string, baselineFile: string, actual: string) {
-        if (!this.baselineFromTest) this.baselineFromTest = { command, baselineFile, actual };
-        else if (ts.isArray(this.baselineFromTest)) this.baselineFromTest.push({ command, baselineFile, actual });
-        else this.baselineFromTest = [this.baselineFromTest, { command, baselineFile, actual }];
+        if (!this.baselineFromTest) this.baselineFromTest = [{ command, baselineFile, actual }];
+        else this.baselineFromTest.push({ command, baselineFile, actual });
     }
 
     baselineTest() {
         if (this.baselineFromTest) {
-            if (ts.isArray(this.baselineFromTest)) {
-                Harness.Baseline.runBaseline(
-                    this.baselineFromTest[0].baselineFile,
-                    this.baselineFromTest.map(({ command, actual }) => `// === ${command} ===\n${actual}`).join("\n\n\n\n"),
-                );
-            }
-            else {
-                Harness.Baseline.runBaseline(this.baselineFromTest.baselineFile, this.baselineFromTest.actual);
-            }
+            Harness.Baseline.runBaseline(
+                this.baselineFromTest[0].baselineFile,
+                this.baselineFromTest.map(({ command, actual }) => `// === ${command} ===\n${actual}`).join("\n\n\n\n"),
+            );
         }
     }
 
@@ -1268,43 +1262,53 @@ export class TestState {
         }
     }
 
+    private baselineEachMarkerOrRange(
+        command: FourSlashInterface.BaselineCommandWithMarkerOrRange,
+        worker: (markerORange: MarkerOrNameOrRange) => string,
+    ) {
+        let done = false;
+        if (command.markerOrRange !== undefined) {
+            done = this.baselineArrayOrSingle(command, command.markerOrRange, worker);
+        }
+        if (command.rangeText !== undefined) {
+            toArray(command.rangeText).forEach(text => done = this.baselineArrayOrSingle(command, this.rangesByText().get(text)!, worker) || done);
+        }
+        if (!done) {
+            this.baselineArrayOrSingle(command, this.getRanges(), worker);
+        }
+    }
+
+    private baselineArrayOrSingle<T>(
+        command: FourSlashInterface.BaselineCommand,
+        arrayOrSingle: ArrayOrSingle<T>,
+        worker: (single: T) => string,
+    ) {
+        const array = toArray(arrayOrSingle);
+        array.forEach(single => this.baseline(command.type, this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), worker(single)));
+        return !!array.length;
+    }
+
     public verifyBaselineCommands(...commands: FourSlashInterface.BaselineCommand[]) {
-        let baselineContent = "";
-        const baselineEachMarkerOrRange = (
-            command: FourSlashInterface.BaselineCommandWithMarkerOrRange,
-            worker: (markerORange: MarkerOrNameOrRange) => string,
-        ) => {
-            let done = false;
-            if (command.markerOrRange !== undefined) {
-                done = baselineArrayOrSingle(command, command.markerOrRange, worker);
-            }
-            if (command.rangeText !== undefined) {
-                toArray(command.rangeText).forEach(text => done = baselineArrayOrSingle(command, this.rangesByText().get(text)!, worker) || done);
-            }
-            if (!done) {
-                baselineArrayOrSingle(command, this.getRanges(), worker);
-            }
-        };
         commands.forEach(command => {
             switch (command.type) {
                 case "findAllReferences":
-                    return baselineEachMarkerOrRange(
+                    return this.baselineEachMarkerOrRange(
                         command,
                         markerOrRange => this.baselineFindAllReferencesWorker(markerOrRange),
                     );
                 case "getFileReferences":
-                    return baselineArrayOrSingle(
+                    return this.baselineArrayOrSingle(
                         command,
                         command.fileName,
                         fileName => this.baselineGetFileReferences(fileName),
                     );
                 case "findRenameLocations":
-                    return baselineEachMarkerOrRange(
+                    return this.baselineEachMarkerOrRange(
                         command,
                         markerOrRange => this.baselineRenameWorker(markerOrRange, command.options),
                     );
                 case "goToDefinition":
-                    return baselineEachMarkerOrRange(
+                    return this.baselineEachMarkerOrRange(
                         command,
                         markerOrRange =>
                             this.baselineGoToDefs(
@@ -1314,7 +1318,7 @@ export class TestState {
                             ),
                     );
                 case "getDefinitionAtPosition":
-                    return baselineEachMarkerOrRange(
+                    return this.baselineEachMarkerOrRange(
                         command,
                         markerOrRange =>
                             this.baselineGoToDefs(
@@ -1327,7 +1331,7 @@ export class TestState {
                     if (this.testType !== FourSlashTestType.Server) {
                         this.raiseError("goToSourceDefinition may only be used in fourslash/server tests.");
                     }
-                    return baselineEachMarkerOrRange(
+                    return this.baselineEachMarkerOrRange(
                         command,
                         markerOrRange =>
                             this.baselineGoToDefs(
@@ -1339,7 +1343,7 @@ export class TestState {
                             ),
                     );
                 case "goToType":
-                    return baselineEachMarkerOrRange(
+                    return this.baselineEachMarkerOrRange(
                         command,
                         markerOrRange =>
                             this.baselineGoToDefs(
@@ -1349,7 +1353,7 @@ export class TestState {
                             ),
                     );
                 case "goToImplementation":
-                    return baselineEachMarkerOrRange(
+                    return this.baselineEachMarkerOrRange(
                         command,
                         markerOrRange =>
                             this.baselineGoToDefs(
@@ -1359,37 +1363,16 @@ export class TestState {
                             ),
                     );
                 case "documentHighlights":
-                    return baselineEachMarkerOrRange(
+                    return this.baselineEachMarkerOrRange(
                         command,
                         markerOrRange => this.baselineGetDocumentHighlights(markerOrRange, command.options),
                     );
                 case "customWork":
-                    return addToBaseline(command, readableJsoncBaseline(command.work() || ""));
+                    return this.baseline(command.type, this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), readableJsoncBaseline(command.work() || ""));
                 default:
                     ts.Debug.assertNever(command);
             }
         });
-        this.baseline(commands.length > 1 ? "Commands" : commands[0].type, this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
-
-        function baselineArrayOrSingle<T>(
-            command: FourSlashInterface.BaselineCommand,
-            arrayOrSingle: ArrayOrSingle<T>,
-            worker: (single: T) => string,
-        ) {
-            if (ts.isArray(arrayOrSingle)) {
-                arrayOrSingle.forEach(single => addToBaseline(command, worker(single)));
-                return !!arrayOrSingle.length;
-            }
-            else {
-                addToBaseline(command, worker(arrayOrSingle));
-                return true;
-            }
-        }
-
-        function addToBaseline(command: FourSlashInterface.BaselineCommand, text: string) {
-            if (baselineContent) baselineContent += "\n\n\n\n";
-            baselineContent += `// === ${command.type} ===\n` + text;
-        }
     }
 
     private baselineFindAllReferencesWorker(markerOrRange: MarkerOrNameOrRange) {

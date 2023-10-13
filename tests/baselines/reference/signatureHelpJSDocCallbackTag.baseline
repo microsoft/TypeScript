@@ -1,3 +1,4 @@
+// === SignatureHelp ===
 === /tests/cases/fourslash/server/jsdocCallbackTag.js ===
 // /**
 //  * @callback FooHandler - A kind of magic
