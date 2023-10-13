@@ -18,5 +18,5 @@ verify.baselineCommands(
     { type: "findAllReferences", markerOrRange: ['1', '2'] },
     { type: "findRenameLocations", markerOrRange: C },
     { type: "findRenameLocations", markerOrRange: bRanges },
-    { type: "documentHighlights", markerOrRange: "1" },
 );
+verify.baselineDocumentHighlights("1");

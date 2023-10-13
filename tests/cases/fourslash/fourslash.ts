@@ -859,11 +859,6 @@ declare namespace FourSlashInterface {
         markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
         rangeText?: ArrayOrSingle<string>;
         options?: RenameOptions;
-    } | {
-        type: "documentHighlights";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-        options?: VerifyDocumentHighlightsOptions;
     };
 }
 /** Wraps a diagnostic message to be compared ignoring interpolated strings */

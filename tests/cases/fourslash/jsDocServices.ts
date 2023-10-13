@@ -20,7 +20,9 @@ verify.quickInfoIs("(parameter) foo: I", "I pity the foo");
 verify.baselineCommands(
     { type: "findAllReferences", markerOrRange: ["use", "def", "use2"] },
     { type: "findRenameLocations", markerOrRange: ranges },
-    { type: "documentHighlights", markerOrRange: ranges },
+);
+verify.baselineDocumentHighlights(ranges);
+verify.baselineCommands(
     { type: "goToType", markerOrRange: "use" },
     { type: "getDefinitionAtPosition", markerOrRange: "use" },
 );

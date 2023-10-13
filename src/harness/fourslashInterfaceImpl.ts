@@ -390,11 +390,11 @@ export class Verify extends VerifyNegatable {
     }
 
     public baselineDocumentHighlights(markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>, options?: VerifyDocumentHighlightsOptions) {
-        this.state.verifyBaselineCommands({ type: "documentHighlights", markerOrRange, options });
+        this.state.baselineDocumentHighlights(markerOrRange, /*rangeText*/ undefined, options);
     }
 
     public baselineDocumentHighlightsAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: VerifyDocumentHighlightsOptions) {
-        this.state.verifyBaselineCommands({ type: "documentHighlights", rangeText, options });
+        this.state.baselineDocumentHighlights(/*markerOrRange*/ undefined, rangeText, options);
     }
 
     public noErrors() {
@@ -1940,10 +1940,5 @@ export type BaselineCommandWithMarkerOrRange = {
     markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
     rangeText?: ArrayOrSingle<string>;
     options?: RenameOptions;
-} | {
-    type: "documentHighlights";
-    markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
-    rangeText?: ArrayOrSingle<string>;
-    options?: VerifyDocumentHighlightsOptions;
 };
 export type BaselineCommand = BaselineCommandWithMarkerOrRange;

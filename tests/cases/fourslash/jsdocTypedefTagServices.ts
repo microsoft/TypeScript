@@ -24,6 +24,6 @@ verify.quickInfoAt("use", desc, "Doc comment");
 verify.baselineCommands(
     { type: "findAllReferences", markerOrRange: ["use", "def"] },
     { type: "findRenameLocations", markerOrRange: ranges },
-    { type: "documentHighlights", markerOrRange: ranges },
-    { type: "goToDefinition", markerOrRange: "use" },
 );
+verify.baselineDocumentHighlights(ranges);
+verify.baselineCommands({ type: "goToDefinition", markerOrRange: "use" });
