@@ -5,6 +5,9 @@ import * as ts from "./_namespaces/ts";
 import * as Utils from "./_namespaces/Utils";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
+import {
+    Logger,
+} from "./tsserverLogger";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -226,6 +229,12 @@ function realizeDiagnostic(diagnostic: ts.Diagnostic, newLine: string): Realized
     };
 }
 
+interface BaselineTest {
+    command: string;
+    baselineFile: string;
+    actual: string;
+}
+
 export class TestState {
     // Language service instance
     private languageServiceAdapterHost: Harness.LanguageService.LanguageServiceAdapterHost;
@@ -249,6 +258,8 @@ export class TestState {
     public formatCodeSettings: ts.FormatCodeSettings;
 
     private inputFiles = new Map<string, string>(); // Map between inputFile's fileName and its content for easily looking up when resolving references
+
+    private logger: Logger | undefined;
 
     private static getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[] | undefined) {
         let result = "";
@@ -358,6 +369,7 @@ export class TestState {
         }
 
         const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
+        this.logger = languageServiceAdapter.getLogger();
         this.languageServiceAdapterHost = languageServiceAdapter.getHost();
         this.languageService = memoWrap(languageServiceAdapter.getLanguageService(), this); // Wrap the LS to cache some expensive operations certain tests call repeatedly
         if (this.testType === FourSlashTestType.Server) {
@@ -445,6 +457,11 @@ export class TestState {
 
         this.formatCodeSettings = ts.testFormatSettings;
 
+        if (this.logger?.loggingEnabled()) {
+            const patch = this.languageServiceAdapterHost.vfs.diff();
+            this.logger.log(vfs.formatPatch(patch) || "");
+        }
+
         // Open the first file by default
         this.openFile(0);
 
@@ -479,6 +496,37 @@ export class TestState {
                     );
             }
             return proxy;
+        }
+    }
+
+    private baselineFromTest: BaselineTest | BaselineTest[] | undefined;
+
+    private baseline(command: string, baselineFile: string, actual: string) {
+        if (!this.baselineFromTest) this.baselineFromTest = { command, baselineFile, actual };
+        else if (ts.isArray(this.baselineFromTest)) this.baselineFromTest.push({ command, baselineFile, actual });
+        else this.baselineFromTest = [this.baselineFromTest, { command, baselineFile, actual }];
+    }
+
+    baselineTest() {
+        if (this.baselineFromTest) {
+            if (ts.isArray(this.baselineFromTest)) {
+                Harness.Baseline.runBaseline(
+                    this.baselineFromTest[0].baselineFile,
+                    this.baselineFromTest.map(({ command, actual }) => `// === ${command} ===\n${actual}`).join("\n\n\n\n"),
+                );
+            }
+            else {
+                Harness.Baseline.runBaseline(this.baselineFromTest.baselineFile, this.baselineFromTest.actual);
+            }
+        }
+    }
+
+    baselineTsserverLog() {
+        if (this.logger) {
+            Harness.Baseline.runBaseline(
+                `tsserver/fourslashServer/${ts.getBaseFileName(this.originalInputFileName).replace(".ts", ".js")}`,
+                this.logger.logs!.join("\n"),
+            );
         }
     }
 
@@ -880,7 +928,7 @@ export class TestState {
             annotations.push("=== No inlay hints ===");
         }
 
-        Harness.Baseline.runBaseline(baselineFile, annotations.join("\n\n"));
+        this.baseline("Inlay Hints", baselineFile, annotations.join("\n\n"));
     }
 
     public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
@@ -1321,7 +1369,7 @@ export class TestState {
                     ts.Debug.assertNever(command);
             }
         });
-        Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
+        this.baseline(commands.length > 1 ? "Commands" : commands[0].type, this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
 
         function baselineArrayOrSingle<T>(
             command: FourSlashInterface.BaselineCommand,
@@ -2229,7 +2277,7 @@ export class TestState {
 
     public baselineCurrentFileBreakpointLocations() {
         const baselineFile = this.getBaselineFileNameForInternalFourslashFile().replace("breakpointValidation", "bpSpan");
-        Harness.Baseline.runBaseline(baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
+        this.baseline("breakpoints", baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
     }
 
     private getEmitFiles(): readonly FourSlashFile[] {
@@ -2293,7 +2341,7 @@ export class TestState {
             resultString += Harness.IO.newLine();
         }
 
-        Harness.Baseline.runBaseline(ts.Debug.checkDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
+        this.baseline("EmitOutput", ts.Debug.checkDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
     }
 
     private flattenChainedMessage(diag: ts.DiagnosticMessageChain, indent = " ") {
@@ -2310,7 +2358,7 @@ export class TestState {
     public baselineSyntacticDiagnostics() {
         const files = this.getCompilerTestFiles();
         const result = this.getSyntacticDiagnosticBaselineText(files);
-        Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(), result);
+        this.baseline("Syntax Diagnostics", this.getBaselineFileNameForContainingTestFile(), result);
     }
 
     private getCompilerTestFiles() {
@@ -2326,7 +2374,7 @@ export class TestState {
             + Harness.IO.newLine()
             + Harness.IO.newLine()
             + this.getSemanticDiagnosticBaselineText(files);
-        Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(), result);
+        this.baseline("Syntax and Semantic Diagnostics", this.getBaselineFileNameForContainingTestFile(), result);
     }
 
     private getSyntacticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
@@ -2361,7 +2409,7 @@ export class TestState {
                 ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : []),
             ],
         );
-        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
+        this.baseline("QuickInfo", baselineFile, annotations + "\n\n" + stringify(result));
     }
 
     public baselineSignatureHelp() {
@@ -2396,7 +2444,7 @@ export class TestState {
                 return tooltip;
             },
         );
-        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
+        this.baseline("SignatureHelp", baselineFile, annotations + "\n\n" + stringify(result));
     }
 
     public baselineCompletions(preferences?: ts.UserPreferences) {
@@ -2443,7 +2491,8 @@ export class TestState {
                 }
             }
         }
-        Harness.Baseline.runBaseline(
+        this.baseline(
+            "Completions",
             baselineFile,
             annotations + "\n\n" + stringify(result, (key, value) => {
                 return key === "exportMapKey"
@@ -2531,7 +2580,7 @@ export class TestState {
             return baselineContent.join(fileContent.includes("\n") ? n + n : n);
         }).join(n.repeat(2) + "=".repeat(80) + n.repeat(2));
 
-        Harness.Baseline.runBaseline(baselineFile, text);
+        this.baseline("Smart Selection", baselineFile, text);
     }
 
     public printBreakpointLocation(pos: number) {
@@ -3006,7 +3055,8 @@ export class TestState {
     }
 
     public baselineCurrentFileNameOrDottedNameSpans() {
-        Harness.Baseline.runBaseline(
+        this.baseline(
+            "NameOrDottedNameSpans",
             this.testData.globalOptions[MetadataOptionNames.baselineFile],
             this.baselineCurrentFileLocations(pos => this.getNameOrDottedNameSpan(pos)!),
         );
@@ -3651,7 +3701,7 @@ export class TestState {
             }
         }
 
-        Harness.Baseline.runBaseline(baselineFile, baselineText);
+        this.baseline("Auto Imports", baselineFile, baselineText);
     }
 
     public verifyJsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined; }): void {
@@ -3682,7 +3732,7 @@ export class TestState {
             offset = result.offset;
         }
 
-        Harness.Baseline.runBaseline(baselineFile, baselineContent);
+        this.baseline("Linked Editing", baselineFile, baselineContent);
 
         function getLinkedEditingBaselineWorker(activeFile: FourSlashFile, offset: number, languageService: ts.LanguageService) {
             const fileName = activeFile.fileName;
@@ -4278,7 +4328,7 @@ export class TestState {
         const baselineFile = this.getBaselineFileNameForContainingTestFile(".callHierarchy.txt");
         const callHierarchyItem = this.languageService.prepareCallHierarchy(this.activeFile.fileName, this.currentCaretPosition);
         const text = callHierarchyItem ? ts.mapOneOrMany(callHierarchyItem, item => this.formatCallHierarchy(item), result => result.join("")) : "none";
-        Harness.Baseline.runBaseline(baselineFile, text);
+        this.baseline("Call Hierarchy", baselineFile, text);
     }
 
     private getLineContent(index: number) {
@@ -4503,12 +4553,16 @@ function renameKeys<T>(obj: { readonly [key: string]: T; }, renameKey: (key: str
     return res;
 }
 
-export function runFourSlashTest(basePath: string, testType: FourSlashTestType, fileName: string) {
-    const content = Harness.IO.readFile(fileName)!;
-    runFourSlashTestContent(basePath, testType, content, fileName);
+export interface FourSlashServerLogBaseliner {
+    baseline?: () => void;
 }
 
-export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string): void {
+export function runFourSlashTest(basePath: string, testType: FourSlashTestType, fileName: string, serverLogBaseliner?: FourSlashServerLogBaseliner) {
+    const content = Harness.IO.readFile(fileName)!;
+    runFourSlashTestContent(basePath, testType, content, fileName, serverLogBaseliner);
+}
+
+export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string, serverLogBaseliner?: FourSlashServerLogBaseliner): void {
     // Give file paths an absolute path for the virtual file system
     const absoluteBasePath = ts.combinePaths(Harness.virtualFileSystemRoot, basePath);
     const absoluteFileName = ts.combinePaths(Harness.virtualFileSystemRoot, fileName);
@@ -4516,12 +4570,14 @@ export function runFourSlashTestContent(basePath: string, testType: FourSlashTes
     // Parse out the files and their metadata
     const testData = parseTestData(absoluteBasePath, content, absoluteFileName);
     const state = new TestState(absoluteFileName, absoluteBasePath, testType, testData);
+    if (serverLogBaseliner) serverLogBaseliner.baseline = () => state.baselineTsserverLog();
     const actualFileName = Harness.IO.resolvePath(fileName) || absoluteFileName;
     const output = ts.transpileModule(content, { reportDiagnostics: true, fileName: actualFileName, compilerOptions: { target: ts.ScriptTarget.ES2015, inlineSourceMap: true, inlineSources: true } });
     if (output.diagnostics!.length > 0) {
         throw new Error(`Syntax error in ${absoluteBasePath}: ${output.diagnostics![0].messageText}`);
     }
     runCode(output.outputText, state, actualFileName);
+    state.baselineTest();
 }
 
 function runCode(code: string, state: TestState, fileName: string): void {

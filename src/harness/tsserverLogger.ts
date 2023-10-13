@@ -1,4 +1,9 @@
 import * as ts from "./_namespaces/ts";
+import {
+    Compiler,
+} from "./harnessIO";
+
+export const HarnessLSCouldNotResolveModule = "HarnessLanguageService:: Could not resolve module";
 
 export function replaceAll(source: string, searchValue: string, replaceValue: string): string {
     let result: string | undefined = (source as string & { replaceAll: typeof source.replace; }).replaceAll?.(searchValue, replaceValue);
@@ -110,10 +115,27 @@ export function sanitizeLog(s: string): string {
     s = s.replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`);
     s = s.replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`);
     s = s.replace(/"exportMapKey":\s*"\d+ \d+ /g, match => match.replace(/ \d+ /, ` * `));
+    s = s.replace(/getIndentationAtPosition: getCurrentSourceFile: \d+(?:\.\d+)?/, `getIndentationAtPosition: getCurrentSourceFile: *`);
+    s = s.replace(/getIndentationAtPosition: computeIndentation\s*: \d+(?:\.\d+)?/, `getIndentationAtPosition: computeIndentation: *`);
+    s = sanitizeHarnessLSException(s);
     return s;
 }
 
-export function createLoggerWithInMemoryLogs(host: ts.server.ServerHost): Logger {
+function sanitizeHarnessLSException(s: string) {
+    const index = s.indexOf(HarnessLSCouldNotResolveModule);
+    if (index > 0) s = s.substring(0, index) + HarnessLSCouldNotResolveModule;
+    return s;
+}
+
+export function sanitizeLibFileText(s: string): string {
+    Compiler.libFileNameSourceFileMap?.forEach((lib, fileName) => {
+        s = replaceAll(s, JSON.stringify(lib.text), `${fileName}-Text`);
+        s = replaceAll(s, lib.text, `${fileName}-Text`);
+    });
+    return s;
+}
+
+export function createLoggerWithInMemoryLogs(host: ts.server.ServerHost, sanitizeLibs?: true): Logger {
     const logger = createHasErrorMessageLogger();
     const logs: string[] = [];
     if (host) logs.push(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
@@ -122,7 +144,7 @@ export function createLoggerWithInMemoryLogs(host: ts.server.ServerHost): Logger
         logs,
         hasLevel: ts.returnTrue,
         loggingEnabled: ts.returnTrue,
-        info: s => logs.push(sanitizeLog(s)),
+        info: s => logs.push((sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s))),
         host,
     });
 }
