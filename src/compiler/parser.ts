@@ -6335,7 +6335,7 @@ namespace Parser {
         if (token() === SyntaxKind.SlashToken && scanner.scan() === SyntaxKind.GreaterThanToken) {
             nextToken();
             parseErrorAt(posLessThan - 1, getNodePos(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_to_change_the_file_extension_to_tsx, tokenToString(SyntaxKind.GreaterThanToken));
-            return finishNode(factory.createTypeAssertion(type, factory.createIdentifier('')), pos);
+            return finishNode(factory.createTypeAssertion(type, factory.createIdentifier("")), pos);
         }
 
         parseExpected(SyntaxKind.GreaterThanToken);
