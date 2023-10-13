@@ -2259,7 +2259,7 @@ export class TestState {
     }
 
     public baselineCurrentFileBreakpointLocations() {
-        const baselineFile = this.getBaselineFileNameForInternalFourslashFile().replace("breakpointValidation", "bpSpan");
+        const baselineFile = this.getBaselineFileNameForContainingTestFile();
         this.baseline("breakpoints", baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
     }
 
@@ -2619,11 +2619,6 @@ export class TestState {
     public printCurrentSignatureHelp() {
         const help = this.getSignatureHelp(ts.emptyOptions)!;
         Harness.IO.log(stringify(help.items[help.selectedItemIndex]));
-    }
-
-    private getBaselineFileNameForInternalFourslashFile(ext = ".baseline") {
-        return this.testData.globalOptions[MetadataOptionNames.baselineFile] ||
-            ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ext);
     }
 
     private getBaselineFileNameForContainingTestFile(ext = ".baseline") {
