@@ -1,11 +1,13 @@
+import {
+    createLoggerWithInMemoryLogs,
+    Logger,
+} from "../../../../harness/tsserverLogger";
 import * as ts from "../../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
     createSession,
     createSessionWithCustomEventHandler,
-    Logger,
     openFilesForSession,
     TestSession,
 } from "../../helpers/tsserver";
@@ -135,7 +137,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
 
     it("canUseWatchEvents", () => {
         const { host, logger } = setup();
-        const session = createSessionWithCustomEventHandler(logger.host!, { canUseWatchEvents: true, logger }, handleWatchEvents);
+        const session = createSessionWithCustomEventHandler(host, { canUseWatchEvents: true, logger }, handleWatchEvents);
         openFilesForSession(["/user/username/projects/myproject/a.ts"], session);
 
         // Directory watcher
@@ -169,8 +171,8 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
     });
 
     it("canUseWatchEvents without canUseEvents", () => {
-        const { logger } = setup();
-        const session = createSession(logger.host!, { canUseEvents: false, logger });
+        const { host, logger } = setup();
+        const session = createSession(host, { canUseEvents: false, logger });
         openFilesForSession(["/user/username/projects/myproject/a.ts"], session);
 
         // Directory watcher

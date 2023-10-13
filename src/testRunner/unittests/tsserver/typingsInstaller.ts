@@ -1,13 +1,15 @@
+import {
+    createLoggerWithInMemoryLogs,
+    replaceAll,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
     openFilesForSession,
     patchHostTimeouts,
-    replaceAll,
     TestSessionRequest,
     toExternalFile,
 } from "../helpers/tsserver";
