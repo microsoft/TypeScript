@@ -121,6 +121,15 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     const stringToWordSpans = new Map<string, TextSpan[]>();
 
     const dotSeparatedSegments = pattern.trim().split(".").map(p => createSegment(p.trim()));
+
+    // The pattern is an empty string, and it matches everything.
+    if (dotSeparatedSegments.length === 1 && dotSeparatedSegments[0].totalTextChunk.text === "") {
+        return {
+            getMatchForLastSegmentOfPattern: () => createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true),
+            getFullMatch: () => createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true),
+            patternContainsDots: false,
+        };
+    }
     // A segment is considered invalid if we couldn't find any words in it.
     if (dotSeparatedSegments.some(segment => !segment.subWordTextChunks.length)) return undefined;
 

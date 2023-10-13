@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/relationComplexityError.ts] ////
+
+=== relationComplexityError.ts ===
+// Repro from #55630
+
+type Digits = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+>Digits : Symbol(Digits, Decl(relationComplexityError.ts, 0, 0))
+
+type T1 = `${Digits}${Digits}${Digits}${Digits}` | undefined;
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 2, 72))
+>Digits : Symbol(Digits, Decl(relationComplexityError.ts, 0, 0))
+>Digits : Symbol(Digits, Decl(relationComplexityError.ts, 0, 0))
+>Digits : Symbol(Digits, Decl(relationComplexityError.ts, 0, 0))
+>Digits : Symbol(Digits, Decl(relationComplexityError.ts, 0, 0))
+
+type T2 = { a: string } | { b: number };
+>T2 : Symbol(T2, Decl(relationComplexityError.ts, 3, 61))
+>a : Symbol(a, Decl(relationComplexityError.ts, 4, 11))
+>b : Symbol(b, Decl(relationComplexityError.ts, 4, 27))
+
+function f1(x: T1, y: T1 & T2) {
+>f1 : Symbol(f1, Decl(relationComplexityError.ts, 4, 40))
+>x : Symbol(x, Decl(relationComplexityError.ts, 6, 12))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 2, 72))
+>y : Symbol(y, Decl(relationComplexityError.ts, 6, 18))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 2, 72))
+>T2 : Symbol(T2, Decl(relationComplexityError.ts, 3, 61))
+
+    x = y;
+>x : Symbol(x, Decl(relationComplexityError.ts, 6, 12))
+>y : Symbol(y, Decl(relationComplexityError.ts, 6, 18))
+}
+
+function f2(x: T1 | null, y: T1 & T2) {
+>f2 : Symbol(f2, Decl(relationComplexityError.ts, 8, 1))
+>x : Symbol(x, Decl(relationComplexityError.ts, 10, 12))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 2, 72))
+>y : Symbol(y, Decl(relationComplexityError.ts, 10, 25))
+>T1 : Symbol(T1, Decl(relationComplexityError.ts, 2, 72))
+>T2 : Symbol(T2, Decl(relationComplexityError.ts, 3, 61))
+
+    x = y;  // Complexity error
+>x : Symbol(x, Decl(relationComplexityError.ts, 10, 12))
+>y : Symbol(y, Decl(relationComplexityError.ts, 10, 25))
+}
+

@@ -106,7 +106,7 @@ export function getAllRules(): RuleSpec[] {
         rule("SpaceAfterQuestionMarkInConditionalOperator", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext, isConditionalOperatorContext], RuleAction.InsertSpace),
 
         // in other cases there should be no space between '?' and next token
-        rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext, isNonOptionalPropertyContext], RuleAction.DeleteSpace),
 
         rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext, isNotPropertyAccessOnIntegerLiteral], RuleAction.DeleteSpace),
         rule("NoSpaceAfterDot", [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
@@ -559,6 +559,14 @@ function isTypeAnnotationContext(context: FormattingContext): boolean {
         contextKind === SyntaxKind.Parameter ||
         contextKind === SyntaxKind.VariableDeclaration ||
         isFunctionLikeKind(contextKind);
+}
+
+function isOptionalPropertyContext(context: FormattingContext) {
+    return isPropertyDeclaration(context.contextNode) && context.contextNode.questionToken;
+}
+
+function isNonOptionalPropertyContext(context: FormattingContext) {
+    return !isOptionalPropertyContext(context);
 }
 
 function isConditionalOperatorContext(context: FormattingContext): boolean {

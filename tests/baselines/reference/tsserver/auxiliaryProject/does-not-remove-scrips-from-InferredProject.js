@@ -59,6 +59,19 @@ FsWatches::
 /b.d.ts: *new*
   {}
 
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "findSourceDefinition",
+      "arguments": {
+        "file": "/a.ts",
+        "line": 1,
+        "offset": 10
+      },
+      "seq": 2,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/auxiliaryProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -74,7 +87,32 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Before request
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": [
+        {
+          "file": "/b.js",
+          "start": {
+            "line": 1,
+            "offset": 14
+          },
+          "end": {
+            "line": 1,
+            "offset": 15
+          },
+          "contextStart": {
+            "line": 1,
+            "offset": 1
+          },
+          "contextEnd": {
+            "line": 1,
+            "offset": 18
+          }
+        }
+      ],
+      "responseRequired": true
+    }
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -86,13 +124,15 @@ FsWatches::
 /b.js: *new*
   {}
 
+Before request
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
         "file": "/b.js"
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b.js 500 undefined WatchType: Closed Script info

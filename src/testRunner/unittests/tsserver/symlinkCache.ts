@@ -82,7 +82,7 @@ describe("unittests:: tsserver:: symlinkCache", () => {
                 resolvedFileName: "/one/two/foo",
             },
         });
-        cache.setSymlinksFromResolutions([], map);
+        cache.setSymlinksFromResolutions(ts.noop, ts.noop, map);
     });
 });
 

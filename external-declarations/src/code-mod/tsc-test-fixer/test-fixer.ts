@@ -68,7 +68,7 @@ const registry: ExternalDocumentCache = {
         byKey.set(path, sourceFile);
     },
 };
-const createDocumentRegistryInternal: (useCaseSensitiveFileNames: boolean, currentDirectory: string, externalCache?: ExternalDocumentCache) => DocumentRegistry = (ts as any).createDocumentRegistryInternal;
+const createDocumentRegistryInternal: (...a: [...a: Parameters<typeof ts.createDocumentRegistry>, externalCache?: ExternalDocumentCache]) => DocumentRegistry = (ts as any).createDocumentRegistryInternal;
 
 async function fixTestFiles(toBeCompiled: TestFile[], settings: ts.CompilerOptions) {
     const { fs, options, programFileNames } = prepareTestOptionsAndFs(
@@ -93,7 +93,12 @@ async function fixTestFiles(toBeCompiled: TestFile[], settings: ts.CompilerOptio
 
     await fixProjectRaw(
         langHost,
-        createDocumentRegistryInternal(host.useCaseSensitiveFileNames(), host.getCurrentDirectory(), registry),
+        createDocumentRegistryInternal(
+            host.useCaseSensitiveFileNames(),
+            host.getCurrentDirectory(),
+            /*jsDocParsingMode*/ undefined,
+            registry,
+        ),
         snapShotRegistry,
         isolatedDeclarationsErrors,
         { includeRelativeTypeFixes: false, includeInlineTypeFixes: false },

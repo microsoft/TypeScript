@@ -772,7 +772,8 @@ function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quot
         const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.WriteComputedProps);
         if (prop && isComputedPropertyName(prop)) return prop;
     }
-    return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single);
+    // We're using these nodes as property names in an object literal; no need to quote names when not needed.
+    return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single, /*stringNamed*/ false, /*isMethod*/ false);
 }
 
 function findScope(node: Node) {
