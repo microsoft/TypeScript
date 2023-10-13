@@ -6,7 +6,7 @@
 
 goTo.marker();
 verify.quickInfoIs("");
+verify.baselineFindAllReferences("");
 verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: "" },
     { type: "getDefinitionAtPosition", markerOrRange: "" },
 );

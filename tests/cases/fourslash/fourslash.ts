@@ -851,7 +851,7 @@ declare namespace FourSlashInterface {
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
     type DiagnosticIgnoredInterpolations = { template: string }
     type BaselineCommand = {
-        type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
+        type: "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
         markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
         rangeText?: ArrayOrSingle<string>;
     };

@@ -338,15 +338,15 @@ export class Verify extends VerifyNegatable {
     }
 
     public baselineFindAllReferences(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
-        this.state.verifyBaselineCommands({ type: "findAllReferences", markerOrRange });
+        this.state.baselineFindAllReferences(markerOrRange, /*rangeText*/ undefined);
     }
 
     public baselineFindAllReferencesAtRangesWithText(...rangeText: string[]) {
-        this.state.verifyBaselineCommands({ type: "findAllReferences", rangeText });
+        this.state.baselineFindAllReferences(/*markerOrRange*/ undefined, rangeText);
     }
 
     public baselineGetFileReferences(...fileName: string[]) {
-        this.state.baselineGetFileReferences(...fileName);
+        this.state.baselineGetFileReferences(fileName);
     }
 
     public baselineGoToDefinition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
@@ -1932,7 +1932,7 @@ export interface RenameOptions {
     readonly quotePreference?: "auto" | "double" | "single";
 }
 export interface BaselineCommand {
-    type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
+    type: "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
     markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
     rangeText?: ArrayOrSingle<string>;
 }

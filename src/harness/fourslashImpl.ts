@@ -1306,11 +1306,6 @@ export class TestState {
     public verifyBaselineCommands(...commands: FourSlashInterface.BaselineCommand[]) {
         commands.forEach(command => {
             switch (command.type) {
-                case "findAllReferences":
-                    return this.baselineCommand(
-                        command,
-                        markerOrRange => this.baselineFindAllReferencesWorker(markerOrRange),
-                    );
                 case "goToDefinition":
                     return this.baselineCommand(
                         command,
@@ -1372,55 +1367,60 @@ export class TestState {
         });
     }
 
-    private baselineFindAllReferencesWorker(markerOrRange: MarkerOrNameOrRange) {
-        this.goToMarkerOrNameOrRange(markerOrRange);
-        const references = this.findReferencesAtCaret();
-        const defIdMap = new Map<ts.ReferencedSymbolDefinitionInfo | ts.ReferencedSymbolEntry, number>();
-        const markerInfo = { markerOrRange, markerName: "/*FIND ALL REFS*/" };
-        let baseline = this.getBaselineForDocumentSpansWithFileContents(
-            ts.flatMap(references, (r, def) => {
-                if (references!.length > 1) {
-                    defIdMap.set(r.definition, def);
-                    r.references.forEach(r => defIdMap.set(r, def));
-                }
-                return r.references;
-            }),
-            {
-                markerInfo,
-                documentSpanId: defIdMap.size ? ref => `defId: ${defIdMap.get(ref)}` : undefined,
-            },
-        );
-        if (references?.length) {
-            baseline += "\n\n";
-            baseline += indentJsonBaseline(
-                "// === Definitions ===\n" +
-                    this.getBaselineForDocumentSpansWithFileContents(
-                        references.map(r => r.definition),
-                        {
-                            markerInfo,
-                            documentSpanId: defIdMap.size ? def => `defId: ${defIdMap.get(def)}` : undefined,
-                            skipDocumentSpanDetails: true,
-                            skipDocumentContainingOnlyMarker: true,
-                        },
-                    ) +
-                    "\n\n// === Details ===\n" +
-                    JSON.stringify(
-                        references.map(r => ({
-                            defId: defIdMap.get(r.definition),
-                            ...r.definition,
-                            fileName: undefined,
-                            textSpan: undefined,
-                            contextSpan: undefined,
-                        })),
-                        undefined,
-                        " ",
-                    ),
+    public baselineFindAllReferences(
+        markerOrRange: ArrayOrSingle<MarkerOrNameOrRange> | undefined,
+        rangeText: ArrayOrSingle<string> | undefined,
+    ) {
+        this.baselineEachMarkerOrRange("findAllReferences", markerOrRange, rangeText, markerOrRange => {
+            this.goToMarkerOrNameOrRange(markerOrRange);
+            const references = this.findReferencesAtCaret();
+            const defIdMap = new Map<ts.ReferencedSymbolDefinitionInfo | ts.ReferencedSymbolEntry, number>();
+            const markerInfo = { markerOrRange, markerName: "/*FIND ALL REFS*/" };
+            let baseline = this.getBaselineForDocumentSpansWithFileContents(
+                ts.flatMap(references, (r, def) => {
+                    if (references!.length > 1) {
+                        defIdMap.set(r.definition, def);
+                        r.references.forEach(r => defIdMap.set(r, def));
+                    }
+                    return r.references;
+                }),
+                {
+                    markerInfo,
+                    documentSpanId: defIdMap.size ? ref => `defId: ${defIdMap.get(ref)}` : undefined,
+                },
             );
-        }
-        return baseline;
+            if (references?.length) {
+                baseline += "\n\n";
+                baseline += indentJsonBaseline(
+                    "// === Definitions ===\n" +
+                        this.getBaselineForDocumentSpansWithFileContents(
+                            references.map(r => r.definition),
+                            {
+                                markerInfo,
+                                documentSpanId: defIdMap.size ? def => `defId: ${defIdMap.get(def)}` : undefined,
+                                skipDocumentSpanDetails: true,
+                                skipDocumentContainingOnlyMarker: true,
+                            },
+                        ) +
+                        "\n\n// === Details ===\n" +
+                        JSON.stringify(
+                            references.map(r => ({
+                                defId: defIdMap.get(r.definition),
+                                ...r.definition,
+                                fileName: undefined,
+                                textSpan: undefined,
+                                contextSpan: undefined,
+                            })),
+                            undefined,
+                            " ",
+                        ),
+                );
+            }
+            return baseline;
+        });
     }
 
-    public baselineGetFileReferences(...fileNames: string[]) {
+    public baselineGetFileReferences(fileNames: ArrayOrSingle<string>) {
         this.baselineArrayOrSingle("getFileReferences", fileNames, fileName => {
             const references = this.languageService.getFileReferences(fileName);
             return `// fileName: ${fileName}\n\n` + this.getBaselineForDocumentSpansWithFileContents(
@@ -1899,7 +1899,11 @@ export class TestState {
         }
     }
 
-    public baselineRename(markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>, rangeText?: ArrayOrSingle<string>, options?: FourSlashInterface.RenameOptions) {
+    public baselineRename(
+        markerOrRange: ArrayOrSingle<MarkerOrNameOrRange> | undefined,
+        rangeText: ArrayOrSingle<string> | undefined,
+        options: FourSlashInterface.RenameOptions | undefined,
+    ) {
         this.baselineEachMarkerOrRange("findRenameLocations", markerOrRange, rangeText, markerOrRange => {
             const { fileName, position } = ts.isString(markerOrRange) ?
                 this.getMarkerByName(markerOrRange) :
@@ -3878,7 +3882,11 @@ export class TestState {
         return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
     }
 
-    public baselineDocumentHighlights(markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>, rangeText?: ArrayOrSingle<string>, options?: FourSlashInterface.VerifyDocumentHighlightsOptions) {
+    public baselineDocumentHighlights(
+        markerOrRange: ArrayOrSingle<MarkerOrNameOrRange> | undefined,
+        rangeText: ArrayOrSingle<string> | undefined,
+        options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined,
+    ) {
         this.baselineEachMarkerOrRange(
             "documentHighlights",
             markerOrRange,
