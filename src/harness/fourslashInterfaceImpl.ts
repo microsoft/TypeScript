@@ -346,7 +346,7 @@ export class Verify extends VerifyNegatable {
     }
 
     public baselineGetFileReferences(...fileName: string[]) {
-        this.state.verifyBaselineCommands({ type: "getFileReferences", fileName });
+        this.state.baselineGetFileReferences(...fileName);
     }
 
     public baselineGoToDefinition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
@@ -1946,10 +1946,4 @@ export type BaselineCommandWithMarkerOrRange = {
     rangeText?: ArrayOrSingle<string>;
     options?: VerifyDocumentHighlightsOptions;
 };
-export type BaselineCommand = BaselineCommandWithMarkerOrRange | {
-    type: "getFileReferences";
-    fileName: ArrayOrSingle<string>;
-} | {
-    type: "customWork";
-    work: () => string | undefined;
-};
+export type BaselineCommand = BaselineCommandWithMarkerOrRange;

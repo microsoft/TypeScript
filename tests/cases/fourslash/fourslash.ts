@@ -855,9 +855,6 @@ declare namespace FourSlashInterface {
         markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
         rangeText?: ArrayOrSingle<string>;
     } | {
-        type: "getFileReferences";
-        fileName: ArrayOrSingle<string>;
-    } | {
         type: "findRenameLocations";
         markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
         rangeText?: ArrayOrSingle<string>;
@@ -867,9 +864,6 @@ declare namespace FourSlashInterface {
         markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
         rangeText?: ArrayOrSingle<string>;
         options?: VerifyDocumentHighlightsOptions;
-    } | {
-        type: "customWork";
-        work: () => string | undefined;
     };
 }
 /** Wraps a diagnostic message to be compared ignoring interpolated strings */

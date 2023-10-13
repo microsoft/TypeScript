@@ -1267,23 +1267,23 @@ export class TestState {
     ) {
         let done = false;
         if (command.markerOrRange !== undefined) {
-            done = this.baselineArrayOrSingle(command, command.markerOrRange, worker);
+            done = this.baselineArrayOrSingle(command.type, command.markerOrRange, worker);
         }
         if (command.rangeText !== undefined) {
-            toArray(command.rangeText).forEach(text => done = this.baselineArrayOrSingle(command, this.rangesByText().get(text)!, worker) || done);
+            toArray(command.rangeText).forEach(text => done = this.baselineArrayOrSingle(command.type, this.rangesByText().get(text)!, worker) || done);
         }
         if (!done) {
-            this.baselineArrayOrSingle(command, this.getRanges(), worker);
+            this.baselineArrayOrSingle(command.type, this.getRanges(), worker);
         }
     }
 
     private baselineArrayOrSingle<T>(
-        command: FourSlashInterface.BaselineCommand,
+        command: string,
         arrayOrSingle: ArrayOrSingle<T>,
         worker: (single: T) => string,
     ) {
         const array = toArray(arrayOrSingle);
-        array.forEach(single => this.baseline(command.type, worker(single), ".baseline.jsonc"));
+        array.forEach(single => this.baseline(command, worker(single), ".baseline.jsonc"));
         return !!array.length;
     }
 
@@ -1294,12 +1294,6 @@ export class TestState {
                     return this.baselineEachMarkerOrRange(
                         command,
                         markerOrRange => this.baselineFindAllReferencesWorker(markerOrRange),
-                    );
-                case "getFileReferences":
-                    return this.baselineArrayOrSingle(
-                        command,
-                        command.fileName,
-                        fileName => this.baselineGetFileReferences(fileName),
                     );
                 case "findRenameLocations":
                     return this.baselineEachMarkerOrRange(
@@ -1366,8 +1360,6 @@ export class TestState {
                         command,
                         markerOrRange => this.baselineGetDocumentHighlights(markerOrRange, command.options),
                     );
-                case "customWork":
-                    return this.baseline(command.type, readableJsoncBaseline(command.work() || ""), ".baseline.jsonc");
                 default:
                     ts.Debug.assertNever(command);
             }
@@ -1422,12 +1414,14 @@ export class TestState {
         return baseline;
     }
 
-    private baselineGetFileReferences(fileName: string) {
-        const references = this.languageService.getFileReferences(fileName);
-        return `// fileName: ${fileName}\n\n` + this.getBaselineForDocumentSpansWithFileContents(
-            references,
-            { markerInfo: undefined },
-        );
+    public baselineGetFileReferences(...fileNames: string[]) {
+        this.baselineArrayOrSingle("getFileReferences", fileNames, fileName => {
+            const references = this.languageService.getFileReferences(fileName);
+            return `// fileName: ${fileName}\n\n` + this.getBaselineForDocumentSpansWithFileContents(
+                references,
+                { markerInfo: undefined },
+            );
+        });
     }
 
     private getBaselineForDocumentSpansWithFileContents<T extends ts.DocumentSpan>(
