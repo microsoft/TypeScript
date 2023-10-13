@@ -162,6 +162,7 @@ import {
     isStringOrNumericLiteralLike,
     isTaggedTemplateExpression,
     isTemplateLiteralKind,
+    isTypeAssertionExpression,
     isTypeReferenceNode,
     IterationStatement,
     JSDoc,
@@ -5558,9 +5559,9 @@ namespace Parser {
         );
     }
 
-    function parseBinaryExpressionOrHigher(precedence: OperatorPrecedence): Expression {
+    function parseBinaryExpressionOrHigher(precedence: OperatorPrecedence, previousNode?: Node): Expression {
         const pos = getNodePos();
-        const leftOperand = parseUnaryExpressionOrHigher();
+        const leftOperand = parseUnaryExpressionOrHigher(previousNode);
         return parseBinaryExpressionRest(precedence, leftOperand, pos);
     }
 
@@ -5626,7 +5627,7 @@ namespace Parser {
                 }
             }
             else {
-                leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence), pos);
+                leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence, leftOperand), pos);
             }
         }
 
@@ -5698,7 +5699,7 @@ namespace Parser {
      *      1) UnaryExpression[?Yield]
      *      2) UpdateExpression[?Yield] ** ExponentiationExpression[?Yield]
      */
-    function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
+    function parseUnaryExpressionOrHigher(previousNode?: Node): UnaryExpression | BinaryExpression {
         /**
          * ES7 UpdateExpression:
          *      1) LeftHandSideExpression[?Yield]
@@ -5709,7 +5710,7 @@ namespace Parser {
          */
         if (isUpdateExpression()) {
             const pos = getNodePos();
-            const updateExpression = parseUpdateExpression();
+            const updateExpression = parseUpdateExpression(previousNode);
             return token() === SyntaxKind.AsteriskAsteriskToken ?
                 parseBinaryExpressionRest(getBinaryOperatorPrecedence(token()), updateExpression, pos) as BinaryExpression :
                 updateExpression;
@@ -5835,7 +5836,7 @@ namespace Parser {
      *      5) --LeftHandSideExpression[?yield]
      * In TypeScript (2), (3) are parsed as PostfixUnaryExpression. (4), (5) are parsed as PrefixUnaryExpression
      */
-    function parseUpdateExpression(): UpdateExpression {
+    function parseUpdateExpression(previousNode?: Node): UpdateExpression {
         if (token() === SyntaxKind.PlusPlusToken || token() === SyntaxKind.MinusMinusToken) {
             const pos = getNodePos();
             return finishNode(factory.createPrefixUnaryExpression(token() as PrefixUnaryOperator, nextTokenAnd(parseLeftHandSideExpressionOrHigher)), pos);
@@ -5845,7 +5846,7 @@ namespace Parser {
             return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true);
         }
 
-        const expression = parseLeftHandSideExpressionOrHigher();
+        const expression = parseLeftHandSideExpressionOrHigher(previousNode);
 
         Debug.assert(isLeftHandSideExpression(expression));
         if ((token() === SyntaxKind.PlusPlusToken || token() === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
@@ -5857,7 +5858,7 @@ namespace Parser {
         return expression;
     }
 
-    function parseLeftHandSideExpressionOrHigher(): LeftHandSideExpression {
+    function parseLeftHandSideExpressionOrHigher(previousNode?: Node): LeftHandSideExpression {
         // Original Ecma:
         // LeftHandSideExpression: See 11.2
         //      NewExpression
@@ -5909,11 +5910,11 @@ namespace Parser {
                 sourceFlags |= NodeFlags.PossiblyContainsImportMeta;
             }
             else {
-                expression = parseMemberExpressionOrHigher();
+                expression = parseMemberExpressionOrHigher(previousNode);
             }
         }
         else {
-            expression = token() === SyntaxKind.SuperKeyword ? parseSuperExpression() : parseMemberExpressionOrHigher();
+            expression = token() === SyntaxKind.SuperKeyword ? parseSuperExpression() : parseMemberExpressionOrHigher(previousNode);
         }
 
         // Now, we *may* be complete.  However, we might have consumed the start of a
@@ -5922,7 +5923,7 @@ namespace Parser {
         return parseCallExpressionRest(pos, expression);
     }
 
-    function parseMemberExpressionOrHigher(): MemberExpression {
+    function parseMemberExpressionOrHigher(previousNode?: Node): MemberExpression {
         // Note: to make our lives simpler, we decompose the NewExpression productions and
         // place ObjectCreationExpression and FunctionExpression into PrimaryExpression.
         // like so:
@@ -5971,7 +5972,7 @@ namespace Parser {
         // Because CallExpression and MemberExpression are left recursive, we need to bottom out
         // of the recursion immediately.  So we parse out a primary expression to start with.
         const pos = getNodePos();
-        const expression = parsePrimaryExpression();
+        const expression = parsePrimaryExpression(previousNode);
         return parseMemberExpressionRest(pos, expression, /*allowOptionalChain*/ true);
     }
 
@@ -6327,7 +6328,16 @@ namespace Parser {
         Debug.assert(languageVariant !== LanguageVariant.JSX, "Type assertions should never be parsed in JSX; they should be parsed as comparisons or JSX elements/fragments.");
         const pos = getNodePos();
         parseExpected(SyntaxKind.LessThanToken);
+        const posLessThan = getNodePos();
         const type = parseType();
+
+        // <Type />: special case for a JSX element in a .ts file and avoid reporting a second error on the name
+        if (token() === SyntaxKind.SlashToken && scanner.scan() === SyntaxKind.GreaterThanToken) {
+            nextToken();
+            parseErrorAt(posLessThan - 1, getNodePos(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_to_change_the_file_extension_to_tsx, tokenToString(SyntaxKind.GreaterThanToken));
+            return finishNode(factory.createTypeAssertion(type, factory.createIdentifier('')), pos);
+        }
+
         parseExpected(SyntaxKind.GreaterThanToken);
         const expression = parseSimpleUnaryExpression();
         return finishNode(factory.createTypeAssertion(type, expression), pos);
@@ -6560,7 +6570,7 @@ namespace Parser {
         return scanner.hasPrecedingLineBreak() || isBinaryOperator() || !isStartOfExpression();
     }
 
-    function parsePrimaryExpression(): PrimaryExpression {
+    function parsePrimaryExpression(previousNode?: Node): PrimaryExpression {
         switch (token()) {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
                 if (scanner.getTokenFlags() & TokenFlags.IsInvalid) {
@@ -6601,6 +6611,21 @@ namespace Parser {
             case SyntaxKind.NewKeyword:
                 return parseNewExpressionOrNewDotTarget();
             case SyntaxKind.SlashToken:
+                // JSX inside a .ts (not .tsx) file gets a specialized error
+                if (previousNode && isTypeAssertionExpression(previousNode)) {
+                    nextToken(); // slash
+                    const identifier = parseIdentifier(); // identifier (tag name)
+                    // Skip through the tag so we don't report additional diagnostics after the .ts/.tsx
+                    while (true) {
+                        const current = nextToken();
+                        if (current !== SyntaxKind.Identifier && current !== SyntaxKind.GreaterThanToken) {
+                            break;
+                        }
+                    }
+                    parseErrorAt(previousNode.type.pos - 1, scanner.getTokenStart(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_to_change_the_file_extension_to_tsx, tokenToString(SyntaxKind.GreaterThanToken));
+                    return identifier;
+                }
+                // falls through
             case SyntaxKind.SlashEqualsToken:
                 if (reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
                     return parseLiteralNode();

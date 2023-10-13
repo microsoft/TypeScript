@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/jsx/nonTsxExtensionOpeningClosingTagMultiline.ts] ////
+
+=== nonTsxExtensionOpeningClosingTagMultiline.ts ===
+console.log("before");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+export const _ = () => <span>
+>_ : Symbol(_, Decl(nonTsxExtensionOpeningClosingTagMultiline.ts, 1, 12))
+>span : Symbol(span)
+
+    yippee
+</span>;
+console.log("after");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+

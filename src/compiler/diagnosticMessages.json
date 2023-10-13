@@ -1524,6 +1524,10 @@
         "category": "Error",
         "code": 1464
     },
+    "JSX tags are not permitted in `.ts` files. Did you mean to change the file extension to `.tsx`?": {
+        "category": "Error",
+        "code": 1465
+    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",

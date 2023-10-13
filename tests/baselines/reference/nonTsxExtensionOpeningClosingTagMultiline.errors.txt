@@ -1,0 +1,23 @@
+nonTsxExtensionOpeningClosingTagMultiline.ts(2,24): error TS1465: JSX tags are not permitted in `.ts` files. Did you mean to change the file extension to `.tsx`?
+nonTsxExtensionOpeningClosingTagMultiline.ts(2,25): error TS2304: Cannot find name 'span'.
+nonTsxExtensionOpeningClosingTagMultiline.ts(3,5): error TS2304: Cannot find name 'yippee'.
+nonTsxExtensionOpeningClosingTagMultiline.ts(4,3): error TS2304: Cannot find name 'span'.
+
+
+==== nonTsxExtensionOpeningClosingTagMultiline.ts (4 errors) ====
+    console.log("before");
+    export const _ = () => <span>
+                           ~~~~~~
+                            ~~~~
+!!! error TS2304: Cannot find name 'span'.
+        yippee
+    ~~~~~~~~~~
+        ~~~~~~
+!!! error TS2304: Cannot find name 'yippee'.
+    </span>;
+    ~~~~~~~
+!!! error TS1465: JSX tags are not permitted in `.ts` files. Did you mean to change the file extension to `.tsx`?
+      ~~~~
+!!! error TS2304: Cannot find name 'span'.
+    console.log("after");
+    

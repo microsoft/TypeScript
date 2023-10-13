@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/jsx/nonTsxExtensionOpeningClosingTag.ts] ////
+
+=== nonTsxExtensionOpeningClosingTag.ts ===
+console.log("before");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+export const _ = () => <span>yippee</span>;
+>_ : Symbol(_, Decl(nonTsxExtensionOpeningClosingTag.ts, 1, 12))
+>span : Symbol(span)
+
+console.log("after");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+

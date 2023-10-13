@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/jsx/nonTsxExtensionOpeningClosingTag.ts] ////
+
+=== nonTsxExtensionOpeningClosingTag.ts ===
+console.log("before");
+>console.log("before") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"before" : "before"
+
+export const _ = () => <span>yippee</span>;
+>_ : () => boolean
+>() => <span>yippee</span> : () => boolean
+><span>yippee</span> : boolean
+><span>yippee : span
+>yippee : any
+>span : any
+
+console.log("after");
+>console.log("after") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"after" : "after"
+

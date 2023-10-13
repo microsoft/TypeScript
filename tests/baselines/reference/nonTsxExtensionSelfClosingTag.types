@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/jsx/nonTsxExtensionSelfClosingTag.ts] ////
+
+=== nonTsxExtensionSelfClosingTag.ts ===
+console.log("before");
+>console.log("before") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"before" : "before"
+
+export const _ = () => <span />;
+>_ : () => span
+>() => <span /> : () => span
+><span /> : span
+
+
+> : any
+
+export const _ = () => <span />;
+console.log("after");
+>console.log("after") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"after" : "after"
+

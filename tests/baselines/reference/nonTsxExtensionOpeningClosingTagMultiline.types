@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/jsx/nonTsxExtensionOpeningClosingTagMultiline.ts] ////
+
+=== nonTsxExtensionOpeningClosingTagMultiline.ts ===
+console.log("before");
+>console.log("before") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"before" : "before"
+
+export const _ = () => <span>
+>_ : () => boolean
+>() => <span>    yippee</span> : () => boolean
+><span>    yippee</span> : boolean
+><span>    yippee : span
+
+    yippee
+>yippee : any
+
+</span>;
+>span : any
+
+console.log("after");
+>console.log("after") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"after" : "after"
+

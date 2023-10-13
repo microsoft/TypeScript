@@ -1,0 +1,48 @@
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,25): error TS2304: Cannot find name 'span'.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,30): error TS1005: '>' expected.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,30): error TS2304: Cannot find name 'aria'.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,35): error TS2304: Cannot find name 'disabled'.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,44): error TS1005: ',' expected.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,52): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,53): error TS1136: Property assignment expected.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,56): error TS1005: ';' expected.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,61): error TS1128: Declaration or statement expected.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,62): error TS1109: Expression expected.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,62): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,63): error TS2304: Cannot find name 'yippee'.
+nonTsxExtensionOpeningClosingTagAttributes.ts(2,71): error TS1161: Unterminated regular expression literal.
+
+
+==== nonTsxExtensionOpeningClosingTagAttributes.ts (13 errors) ====
+    console.log("before");
+    export const _ = () => <span aria-disabled onClick={() => {}}>yippee</span>;
+                            ~~~~
+!!! error TS2304: Cannot find name 'span'.
+                                 ~~~~
+!!! error TS1005: '>' expected.
+                                 ~~~~
+!!! error TS2304: Cannot find name 'aria'.
+                                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'disabled'.
+                                               ~~~~~~~
+!!! error TS1005: ',' expected.
+                                                       ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
+                                                        ~
+!!! error TS1136: Property assignment expected.
+                                                           ~~
+!!! error TS1005: ';' expected.
+                                                                ~
+!!! error TS1128: Declaration or statement expected.
+                                                                 ~
+!!! error TS1109: Expression expected.
+                                                                 ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'.
+                                                                  ~~~~~~
+!!! error TS2304: Cannot find name 'yippee'.
+                                                                          
+!!! error TS1161: Unterminated regular expression literal.
+    console.log("after");
+    

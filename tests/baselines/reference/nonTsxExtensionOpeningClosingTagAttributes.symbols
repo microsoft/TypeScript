@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/jsx/nonTsxExtensionOpeningClosingTagAttributes.ts] ////
+
+=== nonTsxExtensionOpeningClosingTagAttributes.ts ===
+console.log("before");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+export const _ = () => <span aria-disabled onClick={() => {}}>yippee</span>;
+>_ : Symbol(_, Decl(nonTsxExtensionOpeningClosingTagAttributes.ts, 1, 12))
+>span : Symbol(span)
+>onClick : Symbol(onClick, Decl(nonTsxExtensionOpeningClosingTagAttributes.ts, 1, 42))
+
+console.log("after");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+

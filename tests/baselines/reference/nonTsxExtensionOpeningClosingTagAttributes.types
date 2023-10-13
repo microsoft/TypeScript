@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/jsx/nonTsxExtensionOpeningClosingTagAttributes.ts] ////
+
+=== nonTsxExtensionOpeningClosingTagAttributes.ts ===
+console.log("before");
+>console.log("before") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"before" : "before"
+
+export const _ = () => <span aria-disabled onClick={() => {}}>yippee</span>;
+>_ : () => number
+>() => <span aria-disabled : () => number
+><span aria-disabled : number
+><span aria : span
+>aria : any
+>disabled : any
+>onClick : any
+>{() : any
+>{ : {}
+>>yippee</span>; : boolean
+>>yippee : boolean
+> : any
+>yippee : any
+>/span>; : RegExp
+
+console.log("after");
+>console.log("after") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"after" : "after"
+
