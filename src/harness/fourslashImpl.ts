@@ -231,8 +231,8 @@ function realizeDiagnostic(diagnostic: ts.Diagnostic, newLine: string): Realized
 
 interface BaselineTest {
     command: string;
-    baselineFile: string;
     actual: string;
+    ext: string | undefined;
 }
 
 export class TestState {
@@ -501,15 +501,15 @@ export class TestState {
 
     private baselineFromTest: BaselineTest[] | undefined;
 
-    private baseline(command: string, baselineFile: string, actual: string) {
-        if (!this.baselineFromTest) this.baselineFromTest = [{ command, baselineFile, actual }];
-        else this.baselineFromTest.push({ command, baselineFile, actual });
+    private baseline(command: string, actual: string, ext?: string) {
+        if (!this.baselineFromTest) this.baselineFromTest = [{ command, actual, ext }];
+        else this.baselineFromTest.push({ command, actual, ext });
     }
 
     baselineTest() {
         if (this.baselineFromTest) {
             Harness.Baseline.runBaseline(
-                this.baselineFromTest[0].baselineFile,
+                this.getBaselineFileNameForContainingTestFile(this.baselineFromTest[0].ext),
                 this.baselineFromTest.map(({ command, actual }) => `// === ${command} ===\n${actual}`).join("\n\n\n\n"),
             );
         }
@@ -897,7 +897,6 @@ export class TestState {
             return a.position - b.position;
         };
 
-        const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const fileName = this.activeFile.fileName;
         const hints = this.languageService.provideInlayHints(fileName, span, preferences);
         const annotations = ts.map(hints.sort(sortHints), hint => {
@@ -922,7 +921,7 @@ export class TestState {
             annotations.push("=== No inlay hints ===");
         }
 
-        this.baseline("Inlay Hints", baselineFile, annotations.join("\n\n"));
+        this.baseline("Inlay Hints", annotations.join("\n\n"));
     }
 
     public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
@@ -1284,7 +1283,7 @@ export class TestState {
         worker: (single: T) => string,
     ) {
         const array = toArray(arrayOrSingle);
-        array.forEach(single => this.baseline(command.type, this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), worker(single)));
+        array.forEach(single => this.baseline(command.type, worker(single), ".baseline.jsonc"));
         return !!array.length;
     }
 
@@ -1368,7 +1367,7 @@ export class TestState {
                         markerOrRange => this.baselineGetDocumentHighlights(markerOrRange, command.options),
                     );
                 case "customWork":
-                    return this.baseline(command.type, this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), readableJsoncBaseline(command.work() || ""));
+                    return this.baseline(command.type, readableJsoncBaseline(command.work() || ""), ".baseline.jsonc");
                 default:
                     ts.Debug.assertNever(command);
             }
@@ -2259,8 +2258,7 @@ export class TestState {
     }
 
     public baselineCurrentFileBreakpointLocations() {
-        const baselineFile = this.getBaselineFileNameForContainingTestFile();
-        this.baseline("breakpoints", baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
+        this.baseline("breakpoints", this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
     }
 
     private getEmitFiles(): readonly FourSlashFile[] {
@@ -2324,7 +2322,7 @@ export class TestState {
             resultString += Harness.IO.newLine();
         }
 
-        this.baseline("EmitOutput", ts.Debug.checkDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
+        this.baseline("EmitOutput", resultString);
     }
 
     private flattenChainedMessage(diag: ts.DiagnosticMessageChain, indent = " ") {
@@ -2341,7 +2339,7 @@ export class TestState {
     public baselineSyntacticDiagnostics() {
         const files = this.getCompilerTestFiles();
         const result = this.getSyntacticDiagnosticBaselineText(files);
-        this.baseline("Syntax Diagnostics", this.getBaselineFileNameForContainingTestFile(), result);
+        this.baseline("Syntax Diagnostics", result);
     }
 
     private getCompilerTestFiles() {
@@ -2357,7 +2355,7 @@ export class TestState {
             + Harness.IO.newLine()
             + Harness.IO.newLine()
             + this.getSemanticDiagnosticBaselineText(files);
-        this.baseline("Syntax and Semantic Diagnostics", this.getBaselineFileNameForContainingTestFile(), result);
+        this.baseline("Syntax and Semantic Diagnostics", result);
     }
 
     private getSyntacticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
@@ -2377,7 +2375,6 @@ export class TestState {
     }
 
     public baselineQuickInfo() {
-        const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
             item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position),
@@ -2392,11 +2389,10 @@ export class TestState {
                 ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : []),
             ],
         );
-        this.baseline("QuickInfo", baselineFile, annotations + "\n\n" + stringify(result));
+        this.baseline("QuickInfo", annotations + "\n\n" + stringify(result));
     }
 
     public baselineSignatureHelp() {
-        const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
             item: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined),
@@ -2427,11 +2423,10 @@ export class TestState {
                 return tooltip;
             },
         );
-        this.baseline("SignatureHelp", baselineFile, annotations + "\n\n" + stringify(result));
+        this.baseline("SignatureHelp", annotations + "\n\n" + stringify(result));
     }
 
     public baselineCompletions(preferences?: ts.UserPreferences) {
-        const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
             this.goToMarker(marker);
             const completions = this.getCompletionListAtCaret(preferences);
@@ -2476,7 +2471,6 @@ export class TestState {
         }
         this.baseline(
             "Completions",
-            baselineFile,
             annotations + "\n\n" + stringify(result, (key, value) => {
                 return key === "exportMapKey"
                     ? value.replace(/ \d+ /g, " * ")
@@ -2535,7 +2529,6 @@ export class TestState {
 
     public baselineSmartSelection() {
         const n = "\n";
-        const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const markers = this.getMarkers();
         const fileContent = this.activeFile.content;
         const text = markers.map(marker => {
@@ -2563,7 +2556,7 @@ export class TestState {
             return baselineContent.join(fileContent.includes("\n") ? n + n : n);
         }).join(n.repeat(2) + "=".repeat(80) + n.repeat(2));
 
-        this.baseline("Smart Selection", baselineFile, text);
+        this.baseline("Smart Selection", text);
     }
 
     public printBreakpointLocation(pos: number) {
@@ -3035,7 +3028,6 @@ export class TestState {
     public baselineCurrentFileNameOrDottedNameSpans() {
         this.baseline(
             "NameOrDottedNameSpans",
-            this.testData.globalOptions[MetadataOptionNames.baselineFile],
             this.baselineCurrentFileLocations(pos => this.getNameOrDottedNameSpan(pos)!),
         );
     }
@@ -3611,7 +3603,6 @@ export class TestState {
 
     public baselineAutoImports(markerName: string, fullNamesForCodeFix?: string[], preferences?: ts.UserPreferences) {
         const marker = this.getMarkerByName(markerName);
-        const baselineFile = this.getBaselineFileNameForContainingTestFile(`.baseline.md`);
         const completionPreferences = {
             includeCompletionsForModuleExports: true,
             includeCompletionsWithInsertText: true,
@@ -3679,7 +3670,7 @@ export class TestState {
             }
         }
 
-        this.baseline("Auto Imports", baselineFile, baselineText);
+        this.baseline("Auto Imports", baselineText, `.baseline.md`);
     }
 
     public verifyJsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined; }): void {
@@ -3699,7 +3690,6 @@ export class TestState {
     }
 
     public baselineLinkedEditing(): void {
-        const baselineFile = this.getBaselineFileNameForContainingTestFile(".linkedEditing.txt");
         const files = this.testData.files;
 
         let baselineContent = "";
@@ -3710,7 +3700,7 @@ export class TestState {
             offset = result.offset;
         }
 
-        this.baseline("Linked Editing", baselineFile, baselineContent);
+        this.baseline("Linked Editing", baselineContent, ".linkedEditing.txt");
 
         function getLinkedEditingBaselineWorker(activeFile: FourSlashFile, offset: number, languageService: ts.LanguageService) {
             const fileName = activeFile.fileName;
@@ -4303,10 +4293,9 @@ export class TestState {
     }
 
     public baselineCallHierarchy() {
-        const baselineFile = this.getBaselineFileNameForContainingTestFile(".callHierarchy.txt");
         const callHierarchyItem = this.languageService.prepareCallHierarchy(this.activeFile.fileName, this.currentCaretPosition);
         const text = callHierarchyItem ? ts.mapOneOrMany(callHierarchyItem, item => this.formatCallHierarchy(item), result => result.join("")) : "none";
-        this.baseline("Call Hierarchy", baselineFile, text);
+        this.baseline("Call Hierarchy", text, ".callHierarchy.txt");
     }
 
     private getLineContent(index: number) {
