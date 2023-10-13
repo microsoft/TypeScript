@@ -574,11 +574,11 @@ export class Verify extends VerifyNegatable {
     }
 
     public baselineRename(markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>, options?: RenameOptions) {
-        this.state.verifyBaselineCommands({ type: "findRenameLocations", markerOrRange, options });
+        this.state.baselineRename(markerOrRange, /*rangeText*/ undefined, options);
     }
 
     public baselineRenameAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: RenameOptions) {
-        this.state.verifyBaselineCommands({ type: "findRenameLocations", rangeText, options });
+        this.state.baselineRename(/*markerOrRange*/ undefined, rangeText, options);
     }
 
     public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: FourSlash.TextSpan, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]) {
@@ -1931,14 +1931,8 @@ export interface RenameOptions {
     readonly providePrefixAndSuffixTextForRename?: boolean;
     readonly quotePreference?: "auto" | "double" | "single";
 }
-export type BaselineCommandWithMarkerOrRange = {
+export interface BaselineCommand {
     type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
     markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
     rangeText?: ArrayOrSingle<string>;
-} | {
-    type: "findRenameLocations";
-    markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
-    rangeText?: ArrayOrSingle<string>;
-    options?: RenameOptions;
-};
-export type BaselineCommand = BaselineCommandWithMarkerOrRange;
+}

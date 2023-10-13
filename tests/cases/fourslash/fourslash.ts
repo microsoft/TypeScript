@@ -854,11 +854,6 @@ declare namespace FourSlashInterface {
         type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
         markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
         rangeText?: ArrayOrSingle<string>;
-    } | {
-        type: "findRenameLocations";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-        options?: RenameOptions;
     };
 }
 /** Wraps a diagnostic message to be compared ignoring interpolated strings */

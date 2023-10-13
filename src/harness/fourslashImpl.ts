@@ -1262,7 +1262,7 @@ export class TestState {
     }
 
     private baselineCommand(
-        command: FourSlashInterface.BaselineCommandWithMarkerOrRange,
+        command: FourSlashInterface.BaselineCommand,
         worker: (markerORange: MarkerOrNameOrRange) => string,
     ) {
         let done = false;
@@ -1310,11 +1310,6 @@ export class TestState {
                     return this.baselineCommand(
                         command,
                         markerOrRange => this.baselineFindAllReferencesWorker(markerOrRange),
-                    );
-                case "findRenameLocations":
-                    return this.baselineCommand(
-                        command,
-                        markerOrRange => this.baselineRenameWorker(markerOrRange, command.options),
                     );
                 case "goToDefinition":
                     return this.baselineCommand(
@@ -1372,7 +1367,7 @@ export class TestState {
                             ),
                     );
                 default:
-                    ts.Debug.assertNever(command);
+                    ts.Debug.assertNever(command.type);
             }
         });
     }
@@ -1904,47 +1899,49 @@ export class TestState {
         }
     }
 
-    private baselineRenameWorker(markerOrRange: MarkerOrNameOrRange, options?: FourSlashInterface.RenameOptions) {
-        const { fileName, position } = ts.isString(markerOrRange) ?
-            this.getMarkerByName(markerOrRange) :
-            isMarker(markerOrRange) ?
-            markerOrRange :
-            { fileName: markerOrRange.fileName, position: markerOrRange.pos };
-        const {
-            findInStrings = false,
-            findInComments = false,
-            providePrefixAndSuffixTextForRename = true,
-            quotePreference = "double",
-        } = options || {};
-        const locations = this.languageService.findRenameLocations(
-            fileName,
-            position,
-            findInStrings,
-            findInComments,
-            { providePrefixAndSuffixTextForRename, quotePreference },
-        );
+    public baselineRename(markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>, rangeText?: ArrayOrSingle<string>, options?: FourSlashInterface.RenameOptions) {
+        this.baselineEachMarkerOrRange("findRenameLocations", markerOrRange, rangeText, markerOrRange => {
+            const { fileName, position } = ts.isString(markerOrRange) ?
+                this.getMarkerByName(markerOrRange) :
+                isMarker(markerOrRange) ?
+                markerOrRange :
+                { fileName: markerOrRange.fileName, position: markerOrRange.pos };
+            const {
+                findInStrings = false,
+                findInComments = false,
+                providePrefixAndSuffixTextForRename = true,
+                quotePreference = "double",
+            } = options || {};
+            const locations = this.languageService.findRenameLocations(
+                fileName,
+                position,
+                findInStrings,
+                findInComments,
+                { providePrefixAndSuffixTextForRename, quotePreference },
+            );
 
-        if (!locations) {
-            this.raiseError(`baselineRename failed. Could not rename at the provided position.`);
-        }
+            if (!locations) {
+                this.raiseError(`baselineRename failed. Could not rename at the provided position.`);
+            }
 
-        const renameOptions = options ?
-            (options.findInStrings !== undefined ? `// @findInStrings: ${findInStrings}\n` : "") +
-            (options.findInComments !== undefined ? `// @findInComments: ${findInComments}\n` : "") +
-            (options.providePrefixAndSuffixTextForRename !== undefined ? `// @providePrefixAndSuffixTextForRename: ${providePrefixAndSuffixTextForRename}\n` : "") +
-            (options.quotePreference !== undefined ? `// @quotePreference: ${quotePreference}\n` : "") :
-            "";
+            const renameOptions = options ?
+                (options.findInStrings !== undefined ? `// @findInStrings: ${findInStrings}\n` : "") +
+                (options.findInComments !== undefined ? `// @findInComments: ${findInComments}\n` : "") +
+                (options.providePrefixAndSuffixTextForRename !== undefined ? `// @providePrefixAndSuffixTextForRename: ${providePrefixAndSuffixTextForRename}\n` : "") +
+                (options.quotePreference !== undefined ? `// @quotePreference: ${quotePreference}\n` : "") :
+                "";
 
-        return renameOptions + (renameOptions ? "\n" : "") + this.getBaselineForDocumentSpansWithFileContents(
-            locations,
-            {
-                markerInfo: { markerOrRange, markerName: "/*RENAME*/" },
-                endMarker: "RENAME|]",
-                startMarkerPrefix: span => span.prefixText ? `/*START PREFIX*/${span.prefixText}` : "",
-                endMarkerSuffix: span => span.suffixText ? `${span.suffixText}/*END SUFFIX*/` : "",
-                ignoredDocumentSpanProperties: ["prefixText", "suffixText"],
-            },
-        );
+            return renameOptions + (renameOptions ? "\n" : "") + this.getBaselineForDocumentSpansWithFileContents(
+                locations,
+                {
+                    markerInfo: { markerOrRange, markerName: "/*RENAME*/" },
+                    endMarker: "RENAME|]",
+                    startMarkerPrefix: span => span.prefixText ? `/*START PREFIX*/${span.prefixText}` : "",
+                    endMarkerSuffix: span => span.suffixText ? `${span.suffixText}/*END SUFFIX*/` : "",
+                    ignoredDocumentSpanProperties: ["prefixText", "suffixText"],
+                },
+            );
+        });
     }
 
     public verifyQuickInfoExists(negative: boolean) {

@@ -17,10 +17,8 @@ const ranges = [r0, r1, r2];
 goTo.marker("use");
 verify.quickInfoIs("(parameter) foo: I", "I pity the foo");
 
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ["use", "def", "use2"] },
-    { type: "findRenameLocations", markerOrRange: ranges },
-);
+verify.baselineFindAllReferences("use", "def", "use2");
+verify.baselineRename(ranges);
 verify.baselineDocumentHighlights(ranges);
 verify.baselineCommands(
     { type: "goToType", markerOrRange: "use" },
