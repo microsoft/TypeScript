@@ -339,152 +339,8 @@ export function createLocalInferenceResolver({
                 );
                 tupleType.emitNode = { flags: 1, autoGenerate: undefined, internalFlags: 0 };
                 return regular(factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType), node, inheritedArrayTypeFlags);
-
-            case SyntaxKind.ObjectLiteralExpression: {
-                const objectLiteral = node as ObjectLiteralExpression;
-                const properties: TypeElement[] = [];
-                let inheritedObjectTypeFlags = LocalTypeInfoFlags.None;
-                const members = new Map<string, {
-                    name: PropertyName;
-                    location: number;
-                }>();
-                let replaceWithInvalid = false;
-                for (let propIndex = 0, length = objectLiteral.properties.length; propIndex < length; propIndex++) {
-                    const prop = objectLiteral.properties[propIndex];
-
-                    if (isShorthandPropertyAssignment(prop)) {
-                        invalid(prop);
-                        inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
-                        continue;
-                    }
-                    else if (isSpreadAssignment(prop)) {
-                        invalid(prop);
-                        inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
-                        continue;
-                    }
-
-                    if (isPrivateIdentifier(prop.name)) {
-                        // Not valid in object literals but the compiler will complain about this, we just ignore it here.
-                        continue;
-                    }
-                    if (isComputedPropertyName(prop.name)) {
-                        if (!resolver.isLiteralComputedName(prop.name)) {
-                            reportIsolatedDeclarationError(node);
-                            replaceWithInvalid = true;
-                            continue;
-                        }
-                        if (isEntityNameExpression(prop.name.expression)) {
-                            checkEntityNameVisibility(prop.name.expression, prop);
-                        }
-                    }
-
-                    const nameKey = getMemberKey(prop);
-                    const existingMember = nameKey ? members.get(nameKey) : undefined;
-                    const name = simplifyComputedPropertyName(prop.name, existingMember?.name) ??
-                        deepClone(visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!);
-
-                    let newProp;
-                    if (isMethodDeclaration(prop)) {
-                        const oldEnclosingDeclaration = setEnclosingDeclarations(prop);
-                        try {
-                            const returnType = visitTypeAndClone(prop.type, prop);
-
-                            const typeParameters = visitNodes(prop.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration)?.map(deepClone);
-                            // TODO: We need to see about inheriting flags from parameters
-                            const parameters = prop.parameters.map(p => deepClone(ensureParameter(p)));
-                            inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, returnType.flags);
-                            if (inferenceFlags & NarrowBehavior.AsConst) {
-                                newProp = factory.createPropertySignature(
-                                    [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
-                                    name,
-                                    /*questionToken*/ undefined,
-                                    factory.createFunctionTypeNode(
-                                        typeParameters,
-                                        parameters,
-                                        returnType.typeNode,
-                                    ),
-                                );
-                            }
-                            else {
-                                newProp = factory.createMethodSignature(
-                                    [],
-                                    name,
-                                    /*questionToken*/ undefined,
-                                    typeParameters,
-                                    parameters,
-                                    returnType.typeNode,
-                                );
-                            }
-                        }
-                        finally {
-                            setEnclosingDeclarations(oldEnclosingDeclaration);
-                        }
-                    }
-                    else if (isPropertyAssignment(prop)) {
-                        const modifiers = inferenceFlags & NarrowBehavior.AsConst ?
-                            [factory.createModifier(SyntaxKind.ReadonlyKeyword)] :
-                            [];
-                        const { typeNode, flags: propTypeFlags } = localInference(prop.initializer, inferenceFlags & NarrowBehavior.NotKeepLiterals);
-                        inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, propTypeFlags);
-                        newProp = factory.createPropertySignature(
-                            modifiers,
-                            name,
-                            /*questionToken*/ undefined,
-                            typeNode,
-                        );
-                    }
-                    else {
-                        if (!isGetAccessorDeclaration(prop) && !isSetAccessorDeclaration(prop)) {
-                            Debug.assertNever(prop);
-                        }
-                        if (!nameKey) {
-                            return invalid(prop);
-                        }
-                        const { getAccessor, setAccessor, otherAccessorIndex } = getAccessorInfo(objectLiteral.properties, prop);
-                        if (otherAccessorIndex === -1 || otherAccessorIndex > propIndex) {
-                            const accessorType = inferAccessorType(getAccessor, setAccessor);
-                            const modifiers: Modifier[] = [];
-                            if (!setAccessor) {
-                                modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword));
-                            }
-                            inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, accessorType.flags);
-                            newProp = factory.createPropertySignature(
-                                modifiers,
-                                name,
-                                /*questionToken*/ undefined,
-                                accessorType.typeNode,
-                            );
-                        }
-                    }
-
-                    if (newProp) {
-                        const commentRange = getCommentRange(prop);
-                        setCommentRange(newProp, {
-                            pos: commentRange.pos,
-                            end: newProp.name.end,
-                        });
-
-                        if (nameKey) {
-                            if (existingMember !== undefined && !isMethodDeclaration(prop)) {
-                                properties[existingMember.location] = newProp;
-                            }
-                            else {
-                                members.set(nameKey, {
-                                    location: properties.length,
-                                    name,
-                                });
-                                properties.push(newProp);
-                            }
-                        }
-                        else {
-                            properties.push(newProp);
-                        }
-                    }
-                }
-
-                const typeNode: TypeNode = replaceWithInvalid ? makeInvalidType() : factory.createTypeLiteralNode(properties);
-                return regular(typeNode, objectLiteral, inheritedObjectTypeFlags);
-            }
+            case SyntaxKind.ObjectLiteralExpression: 
+                return getTypeForObjectLiteralExpression(node as ObjectLiteralExpression, inferenceFlags);
         }
 
         return invalid(node);
@@ -494,6 +350,151 @@ export function createLocalInferenceResolver({
     }
     function regular(typeNode: TypeNode, sourceNode: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
         return { typeNode, flags, sourceNode };
+    }
+    function getTypeForObjectLiteralExpression(node: ObjectLiteralExpression, inferenceFlags: NarrowBehavior) {
+        const objectLiteral = node;
+        const properties: TypeElement[] = [];
+        let inheritedObjectTypeFlags = LocalTypeInfoFlags.None;
+        const members = new Map<string, {
+            name: PropertyName;
+            location: number;
+        }>();
+        let replaceWithInvalid = false;
+        for (let propIndex = 0, length = objectLiteral.properties.length; propIndex < length; propIndex++) {
+            const prop = objectLiteral.properties[propIndex];
+
+            if (isShorthandPropertyAssignment(prop)) {
+                invalid(prop);
+                inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
+                continue;
+            }
+            else if (isSpreadAssignment(prop)) {
+                invalid(prop);
+                inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
+                continue;
+            }
+
+            if (isPrivateIdentifier(prop.name)) {
+                // Not valid in object literals but the compiler will complain about this, we just ignore it here.
+                continue;
+            }
+            if (isComputedPropertyName(prop.name)) {
+                if (!resolver.isLiteralComputedName(prop.name)) {
+                    reportIsolatedDeclarationError(node);
+                    replaceWithInvalid = true;
+                    continue;
+                }
+                if (isEntityNameExpression(prop.name.expression)) {
+                    checkEntityNameVisibility(prop.name.expression, prop);
+                }
+            }
+
+            const nameKey = getMemberKey(prop);
+            const existingMember = nameKey ? members.get(nameKey) : undefined;
+            const name = simplifyComputedPropertyName(prop.name, existingMember?.name) ??
+                deepClone(visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!);
+
+            let newProp;
+            if (isMethodDeclaration(prop)) {
+                const oldEnclosingDeclaration = setEnclosingDeclarations(prop);
+                try {
+                    const returnType = visitTypeAndClone(prop.type, prop);
+
+                    const typeParameters = visitNodes(prop.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration)?.map(deepClone);
+                    // TODO: We need to see about inheriting flags from parameters
+                    const parameters = prop.parameters.map(p => deepClone(ensureParameter(p)));
+                    inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, returnType.flags);
+                    if (inferenceFlags & NarrowBehavior.AsConst) {
+                        newProp = factory.createPropertySignature(
+                            [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
+                            name,
+                            /*questionToken*/ undefined,
+                            factory.createFunctionTypeNode(
+                                typeParameters,
+                                parameters,
+                                returnType.typeNode,
+                            ),
+                        );
+                    }
+                    else {
+                        newProp = factory.createMethodSignature(
+                            [],
+                            name,
+                            /*questionToken*/ undefined,
+                            typeParameters,
+                            parameters,
+                            returnType.typeNode,
+                        );
+                    }
+                }
+                finally {
+                    setEnclosingDeclarations(oldEnclosingDeclaration);
+                }
+            }
+            else if (isPropertyAssignment(prop)) {
+                const modifiers = inferenceFlags & NarrowBehavior.AsConst ?
+                    [factory.createModifier(SyntaxKind.ReadonlyKeyword)] :
+                    [];
+                const { typeNode, flags: propTypeFlags } = localInference(prop.initializer, inferenceFlags & NarrowBehavior.NotKeepLiterals);
+                inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, propTypeFlags);
+                newProp = factory.createPropertySignature(
+                    modifiers,
+                    name,
+                    /*questionToken*/ undefined,
+                    typeNode,
+                );
+            }
+            else {
+                if (!isGetAccessorDeclaration(prop) && !isSetAccessorDeclaration(prop)) {
+                    Debug.assertNever(prop);
+                }
+                if (!nameKey) {
+                    return invalid(prop);
+                }
+                const { getAccessor, setAccessor, otherAccessorIndex } = getAccessorInfo(objectLiteral.properties, prop);
+                if (otherAccessorIndex === -1 || otherAccessorIndex > propIndex) {
+                    const accessorType = inferAccessorType(getAccessor, setAccessor);
+                    const modifiers: Modifier[] = [];
+                    if (!setAccessor) {
+                        modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword));
+                    }
+                    inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, accessorType.flags);
+                    newProp = factory.createPropertySignature(
+                        modifiers,
+                        name,
+                        /*questionToken*/ undefined,
+                        accessorType.typeNode,
+                    );
+                }
+            }
+
+            if (newProp) {
+                const commentRange = getCommentRange(prop);
+                setCommentRange(newProp, {
+                    pos: commentRange.pos,
+                    end: newProp.name.end,
+                });
+
+                if (nameKey) {
+                    if (existingMember !== undefined && !isMethodDeclaration(prop)) {
+                        properties[existingMember.location] = newProp;
+                    }
+                    else {
+                        members.set(nameKey, {
+                            location: properties.length,
+                            name,
+                        });
+                        properties.push(newProp);
+                    }
+                }
+                else {
+                    properties.push(newProp);
+                }
+            }
+        }
+
+        const typeNode: TypeNode = replaceWithInvalid ? makeInvalidType() : factory.createTypeLiteralNode(properties);
+        return regular(typeNode, objectLiteral, inheritedObjectTypeFlags);
     }
     function normalizeLiteralValue(literal: LiteralExpression) {
         switch (literal.kind) {
