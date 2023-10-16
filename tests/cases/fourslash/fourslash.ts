@@ -318,7 +318,6 @@ declare namespace FourSlashInterface {
         formatDocumentChangesNothing(): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
-        baselineCommands(...commands: BaselineCommand[]): void;
         baselineFindAllReferences(...markerOrRange: MarkerOrNameOrRange[]): void;
         baselineFindAllReferencesAtRangesWithText(...rangeText: string[]): void;
         baselineGetFileReferences(...fileName: string[]): void;
@@ -850,27 +849,6 @@ declare namespace FourSlashInterface {
     type RenameOptions = { readonly findInStrings?: boolean, readonly findInComments?: boolean, readonly providePrefixAndSuffixTextForRename?: boolean, readonly quotePreference?: "auto" | "double" | "single" };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
     type DiagnosticIgnoredInterpolations = { template: string }
-    type BaselineCommand = {
-        type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-    } | {
-        type: "getFileReferences";
-        fileName: ArrayOrSingle<string>;
-    } | {
-        type: "findRenameLocations";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-        options?: RenameOptions;
-    } | {
-        type: "documentHighlights";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-        options?: VerifyDocumentHighlightsOptions;
-    } | {
-        type: "customWork";
-        work: () => string | undefined;
-    };
 }
 /** Wraps a diagnostic message to be compared ignoring interpolated strings */
 declare function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations;

@@ -1,14 +1,16 @@
+import {
+    Logger,
+    nowString,
+    replaceAll,
+    sanitizeLog,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     ActionWatchTypingLocations,
     stringifyIndented,
 } from "../../_namespaces/ts.server";
 import {
-    Logger,
-    nowString,
     patchHostTimeouts,
-    replaceAll,
-    sanitizeLog,
     TestSessionAndServiceHost,
 } from "./tsserver";
 import {
@@ -61,7 +63,7 @@ export function loggerToTypingsInstallerLog(logger: Logger): ts.server.typingsIn
             //
             const initialLog = sanitizeLog(s);
             const pseudoSanitizedLog = replaceAll(initialLog, `@ts${ts.versionMajorMinor}`, `@tsFakeMajor.Minor`);
-            return logger.log(`TI:: [${nowString(logger.host!)}] ${pseudoSanitizedLog}`);
+            return logger.log(`TI:: [${nowString(logger)}] ${pseudoSanitizedLog}`);
         },
     } : undefined;
 }
