@@ -70,6 +70,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/a/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/packages/a/package.json: *new*
+  {"pollingInterval":250}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -155,6 +166,19 @@ Info seq  [hh:mm:ss:mss] 	FileName: /packages/a/package.json ProjectRootPath: un
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/a/index.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/packages/a/package.json:
+  {"pollingInterval":250}
+/packages/b/index.js: *new*
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 3,
@@ -769,3 +793,19 @@ Info seq  [hh:mm:ss:mss] response:
         ]
       }
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/packages/a/package.json:
+  {"pollingInterval":250}
+/packages/b/index.js:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/packages/a/node_modules: *new*
+  {}

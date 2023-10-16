@@ -165,6 +165,33 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/packages/app/dist/index.d.ts: *new*
+  {"pollingInterval":500}
+/packages/app/dist/package.json: *new*
+  {"pollingInterval":2000}
+/packages/utils/dist/index.d.ts: *new*
+  {"pollingInterval":500}
+/packages/utils/dist/package.json: *new*
+  {"pollingInterval":2000}
+/script.ts: *new*
+  {"pollingInterval":500}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+: *new*
+  {}
+/packages/app/dist: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -190,6 +217,35 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /script.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/packages/app/dist/index.d.ts:
+  {"pollingInterval":500}
+/packages/app/dist/package.json:
+  {"pollingInterval":2000}
+/packages/utils/dist/index.d.ts:
+  {"pollingInterval":500}
+/packages/utils/dist/package.json:
+  {"pollingInterval":2000}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/script.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+:
+  {}
+/packages/app/dist:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
@@ -333,3 +389,29 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/packages/app/dist/index.d.ts:
+  {"pollingInterval":500}
+/packages/app/dist/package.json:
+  {"pollingInterval":2000}
+/packages/utils/dist/index.d.ts:
+  {"pollingInterval":500}
+/packages/utils/dist/package.json:
+  {"pollingInterval":2000}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+:
+  {}
+/packages/app/dist:
+  {}
+/packages/app/node_modules: *new*
+  {}

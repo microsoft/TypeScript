@@ -84,6 +84,15 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/pkg/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -198,6 +207,29 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/pkg/package.json ProjectRootPa
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /main.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/node_modules/pkg/lib/core/package.json: *new*
+  {"pollingInterval":2000}
+/node_modules/pkg/lib/core/test.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/pkg/lib/package.json: *new*
+  {"pollingInterval":2000}
+/package.json: *new*
+  {"pollingInterval":250}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
@@ -928,3 +960,27 @@ Info seq  [hh:mm:ss:mss] response:
         ]
       }
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/node_modules/pkg/lib/core/package.json:
+  {"pollingInterval":2000}
+/node_modules/pkg/lib/core/test.d.ts:
+  {"pollingInterval":500}
+/node_modules/pkg/lib/package.json:
+  {"pollingInterval":2000}
+/package.json:
+  {"pollingInterval":250}
+/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+:
+  {}
+/node_modules: *new*
+  {}

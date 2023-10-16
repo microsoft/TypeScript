@@ -242,6 +242,29 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
+After Request
+watchedFiles::
+/a/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/b/index.ts: *new*
+  {"pollingInterval":500}
+/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/c/index.ts: *new*
+  {"pollingInterval":500}
+/c/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/tsconfig.settings.json: *new*
+  {"pollingInterval":2000}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -392,6 +415,31 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+watchedFiles::
+/a/index.d.ts: *new*
+  {"pollingInterval":2000}
+/a/tsconfig.json:
+  {"pollingInterval":2000}
+/b/index.ts:
+  {"pollingInterval":500}
+/b/tsconfig.json:
+  {"pollingInterval":2000}
+/c/index.ts:
+  {"pollingInterval":500}
+/c/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/tsconfig.json:
+  {"pollingInterval":2000}
+/tsconfig.settings.json:
+  {"pollingInterval":2000}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
@@ -762,6 +810,33 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /b/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json,/b/tsconfig.json
+After Request
+watchedFiles::
+/a/index.d.ts:
+  {"pollingInterval":2000}
+/a/tsconfig.json:
+  {"pollingInterval":2000}
+/b/tsconfig.json:
+  {"pollingInterval":2000}
+/c/index.ts:
+  {"pollingInterval":500}
+/c/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/tsconfig.json:
+  {"pollingInterval":2000}
+/tsconfig.settings.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/b/index.ts:
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 5,
@@ -873,6 +948,31 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+watchedFiles::
+/a/index.d.ts:
+  {"pollingInterval":2000}
+/a/tsconfig.json:
+  {"pollingInterval":2000}
+/b/index.d.ts: *new*
+  {"pollingInterval":2000}
+/b/tsconfig.json:
+  {"pollingInterval":2000}
+/c/index.ts:
+  {"pollingInterval":500}
+/c/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/tsconfig.json:
+  {"pollingInterval":2000}
+/tsconfig.settings.json:
+  {"pollingInterval":2000}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 6,
@@ -1182,6 +1282,33 @@ Info seq  [hh:mm:ss:mss] 	FileName: /b/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json,/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /c/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json,/c/tsconfig.json
+After Request
+watchedFiles::
+/a/index.d.ts:
+  {"pollingInterval":2000}
+/a/tsconfig.json:
+  {"pollingInterval":2000}
+/b/index.d.ts:
+  {"pollingInterval":2000}
+/b/tsconfig.json:
+  {"pollingInterval":2000}
+/c/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/tsconfig.json:
+  {"pollingInterval":2000}
+/tsconfig.settings.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/c/index.ts:
+  {"pollingInterval":500}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 9,
@@ -1284,6 +1411,31 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+watchedFiles::
+/a/index.d.ts:
+  {"pollingInterval":2000}
+/a/tsconfig.json:
+  {"pollingInterval":2000}
+/b/index.d.ts:
+  {"pollingInterval":2000}
+/b/tsconfig.json:
+  {"pollingInterval":2000}
+/c/index.d.ts: *new*
+  {"pollingInterval":2000}
+/c/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/tsconfig.json:
+  {"pollingInterval":2000}
+/tsconfig.settings.json:
+  {"pollingInterval":2000}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 10,

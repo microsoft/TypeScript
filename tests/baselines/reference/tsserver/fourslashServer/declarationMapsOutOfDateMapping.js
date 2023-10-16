@@ -79,6 +79,19 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/a/dist/index.d.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/node_modules/a/dist/node_modules/@types: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -143,6 +156,19 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/a/dist/index.d.ts ProjectRootP
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive *deleted*::
+/node_modules/a/dist/node_modules/@types:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
@@ -185,3 +211,15 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/node_modules/a/dist/index.d.ts.map: *new*
+  {"pollingInterval":500}
+/node_modules/a/src/index.ts: *new*
+  {"pollingInterval":500}

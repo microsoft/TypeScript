@@ -157,6 +157,35 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tests/cases/fourslash/server/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/tests/cases/fourslash/server/a.ts: *new*
+  {"pollingInterval":500}
+/tests/cases/fourslash/server/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/tests/cases/fourslash/server/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/tests/cases/fourslash/node_modules: *new*
+  {}
+  {}
+/tests/cases/fourslash/node_modules/@types: *new*
+  {}
+  {}
+/tests/cases/fourslash/server/node_modules: *new*
+  {}
+  {}
+/tests/cases/fourslash/server/node_modules/@types: *new*
+  {}
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -182,6 +211,37 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tests/cases/fourslash/server/tsconfig.json 
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /tests/cases/fourslash/server/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tests/cases/fourslash/server/tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/tests/cases/fourslash/server/jsconfig.json:
+  {"pollingInterval":2000}
+/tests/cases/fourslash/server/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedFiles *deleted*::
+/tests/cases/fourslash/server/a.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/tests/cases/fourslash/node_modules:
+  {}
+  {}
+/tests/cases/fourslash/node_modules/@types:
+  {}
+  {}
+/tests/cases/fourslash/server/node_modules:
+  {}
+  {}
+/tests/cases/fourslash/server/node_modules/@types:
+  {}
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,

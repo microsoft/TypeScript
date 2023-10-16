@@ -173,6 +173,33 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/apps/app1/src/app.ts: *new*
+  {"pollingInterval":500}
+/apps/app1/src/index.ts: *new*
+  {"pollingInterval":500}
+/apps/app1/src/utils.ts: *new*
+  {"pollingInterval":500}
+/apps/app1/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/shared/constants.ts: *new*
+  {"pollingInterval":500}
+/shared/data.ts: *new*
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/apps/app1/src: *new*
+  {}
+/shared: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -240,6 +267,35 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/tsconfig.json ProjectRootPath: un
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
+After Request
+watchedFiles::
+/apps/app1/src/app.ts:
+  {"pollingInterval":500}
+/apps/app1/src/utils.ts:
+  {"pollingInterval":500}
+/apps/app1/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/shared/constants.ts:
+  {"pollingInterval":500}
+/shared/data.ts:
+  {"pollingInterval":500}
+
+watchedFiles *deleted*::
+/apps/app1/src/index.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/apps/app1/src:
+  {}
+/shared:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 3,
@@ -468,6 +524,33 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/index.ts ProjectRootPath: und
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
+After Request
+watchedFiles::
+/apps/app1/src/utils.ts:
+  {"pollingInterval":500}
+/apps/app1/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/shared/constants.ts:
+  {"pollingInterval":500}
+/shared/data.ts:
+  {"pollingInterval":500}
+
+watchedFiles *deleted*::
+/apps/app1/src/app.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/apps/app1/src:
+  {}
+/shared:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 12,
@@ -698,6 +781,31 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/app.ts ProjectRootPath: undef
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /shared/data.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
+After Request
+watchedFiles::
+/apps/app1/src/utils.ts:
+  {"pollingInterval":500}
+/apps/app1/tsconfig.json:
+  {"pollingInterval":2000}
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/shared/constants.ts:
+  {"pollingInterval":500}
+
+watchedFiles *deleted*::
+/shared/data.ts:
+  {"pollingInterval":500}
+
+watchedDirectoriesRecursive::
+/apps/app1/src:
+  {}
+/shared:
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 21,

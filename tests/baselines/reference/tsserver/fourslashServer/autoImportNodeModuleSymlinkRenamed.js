@@ -110,6 +110,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+After Request
+watchedFiles::
+/lib.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.d.ts: *new*
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/package.json: *new*
+  {"pollingInterval":250}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -243,6 +254,31 @@ Info seq  [hh:mm:ss:mss] 	FileName: /package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/web/src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/web/tsconfig.json
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/package.json:
+  {"pollingInterval":250}
+/packages/utils/src/index.ts: *new*
+  {"pollingInterval":500}
+/packages/utils/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/packages/web/package.json: *new*
+  {"pollingInterval":250}
+/packages/web/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/packages/utils/src: *new*
+  {}
+/packages/web/src: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
@@ -387,3 +423,29 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+watchedFiles::
+/lib.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.d.ts:
+  {"pollingInterval":500}
+/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/package.json:
+  {"pollingInterval":250}
+/packages/utils/src/index.ts:
+  {"pollingInterval":500}
+/packages/utils/tsconfig.json:
+  {"pollingInterval":2000}
+/packages/web/package.json:
+  {"pollingInterval":250}
+/packages/web/tsconfig.json:
+  {"pollingInterval":2000}
+
+watchedDirectoriesRecursive::
+/node_modules: *new*
+  {}
+/packages/utils/src:
+  {}
+/packages/web/src:
+  {}
