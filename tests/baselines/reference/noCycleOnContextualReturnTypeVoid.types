@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/noCycleOnContextualReturnTypeVoid.ts] ////
+
+=== noCycleOnContextualReturnTypeVoid.ts ===
+type HowlErrorCallback = (soundId: number, error: unknown) => void;
+>HowlErrorCallback : (soundId: number, error: unknown) => void
+>soundId : number
+>error : unknown
+
+interface HowlOptions {
+  onplayerror?: HowlErrorCallback | undefined;
+>onplayerror : HowlErrorCallback | undefined
+}
+
+class Howl {
+>Howl : Howl
+
+  constructor(public readonly options: HowlOptions) {}
+>options : HowlOptions
+
+  once(name: "unlock", fn: () => void) {
+>once : (name: "unlock", fn: () => void) => void
+>name : "unlock"
+>fn : () => void
+
+    console.log(name, fn);
+>console.log(name, fn) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>name : "unlock"
+>fn : () => void
+  }
+}
+
+const instance = new Howl({
+>instance : Howl
+>new Howl({  onplayerror: () => instance.once("unlock", () => {}),}) : Howl
+>Howl : typeof Howl
+>{  onplayerror: () => instance.once("unlock", () => {}),} : { onplayerror: () => void; }
+
+  onplayerror: () => instance.once("unlock", () => {}),
+>onplayerror : () => void
+>() => instance.once("unlock", () => {}) : () => void
+>instance.once("unlock", () => {}) : void
+>instance.once : (name: "unlock", fn: () => void) => void
+>instance : Howl
+>once : (name: "unlock", fn: () => void) => void
+>"unlock" : "unlock"
+>() => {} : () => void
+
+});
+
+const instance2 = new Howl({
+>instance2 : Howl
+>new Howl({  onplayerror: () => {    return instance2.once("unlock", () => {});  },}) : Howl
+>Howl : typeof Howl
+>{  onplayerror: () => {    return instance2.once("unlock", () => {});  },} : { onplayerror: () => void; }
+
+  onplayerror: () => {
+>onplayerror : () => void
+>() => {    return instance2.once("unlock", () => {});  } : () => void
+
+    return instance2.once("unlock", () => {});
+>instance2.once("unlock", () => {}) : void
+>instance2.once : (name: "unlock", fn: () => void) => void
+>instance2 : Howl
+>once : (name: "unlock", fn: () => void) => void
+>"unlock" : "unlock"
+>() => {} : () => void
+
+  },
+});
+

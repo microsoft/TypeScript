@@ -36874,7 +36874,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
-                    const returnType = getReturnTypeFromBody(node, checkMode);
+                    const contextualReturnType = getContextualReturnType(node, /*contextFlags*/ undefined);
+                    const returnType = contextualReturnType && contextualReturnType.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void) ? contextualReturnType : getReturnTypeFromBody(node, checkMode);
                     if (!signature.resolvedReturnType) {
                         signature.resolvedReturnType = returnType;
                     }

@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/noCycleOnContextualReturnTypeVoid.ts] ////
+
+=== noCycleOnContextualReturnTypeVoid.ts ===
+type HowlErrorCallback = (soundId: number, error: unknown) => void;
+>HowlErrorCallback : Symbol(HowlErrorCallback, Decl(noCycleOnContextualReturnTypeVoid.ts, 0, 0))
+>soundId : Symbol(soundId, Decl(noCycleOnContextualReturnTypeVoid.ts, 0, 26))
+>error : Symbol(error, Decl(noCycleOnContextualReturnTypeVoid.ts, 0, 42))
+
+interface HowlOptions {
+>HowlOptions : Symbol(HowlOptions, Decl(noCycleOnContextualReturnTypeVoid.ts, 0, 67))
+
+  onplayerror?: HowlErrorCallback | undefined;
+>onplayerror : Symbol(HowlOptions.onplayerror, Decl(noCycleOnContextualReturnTypeVoid.ts, 2, 23))
+>HowlErrorCallback : Symbol(HowlErrorCallback, Decl(noCycleOnContextualReturnTypeVoid.ts, 0, 0))
+}
+
+class Howl {
+>Howl : Symbol(Howl, Decl(noCycleOnContextualReturnTypeVoid.ts, 4, 1))
+
+  constructor(public readonly options: HowlOptions) {}
+>options : Symbol(Howl.options, Decl(noCycleOnContextualReturnTypeVoid.ts, 7, 14))
+>HowlOptions : Symbol(HowlOptions, Decl(noCycleOnContextualReturnTypeVoid.ts, 0, 67))
+
+  once(name: "unlock", fn: () => void) {
+>once : Symbol(Howl.once, Decl(noCycleOnContextualReturnTypeVoid.ts, 7, 54))
+>name : Symbol(name, Decl(noCycleOnContextualReturnTypeVoid.ts, 8, 7))
+>fn : Symbol(fn, Decl(noCycleOnContextualReturnTypeVoid.ts, 8, 22))
+
+    console.log(name, fn);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>name : Symbol(name, Decl(noCycleOnContextualReturnTypeVoid.ts, 8, 7))
+>fn : Symbol(fn, Decl(noCycleOnContextualReturnTypeVoid.ts, 8, 22))
+  }
+}
+
+const instance = new Howl({
+>instance : Symbol(instance, Decl(noCycleOnContextualReturnTypeVoid.ts, 13, 5))
+>Howl : Symbol(Howl, Decl(noCycleOnContextualReturnTypeVoid.ts, 4, 1))
+
+  onplayerror: () => instance.once("unlock", () => {}),
+>onplayerror : Symbol(onplayerror, Decl(noCycleOnContextualReturnTypeVoid.ts, 13, 27))
+>instance.once : Symbol(Howl.once, Decl(noCycleOnContextualReturnTypeVoid.ts, 7, 54))
+>instance : Symbol(instance, Decl(noCycleOnContextualReturnTypeVoid.ts, 13, 5))
+>once : Symbol(Howl.once, Decl(noCycleOnContextualReturnTypeVoid.ts, 7, 54))
+
+});
+
+const instance2 = new Howl({
+>instance2 : Symbol(instance2, Decl(noCycleOnContextualReturnTypeVoid.ts, 17, 5))
+>Howl : Symbol(Howl, Decl(noCycleOnContextualReturnTypeVoid.ts, 4, 1))
+
+  onplayerror: () => {
+>onplayerror : Symbol(onplayerror, Decl(noCycleOnContextualReturnTypeVoid.ts, 17, 28))
+
+    return instance2.once("unlock", () => {});
+>instance2.once : Symbol(Howl.once, Decl(noCycleOnContextualReturnTypeVoid.ts, 7, 54))
+>instance2 : Symbol(instance2, Decl(noCycleOnContextualReturnTypeVoid.ts, 17, 5))
+>once : Symbol(Howl.once, Decl(noCycleOnContextualReturnTypeVoid.ts, 7, 54))
+
+  },
+});
+
