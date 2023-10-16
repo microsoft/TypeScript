@@ -175,22 +175,25 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
     const current = getTokenAtPosition(file, startPosition);
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const cursorRequest = range.pos === range.end && considerEmptySpans;
-    
+
     const firstType = findAncestor(current, node =>
         node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
         (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end)));
     if (!firstType || !isTypeNode(firstType)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
-    
+
     const checker = context.program.getTypeChecker();
     const enclosingNode = getEnclosingNode(firstType, isJS);
     if (enclosingNode === undefined) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
-    
+
     const typeList: TypeNode[] = [];
     if ((isUnionTypeNode(firstType.parent) || isIntersectionTypeNode(firstType.parent)) && range.end > firstType.end) {
         // the only extraction cases in which multiple nodes may need to be selected to capture the entire type are union and intersection types
-        addRange(typeList, firstType.parent.types.filter(type => {
-                return type.getStart() >= range.pos && type.getEnd() <= range.end
-        }));
+        addRange(
+            typeList,
+            firstType.parent.types.filter(type => {
+                return type.getStart() >= range.pos && type.getEnd() <= range.end;
+            }),
+        );
     }
     const selection = typeList.length > 1 ? typeList : firstType;
 
@@ -240,7 +243,7 @@ function rangeContainsSkipTrivia(r1: TextRange | TextRange[], node: Node | Node[
     return rangeContainsStartEnd(r1Range, skipTrivia(file.text, nodeRange.pos), nodeRange.end);
 
     function arrayToNode(rangeOrArray: TextRange | TextRange[]): TextRange {
-        return isArray(rangeOrArray) ? {pos: rangeOrArray[0].pos, end: rangeOrArray[rangeOrArray.length-1].end } : rangeOrArray;
+        return isArray(rangeOrArray) ? { pos: rangeOrArray[0].pos, end: rangeOrArray[rangeOrArray.length - 1].end } : rangeOrArray;
     }
 }
 
@@ -313,7 +316,7 @@ function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile,
     const { enclosingNode, selection, typeParameters } = info;
 
     if (isArray(selection)) {
-        const newTypeValue = isUnionTypeNode(selection[0].parent) ? factory.createUnionTypeNode(selection) : factory.createIntersectionTypeNode(selection); 
+        const newTypeValue = isUnionTypeNode(selection[0].parent) ? factory.createUnionTypeNode(selection) : factory.createIntersectionTypeNode(selection);
         const newTypeDeclaration = factory.createTypeAliasDeclaration(
             /*modifiers*/ undefined,
             name,
@@ -321,7 +324,7 @@ function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile,
             newTypeValue,
         );
         changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeDeclaration), /*blankLineBetween*/ true);
-        changes.replaceNodeRange(file, selection[0], selection[selection.length-1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+        changes.replaceNodeRange(file, selection[0], selection[selection.length - 1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
     }
     else {
         const newTypeNode = factory.createTypeAliasDeclaration(
@@ -349,7 +352,7 @@ function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile,
     changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /*blankLineBetween*/ true);
 
     if (isArray(selection)) {
-        changes.replaceNodeRange(file, selection[0], selection[selection.length-1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+        changes.replaceNodeRange(file, selection[0], selection[selection.length - 1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
     }
     else {
         changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
@@ -358,11 +361,13 @@ function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile,
 
 function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorContext, file: SourceFile, name: string, info: ExtractInfo) {
     const { enclosingNode, selection, typeParameters } = info;
-    
+
     let newTypeValue: TypeNode;
     if (isArray(selection)) {
-        selection.forEach(typeNode => { setEmitFlags(typeNode, EmitFlags.NoComments | EmitFlags.NoNestedComments) });
-        newTypeValue = isUnionTypeNode(selection[0].parent) ? factory.createUnionTypeNode(selection) : factory.createIntersectionTypeNode(selection); 
+        selection.forEach(typeNode => {
+            setEmitFlags(typeNode, EmitFlags.NoComments | EmitFlags.NoNestedComments);
+        });
+        newTypeValue = isUnionTypeNode(selection[0].parent) ? factory.createUnionTypeNode(selection) : factory.createIntersectionTypeNode(selection);
     }
     else {
         setEmitFlags(selection, EmitFlags.NoComments | EmitFlags.NoNestedComments);
@@ -400,7 +405,7 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
     }
 
     if (isArray(selection)) {
-        changes.replaceNodeRange(file, selection[0], selection[selection.length-1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
+        changes.replaceNodeRange(file, selection[0], selection[selection.length - 1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
     }
     else {
         changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
