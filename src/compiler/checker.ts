@@ -37085,12 +37085,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkVoidExpression(node: VoidExpression): Type {
-        if (node.parent.kind === SyntaxKind.ArrowFunction && (node.parent as ArrowFunction).body === node) {
-            checkNodeDeferred(node);
-        }
-        else {
-            checkExpression(node.expression);
-        }
+        checkNodeDeferred(node);
         return undefinedWideningType;
     }
 
