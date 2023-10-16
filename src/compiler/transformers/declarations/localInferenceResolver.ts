@@ -212,10 +212,9 @@ export function createLocalInferenceResolver({
         return invalid(getAccessor ?? setAccessor!);
     }
     function localInference(node: Node, inferenceFlags: NarrowBehavior = NarrowBehavior.None): LocalTypeInfo {
-        const nextInferenceFlags = inferenceFlags & NarrowBehavior.NotKeepLiterals;
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
-                return localInference((node as ParenthesizedExpression).expression, nextInferenceFlags);
+                return localInference((node as ParenthesizedExpression).expression, inferenceFlags & NarrowBehavior.NotKeepLiterals);
             case SyntaxKind.Identifier: {
                 if ((node as Identifier).escapedText === "undefined") {
                     return createUndefinedTypeNode(node);
@@ -330,7 +329,7 @@ export function createLocalInferenceResolver({
                         );
                     }
                     else {
-                        const elementType = localInference(element, nextInferenceFlags);
+                        const elementType = localInference(element, inferenceFlags & NarrowBehavior.NotKeepLiterals);
                         inheritedArrayTypeFlags = mergeFlags(inheritedArrayTypeFlags, elementType.flags);
                         elementTypesInfo.push(elementType);
                     }
@@ -425,7 +424,7 @@ export function createLocalInferenceResolver({
                         const modifiers = inferenceFlags & NarrowBehavior.AsConst ?
                             [factory.createModifier(SyntaxKind.ReadonlyKeyword)] :
                             [];
-                        const { typeNode, flags: propTypeFlags } = localInference(prop.initializer, nextInferenceFlags);
+                        const { typeNode, flags: propTypeFlags } = localInference(prop.initializer, inferenceFlags & NarrowBehavior.NotKeepLiterals);
                         inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, propTypeFlags);
                         newProp = factory.createPropertySignature(
                             modifiers,
