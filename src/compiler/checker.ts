@@ -37086,7 +37086,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkVoidExpression(node: VoidExpression): Type {
         if (node.parent.kind === SyntaxKind.ArrowFunction && (node.parent as ArrowFunction).body === node) {
-            checkNodeDeferred(node.expression);
+            checkNodeDeferred(node);
         }
         else {
             checkExpression(node.expression);
@@ -46202,6 +46202,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.AsExpression:
             case SyntaxKind.ParenthesizedExpression:
                 checkAssertionDeferred(node as AssertionExpression | JSDocTypeAssertion);
+                break;
+            case SyntaxKind.VoidExpression:
+                checkExpression((node as VoidExpression).expression);
                 break;
             case SyntaxKind.BinaryExpression:
                 if (isInstanceOfExpression(node)) {
