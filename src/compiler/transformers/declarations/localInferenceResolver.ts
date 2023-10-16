@@ -344,8 +344,9 @@ export function createLocalInferenceResolver({
 
         return invalid(node);
     }
-    function invalid(sourceNode: Node): LocalTypeInfo {
-        return { typeNode: makeInvalidTypeAndReport(sourceNode), flags: LocalTypeInfoFlags.Invalid, sourceNode };
+    function invalid(sourceNode: Node): LocalTypeInfo {        
+        reportIsolatedDeclarationError(sourceNode);
+        return { typeNode: makeInvalidType(), flags: LocalTypeInfoFlags.Invalid, sourceNode };
     }
     function regular(typeNode: TypeNode, sourceNode: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
         return { typeNode, flags, sourceNode };
@@ -363,12 +364,12 @@ export function createLocalInferenceResolver({
             const prop = objectLiteral.properties[propIndex];
 
             if (isShorthandPropertyAssignment(prop)) {
-                invalid(prop);
+                reportIsolatedDeclarationError(prop);
                 inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
                 continue;
             }
             else if (isSpreadAssignment(prop)) {
-                invalid(prop);
+                reportIsolatedDeclarationError(prop);
                 inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
                 continue;
             }
@@ -539,10 +540,7 @@ export function createLocalInferenceResolver({
             );
         }
     }
-    function makeInvalidTypeAndReport(node: Node) {
-        reportIsolatedDeclarationError(node);
-        return makeInvalidType();
-    }
+
     function visitTypeAndClone(type: TypeNode | undefined, owner: Node) {
         const visitedType = visitNode(type, visitDeclarationSubtree, isTypeNode);
         if (!visitedType) return invalid(owner);
