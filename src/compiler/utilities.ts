@@ -4334,7 +4334,7 @@ export function getNextJSDocCommentLocation(node: Node) {
         parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
         parent.kind === SyntaxKind.ReturnStatement ||
         getNestedModuleDeclaration(parent) ||
-        isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken
+        isAssignmentExpression(node)
     ) {
         return parent;
     }
@@ -4346,8 +4346,7 @@ export function getNextJSDocCommentLocation(node: Node) {
     // var x = function(name) { return name.length; }
     else if (
         parent.parent &&
-        (getSingleVariableOfVariableStatement(parent.parent) === node ||
-            isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken)
+        (getSingleVariableOfVariableStatement(parent.parent) === node || isAssignmentExpression(parent))
     ) {
         return parent.parent;
     }
