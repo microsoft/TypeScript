@@ -175,9 +175,6 @@ export function createLocalInferenceResolver({
         flags: LocalTypeInfoFlags;
     }
 
-    function mergeFlags(existing: LocalTypeInfoFlags, newFlags: LocalTypeInfoFlags): LocalTypeInfoFlags {
-        return existing | newFlags;
-    }
     function getAccessorInfo(properties: NodeArray<ObjectLiteralElementLike>, knownAccessor: SetAccessorDeclaration | GetAccessorDeclaration) {
         const nameKey = getMemberKey(knownAccessor);
         const knownIsGetAccessor = isGetAccessorDeclaration(knownAccessor);
@@ -239,8 +236,7 @@ export function createLocalInferenceResolver({
                         fnNode.parameters.map(p => deepClone(ensureParameter(p))),
                         returnType.typeNode,
                     );
-                    const flags = mergeFlags(LocalTypeInfoFlags.None, returnType.flags);
-                    return regular(fnTypeNode, node, flags);
+                    return regular(fnTypeNode, node, LocalTypeInfoFlags.None | returnType.flags);
                 }
                 finally {
                     setEnclosingDeclarations(oldEnclosingDeclaration);
@@ -330,7 +326,7 @@ export function createLocalInferenceResolver({
                     }
                     else {
                         const elementType = localInference(element, inferenceFlags & NarrowBehavior.NotKeepLiterals);
-                        inheritedArrayTypeFlags = mergeFlags(inheritedArrayTypeFlags, elementType.flags);
+                        inheritedArrayTypeFlags |= elementType.flags;
                         elementTypesInfo.push(elementType);
                     }
                 }
@@ -403,7 +399,7 @@ export function createLocalInferenceResolver({
                     const typeParameters = visitNodes(prop.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration)?.map(deepClone);
                     // TODO: We need to see about inheriting flags from parameters
                     const parameters = prop.parameters.map(p => deepClone(ensureParameter(p)));
-                    inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, returnType.flags);
+                    inheritedObjectTypeFlags |= returnType.flags;
                     if (inferenceFlags & NarrowBehavior.AsConst) {
                         newProp = factory.createPropertySignature(
                             [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
@@ -436,7 +432,7 @@ export function createLocalInferenceResolver({
                     [factory.createModifier(SyntaxKind.ReadonlyKeyword)] :
                     [];
                 const { typeNode, flags: propTypeFlags } = localInference(prop.initializer, inferenceFlags & NarrowBehavior.NotKeepLiterals);
-                inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, propTypeFlags);
+                inheritedObjectTypeFlags |= propTypeFlags;
                 newProp = factory.createPropertySignature(
                     modifiers,
                     name,
@@ -458,7 +454,7 @@ export function createLocalInferenceResolver({
                     if (!setAccessor) {
                         modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword));
                     }
-                    inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, accessorType.flags);
+                    inheritedObjectTypeFlags |= accessorType.flags;
                     newProp = factory.createPropertySignature(
                         modifiers,
                         name,
