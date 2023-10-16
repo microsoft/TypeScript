@@ -127,35 +127,38 @@ export function createLocalInferenceResolver({
     checkEntityNameVisibility(name: EntityNameOrEntityNameExpression, container?: Node): void;
     ensureParameter(p: ParameterDeclaration): ParameterDeclaration;
     context: TransformationContext;
-}): LocalInferenceResolver | undefined {
+}): { resolver: LocalInferenceResolver, isolatedDeclarations: true } | { resolver: undefined, isolatedDeclarations: false } {
     let currentSourceFile: SourceFile | undefined;
     const options = context.getCompilerOptions();
     const resolver = context.getEmitResolver();
     if (!options.isolatedDeclarations) {
-        return undefined;
+        return { resolver: undefined, isolatedDeclarations: false };
     }
     const { factory } = context;
     const strictNullChecks = !!options.strict || !!options.strictNullChecks;
 
     return {
-        fromInitializer(node: HasInferredType, type: TypeNode | undefined, sourceFile: SourceFile) {
-            const oldSourceFile = currentSourceFile;
-            currentSourceFile = sourceFile;
-            try {
-                const localType = localInferenceFromInitializer(node, type);
-                if (localType !== undefined) {
-                    return localType;
+        resolver: {
+            fromInitializer(node: HasInferredType, type: TypeNode | undefined, sourceFile: SourceFile) {
+                const oldSourceFile = currentSourceFile;
+                currentSourceFile = sourceFile;
+                try {
+                    const localType = localInferenceFromInitializer(node, type);
+                    if (localType !== undefined) {
+                        return localType;
+                    }
+                    if (type) {
+                        return visitNode(type, visitDeclarationSubtree, isTypeNode)!;
+                    }
+                    return makeInvalidType();
                 }
-                if (type) {
-                    return visitNode(type, visitDeclarationSubtree, isTypeNode)!;
+                finally {
+                    currentSourceFile = oldSourceFile;
                 }
-                return makeInvalidType();
-            }
-            finally {
-                currentSourceFile = oldSourceFile;
-            }
+            },
+            makeInvalidType,
         },
-        makeInvalidType,
+        isolatedDeclarations: options.isolatedDeclarations
     };
     function reportIsolatedDeclarationError(node: Node) {
         const message = createDiagnosticForNode(
@@ -713,7 +716,7 @@ export function createLocalInferenceResolver({
         else if (type) {
             return visitNode(type, visitDeclarationSubtree, isTypeNode);
         }
-        else if (isExportAssignment(node) && node.expression) {
+        else if (isExportAssignment(node)) {
             localType = localInference(node.expression, NarrowBehavior.KeepLiterals);
         }
         else if (isVariableDeclaration(node) && node.initializer) {
