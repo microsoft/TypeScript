@@ -25,6 +25,7 @@ import {
     getTokenAtPosition,
     getUniqueName,
     ignoreSourceNewlines,
+    isArray,
     isConditionalTypeNode,
     isFunctionLike,
     isIdentifier,
@@ -44,6 +45,7 @@ import {
     isTypePredicateNode,
     isTypeQueryNode,
     isTypeReferenceNode,
+    isUnionTypeNode,
     JSDocTag,
     JSDocTemplateTag,
     Node,
@@ -151,7 +153,7 @@ registerRefactor(refactorName, {
 
 interface TypeAliasInfo {
     isJS: boolean;
-    selection: TypeNode;
+    selection: TypeNode | TypeNode[];
     enclosingNode: Node;
     typeParameters: readonly TypeParameterDeclaration[];
     typeElements?: readonly TypeElement[];
@@ -159,7 +161,7 @@ interface TypeAliasInfo {
 
 interface InterfaceInfo {
     isJS: boolean;
-    selection: TypeNode;
+    selection: TypeNode | TypeNode[];
     enclosingNode: Node;
     typeParameters: readonly TypeParameterDeclaration[];
     typeElements: readonly TypeElement[];
@@ -173,15 +175,24 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
     const current = getTokenAtPosition(file, startPosition);
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const cursorRequest = range.pos === range.end && considerEmptySpans;
-
-    const selection = findAncestor(current, node =>
+    
+    const firstType = findAncestor(current, node =>
         node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
         (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end)));
-    if (!selection || !isTypeNode(selection)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
-
+    if (!firstType || !isTypeNode(firstType)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
+    
     const checker = context.program.getTypeChecker();
-    const enclosingNode = getEnclosingNode(selection, isJS);
+    const enclosingNode = getEnclosingNode(firstType, isJS);
     if (enclosingNode === undefined) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
+    
+    const typeList: TypeNode[] = [];
+    if ((isUnionTypeNode(firstType.parent) || isIntersectionTypeNode(firstType.parent)) && range.end > firstType.end) {
+        // the only extraction cases in which multiple nodes may need to be selected to capture the entire type are union and intersection types
+        addRange(typeList, firstType.parent.types.filter(type => {
+                return type.getStart() >= range.pos && type.getEnd() <= range.end
+        }));
+    }
+    const selection = typeList.length > 1 ? typeList : firstType;
 
     const typeParameters = collectTypeParameters(checker, selection, enclosingNode, file);
     if (!typeParameters) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
@@ -190,12 +201,21 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
     return { isJS, selection, enclosingNode, typeParameters, typeElements };
 }
 
-function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): readonly TypeElement[] | undefined {
-    if (!node) return undefined;
-    if (isIntersectionTypeNode(node)) {
+function flattenTypeLiteralNodeReference(checker: TypeChecker, selection: TypeNode | TypeNode[] | undefined): readonly TypeElement[] | undefined {
+    if (!selection) return undefined;
+    if (isArray(selection)) {
+        const result: TypeElement[] = [];
+        for (const type of selection) {
+            const flattenedTypeMembers = flattenTypeLiteralNodeReference(checker, type);
+            if (!flattenedTypeMembers) return undefined;
+            addRange(result, flattenedTypeMembers);
+        }
+        return result;
+    }
+    if (isIntersectionTypeNode(selection)) {
         const result: TypeElement[] = [];
         const seen = new Map<string, true>();
-        for (const type of node.types) {
+        for (const type of selection.types) {
             const flattenedTypeMembers = flattenTypeLiteralNodeReference(checker, type);
             if (!flattenedTypeMembers || !flattenedTypeMembers.every(type => type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string))) {
                 return undefined;
@@ -205,21 +225,33 @@ function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | 
         }
         return result;
     }
-    else if (isParenthesizedTypeNode(node)) {
-        return flattenTypeLiteralNodeReference(checker, node.type);
+    else if (isParenthesizedTypeNode(selection)) {
+        return flattenTypeLiteralNodeReference(checker, selection.type);
     }
-    else if (isTypeLiteralNode(node)) {
-        return node.members;
+    else if (isTypeLiteralNode(selection)) {
+        return selection.members;
     }
     return undefined;
 }
 
-function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
-    return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
+function rangeContainsSkipTrivia(r1: TextRange | TextRange[], node: Node | Node[], file: SourceFile): boolean {
+    const r1Range = arrayToNode(r1);
+    const nodeRange = arrayToNode(node);
+    return rangeContainsStartEnd(r1Range, skipTrivia(file.text, nodeRange.pos), nodeRange.end);
+
+    function arrayToNode(rangeOrArray: TextRange | TextRange[]): TextRange {
+        return isArray(rangeOrArray) ? {pos: rangeOrArray[0].pos, end: rangeOrArray[rangeOrArray.length-1].end } : rangeOrArray;
+    }
 }
 
-function collectTypeParameters(checker: TypeChecker, selection: TypeNode, enclosingNode: Node, file: SourceFile): TypeParameterDeclaration[] | undefined {
+function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeNode[], enclosingNode: Node, file: SourceFile): TypeParameterDeclaration[] | undefined {
     const result: TypeParameterDeclaration[] = [];
+    if (isArray(selection)) {
+        selection.forEach(t => {
+            if (!visitor(t)) return undefined;
+        });
+        return result;
+    }
     return visitor(selection) ? undefined : result;
 
     function visitor(node: Node): true | undefined {
@@ -280,14 +312,27 @@ function collectTypeParameters(checker: TypeChecker, selection: TypeNode, enclos
 function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: TypeAliasInfo) {
     const { enclosingNode, selection, typeParameters } = info;
 
-    const newTypeNode = factory.createTypeAliasDeclaration(
-        /*modifiers*/ undefined,
-        name,
-        typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)),
-        selection,
-    );
-    changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /*blankLineBetween*/ true);
-    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+    if (isArray(selection)) {
+        const newTypeValue = isUnionTypeNode(selection[0].parent) ? factory.createUnionTypeNode(selection) : factory.createIntersectionTypeNode(selection); 
+        const newTypeDeclaration = factory.createTypeAliasDeclaration(
+            /*modifiers*/ undefined,
+            name,
+            typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)),
+            newTypeValue,
+        );
+        changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeDeclaration), /*blankLineBetween*/ true);
+        changes.replaceNodeRange(file, selection[0], selection[selection.length-1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+    }
+    else {
+        const newTypeNode = factory.createTypeAliasDeclaration(
+            /*modifiers*/ undefined,
+            name,
+            typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)),
+            selection,
+        );
+        changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /*blankLineBetween*/ true);
+        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+    }
 }
 
 function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: InterfaceInfo) {
@@ -302,17 +347,31 @@ function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile,
     );
     setTextRange(newTypeNode, typeElements[0]?.parent);
     changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /*blankLineBetween*/ true);
-    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+
+    if (isArray(selection)) {
+        changes.replaceNodeRange(file, selection[0], selection[selection.length-1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+    }
+    else {
+        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+    }
 }
 
 function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorContext, file: SourceFile, name: string, info: ExtractInfo) {
     const { enclosingNode, selection, typeParameters } = info;
-
-    setEmitFlags(selection, EmitFlags.NoComments | EmitFlags.NoNestedComments);
+    
+    let newTypeValue: TypeNode;
+    if (isArray(selection)) {
+        selection.forEach(typeNode => { setEmitFlags(typeNode, EmitFlags.NoComments | EmitFlags.NoNestedComments) });
+        newTypeValue = isUnionTypeNode(selection[0].parent) ? factory.createUnionTypeNode(selection) : factory.createIntersectionTypeNode(selection); 
+    }
+    else {
+        setEmitFlags(selection, EmitFlags.NoComments | EmitFlags.NoNestedComments);
+        newTypeValue = selection;
+    }
 
     const node = factory.createJSDocTypedefTag(
         factory.createIdentifier("typedef"),
-        factory.createJSDocTypeExpression(selection),
+        factory.createJSDocTypeExpression(newTypeValue),
         factory.createIdentifier(name),
     );
 
@@ -339,7 +398,13 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
     else {
         changes.insertNodeBefore(file, enclosingNode, jsDoc, /*blankLineBetween*/ true);
     }
-    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
+
+    if (isArray(selection)) {
+        changes.replaceNodeRange(file, selection[0], selection[selection.length-1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
+    }
+    else {
+        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
+    }
 }
 
 function getEnclosingNode(node: Node, isJS: boolean) {
