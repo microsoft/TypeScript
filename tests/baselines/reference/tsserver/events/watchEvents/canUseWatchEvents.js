@@ -229,7 +229,7 @@ Custom WatchedFiles::
 /user/username/projects/myproject/tsconfig.json: *new*
   {"id":1,"path":"/user/username/projects/myproject/tsconfig.json"}
 
-Custom WatchedDirectories:Recursive::
+Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject: *new*
   {"id":2,"path":"/user/username/projects/myproject","recursive":true}
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -346,7 +346,7 @@ Custom WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"id":1,"path":"/user/username/projects/myproject/tsconfig.json"}
 
-Custom WatchedDirectories:Recursive::
+Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject:
   {"id":2,"path":"/user/username/projects/myproject","recursive":true}
 /user/username/projects/myproject/node_modules/@types:
@@ -482,7 +482,7 @@ Custom WatchedFiles *deleted*::
 /user/username/projects/myproject/b.ts:
   {"id":3,"path":"/user/username/projects/myproject/b.ts"}
 
-Custom WatchedDirectories:Recursive::
+Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject:
   {"id":2,"path":"/user/username/projects/myproject","recursive":true}
 /user/username/projects/myproject/node_modules/@types:
@@ -536,7 +536,7 @@ Custom WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"id":1,"path":"/user/username/projects/myproject/tsconfig.json"}
 
-Custom WatchedDirectories:Recursive::
+Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject:
   {"id":2,"path":"/user/username/projects/myproject","recursive":true}
 /user/username/projects/myproject/node_modules/@types:
