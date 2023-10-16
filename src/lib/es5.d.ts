@@ -2056,7 +2056,7 @@ interface Int8Array {
     /**
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
-     * a negative value if first argument is less than second argument, zero if they're equal and a positive
+     * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
@@ -2338,7 +2338,7 @@ interface Uint8Array {
     /**
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
-     * a negative value if first argument is less than second argument, zero if they're equal and a positive
+     * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
@@ -2620,7 +2620,7 @@ interface Uint8ClampedArray {
     /**
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
-     * a negative value if first argument is less than second argument, zero if they're equal and a positive
+     * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
@@ -2780,6 +2780,7 @@ interface Int16Array {
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: Int16Array) => void, thisArg?: any): void;
+
     /**
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
@@ -2900,7 +2901,7 @@ interface Int16Array {
     /**
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
-     * a negative value if first argument is less than second argument, zero if they're equal and a positive
+     * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
@@ -3183,7 +3184,7 @@ interface Uint16Array {
     /**
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
-     * a negative value if first argument is less than second argument, zero if they're equal and a positive
+     * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
@@ -3465,7 +3466,7 @@ interface Int32Array {
     /**
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
-     * a negative value if first argument is less than second argument, zero if they're equal and a positive
+     * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
@@ -3626,6 +3627,7 @@ interface Uint32Array {
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: Uint32Array) => void, thisArg?: any): void;
+
     /**
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
@@ -3746,7 +3748,7 @@ interface Uint32Array {
     /**
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
-     * a negative value if first argument is less than second argument, zero if they're equal and a positive
+     * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
@@ -4028,7 +4030,7 @@ interface Float32Array {
     /**
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
-     * a negative value if first argument is less than second argument, zero if they're equal and a positive
+     * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
@@ -4311,7 +4313,7 @@ interface Float64Array {
     /**
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
-     * a negative value if first argument is less than second argument, zero if they're equal and a positive
+     * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
