@@ -76,7 +76,6 @@ import {
     InstallPackageOptions,
     IScriptSnapshot,
     isDeclarationFileName,
-    isExternalModuleNameRelative,
     isInsideNodeModules,
     JSDocParsingMode,
     JsTyping,
@@ -90,6 +89,7 @@ import {
     ModuleResolutionCache,
     ModuleResolutionHost,
     ModuleSpecifierCache,
+    needsResolutionFromGlobalCache,
     noopFileWatcher,
     normalizePath,
     normalizeSlashes,
@@ -107,7 +107,6 @@ import {
     ProjectReference,
     removeFileExtension,
     ResolutionCache,
-    resolutionExtensionIsTSOrJson,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
@@ -1557,7 +1556,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // If typing files changed, then only schedule project update
             this.typingFiles = typingFiles;
             // Invalidate files with unresolved imports
-            this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
+            if (this.typingFiles.length) this.resolutionCache.invalidateUnresolvedResolutionsWithGlobalCachePass();
             this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
         }
     }
@@ -2444,11 +2443,10 @@ function extractUnresolvedImportsFromSourceFile(
 ): readonly string[] {
     return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
         let unresolvedImports: string[] | undefined;
-        program.forEachResolvedModule(({ resolvedModule }, name) => {
+        program.forEachResolvedModule((resolution, name) => {
             // pick unresolved non-relative names
             if (
-                (!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
-                !isExternalModuleNameRelative(name) &&
+                needsResolutionFromGlobalCache(name, resolution) &&
                 !ambientModules.some(m => m === name)
             ) {
                 unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
