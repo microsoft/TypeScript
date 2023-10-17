@@ -170,7 +170,7 @@ import {
     visitEachChild,
     visitNode,
     visitNodes,
-    VisitResult
+    VisitResult,
 } from "../_namespaces/ts";
 import {
     refactorKindBeginsWith,
@@ -1477,7 +1477,7 @@ function extractConstantInScope(
                 if (isLiteralExpression(a) && isLiteralExpression(b)) {
                     return a.text === b.text;
                 }
-                else if(isBooleanLiteral(a) && isBooleanLiteral(b)){
+                else if (isBooleanLiteral(a) && isBooleanLiteral(b)) {
                     // must be true here, since we check if a.kind !== b.kind above
                     return true;
                 }
@@ -1485,20 +1485,20 @@ function extractConstantInScope(
                     if (a.elements.length !== b.elements.length) return false;
                     return a.elements.every((a, i) => isSameNode(a, b.elements[i]));
                 }
-                else if(isObjectLiteralExpression(a) && isObjectLiteralExpression(b)){
-                    if(a.properties.length !== b.properties.length) return false;
+                else if (isObjectLiteralExpression(a) && isObjectLiteralExpression(b)) {
+                    if (a.properties.length !== b.properties.length) return false;
                     return a.properties.every((a, i) => isSameNode(a, b.properties[i]));
                 }
-                else if(isPropertyAssignment(a) && isPropertyAssignment(b)){
+                else if (isPropertyAssignment(a) && isPropertyAssignment(b)) {
                     return isSameNode(a.name, b.name) && isSameNode(a.initializer, b.initializer);
                 }
-                else if(isShorthandPropertyAssignment(a) && isShorthandPropertyAssignment(b)){
+                else if (isShorthandPropertyAssignment(a) && isShorthandPropertyAssignment(b)) {
                     return isSameNode(a.name, b.name);
                 }
-                else if(isComputedPropertyName(a) && isComputedPropertyName(b)){
+                else if (isComputedPropertyName(a) && isComputedPropertyName(b)) {
                     return isSameNode(a.expression, b.expression);
                 }
-                else if(isSpreadAssignment(a) && isSpreadAssignment(b) || isSpreadElement(a) && isSpreadElement(b)){
+                else if (isSpreadAssignment(a) && isSpreadAssignment(b) || isSpreadElement(a) && isSpreadElement(b)) {
                     return isSameNode(a.expression, b.expression);
                 }
                 else if (isIdentifier(a) && isIdentifier(b)) {
@@ -1509,7 +1509,7 @@ function extractConstantInScope(
                 else if (isPropertyAccessExpression(a) && isPropertyAccessExpression(b)) {
                     return isSameNode(a.expression, b.expression) && isSameNode(a.name, b.name) && a.questionDotToken?.kind === b.questionDotToken?.kind;
                 }
-                else if(isElementAccessExpression(a) && isElementAccessExpression(b)){
+                else if (isElementAccessExpression(a) && isElementAccessExpression(b)) {
                     return isSameNode(a.expression, b.expression) && isSameNode(a.argumentExpression, b.argumentExpression) && a.questionDotToken?.kind === b.questionDotToken?.kind;
                 }
                 else if (isBinaryExpression(a) && isBinaryExpression(b)) {
@@ -1518,12 +1518,12 @@ function extractConstantInScope(
                 else if (isConditionalExpression(a) && isConditionalExpression(b)) {
                     return isSameNode(a.condition, b.condition) && isSameNode(a.whenTrue, b.whenTrue) && isSameNode(a.whenFalse, b.whenFalse);
                 }
-                else if(isCallExpression(a) && isCallExpression(b)){
-                    if(isSameNode(a.expression, b.expression) && a.questionDotToken?.kind === b.questionDotToken?.kind && a.arguments.length === b.arguments.length && a.typeArguments?.length === b.typeArguments?.length){
+                else if (isCallExpression(a) && isCallExpression(b)) {
+                    if (isSameNode(a.expression, b.expression) && a.questionDotToken?.kind === b.questionDotToken?.kind && a.arguments.length === b.arguments.length && a.typeArguments?.length === b.typeArguments?.length) {
                         return a.arguments.every((a, i) => isSameNode(a, b.arguments[i])) && (a.typeArguments?.every((a, i) => isSameNode(a, b.typeArguments![i])) ?? true);
                     }
                 }
-                else if(isPrefixUnaryExpression(a) && isPrefixUnaryExpression(b) || isPostfixUnaryExpression(a) && isPostfixUnaryExpression(b)){
+                else if (isPrefixUnaryExpression(a) && isPrefixUnaryExpression(b) || isPostfixUnaryExpression(a) && isPostfixUnaryExpression(b)) {
                     return a.operator === b.operator && isSameNode(a.operand, b.operand);
                 }
 
