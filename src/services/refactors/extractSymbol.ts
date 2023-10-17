@@ -161,7 +161,7 @@ import {
     visitEachChild,
     visitNode,
     visitNodes,
-    VisitResult
+    VisitResult,
 } from "../_namespaces/ts";
 import {
     refactorKindBeginsWith,
@@ -923,8 +923,8 @@ function getPossibleExtractions(targetRange: TargetRange, context: RefactorConte
         const scopeDescription = isFunctionLikeDeclaration(scope)
             ? getDescriptionForFunctionLikeDeclaration(scope)
             : isClassLike(scope)
-                ? getDescriptionForClassLikeDeclaration(scope)
-                : getDescriptionForModuleLikeDeclaration(scope);
+            ? getDescriptionForClassLikeDeclaration(scope)
+            : getDescriptionForModuleLikeDeclaration(scope);
 
         let functionDescription: string;
         let constantDescription: string;
@@ -980,8 +980,8 @@ function getDescriptionForFunctionInScope(scope: Scope): string {
     return isFunctionLikeDeclaration(scope)
         ? "inner function"
         : isClassLike(scope)
-            ? "method"
-            : "function";
+        ? "method"
+        : "function";
 }
 function getDescriptionForConstantInScope(scope: Scope): string {
     return isClassLike(scope)
@@ -1467,29 +1467,30 @@ function extractConstantInScope(
                 if (a.kind !== b.kind) return false;
                 if (isLiteralExpression(a) && isLiteralExpression(b)) {
                     return a.text === b.text;
-                } else if (isArrayLiteralExpression(a) && isArrayLiteralExpression(b)) {
+                }
+                else if (isArrayLiteralExpression(a) && isArrayLiteralExpression(b)) {
                     if (a.elements.length !== b.elements.length) return false;
                     return a.elements.every((a, i) => isSameNode(a, b.elements[i]));
-                } else if (isIdentifier(a) && isIdentifier(b)) {
+                }
+                else if (isIdentifier(a) && isIdentifier(b)) {
                     return a.symbol === b.symbol;
-                } else if (isPropertyAccessExpression(a) && isPropertyAccessExpression(b)) {
+                }
+                else if (isPropertyAccessExpression(a) && isPropertyAccessExpression(b)) {
                     return a.symbol === b.symbol;
-                } else if (isBinaryExpression(a) && isBinaryExpression(b)) {
+                }
+                else if (isBinaryExpression(a) && isBinaryExpression(b)) {
                     return a.operatorToken.kind === b.operatorToken.kind && isSameNode(a.left, b.left) && isSameNode(a.right, b.right);
-                } else if (isConditionalExpression(a) && isConditionalExpression(b)) {
+                }
+                else if (isConditionalExpression(a) && isConditionalExpression(b)) {
                     return isSameNode(a.condition, b.condition) && isSameNode(a.whenTrue, b.whenTrue) && isSameNode(a.whenFalse, b.whenFalse);
                 }
 
                 return false;
             }
 
-            function visitor(potentialNode: Node): VisitResult<Node | undefined> {
+            function visitor(potentialNode: Node) {
                 // Don't handle the actual node here, it wil be handled below using the old code
                 if (potentialNode === node) {
-                    return potentialNode;
-                }
-
-                if (potentialNode === newVariableDeclaration) {
                     return potentialNode;
                 }
 
@@ -1507,7 +1508,7 @@ function extractConstantInScope(
                     return potentialNode;
                 }
 
-                return visitEachChild(potentialNode, visitor, nullTransformationContext)
+                return visitEachChild(potentialNode, visitor, nullTransformationContext);
             }
 
             visitEachChild(scope, visitor, nullTransformationContext);
@@ -1782,7 +1783,7 @@ function getNodeToInsertConstantBefore(node: Node, scope: Scope): Statement {
         }
     }
 
-    for (let curr = (prevScope || node).parent; ; curr = curr.parent) {
+    for (let curr = (prevScope || node).parent;; curr = curr.parent) {
         if (isBlockLike(curr)) {
             let prevStatement: Statement | undefined;
             for (const statement of curr.statements) {
@@ -1817,8 +1818,8 @@ function getPropertyAssignmentsForWritesAndVariableDeclarations(
     return variableAssignments === undefined
         ? writeAssignments!
         : writeAssignments === undefined
-            ? variableAssignments
-            : variableAssignments.concat(writeAssignments);
+        ? variableAssignments
+        : variableAssignments.concat(writeAssignments);
 }
 
 function isReadonlyArray(v: any): v is readonly any[] {
@@ -1887,8 +1888,8 @@ function collectReadsAndWrites(
     const expression = !isReadonlyArray(targetRange.range)
         ? targetRange.range
         : targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0])
-            ? targetRange.range[0].expression
-            : undefined;
+        ? targetRange.range[0].expression
+        : undefined;
 
     let expressionDiagnostic: Diagnostic | undefined;
     if (expression === undefined) {
