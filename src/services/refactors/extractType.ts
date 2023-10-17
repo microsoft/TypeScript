@@ -61,6 +61,7 @@ import {
     SymbolFlags,
     textChanges,
     TextRange,
+    toArray,
     TypeChecker,
     TypeElement,
     TypeNode,
@@ -237,18 +238,13 @@ function flattenTypeLiteralNodeReference(checker: TypeChecker, selection: TypeNo
     return undefined;
 }
 
-function rangeContainsSkipTrivia(r1: TextRange | TextRange[], node: Node | Node[], file: SourceFile): boolean {
-    const r1Range = arrayToNode(r1);
-    const nodeRange = arrayToNode(node);
-    return rangeContainsStartEnd(r1Range, skipTrivia(file.text, nodeRange.pos), nodeRange.end);
-
-    function arrayToNode(rangeOrArray: TextRange | TextRange[]): TextRange {
-        return isArray(rangeOrArray) ? { pos: rangeOrArray[0].pos, end: rangeOrArray[rangeOrArray.length - 1].end } : rangeOrArray;
-    }
+function rangeContainsSkipTrivia(r1: TextRange, node: TextRange, file: SourceFile): boolean {
+    return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
 }
 
 function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeNode[], enclosingNode: Node, file: SourceFile): TypeParameterDeclaration[] | undefined {
     const result: TypeParameterDeclaration[] = [];
+    const selectionRange = isArray(selection) ? { pos: selection[0].pos, end: selection[selection.length - 1].end } : selection;
     if (isArray(selection)) {
         selection.forEach(t => {
             if (!visitor(t)) return undefined;
@@ -266,11 +262,11 @@ function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeN
                     if (isTypeParameterDeclaration(decl) && decl.getSourceFile() === file) {
                         // skip extraction if the type node is in the range of the type parameter declaration.
                         // function foo<T extends { a?: /**/T }>(): void;
-                        if (decl.name.escapedText === typeName.escapedText && rangeContainsSkipTrivia(decl, selection, file)) {
+                        if (decl.name.escapedText === typeName.escapedText && rangeContainsSkipTrivia(decl, selectionRange, file)) {
                             return true;
                         }
 
-                        if (rangeContainsSkipTrivia(enclosingNode, decl, file) && !rangeContainsSkipTrivia(selection, decl, file)) {
+                        if (rangeContainsSkipTrivia(enclosingNode, decl, file) && !rangeContainsSkipTrivia(selectionRange, decl, file)) {
                             pushIfUnique(result, decl);
                             break;
                         }
@@ -280,25 +276,25 @@ function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeN
         }
         else if (isInferTypeNode(node)) {
             const conditionalTypeNode = findAncestor(node, n => isConditionalTypeNode(n) && rangeContainsSkipTrivia(n.extendsType, node, file));
-            if (!conditionalTypeNode || !rangeContainsSkipTrivia(selection, conditionalTypeNode, file)) {
+            if (!conditionalTypeNode || !rangeContainsSkipTrivia(selectionRange, conditionalTypeNode, file)) {
                 return true;
             }
         }
         else if ((isTypePredicateNode(node) || isThisTypeNode(node))) {
             const functionLikeNode = findAncestor(node.parent, isFunctionLike);
-            if (functionLikeNode && functionLikeNode.type && rangeContainsSkipTrivia(functionLikeNode.type, node, file) && !rangeContainsSkipTrivia(selection, functionLikeNode, file)) {
+            if (functionLikeNode && functionLikeNode.type && rangeContainsSkipTrivia(functionLikeNode.type, node, file) && !rangeContainsSkipTrivia(selectionRange, functionLikeNode, file)) {
                 return true;
             }
         }
         else if (isTypeQueryNode(node)) {
             if (isIdentifier(node.exprName)) {
                 const symbol = checker.resolveName(node.exprName.text, node.exprName, SymbolFlags.Value, /*excludeGlobals*/ false);
-                if (symbol?.valueDeclaration && rangeContainsSkipTrivia(enclosingNode, symbol.valueDeclaration, file) && !rangeContainsSkipTrivia(selection, symbol.valueDeclaration, file)) {
+                if (symbol?.valueDeclaration && rangeContainsSkipTrivia(enclosingNode, symbol.valueDeclaration, file) && !rangeContainsSkipTrivia(selectionRange, symbol.valueDeclaration, file)) {
                     return true;
                 }
             }
             else {
-                if (isThisIdentifier(node.exprName.left) && !rangeContainsSkipTrivia(selection, node.parent, file)) {
+                if (isThisIdentifier(node.exprName.left) && !rangeContainsSkipTrivia(selectionRange, node.parent, file)) {
                     return true;
                 }
             }
