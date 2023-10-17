@@ -1,4 +1,6 @@
-=== tests/cases/compiler/computedPropertiesNarrowed.ts ===
+//// [tests/cases/compiler/computedPropertiesNarrowed.ts] ////
+
+=== computedPropertiesNarrowed.ts ===
 const x: 0 | 1 = Math.random()? 0: 1;
 >x : Symbol(x, Decl(computedPropertiesNarrowed.ts, 0, 5))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))

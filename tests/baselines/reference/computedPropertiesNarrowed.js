@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/computedPropertiesNarrowed.ts] ////
+
 //// [computedPropertiesNarrowed.ts]
 const x: 0 | 1 = Math.random()? 0: 1;
 declare function assert(n: number): asserts n is 1;

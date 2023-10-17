@@ -1,12 +1,12 @@
-tests/cases/compiler/computedPropertiesNarrowed.ts(4,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-tests/cases/compiler/computedPropertiesNarrowed.ts(18,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-tests/cases/compiler/computedPropertiesNarrowed.ts(21,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-tests/cases/compiler/computedPropertiesNarrowed.ts(25,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-tests/cases/compiler/computedPropertiesNarrowed.ts(36,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-tests/cases/compiler/computedPropertiesNarrowed.ts(46,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertiesNarrowed.ts(4,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertiesNarrowed.ts(18,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertiesNarrowed.ts(21,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertiesNarrowed.ts(25,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertiesNarrowed.ts(36,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertiesNarrowed.ts(46,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 
 
-==== tests/cases/compiler/computedPropertiesNarrowed.ts (6 errors) ====
+==== computedPropertiesNarrowed.ts (6 errors) ====
     const x: 0 | 1 = Math.random()? 0: 1;
     declare function assert(n: number): asserts n is 1;
     assert(x);

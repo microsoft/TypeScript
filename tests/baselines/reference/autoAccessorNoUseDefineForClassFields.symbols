@@ -22,17 +22,18 @@ class C3 {
 >C3 : Symbol(C3, Decl(file3.ts, 0, 0))
 
     static accessor #x = 0;
->x : Symbol(C3.x, Decl(file3.ts, 0, 10))
+>#x : Symbol(C3.#x, Decl(file3.ts, 0, 10))
 
     accessor #y = 0;
+>#y : Symbol(C3.#y, Decl(file3.ts, 1, 27))
 }
 
-=== file3.ts ===
+=== file3-2.ts ===
 class C3 {
->C3 : Symbol(C3, Decl(file3.ts, 0, 0))
+>C3 : Symbol(C3, Decl(file3-2.ts, 0, 0))
 
     accessor x = 0;
->x : Symbol(C3.x, Decl(file3.ts, 0, 10))
+>x : Symbol(C3.x, Decl(file3-2.ts, 0, 10))
 }
 
 === file4.ts ===
