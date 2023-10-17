@@ -1,0 +1,22 @@
+/// <reference path='fourslash.ts' />
+
+// @filename: foo.ts
+////function foo() {
+////    /*a*/const a = { ...x, y, z: false, ['a']: true }/*b*/;
+////    const b = { ...x, y, z: false, ['a']: true };
+////    return a+b;
+////}
+
+goTo.select("a", "b");
+edit.applyRefactor({
+    refactorName: "Extract Symbol",
+    actionName: "constant_scope_1",
+    actionDescription: "Extract to constant in global scope",
+    newContent:
+        `const newLocal = { ...x, y, z: false, ['a']: true };
+function foo() {
+    const a = newLocal;
+    const b = /*RENAME*/newLocal;
+    return a+b;
+}`
+});
