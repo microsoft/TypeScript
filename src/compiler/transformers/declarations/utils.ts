@@ -15,7 +15,7 @@ import {
     SyntaxKind,
 } from "../../types";
 import {
-    MemberKey
+    MemberKey,
 } from "./types";
 
 export function getMemberKey(name: string | Exclude<PropertyName, ComputedPropertyName> | NoSubstitutionTemplateLiteral): MemberKey;

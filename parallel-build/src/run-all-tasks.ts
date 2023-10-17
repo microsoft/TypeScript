@@ -2,7 +2,7 @@ import * as child from "node:child_process";
 import path from "node:path";
 
 import * as fs from "fs/promises";
-import * as sys from "systeminformation"
+import * as sys from "systeminformation";
 
 const taskDir = "./tasks";
 const statsDir = taskDir + "-stats";

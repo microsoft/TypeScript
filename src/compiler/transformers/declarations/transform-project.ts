@@ -56,7 +56,7 @@ function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOpt
 
         if (!source) return;
 
-        const {code, diagnostics} = emitDeclarationsForFile(source, [], [], options);
+        const { code, diagnostics } = emitDeclarationsForFile(source, [], [], options);
         if (diagnostics.length > 0) {
             throw new Error(`Cannot transform file '${source.fileName}' due to ${diagnostics.length} diagnostics`);
         }

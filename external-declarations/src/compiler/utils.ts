@@ -1,7 +1,27 @@
-import { __String, CompilerOptions, Extension, JsxEmit, ModuleKind, NewLineKind, Node, NodeFlags, PrinterOptions, ScriptTarget, sys, TsConfigSourceFile } from "typescript";
+import {
+    __String,
+    CompilerOptions,
+    Extension,
+    JsxEmit,
+    ModuleKind,
+    NewLineKind,
+    Node,
+    NodeFlags,
+    PrinterOptions,
+    ScriptTarget,
+    sys,
+    TsConfigSourceFile,
+} from "typescript";
 
-import { clone, flatten, some } from "./lang-utils";
-import { fileExtensionIs, fileExtensionIsOneOf } from "./path-utils";
+import {
+    clone,
+    flatten,
+    some,
+} from "./lang-utils";
+import {
+    fileExtensionIs,
+    fileExtensionIsOneOf,
+} from "./path-utils";
 
 /** @internal */
 export function isInJSFile(node: Node | undefined): boolean {
@@ -16,19 +36,17 @@ export function getDeclarationEmitExtensionForPath(path: string) {
         Extension.Dts;
 }
 
-
 /** @internal */
 export function getOutputExtension(fileName: string, options: CompilerOptions): Extension {
     return fileExtensionIs(fileName, Extension.Json) ? Extension.Json :
-    options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
-    fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
-    fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs]) ? Extension.Cjs :
-    Extension.Js;
+        options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
+        fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
+        fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs]) ? Extension.Cjs :
+        Extension.Js;
 }
 
-
 /** @internal */
-export function getEmitScriptTarget(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
+export function getEmitScriptTarget(compilerOptions: { module?: CompilerOptions["module"]; target?: CompilerOptions["target"]; }) {
     return compilerOptions.target ||
         (compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
         (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
@@ -45,7 +63,7 @@ const supportedJSExtensionsFlat: readonly Extension[] = flatten(supportedJSExten
  * @internal
  */
 const supportedTSExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts], [Extension.Cts, Extension.Dcts], [Extension.Mts, Extension.Dmts]];
- /** @internal */
+/** @internal */
 const supportedTSExtensionsFlat: readonly Extension[] = flatten(supportedTSExtensions);
 
 /** @internal */
@@ -63,8 +81,6 @@ const supportedDeclarationExtensions: readonly Extension[] = [Extension.Dts, Ext
 export function isDeclarationFileName(fileName: string): boolean {
     return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions);
 }
-
-
 
 /** @internal */
 export function cloneCompilerOptions(options: CompilerOptions): CompilerOptions {
@@ -91,6 +107,3 @@ export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, g
     }
     return getNewLine ? getNewLine() : sys ? sys.newLine : carriageReturnLineFeed;
 }
-
-
-

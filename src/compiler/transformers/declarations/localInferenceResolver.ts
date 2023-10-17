@@ -133,7 +133,7 @@ export function createLocalInferenceResolver({
     checkEntityNameVisibility(name: EntityNameOrEntityNameExpression, container?: Node): void;
     ensureParameter(p: ParameterDeclaration): ParameterDeclaration;
     context: TransformationContext;
-}): { resolver: LocalInferenceResolver, isolatedDeclarations: true } | { resolver: undefined, isolatedDeclarations: false } {
+}): { resolver: LocalInferenceResolver; isolatedDeclarations: true; } | { resolver: undefined; isolatedDeclarations: false; } {
     let currentSourceFile: SourceFile;
     const options = context.getCompilerOptions();
     const resolver = context.getEmitResolver();
@@ -164,7 +164,7 @@ export function createLocalInferenceResolver({
             },
             makeInvalidType,
         },
-        isolatedDeclarations: options.isolatedDeclarations
+        isolatedDeclarations: options.isolatedDeclarations,
     };
     function reportIsolatedDeclarationError(node: Node) {
         const message = createDiagnosticForNode(
@@ -193,10 +193,10 @@ export function createLocalInferenceResolver({
 
         const getAccessor = knownIsGetAccessor ? knownAccessor :
             otherAccessor && isGetAccessorDeclaration(otherAccessor) ? otherAccessor :
-                undefined;
+            undefined;
         const setAccessor = !knownIsGetAccessor ? knownAccessor :
             otherAccessor && isSetAccessorDeclaration(otherAccessor) ? otherAccessor :
-                undefined;
+            undefined;
 
         return {
             otherAccessorIndex,
@@ -520,9 +520,10 @@ export function createLocalInferenceResolver({
                         currentSourceFile,
                         {
                             pos: node.heritageClauses[0].pos,
-                            end: node.heritageClauses[node.heritageClauses.length - 1].end
+                            end: node.heritageClauses[node.heritageClauses.length - 1].end,
                         },
-                        Diagnostics.Heritage_clauses_in_class_expressions_are_not_allowed_with_isolatedDeclarations)
+                        Diagnostics.Heritage_clauses_in_class_expressions_are_not_allowed_with_isolatedDeclarations,
+                    ),
                 ],
             });
             invalid = true;
@@ -536,7 +537,7 @@ export function createLocalInferenceResolver({
                         invalid = true;
                     }
                     // TODO: See what happens on private modifiers.
-                    if (parameter.modifiers?.some((modifier) => propertyLikeModifiers.has(modifier.kind))) {
+                    if (parameter.modifiers?.some(modifier => propertyLikeModifiers.has(modifier.kind))) {
                         nonStaticMembers.push(factory.createPropertySignature(
                             keepReadonlyKeyword(parameter.modifiers),
                             parameter.name as Identifier,
@@ -553,7 +554,8 @@ export function createLocalInferenceResolver({
                         parameter.initializer,
                     ));
                 }
-            } else if (isMethodDeclaration(member)) {
+            }
+            else if (isMethodDeclaration(member)) {
                 const type = localInferenceFromInitializer(member, member.type);
                 if (!type) {
                     invalid = true;
@@ -566,19 +568,22 @@ export function createLocalInferenceResolver({
                     member.parameters,
                     type,
                 );
-                if (member.modifiers?.some((modifier) => modifier.kind === SyntaxKind.StaticKeyword)) {
+                if (member.modifiers?.some(modifier => modifier.kind === SyntaxKind.StaticKeyword)) {
                     staticMembers.push(methodSignature);
-                } else {
+                }
+                else {
                     nonStaticMembers.push(methodSignature);
                 }
-            } else if (isGetAccessorDeclaration(member) || isSetAccessorDeclaration(member)) {
+            }
+            else if (isGetAccessorDeclaration(member) || isSetAccessorDeclaration(member)) {
                 if (!hasGetSetAccessor) {
                     hasGetSetAccessor = true;
                     let type;
                     if (isGetAccessorDeclaration(member)) {
                         type = localInferenceFromInitializer(member, member.type);
-                    } else {
-                        type = localInferenceFromInitializer(member.parameters[0], member.parameters[0].type)
+                    }
+                    else {
+                        type = localInferenceFromInitializer(member.parameters[0], member.parameters[0].type);
                     }
                     if (!type) {
                         invalid = true;
@@ -589,12 +594,14 @@ export function createLocalInferenceResolver({
                             member.name,
                             /*questionToken*/ undefined,
                             type,
-                        )
+                        ),
                     );
                 }
-            } else if (isIndexSignatureDeclaration(member)) {
+            }
+            else if (isIndexSignatureDeclaration(member)) {
                 nonStaticMembers.push(member);
-            } else if (isPropertyDeclaration(member)) {
+            }
+            else if (isPropertyDeclaration(member)) {
                 const name = isPrivateIdentifier(member.name) ?
                     // imitating the behavior from utilities.ts : getSymbolNameForPrivateIdentifier, but as we don't have
                     // a Symbol & SymbolId in hand, we use NodeId of the declaration instead as an approximiation and to provide uniqueness.
@@ -611,10 +618,11 @@ export function createLocalInferenceResolver({
                     name,
                     member.questionToken,
                     type,
-                )
-                if (member.modifiers?.some((modifier) => modifier.kind === SyntaxKind.StaticKeyword)) {
+                );
+                if (member.modifiers?.some(modifier => modifier.kind === SyntaxKind.StaticKeyword)) {
                     staticMembers.push(propertySignature);
-                } else {
+                }
+                else {
                     nonStaticMembers.push(propertySignature);
                 }
             }
@@ -627,7 +635,7 @@ export function createLocalInferenceResolver({
             const constructorSignature = factory.createConstructSignature(
                 node.typeParameters,
                 constructorParameters,
-                factory.createTypeLiteralNode(nonStaticMembers)
+                factory.createTypeLiteralNode(nonStaticMembers),
             );
             const typeNode = factory.createTypeLiteralNode([constructorSignature, ...staticMembers]);
             return { typeNode, flags: LocalTypeInfoFlags.None, sourceNode: node };
@@ -635,9 +643,10 @@ export function createLocalInferenceResolver({
     }
 
     function keepReadonlyKeyword(modifiers?: NodeArray<ModifierLike>): Modifier[] {
-        if (modifiers?.some((modifier) => modifier.kind === SyntaxKind.ReadonlyKeyword)) {
+        if (modifiers?.some(modifier => modifier.kind === SyntaxKind.ReadonlyKeyword)) {
             return [factory.createModifier(SyntaxKind.ReadonlyKeyword)];
-        } else {
+        }
+        else {
             return [];
         }
     }

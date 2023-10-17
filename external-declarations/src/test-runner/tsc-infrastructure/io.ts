@@ -1,7 +1,14 @@
-import { sys } from "typescript";
+import {
+    sys,
+} from "typescript";
 
-import { compareStringsCaseInsensitive,compareStringsCaseSensitive } from "../../compiler/lang-utils";
-import { FileSystemEntries } from "./vfs";
+import {
+    compareStringsCaseInsensitive,
+    compareStringsCaseSensitive,
+} from "../../compiler/lang-utils";
+import {
+    FileSystemEntries,
+} from "./vfs";
 import * as vpath from "./vpath";
 
 export interface IO {
@@ -18,7 +25,7 @@ export interface IO {
     fileExists(fileName: string): boolean;
     directoryExists(path: string): boolean;
     deleteFile(fileName: string): void;
-    listFiles(path: string, filter?: RegExp, options?: { recursive?: boolean }): string[];
+    listFiles(path: string, filter?: RegExp, options?: { recursive?: boolean; }): string[];
     log(text: string): void;
     args(): string[];
     getExecutingFilePath(): string;
@@ -29,7 +36,7 @@ export interface IO {
     tryEnableSourceMapsForHost?(): void;
     getEnvironmentVariable?(name: string): string;
     getMemoryUsage?(): number | undefined;
-    joinPath(...components: string[]): string
+    joinPath(...components: string[]): string;
 }
 
 // harness always uses one kind of new line
@@ -65,7 +72,7 @@ function createNodeIO(): IO {
         return pathModule.join(...components);
     }
 
-    function listFiles(path: string, spec: RegExp, options: { recursive?: boolean } = {}) {
+    function listFiles(path: string, spec: RegExp, options: { recursive?: boolean; } = {}) {
         function filesInFolder(folder: string): string[] {
             let paths: string[] = [];
 
@@ -151,14 +158,15 @@ function createNodeIO(): IO {
         exit: exitCode => sys.exit(exitCode),
         readDirectory: (path, extension, exclude, include, depth) => sys.readDirectory(path, extension, exclude, include, depth),
         getAccessibleFileSystemEntries,
-        tryEnableSourceMapsForHost: () => { throw new Error("Not supported");},
+        tryEnableSourceMapsForHost: () => {
+            throw new Error("Not supported");
+        },
         getMemoryUsage: () => sys.getMemoryUsage && sys.getMemoryUsage(),
         getEnvironmentVariable(name: string) {
             return process.env[name] || "";
         },
-        joinPath
+        joinPath,
     };
 }
-
 
 export const IO = createNodeIO();

@@ -112,8 +112,8 @@ async function main() {
         const nextTasks = tasks.filter(t => t.dependencies.every(d => completedTasks.has(d)));
         if (nextTasks.length === 0) {
             console.log(`${taskNameLog("NONE")}: Waiting for deps to finish. Unscheduled Tasks: ${tasks.length}`);
-            if(activeTasks.length === 0) {
-                throw new Error(`No tasks are running but tasks still have required dependencies. Check your task file. Sample uncompleted task: ${tasks[0].dependencies.find(o => !completedTasks.has(o))}`)
+            if (activeTasks.length === 0) {
+                throw new Error(`No tasks are running but tasks still have required dependencies. Check your task file. Sample uncompleted task: ${tasks[0].dependencies.find(o => !completedTasks.has(o))}`);
             }
             await waitForTaskCompletion();
             continue;

@@ -1,8 +1,31 @@
-import { Path } from "typescript";
+import {
+    Path,
+} from "typescript";
 
-import { changeAnyExtension, comparePaths, comparePathsCaseInsensitive, comparePathsCaseSensitive, getAnyExtensionFromPath, getBaseFileName, getDirectoryPath, getPathComponents, getPathFromPathComponents, getRelativePathFromDirectory, isDiskPathRoot, isRootedDiskPath, reducePathComponents, resolvePath } from "../../compiler/path-utils";
-import { CharacterCodes } from "../../compiler/types";
-import { hasJSFileExtension, hasTSFileExtension, isDeclarationFileName } from "../../compiler/utils";
+import {
+    changeAnyExtension,
+    comparePaths,
+    comparePathsCaseInsensitive,
+    comparePathsCaseSensitive,
+    getAnyExtensionFromPath,
+    getBaseFileName,
+    getDirectoryPath,
+    getPathComponents,
+    getPathFromPathComponents,
+    getRelativePathFromDirectory,
+    isDiskPathRoot,
+    isRootedDiskPath,
+    reducePathComponents,
+    resolvePath,
+} from "../../compiler/path-utils";
+import {
+    CharacterCodes,
+} from "../../compiler/types";
+import {
+    hasJSFileExtension,
+    hasTSFileExtension,
+    isDeclarationFileName,
+} from "../../compiler/utils";
 import * as vfs from "./vfs";
 
 /**
@@ -18,8 +41,6 @@ export const altDirectorySeparator = "\\";
 const urlSchemeSeparator = "://";
 const backslashRegExp = /\\/g;
 export const sep = directorySeparator;
-
-
 
 /**
  * Combines paths. If a path is absolute, it replaces any previous path. Relative paths are not simplified.
@@ -67,7 +88,6 @@ export function normalizeSlashes(path: string): string {
         : path;
 }
 
-
 /**
  * Adds a trailing directory separator to a path, if it does not already have one.
  *
@@ -106,7 +126,6 @@ export function hasTrailingDirectorySeparator(path: string) {
 export function isAnyDirectorySeparator(charCode: number): boolean {
     return charCode === CharacterCodes.slash || charCode === CharacterCodes.backslash;
 }
-
 
 /**
  * Returns length of the root part of a path or URL (i.e. length of "/", "x:/", "//server/share/, file:///user/files").
@@ -176,8 +195,10 @@ function getEncodedRootLength(path: string): number {
             // special case interpreted as "the machine from which the URL is being interpreted".
             const scheme = path.slice(0, schemeEnd);
             const authority = path.slice(authorityStart, authorityEnd);
-            if (scheme === "file" && (authority === "" || authority === "localhost") &&
-                isVolumeCharacter(path.charCodeAt(authorityEnd + 1))) {
+            if (
+                scheme === "file" && (authority === "" || authority === "localhost") &&
+                isVolumeCharacter(path.charCodeAt(authorityEnd + 1))
+            ) {
                 const volumeSeparatorEnd = getFileUrlVolumeSeparatorEnd(path, authorityEnd + 2);
                 if (volumeSeparatorEnd !== -1) {
                     if (path.charCodeAt(volumeSeparatorEnd) === CharacterCodes.slash) {
@@ -286,7 +307,6 @@ export function validate(path: string, flags: ValidationFlags = ValidationFlags.
     if (!validateComponents(components, flags, trailing)) throw vfs.createIOError("ENOENT");
     return components.length > 1 && trailing ? format(reduce(components)) + sep : format(reduce(components));
 }
-
 
 const invalidRootComponentRegExp = /^(?!(\/|\/\/\w+\/|[a-zA-Z]:\/?|)$)/;
 const invalidNavigableComponentRegExp = /[:*?"<>|]/;

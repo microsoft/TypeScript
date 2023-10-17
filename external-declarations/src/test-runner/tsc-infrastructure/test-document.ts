@@ -1,9 +1,13 @@
-import { isLineBreak } from "typescript";
+import {
+    isLineBreak,
+} from "typescript";
 
-import { CharacterCodes } from "../../compiler/types";
-import { TestFile } from "./compiler-run";
-
-
+import {
+    CharacterCodes,
+} from "../../compiler/types";
+import {
+    TestFile,
+} from "./compiler-run";
 
 /** @internal */
 export function computeLineStarts(text: string): number[] {
@@ -58,7 +62,8 @@ export class TextDocument {
             file.unitName,
             file.content,
             file.fileOptions && Object.keys(file.fileOptions)
-                .reduce((meta, key) => meta.set(key, file.fileOptions[key]), new Map<string, string>()));
+                .reduce((meta, key) => meta.set(key, file.fileOptions[key]), new Map<string, string>()),
+        );
     }
 
     public asTestFile() {
@@ -66,7 +71,7 @@ export class TextDocument {
             unitName: this.file,
             content: this.text,
             fileOptions: Array.from(this.meta)
-                .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>)
+                .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>),
         });
     }
 }

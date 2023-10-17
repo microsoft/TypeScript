@@ -1,4 +1,8 @@
-import { ArgType,parseArgs,parserConfiguration } from "../utils/cli-parser";
+import {
+    ArgType,
+    parseArgs,
+    parserConfiguration,
+} from "../utils/cli-parser";
 
 export const testRunnerCLIConfiguration = parserConfiguration({
     default: {
@@ -18,8 +22,6 @@ export const testRunnerCLIConfiguration = parserConfiguration({
     category: ArgType.String(),
     forceIsolatedDeclarations: ArgType.Boolean(),
 });
-
-
 
 const { value, printUsageOnErrors } = parseArgs(process.argv.slice(2), testRunnerCLIConfiguration);
 

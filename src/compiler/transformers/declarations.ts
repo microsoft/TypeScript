@@ -331,7 +331,7 @@ export function transformDeclarations(context: TransformationContext) {
     let libs: Map<string, boolean>;
     let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
     const resolver = context.getEmitResolver();
-    const {resolver: localInferenceResolver, isolatedDeclarations} = createLocalInferenceResolver({
+    const { resolver: localInferenceResolver, isolatedDeclarations } = createLocalInferenceResolver({
         ensureParameter,
         context,
         visitDeclarationSubtree,
