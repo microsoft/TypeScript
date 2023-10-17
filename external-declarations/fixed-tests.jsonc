@@ -5,6 +5,7 @@
             9008, // Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit
             9009, // Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function
             9010, // Reference directives are not supported in isolated declaration mode.
+            9011, // Heritage_clause_for_Class_Expressions_is_not_allowed_with_isolatedDeclarations
         ], 
         "with-unreliable-errors": [
             2784, // 'get' and 'set' accessors cannot declare 'this' parameters.

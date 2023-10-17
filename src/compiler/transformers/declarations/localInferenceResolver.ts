@@ -10,9 +10,11 @@ import {
 } from "../../diagnosticInformationMap.generated";
 import {
     isComputedPropertyName,
+    isConstructorDeclaration,
     isExportAssignment,
     isGetAccessorDeclaration,
     isIdentifier,
+    isIndexSignatureDeclaration,
     isInterfaceDeclaration,
     isLiteralTypeNode,
     isMethodDeclaration,
@@ -49,6 +51,7 @@ import {
     ArrayLiteralExpression,
     ArrowFunction,
     AsExpression,
+    ClassExpression,
     EntityNameOrEntityNameExpression,
     ExportAssignment,
     Expression,
@@ -62,6 +65,7 @@ import {
     MethodDeclaration,
     MethodSignature,
     Modifier,
+    ModifierLike,
     Node,
     NodeArray,
     NodeFlags,
@@ -85,6 +89,7 @@ import {
 } from "../../types";
 import {
     createDiagnosticForNode,
+    createDiagnosticForRange,
     isEntityNameExpression,
 } from "../../utilities";
 import {
@@ -110,6 +115,7 @@ enum LocalTypeInfoFlags {
     None = 0,
     Invalid = 1 << 1,
 }
+const propertyLikeModifiers = new Set<SyntaxKind>([SyntaxKind.ReadonlyKeyword, SyntaxKind.PublicKeyword]);
 
 interface LocalInferenceResolver {
     makeInvalidType(): Node;
@@ -128,7 +134,7 @@ export function createLocalInferenceResolver({
     ensureParameter(p: ParameterDeclaration): ParameterDeclaration;
     context: TransformationContext;
 }): { resolver: LocalInferenceResolver, isolatedDeclarations: true } | { resolver: undefined, isolatedDeclarations: false } {
-    let currentSourceFile: SourceFile | undefined;
+    let currentSourceFile: SourceFile;
     const options = context.getCompilerOptions();
     const resolver = context.getEmitResolver();
     if (!options.isolatedDeclarations) {
@@ -187,10 +193,10 @@ export function createLocalInferenceResolver({
 
         const getAccessor = knownIsGetAccessor ? knownAccessor :
             otherAccessor && isGetAccessorDeclaration(otherAccessor) ? otherAccessor :
-            undefined;
+                undefined;
         const setAccessor = !knownIsGetAccessor ? knownAccessor :
             otherAccessor && isSetAccessorDeclaration(otherAccessor) ? otherAccessor :
-            undefined;
+                undefined;
 
         return {
             otherAccessorIndex,
@@ -338,13 +344,15 @@ export function createLocalInferenceResolver({
                 );
                 tupleType.emitNode = { flags: 1, autoGenerate: undefined, internalFlags: 0 };
                 return regular(factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType), node, inheritedArrayTypeFlags);
-            case SyntaxKind.ObjectLiteralExpression: 
+            case SyntaxKind.ObjectLiteralExpression:
                 return getTypeForObjectLiteralExpression(node as ObjectLiteralExpression, inferenceFlags);
+            case SyntaxKind.ClassExpression:
+                return getClassExpressionTypeNode(node as ClassExpression);
         }
 
         return invalid(node);
     }
-    function invalid(sourceNode: Node): LocalTypeInfo {        
+    function invalid(sourceNode: Node): LocalTypeInfo {
         reportIsolatedDeclarationError(sourceNode);
         return { typeNode: makeInvalidType(), flags: LocalTypeInfoFlags.Invalid, sourceNode };
     }
@@ -496,6 +504,144 @@ export function createLocalInferenceResolver({
         const typeNode: TypeNode = replaceWithInvalid ? makeInvalidType() : factory.createTypeLiteralNode(properties);
         return regular(typeNode, objectLiteral, inheritedObjectTypeFlags);
     }
+
+    function getClassExpressionTypeNode(node: ClassExpression): LocalTypeInfo {
+        let invalid = false;
+        let hasGetSetAccessor = false;
+        const staticMembers: TypeElement[] = [];
+        const nonStaticMembers: TypeElement[] = [];
+        const constructorParameters: ParameterDeclaration[] = [];
+
+        if (node.heritageClauses && node.heritageClauses.length > 0) {
+            context.addDiagnostic({
+                ...createDiagnosticForNode(node, Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit),
+                relatedInformation: [
+                    createDiagnosticForRange(
+                        currentSourceFile,
+                        {
+                            pos: node.heritageClauses[0].pos,
+                            end: node.heritageClauses[node.heritageClauses.length - 1].end
+                        },
+                        Diagnostics.Heritage_clauses_in_class_expressions_are_not_allowed_with_isolatedDeclarations)
+                ],
+            });
+            invalid = true;
+        }
+
+        for (const member of node.members) {
+            if (isConstructorDeclaration(member)) {
+                for (const parameter of member.parameters) {
+                    const type = localInferenceFromInitializer(parameter, parameter.type);
+                    if (!type) {
+                        invalid = true;
+                    }
+                    // TODO: See what happens on private modifiers.
+                    if (parameter.modifiers?.some((modifier) => propertyLikeModifiers.has(modifier.kind))) {
+                        nonStaticMembers.push(factory.createPropertySignature(
+                            keepReadonlyKeyword(parameter.modifiers),
+                            parameter.name as Identifier,
+                            parameter.questionToken,
+                            type,
+                        ));
+                    }
+                    constructorParameters.push(factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        parameter.dotDotDotToken,
+                        parameter.name,
+                        parameter.questionToken,
+                        type,
+                        parameter.initializer,
+                    ));
+                }
+            } else if (isMethodDeclaration(member)) {
+                const type = localInferenceFromInitializer(member, member.type);
+                if (!type) {
+                    invalid = true;
+                }
+                const methodSignature = factory.createMethodSignature(
+                    /*modifiers*/ undefined,
+                    member.name,
+                    member.questionToken,
+                    member.typeParameters,
+                    member.parameters,
+                    type,
+                );
+                if (member.modifiers?.some((modifier) => modifier.kind === SyntaxKind.StaticKeyword)) {
+                    staticMembers.push(methodSignature);
+                } else {
+                    nonStaticMembers.push(methodSignature);
+                }
+            } else if (isGetAccessorDeclaration(member) || isSetAccessorDeclaration(member)) {
+                if (!hasGetSetAccessor) {
+                    hasGetSetAccessor = true;
+                    let type;
+                    if (isGetAccessorDeclaration(member)) {
+                        type = localInferenceFromInitializer(member, member.type);
+                    } else {
+                        type = localInferenceFromInitializer(member.parameters[0], member.parameters[0].type)
+                    }
+                    if (!type) {
+                        invalid = true;
+                    }
+                    nonStaticMembers.push(
+                        factory.createPropertySignature(
+                            [],
+                            member.name,
+                            /*questionToken*/ undefined,
+                            type,
+                        )
+                    );
+                }
+            } else if (isIndexSignatureDeclaration(member)) {
+                nonStaticMembers.push(member);
+            } else if (isPropertyDeclaration(member)) {
+                const name = isPrivateIdentifier(member.name) ?
+                    // imitating the behavior from utilities.ts : getSymbolNameForPrivateIdentifier, but as we don't have
+                    // a Symbol & SymbolId in hand, we use NodeId of the declaration instead as an approximiation and to provide uniqueness.
+                    // TODO: This seems to have a high collision possibilitiy than the vanilla implementation as we have much less
+                    // ids for nodes in DTE.
+                    factory.createStringLiteral(`__#${node.parent.id}@${member.name.escapedText}`) :
+                    member.name;
+                const type = localInferenceFromInitializer(member, member.type);
+                if (!type) {
+                    invalid = true;
+                }
+                const propertySignature = factory.createPropertySignature(
+                    keepReadonlyKeyword(member.modifiers),
+                    name,
+                    member.questionToken,
+                    type,
+                )
+                if (member.modifiers?.some((modifier) => modifier.kind === SyntaxKind.StaticKeyword)) {
+                    staticMembers.push(propertySignature);
+                } else {
+                    nonStaticMembers.push(propertySignature);
+                }
+            }
+        }
+
+        if (invalid) {
+            return { typeNode: makeInvalidType(), flags: LocalTypeInfoFlags.Invalid, sourceNode: node };
+        }
+        else {
+            const constructorSignature = factory.createConstructSignature(
+                node.typeParameters,
+                constructorParameters,
+                factory.createTypeLiteralNode(nonStaticMembers)
+            );
+            const typeNode = factory.createTypeLiteralNode([constructorSignature, ...staticMembers]);
+            return { typeNode, flags: LocalTypeInfoFlags.None, sourceNode: node };
+        }
+    }
+
+    function keepReadonlyKeyword(modifiers?: NodeArray<ModifierLike>): Modifier[] {
+        if (modifiers?.some((modifier) => modifier.kind === SyntaxKind.ReadonlyKeyword)) {
+            return [factory.createModifier(SyntaxKind.ReadonlyKeyword)];
+        } else {
+            return [];
+        }
+    }
+
     function normalizeLiteralValue(literal: LiteralExpression) {
         switch (literal.kind) {
             case SyntaxKind.BigIntLiteral:
