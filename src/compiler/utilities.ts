@@ -10486,6 +10486,7 @@ export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclarati
     return !!getResolutionModeOverride(node.attributes);
 }
 
+/** @internal */
 export function getDeclarationContainer(node: Node): Node {
     return findAncestor(getRootDeclaration(node), node => {
         switch (node.kind) {
@@ -10501,10 +10502,13 @@ export function getDeclarationContainer(node: Node): Node {
         }
     })!.parent;
 }
+
+/** @internal */
 export function isGlobalSourceFile(node: Node) {
     return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(node as SourceFile);
 }
 
+/** @internal */
 export function determineIfDeclarationIsVisible(node: Node, isDeclarationVisible: (node: Node) => boolean) {
     switch (node.kind) {
         case SyntaxKind.JSDocCallbackTag:

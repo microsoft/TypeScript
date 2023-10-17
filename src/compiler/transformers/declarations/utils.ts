@@ -14,10 +14,9 @@ import {
     PropertyName,
     SyntaxKind,
 } from "../../types";
-
-export type MemberKey = string & {
-    __memberKey: void;
-};
+import {
+    MemberKey
+} from "./types";
 
 export function getMemberKey(name: string | Exclude<PropertyName, ComputedPropertyName> | NoSubstitutionTemplateLiteral): MemberKey;
 export function getMemberKey(name: string | PropertyName | NoSubstitutionTemplateLiteral | undefined): MemberKey | undefined;

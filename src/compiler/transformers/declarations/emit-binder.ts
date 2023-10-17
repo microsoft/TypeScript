@@ -70,12 +70,13 @@ import {
 } from "../../utilitiesPublic";
 import {
     IsolatedEmitHost,
+    MemberKey,
 } from "./types";
 import {
     getMemberKey,
-    MemberKey,
 } from "./utils";
 
+/** @internal */
 export interface EmitDeclarationNodeLinks {
     isVisible?: boolean;
     symbol?: EmitDeclarationSymbol;
@@ -84,7 +85,10 @@ export interface EmitDeclarationNodeLinks {
     enumValue?: string | number | undefined;
 }
 
-type EmitDeclarationSymbolTable = Map<MemberKey, EmitDeclarationSymbol>;
+/** @internal */
+export type EmitDeclarationSymbolTable = Map<MemberKey, EmitDeclarationSymbol>;
+
+/** @internal */
 export interface EmitDeclarationSymbol {
     name?: MemberKey;
     exportSymbol?: EmitDeclarationSymbol;
@@ -136,6 +140,7 @@ const syntaxKindToSymbolMap = {
     [SyntaxKind.ImportClause]: [SymbolFlags.Alias, SymbolFlags.AliasExcludes],
 } as const satisfies Partial<Record<SyntaxKind, SymbolRegistrationFlags | Record<string, SymbolRegistrationFlags>>>;
 
+/** @internal */
 export function bindSourceFileForDeclarationEmit(file: SourceFile, host: IsolatedEmitHost) {
     const options: CompilerOptions = host.getCompilerOptions();
     const nodeLinks: EmitDeclarationNodeLinks[] = [];
@@ -544,8 +549,9 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile, host: Isolate
 
 /**
  * Gets the symbolic name for a member from its type.
+ * @internal
  */
-function getMemberNameFromElement(element: TypeElement | ClassElement | EnumMember): MemberKey | undefined {
+export function getMemberNameFromElement(element: TypeElement | ClassElement | EnumMember): MemberKey | undefined {
     if (isConstructorDeclaration(element) || isConstructSignatureDeclaration(element)) {
         return "@constructor" as MemberKey;
     }
