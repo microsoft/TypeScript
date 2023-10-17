@@ -503,6 +503,12 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by include pattern './src/**/*.ts' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.es2021.d.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/packages/package-a/src/subfolder/index.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/packages/package-a/src/index.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/packages/package-b/src/index.ts:: []
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4 Done: []
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -907,6 +913,9 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Matched by include pattern './src/**/*.ts' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/packages/package-b/src/index.ts:: ["package-aX"]
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: ["package-aX"]
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1219,6 +1228,10 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by include pattern './src/**/*.ts' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/packages/package-a/src/index.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/packages/package-b/src/index.ts:: []
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

@@ -237,6 +237,10 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Matched by include pattern './src/**/*' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /user/username/projects/app/src/index.ts:: []
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: []
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -856,6 +860,8 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	/user/username/projects/app/src/index.ts SVC-1-0 "\n\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: []
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
@@ -1345,6 +1351,8 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	/user/username/projects/app/src/index.ts SVC-1-0 "\n\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: []
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
