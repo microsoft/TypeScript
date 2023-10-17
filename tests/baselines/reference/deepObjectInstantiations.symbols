@@ -1,0 +1,153 @@
+//// [tests/cases/compiler/deepObjectInstantiations.ts] ////
+
+=== deepObjectInstantiations.ts ===
+// @strict
+
+export type Input = Static<typeof Input, []>
+>Input : Symbol(Input, Decl(deepObjectInstantiations.ts, 0, 0), Decl(deepObjectInstantiations.ts, 3, 12))
+>Static : Symbol(Static, Decl(deepObjectInstantiations.ts, 32, 41))
+>Input : Symbol(Input, Decl(deepObjectInstantiations.ts, 0, 0), Decl(deepObjectInstantiations.ts, 3, 12))
+
+export const Input = MakeObject({
+>Input : Symbol(Input, Decl(deepObjectInstantiations.ts, 0, 0), Decl(deepObjectInstantiations.ts, 3, 12))
+>MakeObject : Symbol(MakeObject, Decl(deepObjectInstantiations.ts, 37, 115))
+
+    level1: MakeObject({
+>level1 : Symbol(level1, Decl(deepObjectInstantiations.ts, 3, 33))
+>MakeObject : Symbol(MakeObject, Decl(deepObjectInstantiations.ts, 37, 115))
+
+        level2: MakeObject({
+>level2 : Symbol(level2, Decl(deepObjectInstantiations.ts, 4, 24))
+>MakeObject : Symbol(MakeObject, Decl(deepObjectInstantiations.ts, 37, 115))
+
+            foo: MakeString(),
+>foo : Symbol(foo, Decl(deepObjectInstantiations.ts, 5, 28))
+>MakeString : Symbol(MakeString, Decl(deepObjectInstantiations.ts, 43, 1))
+
+        })
+    })
+})
+
+export type Output = Static<typeof Output, []>
+>Output : Symbol(Output, Decl(deepObjectInstantiations.ts, 9, 2), Decl(deepObjectInstantiations.ts, 12, 12))
+>Static : Symbol(Static, Decl(deepObjectInstantiations.ts, 32, 41))
+>Output : Symbol(Output, Decl(deepObjectInstantiations.ts, 9, 2), Decl(deepObjectInstantiations.ts, 12, 12))
+
+export const Output = MakeObject({
+>Output : Symbol(Output, Decl(deepObjectInstantiations.ts, 9, 2), Decl(deepObjectInstantiations.ts, 12, 12))
+>MakeObject : Symbol(MakeObject, Decl(deepObjectInstantiations.ts, 37, 115))
+
+    level1: MakeObject({
+>level1 : Symbol(level1, Decl(deepObjectInstantiations.ts, 12, 34))
+>MakeObject : Symbol(MakeObject, Decl(deepObjectInstantiations.ts, 37, 115))
+
+        level2: MakeObject({
+>level2 : Symbol(level2, Decl(deepObjectInstantiations.ts, 13, 24))
+>MakeObject : Symbol(MakeObject, Decl(deepObjectInstantiations.ts, 37, 115))
+
+            foo: MakeString(),
+>foo : Symbol(foo, Decl(deepObjectInstantiations.ts, 14, 28))
+>MakeString : Symbol(MakeString, Decl(deepObjectInstantiations.ts, 43, 1))
+
+            bar: MakeString(),
+>bar : Symbol(bar, Decl(deepObjectInstantiations.ts, 15, 30))
+>MakeString : Symbol(MakeString, Decl(deepObjectInstantiations.ts, 43, 1))
+
+        })
+    })
+})
+
+function problematicFunction1(ors: Input): Output {
+>problematicFunction1 : Symbol(problematicFunction1, Decl(deepObjectInstantiations.ts, 19, 2))
+>ors : Symbol(ors, Decl(deepObjectInstantiations.ts, 21, 30))
+>Input : Symbol(Input, Decl(deepObjectInstantiations.ts, 0, 0), Decl(deepObjectInstantiations.ts, 3, 12))
+>Output : Symbol(Output, Decl(deepObjectInstantiations.ts, 9, 2), Decl(deepObjectInstantiations.ts, 12, 12))
+
+    // Should error
+    return ors;
+>ors : Symbol(ors, Decl(deepObjectInstantiations.ts, 21, 30))
+}
+function f() {
+>f : Symbol(f, Decl(deepObjectInstantiations.ts, 24, 1))
+
+    problematicFunction1(null as any);
+>problematicFunction1 : Symbol(problematicFunction1, Decl(deepObjectInstantiations.ts, 19, 2))
+}
+f();
+>f : Symbol(f, Decl(deepObjectInstantiations.ts, 24, 1))
+
+export type Evaluate<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
+>Evaluate : Symbol(Evaluate, Decl(deepObjectInstantiations.ts, 28, 4))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 30, 21))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 30, 21))
+>O : Symbol(O, Decl(deepObjectInstantiations.ts, 30, 41))
+>K : Symbol(K, Decl(deepObjectInstantiations.ts, 30, 49))
+>O : Symbol(O, Decl(deepObjectInstantiations.ts, 30, 41))
+>O : Symbol(O, Decl(deepObjectInstantiations.ts, 30, 41))
+>K : Symbol(K, Decl(deepObjectInstantiations.ts, 30, 49))
+
+interface HasStatic { static: unknown }
+>HasStatic : Symbol(HasStatic, Decl(deepObjectInstantiations.ts, 30, 79))
+>static : Symbol(HasStatic.static, Decl(deepObjectInstantiations.ts, 31, 21))
+
+interface HasParams { params: unknown[] }
+>HasParams : Symbol(HasParams, Decl(deepObjectInstantiations.ts, 31, 39))
+>params : Symbol(HasParams.params, Decl(deepObjectInstantiations.ts, 32, 21))
+
+export type Static<T extends HasStatic, P> = (T & { params: P; })['static']
+>Static : Symbol(Static, Decl(deepObjectInstantiations.ts, 32, 41))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 33, 19))
+>HasStatic : Symbol(HasStatic, Decl(deepObjectInstantiations.ts, 30, 79))
+>P : Symbol(P, Decl(deepObjectInstantiations.ts, 33, 39))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 33, 19))
+>params : Symbol(params, Decl(deepObjectInstantiations.ts, 33, 51))
+>P : Symbol(P, Decl(deepObjectInstantiations.ts, 33, 39))
+
+type RecordOfHasStatics = Record<string, HasStatic>;
+>RecordOfHasStatics : Symbol(RecordOfHasStatics, Decl(deepObjectInstantiations.ts, 33, 75))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>HasStatic : Symbol(HasStatic, Decl(deepObjectInstantiations.ts, 30, 79))
+
+export type PropertiesReduce<T extends RecordOfHasStatics, P = []> = Evaluate<{ [K in keyof T]: Static<T[K], P> }>;
+>PropertiesReduce : Symbol(PropertiesReduce, Decl(deepObjectInstantiations.ts, 35, 52))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 37, 29))
+>RecordOfHasStatics : Symbol(RecordOfHasStatics, Decl(deepObjectInstantiations.ts, 33, 75))
+>P : Symbol(P, Decl(deepObjectInstantiations.ts, 37, 58))
+>Evaluate : Symbol(Evaluate, Decl(deepObjectInstantiations.ts, 28, 4))
+>K : Symbol(K, Decl(deepObjectInstantiations.ts, 37, 81))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 37, 29))
+>Static : Symbol(Static, Decl(deepObjectInstantiations.ts, 32, 41))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 37, 29))
+>K : Symbol(K, Decl(deepObjectInstantiations.ts, 37, 81))
+>P : Symbol(P, Decl(deepObjectInstantiations.ts, 37, 58))
+
+declare function MakeObject<T extends RecordOfHasStatics>(object: T): TObject<T>;
+>MakeObject : Symbol(MakeObject, Decl(deepObjectInstantiations.ts, 37, 115))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 39, 28))
+>RecordOfHasStatics : Symbol(RecordOfHasStatics, Decl(deepObjectInstantiations.ts, 33, 75))
+>object : Symbol(object, Decl(deepObjectInstantiations.ts, 39, 58))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 39, 28))
+>TObject : Symbol(TObject, Decl(deepObjectInstantiations.ts, 39, 81))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 39, 28))
+
+export interface TObject<T extends RecordOfHasStatics> extends HasParams {
+>TObject : Symbol(TObject, Decl(deepObjectInstantiations.ts, 39, 81))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 40, 25))
+>RecordOfHasStatics : Symbol(RecordOfHasStatics, Decl(deepObjectInstantiations.ts, 33, 75))
+>HasParams : Symbol(HasParams, Decl(deepObjectInstantiations.ts, 31, 39))
+
+    static: PropertiesReduce<T, this['params']>;
+>static : Symbol(TObject.static, Decl(deepObjectInstantiations.ts, 40, 74))
+>PropertiesReduce : Symbol(PropertiesReduce, Decl(deepObjectInstantiations.ts, 35, 52))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 40, 25))
+
+    properties: T;
+>properties : Symbol(TObject.properties, Decl(deepObjectInstantiations.ts, 41, 48))
+>T : Symbol(T, Decl(deepObjectInstantiations.ts, 40, 25))
+}
+
+declare function MakeString(): HasParams & { static: string };
+>MakeString : Symbol(MakeString, Decl(deepObjectInstantiations.ts, 43, 1))
+>HasParams : Symbol(HasParams, Decl(deepObjectInstantiations.ts, 31, 39))
+>static : Symbol(static, Decl(deepObjectInstantiations.ts, 45, 44))
+

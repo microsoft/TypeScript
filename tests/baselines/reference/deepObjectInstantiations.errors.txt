@@ -1,0 +1,58 @@
+deepObjectInstantiations.ts(24,5): error TS2322: Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }'.
+  The types of 'level1.level2' are incompatible between these types.
+    Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
+
+
+==== deepObjectInstantiations.ts (1 errors) ====
+    // @strict
+    
+    export type Input = Static<typeof Input, []>
+    export const Input = MakeObject({
+        level1: MakeObject({
+            level2: MakeObject({
+                foo: MakeString(),
+            })
+        })
+    })
+    
+    export type Output = Static<typeof Output, []>
+    export const Output = MakeObject({
+        level1: MakeObject({
+            level2: MakeObject({
+                foo: MakeString(),
+                bar: MakeString(),
+            })
+        })
+    })
+    
+    function problematicFunction1(ors: Input): Output {
+        // Should error
+        return ors;
+        ~~~~~~
+!!! error TS2322: Type '{ level1: { level2: { foo: string; }; }; }' is not assignable to type '{ level1: { level2: { foo: string; bar: string; }; }; }'.
+!!! error TS2322:   The types of 'level1.level2' are incompatible between these types.
+!!! error TS2322:     Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
+!!! related TS2728 deepObjectInstantiations.ts:17:13: 'bar' is declared here.
+    }
+    function f() {
+        problematicFunction1(null as any);
+    }
+    f();
+    
+    export type Evaluate<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
+    interface HasStatic { static: unknown }
+    interface HasParams { params: unknown[] }
+    export type Static<T extends HasStatic, P> = (T & { params: P; })['static']
+    
+    type RecordOfHasStatics = Record<string, HasStatic>;
+    
+    export type PropertiesReduce<T extends RecordOfHasStatics, P = []> = Evaluate<{ [K in keyof T]: Static<T[K], P> }>;
+    
+    declare function MakeObject<T extends RecordOfHasStatics>(object: T): TObject<T>;
+    export interface TObject<T extends RecordOfHasStatics> extends HasParams {
+        static: PropertiesReduce<T, this['params']>;
+        properties: T;
+    }
+    
+    declare function MakeString(): HasParams & { static: string };
+    

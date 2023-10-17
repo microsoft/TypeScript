@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/deepObjectInstantiations.ts] ////
+
+=== deepObjectInstantiations.ts ===
+// @strict
+
+export type Input = Static<typeof Input, []>
+>Input : { level1: { level2: { foo: string; }; }; }
+>Input : TObject<{ level1: TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; }>; }>; }>
+
+export const Input = MakeObject({
+>Input : TObject<{ level1: TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; }>; }>; }>
+>MakeObject({    level1: MakeObject({        level2: MakeObject({            foo: MakeString(),        })    })}) : TObject<{ level1: TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; }>; }>; }>
+>MakeObject : <T extends RecordOfHasStatics>(object: T) => TObject<T>
+>{    level1: MakeObject({        level2: MakeObject({            foo: MakeString(),        })    })} : { level1: TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; }>; }>; }
+
+    level1: MakeObject({
+>level1 : TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; }>; }>
+>MakeObject({        level2: MakeObject({            foo: MakeString(),        })    }) : TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; }>; }>
+>MakeObject : <T extends RecordOfHasStatics>(object: T) => TObject<T>
+>{        level2: MakeObject({            foo: MakeString(),        })    } : { level2: TObject<{ foo: HasParams & { static: string; }; }>; }
+
+        level2: MakeObject({
+>level2 : TObject<{ foo: HasParams & { static: string; }; }>
+>MakeObject({            foo: MakeString(),        }) : TObject<{ foo: HasParams & { static: string; }; }>
+>MakeObject : <T extends RecordOfHasStatics>(object: T) => TObject<T>
+>{            foo: MakeString(),        } : { foo: HasParams & { static: string; }; }
+
+            foo: MakeString(),
+>foo : HasParams & { static: string; }
+>MakeString() : HasParams & { static: string; }
+>MakeString : () => HasParams & { static: string; }
+
+        })
+    })
+})
+
+export type Output = Static<typeof Output, []>
+>Output : { level1: { level2: { foo: string; bar: string; }; }; }
+>Output : TObject<{ level1: TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; bar: HasParams & { static: string; }; }>; }>; }>
+
+export const Output = MakeObject({
+>Output : TObject<{ level1: TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; bar: HasParams & { static: string; }; }>; }>; }>
+>MakeObject({    level1: MakeObject({        level2: MakeObject({            foo: MakeString(),            bar: MakeString(),        })    })}) : TObject<{ level1: TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; bar: HasParams & { static: string; }; }>; }>; }>
+>MakeObject : <T extends RecordOfHasStatics>(object: T) => TObject<T>
+>{    level1: MakeObject({        level2: MakeObject({            foo: MakeString(),            bar: MakeString(),        })    })} : { level1: TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; bar: HasParams & { static: string; }; }>; }>; }
+
+    level1: MakeObject({
+>level1 : TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; bar: HasParams & { static: string; }; }>; }>
+>MakeObject({        level2: MakeObject({            foo: MakeString(),            bar: MakeString(),        })    }) : TObject<{ level2: TObject<{ foo: HasParams & { static: string; }; bar: HasParams & { static: string; }; }>; }>
+>MakeObject : <T extends RecordOfHasStatics>(object: T) => TObject<T>
+>{        level2: MakeObject({            foo: MakeString(),            bar: MakeString(),        })    } : { level2: TObject<{ foo: HasParams & { static: string; }; bar: HasParams & { static: string; }; }>; }
+
+        level2: MakeObject({
+>level2 : TObject<{ foo: HasParams & { static: string; }; bar: HasParams & { static: string; }; }>
+>MakeObject({            foo: MakeString(),            bar: MakeString(),        }) : TObject<{ foo: HasParams & { static: string; }; bar: HasParams & { static: string; }; }>
+>MakeObject : <T extends RecordOfHasStatics>(object: T) => TObject<T>
+>{            foo: MakeString(),            bar: MakeString(),        } : { foo: HasParams & { static: string; }; bar: HasParams & { static: string; }; }
+
+            foo: MakeString(),
+>foo : HasParams & { static: string; }
+>MakeString() : HasParams & { static: string; }
+>MakeString : () => HasParams & { static: string; }
+
+            bar: MakeString(),
+>bar : HasParams & { static: string; }
+>MakeString() : HasParams & { static: string; }
+>MakeString : () => HasParams & { static: string; }
+
+        })
+    })
+})
+
+function problematicFunction1(ors: Input): Output {
+>problematicFunction1 : (ors: Input) => Output
+>ors : { level1: { level2: { foo: string; }; }; }
+
+    // Should error
+    return ors;
+>ors : { level1: { level2: { foo: string; }; }; }
+}
+function f() {
+>f : () => void
+
+    problematicFunction1(null as any);
+>problematicFunction1(null as any) : { level1: { level2: { foo: string; bar: string; }; }; }
+>problematicFunction1 : (ors: { level1: { level2: { foo: string; }; }; }) => { level1: { level2: { foo: string; bar: string; }; }; }
+>null as any : any
+}
+f();
+>f() : void
+>f : () => void
+
+export type Evaluate<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
+>Evaluate : Evaluate<T>
+
+interface HasStatic { static: unknown }
+>static : unknown
+
+interface HasParams { params: unknown[] }
+>params : unknown[]
+
+export type Static<T extends HasStatic, P> = (T & { params: P; })['static']
+>Static : Static<T, P>
+>params : P
+
+type RecordOfHasStatics = Record<string, HasStatic>;
+>RecordOfHasStatics : { [x: string]: HasStatic; }
+
+export type PropertiesReduce<T extends RecordOfHasStatics, P = []> = Evaluate<{ [K in keyof T]: Static<T[K], P> }>;
+>PropertiesReduce : PropertiesReduce<T, P>
+
+declare function MakeObject<T extends RecordOfHasStatics>(object: T): TObject<T>;
+>MakeObject : <T extends RecordOfHasStatics>(object: T) => TObject<T>
+>object : T
+
+export interface TObject<T extends RecordOfHasStatics> extends HasParams {
+    static: PropertiesReduce<T, this['params']>;
+>static : Evaluate<{ [K in keyof T]: Static<T[K], this["params"]>; }>
+
+    properties: T;
+>properties : T
+}
+
+declare function MakeString(): HasParams & { static: string };
+>MakeString : () => HasParams & {    static: string;}
+>static : string
+

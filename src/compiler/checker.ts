@@ -21769,12 +21769,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (recursionFlags & RecursionFlags.Source) {
                 sourceStack[sourceDepth] = source;
                 sourceDepth++;
-                if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, sourceDepth)) expandingFlags |= ExpandingFlags.Source;
+                if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, sourceDepth, 5)) expandingFlags |= ExpandingFlags.Source;
             }
             if (recursionFlags & RecursionFlags.Target) {
                 targetStack[targetDepth] = target;
                 targetDepth++;
-                if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, targetDepth)) expandingFlags |= ExpandingFlags.Target;
+                if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, targetDepth, 5)) expandingFlags |= ExpandingFlags.Target;
             }
             let originalHandler: typeof outofbandVarianceMarkerHandler;
             let propagatingVarianceFlags = 0 as RelationComparisonResult;
@@ -23577,7 +23577,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // `type A<T> = null extends T ? [A<NonNullable<T>>] : [T]`
     // has expanded into `[A<NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<T>>>>>>]`. In such cases we need
     // to terminate the expansion, and we do so here.
-    function isDeeplyNestedType(type: Type, stack: Type[], depth: number, maxDepth = 3): boolean {
+    function isDeeplyNestedType(type: Type, stack: Type[], depth: number, maxDepth: number): boolean {
         if (depth >= maxDepth) {
             if (type.flags & TypeFlags.Intersection) {
                 return some((type as IntersectionType).types, t => isDeeplyNestedType(t, stack, depth, maxDepth));
