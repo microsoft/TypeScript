@@ -1473,10 +1473,10 @@ function extractConstantInScope(
                     return a.elements.every((a, i) => isSameNode(a, b.elements[i]));
                 }
                 else if (isIdentifier(a) && isIdentifier(b)) {
-                    return a.symbol === b.symbol;
+                    return a.symbol ? a.symbol === b.symbol : a.text === b.text;
                 }
                 else if (isPropertyAccessExpression(a) && isPropertyAccessExpression(b)) {
-                    return a.symbol === b.symbol;
+                    return a.symbol ? a.symbol === b.symbol : isSameNode(a.expression, b.expression) && isSameNode(a.name, b.name);
                 }
                 else if (isBinaryExpression(a) && isBinaryExpression(b)) {
                     return a.operatorToken.kind === b.operatorToken.kind && isSameNode(a.left, b.left) && isSameNode(a.right, b.right);

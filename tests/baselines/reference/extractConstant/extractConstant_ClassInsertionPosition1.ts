@@ -5,7 +5,7 @@ class C {
     M1() { }
     M2() { }
     M3() {
-        let x = /*[#|*/1/*|]*/;
+        let x = /*[#|*/3/*|]*/;
     }
 }
 // ==SCOPE::Extract to constant in enclosing scope==
@@ -15,7 +15,7 @@ class C {
     M1() { }
     M2() { }
     M3() {
-        const newLocal = 1;
+        const newLocal = 3;
         let x = /*RENAME*/newLocal;
     }
 }
@@ -23,7 +23,7 @@ class C {
 class C {
     a = 1;
     b = 2;
-    private readonly newProperty = 1;
+    private readonly newProperty = 3;
 
     M1() { }
     M2() { }
@@ -32,7 +32,7 @@ class C {
     }
 }
 // ==SCOPE::Extract to constant in global scope==
-const newLocal = 1;
+const newLocal = 3;
 class C {
     a = 1;
     b = 2;

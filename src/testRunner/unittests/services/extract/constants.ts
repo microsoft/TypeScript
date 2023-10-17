@@ -78,7 +78,7 @@ function F() {
     M1() { }
     M2() { }
     M3() {
-        let x = [#|1|];
+        let x = [#|3|];
     }
 }`,
     );
@@ -91,7 +91,7 @@ function F() {
     b = 2;
     M2() { }
     M3() {
-        let x = [#|1|];
+        let x = [#|3|];
     }
 }`,
     );
@@ -104,7 +104,7 @@ function F() {
     b = 2;
     M2() { }
     M3() {
-        let x = [#|1|];
+        let x = [#|3|];
     }
 }`,
     );
@@ -372,7 +372,7 @@ const myObj: { member(x: number, y: string): void } = {
         "extractConstant_CaseClauseExpression",
         `
 switch (1) {
-    case [#|1|]:
+    case [#|2|]:
         break;
 }
 `,
