@@ -102,6 +102,11 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by include pattern '*.vue' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /user/username/projects/myproject/a.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /user/username/projects/myproject/b.vue:: ["bVueFile"]
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: ["bVueFile"]
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -314,6 +319,9 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/user/username/projects/myproject/b.vue SVC-1-1 "import { y } from \"bVueFileUpdated\";"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /user/username/projects/myproject/b.vue:: ["bVueFileUpdated"]
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: ["bVueFileUpdated"]
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

@@ -139,6 +139,11 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.es2020.full.d.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/library/caches/typescript/node_modules/@types/node/index.d.ts:: ["undici-types"]
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /^/aichat-code-block-anysphere/ocjahtkquh:: []
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: ["undici-types"]
 TI:: Creating typing installer
 //// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 18
 

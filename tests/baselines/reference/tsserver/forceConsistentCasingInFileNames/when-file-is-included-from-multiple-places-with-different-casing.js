@@ -133,6 +133,13 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.d.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/src/struct.d.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/src/anotherfile.ts:: []
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/src/onemore.ts:: []
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1267,6 +1274,8 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/projects/project/src/oneMore.ts Text-1 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\nimport * as xs4 from \"./struct\";\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
@@ -1396,6 +1405,9 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/projects/project/src/oneMore.ts Text-1 "import * as xs1 from \"fp-ts/lib/Struct\";\nimport * as xs2 from \"fp-ts/lib/struct\";\nimport * as xs3 from \"./Struct\";\nimport * as xs4 from \"./struct\";\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
+Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/projects/project/src/struct.d.ts:: []
+Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
