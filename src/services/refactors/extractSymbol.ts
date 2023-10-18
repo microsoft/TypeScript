@@ -1386,6 +1386,9 @@ function extractConstantInScope(
 
     const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
+    // location starts at 1 because the declaration is index 0
+    let preferredRenameLocation = 1;
+
     if (isClassLike(scope)) {
         Debug.assert(!isJS, "Cannot extract to a JS class"); // See CannotExtractToJSClass
         const modifiers: Modifier[] = [];
@@ -1409,6 +1412,7 @@ function extractConstantInScope(
         changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, /*blankLineBetween*/ true);
 
         // Consume
+        let location = preferredRenameLocation;
         visitEachChild(scope, function visitor(potentialNode) {
             if (!isSameNode(potentialNode, node)) {
                 return visitEachChild(potentialNode, visitor, nullTransformationContext);
@@ -1426,6 +1430,12 @@ function extractConstantInScope(
             }
 
             changeTracker.replaceNode(context.file, potentialNode, localReference);
+
+            if (potentialNode === node) {
+                preferredRenameLocation = location;
+            }
+
+            location++;
 
             return potentialNode;
         }, nullTransformationContext);
@@ -1472,9 +1482,14 @@ function extractConstantInScope(
             }
 
             // Consume
+            let location = preferredRenameLocation;
             visitEachChild(scope, function visitor(potentialNode) {
                 if (!isSameNode(potentialNode, node)) {
                     return visitEachChild(potentialNode, visitor, nullTransformationContext);
+                }
+
+                if (potentialNode === node) {
+                    preferredRenameLocation = location;
                 }
 
                 if (potentialNode.parent.kind === SyntaxKind.ExpressionStatement) {
@@ -1489,6 +1504,7 @@ function extractConstantInScope(
                         localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
                     }
                     changeTracker.replaceNode(context.file, potentialNode, localReference);
+                    location++;
                 }
 
                 return potentialNode;
@@ -1499,7 +1515,7 @@ function extractConstantInScope(
     const edits = changeTracker.getChanges();
 
     const renameFilename = node.getSourceFile().fileName;
-    const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*preferLastLocation*/ true);
+    const renameLocation = getRenameLocation(edits, renameFilename, localNameText, preferredRenameLocation);
     return { renameFilename, renameLocation, edits };
 
     function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined; initializer: Expression; } {

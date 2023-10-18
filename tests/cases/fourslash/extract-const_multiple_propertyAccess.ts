@@ -13,6 +13,6 @@ edit.applyRefactor({
     newContent:
         `const length = foo.name.length;
 function foo() {
-    return length + /*RENAME*/length;
+    return /*RENAME*/length + length;
 }`
 });

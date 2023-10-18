@@ -17,8 +17,8 @@ edit.applyRefactor({
         `const t = true;
 const newLocal = t ? 1 : "test";
 function foo() {
-    const a = newLocal;
-    const b = /*RENAME*/newLocal;
+    const a = /*RENAME*/newLocal;
+    const b = newLocal;
     return a + b;
 }`
 });

@@ -3278,9 +3278,14 @@ export function getUniqueName(baseName: string, sourceFile: SourceFile): string 
  *
  * @internal
  */
-export function getRenameLocation(edits: readonly FileTextChanges[], renameFilename: string, name: string, preferLastLocation: boolean): number {
+export function getRenameLocation(edits: readonly FileTextChanges[], renameFilename: string, name: string, preferLastLocation: boolean): number;
+/** @internal */
+export function getRenameLocation(edits: readonly FileTextChanges[], renameFilename: string, name: string, preferredLocation: number): number;
+export function getRenameLocation(edits: readonly FileTextChanges[], renameFilename: string, name: string, preferredLocation: number | boolean): number {
     let delta = 0;
     let lastPos = -1;
+    let location = 0;
+    const preferFirstLocation = preferredLocation === false;
     for (const { fileName, textChanges } of edits) {
         Debug.assert(fileName === renameFilename);
         for (const change of textChanges) {
@@ -3290,16 +3295,19 @@ export function getRenameLocation(edits: readonly FileTextChanges[], renameFilen
                 lastPos = span.start + delta + index;
 
                 // If the reference comes first, return immediately.
-                if (!preferLastLocation) {
+                if (preferFirstLocation) {
                     return lastPos;
                 }
+                else if (preferredLocation === location) {
+                    return lastPos;
+                }
+                location++;
             }
             delta += newText.length - span.length;
         }
     }
 
     // If the declaration comes first, return the position of the last occurrence.
-    Debug.assert(preferLastLocation);
     Debug.assert(lastPos >= 0);
     return lastPos;
 }
