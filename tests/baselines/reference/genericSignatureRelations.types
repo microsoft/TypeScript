@@ -1,14 +1,16 @@
-=== tests/cases/compiler/genericSignatureRelations.ts ===
+//// [tests/cases/compiler/genericSignatureRelations.ts] ////
+
+=== genericSignatureRelations.ts ===
 // Repro from #48070
 
 type S<X> = <T>() => T extends X ? 1 : '2';
 >S : S<X>
 
 type Foo1 = S<'s1'>;
->Foo1 : Foo1
+>Foo1 : <T>() => T extends "s1" ? 1 : "2"
 
 type Foo2 = S<'s2'>;
->Foo2 : Foo2
+>Foo2 : <T>() => T extends "s2" ? 1 : "2"
 
 type Result1 = Foo1 extends Foo2 ? true : false;
 >Result1 : false
