@@ -69,9 +69,9 @@ export interface Scanner {
     /** @internal */
     getTokenFlags(): TokenFlags;
     reScanGreaterToken(): SyntaxKind;
-    reScanSlashToken(): SyntaxKind;
     /** @internal */
-    reScanSlashToken(onError?: (message: DiagnosticMessage) => void): SyntaxKind;
+    tryReScanSlashToken(): DiagnosticMessage | undefined;
+    reScanSlashToken(): SyntaxKind;
     reScanAsteriskEqualsToken(): SyntaxKind;
     reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
     /** @deprecated use {@link reScanTemplateToken}(false) */
@@ -1036,6 +1036,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         getTokenFlags: () => tokenFlags,
         reScanGreaterToken,
         reScanAsteriskEqualsToken,
+        tryReScanSlashToken,
         reScanSlashToken,
         reScanTemplateToken,
         reScanTemplateHeadOrNoSubstitutionTemplate,
@@ -1080,7 +1081,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     return scanner;
 
     function error(message: DiagnosticMessage): void;
-    function error(message: DiagnosticMessage, errPos: number, length: number, arg0?: any): void;
+    function error(message: DiagnosticMessage, errPos: number, length?: number, arg0?: any): void;
     function error(message: DiagnosticMessage, errPos: number = pos, length?: number, arg0?: any): void {
         if (onError) {
             const oldPos = pos;
@@ -2368,7 +2369,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return token = SyntaxKind.EqualsToken;
     }
 
-    function reScanSlashToken(onError: typeof error = error): SyntaxKind {
+    function tryReScanSlashToken(): DiagnosticMessage | undefined {
+        let diagnostic: DiagnosticMessage | undefined;
+
         if (token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) {
             let p = tokenStart + 1;
             let inEscape = false;
@@ -2378,14 +2381,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 // regex.  Report error and return what we have so far.
                 if (p >= end) {
                     tokenFlags |= TokenFlags.Unterminated;
-                    onError(Diagnostics.Unterminated_regular_expression_literal);
+                    diagnostic = Diagnostics.Unterminated_regular_expression_literal;
                     break;
                 }
 
                 const ch = text.charCodeAt(p);
                 if (isLineBreak(ch)) {
                     tokenFlags |= TokenFlags.Unterminated;
-                    onError(Diagnostics.Unterminated_regular_expression_literal);
+                    diagnostic = Diagnostics.Unterminated_regular_expression_literal;
                     break;
                 }
 
@@ -2419,6 +2422,18 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             tokenValue = text.substring(tokenStart, pos);
             token = SyntaxKind.RegularExpressionLiteral;
         }
+
+        return diagnostic;
+    }
+
+    function reScanSlashToken(): SyntaxKind {
+        const p = pos;
+        const diagnostic = tryReScanSlashToken();
+
+        if (diagnostic) {
+            error(diagnostic, p)
+        }
+
         return token;
     }
 

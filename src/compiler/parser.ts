@@ -6613,10 +6613,8 @@ namespace Parser {
             case SyntaxKind.SlashToken:
                 // JSX inside a .ts (not .tsx) file gets a specialized error...
                 if (previousNode && isTypeAssertionExpression(previousNode)) {
-                    // ...however, code like <tag>inner</tag>/ might actually be a regular expression afterwards
-                    let caughtError = false;
-                    speculationHelper(() => scanner.reScanSlashToken(() => caughtError = true), SpeculationKind.Lookahead);
-                    if (caughtError) {
+                    // ...however, code like <tag>inner</tag>/ might be a regular expression after an assertion
+                    if (speculationHelper(() => scanner.tryReScanSlashToken(), SpeculationKind.Lookahead)) {
                         nextToken(); // slash
                         const identifier = parseIdentifier(); // identifier (tag name)
                         // Skip through the tag so we don't report additional diagnostics after the "JSX tags are not permitted" notice
@@ -6644,11 +6642,6 @@ namespace Parser {
 
         return parseIdentifier(Diagnostics.Expression_expected);
     }
-
-    // function reScanSlashTokenAsRegularExpressionLiteral() {
-    //     let hadError = false;
-    //     return scanner.tryScan(() => scanner.reScanSlashToken(() => hadError = true) === SyntaxKind.RegularExpressionLiteral && !hadError);
-    // }
 
     function parseParenthesizedExpression(): ParenthesizedExpression {
         const pos = getNodePos();
