@@ -6710,7 +6710,7 @@
         "category": "Error",
         "code": 9010
     },
-    "Heritage clauses in class expressions are not allowed with --isolatedDeclarations": {
+    "To use heritage clauses in class expressions with --isolatedDeclarations, you need explicit type annotation on the variable.": {
         "category": "Error",
         "code": 9011
     },

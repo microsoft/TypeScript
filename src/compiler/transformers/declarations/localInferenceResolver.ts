@@ -3,12 +3,10 @@ import {
     setCommentRange,
 } from "../../_namespaces/ts";
 import {
-    Debug,
-} from "../../debug";
-import {
     Diagnostics,
 } from "../../diagnosticInformationMap.generated";
 import {
+    isClassExpression,
     isComputedPropertyName,
     isConstructorDeclaration,
     isExportAssignment,
@@ -58,6 +56,7 @@ import {
     FunctionExpression,
     GetAccessorDeclaration,
     HasInferredType,
+    HasModifiers,
     Identifier,
     KeywordTypeSyntaxKind,
     LanguageVariant,
@@ -69,7 +68,6 @@ import {
     Node,
     NodeArray,
     NodeFlags,
-    ObjectLiteralElementLike,
     ObjectLiteralExpression,
     ParameterDeclaration,
     ParenthesizedExpression,
@@ -184,25 +182,38 @@ export function createLocalInferenceResolver({
         flags: LocalTypeInfoFlags;
     }
 
-    function getAccessorInfo(properties: NodeArray<ObjectLiteralElementLike>, knownAccessor: SetAccessorDeclaration | GetAccessorDeclaration) {
+    function getAccessorInfo(parent: ClassExpression | ObjectLiteralExpression, knownAccessor: SetAccessorDeclaration | GetAccessorDeclaration) {
         const nameKey = getMemberKey(knownAccessor);
-        const knownIsGetAccessor = isGetAccessorDeclaration(knownAccessor);
-        const otherAccessorTest = knownIsGetAccessor ? isSetAccessorDeclaration : isGetAccessorDeclaration;
-        const otherAccessorIndex = properties.findIndex(n => otherAccessorTest(n) && getMemberKey(n) === nameKey);
-        const otherAccessor = properties[otherAccessorIndex] as SetAccessorDeclaration | GetAccessorDeclaration | undefined;
-
-        const getAccessor = knownIsGetAccessor ? knownAccessor :
-            otherAccessor && isGetAccessorDeclaration(otherAccessor) ? otherAccessor :
-            undefined;
-        const setAccessor = !knownIsGetAccessor ? knownAccessor :
-            otherAccessor && isSetAccessorDeclaration(otherAccessor) ? otherAccessor :
-            undefined;
+        const members = isClassExpression(parent) ? parent.members : parent.properties;
+        let getAccessor, setAccessor;
+        let otherAccessorIdx = -1, knownAccessorIdx = -1;
+        for (let i = 0; i < members.length; ++i) {
+            const member = members[i];
+            if (isGetAccessorDeclaration(member) && getMemberKey(member) === nameKey) {
+                getAccessor = member;
+                if (knownAccessor !== member) {
+                    otherAccessorIdx = i;
+                }
+                else {
+                    knownAccessorIdx = i;
+                }
+            }
+            else if (isSetAccessorDeclaration(member) && getMemberKey(member) === nameKey) {
+                setAccessor = member;
+                if (knownAccessor !== member) {
+                    otherAccessorIdx = i;
+                }
+                else {
+                    knownAccessorIdx = i;
+                }
+            }
+        }
 
         return {
-            otherAccessorIndex,
-            otherAccessor,
             getAccessor,
             setAccessor,
+            otherAccessorIdx,
+            knownAccessorIdx,
         };
     }
     function inferAccessorType(getAccessor?: GetAccessorDeclaration, setAccessor?: SetAccessorDeclaration): LocalTypeInfo {
@@ -359,8 +370,7 @@ export function createLocalInferenceResolver({
     function regular(typeNode: TypeNode, sourceNode: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
         return { typeNode, flags, sourceNode };
     }
-    function getTypeForObjectLiteralExpression(node: ObjectLiteralExpression, inferenceFlags: NarrowBehavior) {
-        const objectLiteral = node;
+    function getTypeForObjectLiteralExpression(objectLiteral: ObjectLiteralExpression, inferenceFlags: NarrowBehavior) {
         const properties: TypeElement[] = [];
         let inheritedObjectTypeFlags = LocalTypeInfoFlags.None;
         const members = new Map<string, {
@@ -388,7 +398,7 @@ export function createLocalInferenceResolver({
             }
             if (isComputedPropertyName(prop.name)) {
                 if (!resolver.isLiteralComputedName(prop.name)) {
-                    reportIsolatedDeclarationError(node);
+                    reportIsolatedDeclarationError(objectLiteral);
                     replaceWithInvalid = true;
                     continue;
                 }
@@ -404,40 +414,9 @@ export function createLocalInferenceResolver({
 
             let newProp;
             if (isMethodDeclaration(prop)) {
-                const oldEnclosingDeclaration = setEnclosingDeclarations(prop);
-                try {
-                    const returnType = visitTypeAndClone(prop.type, prop);
-
-                    const typeParameters = visitNodes(prop.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration)?.map(deepClone);
-                    // TODO: We need to see about inheriting flags from parameters
-                    const parameters = prop.parameters.map(p => deepClone(ensureParameter(p)));
-                    inheritedObjectTypeFlags |= returnType.flags;
-                    if (inferenceFlags & NarrowBehavior.AsConst) {
-                        newProp = factory.createPropertySignature(
-                            [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
-                            name,
-                            /*questionToken*/ undefined,
-                            factory.createFunctionTypeNode(
-                                typeParameters,
-                                parameters,
-                                returnType.typeNode,
-                            ),
-                        );
-                    }
-                    else {
-                        newProp = factory.createMethodSignature(
-                            [],
-                            name,
-                            /*questionToken*/ undefined,
-                            typeParameters,
-                            parameters,
-                            returnType.typeNode,
-                        );
-                    }
-                }
-                finally {
-                    setEnclosingDeclarations(oldEnclosingDeclaration);
-                }
+                const { method, flags } = handleMethodDeclaration(prop, name, inferenceFlags);
+                newProp = method;
+                inheritedObjectTypeFlags |= flags;
             }
             else if (isPropertyAssignment(prop)) {
                 const modifiers = inferenceFlags & NarrowBehavior.AsConst ?
@@ -453,26 +432,13 @@ export function createLocalInferenceResolver({
                 );
             }
             else {
-                if (!isGetAccessorDeclaration(prop) && !isSetAccessorDeclaration(prop)) {
-                    Debug.assertNever(prop);
-                }
-                if (!nameKey) {
-                    return invalid(prop);
-                }
-                const { getAccessor, setAccessor, otherAccessorIndex } = getAccessorInfo(objectLiteral.properties, prop);
-                if (otherAccessorIndex === -1 || otherAccessorIndex > propIndex) {
-                    const accessorType = inferAccessorType(getAccessor, setAccessor);
-                    const modifiers: Modifier[] = [];
-                    if (!setAccessor) {
-                        modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword));
-                    }
+                const accessorType = handleAccessors(prop, objectLiteral, name, nameKey);
+                if (accessorType) {
                     inheritedObjectTypeFlags |= accessorType.flags;
-                    newProp = factory.createPropertySignature(
-                        modifiers,
-                        name,
-                        /*questionToken*/ undefined,
-                        accessorType.typeNode,
-                    );
+                    newProp = accessorType.type;
+                }
+                else {
+                    return invalid(prop);
                 }
             }
 
@@ -505,9 +471,69 @@ export function createLocalInferenceResolver({
         return regular(typeNode, objectLiteral, inheritedObjectTypeFlags);
     }
 
+    function handleMethodDeclaration(method: MethodDeclaration, name: PropertyName, inferenceFlags: NarrowBehavior) {
+        const oldEnclosingDeclaration = setEnclosingDeclarations(method);
+        try {
+            const returnType = visitTypeAndClone(method.type, method);
+            const typeParameters = visitNodes(method.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration)?.map(deepClone);
+            // TODO: We need to see about inheriting flags from parameters
+            const parameters = method.parameters.map(p => deepClone(ensureParameter(p)));
+            if (inferenceFlags & NarrowBehavior.AsConst) {
+                return {
+                    flags: returnType.flags,
+                    method: factory.createPropertySignature(
+                        [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
+                        name,
+                        /*questionToken*/ undefined,
+                        factory.createFunctionTypeNode(
+                            typeParameters,
+                            parameters,
+                            returnType.typeNode,
+                        ),
+                    ),
+                };
+            }
+            else {
+                return {
+                    flags: returnType.flags,
+                    method: factory.createMethodSignature(
+                        [],
+                        name,
+                        /*questionToken*/ undefined,
+                        typeParameters,
+                        parameters,
+                        returnType.typeNode,
+                    ),
+                };
+            }
+        }
+        finally {
+            setEnclosingDeclarations(oldEnclosingDeclaration);
+        }
+    }
+
+    function handleAccessors(accessor: GetAccessorDeclaration | SetAccessorDeclaration, parent: ObjectLiteralExpression | ClassExpression, name: PropertyName, nameKey: string | undefined) {
+        if (!nameKey) {
+            return;
+        }
+
+        const { getAccessor, setAccessor, knownAccessorIdx, otherAccessorIdx } = getAccessorInfo(parent, accessor);
+        if (otherAccessorIdx === -1 || otherAccessorIdx > knownAccessorIdx) {
+            const accessorType = inferAccessorType(getAccessor, setAccessor);
+            return {
+                flags: accessorType.flags,
+                type: factory.createPropertySignature(
+                    setAccessor ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : [],
+                    name,
+                    /*questionToken*/ undefined,
+                    accessorType.typeNode,
+                ),
+            };
+        }
+    }
+
     function getClassExpressionTypeNode(node: ClassExpression): LocalTypeInfo {
         let invalid = false;
-        let hasGetSetAccessor = false;
         const staticMembers: TypeElement[] = [];
         const nonStaticMembers: TypeElement[] = [];
         const constructorParameters: ParameterDeclaration[] = [];
@@ -522,7 +548,7 @@ export function createLocalInferenceResolver({
                             pos: node.heritageClauses[0].pos,
                             end: node.heritageClauses[node.heritageClauses.length - 1].end,
                         },
-                        Diagnostics.Heritage_clauses_in_class_expressions_are_not_allowed_with_isolatedDeclarations,
+                        Diagnostics.To_use_heritage_clauses_in_class_expressions_with_isolatedDeclarations_you_need_explicit_type_annotation_on_the_variable,
                     ),
                 ],
             });
@@ -535,6 +561,7 @@ export function createLocalInferenceResolver({
                     const type = localInferenceFromInitializer(parameter, parameter.type);
                     if (!type) {
                         invalid = true;
+                        continue;
                     }
                     // TODO: See what happens on private modifiers.
                     if (parameter.modifiers?.some(modifier => propertyLikeModifiers.has(modifier.kind))) {
@@ -556,46 +583,26 @@ export function createLocalInferenceResolver({
                 }
             }
             else if (isMethodDeclaration(member)) {
-                const type = localInferenceFromInitializer(member, member.type);
-                if (!type) {
+                const { method, flags } = handleMethodDeclaration(member, member.name, NarrowBehavior.None);
+                if (flags === LocalTypeInfoFlags.Invalid) {
                     invalid = true;
+                    continue;
                 }
-                const methodSignature = factory.createMethodSignature(
-                    /*modifiers*/ undefined,
-                    member.name,
-                    member.questionToken,
-                    member.typeParameters,
-                    member.parameters,
-                    type,
-                );
-                if (member.modifiers?.some(modifier => modifier.kind === SyntaxKind.StaticKeyword)) {
-                    staticMembers.push(methodSignature);
+                if (hasStaticModifier(member)) {
+                    staticMembers.push(method);
                 }
                 else {
-                    nonStaticMembers.push(methodSignature);
+                    nonStaticMembers.push(method);
                 }
             }
             else if (isGetAccessorDeclaration(member) || isSetAccessorDeclaration(member)) {
-                if (!hasGetSetAccessor) {
-                    hasGetSetAccessor = true;
-                    let type;
-                    if (isGetAccessorDeclaration(member)) {
-                        type = localInferenceFromInitializer(member, member.type);
-                    }
-                    else {
-                        type = localInferenceFromInitializer(member.parameters[0], member.parameters[0].type);
-                    }
-                    if (!type) {
-                        invalid = true;
-                    }
-                    nonStaticMembers.push(
-                        factory.createPropertySignature(
-                            [],
-                            member.name,
-                            /*questionToken*/ undefined,
-                            type,
-                        ),
-                    );
+                const accessorType = handleAccessors(member, node, member.name, getMemberKey(member));
+                if (accessorType && accessorType.flags !== LocalTypeInfoFlags.None) {
+                    nonStaticMembers.push(accessorType.type);
+                }
+                else {
+                    invalid = true;
+                    continue;
                 }
             }
             else if (isIndexSignatureDeclaration(member)) {
@@ -612,6 +619,7 @@ export function createLocalInferenceResolver({
                 const type = localInferenceFromInitializer(member, member.type);
                 if (!type) {
                     invalid = true;
+                    continue;
                 }
                 const propertySignature = factory.createPropertySignature(
                     keepReadonlyKeyword(member.modifiers),
@@ -619,7 +627,7 @@ export function createLocalInferenceResolver({
                     member.questionToken,
                     type,
                 );
-                if (member.modifiers?.some(modifier => modifier.kind === SyntaxKind.StaticKeyword)) {
+                if (hasStaticModifier(member)) {
                     staticMembers.push(propertySignature);
                 }
                 else {
@@ -640,6 +648,10 @@ export function createLocalInferenceResolver({
             const typeNode = factory.createTypeLiteralNode([constructorSignature, ...staticMembers]);
             return { typeNode, flags: LocalTypeInfoFlags.None, sourceNode: node };
         }
+    }
+
+    function hasStaticModifier(node: HasModifiers) {
+        return node.modifiers?.some(modifier => modifier.kind === SyntaxKind.StaticKeyword);
     }
 
     function keepReadonlyKeyword(modifiers?: NodeArray<ModifierLike>): Modifier[] {
