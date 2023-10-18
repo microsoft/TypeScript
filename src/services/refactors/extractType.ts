@@ -61,7 +61,6 @@ import {
     SymbolFlags,
     textChanges,
     TextRange,
-    toArray,
     TypeChecker,
     TypeElement,
     TypeNode,
@@ -308,34 +307,22 @@ function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeN
     }
 }
 
-function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: TypeAliasInfo) {
-    const { enclosingNode, selection, typeParameters } = info;
 
-    if (isArray(selection)) {
-        const newTypeValue = isUnionTypeNode(selection[0].parent) ? factory.createUnionTypeNode(selection) : factory.createIntersectionTypeNode(selection);
-        const newTypeDeclaration = factory.createTypeAliasDeclaration(
-            /*modifiers*/ undefined,
-            name,
-            typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)),
-            newTypeValue,
-        );
-        changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeDeclaration), /*blankLineBetween*/ true);
-        changes.replaceNodeRange(file, selection[0], selection[selection.length - 1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
-    }
-    else {
-        const newTypeNode = factory.createTypeAliasDeclaration(
-            /*modifiers*/ undefined,
-            name,
-            typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)),
-            selection,
-        );
-        changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /*blankLineBetween*/ true);
-        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
-    }
+function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: TypeAliasInfo) {
+    const { enclosingNode, typeParameters } = info;
+    const { firstTypeNode, lastTypeNode, newTypeNode } = getNodesToEdit(info);
+    const newTypeDeclaration = factory.createTypeAliasDeclaration(
+        /*modifiers*/ undefined,
+        name,
+        typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)),
+        newTypeNode,
+    );
+    changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeDeclaration), /*blankLineBetween*/ true);
+    changes.replaceNodeRange(file, firstTypeNode, lastTypeNode, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
 }
 
 function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: InterfaceInfo) {
-    const { enclosingNode, selection, typeParameters, typeElements } = info;
+    const { enclosingNode, typeParameters, typeElements } = info;
 
     const newTypeNode = factory.createInterfaceDeclaration(
         /*modifiers*/ undefined,
@@ -347,32 +334,26 @@ function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile,
     setTextRange(newTypeNode, typeElements[0]?.parent);
     changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /*blankLineBetween*/ true);
 
-    if (isArray(selection)) {
-        changes.replaceNodeRange(file, selection[0], selection[selection.length - 1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
-    }
-    else {
-        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
-    }
+    const { firstTypeNode, lastTypeNode } = getNodesToEdit(info);
+    changes.replaceNodeRange(file, firstTypeNode, lastTypeNode, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
 }
 
 function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorContext, file: SourceFile, name: string, info: ExtractInfo) {
-    const { enclosingNode, selection, typeParameters } = info;
-
-    let newTypeValue: TypeNode;
-    if (isArray(selection)) {
-        selection.forEach(typeNode => {
+    if (isArray(info.selection)) {
+        info.selection.forEach(typeNode => {
             setEmitFlags(typeNode, EmitFlags.NoComments | EmitFlags.NoNestedComments);
         });
-        newTypeValue = isUnionTypeNode(selection[0].parent) ? factory.createUnionTypeNode(selection) : factory.createIntersectionTypeNode(selection);
     }
     else {
-        setEmitFlags(selection, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-        newTypeValue = selection;
+        setEmitFlags(info.selection, EmitFlags.NoComments | EmitFlags.NoNestedComments);
     }
+    const { enclosingNode, typeParameters } = info;
+    const { firstTypeNode, lastTypeNode, newTypeNode } = getNodesToEdit(info);
+
 
     const node = factory.createJSDocTypedefTag(
         factory.createIdentifier("typedef"),
-        factory.createJSDocTypeExpression(newTypeValue),
+        factory.createJSDocTypeExpression(newTypeNode),
         factory.createIdentifier(name),
     );
 
@@ -399,12 +380,21 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
     else {
         changes.insertNodeBefore(file, enclosingNode, jsDoc, /*blankLineBetween*/ true);
     }
+    changes.replaceNodeRange(file, firstTypeNode, lastTypeNode, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
+}
 
-    if (isArray(selection)) {
-        changes.replaceNodeRange(file, selection[0], selection[selection.length - 1], factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
+function getNodesToEdit(info: ExtractInfo) {
+    if (isArray(info.selection)) {
+        return {
+            firstTypeNode: info.selection[0],
+            lastTypeNode: info.selection[info.selection.length - 1],
+            newTypeNode: isUnionTypeNode(info.selection[0].parent) ? factory.createUnionTypeNode(info.selection) : factory.createIntersectionTypeNode(info.selection),
+        }
     }
-    else {
-        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
+    return {
+        firstTypeNode: info.selection,
+        lastTypeNode: info.selection,
+        newTypeNode: info.selection
     }
 }
 
