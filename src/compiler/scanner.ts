@@ -2431,7 +2431,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         const diagnostic = tryReScanSlashToken();
 
         if (diagnostic) {
-            error(diagnostic, p)
+            error(diagnostic, p);
         }
 
         return token;
