@@ -1403,24 +1403,32 @@ function extractConstantInScope(
             initializer,
         );
 
-        let localReference: Expression = factory.createPropertyAccessExpression(
-            rangeFacts & RangeFacts.InStaticRegion
-                ? factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
-                : factory.createThis(),
-            factory.createIdentifier(localNameText),
-        );
-
-        if (isInJSXContent(node)) {
-            localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
-        }
-
         // Declare
         const maxInsertionPos = node.pos;
         const nodeToInsertBefore = getNodeToInsertPropertyBefore(maxInsertionPos, scope);
         changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, /*blankLineBetween*/ true);
 
         // Consume
-        changeTracker.replaceNode(context.file, node, localReference);
+        visitEachChild(scope, function visitor(potentialNode) {
+            if (!isSameNode(potentialNode, node)) {
+                return visitEachChild(potentialNode, visitor, nullTransformationContext);
+            }
+
+            let localReference: Expression = factory.createPropertyAccessExpression(
+                rangeFacts & RangeFacts.InStaticRegion
+                    ? factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
+                    : factory.createThis(),
+                factory.createIdentifier(localNameText),
+            );
+
+            if (isInJSXContent(potentialNode)) {
+                localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+            }
+
+            changeTracker.replaceNode(context.file, potentialNode, localReference);
+
+            return potentialNode;
+        }, nullTransformationContext);
     }
     else {
         const newVariableDeclaration = factory.createVariableDeclaration(localNameText, /*exclamationToken*/ undefined, variableType, initializer);
@@ -1463,16 +1471,17 @@ function extractConstantInScope(
                 changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, /*blankLineBetween*/ false);
             }
 
-            function visitor(potentialNode: Node) {
-                // Don't handle the actual node here, it wil be handled below using the old code
-                if (potentialNode === node) {
-                    return potentialNode;
+            // Consume
+            visitEachChild(scope, function visitor(potentialNode) {
+                if (!isSameNode(potentialNode, node)) {
+                    return visitEachChild(potentialNode, visitor, nullTransformationContext);
                 }
 
-                if (isSameNode(potentialNode, node)) {
-                    // Ignore the expression statement situation, for simplicity (can be implemented later)
-                    if (potentialNode.parent.kind === SyntaxKind.ExpressionStatement) return potentialNode;
-
+                if (potentialNode.parent.kind === SyntaxKind.ExpressionStatement) {
+                    // If the parent is an expression statement, delete it.
+                    changeTracker.delete(context.file, potentialNode.parent);
+                }
+                else {
                     let localReference: Expression = factory.createIdentifier(localNameText);
                     // When extract to a new variable in JSX content, need to wrap a {} out of the new variable
                     // or it will become a plain text
@@ -1480,28 +1489,10 @@ function extractConstantInScope(
                         localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
                     }
                     changeTracker.replaceNode(context.file, potentialNode, localReference);
-                    return potentialNode;
                 }
 
-                return visitEachChild(potentialNode, visitor, nullTransformationContext);
-            }
-
-            visitEachChild(scope, visitor, nullTransformationContext);
-
-            // Consume
-            if (node.parent.kind === SyntaxKind.ExpressionStatement) {
-                // If the parent is an expression statement, delete it.
-                changeTracker.delete(context.file, node.parent);
-            }
-            else {
-                let localReference: Expression = factory.createIdentifier(localNameText);
-                // When extract to a new variable in JSX content, need to wrap a {} out of the new variable
-                // or it will become a plain text
-                if (isInJSXContent(node)) {
-                    localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
-                }
-                changeTracker.replaceNode(context.file, node, localReference);
-            }
+                return potentialNode;
+            }, nullTransformationContext);
         }
     }
 

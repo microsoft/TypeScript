@@ -29,6 +29,8 @@ import {
 } from "../_namespaces/ts";
 
 export function isSameNode(a: Node, b: Node): boolean {
+    if(a === b) return true;
+
     if (a.kind !== b.kind) return false;
 
     return isSameNodeTable[a.kind]?.(a, b) ?? false;
