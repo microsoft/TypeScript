@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts] ////
+
+=== interfaceWithPropertyOfEveryType.ts ===
 class C { foo: string; }
 >C : Symbol(C, Decl(interfaceWithPropertyOfEveryType.ts, 0, 0))
 >foo : Symbol(C.foo, Decl(interfaceWithPropertyOfEveryType.ts, 0, 9))

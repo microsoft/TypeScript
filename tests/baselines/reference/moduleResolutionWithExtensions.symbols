@@ -1,8 +1,11 @@
+//// [tests/cases/conformance/externalModules/moduleResolutionWithExtensions.ts] ////
+
 === /src/a.ts ===
+
 export default 0;
-No type information for this code.
-No type information for this code.// No extension: '.ts' added
-No type information for this code.=== /src/b.ts ===
+
+// No extension: '.ts' added
+=== /src/b.ts ===
 import a from './a';
 >a : Symbol(a, Decl(b.ts, 0, 6))
 

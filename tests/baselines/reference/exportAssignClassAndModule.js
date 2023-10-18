@@ -28,7 +28,7 @@ var Foo = /** @class */ (function () {
 module.exports = Foo;
 //// [exportAssignClassAndModule_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var z;
 var zz;
 zz.x;

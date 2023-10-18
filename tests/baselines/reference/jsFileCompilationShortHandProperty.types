@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationShortHandProperty.ts] ////
+
+=== a.js ===
 function foo() {
 >foo : () => { a: number; b: string; }
 

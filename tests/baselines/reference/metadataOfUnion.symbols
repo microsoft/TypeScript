@@ -1,4 +1,6 @@
-=== tests/cases/compiler/metadataOfUnion.ts ===
+//// [tests/cases/compiler/metadataOfUnion.ts] ////
+
+=== metadataOfUnion.ts ===
 function PropDeco(target: Object, propKey: string | symbol) { }
 >PropDeco : Symbol(PropDeco, Decl(metadataOfUnion.ts, 0, 0))
 >target : Symbol(target, Decl(metadataOfUnion.ts, 0, 18))

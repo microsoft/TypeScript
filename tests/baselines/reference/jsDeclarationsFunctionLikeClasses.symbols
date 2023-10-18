@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionLikeClasses.ts] ////
+
+=== source.js ===
 /**
  * @param {number} x
  * @param {number} y
@@ -30,7 +32,7 @@ export function Point(x, y) {
 >y : Symbol(y, Decl(source.js, 4, 24))
 }
 
-=== tests/cases/conformance/jsdoc/declarations/referencer.js ===
+=== referencer.js ===
 import {Point} from "./source";
 >Point : Symbol(Point, Decl(referencer.js, 0, 8))
 

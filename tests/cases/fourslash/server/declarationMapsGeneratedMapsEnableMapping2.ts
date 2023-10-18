@@ -36,11 +36,11 @@
 ////instance.[|/*1*/methodName|]({member: 12});
 
 // @Filename: /dist/index.js.map
-////{"version":3,"file":"index.js","sourceRoot":"/","sources":["index.ts"],"names":[],"mappings":";;;AAAA;IAAA;IASA,CAAC;IAPG,wBAAU,GAAV,UAAW,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,yBAAW,GAAX;QACI,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE;YACrB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;SAClB;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;IACL,UAAC;AAAD,CAAC,AATD,IASC;AATY,kBAAG"}
+////{"version":3,"file":"index.js","sourceRoot":"/","sources":["index.ts"],"names":[],"mappings":";;;AAAA;IAAA;IASA,CAAC;IAPG,wBAAU,GAAV,UAAW,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,yBAAW,GAAX;QACI,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE,CAAC;YACtB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;QACnB,CAAC;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;IACL,UAAC;AAAD,CAAC,AATD,IASC;AATY,kBAAG"}
 
 // @Filename: /dist/index.js
 ////"use strict";
-////exports.__esModule = true;
+////Object.defineProperty(exports, "__esModule", { value: true });
 ////exports.Foo = void 0;
 ////var Foo = /** @class */ (function () {
 ////    function Foo() {
@@ -80,9 +80,9 @@
 goTo.file("/index.ts");
 verify.getEmitOutput(["/dist/index.js.map", "/dist/index.js", "/dist/index.d.ts.map", "/dist/index.d.ts"]);
 
-verify.goToDefinition("1", "2"); // getDefinitionAndBoundSpan
-verify.goToType("1", "SomeType"); // getTypeDefinitionAtPosition
-goTo.marker("1");
-verify.goToDefinitionIs("2"); // getDefinitionAtPosition
-goTo.implementation(); // getImplementationAtPosition
-verify.caretAtMarker("2");
+verify.baselineCommands(
+    { type: "goToImplementation", markerOrRange: "1" }, // getImplementationAtPosition
+    { type: "goToType", markerOrRange: "1" }, // getTypeDefinitionAtPosition
+    { type: "goToDefinition", markerOrRange: "1" }, // getDefinitionAndBoundSpan
+    { type: "getDefinitionAtPosition", markerOrRange: "1" }, // getDefinitionAtPosition
+);

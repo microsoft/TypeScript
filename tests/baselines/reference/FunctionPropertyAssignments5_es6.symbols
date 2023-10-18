@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts ===
+//// [tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts] ////
+
+=== FunctionPropertyAssignments5_es6.ts ===
 var v = { *[foo()]() { } }
 >v : Symbol(v, Decl(FunctionPropertyAssignments5_es6.ts, 0, 3))
 >[foo()] : Symbol([foo()], Decl(FunctionPropertyAssignments5_es6.ts, 0, 9))

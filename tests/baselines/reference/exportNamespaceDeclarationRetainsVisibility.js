@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportNamespaceDeclarationRetainsVisibility.ts] ////
+
 //// [exportNamespaceDeclarationRetainsVisibility.ts]
 namespace X {
     interface A {
@@ -15,7 +17,7 @@ export = X;
 
 //// [exportNamespaceDeclarationRetainsVisibility.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [exportNamespaceDeclarationRetainsVisibility.d.ts]

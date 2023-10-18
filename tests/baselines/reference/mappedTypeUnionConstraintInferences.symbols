@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeUnionConstraintInferences.ts ===
+//// [tests/cases/compiler/mappedTypeUnionConstraintInferences.ts] ////
+
+=== mappedTypeUnionConstraintInferences.ts ===
 export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 >Omit : Symbol(Omit, Decl(mappedTypeUnionConstraintInferences.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 0, 25))

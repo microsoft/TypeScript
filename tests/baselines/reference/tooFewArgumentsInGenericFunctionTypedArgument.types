@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tooFewArgumentsInGenericFunctionTypedArgument.ts ===
+//// [tests/cases/compiler/tooFewArgumentsInGenericFunctionTypedArgument.ts] ////
+
+=== tooFewArgumentsInGenericFunctionTypedArgument.ts ===
 interface Collection<T, U> {
     length: number;
 >length : number

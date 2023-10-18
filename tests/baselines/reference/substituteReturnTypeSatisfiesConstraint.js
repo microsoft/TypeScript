@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/substituteReturnTypeSatisfiesConstraint.ts] ////
+
 //// [substituteReturnTypeSatisfiesConstraint.ts]
 type M = { p: string };
 type O = { m: () => M };

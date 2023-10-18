@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typedArraysCrossAssignability01.ts ===
+//// [tests/cases/compiler/typedArraysCrossAssignability01.ts] ////
+
+=== typedArraysCrossAssignability01.ts ===
 function CheckAssignability() {
 >CheckAssignability : () => void
 

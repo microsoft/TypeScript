@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentsWithTypeArguments1.tsx] ////
+
 //// [file.tsx]
 import React = require('react')
 
@@ -33,7 +35,7 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} 
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     // OK
     function Baz(key1, value) {
         var a0 = <ComponentWithTwoAttributes key1={key1} value={value}/>;

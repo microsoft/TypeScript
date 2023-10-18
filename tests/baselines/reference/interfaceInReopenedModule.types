@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceInReopenedModule.ts ===
+//// [tests/cases/compiler/interfaceInReopenedModule.ts] ////
+
+=== interfaceInReopenedModule.ts ===
 module m {
 }
 

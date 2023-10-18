@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_0.ts ===
+//// [tests/cases/compiler/duplicateVarsAcrossFileBoundaries.ts] ////
+
+=== duplicateVarsAcrossFileBoundaries_0.ts ===
 var x = 3;
 >x : number
 >3 : 3
@@ -7,7 +9,7 @@ var y = "";
 >y : string
 >"" : ""
 
-=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_1.ts ===
+=== duplicateVarsAcrossFileBoundaries_1.ts ===
 var x = true;
 >x : number
 >true : true
@@ -16,7 +18,7 @@ var z = 3;
 >z : number
 >3 : 3
 
-=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_2.ts ===
+=== duplicateVarsAcrossFileBoundaries_2.ts ===
 var x = "";
 >x : number
 >"" : ""
@@ -29,7 +31,7 @@ var z = false;
 >z : number
 >false : false
 
-=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_3.ts ===
+=== duplicateVarsAcrossFileBoundaries_3.ts ===
 var x = 0;
 >x : number
 >0 : 0
@@ -42,7 +44,7 @@ var z = 0;
 >z : number
 >0 : 0
 
-=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_4.ts ===
+=== duplicateVarsAcrossFileBoundaries_4.ts ===
 module P { }
 import p = P;
 >p : any
@@ -51,7 +53,7 @@ import p = P;
 var q;
 >q : any
 
-=== tests/cases/compiler/duplicateVarsAcrossFileBoundaries_5.ts ===
+=== duplicateVarsAcrossFileBoundaries_5.ts ===
 module Q { }
 import q = Q;
 >q : any

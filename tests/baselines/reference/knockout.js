@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/knockout.ts] ////
+
 //// [knockout.ts]
   declare module ko {
    export interface Observable<T> {

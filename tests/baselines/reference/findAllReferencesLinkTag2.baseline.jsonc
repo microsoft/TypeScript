@@ -1,10 +1,11 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
 // namespace NPR {
 //     export class Consider {
 //         This = class {
 //             show() { }
 //         }
-//         [|m|]/*FIND ALL REFS*/() { }
+//         <|[|{| isWriteAccess: true, isDefinition: true |}m|]/*FIND ALL REFS*/() { }|>
 //     }
 //     /**
 //      * @see {Consider.prototype.[|m|]}
@@ -12,136 +13,97 @@
 //      * @see {Consider#This#show}
 //      * {@link Consider.This.show}
 //      * @see {NPR.Consider#This#show}
-//      * {@link NPR.Consider.This#show}
-//      * @see {NPR.Consider#This.show} # doesn't parse trailing .
-//      * @see {NPR.Consider.This.show}
-//      */
-//     export function ref() { }
-// }
-// /**
-//  * {@link NPR.Consider#This#show hello hello}
-//  * {@link NPR.Consider.This#show}
-//  * @see {NPR.Consider#This.show} # doesn't parse trailing .
-//  * @see {NPR.Consider.This.show}
-//  */
-// export function outerref() { }
+// --- (line: 14) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-      "kind": "method",
-      "name": "(method) NPR.Consider.m(): void",
-      "textSpan": {
-        "start": 108,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "NPR",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Consider",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "m",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 108,
-        "length": 7
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 108,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "contextSpan": {
-          "start": 108,
-          "length": 7
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 162,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
+  // namespace NPR {
+  //     export class Consider {
+  //         This = class {
+  //             show() { }
+  //         }
+  //         <|[|m|]/*FIND ALL REFS*/() { }|>
+  //     }
+  //     /**
+  //      * @see {Consider.prototype.m}
+  // --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) NPR.Consider.m(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "NPR",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Consider",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "m",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
 // namespace NPR {
 //     export class Consider {
 //         This = class {
-//             [|show|]/*FIND ALL REFS*/() { }
+//             <|[|{| isWriteAccess: true, isDefinition: true |}show|]/*FIND ALL REFS*/() { }|>
 //         }
 //         m() { }
 //     }
@@ -165,169 +127,86 @@
 //  */
 // export function outerref() { }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-      "kind": "method",
-      "name": "(method) (Anonymous class).show(): void",
-      "textSpan": {
-        "start": 79,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(Anonymous class)",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "show",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 79,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "contextSpan": {
-          "start": 79,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 252,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 289,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 327,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 428,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 506,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 552,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 645,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
+  // namespace NPR {
+  //     export class Consider {
+  //         This = class {
+  //             <|[|show|]/*FIND ALL REFS*/() { }|>
+  //         }
+  //         m() { }
+  //     }
+  // --- (line: 8) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) (Anonymous class).show(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(Anonymous class)",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "show",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
 // namespace NPR {
 //     export class Consider {
-//         [|This|]/*FIND ALL REFS*/ = class {
+//         <|[|{| isWriteAccess: true, isDefinition: true |}This|]/*FIND ALL REFS*/ = class {
 //             show() { }
-//         }
+//         }|>
 //         m() { }
 //     }
 //     /**
@@ -350,197 +229,97 @@
 //  */
 // export function outerref() { }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-      "kind": "property",
-      "name": "(property) NPR.Consider.This: typeof (Anonymous class)",
-      "textSpan": {
-        "start": 52,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "NPR",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Consider",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "This",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "typeof",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(Anonymous class)",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 52,
-        "length": 47
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 52,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "contextSpan": {
-          "start": 52,
-          "length": 47
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 213,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 247,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 284,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 322,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 359,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 423,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 501,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 547,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 580,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 640,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
+  // namespace NPR {
+  //     export class Consider {
+  //         <|[|This|]/*FIND ALL REFS*/ = class {
+  //             show() { }
+  //         }|>
+  //         m() { }
+  //     }
+  //     /**
+  // --- (line: 9) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) NPR.Consider.This: typeof (Anonymous class)",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "NPR",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Consider",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "This",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(Anonymous class)",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
 // namespace NPR {
-//     export class [|Consider|]/*FIND ALL REFS*/ {
+//     <|export class [|{| isWriteAccess: true, isDefinition: true |}Consider|]/*FIND ALL REFS*/ {
 //         This = class {
 //             show() { }
 //         }
 //         m() { }
-//     }
+//     }|>
 //     /**
 //      * @see {[|Consider|].prototype.m}
 //      * {@link [|Consider|]#m}
@@ -561,181 +340,63 @@
 //  */
 // export function outerref() { }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-      "kind": "class",
-      "name": "class NPR.Consider",
-      "textSpan": {
-        "start": 33,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "NPR",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Consider",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 20,
-        "length": 101
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 33,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "contextSpan": {
-          "start": 20,
-          "length": 101
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 143,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 179,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 204,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 238,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 275,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 313,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 350,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 414,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 492,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 538,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 571,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 631,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
+  // namespace NPR {
+  //     <|export class [|Consider|]/*FIND ALL REFS*/ {
+  //         This = class {
+  //             show() { }
+  //         }
+  //         m() { }
+  //     }|>
+  //     /**
+  //      * @see {Consider.prototype.m}
+  //      * {@link Consider#m}
+  // --- (line: 11) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class NPR.Consider",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "NPR",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Consider",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
-// namespace [|NPR|]/*FIND ALL REFS*/ {
+// <|namespace [|{| isWriteAccess: true, isDefinition: true |}NPR|]/*FIND ALL REFS*/ {
 //     export class Consider {
 //         This = class {
 //             show() { }
-//         }
-//         m() { }
-//     }
-//     /**
-//      * @see {Consider.prototype.m}
+// --- (line: 5) skipped ---
+
+// --- (line: 9) skipped ---
 //      * {@link Consider#m}
 //      * @see {Consider#This#show}
 //      * {@link Consider.This.show}
@@ -745,7 +406,7 @@
 //      * @see {[|NPR|].Consider.This.show}
 //      */
 //     export function ref() { }
-// }
+// }|>
 // /**
 //  * {@link [|NPR|].Consider#This#show hello hello}
 //  * {@link [|NPR|].Consider.This#show}
@@ -754,123 +415,52 @@
 //  */
 // export function outerref() { }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-      "kind": "module",
-      "name": "namespace NPR",
-      "textSpan": {
-        "start": 10,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "NPR",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 473
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 473
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 271,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 309,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 346,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 410,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 488,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 534,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 567,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 627,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
+  // <|namespace [|NPR|]/*FIND ALL REFS*/ {
+  //     export class Consider {
+  //         This = class {
+  //             show() { }
+  //         }
+  //         m() { }
+  //     }
+  //     /**
+  //      * @see {Consider.prototype.m}
+  //      * {@link Consider#m}
+  //      * @see {Consider#This#show}
+  //      * {@link Consider.This.show}
+  //      * @see {NPR.Consider#This#show}
+  //      * {@link NPR.Consider.This#show}
+  //      * @see {NPR.Consider#This.show} # doesn't parse trailing .
+  //      * @see {NPR.Consider.This.show}
+  //      */
+  //     export function ref() { }
+  // }|>
+  // /**
+  //  * {@link NPR.Consider#This#show hello hello}
+  //  * {@link NPR.Consider.This#show}
+  // --- (line: 23) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace NPR",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "NPR",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]

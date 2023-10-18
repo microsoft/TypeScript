@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts] ////
+
 //// [destructuringParameterDeclaration8.ts]
 // explicit type annotation should cause `method` to have type 'x' | 'y'
 // both inside and outside `test`.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileObjectLiteralWithOnlySetter.ts] ////
+
 //// [declFileObjectLiteralWithOnlySetter.ts]
 function /*1*/makePoint(x: number) { 
     return {

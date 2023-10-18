@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/filterNamespace_import.ts] ////
+
 === /ns.ts ===
 namespace ns {
 >ns : Symbol(ns, Decl(ns.ts, 0, 0))

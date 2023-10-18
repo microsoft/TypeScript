@@ -1,4 +1,6 @@
-=== tests/cases/compiler/betterErrorForUnionCall.ts ===
+//// [tests/cases/compiler/betterErrorForUnionCall.ts] ////
+
+=== betterErrorForUnionCall.ts ===
 declare const union: { a: string } | { b: string }
 >union : Symbol(union, Decl(betterErrorForUnionCall.ts, 0, 13))
 >a : Symbol(a, Decl(betterErrorForUnionCall.ts, 0, 22))

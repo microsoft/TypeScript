@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicatePackage.ts] ////
+
 === /src/a.ts ===
 import { a } from "a";
 >a : (x: import("/node_modules/a/node_modules/x/index").default) => void

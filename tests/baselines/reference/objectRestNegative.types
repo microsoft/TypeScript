@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/objectRestNegative.ts ===
+//// [tests/cases/conformance/types/rest/objectRestNegative.ts] ////
+
+=== objectRestNegative.ts ===
 let o = { a: 1, b: 'no' };
 >o : { a: number; b: string; }
 >{ a: 1, b: 'no' } : { a: number; b: string; }

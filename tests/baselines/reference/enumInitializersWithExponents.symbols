@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumInitializersWithExponents.ts ===
+//// [tests/cases/compiler/enumInitializersWithExponents.ts] ////
+
+=== enumInitializersWithExponents.ts ===
 // Must be integer literals.
 declare enum E {
 >E : Symbol(E, Decl(enumInitializersWithExponents.ts, 0, 0))

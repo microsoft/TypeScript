@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexSignatureTypeCheck.ts ===
+//// [tests/cases/compiler/indexSignatureTypeCheck.ts] ////
+
+=== indexSignatureTypeCheck.ts ===
 interface IPropertySet {
 
     [index: string]: any;
@@ -9,7 +11,6 @@ interface IPropertySet {
 
 var ps: IPropertySet = null;
 >ps : IPropertySet
->null : null
 
 var index: any = "hello";
 >index : any

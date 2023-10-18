@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/objectTypeLiteralSyntax2.ts] ////
+
 //// [objectTypeLiteralSyntax2.ts]
 var x: {
     foo: string,

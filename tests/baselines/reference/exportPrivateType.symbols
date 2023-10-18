@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportPrivateType.ts ===
+//// [tests/cases/compiler/exportPrivateType.ts] ////
+
+=== exportPrivateType.ts ===
 module foo {
 >foo : Symbol(foo, Decl(exportPrivateType.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminantPropertyCheck.ts] ////
+
 //// [discriminantPropertyCheck.ts]
 type Item = Item1 | Item2;
 
@@ -239,7 +241,7 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 
 //// [discriminantPropertyCheck.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 function goo1(x) {
     if (x.kind === "A" && x.foo !== undefined) {

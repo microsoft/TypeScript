@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitedTypeStrictNull.ts] ////
+
 //// [awaitedTypeStrictNull.ts]
 type T1 = Awaited<number>;
 type T2 = Awaited<Promise<number>>;
@@ -14,6 +16,10 @@ type T12 = Awaited<Promise<Promise<number>>>;
 type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected*/ string | number | null>; // otherwise just prints T13 in types tests, which isn't very helpful
 type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
 type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
+
+type TUndefined = Awaited<undefined>;
+type TNull = Awaited<null>;
+type TNullOrUndefined = Awaited<null | undefined>;
 
 interface BadPromise { then(cb: (value: BadPromise) => void): void; }
 type T16 = Awaited<BadPromise>; // error

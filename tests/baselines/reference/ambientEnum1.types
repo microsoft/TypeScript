@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientEnum1.ts ===
+//// [tests/cases/compiler/ambientEnum1.ts] ////
+
+=== ambientEnum1.ts ===
     declare enum E1 {
 >E1 : E1
 
@@ -12,7 +14,7 @@
 >E2 : E2
 
         x = 'foo'.length
->x : E2
+>x : E2.x
 >'foo'.length : number
 >'foo' : "foo"
 >length : number

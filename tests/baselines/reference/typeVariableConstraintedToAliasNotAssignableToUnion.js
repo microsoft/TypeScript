@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts] ////
+
 //// [typeVariableConstraintedToAliasNotAssignableToUnion.ts]
 declare class TableClass<S = any> {
     _field: S;
@@ -41,7 +43,7 @@ someUnion = o;
 
 //// [typeVariableConstraintedToAliasNotAssignableToUnion.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function fn(o) {
     aBoolean = o;
     aStringOrNumber = o;

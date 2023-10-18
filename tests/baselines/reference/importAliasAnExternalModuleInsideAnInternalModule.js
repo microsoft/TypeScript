@@ -16,16 +16,16 @@ module m_private {
 
 //// [importAliasAnExternalModuleInsideAnInternalModule_file0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 var m;
 (function (m) {
     function foo() { }
     m.foo = foo;
-})(m = exports.m || (exports.m = {}));
+})(m || (exports.m = m = {}));
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var r = require("./importAliasAnExternalModuleInsideAnInternalModule_file0");
 var m_private;
 (function (m_private) {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tryCatchFinally.ts ===
+//// [tests/cases/compiler/tryCatchFinally.ts] ////
+
+=== tryCatchFinally.ts ===
 try { } catch(e) { } finally { } 
 >e : Symbol(e, Decl(tryCatchFinally.ts, 0, 14))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyInAmbientDeclaration.ts ===
+//// [tests/cases/compiler/implicitAnyInAmbientDeclaration.ts] ////
+
+=== implicitAnyInAmbientDeclaration.ts ===
 module Test {
 >Test : Symbol(Test, Decl(implicitAnyInAmbientDeclaration.ts, 0, 0))
 

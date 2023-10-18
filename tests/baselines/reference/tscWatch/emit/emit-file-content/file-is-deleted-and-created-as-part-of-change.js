@@ -1,3 +1,4 @@
+currentDirectory:: /home/username/project useCaseSensitiveFileNames: true
 Input::
 //// [/home/username/project/app/file.ts]
 var a = 10;
@@ -43,21 +44,21 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /home/username/project/app/file.ts (used version)
 
-WatchedFiles::
-/home/username/project/tsconfig.json:
-  {"fileName":"/home/username/project/tsconfig.json","pollingInterval":250}
-/home/username/project/app/file.ts:
-  {"fileName":"/home/username/project/app/file.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/home/username/project/node_modules/@types:
-  {"fileName":"/home/username/project/node_modules/@types","pollingInterval":500}
+PolledWatches::
+/home/username/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/home/username/project/app/file.ts: *new*
+  {}
+/home/username/project/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/home/username/project/app:
-  {"directoryName":"/home/username/project/app"}
+/home/username/project/app: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -74,6 +75,9 @@ var a = 10;
 var b = 10;
 
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
@@ -95,22 +99,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/username/project/app/file.ts (computed .d.ts)
-
-WatchedFiles::
-/home/username/project/tsconfig.json:
-  {"fileName":"/home/username/project/tsconfig.json","pollingInterval":250}
-/home/username/project/app/file.ts:
-  {"fileName":"/home/username/project/app/file.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/home/username/project/node_modules/@types:
-  {"fileName":"/home/username/project/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/home/username/project/app:
-  {"directoryName":"/home/username/project/app"}
 
 exitCode:: ExitStatus.undefined
 

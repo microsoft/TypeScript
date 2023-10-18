@@ -1,8 +1,8 @@
-tests/cases/compiler/primitiveConstraints1.ts(2,6): error TS2344: Type 'string' does not satisfy the constraint 'number'.
-tests/cases/compiler/primitiveConstraints1.ts(5,14): error TS2344: Type 'string' does not satisfy the constraint 'number'.
+primitiveConstraints1.ts(2,6): error TS2344: Type 'string' does not satisfy the constraint 'number'.
+primitiveConstraints1.ts(5,14): error TS2344: Type 'string' does not satisfy the constraint 'number'.
 
 
-==== tests/cases/compiler/primitiveConstraints1.ts (2 errors) ====
+==== primitiveConstraints1.ts (2 errors) ====
     function foo1<T extends U, U>(t: T, u: U) { }
     foo1<string, number>('hm', 1); // no error
          ~~~~~~

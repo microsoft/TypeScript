@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts ===
+//// [tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile.ts] ////
+
+=== privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts ===
 import exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
 >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 
@@ -376,7 +378,7 @@ function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createE
 >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 >createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
 }
-=== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts ===
+=== privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts ===
 declare module "GlobalWidgets" {
 >"GlobalWidgets" : Symbol("GlobalWidgets", Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 0, 0))
 
@@ -405,7 +407,7 @@ declare module "GlobalWidgets" {
     }
 }
 
-=== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts ===
+=== privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts ===
 export class Widget1 {
 >Widget1 : Symbol(Widget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 0, 0))
 
@@ -436,7 +438,7 @@ export module SpecializedWidget {
     }
 }
 
-=== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts ===
+=== privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts ===
 ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
 import Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 >Widgets : Symbol(Widgets, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 0, 0))

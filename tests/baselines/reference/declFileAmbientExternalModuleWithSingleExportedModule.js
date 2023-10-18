@@ -20,14 +20,14 @@ export var x: SubModule.m.m3.c;
 //// [declFileAmbientExternalModuleWithSingleExportedModule_0.js]
 //// [declFileAmbientExternalModuleWithSingleExportedModule_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 
 
 //// [declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts]
 declare module "SubModule" {
-    module m {
-        module m3 {
+    namespace m {
+        namespace m3 {
             interface c {
             }
         }

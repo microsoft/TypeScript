@@ -1,0 +1,109 @@
+nanEquality.ts(3,5): error TS2845: This condition will always return 'false'.
+nanEquality.ts(4,5): error TS2845: This condition will always return 'false'.
+nanEquality.ts(6,5): error TS2845: This condition will always return 'false'.
+nanEquality.ts(7,5): error TS2845: This condition will always return 'false'.
+nanEquality.ts(9,5): error TS2845: This condition will always return 'true'.
+nanEquality.ts(10,5): error TS2845: This condition will always return 'true'.
+nanEquality.ts(12,5): error TS2845: This condition will always return 'true'.
+nanEquality.ts(13,5): error TS2845: This condition will always return 'true'.
+nanEquality.ts(15,5): error TS2845: This condition will always return 'false'.
+nanEquality.ts(16,5): error TS2845: This condition will always return 'false'.
+nanEquality.ts(18,5): error TS2845: This condition will always return 'true'.
+nanEquality.ts(19,5): error TS2845: This condition will always return 'true'.
+nanEquality.ts(21,5): error TS2845: This condition will always return 'false'.
+nanEquality.ts(22,5): error TS2845: This condition will always return 'true'.
+nanEquality.ts(24,5): error TS2845: This condition will always return 'false'.
+nanEquality.ts(25,5): error TS2845: This condition will always return 'true'.
+nanEquality.ts(29,5): error TS2845: This condition will always return 'false'.
+
+
+==== nanEquality.ts (17 errors) ====
+    declare const x: number;
+    
+    if (x === NaN) {}
+        ~~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+!!! related TS1369 nanEquality.ts:3:5: Did you mean 'Number.isNaN(x)'?
+    if (NaN === x) {}
+        ~~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+!!! related TS1369 nanEquality.ts:4:13: Did you mean 'Number.isNaN(x)'?
+    
+    if (x == NaN) {}
+        ~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+!!! related TS1369 nanEquality.ts:6:5: Did you mean 'Number.isNaN(x)'?
+    if (NaN == x) {}
+        ~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+!!! related TS1369 nanEquality.ts:7:12: Did you mean 'Number.isNaN(x)'?
+    
+    if (x !== NaN) {}
+        ~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+!!! related TS1369 nanEquality.ts:9:5: Did you mean '!Number.isNaN(x)'?
+    if (NaN !== x) {}
+        ~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+!!! related TS1369 nanEquality.ts:10:13: Did you mean '!Number.isNaN(x)'?
+    
+    if (x != NaN) {}
+        ~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+!!! related TS1369 nanEquality.ts:12:5: Did you mean '!Number.isNaN(x)'?
+    if (NaN != x) {}
+        ~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+!!! related TS1369 nanEquality.ts:13:12: Did you mean '!Number.isNaN(x)'?
+    
+    if (x === ((NaN))) {}
+        ~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+!!! related TS1369 nanEquality.ts:15:5: Did you mean 'Number.isNaN(x)'?
+    if (((NaN)) === x) {}
+        ~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+!!! related TS1369 nanEquality.ts:16:17: Did you mean 'Number.isNaN(x)'?
+    
+    if (x !== ((NaN))) {}
+        ~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+!!! related TS1369 nanEquality.ts:18:5: Did you mean '!Number.isNaN(x)'?
+    if (((NaN)) !== x) {}
+        ~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+!!! related TS1369 nanEquality.ts:19:17: Did you mean '!Number.isNaN(x)'?
+    
+    if (NaN === NaN) {}
+        ~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+    if (NaN !== NaN) {}
+        ~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    if (NaN == NaN) {}
+        ~~~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+    if (NaN != NaN) {}
+        ~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    // ...
+    declare let y: any;
+    if (NaN === y[0][1]) {}
+        ~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+!!! related TS1369 nanEquality.ts:29:13: Did you mean 'Number.isNaN(...)'?
+    
+    function t1(value: number, NaN: number) {
+        return value === NaN; // ok
+    }
+    
+    function t2(value: number, NaN: number) {
+        return NaN == value; // ok
+    }
+    
+    function t3(NaN: number) {
+        return NaN === NaN; // ok
+    }
+    

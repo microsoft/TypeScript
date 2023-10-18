@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts] ////
+
 //// [comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts]
 interface I {
     a: string;

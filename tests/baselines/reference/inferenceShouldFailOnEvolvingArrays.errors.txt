@@ -1,11 +1,11 @@
-tests/cases/compiler/inferenceShouldFailOnEvolvingArrays.ts(7,11): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/compiler/inferenceShouldFailOnEvolvingArrays.ts(9,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/compiler/inferenceShouldFailOnEvolvingArrays.ts(15,17): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/inferenceShouldFailOnEvolvingArrays.ts(17,19): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/compiler/inferenceShouldFailOnEvolvingArrays.ts(18,22): error TS2322: Type 'number' is not assignable to type 'string'.
+inferenceShouldFailOnEvolvingArrays.ts(7,11): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+inferenceShouldFailOnEvolvingArrays.ts(9,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+inferenceShouldFailOnEvolvingArrays.ts(15,17): error TS2322: Type 'number' is not assignable to type 'string'.
+inferenceShouldFailOnEvolvingArrays.ts(17,19): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+inferenceShouldFailOnEvolvingArrays.ts(18,22): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/inferenceShouldFailOnEvolvingArrays.ts (5 errors) ====
+==== inferenceShouldFailOnEvolvingArrays.ts (5 errors) ====
     // repro from https://github.com/Microsoft/TypeScript/issues/25675
     // The type of `arg` blocks inference but simplifies to T.
     function logLength<T extends string, U extends string>(arg: { [K in U]: T }[U]): T {

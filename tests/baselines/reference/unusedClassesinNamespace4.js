@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedClassesinNamespace4.ts] ////
+
 //// [unusedClassesinNamespace4.ts]
 namespace Validation {
     class c1 {

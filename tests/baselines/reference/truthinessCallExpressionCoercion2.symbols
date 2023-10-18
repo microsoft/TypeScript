@@ -1,4 +1,6 @@
-=== tests/cases/compiler/truthinessCallExpressionCoercion2.ts ===
+//// [tests/cases/compiler/truthinessCallExpressionCoercion2.ts] ////
+
+=== truthinessCallExpressionCoercion2.ts ===
 declare class A {
 >A : Symbol(A, Decl(truthinessCallExpressionCoercion2.ts, 0, 0))
 
@@ -106,6 +108,30 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     }
 
     // error
+    if (required1 || b) {
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
+    }
+
+    // error
+    if (required1 || required2) {
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+>required2 : Symbol(required2, Decl(truthinessCallExpressionCoercion2.ts, 8, 39))
+    }
+
+    // error
+    if (required1 ?? b) {
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
+    }
+
+    // error
+    if (required1 ?? required2) {
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+>required2 : Symbol(required2, Decl(truthinessCallExpressionCoercion2.ts, 8, 39))
+    }
+
+    // error
     if (((required1 && b))) {
 >required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
 >b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
@@ -121,6 +147,33 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     }
 
     // ok
+    if (required1 || b) {
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
+
+        required1();
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+    }
+
+    // ok
+    if (required1 ?? b) {
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
+
+        required1();
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+    }
+
+    // ok
+    if (b ?? required1) {
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+
+        required1();
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+    }
+
+    // ok
     if (((required1 && b))) {
 >required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
 >b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
@@ -128,10 +181,43 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
         required1();
 >required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
     }
+
+    // error, extra parens are on purpose here
+    if ((required1)) {
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+    }
+
+    // error
+    if (b && (required1 || required2)) {
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+>required2 : Symbol(required2, Decl(truthinessCallExpressionCoercion2.ts, 8, 39))
+    }
+
+    // error
+    if ((required1 || required2) && b) {
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+>required2 : Symbol(required2, Decl(truthinessCallExpressionCoercion2.ts, 8, 39))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
+    }
+
+    // error
+    if (b && (required1 ?? required2)) {
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+>required2 : Symbol(required2, Decl(truthinessCallExpressionCoercion2.ts, 8, 39))
+    }
+
+    // error
+    if ((required1 ?? required2) && b) {
+>required1 : Symbol(required1, Decl(truthinessCallExpressionCoercion2.ts, 8, 14))
+>required2 : Symbol(required2, Decl(truthinessCallExpressionCoercion2.ts, 8, 39))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 8, 65))
+    }
 }
 
 function checksConsole() {
->checksConsole : Symbol(checksConsole, Decl(truthinessCallExpressionCoercion2.ts, 59, 1))
+>checksConsole : Symbol(checksConsole, Decl(truthinessCallExpressionCoercion2.ts, 110, 1))
 
     // error
     typeof window !== 'undefined' && window.console &&
@@ -157,174 +243,257 @@ function checksConsole() {
 }
 
 function checksPropertyAccess() {
->checksPropertyAccess : Symbol(checksPropertyAccess, Decl(truthinessCallExpressionCoercion2.ts, 65, 1))
+>checksPropertyAccess : Symbol(checksPropertyAccess, Decl(truthinessCallExpressionCoercion2.ts, 116, 1))
 
     const x = {
->x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 68, 9))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 119, 9))
 
         foo: {
->foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
 
             bar() { return true; }
->bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
         }
     }
 
     // error
     x.foo.bar && console.log('x.foo.bar');
->x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
->x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 68, 9))
->foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 119, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 
     // error
     1 && x.foo.bar && console.log('x.foo.bar');
->x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
->x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 68, 9))
->foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 119, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 
     // ok
     x.foo.bar && x.foo.bar();
->x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
->x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 68, 9))
->foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
->x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
->x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 68, 9))
->foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 119, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 119, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
 
     // ok
     x.foo.bar && 1 && x.foo.bar();
->x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
->x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 68, 9))
->foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
->x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
->x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 68, 9))
->foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 68, 15))
->bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 69, 14))
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 119, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion2.ts, 119, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion2.ts, 119, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion2.ts, 120, 14))
 
     // ok
     const y = A.from && (A.from as Function) !== B.from ? true : false;
->y : Symbol(y, Decl(truthinessCallExpressionCoercion2.ts, 87, 9))
+>y : Symbol(y, Decl(truthinessCallExpressionCoercion2.ts, 138, 9))
 >A.from : Symbol(A.from, Decl(truthinessCallExpressionCoercion2.ts, 0, 17))
 >A : Symbol(A, Decl(truthinessCallExpressionCoercion2.ts, 0, 0))
 >from : Symbol(A.from, Decl(truthinessCallExpressionCoercion2.ts, 0, 17))
 >A.from : Symbol(A.from, Decl(truthinessCallExpressionCoercion2.ts, 0, 17))
 >A : Symbol(A, Decl(truthinessCallExpressionCoercion2.ts, 0, 0))
 >from : Symbol(A.from, Decl(truthinessCallExpressionCoercion2.ts, 0, 17))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
 >B.from : Symbol(B.from, Decl(truthinessCallExpressionCoercion2.ts, 4, 17))
 >B : Symbol(B, Decl(truthinessCallExpressionCoercion2.ts, 2, 1))
 >from : Symbol(B.from, Decl(truthinessCallExpressionCoercion2.ts, 4, 17))
 
     y;
->y : Symbol(y, Decl(truthinessCallExpressionCoercion2.ts, 87, 9))
+>y : Symbol(y, Decl(truthinessCallExpressionCoercion2.ts, 138, 9))
 
     const x1 = {
->x1 : Symbol(x1, Decl(truthinessCallExpressionCoercion2.ts, 90, 9))
+>x1 : Symbol(x1, Decl(truthinessCallExpressionCoercion2.ts, 141, 9))
 
         a: { b: { c: () => {} } }
->a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 90, 16))
->b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 91, 12))
->c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 91, 17))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
     }
     const x2 = {
->x2 : Symbol(x2, Decl(truthinessCallExpressionCoercion2.ts, 93, 9))
+>x2 : Symbol(x2, Decl(truthinessCallExpressionCoercion2.ts, 144, 9))
 
         a: { b: { c: () => {} } }
->a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 93, 16))
->b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 94, 12))
->c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 94, 17))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
     }
 
     // error
     x1.a.b.c && x2.a.b.c();
->x1.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 91, 17))
->x1.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 91, 12))
->x1.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 90, 16))
->x1 : Symbol(x1, Decl(truthinessCallExpressionCoercion2.ts, 90, 9))
->a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 90, 16))
->b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 91, 12))
->c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 91, 17))
->x2.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 94, 17))
->x2.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 94, 12))
->x2.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 93, 16))
->x2 : Symbol(x2, Decl(truthinessCallExpressionCoercion2.ts, 93, 9))
->a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 93, 16))
->b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 94, 12))
->c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 94, 17))
+>x1.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x1.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>x1.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>x1 : Symbol(x1, Decl(truthinessCallExpressionCoercion2.ts, 141, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x2.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
+>x2.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>x2.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>x2 : Symbol(x2, Decl(truthinessCallExpressionCoercion2.ts, 144, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
+
+    // error, extra parens are on purpose here
+    if ((x1.a.b.c)) {
+>x1.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x1.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>x1.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>x1 : Symbol(x1, Decl(truthinessCallExpressionCoercion2.ts, 141, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+    }
+
+    // error
+    if (1 && (x1.a.b.c || x2.a.b.c)) {
+>x1.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x1.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>x1.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>x1 : Symbol(x1, Decl(truthinessCallExpressionCoercion2.ts, 141, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x2.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
+>x2.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>x2.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>x2 : Symbol(x2, Decl(truthinessCallExpressionCoercion2.ts, 144, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
+    }
+
+    // error
+    if ((x1.a.b.c || x2.a.b.c) && 1) {
+>x1.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x1.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>x1.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>x1 : Symbol(x1, Decl(truthinessCallExpressionCoercion2.ts, 141, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x2.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
+>x2.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>x2.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>x2 : Symbol(x2, Decl(truthinessCallExpressionCoercion2.ts, 144, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
+    }
+
+    // error
+    if (1 && (x1.a.b.c ?? x2.a.b.c)) {
+>x1.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x1.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>x1.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>x1 : Symbol(x1, Decl(truthinessCallExpressionCoercion2.ts, 141, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x2.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
+>x2.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>x2.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>x2 : Symbol(x2, Decl(truthinessCallExpressionCoercion2.ts, 144, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
+    }
+
+    // error
+    if ((x1.a.b.c ?? x2.a.b.c) && 1) {
+>x1.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x1.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>x1.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>x1 : Symbol(x1, Decl(truthinessCallExpressionCoercion2.ts, 141, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 141, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 142, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 142, 17))
+>x2.a.b.c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
+>x2.a.b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>x2.a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>x2 : Symbol(x2, Decl(truthinessCallExpressionCoercion2.ts, 144, 9))
+>a : Symbol(a, Decl(truthinessCallExpressionCoercion2.ts, 144, 16))
+>b : Symbol(b, Decl(truthinessCallExpressionCoercion2.ts, 145, 12))
+>c : Symbol(c, Decl(truthinessCallExpressionCoercion2.ts, 145, 17))
+    }
 }
 
 class Foo {
->Foo : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 99, 1))
+>Foo : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 170, 1))
 
     optional?: () => boolean;
->optional : Symbol(Foo.optional, Decl(truthinessCallExpressionCoercion2.ts, 101, 11))
+>optional : Symbol(Foo.optional, Decl(truthinessCallExpressionCoercion2.ts, 172, 11))
 
     required() {
->required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
+>required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
 
         return true;
     }
     test() {
->test : Symbol(Foo.test, Decl(truthinessCallExpressionCoercion2.ts, 105, 5))
+>test : Symbol(Foo.test, Decl(truthinessCallExpressionCoercion2.ts, 176, 5))
 
         // error
         this.required && console.log('required');
->this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
->this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 99, 1))
->required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
+>this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 170, 1))
+>required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 
         // error
         1 && this.required && console.log('required');
->this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
->this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 99, 1))
->required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
+>this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 170, 1))
+>required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 
         // ok
         this.required && this.required();
->this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
->this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 99, 1))
->required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
->this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
->this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 99, 1))
->required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
+>this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 170, 1))
+>required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
+>this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 170, 1))
+>required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
 
         // ok
         this.required && 1 && this.required();
->this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
->this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 99, 1))
->required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
->this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
->this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 99, 1))
->required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 102, 29))
+>this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 170, 1))
+>required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
+>this.required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 170, 1))
+>required : Symbol(Foo.required, Decl(truthinessCallExpressionCoercion2.ts, 173, 29))
 
         // ok
         1 && this.optional && console.log('optional');
->this.optional : Symbol(Foo.optional, Decl(truthinessCallExpressionCoercion2.ts, 101, 11))
->this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 99, 1))
->optional : Symbol(Foo.optional, Decl(truthinessCallExpressionCoercion2.ts, 101, 11))
+>this.optional : Symbol(Foo.optional, Decl(truthinessCallExpressionCoercion2.ts, 172, 11))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion2.ts, 170, 1))
+>optional : Symbol(Foo.optional, Decl(truthinessCallExpressionCoercion2.ts, 172, 11))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

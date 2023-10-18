@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externalModuleQualification.ts] ////
+
 //// [externalModuleQualification.ts]
 export var ID = "test";
 export class DiffEditor<A, B, C> {
@@ -13,7 +15,7 @@ class NavigateAction {
 
 //// [externalModuleQualification.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.DiffEditor = exports.ID = void 0;
 exports.ID = "test";
 var DiffEditor = /** @class */ (function () {

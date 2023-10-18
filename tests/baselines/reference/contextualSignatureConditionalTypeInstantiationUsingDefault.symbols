@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/contextualSignatureConditionalTypeInstantiationUsingDefault.ts] ////
+
+=== contextualSignatureConditionalTypeInstantiationUsingDefault.ts ===
+// repro #46310
+
+export interface TypegenDisabled {
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 0, 0))
+
+  "@@xstate/typegen": false;
+>"@@xstate/typegen" : Symbol(TypegenDisabled["@@xstate/typegen"], Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 2, 34))
+}
+export interface TypegenEnabled {
+>TypegenEnabled : Symbol(TypegenEnabled, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 4, 1))
+
+  "@@xstate/typegen": true;
+>"@@xstate/typegen" : Symbol(TypegenEnabled["@@xstate/typegen"], Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 5, 33))
+}
+
+type ActionFunction<TEvent extends { type: string }> = (event: TEvent) => void;
+>ActionFunction : Symbol(ActionFunction, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 7, 1))
+>TEvent : Symbol(TEvent, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 9, 20))
+>type : Symbol(type, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 9, 36))
+>event : Symbol(event, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 9, 56))
+>TEvent : Symbol(TEvent, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 9, 20))
+
+declare function createMachine<
+>createMachine : Symbol(createMachine, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 9, 79))
+
+  TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 11, 31))
+>TypegenEnabled : Symbol(TypegenEnabled, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 4, 1))
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 0, 0))
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 0, 0))
+
+>(
+  config: {
+>config : Symbol(config, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 13, 2))
+
+    types?: TTypesMeta;
+>types : Symbol(types, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 14, 11))
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 11, 31))
+
+  },
+  implementations: TTypesMeta extends TypegenEnabled
+>implementations : Symbol(implementations, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 16, 4))
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 11, 31))
+>TypegenEnabled : Symbol(TypegenEnabled, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 4, 1))
+
+    ? ActionFunction<{ type: "test" }>
+>ActionFunction : Symbol(ActionFunction, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 7, 1))
+>type : Symbol(type, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 18, 22))
+
+    : ActionFunction<{ type: string }>
+>ActionFunction : Symbol(ActionFunction, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 7, 1))
+>type : Symbol(type, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 19, 22))
+
+): void;
+
+createMachine({}, (ev) => {
+>createMachine : Symbol(createMachine, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 9, 79))
+>ev : Symbol(ev, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 22, 19))
+
+  ev.type; // should be `string`
+>ev.type : Symbol(type, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 19, 22))
+>ev : Symbol(ev, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 22, 19))
+>type : Symbol(type, Decl(contextualSignatureConditionalTypeInstantiationUsingDefault.ts, 19, 22))
+
+});
+

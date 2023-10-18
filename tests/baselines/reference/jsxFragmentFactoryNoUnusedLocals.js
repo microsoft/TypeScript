@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx] ////
+
 //// [jsxFragmentFactoryNoUnusedLocals.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import { Fragment, createElement } from "react"
@@ -16,7 +18,7 @@ export function Counter({ count = 0 }: CounterProps) {
 
 //// [jsxFragmentFactoryNoUnusedLocals.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Counter = void 0;
 /// <reference path="react16.d.ts" />
 var react_1 = require("react");

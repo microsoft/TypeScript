@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithRequireAndImport.ts] ////
+
 === /index.ts ===
 declare const require: any;
 >require : any
@@ -5,7 +7,6 @@ declare const require: any;
 const a: typeof import('./other') = null as any
 >a : typeof import("/other")
 >null as any : any
->null : null
 
 function foo() {
 >foo : () => void

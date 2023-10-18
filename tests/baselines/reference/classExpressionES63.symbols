@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/classExpressions/classExpressionES63.ts ===
+//// [tests/cases/conformance/es6/classExpressions/classExpressionES63.ts] ////
+
+=== classExpressionES63.ts ===
 let C = class extends class extends class { a = 1 } { b = 2 } { c = 3 };
 >C : Symbol(C, Decl(classExpressionES63.ts, 0, 3))
 >a : Symbol((Anonymous class).a, Decl(classExpressionES63.ts, 0, 43))

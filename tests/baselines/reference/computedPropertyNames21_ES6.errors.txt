@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames21_ES6.ts(5,6): error TS2465: 'this' cannot be referenced in a computed property name.
+computedPropertyNames21_ES6.ts(5,6): error TS2465: 'this' cannot be referenced in a computed property name.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames21_ES6.ts (1 errors) ====
+==== computedPropertyNames21_ES6.ts (1 errors) ====
     class C {
         bar() {
             return 0;

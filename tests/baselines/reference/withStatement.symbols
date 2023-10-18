@@ -1,4 +1,6 @@
-=== tests/cases/compiler/withStatement.ts ===
+//// [tests/cases/compiler/withStatement.ts] ////
+
+=== withStatement.ts ===
 declare var ooo:any;
 >ooo : Symbol(ooo, Decl(withStatement.ts, 0, 11))
 

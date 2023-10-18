@@ -1,4 +1,6 @@
-=== tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts ===
+//// [tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts] ////
+
+=== requiredMappedTypeModifierTrumpsVariance.ts ===
 const a: Required<{ a?: 1; x: 1 }> = { a: 1, x: 1 };
 >a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 5))
 >Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))

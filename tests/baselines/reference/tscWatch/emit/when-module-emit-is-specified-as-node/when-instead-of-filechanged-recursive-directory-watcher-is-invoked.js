@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/rootFolder/project/tsconfig.json]
 {"compilerOptions":{"module":"none","allowJs":true,"outDir":"Static/scripts/"},"include":["Scripts/**/*"]}
@@ -49,23 +50,23 @@ Shape signatures in builder refreshed for::
 /a/rootfolder/project/scripts/javascript.js (used version)
 /a/rootfolder/project/scripts/typescript.ts (used version)
 
-WatchedFiles::
-/a/rootfolder/project/tsconfig.json:
-  {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
-/a/rootfolder/project/scripts/javascript.js:
-  {"fileName":"/a/rootFolder/project/Scripts/Javascript.js","pollingInterval":250}
-/a/rootfolder/project/scripts/typescript.ts:
-  {"fileName":"/a/rootFolder/project/Scripts/TypeScript.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/rootfolder/project/node_modules/@types:
-  {"fileName":"/a/rootFolder/project/node_modules/@types","pollingInterval":500}
+PolledWatches::
+/a/rootfolder/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/a/rootfolder/project/scripts/javascript.js: *new*
+  {}
+/a/rootfolder/project/scripts/typescript.ts: *new*
+  {}
+/a/rootfolder/project/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/a/rootfolder/project/scripts:
-  {"directoryName":"/a/rootfolder/project/scripts"}
+/a/rootfolder/project/scripts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -85,6 +86,9 @@ Input::
 var zz30 = 100;
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
@@ -109,24 +113,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/rootfolder/project/scripts/typescript.ts (computed .d.ts)
 /a/rootfolder/project/scripts/javascript.js (computed .d.ts)
-
-WatchedFiles::
-/a/rootfolder/project/tsconfig.json:
-  {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
-/a/rootfolder/project/scripts/javascript.js:
-  {"fileName":"/a/rootFolder/project/Scripts/Javascript.js","pollingInterval":250}
-/a/rootfolder/project/scripts/typescript.ts:
-  {"fileName":"/a/rootFolder/project/Scripts/TypeScript.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/rootfolder/project/node_modules/@types:
-  {"fileName":"/a/rootFolder/project/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/rootfolder/project/scripts:
-  {"directoryName":"/a/rootfolder/project/scripts"}
 
 exitCode:: ExitStatus.undefined
 

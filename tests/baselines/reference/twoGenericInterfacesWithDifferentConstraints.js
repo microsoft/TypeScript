@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts] ////
+
 //// [twoGenericInterfacesWithDifferentConstraints.ts]
 interface A<T extends Date> {
     x: T;

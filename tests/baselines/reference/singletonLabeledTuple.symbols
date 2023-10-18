@@ -1,4 +1,6 @@
-=== tests/cases/compiler/singletonLabeledTuple.ts ===
+//// [tests/cases/compiler/singletonLabeledTuple.ts] ////
+
+=== singletonLabeledTuple.ts ===
 type AliasOptional = [p?: number]
 >AliasOptional : Symbol(AliasOptional, Decl(singletonLabeledTuple.ts, 0, 0))
 

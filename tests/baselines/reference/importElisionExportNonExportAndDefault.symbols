@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/importElisionExportNonExportAndDefault.ts] ////
+
+=== main.ts ===
+import MyFunction from "./MyComponent";
+>MyFunction : Symbol(MyFunction, Decl(main.ts, 0, 6))
+
+MyFunction({msg: "Hello World"});
+>MyFunction : Symbol(MyFunction, Decl(main.ts, 0, 6))
+>msg : Symbol(msg, Decl(main.ts, 2, 12))
+
+
+=== MyComponent.ts ===
+interface MyFunction { msg: string; }
+>MyFunction : Symbol(MyFunction, Decl(MyComponent.ts, 0, 0), Decl(MyComponent.ts, 2, 12))
+>msg : Symbol(MyFunction.msg, Decl(MyComponent.ts, 0, 22))
+
+export const MyFunction = ({ msg }: MyFunction) => console.log(`Got message "${msg}"`);
+>MyFunction : Symbol(MyFunction, Decl(MyComponent.ts, 2, 12))
+>msg : Symbol(msg, Decl(MyComponent.ts, 2, 28))
+>MyFunction : Symbol(MyFunction, Decl(MyComponent.ts, 0, 0), Decl(MyComponent.ts, 2, 12))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>msg : Symbol(msg, Decl(MyComponent.ts, 2, 28))
+
+export default MyFunction;
+>MyFunction : Symbol(MyFunction, Decl(MyComponent.ts, 0, 0), Decl(MyComponent.ts, 2, 12))
+

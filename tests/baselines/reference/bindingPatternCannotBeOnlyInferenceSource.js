@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts] ////
+
 //// [bindingPatternCannotBeOnlyInferenceSource.ts]
 declare function f<T>(): T;
 const {} = f();       // error (only in strictNullChecks)
@@ -34,7 +36,7 @@ var _c = f(), e1 = _c[0], e2 = _c[1]; // error
 var funcs1 = {
     funcA: function (a) { },
     funcB: function (b, bb) { },
-    funcC: function (c, cc, ccc) { }
+    funcC: function (c, cc, ccc) { },
 };
 var _d = useReduxDispatch1(function (d, f) { return ({
     funcA: function () {
@@ -43,7 +45,7 @@ var _d = useReduxDispatch1(function (d, f) { return ({
             p[_i] = arguments[_i];
         }
         return d(f.funcA.apply(f, p));
-    },
+    }, // p should be inferrable
     funcB: function () {
         var p = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -57,5 +59,5 @@ var _d = useReduxDispatch1(function (d, f) { return ({
             p[_i] = arguments[_i];
         }
         return d(f.funcC.apply(f, p));
-    }
+    },
 }); });

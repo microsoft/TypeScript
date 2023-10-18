@@ -1,7 +1,7 @@
-tests/cases/compiler/test.tsx(9,17): error TS2552: Cannot find name 'createElement'. Did you mean 'frameElement'?
+test.tsx(9,17): error TS2552: Cannot find name 'createElement'. Did you mean 'frameElement'?
 
 
-==== tests/cases/compiler/test.tsx (1 errors) ====
+==== test.tsx (1 errors) ====
     declare module JSX {
         interface IntrinsicElements {
             [s: string]: any;
@@ -13,7 +13,7 @@ tests/cases/compiler/test.tsx(9,17): error TS2552: Cannot find name 'createEleme
             return <div />;
                     ~~~
 !!! error TS2552: Cannot find name 'createElement'. Did you mean 'frameElement'?
-!!! related TS2728 /.ts/lib.dom.d.ts:17631:13: 'frameElement' is declared here.
+!!! related TS2728 lib.dom.d.ts:--:--: 'frameElement' is declared here.
         }
     }
     

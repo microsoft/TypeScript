@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/destructureTupleWithVariableElement.ts] ////
+
+=== destructureTupleWithVariableElement.ts ===
+// repro from #52302
+
+type NonEmptyStringArray = [string, ...Array<string>]
+>NonEmptyStringArray : Symbol(NonEmptyStringArray, Decl(destructureTupleWithVariableElement.ts, 0, 0))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const strings: NonEmptyStringArray = ['one', 'two']
+>strings : Symbol(strings, Decl(destructureTupleWithVariableElement.ts, 4, 5))
+>NonEmptyStringArray : Symbol(NonEmptyStringArray, Decl(destructureTupleWithVariableElement.ts, 0, 0))
+
+const [s0, s1, s2] = strings;
+>s0 : Symbol(s0, Decl(destructureTupleWithVariableElement.ts, 5, 7))
+>s1 : Symbol(s1, Decl(destructureTupleWithVariableElement.ts, 5, 10))
+>s2 : Symbol(s2, Decl(destructureTupleWithVariableElement.ts, 5, 14))
+>strings : Symbol(strings, Decl(destructureTupleWithVariableElement.ts, 4, 5))
+
+s0.toUpperCase()
+>s0.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>s0 : Symbol(s0, Decl(destructureTupleWithVariableElement.ts, 5, 7))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+s1.toUpperCase() 
+>s1.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>s1 : Symbol(s1, Decl(destructureTupleWithVariableElement.ts, 5, 10))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+s2.toUpperCase()
+>s2.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>s2 : Symbol(s2, Decl(destructureTupleWithVariableElement.ts, 5, 14))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+declare const strings2: [string, ...Array<string>, string]
+>strings2 : Symbol(strings2, Decl(destructureTupleWithVariableElement.ts, 11, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const [s3, s4, s5] = strings2;
+>s3 : Symbol(s3, Decl(destructureTupleWithVariableElement.ts, 13, 7))
+>s4 : Symbol(s4, Decl(destructureTupleWithVariableElement.ts, 13, 10))
+>s5 : Symbol(s5, Decl(destructureTupleWithVariableElement.ts, 13, 14))
+>strings2 : Symbol(strings2, Decl(destructureTupleWithVariableElement.ts, 11, 13))
+
+s3.toUpperCase()
+>s3.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>s3 : Symbol(s3, Decl(destructureTupleWithVariableElement.ts, 13, 7))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+s4.toUpperCase() 
+>s4.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>s4 : Symbol(s4, Decl(destructureTupleWithVariableElement.ts, 13, 10))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+s5.toUpperCase()
+>s5.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>s5 : Symbol(s5, Decl(destructureTupleWithVariableElement.ts, 13, 14))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+

@@ -5,7 +5,7 @@ sourceRoot:
 sources: ES5For-of33.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of33.js
+emittedFile:ES5For-of33.js
 sourceFile:ES5For-of33.ts
 -------------------------------------------------------------------
 >>>var __values = (this && this.__values) || function(o) {
@@ -37,6 +37,7 @@ sourceFile:ES5For-of33.ts
 13>                                          ^
 14>                                           ^^^^^^^^^^^^^^^^
 15>                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+16>                                                                                       ^
 1 >
 2 >    for (var v of 
 3 >         
@@ -52,6 +53,7 @@ sourceFile:ES5For-of33.ts
 13>                                          
 14>                                           
 15>                                                           ) 
+16>                                                                                       {
 1 >Emitted(14, 5) Source(1, 1) + SourceIndex(0)
 2 >Emitted(14, 10) Source(1, 15) + SourceIndex(0)
 3 >Emitted(14, 14) Source(1, 15) + SourceIndex(0)
@@ -67,6 +69,7 @@ sourceFile:ES5For-of33.ts
 13>Emitted(14, 44) Source(1, 30) + SourceIndex(0)
 14>Emitted(14, 60) Source(1, 30) + SourceIndex(0)
 15>Emitted(14, 88) Source(1, 32) + SourceIndex(0)
+16>Emitted(14, 89) Source(1, 33) + SourceIndex(0)
 ---
 >>>        var v = _c.value;
 1 >^^^^^^^^
@@ -110,16 +113,19 @@ sourceFile:ES5For-of33.ts
 8 >Emitted(16, 24) Source(2, 20) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
+1 >^^^^
+2 >    ^
 1 >
-  >}
-1 >Emitted(17, 6) Source(3, 2) + SourceIndex(0)
+  >
+2 >    }
+1 >Emitted(17, 5) Source(3, 1) + SourceIndex(0)
+2 >Emitted(17, 6) Source(3, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
 >>>finally {
 >>>    try {
->>>        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+>>>        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
 >>>    }
 >>>    finally { if (e_1) throw e_1.error; }
 >>>}

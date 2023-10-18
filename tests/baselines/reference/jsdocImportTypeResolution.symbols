@@ -1,9 +1,11 @@
-=== tests/cases/compiler/module.js ===
+//// [tests/cases/compiler/jsdocImportTypeResolution.ts] ////
+
+=== module.js ===
 export class MyClass {
 >MyClass : Symbol(MyClass, Decl(module.js, 0, 0))
 }
 
-=== tests/cases/compiler/usage.js ===
+=== usage.js ===
 /**
  * @typedef {Object} options
  * @property {import("./module").MyClass} option

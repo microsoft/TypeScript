@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superPropertyAccess.ts] ////
+
 //// [superPropertyAccess.ts]
 class MyBase {
     m1(a: string) { return a; }

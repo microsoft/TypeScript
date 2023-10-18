@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts] ////
+
 //// [typeofOperatorWithAnyOtherType.ts]
 // typeof  operator on any type
 

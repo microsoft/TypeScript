@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxComponentTypeErrors.tsx] ////
+
 //// [jsxComponentTypeErrors.tsx]
 namespace JSX {
   export interface Element {
@@ -69,7 +71,7 @@ var obj = {
         function MemberClassComponent() {
         }
         return MemberClassComponent;
-    }())
+    }()),
 };
 var elem5 = <obj.MemberFunctionComponent />;
 var elem6 = <obj.MemberClassComponent />;

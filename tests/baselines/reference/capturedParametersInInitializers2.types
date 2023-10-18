@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedParametersInInitializers2.ts ===
+//// [tests/cases/compiler/capturedParametersInInitializers2.ts] ////
+
+=== capturedParametersInInitializers2.ts ===
 function foo(
 >foo : (y?: typeof (Anonymous class), x?: number, z?: number) => void
 

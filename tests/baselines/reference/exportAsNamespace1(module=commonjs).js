@@ -17,20 +17,20 @@ foo.ns.b;
 
 //// [0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;
 //// [1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.ns = void 0;
 exports.ns = require("./0");
 ns.a;
 ns.b;
 //// [2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = require("./1");
 foo.ns.a;
 foo.ns.b;

@@ -1,0 +1,21 @@
+merge.ts(1,10): error TS2440: Import declaration conflicts with local declaration of 'Enum'.
+
+
+==== enum.ts (0 errors) ====
+    export const enum Enum {
+      One = 1,
+    }
+    
+==== merge.ts (1 errors) ====
+    import { Enum } from "./enum";
+             ~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'Enum'.
+    namespace Enum {
+      export type Foo = number;
+    }
+    export { Enum };
+    
+==== index.ts (0 errors) ====
+    import { Enum } from "./merge";
+    Enum.One;
+    

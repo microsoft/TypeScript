@@ -1,4 +1,6 @@
-=== tests/cases/compiler/chainedAssignmentChecking.ts ===
+//// [tests/cases/compiler/chainedAssignmentChecking.ts] ////
+
+=== chainedAssignmentChecking.ts ===
 class X {
 >X : Symbol(X, Decl(chainedAssignmentChecking.ts, 0, 0))
 

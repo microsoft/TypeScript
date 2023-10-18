@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -95,6 +96,7 @@ secondsecond_part2Spread(10, ...secondsecond_part2_ar);
 //// [/src/second/tsconfig.json]
 {
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true,
     "removeComments": true,
@@ -124,6 +126,7 @@ thirdthird_part1Spread(10, ...thirdthird_part1_ar);
 //// [/src/third/tsconfig.json]
 {
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true,
     "removeComments": true,
@@ -212,7 +215,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    // Comment text
   >}
@@ -236,7 +239,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -271,7 +274,7 @@ sourceFile:../second/second_part2.ts
 1 >
 2 >^^^^^^^^^^^^^^
 3 >              ^
-4 >               ^^^^^^^^^^->
+4 >               ^^^^^^^^^->
 1 >
 2 >class 
 3 >              C
@@ -290,7 +293,7 @@ sourceFile:../second/second_part2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >() {
   >        console.log("something got done");
   >    }
@@ -471,7 +474,7 @@ sourceFile:../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1 >namespace N {
   >    // Comment text
   >}
@@ -495,7 +498,7 @@ sourceFile:../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -507,7 +510,7 @@ sourceFile:../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -546,7 +549,7 @@ sourceFile:../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -558,7 +561,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -578,7 +581,7 @@ sourceFile:../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
@@ -605,7 +608,7 @@ sourceFile:../second/second_part1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -695,7 +698,7 @@ sourceFile:../second/second_part1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -708,20 +711,20 @@ sourceFile:../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1->
 1->Emitted(47, 1) Source(1, 1) + SourceIndex(1)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(48, 5) Source(1, 1) + SourceIndex(1)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -735,7 +738,7 @@ sourceFile:../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -773,7 +776,7 @@ sourceFile:../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -794,7 +797,7 @@ sourceFile:../second/second_part2.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -824,7 +827,7 @@ sourceFile:../second/second_part2.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(56, 5) Source(7, 35) + SourceIndex(1)
@@ -862,7 +865,7 @@ sourceFile:../second/second_part2.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(60, 1) Source(7, 53) + SourceIndex(1)
@@ -879,7 +882,7 @@ sourceFile:../second/second_part2.ts
 8 >                                 ^^
 9 >                                   ^
 10>                                    ^
-11>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -929,13 +932,13 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1396,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1398,"end":2092,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-30083835302-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE\"}","hash":"10392077080-var __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nfunction forsecondsecond_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nfunction secondsecond_part2Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar secondsecond_part2_ar = [20, 30];\r\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\r\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":267,"kind":"text"}],"mapHash":"-6793954603-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC\"}","hash":"-6006784725-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["-12564528434-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\nfunction forsecondsecond_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-17653520187-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n\nfunction secondsecond_part2Spread(...b: number[]) { }\nconst secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread(10, ...secondsecond_part2_ar);"],"options":{"composite":true,"outFile":"./second-output.js"},"outSignature":"-13151345584-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":2030,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-30083835302-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE\"}","hash":"15985439346-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":257,"kind":"text"}],"mapHash":"-6793954603-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC\"}","hash":"-12368550231-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-12564528434-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\nfunction forsecondsecond_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-17653520187-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n\nfunction secondsecond_part2Spread(...b: number[]) { }\nconst secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread(10, ...secondsecond_part2_ar);"],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./second-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/2/second-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-500):: typescript:rest
+emitHelpers: (0-490):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -948,7 +951,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-emitHelpers: (502-1006):: typescript:read
+emitHelpers: (491-980):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -966,7 +969,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (1008-1396):: typescript:spreadArray
+emitHelpers: (981-1361):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -977,7 +980,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-text: (1398-2092)
+text: (1362-2030)
 var N;
 (function (N) {
     function f() {
@@ -1009,7 +1012,7 @@ secondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_p
 ======================================================================
 File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-text: (0-267)
+text: (0-257)
 declare namespace N {
 }
 declare namespace N {
@@ -1035,29 +1038,29 @@ declare const secondsecond_part2_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 500,
+          "end": 490,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 502,
-          "end": 1006,
+          "pos": 491,
+          "end": 980,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 1008,
-          "end": 1396,
+          "pos": 981,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 1398,
-          "end": 2092,
+          "pos": 1362,
+          "end": 2030,
           "kind": "text"
         }
       ],
-      "hash": "10392077080-var __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nfunction forsecondsecond_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nfunction secondsecond_part2Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar secondsecond_part2_ar = [20, 30];\r\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\r\n//# sourceMappingURL=second-output.js.map",
+      "hash": "15985439346-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\n//# sourceMappingURL=second-output.js.map",
       "mapHash": "-30083835302-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE\"}",
       "sources": {
         "helpers": [
@@ -1071,32 +1074,52 @@ declare const secondsecond_part2_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 267,
+          "end": 257,
           "kind": "text"
         }
       ],
-      "hash": "-6006784725-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\n//# sourceMappingURL=second-output.d.ts.map",
+      "hash": "-12368550231-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n//# sourceMappingURL=second-output.d.ts.map",
       "mapHash": "-6793954603-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../lib/lib.d.ts",
       "../second/second_part1.ts",
       "../second/second_part2.ts"
     ],
     "fileInfos": {
+      "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../second/second_part1.ts": "-12564528434-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\nfunction forsecondsecond_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
       "../second/second_part2.ts": "-17653520187-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n\nfunction secondsecond_part2Spread(...b: number[]) { }\nconst secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread(10, ...secondsecond_part2_ar);"
     },
+    "root": [
+      [
+        2,
+        "../second/second_part1.ts"
+      ],
+      [
+        3,
+        "../second/second_part2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./second-output.js"
+      "declaration": true,
+      "declarationMap": true,
+      "downlevelIteration": true,
+      "outFile": "./second-output.js",
+      "removeComments": true,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-13151345584-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\n",
+    "outSignature": "-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n",
     "latestChangedDtsFile": "./second-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 5464
+  "size": 5933
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -1158,7 +1181,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
@@ -1218,7 +1241,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
@@ -1251,7 +1274,7 @@ sourceFile:../first_part3.ts
 2 >^^^^^^^^^^^^^^^^^
 3 >                 ^
 4 >                  ^^^^^^^^^^^
-5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >                 f
@@ -1455,7 +1478,7 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^^^^^^^^^^^^^^^^^^^^->
+9 >               ^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -1483,7 +1506,7 @@ sourceFile:../first_PART1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -1573,7 +1596,7 @@ sourceFile:../first_PART1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -1621,7 +1644,7 @@ sourceFile:../first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -1647,7 +1670,7 @@ sourceFile:../first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -1669,7 +1692,7 @@ sourceFile:../first_part3.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(47, 5) Source(4, 33) + SourceIndex(2)
@@ -1707,7 +1730,7 @@ sourceFile:../first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(51, 1) Source(4, 51) + SourceIndex(2)
@@ -1724,7 +1747,7 @@ sourceFile:../first_part3.ts
 8 >                               ^^
 9 >                                 ^
 10>                                  ^
-11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -1774,13 +1797,13 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1396,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1398,"end":1907,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-35433619521-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-57982334156-var __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":318,"kind":"text"}],"mapHash":"32680275599-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-53733421126-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["-2071921725-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","4973778178-console.log(f());\r\n","998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-42349562125-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1854,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-35433619521-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-7416090205-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"text"}],"mapHash":"32680275599-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-2071921725-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","4973778178-console.log(f());\r\n","998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-500):: typescript:rest
+emitHelpers: (0-490):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -1793,7 +1816,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-emitHelpers: (502-1006):: typescript:read
+emitHelpers: (491-980):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -1811,7 +1834,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (1008-1396):: typescript:spreadArray
+emitHelpers: (981-1361):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -1822,7 +1845,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-text: (1398-1907)
+text: (1362-1854)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() {
@@ -1845,7 +1868,7 @@ firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-318)
+text: (0-307)
 interface TheFirst {
     none: any;
 }
@@ -1873,29 +1896,29 @@ declare const firstfirst_part3_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 500,
+          "end": 490,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 502,
-          "end": 1006,
+          "pos": 491,
+          "end": 980,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 1008,
-          "end": 1396,
+          "pos": 981,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 1398,
-          "end": 1907,
+          "pos": 1362,
+          "end": 1854,
           "kind": "text"
         }
       ],
-      "hash": "-57982334156-var __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\n//# sourceMappingURL=first-output.js.map",
+      "hash": "-7416090205-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map",
       "mapHash": "-35433619521-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
@@ -1909,34 +1932,56 @@ declare const firstfirst_part3_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 318,
+          "end": 307,
           "kind": "text"
         }
       ],
-      "hash": "-53733421126-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "hash": "-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map",
       "mapHash": "32680275599-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../lib/lib.d.ts",
       "../first_part1.ts",
       "../first_part2.ts",
       "../first_part3.ts"
     ],
     "fileInfos": {
+      "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../first_part1.ts": "-2071921725-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
       "../first_part2.ts": "4973778178-console.log(f());\r\n",
       "../first_part3.ts": "998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../first_part1.ts",
+          "../first_part2.ts",
+          "../first_part3.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./first-output.js"
+      "declarationMap": true,
+      "downlevelIteration": true,
+      "outFile": "./first-output.js",
+      "removeComments": true,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-42349562125-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n",
+    "outSignature": "-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n",
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 5325
+  "size": 5791
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -2012,7 +2057,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
@@ -2072,7 +2117,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
@@ -2105,7 +2150,7 @@ sourceFile:../../../first/first_part3.ts
 2 >^^^^^^^^^^^^^^^^^
 3 >                 ^
 4 >                  ^^^^^^^^^^^
-5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >                 f
@@ -2188,7 +2233,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    // Comment text
   >}
@@ -2212,7 +2257,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -2247,7 +2292,7 @@ sourceFile:../../../second/second_part2.ts
 1 >
 2 >^^^^^^^^^^^^^^
 3 >              ^
-4 >               ^^^^^^^^^^->
+4 >               ^^^^^^^^^->
 1 >
 2 >class 
 3 >              C
@@ -2266,7 +2311,7 @@ sourceFile:../../../second/second_part2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >() {
   >        console.log("something got done");
   >    }
@@ -2336,7 +2381,7 @@ sourceFile:../../third_part1.ts
 4 >            ^
 5 >             ^^^
 6 >                ^
-7 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >
 3 >        var 
@@ -2355,7 +2400,7 @@ sourceFile:../../third_part1.ts
 2 >^^^^^^^^^^^^^^^^^
 3 >                 ^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                        ^^^^^^^^^
-5 >                                                 ^^^^^^^^^^^^^^->
+5 >                                                 ^^^^^^^^^^^^^->
 1->
   >c.doSomething();
   >
@@ -2600,7 +2645,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^^^^^^^^^^^^^^^^^^^^->
+9 >               ^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -2628,7 +2673,7 @@ sourceFile:../../../first/first_PART1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -2718,7 +2763,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -2766,7 +2811,7 @@ sourceFile:../../../first/first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -2792,7 +2837,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -2814,7 +2859,7 @@ sourceFile:../../../first/first_part3.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(47, 5) Source(4, 33) + SourceIndex(2)
@@ -2852,7 +2897,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(51, 1) Source(4, 51) + SourceIndex(2)
@@ -2869,7 +2914,7 @@ sourceFile:../../../first/first_part3.ts
 8 >                               ^^
 9 >                                 ^
 10>                                  ^
-11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -2925,7 +2970,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1 >namespace N {
   >    // Comment text
   >}
@@ -2949,7 +2994,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -2961,7 +3006,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -3000,7 +3045,7 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -3012,7 +3057,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -3032,7 +3077,7 @@ sourceFile:../../../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
@@ -3059,7 +3104,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -3149,7 +3194,7 @@ sourceFile:../../../second/second_part1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -3162,20 +3207,20 @@ sourceFile:../../../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1->
 1->Emitted(64, 1) Source(1, 1) + SourceIndex(4)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(65, 5) Source(1, 1) + SourceIndex(4)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -3189,7 +3234,7 @@ sourceFile:../../../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -3227,7 +3272,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -3248,7 +3293,7 @@ sourceFile:../../../second/second_part2.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -3278,7 +3323,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(73, 5) Source(7, 35) + SourceIndex(4)
@@ -3316,7 +3361,7 @@ sourceFile:../../../second/second_part2.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(77, 1) Source(7, 53) + SourceIndex(4)
@@ -3333,7 +3378,7 @@ sourceFile:../../../second/second_part2.ts
 8 >                                 ^^
 9 >                                   ^
 10>                                    ^
-11>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -3393,7 +3438,6 @@ sourceFile:../../third_part1.ts
 6 >            ^
 7 >             ^^
 8 >               ^
-9 >                ^->
 1 >
 2 >var 
 3 >    c
@@ -3412,21 +3456,21 @@ sourceFile:../../third_part1.ts
 8 >Emitted(80, 17) Source(1, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
-1->
+1 >
 2 >^
 3 > ^
 4 >  ^^^^^^^^^^^
 5 >             ^^
 6 >               ^
-7 >                ^^^^^^^^^^^^^^^^^^^^^->
-1->
+7 >                ^^^^^^^^^^^^^^^^^^^^->
+1 >
   >
 2 >c
 3 > .
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(81, 1) Source(2, 1) + SourceIndex(5)
+1 >Emitted(81, 1) Source(2, 1) + SourceIndex(5)
 2 >Emitted(81, 2) Source(2, 2) + SourceIndex(5)
 3 >Emitted(81, 3) Source(2, 3) + SourceIndex(5)
 4 >Emitted(81, 14) Source(2, 14) + SourceIndex(5)
@@ -3437,7 +3481,7 @@ sourceFile:../../third_part1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -3527,7 +3571,7 @@ sourceFile:../../third_part1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -3549,7 +3593,7 @@ sourceFile:../../third_part1.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(86, 5) Source(6, 33) + SourceIndex(5)
@@ -3587,7 +3631,7 @@ sourceFile:../../third_part1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(90, 1) Source(6, 51) + SourceIndex(5)
@@ -3604,7 +3648,7 @@ sourceFile:../../third_part1.ts
 8 >                               ^^
 9 >                                 ^
 10>                                  ^
-11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -3654,13 +3698,13 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1396,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1398,"end":1907,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1398,"end":1907,"kind":"text"}]},{"pos":1907,"end":2601,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1907,"end":2601,"kind":"text"}]},{"pos":2601,"end":3036,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-62895833357-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-90037683317-var __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nfunction forsecondsecond_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nfunction secondsecond_part2Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar secondsecond_part2_ar = [20, 30];\r\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\r\nvar c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nfunction thirdthird_part1Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar thirdthird_part1_ar = [20, 30];\r\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":318,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":318,"kind":"text"}]},{"pos":318,"end":585,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":318,"end":585,"kind":"text"}]},{"pos":585,"end":765,"kind":"text"}],"mapHash":"25118173797-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-60677636699-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"-71164455765-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1854,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1362,"end":1854,"kind":"text"}]},{"pos":1854,"end":2522,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1854,"end":2522,"kind":"text"}]},{"pos":2522,"end":2944,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-62895833357-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-32745783681-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":307,"kind":"text"}]},{"pos":307,"end":564,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":307,"end":564,"kind":"text"}]},{"pos":564,"end":740,"kind":"text"}],"mapHash":"25118173797-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-500):: typescript:rest
+emitHelpers: (0-490):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -3673,7 +3717,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-emitHelpers: (502-1006):: typescript:read
+emitHelpers: (491-980):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -3691,7 +3735,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (1008-1396):: typescript:spreadArray
+emitHelpers: (981-1361):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -3702,9 +3746,9 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-prepend: (1398-1907):: ../../../first/bin/first-output.js texts:: 1
+prepend: (1362-1854):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1398-1907)
+text: (1362-1854)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() {
@@ -3724,9 +3768,9 @@ var firstfirst_part3_ar = [20, 30];
 firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));
 
 ----------------------------------------------------------------------
-prepend: (1907-2601):: ../../../2/second-output.js texts:: 1
+prepend: (1854-2522):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1907-2601)
+text: (1854-2522)
 var N;
 (function (N) {
     function f() {
@@ -3755,7 +3799,7 @@ var secondsecond_part2_ar = [20, 30];
 secondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));
 
 ----------------------------------------------------------------------
-text: (2601-3036)
+text: (2522-2944)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {
@@ -3774,9 +3818,9 @@ thirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-318):: ../../../first/bin/first-output.d.ts texts:: 1
+prepend: (0-307):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-318)
+text: (0-307)
 interface TheFirst {
     none: any;
 }
@@ -3790,9 +3834,9 @@ declare function firstfirst_part3Spread(...b: number[]): void;
 declare const firstfirst_part3_ar: number[];
 
 ----------------------------------------------------------------------
-prepend: (318-585):: ../../../2/second-output.d.ts texts:: 1
+prepend: (307-564):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (318-585)
+text: (307-564)
 declare namespace N {
 }
 declare namespace N {
@@ -3805,7 +3849,7 @@ declare function secondsecond_part2Spread(...b: number[]): void;
 declare const secondsecond_part2_ar: number[];
 
 ----------------------------------------------------------------------
-text: (585-765)
+text: (564-740)
 declare var c: C;
 declare function forthirdthird_part1Rest(): void;
 declare function thirdthird_part1Spread(...b: number[]): void;
@@ -3824,55 +3868,55 @@ declare const thirdthird_part1_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 500,
+          "end": 490,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 502,
-          "end": 1006,
+          "pos": 491,
+          "end": 980,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 1008,
-          "end": 1396,
+          "pos": 981,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 1398,
-          "end": 1907,
+          "pos": 1362,
+          "end": 1854,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1398,
-              "end": 1907,
+              "pos": 1362,
+              "end": 1854,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1907,
-          "end": 2601,
+          "pos": 1854,
+          "end": 2522,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 1907,
-              "end": 2601,
+              "pos": 1854,
+              "end": 2522,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2601,
-          "end": 3036,
+          "pos": 2522,
+          "end": 2944,
           "kind": "text"
         }
       ],
-      "hash": "-90037683317-var __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nfunction forsecondsecond_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nfunction secondsecond_part2Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar secondsecond_part2_ar = [20, 30];\r\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\r\nvar c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nfunction thirdthird_part1Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar thirdthird_part1_ar = [20, 30];\r\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\r\n//# sourceMappingURL=third-output.js.map",
+      "hash": "-32745783681-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map",
       "mapHash": "-62895833357-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
@@ -3886,56 +3930,76 @@ declare const thirdthird_part1_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 318,
+          "end": 307,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 318,
+              "end": 307,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 318,
-          "end": 585,
+          "pos": 307,
+          "end": 564,
           "kind": "prepend",
           "data": "../../../2/second-output.d.ts",
           "texts": [
             {
-              "pos": 318,
-              "end": 585,
+              "pos": 307,
+              "end": 564,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 585,
-          "end": 765,
+          "pos": 564,
+          "end": 740,
           "kind": "text"
         }
       ],
-      "hash": "-60677636699-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "hash": "-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map",
       "mapHash": "25118173797-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../../lib/lib.d.ts",
+      "../../../first/bin/first-output.d.ts",
+      "../../../2/second-output.d.ts",
       "../../third_part1.ts"
     ],
     "fileInfos": {
+      "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "../../../first/bin/first-output.d.ts": "-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n",
+      "../../../2/second-output.d.ts": "-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n",
       "../../third_part1.ts": "-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"
     },
+    "root": [
+      [
+        4,
+        "../../third_part1.ts"
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./third-output.js"
+      "declaration": true,
+      "declarationMap": true,
+      "downlevelIteration": true,
+      "outFile": "./third-output.js",
+      "removeComments": true,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-71164455765-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n",
+    "outSignature": "-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n",
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 9271
+  "size": 10312
 }
 
 
@@ -4122,7 +4186,7 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^^^^^^^^^^^^^^^^^^^^->
+9 >               ^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -4150,7 +4214,7 @@ sourceFile:../first_PART1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -4240,7 +4304,7 @@ sourceFile:../first_PART1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -4256,7 +4320,7 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^->
 1->
 2 >console
 3 >       .
@@ -4315,7 +4379,7 @@ sourceFile:../first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -4341,7 +4405,7 @@ sourceFile:../first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -4363,7 +4427,7 @@ sourceFile:../first_part3.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(48, 5) Source(4, 33) + SourceIndex(2)
@@ -4401,7 +4465,7 @@ sourceFile:../first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(52, 1) Source(4, 51) + SourceIndex(2)
@@ -4418,7 +4482,7 @@ sourceFile:../first_part3.ts
 8 >                               ^^
 9 >                                 ^
 10>                                  ^
-11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -4468,13 +4532,13 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1396,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1398,"end":1924,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-30182735568-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-29577924435-var __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":318,"kind":"text"}],"mapHash":"32680275599-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-53733421126-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["-5382108219-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}console.log(s);","4973778178-console.log(f());\r\n","998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-42349562125-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1870,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-30182735568-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-26516546737-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"text"}],"mapHash":"32680275599-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5382108219-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}console.log(s);","4973778178-console.log(f());\r\n","998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-500):: typescript:rest
+emitHelpers: (0-490):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -4487,7 +4551,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-emitHelpers: (502-1006):: typescript:read
+emitHelpers: (491-980):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -4505,7 +4569,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (1008-1396):: typescript:spreadArray
+emitHelpers: (981-1361):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -4516,7 +4580,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-text: (1398-1924)
+text: (1362-1870)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() {
@@ -4540,7 +4604,7 @@ firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-318)
+text: (0-307)
 interface TheFirst {
     none: any;
 }
@@ -4568,29 +4632,29 @@ declare const firstfirst_part3_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 500,
+          "end": 490,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 502,
-          "end": 1006,
+          "pos": 491,
+          "end": 980,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 1008,
-          "end": 1396,
+          "pos": 981,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 1398,
-          "end": 1924,
+          "pos": 1362,
+          "end": 1870,
           "kind": "text"
         }
       ],
-      "hash": "-29577924435-var __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\n//# sourceMappingURL=first-output.js.map",
+      "hash": "-26516546737-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map",
       "mapHash": "-30182735568-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
@@ -4604,34 +4668,56 @@ declare const firstfirst_part3_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 318,
+          "end": 307,
           "kind": "text"
         }
       ],
-      "hash": "-53733421126-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "hash": "-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map",
       "mapHash": "32680275599-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../lib/lib.d.ts",
       "../first_part1.ts",
       "../first_part2.ts",
       "../first_part3.ts"
     ],
     "fileInfos": {
+      "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../first_part1.ts": "-5382108219-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}console.log(s);",
       "../first_part2.ts": "4973778178-console.log(f());\r\n",
       "../first_part3.ts": "998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../first_part1.ts",
+          "../first_part2.ts",
+          "../first_part3.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./first-output.js"
+      "declarationMap": true,
+      "downlevelIteration": true,
+      "outFile": "./first-output.js",
+      "removeComments": true,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-42349562125-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n",
+    "outSignature": "-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n",
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 5400
+  "size": 5865
 }
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -4813,7 +4899,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^^^^^^^^^^^^^^^^^^^^->
+9 >               ^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -4841,7 +4927,7 @@ sourceFile:../../../first/first_PART1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -4931,7 +5017,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -4947,7 +5033,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^->
 1->
 2 >console
 3 >       .
@@ -5006,7 +5092,7 @@ sourceFile:../../../first/first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -5032,7 +5118,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -5054,7 +5140,7 @@ sourceFile:../../../first/first_part3.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(48, 5) Source(4, 33) + SourceIndex(2)
@@ -5092,7 +5178,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(52, 1) Source(4, 51) + SourceIndex(2)
@@ -5109,7 +5195,7 @@ sourceFile:../../../first/first_part3.ts
 8 >                               ^^
 9 >                                 ^
 10>                                  ^
-11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -5165,7 +5251,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1 >namespace N {
   >    // Comment text
   >}
@@ -5189,7 +5275,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -5201,7 +5287,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -5240,7 +5326,7 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -5252,7 +5338,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -5272,7 +5358,7 @@ sourceFile:../../../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
@@ -5299,7 +5385,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -5389,7 +5475,7 @@ sourceFile:../../../second/second_part1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -5402,20 +5488,20 @@ sourceFile:../../../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1->
 1->Emitted(65, 1) Source(1, 1) + SourceIndex(4)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(66, 5) Source(1, 1) + SourceIndex(4)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -5429,7 +5515,7 @@ sourceFile:../../../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -5467,7 +5553,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -5488,7 +5574,7 @@ sourceFile:../../../second/second_part2.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -5518,7 +5604,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(74, 5) Source(7, 35) + SourceIndex(4)
@@ -5556,7 +5642,7 @@ sourceFile:../../../second/second_part2.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(78, 1) Source(7, 53) + SourceIndex(4)
@@ -5573,7 +5659,7 @@ sourceFile:../../../second/second_part2.ts
 8 >                                 ^^
 9 >                                   ^
 10>                                    ^
-11>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -5633,7 +5719,6 @@ sourceFile:../../third_part1.ts
 6 >            ^
 7 >             ^^
 8 >               ^
-9 >                ^->
 1 >
 2 >var 
 3 >    c
@@ -5652,21 +5737,21 @@ sourceFile:../../third_part1.ts
 8 >Emitted(81, 17) Source(1, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
-1->
+1 >
 2 >^
 3 > ^
 4 >  ^^^^^^^^^^^
 5 >             ^^
 6 >               ^
-7 >                ^^^^^^^^^^^^^^^^^^^^^->
-1->
+7 >                ^^^^^^^^^^^^^^^^^^^^->
+1 >
   >
 2 >c
 3 > .
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(82, 1) Source(2, 1) + SourceIndex(5)
+1 >Emitted(82, 1) Source(2, 1) + SourceIndex(5)
 2 >Emitted(82, 2) Source(2, 2) + SourceIndex(5)
 3 >Emitted(82, 3) Source(2, 3) + SourceIndex(5)
 4 >Emitted(82, 14) Source(2, 14) + SourceIndex(5)
@@ -5677,7 +5762,7 @@ sourceFile:../../third_part1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -5767,7 +5852,7 @@ sourceFile:../../third_part1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -5789,7 +5874,7 @@ sourceFile:../../third_part1.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(87, 5) Source(6, 33) + SourceIndex(5)
@@ -5827,7 +5912,7 @@ sourceFile:../../third_part1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(91, 1) Source(6, 51) + SourceIndex(5)
@@ -5844,7 +5929,7 @@ sourceFile:../../third_part1.ts
 8 >                               ^^
 9 >                                 ^
 10>                                  ^
-11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -5894,13 +5979,13 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1396,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1398,"end":1924,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1398,"end":1924,"kind":"text"}]},{"pos":1924,"end":2618,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1924,"end":2618,"kind":"text"}]},{"pos":2618,"end":3053,"kind":"text"}],"mapHash":"5963265220-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-25778453212-var __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nfunction forsecondsecond_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nfunction secondsecond_part2Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar secondsecond_part2_ar = [20, 30];\r\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\r\nvar c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nfunction thirdthird_part1Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar thirdthird_part1_ar = [20, 30];\r\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\r\n//# sourceMappingURL=third-output.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":318,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":318,"kind":"text"}]},{"pos":318,"end":585,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":318,"end":585,"kind":"text"}]},{"pos":585,"end":765,"kind":"text"}],"mapHash":"25118173797-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-60677636699-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"-71164455765-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1870,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1362,"end":1870,"kind":"text"}]},{"pos":1870,"end":2538,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1870,"end":2538,"kind":"text"}]},{"pos":2538,"end":2960,"kind":"text"}],"mapHash":"5963265220-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-65318968533-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":307,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":307,"kind":"text"}]},{"pos":307,"end":564,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":307,"end":564,"kind":"text"}]},{"pos":564,"end":740,"kind":"text"}],"mapHash":"25118173797-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-500):: typescript:rest
+emitHelpers: (0-490):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -5913,7 +5998,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-emitHelpers: (502-1006):: typescript:read
+emitHelpers: (491-980):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -5931,7 +6016,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (1008-1396):: typescript:spreadArray
+emitHelpers: (981-1361):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -5942,9 +6027,9 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-prepend: (1398-1924):: ../../../first/bin/first-output.js texts:: 1
+prepend: (1362-1870):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1398-1924)
+text: (1362-1870)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() {
@@ -5965,9 +6050,9 @@ var firstfirst_part3_ar = [20, 30];
 firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));
 
 ----------------------------------------------------------------------
-prepend: (1924-2618):: ../../../2/second-output.js texts:: 1
+prepend: (1870-2538):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1924-2618)
+text: (1870-2538)
 var N;
 (function (N) {
     function f() {
@@ -5996,7 +6081,7 @@ var secondsecond_part2_ar = [20, 30];
 secondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));
 
 ----------------------------------------------------------------------
-text: (2618-3053)
+text: (2538-2960)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {
@@ -6015,9 +6100,9 @@ thirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-318):: ../../../first/bin/first-output.d.ts texts:: 1
+prepend: (0-307):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-318)
+text: (0-307)
 interface TheFirst {
     none: any;
 }
@@ -6031,9 +6116,9 @@ declare function firstfirst_part3Spread(...b: number[]): void;
 declare const firstfirst_part3_ar: number[];
 
 ----------------------------------------------------------------------
-prepend: (318-585):: ../../../2/second-output.d.ts texts:: 1
+prepend: (307-564):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (318-585)
+text: (307-564)
 declare namespace N {
 }
 declare namespace N {
@@ -6046,7 +6131,7 @@ declare function secondsecond_part2Spread(...b: number[]): void;
 declare const secondsecond_part2_ar: number[];
 
 ----------------------------------------------------------------------
-text: (585-765)
+text: (564-740)
 declare var c: C;
 declare function forthirdthird_part1Rest(): void;
 declare function thirdthird_part1Spread(...b: number[]): void;
@@ -6065,55 +6150,55 @@ declare const thirdthird_part1_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 500,
+          "end": 490,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 502,
-          "end": 1006,
+          "pos": 491,
+          "end": 980,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 1008,
-          "end": 1396,
+          "pos": 981,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 1398,
-          "end": 1924,
+          "pos": 1362,
+          "end": 1870,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1398,
-              "end": 1924,
+              "pos": 1362,
+              "end": 1870,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1924,
-          "end": 2618,
+          "pos": 1870,
+          "end": 2538,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 1924,
-              "end": 2618,
+              "pos": 1870,
+              "end": 2538,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2618,
-          "end": 3053,
+          "pos": 2538,
+          "end": 2960,
           "kind": "text"
         }
       ],
-      "hash": "-25778453212-var __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nfunction forsecondsecond_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nfunction secondsecond_part2Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar secondsecond_part2_ar = [20, 30];\r\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\r\nvar c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nfunction thirdthird_part1Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar thirdthird_part1_ar = [20, 30];\r\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\r\n//# sourceMappingURL=third-output.js.map",
+      "hash": "-65318968533-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map",
       "mapHash": "5963265220-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
@@ -6127,56 +6212,76 @@ declare const thirdthird_part1_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 318,
+          "end": 307,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 318,
+              "end": 307,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 318,
-          "end": 585,
+          "pos": 307,
+          "end": 564,
           "kind": "prepend",
           "data": "../../../2/second-output.d.ts",
           "texts": [
             {
-              "pos": 318,
-              "end": 585,
+              "pos": 307,
+              "end": 564,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 585,
-          "end": 765,
+          "pos": 564,
+          "end": 740,
           "kind": "text"
         }
       ],
-      "hash": "-60677636699-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "hash": "-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map",
       "mapHash": "25118173797-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../../lib/lib.d.ts",
+      "../../../first/bin/first-output.d.ts",
+      "../../../2/second-output.d.ts",
       "../../third_part1.ts"
     ],
     "fileInfos": {
+      "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "../../../first/bin/first-output.d.ts": "-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n",
+      "../../../2/second-output.d.ts": "-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n",
       "../../third_part1.ts": "-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"
     },
+    "root": [
+      [
+        4,
+        "../../third_part1.ts"
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./third-output.js"
+      "declaration": true,
+      "declarationMap": true,
+      "downlevelIteration": true,
+      "outFile": "./third-output.js",
+      "removeComments": true,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-71164455765-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n",
+    "outSignature": "-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n",
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 9329
+  "size": 10368
 }
 
 
@@ -6264,7 +6369,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
@@ -6324,7 +6429,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
@@ -6355,7 +6460,7 @@ sourceFile:../first_part3.ts
 2 >^^^^^^^^^^^^^^^^^
 3 >                 ^
 4 >                  ^^^^^^^^^^^
-5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >                 f
@@ -6536,7 +6641,7 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >               ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -6587,7 +6692,7 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^->
 1 >
 2 >console
 3 >       .
@@ -6646,7 +6751,7 @@ sourceFile:../first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -6672,7 +6777,7 @@ sourceFile:../first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -6694,7 +6799,7 @@ sourceFile:../first_part3.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(35, 5) Source(4, 33) + SourceIndex(2)
@@ -6732,7 +6837,7 @@ sourceFile:../first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(39, 1) Source(4, 51) + SourceIndex(2)
@@ -6749,7 +6854,7 @@ sourceFile:../first_part3.ts
 8 >                               ^^
 9 >                                 ^
 10>                                  ^
-11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -6799,13 +6904,13 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1345,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]},"mapHash":"-26203276582-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"42519965252-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() { }\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":318,"kind":"text"}],"mapHash":"8802529616-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-53733421126-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["1776071466-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() { }console.log(s);","4973778178-console.log(f());\r\n","998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-42349562125-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1304,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]},"mapHash":"-26203276582-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"71257392207-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"text"}],"mapHash":"8802529616-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","1776071466-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() { }console.log(s);","4973778178-console.log(f());\r\n","998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-504):: typescript:read
+emitHelpers: (0-489):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -6823,7 +6928,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-894):: typescript:spreadArray
+emitHelpers: (490-870):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -6834,7 +6939,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-text: (896-1345)
+text: (871-1304)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() { }
@@ -6856,7 +6961,7 @@ firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-318)
+text: (0-307)
 interface TheFirst {
     none: any;
 }
@@ -6884,23 +6989,23 @@ declare const firstfirst_part3_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 504,
+          "end": 489,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 506,
-          "end": 894,
+          "pos": 490,
+          "end": 870,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 896,
-          "end": 1345,
+          "pos": 871,
+          "end": 1304,
           "kind": "text"
         }
       ],
-      "hash": "42519965252-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() { }\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\n//# sourceMappingURL=first-output.js.map",
+      "hash": "71257392207-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map",
       "mapHash": "-26203276582-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
@@ -6913,34 +7018,56 @@ declare const firstfirst_part3_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 318,
+          "end": 307,
           "kind": "text"
         }
       ],
-      "hash": "-53733421126-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "hash": "-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map",
       "mapHash": "8802529616-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../lib/lib.d.ts",
       "../first_part1.ts",
       "../first_part2.ts",
       "../first_part3.ts"
     ],
     "fileInfos": {
+      "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../first_part1.ts": "1776071466-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() { }console.log(s);",
       "../first_part2.ts": "4973778178-console.log(f());\r\n",
       "../first_part3.ts": "998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../first_part1.ts",
+          "../first_part2.ts",
+          "../first_part3.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./first-output.js"
+      "declarationMap": true,
+      "downlevelIteration": true,
+      "outFile": "./first-output.js",
+      "removeComments": true,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-42349562125-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\n",
+    "outSignature": "-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n",
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 4506
+  "size": 4999
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
@@ -6988,7 +7115,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
@@ -7048,7 +7175,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
@@ -7079,7 +7206,7 @@ sourceFile:../../../first/first_part3.ts
 2 >^^^^^^^^^^^^^^^^^
 3 >                 ^
 4 >                  ^^^^^^^^^^^
-5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >                 f
@@ -7162,7 +7289,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    // Comment text
   >}
@@ -7186,7 +7313,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -7221,7 +7348,7 @@ sourceFile:../../../second/second_part2.ts
 1 >
 2 >^^^^^^^^^^^^^^
 3 >              ^
-4 >               ^^^^^^^^^^->
+4 >               ^^^^^^^^^->
 1 >
 2 >class 
 3 >              C
@@ -7240,7 +7367,7 @@ sourceFile:../../../second/second_part2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >() {
   >        console.log("something got done");
   >    }
@@ -7310,7 +7437,7 @@ sourceFile:../../third_part1.ts
 4 >            ^
 5 >             ^^^
 6 >                ^
-7 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >
 3 >        var 
@@ -7329,7 +7456,7 @@ sourceFile:../../third_part1.ts
 2 >^^^^^^^^^^^^^^^^^
 3 >                 ^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                        ^^^^^^^^^
-5 >                                                 ^^^^^^^^^^^^^^->
+5 >                                                 ^^^^^^^^^^^^^->
 1->
   >c.doSomething();
   >
@@ -7573,7 +7700,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >               ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -7624,7 +7751,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^->
 1 >
 2 >console
 3 >       .
@@ -7683,7 +7810,7 @@ sourceFile:../../../first/first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -7709,7 +7836,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -7731,7 +7858,7 @@ sourceFile:../../../first/first_part3.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(46, 5) Source(4, 33) + SourceIndex(2)
@@ -7769,7 +7896,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(50, 1) Source(4, 51) + SourceIndex(2)
@@ -7786,7 +7913,7 @@ sourceFile:../../../first/first_part3.ts
 8 >                               ^^
 9 >                                 ^
 10>                                  ^
-11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -7842,7 +7969,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1 >namespace N {
   >    // Comment text
   >}
@@ -7866,7 +7993,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -7878,7 +8005,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -7917,7 +8044,7 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -7929,7 +8056,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -7949,7 +8076,7 @@ sourceFile:../../../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
@@ -7976,7 +8103,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -8066,7 +8193,7 @@ sourceFile:../../../second/second_part1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -8079,20 +8206,20 @@ sourceFile:../../../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1->
 1->Emitted(63, 1) Source(1, 1) + SourceIndex(4)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(64, 5) Source(1, 1) + SourceIndex(4)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -8106,7 +8233,7 @@ sourceFile:../../../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -8144,7 +8271,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -8165,7 +8292,7 @@ sourceFile:../../../second/second_part2.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -8195,7 +8322,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(72, 5) Source(7, 35) + SourceIndex(4)
@@ -8233,7 +8360,7 @@ sourceFile:../../../second/second_part2.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(76, 1) Source(7, 53) + SourceIndex(4)
@@ -8250,7 +8377,7 @@ sourceFile:../../../second/second_part2.ts
 8 >                                 ^^
 9 >                                   ^
 10>                                    ^
-11>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -8310,7 +8437,6 @@ sourceFile:../../third_part1.ts
 6 >            ^
 7 >             ^^
 8 >               ^
-9 >                ^->
 1 >
 2 >var 
 3 >    c
@@ -8329,21 +8455,21 @@ sourceFile:../../third_part1.ts
 8 >Emitted(79, 17) Source(1, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
-1->
+1 >
 2 >^
 3 > ^
 4 >  ^^^^^^^^^^^
 5 >             ^^
 6 >               ^
-7 >                ^^^^^^^^^^^^^^^^^^^^^->
-1->
+7 >                ^^^^^^^^^^^^^^^^^^^^->
+1 >
   >
 2 >c
 3 > .
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(80, 1) Source(2, 1) + SourceIndex(5)
+1 >Emitted(80, 1) Source(2, 1) + SourceIndex(5)
 2 >Emitted(80, 2) Source(2, 2) + SourceIndex(5)
 3 >Emitted(80, 3) Source(2, 3) + SourceIndex(5)
 4 >Emitted(80, 14) Source(2, 14) + SourceIndex(5)
@@ -8354,7 +8480,7 @@ sourceFile:../../third_part1.ts
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -8444,7 +8570,7 @@ sourceFile:../../third_part1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -8466,7 +8592,7 @@ sourceFile:../../third_part1.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(85, 5) Source(6, 33) + SourceIndex(5)
@@ -8504,7 +8630,7 @@ sourceFile:../../third_part1.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(89, 1) Source(6, 51) + SourceIndex(5)
@@ -8521,7 +8647,7 @@ sourceFile:../../third_part1.ts
 8 >                               ^^
 9 >                                 ^
 10>                                  ^
-11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -8571,13 +8697,13 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1396,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1398,"end":1847,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1398,"end":1847,"kind":"text"}]},{"pos":1847,"end":2541,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1847,"end":2541,"kind":"text"}]},{"pos":2541,"end":2976,"kind":"text"}],"mapHash":"26169118295-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"72997038466-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() { }\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nfunction forsecondsecond_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nfunction secondsecond_part2Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar secondsecond_part2_ar = [20, 30];\r\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\r\nvar c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nfunction thirdthird_part1Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar thirdthird_part1_ar = [20, 30];\r\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\r\n//# sourceMappingURL=third-output.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":318,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":318,"kind":"text"}]},{"pos":318,"end":585,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":318,"end":585,"kind":"text"}]},{"pos":585,"end":765,"kind":"text"}],"mapHash":"18621572486-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-60677636699-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"-71164455765-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1361,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1362,"end":1795,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1362,"end":1795,"kind":"text"}]},{"pos":1795,"end":2463,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1795,"end":2463,"kind":"text"}]},{"pos":2463,"end":2885,"kind":"text"}],"mapHash":"26169118295-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-2171038301-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":307,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":307,"kind":"text"}]},{"pos":307,"end":564,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":307,"end":564,"kind":"text"}]},{"pos":564,"end":740,"kind":"text"}],"mapHash":"18621572486-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-504):: typescript:read
+emitHelpers: (0-489):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -8595,7 +8721,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-894):: typescript:spreadArray
+emitHelpers: (490-870):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -8606,7 +8732,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-emitHelpers: (896-1396):: typescript:rest
+emitHelpers: (871-1361):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -8619,9 +8745,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1398-1847):: ../../../first/bin/first-output.js texts:: 1
+prepend: (1362-1795):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1398-1847)
+text: (1362-1795)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() { }
@@ -8640,9 +8766,9 @@ var firstfirst_part3_ar = [20, 30];
 firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));
 
 ----------------------------------------------------------------------
-prepend: (1847-2541):: ../../../2/second-output.js texts:: 1
+prepend: (1795-2463):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1847-2541)
+text: (1795-2463)
 var N;
 (function (N) {
     function f() {
@@ -8671,7 +8797,7 @@ var secondsecond_part2_ar = [20, 30];
 secondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));
 
 ----------------------------------------------------------------------
-text: (2541-2976)
+text: (2463-2885)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {
@@ -8690,9 +8816,9 @@ thirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-318):: ../../../first/bin/first-output.d.ts texts:: 1
+prepend: (0-307):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-318)
+text: (0-307)
 interface TheFirst {
     none: any;
 }
@@ -8706,9 +8832,9 @@ declare function firstfirst_part3Spread(...b: number[]): void;
 declare const firstfirst_part3_ar: number[];
 
 ----------------------------------------------------------------------
-prepend: (318-585):: ../../../2/second-output.d.ts texts:: 1
+prepend: (307-564):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (318-585)
+text: (307-564)
 declare namespace N {
 }
 declare namespace N {
@@ -8721,7 +8847,7 @@ declare function secondsecond_part2Spread(...b: number[]): void;
 declare const secondsecond_part2_ar: number[];
 
 ----------------------------------------------------------------------
-text: (585-765)
+text: (564-740)
 declare var c: C;
 declare function forthirdthird_part1Rest(): void;
 declare function thirdthird_part1Spread(...b: number[]): void;
@@ -8740,55 +8866,55 @@ declare const thirdthird_part1_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 504,
+          "end": 489,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 506,
-          "end": 894,
+          "pos": 490,
+          "end": 870,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 896,
-          "end": 1396,
+          "pos": 871,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1398,
-          "end": 1847,
+          "pos": 1362,
+          "end": 1795,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1398,
-              "end": 1847,
+              "pos": 1362,
+              "end": 1795,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1847,
-          "end": 2541,
+          "pos": 1795,
+          "end": 2463,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 1847,
-              "end": 2541,
+              "pos": 1795,
+              "end": 2463,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2541,
-          "end": 2976,
+          "pos": 2463,
+          "end": 2885,
           "kind": "text"
         }
       ],
-      "hash": "72997038466-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() { }\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nfunction firstfirst_part3Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar firstfirst_part3_ar = [20, 30];\r\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nfunction forsecondsecond_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nfunction secondsecond_part2Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar secondsecond_part2_ar = [20, 30];\r\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\r\nvar c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\r\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n}\r\nfunction thirdthird_part1Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar thirdthird_part1_ar = [20, 30];\r\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\r\n//# sourceMappingURL=third-output.js.map",
+      "hash": "-2171038301-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map",
       "mapHash": "26169118295-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
@@ -8802,55 +8928,75 @@ declare const thirdthird_part1_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 318,
+          "end": 307,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 318,
+              "end": 307,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 318,
-          "end": 585,
+          "pos": 307,
+          "end": 564,
           "kind": "prepend",
           "data": "../../../2/second-output.d.ts",
           "texts": [
             {
-              "pos": 318,
-              "end": 585,
+              "pos": 307,
+              "end": 564,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 585,
-          "end": 765,
+          "pos": 564,
+          "end": 740,
           "kind": "text"
         }
       ],
-      "hash": "-60677636699-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "hash": "-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map",
       "mapHash": "18621572486-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../../lib/lib.d.ts",
+      "../../../first/bin/first-output.d.ts",
+      "../../../2/second-output.d.ts",
       "../../third_part1.ts"
     ],
     "fileInfos": {
+      "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "../../../first/bin/first-output.d.ts": "-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n",
+      "../../../2/second-output.d.ts": "-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n",
       "../../third_part1.ts": "-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"
     },
+    "root": [
+      [
+        4,
+        "../../third_part1.ts"
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./third-output.js"
+      "declaration": true,
+      "declarationMap": true,
+      "downlevelIteration": true,
+      "outFile": "./third-output.js",
+      "removeComments": true,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-71164455765-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function forfirstfirst_PART1Rest(): void;\r\ndeclare function f(): string;\r\ndeclare function firstfirst_part3Spread(...b: number[]): void;\r\ndeclare const firstfirst_part3_ar: number[];\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare function forsecondsecond_part1Rest(): void;\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare function secondsecond_part2Spread(...b: number[]): void;\r\ndeclare const secondsecond_part2_ar: number[];\r\ndeclare var c: C;\r\ndeclare function forthirdthird_part1Rest(): void;\r\ndeclare function thirdthird_part1Spread(...b: number[]): void;\r\ndeclare const thirdthird_part1_ar: number[];\r\n",
+    "outSignature": "-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n",
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 9114
+  "size": 10159
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxExcessPropsAndAssignability.tsx] ////
+
 //// [jsxExcessPropsAndAssignability.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
@@ -30,7 +32,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var myHoc = function (ComposedComponent) {
     var WrapperComponent = null;

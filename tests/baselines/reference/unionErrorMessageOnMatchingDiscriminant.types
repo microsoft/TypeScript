@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionErrorMessageOnMatchingDiscriminant.ts ===
+//// [tests/cases/compiler/unionErrorMessageOnMatchingDiscriminant.ts] ////
+
+=== unionErrorMessageOnMatchingDiscriminant.ts ===
 type A = {
 >A : { type: 'a'; data: {    a: string;}; }
 
@@ -19,7 +21,6 @@ type B = {
 
     data: null
 >data : null
->null : null
 
 };
 
@@ -48,6 +49,5 @@ const foo: Union = {
 
     data: null
 >data : null
->null : null
 
 };

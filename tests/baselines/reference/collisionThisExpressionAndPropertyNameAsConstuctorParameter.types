@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts] ////
+
+=== collisionThisExpressionAndPropertyNameAsConstuctorParameter.ts ===
 class Foo2 {
 >Foo2 : Foo2
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/exportDefaultAbstractClass.ts] ////
+
+=== a.ts ===
 export default abstract class A { a: number; }
 >A : A
 >a : number
@@ -16,7 +18,7 @@ new B().a.toExponential();
 >a : number
 >toExponential : (fractionDigits?: number) => string
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import A from './a';
 >A : typeof A
 

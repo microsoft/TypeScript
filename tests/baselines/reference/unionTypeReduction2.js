@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeReduction2.ts] ////
+
 //// [unionTypeReduction2.ts]
 function f1(x: { f(): void }, y: { f(x?: string): void }) {
     let z = !!true ? x : y;  // { f(x?: string): void }

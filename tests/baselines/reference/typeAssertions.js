@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts] ////
+
 //// [typeAssertions.ts]
 // Function call whose argument is a 1 arg generic function call with explicit type arguments
 function fn1<T>(t: T) { }

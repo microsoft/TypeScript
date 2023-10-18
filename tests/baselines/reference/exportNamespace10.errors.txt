@@ -1,0 +1,15 @@
+/c.ts(2,19): error TS1362: 'ns' cannot be used as a value because it was exported using 'export type'.
+
+
+==== /a.ts (0 errors) ====
+    export class A {}
+    
+==== /b.ts (0 errors) ====
+    export type * as ns from "./a";
+    
+==== /c.ts (1 errors) ====
+    import { ns } from "./b";
+    let _: ns.A = new ns.A(); // Error
+                      ~~
+!!! error TS1362: 'ns' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 /b.ts:1:13: 'ns' was exported here.

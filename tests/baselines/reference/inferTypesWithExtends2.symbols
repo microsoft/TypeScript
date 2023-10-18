@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts ===
+//// [tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts] ////
+
+=== inferTypesWithExtends2.ts ===
 // infer twice with different constraints (same behavior as class/interface)
 type X1<T> =
 >X1 : Symbol(X1, Decl(inferTypesWithExtends2.ts, 0, 0))

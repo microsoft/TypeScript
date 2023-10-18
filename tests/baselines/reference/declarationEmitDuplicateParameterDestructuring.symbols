@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/declarationEmitDuplicateParameterDestructuring.ts] ////
+
+=== declarationEmitDuplicateParameterDestructuring.ts ===
+export const fn1 = ({ prop: a, prop: b }: { prop: number }) => a + b;
+>fn1 : Symbol(fn1, Decl(declarationEmitDuplicateParameterDestructuring.ts, 0, 12))
+>prop : Symbol(prop, Decl(declarationEmitDuplicateParameterDestructuring.ts, 0, 43))
+>a : Symbol(a, Decl(declarationEmitDuplicateParameterDestructuring.ts, 0, 21))
+>prop : Symbol(prop, Decl(declarationEmitDuplicateParameterDestructuring.ts, 0, 43))
+>b : Symbol(b, Decl(declarationEmitDuplicateParameterDestructuring.ts, 0, 30))
+>prop : Symbol(prop, Decl(declarationEmitDuplicateParameterDestructuring.ts, 0, 43))
+>a : Symbol(a, Decl(declarationEmitDuplicateParameterDestructuring.ts, 0, 21))
+>b : Symbol(b, Decl(declarationEmitDuplicateParameterDestructuring.ts, 0, 30))
+
+export const fn2 = ({ prop: a }: { prop: number }, { prop: b }: { prop: number }) => a + b;
+>fn2 : Symbol(fn2, Decl(declarationEmitDuplicateParameterDestructuring.ts, 2, 12))
+>prop : Symbol(prop, Decl(declarationEmitDuplicateParameterDestructuring.ts, 2, 34))
+>a : Symbol(a, Decl(declarationEmitDuplicateParameterDestructuring.ts, 2, 21))
+>prop : Symbol(prop, Decl(declarationEmitDuplicateParameterDestructuring.ts, 2, 34))
+>prop : Symbol(prop, Decl(declarationEmitDuplicateParameterDestructuring.ts, 2, 65))
+>b : Symbol(b, Decl(declarationEmitDuplicateParameterDestructuring.ts, 2, 52))
+>prop : Symbol(prop, Decl(declarationEmitDuplicateParameterDestructuring.ts, 2, 65))
+>a : Symbol(a, Decl(declarationEmitDuplicateParameterDestructuring.ts, 2, 21))
+>b : Symbol(b, Decl(declarationEmitDuplicateParameterDestructuring.ts, 2, 52))
+

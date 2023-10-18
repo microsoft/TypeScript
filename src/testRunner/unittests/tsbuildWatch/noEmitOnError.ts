@@ -1,46 +1,67 @@
-namespace ts.tscWatch {
-    describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
-        function change(caption: string, content: string): TscWatchCompileChange {
-            return {
-                caption,
-                change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content),
-                // build project
-                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
-            };
-        }
+import {
+    libContent,
+} from "../helpers/contents";
+import {
+    TscWatchCompileChange,
+    verifyTscWatch,
+} from "../helpers/tscWatch";
+import {
+    createWatchedSystem,
+    getTsBuildProjectFile,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
-        const noChange: TscWatchCompileChange = {
-            caption: "No change",
-            change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!),
+describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
+    function change(caption: string, content: string): TscWatchCompileChange {
+        return {
+            caption,
+            edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, content),
             // build project
-            timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
-        verifyTscWatch({
-            scenario: "noEmitOnError",
-            subScenario: "does not emit any files on error",
-            commandLineArgs: ["-b", "-w", "-verbose"],
-            sys: () => createWatchedSystem(
+    }
+
+    const noChange: TscWatchCompileChange = {
+        caption: "No change",
+        edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
+        // build project
+        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+    };
+    verifyTscWatch({
+        scenario: "noEmitOnError",
+        subScenario: "does not emit any files on error",
+        commandLineArgs: ["-b", "-w", "-verbose"],
+        sys: () =>
+            createWatchedSystem(
                 [
                     ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                        .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)),
-                    { path: libFile.path, content: libContent }
+                        .map(f => getTsBuildProjectFile("noEmitOnError", f)),
+                    { path: libFile.path, content: libContent },
                 ],
-                { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError` }
+                { currentDirectory: `/user/username/projects/noEmitOnError` },
             ),
-            changes: [
-                noChange,
-                change("Fix Syntax error", `import { A } from "../shared/types/db";
+        edits: [
+            noChange,
+            change(
+                "Fix Syntax error",
+                `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`),
-                change("Semantic Error", `import { A } from "../shared/types/db";
-const a: string = 10;`),
-                noChange,
-                change("Fix Semantic Error", `import { A } from "../shared/types/db";
-const a: string = "hello";`),
-                noChange,
-            ],
-            baselineIncremental: true
-        });
+};`,
+            ),
+            change(
+                "Semantic Error",
+                `import { A } from "../shared/types/db";
+const a: string = 10;`,
+            ),
+            noChange,
+            change(
+                "Fix Semantic Error",
+                `import { A } from "../shared/types/db";
+const a: string = "hello";`,
+            ),
+            noChange,
+        ],
+        baselineIncremental: true,
     });
-}
+});

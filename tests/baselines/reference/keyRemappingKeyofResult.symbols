@@ -1,4 +1,6 @@
-=== tests/cases/compiler/keyRemappingKeyofResult.ts ===
+//// [tests/cases/compiler/keyRemappingKeyofResult.ts] ////
+
+=== keyRemappingKeyofResult.ts ===
 const sym = Symbol("")
 >sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

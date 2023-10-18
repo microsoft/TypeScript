@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -49,40 +50,40 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file2.ts (used version)
 /user/username/projects/myproject/src/file1.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
-/user/username/projects/myproject/src/file2.ts:
-  {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-/user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist"}
-/user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
-
-FsWatchesRecursive::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/dist: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
+/user/username/projects/myproject/src/file1.ts: *new*
+  {}
+/user/username/projects/myproject/src/file2.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
 //// [/user/username/projects/myproject/dist/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -90,29 +91,9 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
-/user/username/projects/myproject/src/file2.ts:
-  {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-/user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist"}
-/user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -125,6 +106,12 @@ export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
 
+Before running Timeout callback:: count: 2
+1: timerToUpdateProgram
+3: timerToUpdateChildWatches
+Invoking Timeout callback:: timeoutId:: 1:: timerToUpdateProgram
+After running Timeout callback:: count: 1
+3: timerToUpdateChildWatches
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
@@ -150,27 +137,31 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-/user/username/projects/myproject/src/file2.ts:
-  {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/file2.ts: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 /user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist"}
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/myproject/src/file2.ts:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -180,6 +171,19 @@ Change:: Pending directory watchers and program update
 
 Input::
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateChildWatches
+After running Timeout callback:: count: 2
+5: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 2
+5: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+8: timerToUpdateChildWatches
+Before running Timeout callback:: count: 1
+8: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
@@ -208,33 +212,37 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/renamed.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-/user/username/projects/myproject/src/renamed.ts:
-  {"fileName":"/user/username/projects/myproject/src/renamed.ts","pollingInterval":250}
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/src/file2.ts:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 /user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist"}
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
-
-FsWatchesRecursive::
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/src/renamed.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/renamed.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 

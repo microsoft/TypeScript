@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasFunctionInsideTopLevelModuleWithExport.ts] ////
+
 //// [internalAliasFunctionInsideTopLevelModuleWithExport.ts]
 export module a {
     export function foo(x: number) {
@@ -13,7 +15,7 @@ export var bVal2 = b;
 //// [internalAliasFunctionInsideTopLevelModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.bVal2 = exports.bVal = exports.b = exports.a = void 0;
     var a;
     (function (a) {
@@ -21,7 +23,7 @@ define(["require", "exports"], function (require, exports) {
             return x;
         }
         a.foo = foo;
-    })(a = exports.a || (exports.a = {}));
+    })(a || (exports.a = a = {}));
     exports.b = a.foo;
     exports.bVal = (0, exports.b)(10);
     exports.bVal2 = exports.b;
@@ -29,7 +31,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasFunctionInsideTopLevelModuleWithExport.d.ts]
-export declare module a {
+export declare namespace a {
     function foo(x: number): number;
 }
 export import b = a.foo;

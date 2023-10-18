@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/constEnumPreserveEmitNamedExport1.ts] ////
+
+=== a.ts ===
 const enum A {
 >A : Symbol(A, Decl(a.ts, 0, 0))
 
@@ -9,7 +11,7 @@ const enum A {
 export { A };
 >A : Symbol(A, Decl(a.ts, 3, 8))
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import { A } from './a';
 >A : Symbol(A, Decl(b.ts, 0, 8))
 

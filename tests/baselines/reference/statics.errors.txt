@@ -1,8 +1,8 @@
-tests/cases/compiler/statics.ts(6,18): error TS2339: Property 'g' does not exist on type 'C'.
-tests/cases/compiler/statics.ts(23,33): error TS2339: Property 'g' does not exist on type 'C'.
+statics.ts(6,18): error TS2339: Property 'g' does not exist on type 'C'.
+statics.ts(23,33): error TS2339: Property 'g' does not exist on type 'C'.
 
 
-==== tests/cases/compiler/statics.ts (2 errors) ====
+==== statics.ts (2 errors) ====
     module M {
         export class C {
             x: number;

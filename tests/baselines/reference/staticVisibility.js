@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticVisibility.ts] ////
+
 //// [staticVisibility.ts]
 class C1 {
     

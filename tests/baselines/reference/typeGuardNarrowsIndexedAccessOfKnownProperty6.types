@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty6.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty6.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty6.ts ===
 declare const aIndex: "key";
 >aIndex : "key"
 

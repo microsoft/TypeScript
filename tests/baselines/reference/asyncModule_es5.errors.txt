@@ -1,7 +1,7 @@
-tests/cases/conformance/async/es5/asyncModule_es5.ts(1,1): error TS1042: 'async' modifier cannot be used here.
+asyncModule_es5.ts(1,1): error TS1042: 'async' modifier cannot be used here.
 
 
-==== tests/cases/conformance/async/es5/asyncModule_es5.ts (1 errors) ====
+==== asyncModule_es5.ts (1 errors) ====
     async module M {
     ~~~~~
 !!! error TS1042: 'async' modifier cannot be used here.

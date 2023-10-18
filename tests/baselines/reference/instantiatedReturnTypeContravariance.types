@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instantiatedReturnTypeContravariance.ts ===
+//// [tests/cases/compiler/instantiatedReturnTypeContravariance.ts] ////
+
+=== instantiatedReturnTypeContravariance.ts ===
 interface B<T> {
 
 name: string;
@@ -16,7 +18,6 @@ foo(): B<void> {
 >foo : () => B<void>
 
 return null;
->null : null
 
 }
 
@@ -30,7 +31,6 @@ foo(): B<number> {
 >foo : () => B<number>
 
 return null;
->null : null
 
 }
 

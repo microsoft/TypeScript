@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts] ////
+
 //// [objectTypesWithOptionalProperties.ts]
 // Basic uses of optional properties
 
