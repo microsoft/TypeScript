@@ -1,3 +1,4 @@
+// === Completions ===
 === /src/foo.ts ===
 // import { fooFromIndex } from "";
 //                               ^

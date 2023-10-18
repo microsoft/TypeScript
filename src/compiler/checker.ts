@@ -29523,8 +29523,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
             // contextual type for 'this' is 'obj'.
             const parent = walkUpParenthesizedExpressions(func.parent);
-            if (parent.kind === SyntaxKind.BinaryExpression && (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                const target = (parent as BinaryExpression).left;
+            if (isAssignmentExpression(parent)) {
+                const target = parent.left;
                 if (isAccessExpression(target)) {
                     const { expression } = target;
                     // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
@@ -37085,7 +37085,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkVoidExpression(node: VoidExpression): Type {
-        checkExpression(node.expression);
+        checkNodeDeferred(node);
         return undefinedWideningType;
     }
 
@@ -46197,6 +46197,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.AsExpression:
             case SyntaxKind.ParenthesizedExpression:
                 checkAssertionDeferred(node as AssertionExpression | JSDocTypeAssertion);
+                break;
+            case SyntaxKind.VoidExpression:
+                checkExpression((node as VoidExpression).expression);
                 break;
             case SyntaxKind.BinaryExpression:
                 if (isInstanceOfExpression(node)) {

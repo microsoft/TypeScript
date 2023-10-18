@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/main.ts ===
 // import("./other.json", {});
 //                         ^
