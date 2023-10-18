@@ -70,6 +70,8 @@ export interface Scanner {
     getTokenFlags(): TokenFlags;
     reScanGreaterToken(): SyntaxKind;
     reScanSlashToken(): SyntaxKind;
+    /** @internal */
+    reScanSlashToken(onError?: (message: DiagnosticMessage) => void): SyntaxKind;
     reScanAsteriskEqualsToken(): SyntaxKind;
     reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
     /** @deprecated use {@link reScanTemplateToken}(false) */
@@ -2366,7 +2368,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return token = SyntaxKind.EqualsToken;
     }
 
-    function reScanSlashToken(): SyntaxKind {
+    function reScanSlashToken(onError: typeof error = error): SyntaxKind {
         if (token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) {
             let p = tokenStart + 1;
             let inEscape = false;
@@ -2376,14 +2378,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 // regex.  Report error and return what we have so far.
                 if (p >= end) {
                     tokenFlags |= TokenFlags.Unterminated;
-                    error(Diagnostics.Unterminated_regular_expression_literal);
+                    onError(Diagnostics.Unterminated_regular_expression_literal);
                     break;
                 }
 
                 const ch = text.charCodeAt(p);
                 if (isLineBreak(ch)) {
                     tokenFlags |= TokenFlags.Unterminated;
-                    error(Diagnostics.Unterminated_regular_expression_literal);
+                    onError(Diagnostics.Unterminated_regular_expression_literal);
                     break;
                 }
 

@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/jsx/nonTsxExtensionValidRegExp.ts] ////
+
+=== nonTsxExtensionValidRegExp.ts ===
+declare const div: any, foo: any;
+>div : Symbol(div, Decl(nonTsxExtensionValidRegExp.ts, 0, 13), Decl(nonTsxExtensionValidRegExp.ts, 0, 33))
+>foo : Symbol(foo, Decl(nonTsxExtensionValidRegExp.ts, 0, 23))
+
+type div = {};
+>div : Symbol(div, Decl(nonTsxExtensionValidRegExp.ts, 0, 13), Decl(nonTsxExtensionValidRegExp.ts, 0, 33))
+
+// This is valid: <div>foo (less than) /div>/
+const a = <div>foo</div>/;
+>a : Symbol(a, Decl(nonTsxExtensionValidRegExp.ts, 4, 5))
+>div : Symbol(div, Decl(nonTsxExtensionValidRegExp.ts, 0, 13), Decl(nonTsxExtensionValidRegExp.ts, 0, 33))
+>foo : Symbol(foo, Decl(nonTsxExtensionValidRegExp.ts, 0, 23))
+

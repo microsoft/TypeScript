@@ -6611,19 +6611,24 @@ namespace Parser {
             case SyntaxKind.NewKeyword:
                 return parseNewExpressionOrNewDotTarget();
             case SyntaxKind.SlashToken:
-                // JSX inside a .ts (not .tsx) file gets a specialized error
+                // JSX inside a .ts (not .tsx) file gets a specialized error...
                 if (previousNode && isTypeAssertionExpression(previousNode)) {
-                    nextToken(); // slash
-                    const identifier = parseIdentifier(); // identifier (tag name)
-                    // Skip through the tag so we don't report additional diagnostics after the .ts/.tsx
-                    while (true) {
-                        const current = nextToken();
-                        if (current !== SyntaxKind.Identifier && current !== SyntaxKind.GreaterThanToken) {
-                            break;
+                    // ...however, code like <tag>inner</tag>/ might actually be a regular expression afterwards
+                    let caughtError = false;
+                    speculationHelper(() => scanner.reScanSlashToken(() => caughtError = true), SpeculationKind.Lookahead);
+                    if (caughtError) {
+                        nextToken(); // slash
+                        const identifier = parseIdentifier(); // identifier (tag name)
+                        // Skip through the tag so we don't report additional diagnostics after the "JSX tags are not permitted" notice
+                        while (true) {
+                            const current = nextToken();
+                            if (current !== SyntaxKind.Identifier && current !== SyntaxKind.GreaterThanToken) {
+                                break;
+                            }
                         }
+                        parseErrorAt(previousNode.type.pos - 1, scanner.getTokenStart(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_to_change_the_file_extension_to_tsx, tokenToString(SyntaxKind.GreaterThanToken));
+                        return identifier;
                     }
-                    parseErrorAt(previousNode.type.pos - 1, scanner.getTokenStart(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_to_change_the_file_extension_to_tsx, tokenToString(SyntaxKind.GreaterThanToken));
-                    return identifier;
                 }
                 // falls through
             case SyntaxKind.SlashEqualsToken:
@@ -6639,6 +6644,11 @@ namespace Parser {
 
         return parseIdentifier(Diagnostics.Expression_expected);
     }
+
+    // function reScanSlashTokenAsRegularExpressionLiteral() {
+    //     let hadError = false;
+    //     return scanner.tryScan(() => scanner.reScanSlashToken(() => hadError = true) === SyntaxKind.RegularExpressionLiteral && !hadError);
+    // }
 
     function parseParenthesizedExpression(): ParenthesizedExpression {
         const pos = getNodePos();

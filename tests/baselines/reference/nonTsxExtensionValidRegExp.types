@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/jsx/nonTsxExtensionValidRegExp.ts] ////
+
+=== nonTsxExtensionValidRegExp.ts ===
+declare const div: any, foo: any;
+>div : any
+>foo : any
+
+type div = {};
+>div : {}
+
+// This is valid: <div>foo (less than) /div>/
+const a = <div>foo</div>/;
+>a : boolean
+><div>foo</div>/ : boolean
+><div>foo : div
+>foo : any
+>/div>/ : RegExp
+
