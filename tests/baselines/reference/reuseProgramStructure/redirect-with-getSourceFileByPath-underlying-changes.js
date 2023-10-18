@@ -3,14 +3,12 @@ File: /node_modules/a/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/a/index.d.ts
 
 import X from "x";
 export function a(x: X): void;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/node_modules/x/index.d.ts",
@@ -34,20 +32,17 @@ x: {
     "/node_modules/a/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
 import X from "x";
 export const b: X;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/node_modules/x/index.d.ts",
@@ -71,13 +66,12 @@ x: {
     "/node_modules/b/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
 import { a } from "a"; import { b } from "b";
 a(b)
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/index.d.ts",
@@ -110,7 +104,6 @@ b: {
     "/node_modules/b/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]
@@ -123,14 +116,12 @@ File: /node_modules/a/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/a/index.d.ts
 
 import X from "x";
 export function a(x: X): void;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/node_modules/x/index.d.ts",
@@ -154,20 +145,17 @@ x: {
     "/node_modules/a/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; private y: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
 import X from "x";
 export const b: X;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/node_modules/x/index.d.ts",
@@ -191,13 +179,12 @@ x: {
     "/node_modules/b/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
 import { a } from "a"; import { b } from "b";
 a(b)
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/index.d.ts",
@@ -230,7 +217,6 @@ b: {
     "/node_modules/b/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]

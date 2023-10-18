@@ -44,6 +44,7 @@ FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 u
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
 File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
@@ -62,6 +63,8 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
 [[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
@@ -89,21 +92,19 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/user/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/home/user/projects/myproject/tsconfig.json: *new*
-  {}
-/home/user/projects/myproject/src/file.ts: *new*
-  {}
-/home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
   {}
-/home/user/projects/myproject/src: *new*
+/home/user/projects/myproject: *new*
   {}
 /home/user/projects/myproject/node_modules: *new*
   {}
 /home/user/projects/myproject/node_modules/reala: *new*
+  {}
+/home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
   {}
 /home/user/projects/myproject/node_modules/reala/node_modules: *new*
   {}
@@ -111,7 +112,11 @@ FsWatches::
   {}
 /home/user/projects/myproject/node_modules/realb/node_modules: *new*
   {}
-/home/user/projects/myproject: *new*
+/home/user/projects/myproject/src: *new*
+  {}
+/home/user/projects/myproject/src/file.ts: *new*
+  {}
+/home/user/projects/myproject/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined

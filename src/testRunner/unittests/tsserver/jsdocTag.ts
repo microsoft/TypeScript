@@ -1,14 +1,16 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
+import {
+    baselineTsserverLogs,
+    createSession,
+    openFilesForSession,
+} from "../helpers/tsserver";
 import {
     createServerHost,
     File,
-} from "../virtualFileSystemWithWatch";
-import {
-    baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
-    openFilesForSession,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
     const config: File = {
@@ -20,11 +22,11 @@ describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
 }
 "files": ["someFile1.js"]
 }
-`
+`,
     };
     function assertQuickInfoJSDoc(subScenario: string, file: File, options: {
-        displayPartsForJSDoc: boolean,
-        command: ts.server.protocol.CommandTypes,
+        displayPartsForJSDoc: boolean;
+        command: ts.server.protocol.CommandTypes;
     }) {
         it(subScenario, () => {
             const { command, displayPartsForJSDoc } = options;
@@ -32,7 +34,7 @@ describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
-                arguments: { preferences: { displayPartsForJSDoc } }
+                arguments: { preferences: { displayPartsForJSDoc } },
             });
             openFilesForSession([file], session);
             const indexOfX = file.content.indexOf("x");
@@ -41,7 +43,7 @@ describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
                 arguments: {
                     file: file.path,
                     position: indexOfX,
-                } as ts.server.protocol.FileLocationRequestArgs
+                } as ts.server.protocol.FileLocationRequestArgs,
             });
             baselineTsserverLogs("jsdocTag", subScenario, session);
         });
@@ -51,14 +53,14 @@ describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
         path: "/a/someFile1.js",
         content: `class C { }
 /** @wat {@link C} */
-var x = 1`
+var x = 1`,
     };
     const linkInComment: File = {
         path: "/a/someFile1.js",
         content: `class C { }
      /** {@link C} */
 var x = 1
-;`
+;`,
     };
 
     assertQuickInfoJSDoc("for quickinfo, should provide display parts plus a span for a working link in a tag", linkInTag, {
@@ -102,8 +104,8 @@ var x = 1
     });
 
     function assertSignatureHelpJSDoc(subScenario: string, options: {
-        displayPartsForJSDoc: boolean,
-        command: ts.server.protocol.CommandTypes,
+        displayPartsForJSDoc: boolean;
+        command: ts.server.protocol.CommandTypes;
     }) {
         it(subScenario, () => {
             const linkInParamTag: File = {
@@ -111,7 +113,7 @@ var x = 1
                 content: `class C { }
 /** @param y - {@link C} */
 function x(y) { }
-x(1)`
+x(1)`,
             };
 
             const { command, displayPartsForJSDoc } = options;
@@ -119,7 +121,7 @@ x(1)`
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
-                arguments: { preferences: { displayPartsForJSDoc } }
+                arguments: { preferences: { displayPartsForJSDoc } },
             });
             openFilesForSession([linkInParamTag], session);
             const indexOfX = linkInParamTag.content.lastIndexOf("1");
@@ -127,11 +129,11 @@ x(1)`
                 command: command as ts.server.protocol.CommandTypes.SignatureHelp,
                 arguments: {
                     triggerReason: {
-                        kind: "invoked"
+                        kind: "invoked",
                     },
                     file: linkInParamTag.path,
                     position: indexOfX,
-                } as ts.server.protocol.SignatureHelpRequestArgs
+                } as ts.server.protocol.SignatureHelpRequestArgs,
             });
             baselineTsserverLogs("jsdocTag", subScenario, session);
         });
@@ -156,8 +158,8 @@ x(1)`
     });
 
     function assertCompletionsJSDoc(subScenario: string, options: {
-        displayPartsForJSDoc: boolean,
-        command: ts.server.protocol.CommandTypes,
+        displayPartsForJSDoc: boolean;
+        command: ts.server.protocol.CommandTypes;
     }) {
         it(subScenario, () => {
             const linkInParamJSDoc: File = {
@@ -165,14 +167,14 @@ x(1)`
                 content: `class C { }
 /** @param x - see {@link C} */
 function foo (x) { }
-foo`
+foo`,
             };
             const { command, displayPartsForJSDoc } = options;
             const host = createServerHost([linkInParamJSDoc, config]);
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
-                arguments: { preferences: { displayPartsForJSDoc } }
+                arguments: { preferences: { displayPartsForJSDoc } },
             });
             openFilesForSession([linkInParamJSDoc], session);
             const indexOfFoo = linkInParamJSDoc.content.lastIndexOf("fo");
@@ -182,7 +184,7 @@ foo`
                     entryNames: ["foo"],
                     file: linkInParamJSDoc.path,
                     position: indexOfFoo,
-                } as ts.server.protocol.CompletionDetailsRequestArgs
+                } as ts.server.protocol.CompletionDetailsRequestArgs,
             });
             baselineTsserverLogs("jsdocTag", subScenario, session);
         });

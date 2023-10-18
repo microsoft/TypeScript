@@ -163,6 +163,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -214,25 +216,27 @@ function foo() {}
 
 
 PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types: *new*
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/sample1/tests/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json: *new*
-  {}
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
-/user/username/projects/sample1/logic/tsconfig.json: *new*
-  {}
-/user/username/projects/sample1/core/index.ts: *new*
-  {}
-/user/username/projects/sample1/logic/index.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/sample1/core/anothermodule.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/sample1/core/index.ts: *new*
+  {}
+/user/username/projects/sample1/core/tsconfig.json: *new*
+  {}
+/user/username/projects/sample1/logic/index.ts: *new*
+  {}
+/user/username/projects/sample1/logic/tsconfig.json: *new*
+  {}
+/user/username/projects/sample1/tests/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

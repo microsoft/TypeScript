@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericSpecializationToTypeLiteral1.ts] ////
+
 //// [genericSpecializationToTypeLiteral1.ts]
 interface IEnumerable<T> {
 

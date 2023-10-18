@@ -1,9 +1,9 @@
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(23,11): error TS2322: Type 'string' is not assignable to type '`abc${string}`'.
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(29,11): error TS2322: Type 'string' is not assignable to type '`foo${string}` | `bar${string}`'.
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(32,11): error TS2322: Type 'string' is not assignable to type '`foo${string}` | `bar${string}` | `baz${string}`'.
+templateLiteralTypes2.ts(23,11): error TS2322: Type 'string' is not assignable to type '`abc${string}`'.
+templateLiteralTypes2.ts(29,11): error TS2322: Type 'string' is not assignable to type '`foo${string}` | `bar${string}`'.
+templateLiteralTypes2.ts(32,11): error TS2322: Type 'string' is not assignable to type '`foo${string}` | `bar${string}` | `baz${string}`'.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypes2.ts (3 errors) ====
+==== templateLiteralTypes2.ts (3 errors) ====
     function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
         const c1 = `abc${s}`;
         const c2 = `abc${n}`;

@@ -1,3 +1,4 @@
+// === Auto Imports ===
 ```ts
 // @Filename: /main.ts
 import { Component } from "./Component.tsx";

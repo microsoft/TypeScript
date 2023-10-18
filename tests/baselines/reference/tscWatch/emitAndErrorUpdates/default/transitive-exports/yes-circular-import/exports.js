@@ -101,15 +101,13 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/app.ts: *new*
-  {}
-/user/username/projects/myproject/lib2/public.ts: *new*
-  {}
-/user/username/projects/myproject/lib2/data.ts: *new*
   {}
 /user/username/projects/myproject/lib1/public.ts: *new*
   {}
@@ -117,9 +115,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts: *new*
   {}
+/user/username/projects/myproject/lib2/data.ts: *new*
+  {}
 /user/username/projects/myproject/lib2/data2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/lib2/public.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -250,8 +252,7 @@ Output::
 >> Screen clear
 [[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
 
-[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ title: string; }' is not assignable to type 'ITest'.
-  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
+[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2561: [0mObject literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
 [7m [0m [91m            ~~~~~[0m
@@ -373,8 +374,7 @@ Output::
 >> Screen clear
 [[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
 
-[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ title: string; }' is not assignable to type 'ITest'.
-  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
+[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2561: [0mObject literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
 [7m [0m [91m            ~~~~~[0m

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/coAndContraVariantInferences3.ts ===
+//// [tests/cases/compiler/coAndContraVariantInferences3.ts] ////
+
+=== coAndContraVariantInferences3.ts ===
 interface DeprecationOptions {
     message?: string;
 >message : string | undefined

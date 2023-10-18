@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatWithOverloads.ts ===
+//// [tests/cases/compiler/assignmentCompatWithOverloads.ts] ////
+
+=== assignmentCompatWithOverloads.ts ===
 function f1(x: string): number { return null; }
 >f1 : (x: string) => number
 >x : string

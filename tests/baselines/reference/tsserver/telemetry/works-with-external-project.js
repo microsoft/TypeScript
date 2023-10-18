@@ -25,8 +25,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /hunter2/foo.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /hunter2/node_modules/@types 1 undefined Project: /hunter2/foo.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /hunter2/node_modules/@types 1 undefined Project: /hunter2/foo.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -38,7 +36,44 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"ef055f5036459f2705212d5657970dd7bc0280bdb6fa2cddd17d0cd73eb2a989","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":0,"tsx":0,"tsxSize":0,"dts":0,"dtsSize":0,"deferred":0,"deferredSize":0},"compilerOptions":{"strict":true},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"compileOnSave":true,"configFileName":"other","projectType":"external","languageServiceEnabled":true,"version":"FakeVersion"}}}
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "ef055f5036459f2705212d5657970dd7bc0280bdb6fa2cddd17d0cd73eb2a989",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 0,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "strict": true
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "compileOnSave": true,
+          "configFileName": "other",
+          "projectType": "external",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -48,8 +83,6 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-/hunter2/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -84,8 +117,6 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/hunter2/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches *deleted*::
 /a.ts:
@@ -117,8 +148,6 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/hunter2/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /a.ts: *new*
@@ -145,8 +174,6 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /hunter2/node_modules/@types 1 undefined Project: /hunter2/foo.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /hunter2/node_modules/@types 1 undefined Project: /hunter2/foo.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -157,8 +184,6 @@ After request
 
 PolledWatches *deleted*::
 /a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/hunter2/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -188,8 +213,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /hunter2/foo.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /hunter2/node_modules/@types 1 undefined Project: /hunter2/foo.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /hunter2/node_modules/@types 1 undefined Project: /hunter2/foo.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -209,8 +232,6 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-/hunter2/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -244,8 +265,6 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/hunter2/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches *deleted*::

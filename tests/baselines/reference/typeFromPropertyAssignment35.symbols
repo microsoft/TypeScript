@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug26877.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment35.ts] ////
+
+=== bug26877.js ===
 /** @param {Emu.D} x */
 function ollKorrect(x) {
 >ollKorrect : Symbol(ollKorrect, Decl(bug26877.js, 0, 0))
@@ -36,7 +38,7 @@ Emu.D = class {
     }
 }
 
-=== tests/cases/conformance/salsa/second.js ===
+=== second.js ===
 var Emu = {}
 >Emu : Symbol(Emu, Decl(bug26877.js, 5, 1), Decl(second.js, 0, 3), Decl(second.js, 0, 12))
 

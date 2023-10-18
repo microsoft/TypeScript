@@ -1,13 +1,10 @@
-import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
+import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
     openFilesForSession,
@@ -15,13 +12,18 @@ import {
     TestSession,
     toExternalFile,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: Open-file", () => {
     it("can be reloaded with empty content", () => {
         const f = {
             path: "/a/b/app.ts",
-            content: "let x = 1"
+            content: "let x = 1",
         };
         const projectFileName = "externalProject";
         const host = createServerHost([f]);
@@ -46,22 +48,22 @@ describe("unittests:: tsserver:: Open-file", () => {
         it(subScenario, () => {
             const file1: File = {
                 path: "/a/b/src/app.ts",
-                content: "let x = 10;"
+                content: "let x = 10;",
             };
             const file2: File = {
                 path: "/a/B/lib/module2.ts",
-                content: "let z = 10;"
+                content: "let z = 10;",
             };
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
-                content: ""
+                content: "",
             };
             const configFile2: File = {
                 path: "/a/tsconfig.json",
-                content: ""
+                content: "",
             };
             const host = createServerHost([file1, file2, configFile, configFile2], {
-                useCaseSensitiveFileNames
+                useCaseSensitiveFileNames,
             });
             const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
 
@@ -90,11 +92,11 @@ describe("unittests:: tsserver:: Open-file", () => {
         const projectFolder = "/user/someuser/projects/myproject";
         const aFile: File = {
             path: `${projectFolder}/src/a.ts`,
-            content: "export const x = 0;"
+            content: "export const x = 0;",
         };
         const configFile: File = {
             path: `${projectFolder}/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const files = [aFile, configFile, libFile];
         const host = createServerHost(files);
@@ -103,7 +105,7 @@ describe("unittests:: tsserver:: Open-file", () => {
 
         const bFile: File = {
             path: `${projectFolder}/src/b.ts`,
-            content: `export {}; declare module "./a" {  export const y: number; }`
+            content: `export {}; declare module "./a" {  export const y: number; }`,
         };
         host.writeFile(bFile.path, bFile.content);
         service.openClientFile(bFile.path, /*fileContent*/ undefined, ts.ScriptKind.TS, projectFolder);
@@ -114,11 +116,11 @@ describe("unittests:: tsserver:: Open-file", () => {
         const projectFolder = "/user/someuser/projects/myproject";
         const aFile: File = {
             path: `${projectFolder}/src/a.ts`,
-            content: "export const x = 0;"
+            content: "export const x = 0;",
         };
         const configFile: File = {
             path: `${projectFolder}/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const files = [aFile, configFile, libFile];
         const host = createServerHost(files);
@@ -148,7 +150,7 @@ function bar() {
     return z;
 }
 foo();
-bar();`
+bar();`,
         };
         const host = createServerHost([file, libFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
@@ -165,10 +167,10 @@ bar();`
                     fileName: file.path,
                     textChanges: [{
                         newText: "             ",
-                        ...locationOfTsIgnore
-                    }]
-                }]
-            }
+                        ...locationOfTsIgnore,
+                    }],
+                }],
+            },
         });
         verifyGetErrRequest({ session, files: [file] });
         // Revert the change and no errors should be reported
@@ -179,10 +181,10 @@ bar();`
                     fileName: file.path,
                     textChanges: [{
                         newText: tsIgnoreComment,
-                        ...locationOfTsIgnore
-                    }]
-                }]
-            }
+                        ...locationOfTsIgnore,
+                    }],
+                }],
+            },
         });
         verifyGetErrRequest({ session, files: [file] });
         baselineTsserverLogs("openfile", "when file makes edits to add/remove comment directives, they are handled correcrly", session);
@@ -208,10 +210,10 @@ bar();`
                         fileName,
                         changes: [{
                             span: { start: 0, length: 0 },
-                            newText: "export const y = 10;"
-                        }]
-                    }]
-                }
+                            newText: "export const y = 10;",
+                        }],
+                    }],
+                },
             });
         }
 

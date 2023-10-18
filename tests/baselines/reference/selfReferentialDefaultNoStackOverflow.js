@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/selfReferentialDefaultNoStackOverflow.ts] ////
+
 //// [QSpinner.js]
 import DefaultSpinner from './QSpinner'
 

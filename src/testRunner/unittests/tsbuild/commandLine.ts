@@ -1,13 +1,17 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    appendText,
     compilerOptionsToConfigJson,
-    loadProjectFromFiles,
+} from "../helpers/contents";
+import {
     noChangeRun,
-    replaceText,
     TestTscEdit,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
+import {
+    appendText,
+    loadProjectFromFiles,
+    replaceText,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: commandLine::", () => {
     describe("different options::", () => {
@@ -15,7 +19,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             return {
                 caption,
                 edit: ts.noop,
-                commandLineArgs: ["--b", "/src/project", "--verbose", ...options]
+                commandLineArgs: ["--b", "/src/project", "--verbose", ...options],
             };
         }
         function noChangeWithSubscenario(caption: string): TestTscEdit {
@@ -25,9 +29,9 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             return {
                 ...withOptionChange(caption, option),
                 discrepancyExplanation: () => [
-                    `Clean build tsbuildinfo will have compilerOptions with composite and ${option.replace(/\-/g, "")}`,
+                    `Clean build tsbuildinfo will have compilerOptions with composite and ${option.replace(/-/g, "")}`,
                     `Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only`,
-                ]
+                ],
             };
         }
         function withEmitDeclarationOnlyChangeAndDiscrepancyExplanation(caption: string): TestTscEdit {
@@ -36,7 +40,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             edit.discrepancyExplanation = () => [
                 ...discrepancyExplanation(),
                 `Clean build info does not have js section because its fresh build`,
-                `Incremental build info has js section from old build`
+                `Incremental build info has js section from old build`,
             ];
             return edit;
         }
@@ -206,7 +210,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                         discrepancyExplanation: () => [
                             `Clean build tsbuildinfo for both projects will have compilerOptions with composite and emitDeclarationOnly`,
                             `Incremental build will detect that it doesnt need to rebuild so tsbuild info for projects is from before which has option composite only`,
-                        ]
+                        ],
                     },
                     {
                         caption: "js emit with change without emitDeclarationOnly",
@@ -255,7 +259,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                         discrepancyExplanation: () => [
                             `Clean build tsbuildinfo for both projects will have compilerOptions with composite and emitDeclarationOnly`,
                             `Incremental build will detect that it doesnt need to rebuild so tsbuild info for projects is from before which has option composite as true but emitDeclrationOnly as false`,
-                        ]
+                        ],
                     },
                     {
                         caption: "no change run with js emit",

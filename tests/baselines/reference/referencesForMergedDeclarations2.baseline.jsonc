@@ -1,8 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations2.ts ===
-// module ATest {
-//     export interface Bar { }
-// }
+// --- (line: 3) skipped ---
 // 
 // function ATest() { }
 // 
@@ -13,9 +11,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations2.ts ===
-  // module ATest {
-  //     export interface Bar { }
-  // }
+  // --- (line: 3) skipped ---
   // 
   // function ATest() { }
   // 
@@ -152,9 +148,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations2.ts ===
-// module ATest {
-//     export interface Bar { }
-// }
+// --- (line: 3) skipped ---
 // 
 // function ATest() { }
 // 
@@ -165,9 +159,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations2.ts ===
-  // module ATest {
-  //     export interface Bar { }
-  // }
+  // --- (line: 3) skipped ---
   // 
   // function ATest() { }
   // 
@@ -304,9 +296,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations2.ts ===
-// module ATest {
-//     export interface Bar { }
-// }
+// --- (line: 3) skipped ---
 // 
 // function ATest() { }
 // 
@@ -317,9 +307,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations2.ts ===
-  // module ATest {
-  //     export interface Bar { }
-  // }
+  // --- (line: 3) skipped ---
   // 
   // function ATest() { }
   // 
@@ -456,9 +444,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations2.ts ===
-// module ATest {
-//     export interface Bar { }
-// }
+// --- (line: 3) skipped ---
 // 
 // function ATest() { }
 // 
@@ -469,9 +455,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForMergedDeclarations2.ts ===
-  // module ATest {
-  //     export interface Bar { }
-  // }
+  // --- (line: 3) skipped ---
   // 
   // function ATest() { }
   // 

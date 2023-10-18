@@ -73,8 +73,6 @@ Info seq  [hh:mm:ss:mss] Search path: /a
 Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -90,13 +88,11 @@ TI:: Creating typing installer
 PolledWatches::
 /a/lib/lib.es6.d.ts: *new*
   {"pollingInterval":500}
-/a/node_modules/@types: *new*
-  {"pollingInterval":500}
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
@@ -112,23 +108,76 @@ TI:: typing installer creation complete
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/file1.ts"],"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/file1.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/bower_components 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules 1 undefined Project: /dev/null/inferredProject1* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/bower_components",
+        "/a/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/a/bower_components",
+        "/a/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -144,11 +193,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/bower_components: *new*
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/node_modules: *new*
   {"pollingInterval":500}
@@ -183,16 +230,68 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/file1.ts","/A/file2.ts"],"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/file1.ts",
+        "/A/file2.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/bower_components",
+        "/a/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -227,8 +326,6 @@ Info seq  [hh:mm:ss:mss] Search path: /b
 Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -239,22 +336,75 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject2*","fileNames":["/b/file2.ts"],"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/b","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject2*",
+      "fileNames": [
+        "/b/file2.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/b",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/b/bower_components","/b/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/b/bower_components","/b/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject2* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject2* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject2* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject2* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/b/bower_components",
+        "/b/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject2*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject2*",
+      "files": [
+        "/b/bower_components",
+        "/b/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject2*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -278,17 +428,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
   {"pollingInterval":500}
-/b/node_modules/@types: *new*
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components: *new*
   {"pollingInterval":500}
@@ -322,22 +468,75 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject3*","fileNames":["/c/file3.ts"],"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject3*",
+      "fileNames": [
+        "/c/file3.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject3* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject3* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject3* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject3* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject3*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject3*",
+      "files": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject3* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject3* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject3*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -367,17 +566,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
-/b/node_modules/@types:
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -426,17 +621,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
-/b/node_modules/@types:
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -462,8 +653,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 8,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -489,15 +678,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
-/b/node_modules/@types:
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -508,14 +695,10 @@ PolledWatches::
 /node_modules:
   {"pollingInterval":500}
 
-PolledWatches *deleted*::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts: *new*
+  {}
+/a/file1.ts:
   {}
 
 Before request
@@ -529,8 +712,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 9,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -554,13 +735,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -571,14 +752,10 @@ PolledWatches::
 /node_modules:
   {"pollingInterval":500}
 
-PolledWatches *deleted*::
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -615,13 +792,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -633,9 +810,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -660,8 +837,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/file1.ts 500 undefi
 Info seq  [hh:mm:ss:mss] Search path: /a
 Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -672,16 +847,67 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/file1.ts"],"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/file1.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/bower_components",
+        "/a/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
@@ -693,6 +919,18 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject3*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject3*",
+      "files": []
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject3* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject3* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject3*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject3* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
@@ -704,6 +942,18 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject2*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject2*",
+      "files": []
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject2*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
@@ -722,11 +972,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
 /a/node_modules:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -736,17 +990,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -771,8 +1019,6 @@ Info seq  [hh:mm:ss:mss] Search path: /A
 Info seq  [hh:mm:ss:mss] For info: /A/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject4*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject4* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject4* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject4* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject4* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject4*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -783,22 +1029,75 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject4*","fileNames":["/A/file2.ts"],"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/A","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject4*",
+      "fileNames": [
+        "/A/file2.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/A",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/A/bower_components","/A/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/A/bower_components","/A/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject4* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject4* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject4* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject4* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/A/bower_components",
+        "/A/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject4*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject4*",
+      "files": [
+        "/A/bower_components",
+        "/A/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject4* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject4* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject4* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject4* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject4*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -820,29 +1119,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts: *new*
-  {"pollingInterval":500}
-/A/node_modules/@types: *new*
-  {"pollingInterval":500}
 /A/bower_components: *new*
   {"pollingInterval":500}
 /A/node_modules: *new*
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts: *new*
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 
 Before request
@@ -863,8 +1150,6 @@ Info seq  [hh:mm:ss:mss] Search path: /b
 Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject5*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject5* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject5* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject5* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject5* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject5*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -875,22 +1160,75 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject5*","fileNames":["/b/file2.ts"],"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/b","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject5*",
+      "fileNames": [
+        "/b/file2.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/b",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/b/bower_components","/b/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/b/bower_components","/b/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject5* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject5* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject5* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject5* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/b/bower_components",
+        "/b/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject5*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject5*",
+      "files": [
+        "/b/bower_components",
+        "/b/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject5* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject5* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject5* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject5* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject5*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -918,31 +1256,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/A/node_modules/@types:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
-/b/node_modules/@types: *new*
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
+  {"pollingInterval":500}
+/b/bower_components: *new*
+  {"pollingInterval":500}
+/b/node_modules: *new*
   {"pollingInterval":500}
 
 Before request
@@ -972,22 +1300,75 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject6*","fileNames":["/c/file3.ts"],"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject6*",
+      "fileNames": [
+        "/c/file3.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject6* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject6* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject6* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject6* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject6*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject6*",
+      "files": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject6* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject6* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject6* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject6* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject6*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1020,6 +1401,28 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
+  {"pollingInterval":500}
+/b/bower_components:
+  {"pollingInterval":500}
+/b/node_modules:
+  {"pollingInterval":500}
+/bower_components: *new*
+  {"pollingInterval":500}
+/node_modules: *new*
+  {"pollingInterval":500}
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1031,8 +1434,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 15,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1064,9 +1465,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
   {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -1077,20 +1484,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/A/node_modules/@types:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1108,8 +1501,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 16,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject4* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject4* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1139,9 +1530,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
   {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -1153,23 +1550,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/A/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts: *new*
+  {}
+/a/file1.ts:
   {}
 
 Before request
@@ -1183,8 +1568,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 17,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject5* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject5* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1212,9 +1595,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
   {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -1226,21 +1615,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/b/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -1281,9 +1660,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
   {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -1295,17 +1680,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -1355,15 +1734,67 @@ Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 4 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/file1.ts"],"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"projectRootPath":"/a","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/file1.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/bower_components",
+        "/a/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
@@ -1375,6 +1806,18 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject6*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject6*",
+      "files": []
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject6* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject6* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject6* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject6* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject6*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject6* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject4*' (Inferred)
@@ -1386,6 +1829,18 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject4*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject4*",
+      "files": []
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject4* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject4* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject4* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject4* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject4*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject4* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject5*' (Inferred)
@@ -1397,6 +1852,18 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject5*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject5*",
+      "files": []
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject5* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject5* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject5* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject5* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject5*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject5* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
@@ -1415,11 +1882,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
 /a/node_modules:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -1429,19 +1904,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -1465,8 +1932,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Search path: /A
 Info seq  [hh:mm:ss:mss] For info: /A/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -1480,16 +1945,68 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/file1.ts","/A/file2.ts"],"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/file1.ts",
+        "/A/file2.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/bower_components",
+        "/a/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -1505,28 +2022,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
-
-PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 Before request
 
@@ -1546,8 +2041,6 @@ Info seq  [hh:mm:ss:mss] Search path: /b
 Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject7*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject7* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject7* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject7* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject7* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject7*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1558,22 +2051,75 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject7*","fileNames":["/b/file2.ts"],"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/b","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject7*",
+      "fileNames": [
+        "/b/file2.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/b",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/b/bower_components","/b/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/b/bower_components","/b/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject7* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject7* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject7* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject7* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/b/bower_components",
+        "/b/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject7*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject7*",
+      "files": [
+        "/b/bower_components",
+        "/b/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject7* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject7* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject7* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject7* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject7*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -1597,29 +2143,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/node_modules/@types:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
   {"pollingInterval":500}
-/b/node_modules/@types: *new*
+/a/node_modules:
+  {"pollingInterval":500}
+/b/bower_components: *new*
+  {"pollingInterval":500}
+/b/node_modules: *new*
   {"pollingInterval":500}
 
 Before request
@@ -1649,22 +2183,75 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject8*","fileNames":["/c/file3.ts"],"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject8*",
+      "fileNames": [
+        "/c/file3.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject8* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject8* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject8* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject8* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject8*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject8*",
+      "files": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject8* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject8* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject8* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject8* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject8*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject8*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1692,6 +2279,24 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+PolledWatches::
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
+  {"pollingInterval":500}
+/b/bower_components:
+  {"pollingInterval":500}
+/b/node_modules:
+  {"pollingInterval":500}
+/bower_components: *new*
+  {"pollingInterval":500}
+/node_modules: *new*
+  {"pollingInterval":500}
 
 Before request
 
@@ -1731,9 +2336,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/a/bower_components:
+  {"pollingInterval":500}
 /a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
-/a/bower_components:
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -1744,16 +2351,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1771,8 +2368,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 25,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject8*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1798,9 +2393,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/a/bower_components:
+  {"pollingInterval":500}
 /a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
-/a/bower_components:
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -1812,23 +2409,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts: *new*
+  {}
+/a/file1.ts:
   {}
 
 Before request
@@ -1842,8 +2427,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 26,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject7* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject7* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject8*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1867,9 +2450,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/a/bower_components:
+  {"pollingInterval":500}
 /a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
-/a/bower_components:
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -1881,21 +2466,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/b/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -1932,9 +2507,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/a/bower_components:
+  {"pollingInterval":500}
 /a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
-/a/bower_components:
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -1946,17 +2523,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -1981,8 +2552,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/file1.ts 500 undefi
 Info seq  [hh:mm:ss:mss] Search path: /a
 Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1993,16 +2562,67 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/file1.ts"],"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/file1.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/bower_components","/a/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/bower_components",
+        "/a/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject8*' (Inferred)
@@ -2014,6 +2634,18 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject8*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject8*",
+      "files": []
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject8* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject8* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject8* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject8* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject8*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject8* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject7*' (Inferred)
@@ -2025,6 +2657,18 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject7*'
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject7*",
+      "files": []
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject7* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject7* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject7* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject7* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/dev/null/inferredProject7*' - done.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject7* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
@@ -2043,11 +2687,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
 /a/node_modules:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /b/bower_components:
   {"pollingInterval":500}
@@ -2057,21 +2705,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -2096,8 +2734,6 @@ Info seq  [hh:mm:ss:mss] Search path: /A
 Info seq  [hh:mm:ss:mss] For info: /A/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject9*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2017.full.d.ts 500 undefined Project: /dev/null/inferredProject9* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject9* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject9* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject9* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject9*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2108,22 +2744,75 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject9*","fileNames":["/A/file2.ts"],"compilerOptions":{"allowJs":true,"target":4,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/A","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject9*",
+      "fileNames": [
+        "/A/file2.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 4,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/A",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/A/bower_components","/A/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/A/bower_components","/A/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject9* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject9* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject9* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject9* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/A/bower_components",
+        "/A/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject9*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":4,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject9*",
+      "files": [
+        "/A/bower_components",
+        "/A/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject9* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/bower_components 1 undefined Project: /dev/null/inferredProject9* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject9* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /A/node_modules 1 undefined Project: /dev/null/inferredProject9* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject9*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 4,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2145,29 +2834,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/A/bower_components: *new*
+  {"pollingInterval":500}
+/A/node_modules: *new*
   {"pollingInterval":500}
 /a/bower_components:
   {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/node_modules/@types:
-  {"pollingInterval":500}
 /a/lib/lib.es2017.full.d.ts: *new*
   {"pollingInterval":500}
-/A/node_modules/@types: *new*
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
   {"pollingInterval":500}
 
 Before request
@@ -2188,8 +2865,6 @@ Info seq  [hh:mm:ss:mss] Search path: /b
 Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject10*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject10* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject10* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject10* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject10* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject10*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2200,22 +2875,75 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject10*","fileNames":["/b/file2.ts"],"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/b","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject10*",
+      "fileNames": [
+        "/b/file2.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/b",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/b/bower_components","/b/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/b/bower_components","/b/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject10* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject10* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject10* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject10* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/b/bower_components",
+        "/b/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject10*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject10*",
+      "files": [
+        "/b/bower_components",
+        "/b/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject10* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/bower_components 1 undefined Project: /dev/null/inferredProject10* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject10* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules 1 undefined Project: /dev/null/inferredProject10* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject10*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2243,33 +2971,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/a/bower_components:
-  {"pollingInterval":500}
-/a/node_modules:
-  {"pollingInterval":500}
-/b/bower_components:
-  {"pollingInterval":500}
-/b/node_modules:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
 /A/bower_components:
   {"pollingInterval":500}
 /A/node_modules:
   {"pollingInterval":500}
-/a/node_modules/@types:
+/a/bower_components:
   {"pollingInterval":500}
 /a/lib/lib.es2017.full.d.ts:
   {"pollingInterval":500}
-/A/node_modules/@types:
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 /a/lib/lib.esnext.full.d.ts: *new*
   {"pollingInterval":500}
-/b/node_modules/@types: *new*
+/a/node_modules:
+  {"pollingInterval":500}
+/b/bower_components: *new*
+  {"pollingInterval":500}
+/b/node_modules: *new*
   {"pollingInterval":500}
 
 Before request
@@ -2299,22 +3017,75 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject11*","fileNames":["/c/file3.ts"],"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject11*",
+      "fileNames": [
+        "/c/file3.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject11* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject11* watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject11* watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject11* watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject11*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"target":99,"allowNonTsExtensions":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject11*",
+      "files": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject11* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject11* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject11* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject11* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject11*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "target": 99,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject11*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2347,6 +3118,30 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
+  {"pollingInterval":500}
+/a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
+  {"pollingInterval":500}
+/b/bower_components:
+  {"pollingInterval":500}
+/b/node_modules:
+  {"pollingInterval":500}
+/bower_components: *new*
+  {"pollingInterval":500}
+/node_modules: *new*
+  {"pollingInterval":500}
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -2358,8 +3153,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 32,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject11*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2391,9 +3184,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
   {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -2404,22 +3205,6 @@ PolledWatches::
 /bower_components:
   {"pollingInterval":500}
 /node_modules:
-  {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
-/A/node_modules/@types:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/a/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -2437,8 +3222,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 33,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject9* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /A/node_modules/@types 1 undefined Project: /dev/null/inferredProject9* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /A/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject11*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2468,9 +3251,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
   {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -2482,25 +3273,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-/b/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/A/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts: *new*
+  {}
+/a/file1.ts:
   {}
 
 Before request
@@ -2514,8 +3291,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 34,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject10* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b/node_modules/@types 1 undefined Project: /dev/null/inferredProject10* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject11*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -2543,9 +3318,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
   {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -2557,23 +3340,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/b/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -2614,9 +3385,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
+/A/bower_components:
+  {"pollingInterval":500}
+/A/node_modules:
   {"pollingInterval":500}
 /a/bower_components:
+  {"pollingInterval":500}
+/a/lib/lib.es2017.full.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/lib/lib.esnext.full.d.ts:
   {"pollingInterval":500}
 /a/node_modules:
   {"pollingInterval":500}
@@ -2628,19 +3407,11 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules:
   {"pollingInterval":500}
-/A/bower_components:
-  {"pollingInterval":500}
-/A/node_modules:
-  {"pollingInterval":500}
-/a/lib/lib.es2017.full.d.ts:
-  {"pollingInterval":500}
-/a/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
-  {}
 /A/file2.ts:
+  {}
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}

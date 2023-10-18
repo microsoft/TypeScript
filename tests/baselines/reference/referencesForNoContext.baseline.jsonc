@@ -7,30 +7,13 @@
 // 
 //     //Increments
 //     modVar++;
-// 
-//     class testCls{
-//         
-//     }
-// 
-//     function testFn(){
-//         //Increments
-//         modVar++;
-//     }  
-// 
-//     module testMod {
-//     }
-// }
+// --- (line: 8) skipped ---
 
 
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForNoContext.ts ===
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-//     
-// 
-//     //Increments
+// --- (line: 6) skipped ---
 //     modVar++;
 // 
 //     class testCls{
@@ -38,30 +21,13 @@
 //     }
 // 
 //     function testFn(){
-//         //Increments
-//         modVar++;
-//     }  
-// 
-//     module testMod {
-//     }
-// }
+// --- (line: 14) skipped ---
 
 
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForNoContext.ts ===
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-//     
-// 
-//     //Increments
-//     modVar++;
-// 
-//     class testCls{
-//         
-//     }
-// 
+// --- (line: 12) skipped ---
 //     function testFn(){
 //         //Increments
 //         modVar++;
@@ -75,19 +41,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForNoContext.ts ===
-// module modTest {
-//     //Declare
-//     export var modVar:number;
-//     
-// 
-//     //Increments
-//     modVar++;
-// 
-//     class testCls{
-//         
-//     }
-// 
-//     function testFn(){
+// --- (line: 13) skipped ---
 //         //Increments
 //         modVar++;
 //     }  

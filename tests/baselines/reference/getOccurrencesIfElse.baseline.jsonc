@@ -4,12 +4,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -30,12 +27,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -56,12 +50,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -82,12 +73,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -108,12 +96,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -134,12 +119,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }
@@ -160,12 +142,9 @@
 //     if (false) {
 //     }
 //     else {
-//     }
-//     if (true) {
-//     }
-//     else {
-//         if (false)
-//             if (true)
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
 //                 var x = undefined;
 //     }
 // }

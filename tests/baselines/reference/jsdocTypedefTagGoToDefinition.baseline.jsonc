@@ -30,10 +30,7 @@
 
 // === goToDefinition ===
 // === /tests/cases/fourslash/server/jsdocCompletion_typedef.js ===
-// /**
-//  * @typedef {Object} Person
-//  * @property {string} personName
-//  * @property {number} personAge
+// --- (line: 4) skipped ---
 //  */
 // 
 // /**

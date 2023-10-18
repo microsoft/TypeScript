@@ -58,13 +58,13 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
   {}
 /b.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -96,10 +96,10 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
             if (result === null || typeof result !== "object") throw new TypeError("Object expected");
             if (_ = accept(result.get)) descriptor.get = _;
             if (_ = accept(result.set)) descriptor.set = _;
-            if (_ = accept(result.init)) initializers.push(_);
+            if (_ = accept(result.init)) initializers.unshift(_);
         }
         else if (_ = accept(result)) {
-            if (kind === "field") initializers.push(_);
+            if (kind === "field") initializers.unshift(_);
             else descriptor[key] = _;
         }
     }
@@ -118,7 +118,7 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 import './b';
-export let A = (() => {
+let A = (() => {
     let _classDecorators = [((_) => { })];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -128,12 +128,15 @@ export let A = (() => {
     };
     __setFunctionName(_classThis, "A");
     (() => {
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
         A = _classThis = _classDescriptor.value;
+        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis, _classExtraInitializers);
     })();
     return A = _classThis;
 })();
+export { A };
 
 
 

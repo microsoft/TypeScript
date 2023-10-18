@@ -1,15 +1,17 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: with metadataInResponse::", () => {
     const metadata = "Extra Info";
@@ -17,8 +19,8 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
     const tsconfig: File = {
         path: "/tsconfig.json",
         content: JSON.stringify({
-            compilerOptions: { plugins: [{ name: "myplugin" }] }
-        })
+            compilerOptions: { plugins: [{ name: "myplugin" }] },
+        }),
     };
     function createHostWithPlugin(files: readonly File[]) {
         const host = createServerHost(files);
@@ -36,9 +38,9 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
                             return result;
                         };
                         return proxy;
-                    }
+                    },
                 }),
-                error: undefined
+                error: undefined,
             };
         };
         return host;
@@ -48,7 +50,7 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
         const completionRequestArgs: ts.server.protocol.CompletionsRequestArgs = {
             file: aTs.path,
             line: 1,
-            offset: aTs.content.indexOf("this.") + 1 + "this.".length
+            offset: aTs.content.indexOf("this.") + 1 + "this.".length,
         };
 
         it("can pass through metadata when the command returns array", () => {
@@ -57,7 +59,7 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
             openFilesForSession([aTs], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.Completions,
-                arguments: completionRequestArgs
+                arguments: completionRequestArgs,
             });
             baselineTsserverLogs("metadataInResponse", "can pass through metadata when the command returns array", session);
         });
@@ -68,7 +70,7 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
             openFilesForSession([aTs], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.CompletionInfo,
-                arguments: completionRequestArgs
+                arguments: completionRequestArgs,
             });
             baselineTsserverLogs("metadataInResponse", "can pass through metadata when the command returns object", session);
         });
@@ -80,7 +82,7 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
             openFilesForSession([aTs], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.Completions,
-                arguments: { file: aTs.path, line: 1, offset: aTs.content.indexOf("x") + 1 }
+                arguments: { file: aTs.path, line: 1, offset: aTs.content.indexOf("x") + 1 },
             });
             baselineTsserverLogs("metadataInResponse", "returns undefined correctly", session);
         });

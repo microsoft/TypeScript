@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodParameter1.ts ===
+//// [tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodParameter1.ts] ////
+
+=== decoratorOnClassMethodParameter1.ts ===
 declare function dec(target: Object, propertyKey: string | symbol, parameterIndex: number): void;
 >dec : Symbol(dec, Decl(decoratorOnClassMethodParameter1.ts, 0, 0))
 >target : Symbol(target, Decl(decoratorOnClassMethodParameter1.ts, 0, 21))

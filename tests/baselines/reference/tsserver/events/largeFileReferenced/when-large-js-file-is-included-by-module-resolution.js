@@ -44,12 +44,23 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/large.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /user/username/projects/myproject/src/large.js for info /user/username/projects/myproject/src/large.js: fileSize: 4194305
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"largeFileReferenced","body":{"file":"/user/username/projects/myproject/src/large.js","fileSize":4194305,"maxFileSize":4194304}}
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "largeFileReferenced",
+      "body": {
+        "file": "/user/username/projects/myproject/src/large.js",
+        "fileSize": 4194305,
+        "maxFileSize": 4194304
+      }
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -80,25 +91,27 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/src/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/large: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/myproject/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/myproject/src: *new*
   {}
 /user/username/projects/myproject/src/large.js: *new*
-  {}
-/a/lib/lib.d.ts: *new*
   {}

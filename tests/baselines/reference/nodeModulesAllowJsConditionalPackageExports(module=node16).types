@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsConditionalPackageExports.ts] ////
+
+=== index.js ===
 // esm format file
 import * as cjs from "package/cjs";
 >cjs : typeof cjs
@@ -50,7 +52,7 @@ ts.mjsSource;
 >ts : typeof cjsi
 >mjsSource : true
 
-=== tests/cases/conformance/node/allowJs/index.mjs ===
+=== index.mjs ===
 // esm format file
 import * as cjs from "package/cjs";
 >cjs : typeof cjs
@@ -102,7 +104,7 @@ ts.mjsSource;
 >ts : typeof cjsi
 >mjsSource : true
 
-=== tests/cases/conformance/node/allowJs/index.cjs ===
+=== index.cjs ===
 // cjs format file
 import * as cjs from "package/cjs";
 >cjs : typeof cjs
@@ -154,7 +156,7 @@ ts.cjsSource;
 >ts : typeof cjsi
 >cjsSource : true
 
-=== tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts ===
+=== node_modules/inner/index.d.ts ===
 // cjs format file
 import * as cjs from "inner/a";
 >cjs : any
@@ -184,7 +186,7 @@ export const implicitCjsSource = true;
 >implicitCjsSource : true
 >true : true
 
-=== tests/cases/conformance/node/allowJs/node_modules/inner/index.d.mts ===
+=== node_modules/inner/index.d.mts ===
 // esm format file
 import * as cjs from "inner/a";
 >cjs : any
@@ -214,7 +216,7 @@ export const mjsSource = true;
 >mjsSource : true
 >true : true
 
-=== tests/cases/conformance/node/allowJs/node_modules/inner/index.d.cts ===
+=== node_modules/inner/index.d.cts ===
 // cjs format file
 import * as cjs from "inner/a";
 >cjs : typeof cjs

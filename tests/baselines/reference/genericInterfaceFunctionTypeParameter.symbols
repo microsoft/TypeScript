@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInterfaceFunctionTypeParameter.ts ===
+//// [tests/cases/compiler/genericInterfaceFunctionTypeParameter.ts] ////
+
+=== genericInterfaceFunctionTypeParameter.ts ===
 export interface IFoo<A> { }
 >IFoo : Symbol(IFoo, Decl(genericInterfaceFunctionTypeParameter.ts, 0, 0))
 >A : Symbol(A, Decl(genericInterfaceFunctionTypeParameter.ts, 0, 22))

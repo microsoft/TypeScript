@@ -20,17 +20,24 @@
 ////    </d/*14*/iv>
 ////);/*d*/
 
+// goTo.marker("a");
+
+const wordPattern =  "[a-zA-Z0-9:\\-\\._$]*";
 const linkedCursors1 = {
     ranges: [{ start: test.markerByName("0").position, length: 3 }, { start: test.markerByName("5").position, length: 3 }],
+    wordPattern, 
 };
 const linkedCursors2 = {
     ranges: [{ start: test.markerByName("9").position - 1, length: 3 }, { start: test.markerByName("14").position - 1, length: 3 }],
+    wordPattern,
 };
 const linkedCursors3 = {
     ranges: [{ start: test.markerByName("10").position - 1, length: 3 }, { start: test.markerByName("13").position - 1, length: 3 }],
+    wordPattern,
 };
 const linkedCursors4 = {
     ranges: [{ start: test.markerByName("11").position - 1, length: 1 }, { start: test.markerByName("12").position, length: 1 }],
+    wordPattern,
 };
 
 verify.linkedEditing( {

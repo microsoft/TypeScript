@@ -44,6 +44,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 0 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -77,17 +79,19 @@ export classc { method2() { return 10; } }
 
 
 PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/file2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
 /users/username/projects/project: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
@@ -142,17 +146,19 @@ Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.j
 After running Timeout callback:: count: 0
 
 PolledWatches::
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /users/username/projects/file2.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /users/username/projects/project/file2.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::

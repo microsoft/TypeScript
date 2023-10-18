@@ -1,14 +1,16 @@
 import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
+import {
+    baselineTsserverLogs,
+    createProjectService,
+} from "../helpers/tsserver";
+import {
     createServerHost,
     File,
     getTsBuildProjectFile,
     libFile,
-} from "../virtualFileSystemWithWatch";
-import {
-    baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createProjectService,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
     it("on sample project", () => {
@@ -34,10 +36,13 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
         host.runQueuedTimeoutCallbacks();
 
         // change in project reference config file
-        host.writeFile(logicConfig.path, JSON.stringify({
-            compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
-            references: [{ path: "../core" }]
-        }));
+        host.writeFile(
+            logicConfig.path,
+            JSON.stringify({
+                compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
+                references: [{ path: "../core" }],
+            }),
+        );
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("projectsWithReferences", "sample project", service);
     });
@@ -48,7 +53,7 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
                 path: `/user/username/projects/myproject/a/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { composite: true },
-                    files: ["index.ts"]
+                    files: ["index.ts"],
                 }),
             };
             const bConfig: File = {
@@ -56,7 +61,7 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
                 content: JSON.stringify({
                     compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                     files: ["index.ts"],
-                    references: [{ path: `../a` }]
+                    references: [{ path: `../a` }],
                 }),
             };
             const cConfig: File = {
@@ -64,7 +69,7 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
                 content: JSON.stringify({
                     compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                     files: ["index.ts"],
-                    references: [{ path: `../b` }]
+                    references: [{ path: `../b` }],
                 }),
             };
             const aTs: File = {
@@ -86,7 +91,7 @@ X;`,
             const refsTs: File = {
                 path: `/user/username/projects/myproject/refs/a.d.ts`,
                 content: `export class X {}
-export class A {}`
+export class A {}`,
             };
             const host = createServerHost([libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
             const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -107,7 +112,7 @@ export class A {}`
             const { host, service, cConfig, refsTs } = createService();
             const nRefsTs: File = {
                 path: `/user/username/projects/myproject/nrefs/a.d.ts`,
-                content: refsTs.content
+                content: refsTs.content,
             };
             const cTsConfigJson = JSON.parse(cConfig.content);
             host.ensureFileOrFolder(nRefsTs);
@@ -125,7 +130,7 @@ export class A {}`
             const { host, service, bConfig, refsTs } = createService();
             const nRefsTs: File = {
                 path: `/user/username/projects/myproject/nrefs/a.d.ts`,
-                content: refsTs.content
+                content: refsTs.content,
             };
             const bTsConfigJson = JSON.parse(bConfig.content);
             host.ensureFileOrFolder(nRefsTs);
@@ -172,14 +177,14 @@ export class A {}`
                 path: `/user/username/projects/myproject/b/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
-                    references: [{ path: `../a` }]
+                    references: [{ path: `../a` }],
                 }),
             };
             const cConfig: File = {
                 path: `/user/username/projects/myproject/c/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
-                    references: [{ path: `../b` }]
+                    references: [{ path: `../b` }],
                 }),
             };
             const aTs: File = {
@@ -201,7 +206,7 @@ X;`,
             const refsTs: File = {
                 path: `/user/username/projects/myproject/refs/a.d.ts`,
                 content: `export class X {}
-export class A {}`
+export class A {}`,
             };
             const host = createServerHost([libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
             const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -222,7 +227,7 @@ export class A {}`
             const { host, service, cConfig, refsTs } = createService();
             const nRefsTs: File = {
                 path: `/user/username/projects/myproject/nrefs/a.d.ts`,
-                content: refsTs.content
+                content: refsTs.content,
             };
             const cTsConfigJson = JSON.parse(cConfig.content);
             host.ensureFileOrFolder(nRefsTs);
@@ -240,7 +245,7 @@ export class A {}`
             const { host, service, bConfig, refsTs } = createService();
             const nRefsTs: File = {
                 path: `/user/username/projects/myproject/nrefs/a.d.ts`,
-                content: refsTs.content
+                content: refsTs.content,
             };
             const bTsConfigJson = JSON.parse(bConfig.content);
             host.ensureFileOrFolder(nRefsTs);

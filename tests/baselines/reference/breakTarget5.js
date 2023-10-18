@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/breakTarget5.ts] ////
+
 //// [breakTarget5.ts]
 target:
 while (true) {

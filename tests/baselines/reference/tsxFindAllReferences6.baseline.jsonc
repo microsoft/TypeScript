@@ -1,14 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
-//     propString: string
+// --- (line: 9) skipped ---
 //     optional?: boolean
 // }
 // declare function Opt(attributes: OptionPropBag): JSX.Element;
@@ -16,15 +8,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // declare module JSX {
-  //     interface Element { }
-  //     interface IntrinsicElements {
-  //     }
-  //     interface ElementAttributesProperty { props; }
-  // }
-  // interface OptionPropBag {
-  //     propx: number
-  //     propString: string
+  // --- (line: 9) skipped ---
   //     optional?: boolean
   // }
   // declare function Opt(attributes: OptionPropBag): JSX.Element;

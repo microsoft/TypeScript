@@ -1,9 +1,11 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/declarationEmitPrivateSymbolCausesVarDeclarationEmit2.ts] ////
+
+=== a.ts ===
 export const x = Symbol();
 >x : Symbol(x, Decl(a.ts, 0, 12))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import { x } from "./a";
 >x : Symbol(x, Decl(b.ts, 0, 8))
 
@@ -15,7 +17,7 @@ export class C {
 >x : Symbol(x, Decl(b.ts, 0, 8))
 }
 
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 import { x } from "./a";
 >x : Symbol(x, Decl(c.ts, 0, 8))
 

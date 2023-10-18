@@ -1,4 +1,6 @@
-=== tests/cases/compiler/namespaceDisambiguationInUnion.ts ===
+//// [tests/cases/compiler/namespaceDisambiguationInUnion.ts] ////
+
+=== namespaceDisambiguationInUnion.ts ===
 namespace Foo {
   export type Yep = { type: "foo.yep" };
 >Yep : { type: "foo.yep"; }

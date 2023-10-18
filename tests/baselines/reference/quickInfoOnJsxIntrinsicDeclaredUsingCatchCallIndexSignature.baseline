@@ -1,0 +1,75 @@
+// === QuickInfo ===
+=== /a.tsx ===
+// declare namespace JSX {
+//   interface IntrinsicElements { [elemName: string]: any; }
+// }
+// <div class="democlass" />;
+//  ^^^
+// | ----------------------------------------------------------------------
+// | (index) IntrinsicElements[string]: any
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/a.tsx",
+      "position": 86,
+      "name": ""
+    },
+    "item": {
+      "kind": "index",
+      "kindModifiers": "declare",
+      "textSpan": {
+        "start": 86,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "index",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "IntrinsicElements",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

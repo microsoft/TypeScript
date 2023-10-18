@@ -1,8 +1,8 @@
-tests/cases/compiler/throwWithoutNewLine2.ts(1,6): error TS1142: Line break not permitted here.
-tests/cases/compiler/throwWithoutNewLine2.ts(2,1): error TS2304: Cannot find name 'a'.
+throwWithoutNewLine2.ts(1,6): error TS1142: Line break not permitted here.
+throwWithoutNewLine2.ts(2,1): error TS2304: Cannot find name 'a'.
 
 
-==== tests/cases/compiler/throwWithoutNewLine2.ts (2 errors) ====
+==== throwWithoutNewLine2.ts (2 errors) ====
     throw
          
 !!! error TS1142: Line break not permitted here.

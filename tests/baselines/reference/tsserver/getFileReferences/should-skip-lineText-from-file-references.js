@@ -49,8 +49,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/c.ts 500 unde
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /project/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/@types 1 undefined Project: /project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/@types 1 undefined Project: /project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -90,17 +88,15 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/project/tsconfig.json: *new*
-  {}
 /project/b.ts: *new*
   {}
 /project/c.ts: *new*
   {}
 /project/d.ts: *new*
+  {}
+/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -139,15 +135,13 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/project/tsconfig.json:
-  {}
 /project/c.ts:
   {}
 /project/d.ts:
+  {}
+/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -192,13 +186,11 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/project/tsconfig.json:
-  {}
 /project/d.ts:
+  {}
+/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -245,8 +237,6 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /project/tsconfig.json:
@@ -274,7 +264,16 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"configure","request_seq":5,"success":true,"performanceData":{"updateGraphDurationMs":*}}
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 5,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false

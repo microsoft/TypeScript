@@ -33,7 +33,13 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
@@ -88,7 +94,15 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectLoadingStart","body":{"project":"/user/username/projects/a/tsconfig.json","reason":"Creating configured project in external project: /user/username/projects/a/project.csproj"}}
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::projectLoadingStart",
+      "body": {
+        "project": "/user/username/projects/a/tsconfig.json",
+        "reason": "Creating configured project in external project: /user/username/projects/a/project.csproj"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/a/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/a/a.ts"
@@ -104,6 +118,8 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/pro
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -118,13 +134,74 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectLoadingFinish","body":{"project":"/user/username/projects/a/tsconfig.json"}}
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::projectLoadingFinish",
+      "body": {
+        "project": "/user/username/projects/a/tsconfig.json"
+      }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectInfo","body":{"projectId":"20a91f8dffe761e39e0ada0a62a3058faad15d4a8c135539aaccd61bb5497dea","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":18,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::projectInfo",
+      "body": {
+        "projectId": "20a91f8dffe761e39e0ada0a62a3058faad15d4a8c135539aaccd61bb5497dea",
+        "fileStats": {
+          "js": 0,
+          "jsSize": 0,
+          "jsx": 0,
+          "jsxSize": 0,
+          "ts": 1,
+          "tsSize": 18,
+          "tsx": 0,
+          "tsxSize": 0,
+          "dts": 1,
+          "dtsSize": 334,
+          "deferred": 0,
+          "deferredSize": 0
+        },
+        "compilerOptions": {},
+        "typeAcquisition": {
+          "enable": false,
+          "include": false,
+          "exclude": false
+        },
+        "extends": false,
+        "files": false,
+        "include": false,
+        "exclude": false,
+        "compileOnSave": false,
+        "configFileName": "tsconfig.json",
+        "projectType": "configured",
+        "languageServiceEnabled": true,
+        "version": "FakeVersion"
+      }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::configFileDiag","body":{"configFileName":"/user/username/projects/a/tsconfig.json","diagnostics":[],"triggerFile":"/user/username/projects/a/tsconfig.json"}}
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::configFileDiag",
+      "body": {
+        "configFileName": "/user/username/projects/a/tsconfig.json",
+        "diagnostics": [],
+        "triggerFile": "/user/username/projects/a/tsconfig.json"
+      }
+    }
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"configure","request_seq":3,"success":true,"performanceData":{"updateGraphDurationMs":*}}
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
@@ -134,13 +211,15 @@ After request
 PolledWatches::
 /user/username/projects/a/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/a/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/a/a.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/a/tsconfig.json:
   {}
 
 FsWatchesRecursive::

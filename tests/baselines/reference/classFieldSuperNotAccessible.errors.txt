@@ -1,0 +1,17 @@
+classFieldSuperNotAccessible.ts(6,15): error TS2855: Class field 'field' defined by the parent class is not accessible in the child class via super.
+
+
+==== classFieldSuperNotAccessible.ts (1 errors) ====
+    class T {
+        field = () => {}
+    }
+    class T2 extends T {
+        f() {
+            super.field() // error
+                  ~~~~~
+!!! error TS2855: Class field 'field' defined by the parent class is not accessible in the child class via super.
+        }
+    }
+    
+    new T2().f()
+    

@@ -58,22 +58,14 @@ Shape signatures in builder refreshed for::
 /a/b/node_modules/module1.ts (used version)
 /a/b/file1.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/file1.ts: *new*
   {}
 /a/b/node_modules/module1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/b/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
-/a/b/node_modules: *new*
+/a/lib/lib.d.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -123,32 +115,18 @@ Shape signatures in builder refreshed for::
 /a/module1.ts (computed .d.ts)
 /a/b/file1.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500} *new*
-
-PolledWatches *deleted*::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/file1.ts:
+  {}
+/a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}
 /a/module1.ts: *new*
   {}
-/a/b: *new*
-  {}
 
 FsWatches *deleted*::
 /a/b/node_modules/module1.ts:
-  {}
-
-FsWatchesRecursive *deleted*::
-/a/b/node_modules:
   {}
 
 exitCode:: ExitStatus.undefined

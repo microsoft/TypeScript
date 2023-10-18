@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericAndNonGenericOverload1.ts ===
+//// [tests/cases/compiler/genericAndNonGenericOverload1.ts] ////
+
+=== genericAndNonGenericOverload1.ts ===
 interface callable2<T> {
 >callable2 : Symbol(callable2, Decl(genericAndNonGenericOverload1.ts, 0, 0))
 >T : Symbol(T, Decl(genericAndNonGenericOverload1.ts, 0, 20))

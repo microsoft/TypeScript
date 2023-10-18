@@ -37,8 +37,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file2.jsx 500 und
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules/@types 1 undefined Project: /a/app/test.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules/@types 1 undefined Project: /a/app/test.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/app/test.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -56,8 +54,6 @@ TI:: Creating typing installer
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-/a/app/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -108,7 +104,32 @@ TI:: typing installer creation complete
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/a/app/test.csproj","fileNames":["/a/b/file2.jsx","/a/b/file3.d.ts","/a/b/lodash.js"],"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"include":["lodash"],"exclude":[],"enable":true},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/a/app/test.csproj",
+      "fileNames": [
+        "/a/b/file2.jsx",
+        "/a/b/file3.d.ts",
+        "/a/b/lodash.js"
+      ],
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "include": [
+          "lodash"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/app",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
@@ -117,40 +138,62 @@ TI:: [hh:mm:ss:mss] Explicitly included types: ["lodash"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash"]
 TI:: [hh:mm:ss:mss] Inferred 'react' typings due to presence of '.jsx' extension
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["lodash","react"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["lodash","react"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules
-TI:: [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj watcher already invoked: false
-TI:: [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj watcher already invoked: false
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "lodash",
+        "react"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/a/app/test.csproj",
+      "files": [
+        "/a/b/bower_components",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["lodash","react"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::beginInstallTypes","eventId":1,"typingsInstallerVersion":"FakeVersion","projectName":"/a/app/test.csproj"}
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 1,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/a/app/test.csproj"
+    }
 TI:: [hh:mm:ss:mss] #1 with arguments'["@types/lodash@tsFakeMajor.Minor","@types/react@tsFakeMajor.Minor"]'.
 TI:: [hh:mm:ss:mss] #1 with arguments'["@types/lodash@tsFakeMajor.Minor","@types/react@tsFakeMajor.Minor"]':: true
 TI:: Before installWorker
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/app/bower_components: *new*
   {"pollingInterval":500}
-/a/app/node_modules/@types:
+/a/app/node_modules: *new*
   {"pollingInterval":500}
 /a/b/bower_components: *new*
   {"pollingInterval":500}
 /a/b/node_modules: *new*
   {"pollingInterval":500}
-/a/app/bower_components: *new*
-  {"pollingInterval":500}
-/a/app/node_modules: *new*
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -170,10 +213,41 @@ declare const react: { x: number }
 TI:: [hh:mm:ss:mss] Installed typings ["@types/lodash@tsFakeMajor.Minor","@types/react@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/react/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/a/app/test.csproj","typeAcquisition":{"include":["lodash"],"exclude":[],"enable":true},"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/react/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/a/app/test.csproj",
+      "typeAcquisition": {
+        "include": [
+          "lodash"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/react/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Scheduled: /a/app/test.csproj
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::endInstallTypes","eventId":1,"projectName":"/a/app/test.csproj","packagesToInstall":["@types/lodash@tsFakeMajor.Minor","@types/react@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 1,
+      "projectName": "/a/app/test.csproj",
+      "packagesToInstall": [
+        "@types/lodash@tsFakeMajor.Minor",
+        "@types/react@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }
 Before running Timeout callback:: count: 1
 1: /a/app/test.csproj
 
@@ -198,7 +272,34 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/a/app/test.csproj","fileNames":["/a/b/file2.jsx","/a/b/file3.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/react/index.d.ts","/a/b/lodash.js"],"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"include":["lodash"],"exclude":[],"enable":true},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/a/app/test.csproj",
+      "fileNames": [
+        "/a/b/file2.jsx",
+        "/a/b/file3.d.ts",
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/react/index.d.ts",
+        "/a/b/lodash.js"
+      ],
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "include": [
+          "lodash"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/app",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
@@ -206,9 +307,47 @@ TI:: [hh:mm:ss:mss] Explicitly included types: ["lodash"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash"]
 TI:: [hh:mm:ss:mss] Inferred 'react' typings due to presence of '.jsx' extension
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":["/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/react/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":["/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/react/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/react/index.d.ts"
+      ],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/a/app/test.csproj","typeAcquisition":{"include":["lodash"],"exclude":[],"enable":true},"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/react/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/a/app/test.csproj"
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/a/app/test.csproj",
+      "typeAcquisition": {
+        "include": [
+          "lodash"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/react/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 0

@@ -48,15 +48,15 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (used version)
 
 FsWatches::
-/users/username/projects/project/foo.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/bar.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/foo.ts: *new*
   {}
 
 FsWatchesRecursive::
-/users: *new*
+/users/username/projects: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -104,16 +104,10 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (computed .d.ts)
 
-PolledWatches::
-/node_modules: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/users/username/projects/project/foo.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
-/: *new*
+/users/username/projects/project/foo.ts:
   {}
 
 FsWatches *deleted*::
@@ -121,7 +115,7 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/users:
+/users/username/projects:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -166,24 +160,16 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/bar.d.ts (used version)
 /users/username/projects/project/foo.ts (computed .d.ts)
 
-PolledWatches *deleted*::
-/node_modules:
-  {"pollingInterval":500}
-
 FsWatches::
-/users/username/projects/project/foo.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
 /users/username/projects/project/bar.d.ts: *new*
   {}
-
-FsWatches *deleted*::
-/:
+/users/username/projects/project/foo.ts:
   {}
 
 FsWatchesRecursive::
-/users:
+/users/username/projects:
   {}
 
 exitCode:: ExitStatus.undefined

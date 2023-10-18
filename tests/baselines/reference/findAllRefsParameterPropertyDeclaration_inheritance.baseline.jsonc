@@ -177,10 +177,7 @@
 // 	}
 // }
 // class D extends C {
-// 	constructor(public x: string) {
-// 		super(x);
-// 	}
-// }
+// --- (line: 7) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts ===
@@ -190,10 +187,7 @@
   // 	}
   // }
   // class D extends C {
-  // 	constructor(public x: string) {
-  // 		super(x);
-  // 	}
-  // }
+  // --- (line: 7) skipped ---
 
   // === Details ===
   [
@@ -464,9 +458,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts ===
-// class C {
-// 	constructor(public x: string) {
-// 		x;
+// --- (line: 3) skipped ---
 // 	}
 // }
 // class D extends C {
@@ -477,9 +469,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts ===
-  // class C {
-  // 	constructor(public x: string) {
-  // 		x;
+  // --- (line: 3) skipped ---
   // 	}
   // }
   // class D extends C {
