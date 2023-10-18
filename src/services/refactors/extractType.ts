@@ -61,6 +61,7 @@ import {
     SymbolFlags,
     textChanges,
     TextRange,
+    toArray,
     TypeChecker,
     TypeElement,
     TypeNode,
@@ -307,7 +308,6 @@ function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeN
     }
 }
 
-
 function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: TypeAliasInfo) {
     const { enclosingNode, typeParameters } = info;
     const { firstTypeNode, lastTypeNode, newTypeNode } = getNodesToEdit(info);
@@ -339,17 +339,11 @@ function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile,
 }
 
 function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorContext, file: SourceFile, name: string, info: ExtractInfo) {
-    if (isArray(info.selection)) {
-        info.selection.forEach(typeNode => {
-            setEmitFlags(typeNode, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-        });
-    }
-    else {
-        setEmitFlags(info.selection, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-    }
+    toArray(info.selection).forEach(typeNode => {
+        setEmitFlags(typeNode, EmitFlags.NoComments | EmitFlags.NoNestedComments);
+    });
     const { enclosingNode, typeParameters } = info;
     const { firstTypeNode, lastTypeNode, newTypeNode } = getNodesToEdit(info);
-
 
     const node = factory.createJSDocTypedefTag(
         factory.createIdentifier("typedef"),
@@ -389,13 +383,13 @@ function getNodesToEdit(info: ExtractInfo) {
             firstTypeNode: info.selection[0],
             lastTypeNode: info.selection[info.selection.length - 1],
             newTypeNode: isUnionTypeNode(info.selection[0].parent) ? factory.createUnionTypeNode(info.selection) : factory.createIntersectionTypeNode(info.selection),
-        }
+        };
     }
     return {
         firstTypeNode: info.selection,
         lastTypeNode: info.selection,
-        newTypeNode: info.selection
-    }
+        newTypeNode: info.selection,
+    };
 }
 
 function getEnclosingNode(node: Node, isJS: boolean) {
