@@ -11,7 +11,9 @@ ts.Debug.loggingHost = {
 
 let v8: typeof import("v8") | undefined;
 try {
-    v8 = require("v8");
+    if (!process.versions.bun) {
+        v8 = require("v8");
+    }
 }
 catch {
     // do nothing
