@@ -79,7 +79,7 @@ async function main(cancellationToken: CancellationToken, msDelay: number) {
 
     const tsconfig = ts.readConfigFile(projectConfig, ts.sys.readFile);
     const parsed = ts.parseJsonConfigFileContent(tsconfig.config, ts.sys, "./");
-    const options = parsed.options;
+    const options = { ...parsed.options, isolatedDeclarations: true };
     if (parsedArgs.declarationDir) {
         options.declarationDir = parsedArgs.declarationDir;
     }
