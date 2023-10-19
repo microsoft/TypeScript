@@ -83,13 +83,13 @@ Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/proje
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/tsconfig.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingStart",
-     "body": {
-      "projectName": "/home/src/projects/project/packages/package-b/tsconfig.json",
-      "reason": "Creating possible configured project for /home/src/projects/project/packages/package-b/src/index.ts to open"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project/packages/package-b/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/packages/package-b/src/index.ts to open"
+      }
     }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/packages/package-b/tsconfig.json : {
  "rootNames": [
@@ -268,80 +268,80 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingFinish",
-     "body": {
-      "projectName": "/home/src/projects/project/packages/package-b/tsconfig.json"
-     }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "telemetry",
-     "body": {
-      "telemetryEventName": "projectInfo",
-      "payload": {
-       "projectId": "31d6ef54b3d69660fe2a0a8a081a9ece9327825701681ae8fea02692e5414063",
-       "fileStats": {
-        "js": 0,
-        "jsSize": 0,
-        "jsx": 0,
-        "jsxSize": 0,
-        "ts": 3,
-        "tsSize": 104,
-        "tsx": 0,
-        "tsxSize": 0,
-        "dts": 1,
-        "dtsSize": 413,
-        "deferred": 0,
-        "deferredSize": 0
-       },
-       "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "baseUrl": "",
-        "composite": true,
-        "declarationMap": true,
-        "esModuleInterop": true,
-        "lib": [
-         "es2021"
-        ],
-        "module": "esnext",
-        "moduleResolution": "bundler",
-        "outDir": "",
-        "rootDir": "",
-        "target": "es2021",
-        "traceResolution": true,
-        "tsBuildInfoFile": ""
-       },
-       "typeAcquisition": {
-        "enable": false,
-        "include": false,
-        "exclude": false
-       },
-       "extends": false,
-       "files": false,
-       "include": true,
-       "exclude": false,
-       "compileOnSave": false,
-       "configFileName": "tsconfig.json",
-       "projectType": "configured",
-       "languageServiceEnabled": true,
-       "version": "FakeVersion"
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/home/src/projects/project/packages/package-b/tsconfig.json"
       }
-     }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "configFileDiag",
-     "body": {
-      "triggerFile": "/home/src/projects/project/packages/package-b/src/index.ts",
-      "configFile": "/home/src/projects/project/packages/package-b/tsconfig.json",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "31d6ef54b3d69660fe2a0a8a081a9ece9327825701681ae8fea02692e5414063",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 3,
+            "tsSize": 104,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 413,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "allowSyntheticDefaultImports": true,
+            "baseUrl": "",
+            "composite": true,
+            "declarationMap": true,
+            "esModuleInterop": true,
+            "lib": [
+              "es2021"
+            ],
+            "module": "esnext",
+            "moduleResolution": "bundler",
+            "outDir": "",
+            "rootDir": "",
+            "target": "es2021",
+            "traceResolution": true,
+            "tsBuildInfoFile": ""
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": true,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/projects/project/packages/package-b/src/index.ts",
+        "configFile": "/home/src/projects/project/packages/package-b/tsconfig.json",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project/packages/package-b
 Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project/packages/package-b/tsconfig.json :: No config files found.
@@ -429,13 +429,13 @@ Before running Timeout callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/packages/package-b/src/index.ts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 0
 
@@ -444,13 +444,13 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/packages/package-b/src/index.ts",
+        "diagnostics": []
+      }
     }
 After running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -460,22 +460,22 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/packages/package-b/src/index.ts",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 2
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 2
+      }
     }
 After running Immedidate callback:: count: 0
 
@@ -599,13 +599,13 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/packages/package-b/src/index.ts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 0
 
@@ -668,27 +668,27 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 1,
-         "offset": 21
-        },
-        "end": {
-         "line": 1,
-         "offset": 33
-        },
-        "text": "Cannot find module 'package-aX' or its corresponding type declarations.",
-        "code": 2307,
-        "category": "error"
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/packages/package-b/src/index.ts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 21
+            },
+            "end": {
+              "line": 1,
+              "offset": 33
+            },
+            "text": "Cannot find module 'package-aX' or its corresponding type declarations.",
+            "code": 2307,
+            "category": "error"
+          }
+        ]
+      }
     }
 After running Immedidate callback:: count: 1
 4: suggestionCheck
@@ -698,22 +698,22 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/packages/package-b/src/index.ts",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 4
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 4
+      }
     }
 After running Immedidate callback:: count: 0
 
@@ -845,13 +845,13 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/packages/package-b/src/index.ts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 0
 
@@ -910,13 +910,13 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/packages/package-b/src/index.ts",
+        "diagnostics": []
+      }
     }
 After running Immedidate callback:: count: 1
 6: suggestionCheck
@@ -926,21 +926,21 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/packages/package-b/src/index.ts",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 6
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 6
+      }
     }
 After running Immedidate callback:: count: 0

@@ -136,7 +136,28 @@ TI:: typing installer creation complete
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/user/username/projects/project/tsconfig.json","fileNames":["/a/lib/lib.d.ts","/user/username/projects/project/app.js"],"compilerOptions":{"allowJs":true,"configFilePath":"/user/username/projects/project/tsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/user/username/projects/project","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/user/username/projects/project/tsconfig.json",
+      "fileNames": [
+        "/a/lib/lib.d.ts",
+        "/user/username/projects/project/app.js"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "configFilePath": "/user/username/projects/project/tsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/user/username/projects/project",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
@@ -144,10 +165,28 @@ TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/user/username/projects/project/bower_components","/user/username/projects/project/package.json","/user/username/projects/project/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/user/username/projects/project/bower_components","/user/username/projects/project/package.json","/user/username/projects/project/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "jquery"
+      ],
+      "filesToWatch": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/package.json",
+        "/user/username/projects/project/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/user/username/projects/project/tsconfig.json","files":["/user/username/projects/project/bower_components","/user/username/projects/project/package.json","/user/username/projects/project/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/user/username/projects/project/tsconfig.json",
+      "files": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/package.json",
+        "/user/username/projects/project/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location for typing installer
@@ -156,7 +195,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 TI:: [hh:mm:ss:mss] Installing typings ["jquery"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::beginInstallTypes","eventId":1,"typingsInstallerVersion":"FakeVersion","projectName":"/user/username/projects/project/tsconfig.json"}
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 1,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/user/username/projects/project/tsconfig.json"
+    }
 TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]'.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
@@ -205,11 +249,37 @@ declare const $: { x: number }
 TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/a/data/node_modules/@types/jquery/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/user/username/projects/project/tsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"configFilePath":"/user/username/projects/project/tsconfig.json","allowNonTsExtensions":true},"typings":["/a/data/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/user/username/projects/project/tsconfig.json",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "configFilePath": "/user/username/projects/project/tsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typings": [
+        "/a/data/node_modules/@types/jquery/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::endInstallTypes","eventId":1,"projectName":"/user/username/projects/project/tsconfig.json","packagesToInstall":["@types/jquery@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 1,
+      "projectName": "/user/username/projects/project/tsconfig.json",
+      "packagesToInstall": [
+        "@types/jquery@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }
 Before running Timeout callback:: count: 2
 1: /user/username/projects/project/tsconfig.json
 2: *ensureProjectForOpenFiles*
@@ -232,19 +302,71 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/user/username/projects/project/tsconfig.json","fileNames":["/a/lib/lib.d.ts","/user/username/projects/project/app.js","/a/data/node_modules/@types/jquery/index.d.ts"],"compilerOptions":{"allowJs":true,"configFilePath":"/user/username/projects/project/tsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/user/username/projects/project","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/user/username/projects/project/tsconfig.json",
+      "fileNames": [
+        "/a/lib/lib.d.ts",
+        "/user/username/projects/project/app.js",
+        "/a/data/node_modules/@types/jquery/index.d.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "configFilePath": "/user/username/projects/project/tsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/user/username/projects/project",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/user/username/projects/project/bower_components","/user/username/projects/project/package.json","/user/username/projects/project/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/user/username/projects/project/bower_components","/user/username/projects/project/package.json","/user/username/projects/project/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [
+        "/a/data/node_modules/@types/jquery/index.d.ts"
+      ],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/package.json",
+        "/user/username/projects/project/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/user/username/projects/project/tsconfig.json"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/user/username/projects/project/tsconfig.json"
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/user/username/projects/project/tsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"configFilePath":"/user/username/projects/project/tsconfig.json","allowNonTsExtensions":true},"typings":["/a/data/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/user/username/projects/project/tsconfig.json",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "configFilePath": "/user/username/projects/project/tsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typings": [
+        "/a/data/node_modules/@types/jquery/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
@@ -356,17 +478,56 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/user/username/projects/project2/tsconfig.json","fileNames":["/a/lib/lib.d.ts","/user/username/projects/project2/app.js"],"compilerOptions":{"allowJs":true,"configFilePath":"/user/username/projects/project2/tsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/user/username/projects/project2","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/user/username/projects/project2/tsconfig.json",
+      "fileNames": [
+        "/a/lib/lib.d.ts",
+        "/user/username/projects/project2/app.js"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "configFilePath": "/user/username/projects/project2/tsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/user/username/projects/project2",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project2/package.json' dependencies: ["commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["commander"],"filesToWatch":["/user/username/projects/project2/bower_components","/user/username/projects/project2/package.json","/user/username/projects/project2/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["commander"],"filesToWatch":["/user/username/projects/project2/bower_components","/user/username/projects/project2/package.json","/user/username/projects/project2/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "commander"
+      ],
+      "filesToWatch": [
+        "/user/username/projects/project2/bower_components",
+        "/user/username/projects/project2/package.json",
+        "/user/username/projects/project2/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/user/username/projects/project2/tsconfig.json","files":["/user/username/projects/project2/bower_components","/user/username/projects/project2/package.json","/user/username/projects/project2/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/user/username/projects/project2/tsconfig.json",
+      "files": [
+        "/user/username/projects/project2/bower_components",
+        "/user/username/projects/project2/package.json",
+        "/user/username/projects/project2/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/bower_components 1 undefined Project: /user/username/projects/project2/tsconfig.json WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project2/bower_components 1 undefined Project: /user/username/projects/project2/tsconfig.json WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project2/package.json 2000 undefined Project: /user/username/projects/project2/tsconfig.json WatchType: File location for typing installer
@@ -375,7 +536,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 TI:: [hh:mm:ss:mss] Installing typings ["commander"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::beginInstallTypes","eventId":2,"typingsInstallerVersion":"FakeVersion","projectName":"/user/username/projects/project2/tsconfig.json"}
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 2,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/user/username/projects/project2/tsconfig.json"
+    }
 TI:: [hh:mm:ss:mss] #2 with arguments'["@types/commander@tsFakeMajor.Minor"]'.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project2/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] `remove Project::
@@ -399,7 +565,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Config file
 TI:: [hh:mm:ss:mss] Closing file watchers for project '/user/username/projects/project/tsconfig.json'
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/user/username/projects/project/tsconfig.json","files":[]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/user/username/projects/project/tsconfig.json",
+      "files": []
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location for typing installer

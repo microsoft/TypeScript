@@ -1,6 +1,5 @@
 import {
     ArrowFunction,
-    AssertClause,
     Block,
     CallExpression,
     CancellationToken,
@@ -302,11 +301,10 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
         case SyntaxKind.NamedImports:
         case SyntaxKind.NamedExports:
         case SyntaxKind.ImportAttributes:
-        case SyntaxKind.AssertClause:
-            return spanForImportExportElements(n as NamedImports | NamedExports | AssertClause | ImportAttributes);
+            return spanForImportExportElements(n as NamedImports | NamedExports | ImportAttributes);
     }
 
-    function spanForImportExportElements(node: NamedImports | NamedExports | AssertClause | ImportAttributes) {
+    function spanForImportExportElements(node: NamedImports | NamedExports | ImportAttributes) {
         if (!node.elements.length) {
             return undefined;
         }

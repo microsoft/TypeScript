@@ -52,9 +52,18 @@ export class FourSlashRunner extends RunnerBase {
                     if (testIndex >= 0) fn = fn.substr(testIndex);
 
                     if (justName !== "fourslash.ts") {
-                        it(this.testSuiteName + " test " + justName + " runs correctly", () => {
-                            FourSlash.runFourSlashTest(this.basePath, this.testType, fn);
+                        let serverLogBaseliner: FourSlash.FourSlashServerLogBaseliner = {};
+                        after(() => {
+                            serverLogBaseliner = undefined!;
                         });
+                        it(this.testSuiteName + " test " + justName + " runs correctly", () => {
+                            FourSlash.runFourSlashTest(this.basePath, this.testType, fn, serverLogBaseliner);
+                        });
+                        if (this.testType === FourSlash.FourSlashTestType.Server) {
+                            it(this.testSuiteName + " test " + justName + " tsserver log", () => {
+                                serverLogBaseliner.baseline?.();
+                            });
+                        }
                     }
                 });
             });

@@ -11,7 +11,5 @@ const [r0Def, r0, r1Def, r1] = test.ranges();
 // Verify that it doesn't try to rename "default"
 goTo.rangeStart(r0);
 verify.renameInfoFailed();
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['0', '1'] },
-    { type: "findRenameLocations", markerOrRange: r1 }
-);
+verify.baselineFindAllReferences('0', '1');
+verify.baselineRename(r1);

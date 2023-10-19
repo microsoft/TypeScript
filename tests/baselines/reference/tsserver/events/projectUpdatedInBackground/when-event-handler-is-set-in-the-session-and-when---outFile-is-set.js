@@ -36,13 +36,13 @@ Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "CustomHandler::projectLoadingStart",
-     "body": {
-      "project": "/users/username/projects/project/tsconfig.json",
-      "reason": "Creating possible configured project for /users/username/projects/project/a.ts to open"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::projectLoadingStart",
+      "body": {
+        "project": "/users/username/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /users/username/projects/project/a.ts to open"
+      }
     }
 Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/tsconfig.json : {
  "rootNames": [
@@ -76,63 +76,63 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "CustomHandler::projectLoadingFinish",
-     "body": {
-      "project": "/users/username/projects/project/tsconfig.json"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::projectLoadingFinish",
+      "body": {
+        "project": "/users/username/projects/project/tsconfig.json"
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "CustomHandler::projectInfo",
-     "body": {
-      "projectId": "5b0be5fc7f7235edf5a31bffe614b4e0819e55ec5f118558864b1f882e283c0d",
-      "fileStats": {
-       "js": 0,
-       "jsSize": 0,
-       "jsx": 0,
-       "jsxSize": 0,
-       "ts": 1,
-       "tsSize": 16,
-       "tsx": 0,
-       "tsxSize": 0,
-       "dts": 1,
-       "dtsSize": 334,
-       "deferred": 0,
-       "deferredSize": 0
-      },
-      "compilerOptions": {
-       "outFile": ""
-      },
-      "typeAcquisition": {
-       "enable": false,
-       "include": false,
-       "exclude": false
-      },
-      "extends": false,
-      "files": false,
-      "include": false,
-      "exclude": false,
-      "compileOnSave": false,
-      "configFileName": "tsconfig.json",
-      "projectType": "configured",
-      "languageServiceEnabled": true,
-      "version": "FakeVersion"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::projectInfo",
+      "body": {
+        "projectId": "5b0be5fc7f7235edf5a31bffe614b4e0819e55ec5f118558864b1f882e283c0d",
+        "fileStats": {
+          "js": 0,
+          "jsSize": 0,
+          "jsx": 0,
+          "jsxSize": 0,
+          "ts": 1,
+          "tsSize": 16,
+          "tsx": 0,
+          "tsxSize": 0,
+          "dts": 1,
+          "dtsSize": 334,
+          "deferred": 0,
+          "deferredSize": 0
+        },
+        "compilerOptions": {
+          "outFile": ""
+        },
+        "typeAcquisition": {
+          "enable": false,
+          "include": false,
+          "exclude": false
+        },
+        "extends": false,
+        "files": false,
+        "include": false,
+        "exclude": false,
+        "compileOnSave": false,
+        "configFileName": "tsconfig.json",
+        "projectType": "configured",
+        "languageServiceEnabled": true,
+        "version": "FakeVersion"
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "CustomHandler::configFileDiag",
-     "body": {
-      "configFileName": "/users/username/projects/project/tsconfig.json",
-      "diagnostics": [],
-      "triggerFile": "/users/username/projects/project/a.ts"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::configFileDiag",
+      "body": {
+        "configFileName": "/users/username/projects/project/tsconfig.json",
+        "diagnostics": [],
+        "triggerFile": "/users/username/projects/project/a.ts"
+      }
     }
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -212,14 +212,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/a.ts Projec
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "CustomHandler::projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/users/username/projects/project/a.ts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/users/username/projects/project/a.ts"
+        ]
+      }
     }
 After running Timeout callback:: count: 0
 
@@ -281,13 +281,13 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/a.ts Projec
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "CustomHandler::projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/users/username/projects/project/a.ts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/users/username/projects/project/a.ts"
+        ]
+      }
     }
 After running Timeout callback:: count: 0

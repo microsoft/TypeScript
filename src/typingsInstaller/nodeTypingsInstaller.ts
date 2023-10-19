@@ -24,6 +24,7 @@ import {
     InstallTypingHost,
     nowString,
     PackageInstalledResponse,
+    stringifyIndented,
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
@@ -203,7 +204,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
 
     protected sendResponse(response: TypingInstallerResponseUnion) {
         if (this.log.isEnabled()) {
-            this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
+            this.log.writeLine(`Sending response:${stringifyIndented(response)}`);
         }
         process.send!(response); // TODO: GH#18217
         if (this.log.isEnabled()) {
