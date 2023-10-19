@@ -3274,7 +3274,7 @@ declare namespace ts {
         }
         interface PluginModule {
             create(createInfo: PluginCreateInfo): LanguageService;
-            getExternalFiles?(proj: Project): string[];
+            getExternalFiles?(proj: Project, updateLevel: ProgramUpdateLevel): string[];
             onConfigurationChanged?(config: any): void;
         }
         interface PluginModuleWithName {
@@ -3354,7 +3354,6 @@ declare namespace ts {
             readFile(fileName: string): string | undefined;
             writeFile(fileName: string, content: string): void;
             fileExists(file: string): boolean;
-            getModuleResolutionCache(): ModuleResolutionCache | undefined;
             directoryExists(path: string): boolean;
             getDirectories(path: string): string[];
             log(s: string): void;
@@ -3379,7 +3378,7 @@ declare namespace ts {
             disableLanguageService(lastFileExceededProgramSize?: string): void;
             getProjectName(): string;
             protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
-            getExternalFiles(): SortedReadonlyArray<string>;
+            getExternalFiles(updateLevel?: ProgramUpdateLevel): SortedReadonlyArray<string>;
             getSourceFile(path: Path): ts.SourceFile | undefined;
             close(): void;
             private detachScriptInfoIfNotRoot;
@@ -3451,7 +3450,6 @@ declare namespace ts {
             getLanguageService(): never;
             getHostForAutoImportProvider(): never;
             getProjectReferences(): readonly ts.ProjectReference[] | undefined;
-            getTypeAcquisition(): TypeAcquisition;
         }
         /**
          * If a file is opened, the server will look for a tsconfig (or jsconfig)
@@ -4976,7 +4974,7 @@ declare namespace ts {
         readonly right: Identifier;
     }
     type EntityName = Identifier | QualifiedName;
-    type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+    type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
     type MemberName = Identifier | PrivateIdentifier;
     type DeclarationName = PropertyName | JsxAttributeName | StringLiteralLike | ElementAccessExpression | BindingPattern | EntityNameExpression;
     interface Declaration extends Node {
@@ -9829,6 +9827,19 @@ declare namespace ts {
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
     function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
+    enum ProgramUpdateLevel {
+        /** Program is updated with same root file names and options */
+        Update = 0,
+        /** Loads program after updating root file names from the disk */
+        RootNamesAndUpdate = 1,
+        /**
+         * Loads program completely, including:
+         *  - re-reading contents of config file from disk
+         *  - calculating root file names for the program
+         *  - Updating the program
+         */
+        Full = 2,
+    }
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string | undefined;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;

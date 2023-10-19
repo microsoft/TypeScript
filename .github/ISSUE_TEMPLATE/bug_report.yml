@@ -26,21 +26,19 @@ body:
       description: |
         When did you start seeing this bug occur?
 
-        "Bugs" that have existed in TS for a long time are very likely to be FAQs; refer to
-        https://github.com/Microsoft/TypeScript/wiki/FAQ#common-bugs-that-arent-bugs
+        "Bugs" that have existed in TS for a long time are very likely to be FAQs; please refer to the [FAQ wiki page](https://github.com/Microsoft/TypeScript/wiki/FAQ#common-bugs-that-arent-bugs).
 
+        Please try the nightly version of TS to see if it's already been fixed. Install `typescript@next` or use the [Playground](http://www.typescriptlang.org/play/?ts=Nightly).
 
-        If possible, please try testing the nightly version of TS to see if it's already been fixed. For npm: `typescript@next`
+        If possible, try bisecting the issue using [every-ts](https://www.npmjs.com/package/every-ts#bisecting), which should narrow down the problem to a specific change.
 
-        This is also the 'Nightly' version in the playground: http://www.typescriptlang.org/play/?ts=Nightly
-
-
-        Note: The TypeScript Playground can be used to try older versions of TypeScript.
+        The Playground also supports versions of TypeScript back to TypeScript 3.3.
 
         Please keep and fill in the line that best applies.
       value: |
         - This is a crash
         - This changed between versions ______ and _______
+        - This changed in commit or PR _______
         - This is the behavior in every version I tried, and I reviewed the FAQ for entries about _________
         - I was unable to test this on prior versions because _______
     validations:

@@ -4022,7 +4022,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isSyntacticDefault(node: Node) {
-        return ((isExportAssignment(node) && !node.isExportEquals) || hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node));
+        return ((isExportAssignment(node) && !node.isExportEquals)
+            || hasSyntacticModifier(node, ModifierFlags.Default)
+            || isExportSpecifier(node)
+            || isNamespaceExport(node));
     }
 
     function getUsageModeForExpression(usage: Expression) {
@@ -7289,6 +7292,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const propertyName = getPropertyNameNodeForSymbol(propertySymbol, context);
             context.enclosingDeclaration = saveEnclosingDeclaration;
             context.approximateLength += symbolName(propertySymbol).length + 1;
+
+            if (propertySymbol.flags & SymbolFlags.Accessor) {
+                const writeType = getWriteTypeOfSymbol(propertySymbol);
+                if (propertyType !== writeType) {
+                    const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor)!;
+                    const getterSignature = getSignatureFromDeclaration(getterDeclaration);
+                    typeElements.push(
+                        setCommentRange(
+                            signatureToSignatureDeclarationHelper(getterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
+                            getterDeclaration,
+                        ),
+                    );
+                    const setterDeclaration = getDeclarationOfKind<SetAccessorDeclaration>(propertySymbol, SyntaxKind.SetAccessor)!;
+                    const setterSignature = getSignatureFromDeclaration(setterDeclaration);
+                    typeElements.push(
+                        setCommentRange(
+                            signatureToSignatureDeclarationHelper(setterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
+                            setterDeclaration,
+                        ),
+                    );
+                    return;
+                }
+            }
+
             const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
             if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length && !isReadonlySymbol(propertySymbol)) {
                 const signatures = getSignaturesOfType(filterType(propertyType, t => !(t.flags & TypeFlags.Undefined)), SignatureKind.Call);
@@ -7329,9 +7356,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             typeElements.push(preserveCommentsOn(propertySignature));
 
             function preserveCommentsOn<T extends Node>(node: T) {
-                if (some(propertySymbol.declarations, d => d.kind === SyntaxKind.JSDocPropertyTag)) {
-                    const d = propertySymbol.declarations?.find(d => d.kind === SyntaxKind.JSDocPropertyTag)! as JSDocPropertyTag;
-                    const commentText = getTextOfJSDocComment(d.comment);
+                const jsdocPropertyTag = propertySymbol.declarations?.find((d): d is JSDocPropertyTag => d.kind === SyntaxKind.JSDocPropertyTag);
+                if (jsdocPropertyTag) {
+                    const commentText = getTextOfJSDocComment(jsdocPropertyTag.comment);
                     if (commentText) {
                         setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]);
                     }
@@ -9795,7 +9822,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !(typeToSerialize.symbol && some(typeToSerialize.symbol.declarations, d => getSourceFileOfNode(d) !== ctxSrc)) &&
                     !some(getPropertiesOfType(typeToSerialize), p => isLateBoundName(p.escapedName)) &&
                     !some(getPropertiesOfType(typeToSerialize), p => some(p.declarations, d => getSourceFileOfNode(d) !== ctxSrc)) &&
-                    every(getPropertiesOfType(typeToSerialize), p => isIdentifierText(symbolName(p), languageVersion));
+                    every(getPropertiesOfType(typeToSerialize), p => {
+                        if (!isIdentifierText(symbolName(p), languageVersion)) {
+                            return false;
+                        }
+                        if (!(p.flags & SymbolFlags.Accessor)) {
+                            return true;
+                        }
+                        return getNonMissingTypeOfSymbol(p) === getWriteTypeOfSymbol(p);
+                    });
             }
 
             function makeSerializePropertySymbol<T extends Node>(
@@ -17727,7 +17762,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function getPropertyNameFromIndex(indexType: Type, accessNode: StringLiteral | Identifier | PrivateIdentifier | ObjectBindingPattern | ArrayBindingPattern | ComputedPropertyName | NumericLiteral | IndexedAccessTypeNode | ElementAccessExpression | SyntheticExpression | undefined) {
+    function getPropertyNameFromIndex(indexType: Type, accessNode: PropertyName | ObjectBindingPattern | ArrayBindingPattern | IndexedAccessTypeNode | ElementAccessExpression | SyntheticExpression | undefined) {
         return isTypeUsableAsPropertyName(indexType) ?
             getPropertyNameFromType(indexType) :
             accessNode && isPropertyName(accessNode) ?
@@ -17810,7 +17845,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (indexInfo) {
                 if (accessFlags & AccessFlags.NoIndexSignatures && indexInfo.keyType !== numberType) {
                     if (accessExpression) {
-                        error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
+                        if (accessFlags & AccessFlags.Writing) {
+                            error(accessExpression, Diagnostics.Type_0_is_generic_and_can_only_be_indexed_for_reading, typeToString(originalObjectType));
+                        }
+                        else {
+                            error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
+                        }
                     }
                     return undefined;
                 }
@@ -27411,7 +27451,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
-            const expr = flow.switchStatement.expression;
+            const expr = skipParentheses(flow.switchStatement.expression);
             const flowType = getTypeAtFlowNode(flow.antecedent);
             let type = getTypeFromFlowType(flowType);
             if (isMatchingReference(reference, expr)) {
@@ -27421,11 +27461,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 type = narrowTypeBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
             else if (expr.kind === SyntaxKind.TrueKeyword) {
-                const clause = flow.switchStatement.caseBlock.clauses.find((_, index) => index === flow.clauseStart);
-                const clauseExpression = clause && clause.kind === SyntaxKind.CaseClause ? clause.expression : undefined;
-                if (clauseExpression) {
-                    type = narrowType(type, clauseExpression, /*assumeTrue*/ true);
-                }
+                type = narrowTypeBySwitchOnTrue(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
             else {
                 if (strictNullChecks) {
@@ -28038,6 +28074,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In the non-default cause we create a union of the type narrowed by each of the listed cases.
             const clauseWitnesses = witnesses.slice(clauseStart, clauseEnd);
             return getUnionType(map(clauseWitnesses, text => text ? narrowTypeByTypeName(type, text) : neverType));
+        }
+
+        function narrowTypeBySwitchOnTrue(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
+            const defaultIndex = findIndex(switchStatement.caseBlock.clauses, clause => clause.kind === SyntaxKind.DefaultClause);
+            const hasDefaultClause = clauseStart === clauseEnd || (defaultIndex >= clauseStart && defaultIndex < clauseEnd);
+
+            // First, narrow away all of the cases that preceded this set of cases.
+            for (let i = 0; i < clauseStart; i++) {
+                const clause = switchStatement.caseBlock.clauses[i];
+                if (clause.kind === SyntaxKind.CaseClause) {
+                    type = narrowType(type, clause.expression, /*assumeTrue*/ false);
+                }
+            }
+
+            // If our current set has a default, then none the other cases were hit either.
+            // There's no point in narrowing by the the other cases in the set, since we can
+            // get here through other paths.
+            if (hasDefaultClause) {
+                for (let i = clauseEnd; i < switchStatement.caseBlock.clauses.length; i++) {
+                    const clause = switchStatement.caseBlock.clauses[i];
+                    if (clause.kind === SyntaxKind.CaseClause) {
+                        type = narrowType(type, clause.expression, /*assumeTrue*/ false);
+                    }
+                }
+                return type;
+            }
+
+            // Now, narrow based on the cases in this set.
+            const clauses = switchStatement.caseBlock.clauses.slice(clauseStart, clauseEnd);
+            return getUnionType(map(clauses, clause => clause.kind === SyntaxKind.CaseClause ? narrowType(type, clause.expression, /*assumeTrue*/ true) : neverType));
         }
 
         function isMatchingConstructorReference(expr: Expression) {
@@ -29462,8 +29528,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
             // contextual type for 'this' is 'obj'.
             const parent = walkUpParenthesizedExpressions(func.parent);
-            if (parent.kind === SyntaxKind.BinaryExpression && (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                const target = (parent as BinaryExpression).left;
+            if (isAssignmentExpression(parent)) {
+                const target = parent.left;
                 if (isAccessExpression(target)) {
                     const { expression } = target;
                     // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
@@ -31261,7 +31327,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Handle children attribute
         const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement : undefined;
         // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
-        if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
+        if (parent && parent.openingElement === openingLikeElement && getSemanticJsxChildren(parent.children).length > 0) {
             const childrenTypes: Type[] = checkJsxChildren(parent, checkMode);
 
             if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
@@ -33356,8 +33422,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (arg.kind === SyntaxKind.SyntheticExpression && (arg as SyntheticExpression).tupleNameSource) {
                 names.push((arg as SyntheticExpression).tupleNameSource!);
             }
+            else {
+                names.push(undefined);
+            }
         }
-        return createTupleType(types, flags, inConstContext && !someType(restType, isMutableArrayLikeType), length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, inConstContext && !someType(restType, isMutableArrayLikeType), names);
     }
 
     function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
@@ -35741,12 +35810,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 types.push(restType);
                 flags.push(ElementFlags.Variadic);
             }
-            const name = getNameableDeclarationAtPosition(source, i);
-            if (name) {
-                names.push(name);
-            }
+            names.push(getNameableDeclarationAtPosition(source, i));
         }
-        return createTupleType(types, flags, readonly, length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, readonly, names);
     }
 
     // Return the number of parameters in a signature. The rest parameter, if present, counts as one
@@ -36613,9 +36679,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let hasReturnWithNoExpression = functionHasImplicitReturn(func);
         let hasReturnOfTypeNever = false;
         forEachReturnStatement(func.body as Block, returnStatement => {
-            const expr = returnStatement.expression;
+            let expr = returnStatement.expression;
             if (expr) {
+                expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
                 // Bare calls to this same function don't contribute to inference
+                // and `return await` is also safe to unwrap here
+                if (functionFlags & FunctionFlags.Async && expr.kind === SyntaxKind.AwaitExpression) {
+                    expr = skipParentheses((expr as AwaitExpression).expression, /*excludeJSDocTypeAssertions*/ true);
+                }
                 if (
                     expr.kind === SyntaxKind.CallExpression &&
                     (expr as CallExpression).expression.kind === SyntaxKind.Identifier &&
@@ -37019,7 +37090,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkVoidExpression(node: VoidExpression): Type {
-        checkExpression(node.expression);
+        checkNodeDeferred(node);
         return undefinedWideningType;
     }
 
@@ -46132,6 +46203,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ParenthesizedExpression:
                 checkAssertionDeferred(node as AssertionExpression | JSDocTypeAssertion);
                 break;
+            case SyntaxKind.VoidExpression:
+                checkExpression((node as VoidExpression).expression);
+                break;
             case SyntaxKind.BinaryExpression:
                 if (isInstanceOfExpression(node)) {
                     resolveUntypedCall(node);
@@ -47869,6 +47943,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
             },
             isImportRequiredByAugmentation,
+            tryFindAmbientModule: moduleReferenceExpression => {
+                const node = getParseTreeNode(moduleReferenceExpression);
+                const moduleSpecifier = node && isStringLiteralLike(node) ? node.text : undefined;
+                return moduleSpecifier !== undefined ? tryFindAmbientModule(moduleSpecifier, /*withAugmentations*/ true) : undefined;
+            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {

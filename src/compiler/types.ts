@@ -1692,7 +1692,7 @@ export interface QualifiedName extends Node, FlowContainer {
 
 export type EntityName = Identifier | QualifiedName;
 
-export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+export type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
 
 export type MemberName = Identifier | PrivateIdentifier;
 
@@ -5675,6 +5675,7 @@ export interface EmitResolver {
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
+    tryFindAmbientModule(moduleReferenceExpression: Expression): Symbol | undefined;
 }
 
 // dprint-ignore

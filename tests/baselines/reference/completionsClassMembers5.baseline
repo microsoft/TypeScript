@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionsClassMembers5.ts ===
 // export const SOME_CONSTANT = 'SOME_TEXT';
 // export class Base {

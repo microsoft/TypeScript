@@ -1,3 +1,4 @@
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoForObjectBindingElementName06.ts ===
 // type Foo = {
 //     /**

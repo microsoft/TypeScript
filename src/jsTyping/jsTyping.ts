@@ -30,6 +30,9 @@ import {
     Version,
     versionMajorMinor,
 } from "./_namespaces/ts";
+import {
+    stringifyIndented,
+} from "./_namespaces/ts.server";
 
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
@@ -174,7 +177,7 @@ export function discoverTypings(
     }
 
     // A typing name to typing file path mapping
-    const inferredTypings = new Map<string, string>();
+    const inferredTypings = new Map<string, string | false>();
 
     // Only infer typings for .js and .jsx files
     fileNames = mapDefined(fileNames, fileName => {
@@ -211,24 +214,24 @@ export function discoverTypings(
         );
         addInferredTypings(module, "Inferred typings from unresolved imports");
     }
-    // Add the cached typing locations for inferred typings that are already installed
-    packageNameToTypingLocation.forEach((typing, name) => {
-        const registryEntry = typesRegistry.get(name);
-        if (inferredTypings.has(name) && inferredTypings.get(name) === undefined && registryEntry !== undefined && isTypingUpToDate(typing, registryEntry)) {
-            inferredTypings.set(name, typing.typingLocation);
-        }
-    });
-
     // Remove typings that the user has added to the exclude list
     for (const excludeTypingName of exclude) {
         const didDelete = inferredTypings.delete(excludeTypingName);
         if (didDelete && log) log(`Typing for ${excludeTypingName} is in exclude list, will be ignored.`);
     }
 
+    // Add the cached typing locations for inferred typings that are already installed
+    packageNameToTypingLocation.forEach((typing, name) => {
+        const registryEntry = typesRegistry.get(name);
+        if (inferredTypings.get(name) === false && registryEntry !== undefined && isTypingUpToDate(typing, registryEntry)) {
+            inferredTypings.set(name, typing.typingLocation);
+        }
+    });
+
     const newTypingNames: string[] = [];
     const cachedTypingPaths: string[] = [];
     inferredTypings.forEach((inferred, typing) => {
-        if (inferred !== undefined) {
+        if (inferred) {
             cachedTypingPaths.push(inferred);
         }
         else {
@@ -236,12 +239,12 @@ export function discoverTypings(
         }
     });
     const result = { cachedTypingPaths, newTypingNames, filesToWatch };
-    if (log) log(`Result: ${JSON.stringify(result)}`);
+    if (log) log(`Finished typings discovery:${stringifyIndented(result)}`);
     return result;
 
     function addInferredTyping(typingName: string) {
         if (!inferredTypings.has(typingName)) {
-            inferredTypings.set(typingName, undefined!); // TODO: GH#18217
+            inferredTypings.set(typingName, false);
         }
     }
     function addInferredTypings(typingNames: readonly string[], message: string) {

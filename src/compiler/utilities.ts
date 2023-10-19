@@ -3975,12 +3975,13 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.BindingElement:
             return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
         case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ExportDeclaration:
             return tryCast(node.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportEqualsDeclaration:
             return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
@@ -3992,6 +3993,8 @@ export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAcce
             return tryCast(node.parent.parent.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportSpecifier:
             return tryCast(node.parent.parent.parent.moduleSpecifier, isStringLiteralLike);
+        case SyntaxKind.ImportType:
+            return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
         default:
             Debug.assertNever(node);
     }
@@ -4331,7 +4334,7 @@ export function getNextJSDocCommentLocation(node: Node) {
         parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
         parent.kind === SyntaxKind.ReturnStatement ||
         getNestedModuleDeclaration(parent) ||
-        isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken
+        isAssignmentExpression(node)
     ) {
         return parent;
     }
@@ -4343,8 +4346,7 @@ export function getNextJSDocCommentLocation(node: Node) {
     // var x = function(name) { return name.length; }
     else if (
         parent.parent &&
-        (getSingleVariableOfVariableStatement(parent.parent) === node ||
-            isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken)
+        (getSingleVariableOfVariableStatement(parent.parent) === node || isAssignmentExpression(parent))
     ) {
         return parent.parent;
     }
@@ -5062,6 +5064,7 @@ export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttri
         case SyntaxKind.PrivateIdentifier:
             return name.escapedText;
         case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
         case SyntaxKind.NumericLiteral:
             return escapeLeadingUnderscores(name.text);
         case SyntaxKind.ComputedPropertyName:

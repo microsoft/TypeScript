@@ -1,10 +1,11 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-    TestTypingsInstaller,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -130,8 +131,8 @@ import {
 `,
         };
 
-        const globalCacheLocation = `c:/typescript`;
-        const globalAtTypes = `${globalCacheLocation}/node_modules/@types`;
+        const globalTypingsCacheLocation = `c:/typescript`;
+        const globalAtTypes = `${globalTypingsCacheLocation}/node_modules/@types`;
         const globalReactRouterDomPackage: File = {
             path: `${globalAtTypes}/react-router-dom/package.json`,
             content: JSON.stringify({
@@ -180,7 +181,7 @@ export interface BrowserRouterProps {
         const host = createServerHost(files, { windowsStyleRoot: "c:/" });
         const logger = createLoggerWithInMemoryLogs(host);
         const session = createSession(host, {
-            typingsInstaller: new TestTypingsInstaller(globalCacheLocation, /*throttleLimit*/ 5, host, logger),
+            globalTypingsCacheLocation,
             logger,
         });
         openFilesForSession([appFile], session);

@@ -71,17 +71,54 @@ TI:: typing installer creation complete
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/a/app/test.csproj","fileNames":["/a/b/app.js"],"compilerOptions":{"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/a/app/test.csproj",
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "compilerOptions": {
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/app",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/a/app/test.csproj","files":["/a/b/bower_components","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/a/app/test.csproj",
+      "files": [
+        "/a/b/bower_components",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
@@ -91,5 +128,19 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/a/app/test.csproj","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/a/app/test.csproj",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery

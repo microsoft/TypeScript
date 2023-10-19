@@ -12,15 +12,7 @@
 ////    x./*2*/foo
 ////}
 
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['1', '2'] },
-    {
-        type: "customWork",
-        work: () => {
-            goTo.marker("");
-            edit.insert("\n");
-            return "edits";
-        }
-    },
-    { type: "findAllReferences", markerOrRange: ['1', '2'] },
-);
+verify.baselineFindAllReferences("1", "2");
+goTo.marker("");
+edit.insert("\n");
+verify.baselineFindAllReferences("1", "2");

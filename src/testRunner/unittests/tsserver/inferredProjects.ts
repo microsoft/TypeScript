@@ -1,3 +1,6 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     dedent,
@@ -8,7 +11,6 @@ import {
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
     logInferredProjectsOrphanStatus,

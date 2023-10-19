@@ -280,7 +280,7 @@ export function getBuilderFileEmit(options: CompilerOptions) {
 }
 
 /**
- * Determing what all is pending to be emitted based on previous options or previous file emit flags
+ * Determining what all is pending to be emitted based on previous options or previous file emit flags
  *
  * @internal
  */
@@ -1588,7 +1588,7 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
                                     info.signature = signature;
                                 }
                                 else {
-                                    // These are directly commited
+                                    // These are directly committed
                                     info.signature = signature;
                                     state.oldExportedModulesMap?.clear();
                                 }

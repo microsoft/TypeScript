@@ -59,7 +59,30 @@ TI:: typing installer creation complete
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
@@ -67,10 +90,32 @@ TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/a/b/package.json' dependencies: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules","/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["jquery"],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules","/bower_components","/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "jquery"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/package.json",
+        "/a/b/node_modules",
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules","/bower_components","/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/a/b/bower_components",
+        "/a/b/package.json",
+        "/a/b/node_modules",
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location for typing installer
@@ -81,7 +126,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /no
 TI:: [hh:mm:ss:mss] Installing typings ["jquery"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::beginInstallTypes","eventId":1,"typingsInstallerVersion":"FakeVersion","projectName":"/dev/null/inferredProject1*"}
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 1,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/dev/null/inferredProject1*"
+    }
 TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]'.
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -126,11 +176,40 @@ declare const $: { x: number }
 TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/a/data/node_modules/@types/jquery/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":["/a/data/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [
+        "/a/data/node_modules/@types/jquery/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/jquery@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 1,
+      "projectName": "/dev/null/inferredProject1*",
+      "packagesToInstall": [
+        "@types/jquery@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*
@@ -150,19 +229,78 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/b/app.js","/a/data/node_modules/@types/jquery/index.d.ts"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/b/app.js",
+        "/a/data/node_modules/@types/jquery/index.d.ts"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/a/b/package.json' dependencies: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules","/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules","/bower_components","/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [
+        "/a/data/node_modules/@types/jquery/index.d.ts"
+      ],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/package.json",
+        "/a/b/node_modules",
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":["/a/data/node_modules/@types/jquery/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [
+        "/a/data/node_modules/@types/jquery/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
