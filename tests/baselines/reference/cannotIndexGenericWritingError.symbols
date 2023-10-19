@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/cannotIndexGenericWritingError.ts] ////
+
+=== cannotIndexGenericWritingError.ts ===
+// From #47357
+
+function foo<T extends Record<string | symbol, any>>(target: T, p: string | symbol) {
+>foo : Symbol(foo, Decl(cannotIndexGenericWritingError.ts, 0, 0))
+>T : Symbol(T, Decl(cannotIndexGenericWritingError.ts, 2, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>target : Symbol(target, Decl(cannotIndexGenericWritingError.ts, 2, 53))
+>T : Symbol(T, Decl(cannotIndexGenericWritingError.ts, 2, 13))
+>p : Symbol(p, Decl(cannotIndexGenericWritingError.ts, 2, 63))
+
+    target[p] = ""; // error
+>target : Symbol(target, Decl(cannotIndexGenericWritingError.ts, 2, 53))
+>p : Symbol(p, Decl(cannotIndexGenericWritingError.ts, 2, 63))
+}
+
+function foo2<T extends number[] & { [s: string]: number | string }>(target: T, p: string | number) {
+>foo2 : Symbol(foo2, Decl(cannotIndexGenericWritingError.ts, 4, 1))
+>T : Symbol(T, Decl(cannotIndexGenericWritingError.ts, 6, 14))
+>s : Symbol(s, Decl(cannotIndexGenericWritingError.ts, 6, 38))
+>target : Symbol(target, Decl(cannotIndexGenericWritingError.ts, 6, 69))
+>T : Symbol(T, Decl(cannotIndexGenericWritingError.ts, 6, 14))
+>p : Symbol(p, Decl(cannotIndexGenericWritingError.ts, 6, 79))
+
+    target[p] = 1; // error
+>target : Symbol(target, Decl(cannotIndexGenericWritingError.ts, 6, 69))
+>p : Symbol(p, Decl(cannotIndexGenericWritingError.ts, 6, 79))
+
+    target[1] = 1; // ok
+>target : Symbol(target, Decl(cannotIndexGenericWritingError.ts, 6, 69))
+}

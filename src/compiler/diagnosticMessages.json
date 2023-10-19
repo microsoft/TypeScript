@@ -3699,6 +3699,10 @@
         "category": "Error",
         "code": 2861
     },
+    "Type '{0}' is generic and can only be indexed for reading.": {
+        "category": "Error",
+        "code": 2862
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
