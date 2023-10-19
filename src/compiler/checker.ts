@@ -27675,13 +27675,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // As long as the computed type is a subset of the declared type, we use the full declared type to detect
             // a discriminant property. In cases where the computed type isn't a subset, e.g because of a preceding type
             // predicate narrowing, we use the actual computed type.
-            const type = declaredType.flags & TypeFlags.Union && isTypeSubsetOf(computedType, declaredType) ? declaredType : computedType;
-            if (type.flags & TypeFlags.Union) {
+            if (declaredType.flags & TypeFlags.Union || computedType.flags & TypeFlags.Union) {
                 const access = getCandidateDiscriminantPropertyAccess(expr);
                 if (access) {
                     const name = getAccessedPropertyName(access);
-                    if (name && isDiscriminantProperty(type, name)) {
-                        return access;
+                    if (name) {
+                        const type = declaredType.flags & TypeFlags.Union && isTypeSubsetOf(computedType, declaredType) ? declaredType : computedType;
+                        if (isDiscriminantProperty(type, name)) {
+                            return access;
+                        }
                     }
                 }
             }
