@@ -398,7 +398,7 @@ export function createLocalInferenceResolver({
             }
             if (isComputedPropertyName(prop.name)) {
                 if (!resolver.isLiteralComputedName(prop.name)) {
-                    reportIsolatedDeclarationError(objectLiteral);
+                    reportIsolatedDeclarationError(prop.name);
                     replaceWithInvalid = true;
                     continue;
                 }
@@ -584,7 +584,7 @@ export function createLocalInferenceResolver({
             }
             else if (isMethodDeclaration(member)) {
                 const { method, flags } = handleMethodDeclaration(member, member.name, NarrowBehavior.None);
-                if (flags === LocalTypeInfoFlags.Invalid) {
+                if (flags & LocalTypeInfoFlags.Invalid) {
                     invalid = true;
                     continue;
                 }
