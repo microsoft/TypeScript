@@ -44729,7 +44729,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else {
             const text = getTextOfPropertyName(member.name);
-            if (isNumericLiteralName(text) && !isInfinityOrNaNString(text)) {
+            if (isNumericLiteralName(text)) {
                 error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
             }
         }

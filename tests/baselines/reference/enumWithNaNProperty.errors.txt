@@ -1,0 +1,10 @@
+enumWithNaNProperty.ts(2,5): error TS2452: An enum member cannot have a numeric name.
+
+
+==== enumWithNaNProperty.ts (1 errors) ====
+    enum A {
+        NaN = 1
+        ~~~
+!!! error TS2452: An enum member cannot have a numeric name.
+    }
+    
