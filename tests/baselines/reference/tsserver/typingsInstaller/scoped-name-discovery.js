@@ -571,9 +571,6 @@ Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoIm
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/library/caches/typescript/node_modules/@types/zkat__cacache/index.d.ts:: []
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
 TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/project/jsconfig.json",
@@ -696,8 +693,6 @@ Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoIm
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: []
 TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/project/jsconfig.json",

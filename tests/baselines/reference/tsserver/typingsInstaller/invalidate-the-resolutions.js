@@ -610,8 +610,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/projects/project/app.js SVC-1-0 "import * as a from \"foo\";import * as x from \"fooo\";"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 4 Done: []
 Info seq  [hh:mm:ss:mss] Resolution from : /home/src/projects/project/app.js for "fooo" goes to: {
   "resolvedFileName": "/home/src/projects/project/node_modules/fooo/index.d.ts",
   "extension": ".d.ts",

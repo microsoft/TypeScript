@@ -679,8 +679,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/users/user/projects/project1/app.js SVC-1-0 "var x = require('bar');"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
