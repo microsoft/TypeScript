@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        
         "pretty": true,
         "lib": ["ES2021"],
         "target": "ES2021",

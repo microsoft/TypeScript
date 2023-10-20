@@ -5,8 +5,8 @@
         "target": "ESNext",
         "rootDir": "./src",
         "outDir": "./build",
-        "moduleResolution":"nodenext",
+        "moduleResolution": "nodenext",
         "sourceMap": true,
-        "allowSyntheticDefaultImports": true,
+        "allowSyntheticDefaultImports": true
     }
 }

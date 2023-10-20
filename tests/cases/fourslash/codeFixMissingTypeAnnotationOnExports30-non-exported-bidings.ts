@@ -10,7 +10,7 @@
 
 verify.codeFixAll({
     fixId: "fixMissingTypeAnnotationOnExports",
-    fixAllDescription: ts.Diagnostics.Add_all_missing_tye_annotations.message,
+    fixAllDescription: ts.Diagnostics.Add_all_missing_type_annotations.message,
     newFileContent: 
 `let p = { x: 1, y: 2}
 const x: number = p.x;

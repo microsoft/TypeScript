@@ -6710,6 +6710,10 @@
         "category": "Error",
         "code": 9010
     },
+    "To use heritage clauses in class expressions with --isolatedDeclarations, you need explicit type annotation on the variable.": {
+        "category": "Error",
+        "code": 9011
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000

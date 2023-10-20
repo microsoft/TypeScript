@@ -6,7 +6,7 @@ export const tracer: {
         end(name: string): void;
     };
 } = {
-    current: undefined
+    current: undefined,
 };
 
 export function installTracer() {

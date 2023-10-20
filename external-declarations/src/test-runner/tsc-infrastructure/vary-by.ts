@@ -1,6 +1,20 @@
-import { arrayFrom, equateStringsCaseInsensitive, findIndex, forEach, getEntries, hasProperty,map, orderedRemoveItemAt, startsWith } from "../../compiler/lang-utils";
-import { optionDeclarations } from "./options";
-import { CompilerSettings } from "./test-file-parser";
+import {
+    arrayFrom,
+    equateStringsCaseInsensitive,
+    findIndex,
+    forEach,
+    getEntries,
+    hasProperty,
+    map,
+    orderedRemoveItemAt,
+    startsWith,
+} from "../../compiler/lang-utils";
+import {
+    optionDeclarations,
+} from "./options";
+import {
+    CompilerSettings,
+} from "./test-file-parser";
 
 interface FileBasedTestConfiguration {
     [key: string]: string;
@@ -104,7 +118,7 @@ function splitVaryBySettingValue(text: string, varyBy: string): string[] | undef
         return undefined;
     }
 
-    const variations: { key: string, value?: string | number }[] = [];
+    const variations: { key: string; value?: string | number; }[] = [];
     const values = getVaryByStarSettingValues(varyBy);
 
     // add (and deduplicate) all included entries
@@ -151,7 +165,7 @@ function getVaryByStarSettingValues(varyBy: string): ReadonlyMap<string, string 
         if (option.type === "boolean") {
             return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new Map(getEntries({
                 true: 1,
-                false: 0
+                false: 0,
             })));
         }
     }

@@ -1,8 +1,31 @@
-import { Extension, Path } from "typescript";
+import {
+    Extension,
+    Path,
+} from "typescript";
 
-import { Debug } from "./debug";
-import { compareStringsCaseInsensitive, compareStringsCaseSensitive, compareValues, Comparison, endsWith, equateStringsCaseInsensitive, equateStringsCaseSensitive, getStringComparer, identity, lastOrUndefined, some, startsWith, stringContains, toLowerCase } from "./lang-utils";
-import { CharacterCodes, GetCanonicalFileName } from "./types";
+import {
+    Debug,
+} from "./debug";
+import {
+    compareStringsCaseInsensitive,
+    compareStringsCaseSensitive,
+    compareValues,
+    Comparison,
+    endsWith,
+    equateStringsCaseInsensitive,
+    equateStringsCaseSensitive,
+    getStringComparer,
+    identity,
+    lastOrUndefined,
+    some,
+    startsWith,
+    stringContains,
+    toLowerCase,
+} from "./lang-utils";
+import {
+    CharacterCodes,
+    GetCanonicalFileName,
+} from "./types";
 
 /**
  * Internally, we represent paths as strings with '/' as the directory separator.
@@ -131,8 +154,10 @@ function getEncodedRootLength(path: string): number {
             // special case interpreted as "the machine from which the URL is being interpreted".
             const scheme = path.slice(0, schemeEnd);
             const authority = path.slice(authorityStart, authorityEnd);
-            if (scheme === "file" && (authority === "" || authority === "localhost") &&
-                isVolumeCharacter(path.charCodeAt(authorityEnd + 1))) {
+            if (
+                scheme === "file" && (authority === "" || authority === "localhost") &&
+                isVolumeCharacter(path.charCodeAt(authorityEnd + 1))
+            ) {
                 const volumeSeparatorEnd = getFileUrlVolumeSeparatorEnd(path, authorityEnd + 2);
                 if (volumeSeparatorEnd !== -1) {
                     if (path.charCodeAt(volumeSeparatorEnd) === CharacterCodes.slash) {
@@ -577,7 +602,6 @@ export function normalizePath(path: string): string {
     return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized) : normalized;
 }
 
-
 /** @internal */
 export function toPath(fileName: string, basePath: string | undefined, getCanonicalFileName: (path: string) => string): Path {
     const nonCanonicalizedPath = isRootedDiskPath(fileName)
@@ -787,9 +811,7 @@ export function getRelativePathFromDirectory(fromDirectory: string, to: string, 
     return getPathFromPathComponents(pathComponents);
 }
 
-
 //// Path Traversal
-
 
 /**
  * Case insensitive file systems have descripencies in how they handle some characters (eg. turkish Upper case I with dot on top - \u0130)
@@ -809,7 +831,6 @@ function toFileNameLowerCase(x: string) {
         x.replace(fileNameLowerCaseRegExp, toLowerCase) :
         x;
 }
-
 
 // We convert the file names to lower case as key for file name on case insensitive file system
 // While doing so we need to handle special characters (eg \u0130) to ensure that we dont convert
@@ -835,12 +856,10 @@ function toFileNameLowerCase(x: string) {
 // a-z, 0-9, \u0131, \u00DF, \, /, ., : and space
 const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_. ]+/g;
 
-
 /** @internal */
 export function removeExtension(path: string, extension: string): string {
     return path.substring(0, path.length - extension.length);
 }
-
 
 /** @internal */
 export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
@@ -869,11 +888,10 @@ export function isJavaScriptFile(f: string) {
         || f.endsWith(Extension.Mjs);
 }
 
-
 export function getDeclarationExtension(path: string) {
     return (
-        path.endsWith(Extension.Mjs) || path.endsWith(Extension.Mts) ? Extension.Dmts:
-        path.endsWith(Extension.Cjs) || path.endsWith(Extension.Cts) ? Extension.Dcts:
-        Extension.Dts
+        path.endsWith(Extension.Mjs) || path.endsWith(Extension.Mts) ? Extension.Dmts :
+            path.endsWith(Extension.Cjs) || path.endsWith(Extension.Cts) ? Extension.Dcts :
+            Extension.Dts
     );
 }

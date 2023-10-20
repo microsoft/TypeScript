@@ -1,235 +1,238 @@
 import * as ts from "typescript";
 
-import { getNewLineCharacter } from "../../compiler/utils";
+import {
+    getNewLineCharacter,
+} from "../../compiler/utils";
 import * as collections from "./collections";
-import { Utils } from "./compiler-run";
+import {
+    Utils,
+} from "./compiler-run";
 import * as documents from "./test-document";
 import * as vfs from "./vfs";
 import * as vpath from "./vpath";
-
 
 /**
  * Fake implementations of various compiler dependencies.
  */
 
- const processExitSentinel = new Error("System exit");
+const processExitSentinel = new Error("System exit");
 
- export interface SystemOptions {
-     executingFilePath?: string;
-     newLine?: "\r\n" | "\n";
-     env?: Record<string, string>;
- }
+export interface SystemOptions {
+    executingFilePath?: string;
+    newLine?: "\r\n" | "\n";
+    env?: Record<string, string>;
+}
 
- /**
-  * A fake `ts.System` that leverages a virtual file system.
-  */
- export class System implements ts.System {
-     public readonly vfs: vfs.FileSystem;
-     public readonly args: string[] = [];
-     public readonly output: string[] = [];
-     public readonly newLine: string;
-     public readonly useCaseSensitiveFileNames: boolean;
-     public exitCode: number | undefined;
+/**
+ * A fake `ts.System` that leverages a virtual file system.
+ */
+export class System implements ts.System {
+    public readonly vfs: vfs.FileSystem;
+    public readonly args: string[] = [];
+    public readonly output: string[] = [];
+    public readonly newLine: string;
+    public readonly useCaseSensitiveFileNames: boolean;
+    public exitCode: number | undefined;
 
-     private readonly _executingFilePath: string | undefined;
-     private readonly _env: Record<string, string> | undefined;
+    private readonly _executingFilePath: string | undefined;
+    private readonly _env: Record<string, string> | undefined;
 
-     constructor(vfs: vfs.FileSystem, { executingFilePath, newLine = "\r\n", env }: SystemOptions = {}) {
-         this.vfs = vfs.isReadonly ? vfs.shadow() : vfs;
-         this.useCaseSensitiveFileNames = !this.vfs.ignoreCase;
-         this.newLine = newLine;
-         this._executingFilePath = executingFilePath;
-         this._env = env;
-     }
+    constructor(vfs: vfs.FileSystem, { executingFilePath, newLine = "\r\n", env }: SystemOptions = {}) {
+        this.vfs = vfs.isReadonly ? vfs.shadow() : vfs;
+        this.useCaseSensitiveFileNames = !this.vfs.ignoreCase;
+        this.newLine = newLine;
+        this._executingFilePath = executingFilePath;
+        this._env = env;
+    }
 
-     private testTerminalWidth = Number.parseInt(this.getEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"));
-     getWidthOfTerminal = Number.isNaN(this.testTerminalWidth) ? undefined : () => this.testTerminalWidth;
+    private testTerminalWidth = Number.parseInt(this.getEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"));
+    getWidthOfTerminal = Number.isNaN(this.testTerminalWidth) ? undefined : () => this.testTerminalWidth;
 
-     // Pretty output
-     writeOutputIsTTY() {
-         return true;
-     }
+    // Pretty output
+    writeOutputIsTTY() {
+        return true;
+    }
 
-     public write(message: string) {
-         console.log(message);
-         this.output.push(message);
-     }
+    public write(message: string) {
+        console.log(message);
+        this.output.push(message);
+    }
 
-     public readFile(path: string) {
-         try {
-             const content = this.vfs.readFileSync(path, "utf8");
-             return content === undefined ? undefined : Utils.removeByteOrderMark(content);
-         }
-         catch {
-             return undefined;
-         }
-     }
+    public readFile(path: string) {
+        try {
+            const content = this.vfs.readFileSync(path, "utf8");
+            return content === undefined ? undefined : Utils.removeByteOrderMark(content);
+        }
+        catch {
+            return undefined;
+        }
+    }
 
-     public writeFile(path: string, data: string, writeByteOrderMark?: boolean): void {
-         this.vfs.mkdirpSync(vpath.dirname(path));
-         this.vfs.writeFileSync(path, writeByteOrderMark ? Utils.addUTF8ByteOrderMark(data) : data);
-     }
+    public writeFile(path: string, data: string, writeByteOrderMark?: boolean): void {
+        this.vfs.mkdirpSync(vpath.dirname(path));
+        this.vfs.writeFileSync(path, writeByteOrderMark ? Utils.addUTF8ByteOrderMark(data) : data);
+    }
 
-     public deleteFile(path: string) {
-         this.vfs.unlinkSync(path);
-     }
+    public deleteFile(path: string) {
+        this.vfs.unlinkSync(path);
+    }
 
-     public fileExists(path: string) {
-         const stats = this._getStats(path);
-         return stats ? stats.isFile() : false;
-     }
+    public fileExists(path: string) {
+        const stats = this._getStats(path);
+        return stats ? stats.isFile() : false;
+    }
 
-     public directoryExists(path: string) {
-         const stats = this._getStats(path);
-         return stats ? stats.isDirectory() : false;
-     }
+    public directoryExists(path: string) {
+        const stats = this._getStats(path);
+        return stats ? stats.isDirectory() : false;
+    }
 
-     public createDirectory(path: string): void {
-         this.vfs.mkdirpSync(path);
-     }
+    public createDirectory(path: string): void {
+        this.vfs.mkdirpSync(path);
+    }
 
-     public getCurrentDirectory() {
-         return this.vfs.cwd();
-     }
+    public getCurrentDirectory() {
+        return this.vfs.cwd();
+    }
 
-     public getDirectories(path: string) {
-         const result: string[] = [];
-         try {
-             for (const file of this.vfs.readdirSync(path)) {
-                 if (this.vfs.statSync(vpath.combine(path, file)).isDirectory()) {
-                     result.push(file);
-                 }
-             }
-         }
-         catch { /*ignore*/ }
-         return result;
-     }
+    public getDirectories(path: string) {
+        const result: string[] = [];
+        try {
+            for (const file of this.vfs.readdirSync(path)) {
+                if (this.vfs.statSync(vpath.combine(path, file)).isDirectory()) {
+                    result.push(file);
+                }
+            }
+        }
+        catch { /*ignore*/ }
+        return result;
+    }
 
-     public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
+    public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
         throw new Error("Not implemented");
         //  return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path), path => this.realpath(path));
-     }
+    }
 
-     public getAccessibleFileSystemEntries(path: string): vfs.FileSystemEntries {
-         const files: string[] = [];
-         const directories: string[] = [];
-         try {
-             for (const file of this.vfs.readdirSync(path)) {
-                 try {
-                     const stats = this.vfs.statSync(vpath.combine(path, file));
-                     if (stats.isFile()) {
-                         files.push(file);
-                     }
-                     else if (stats.isDirectory()) {
-                         directories.push(file);
-                     }
-                 }
-                 catch { /*ignored*/ }
-             }
-         }
-         catch { /*ignored*/ }
-         return { files, directories };
-     }
+    public getAccessibleFileSystemEntries(path: string): vfs.FileSystemEntries {
+        const files: string[] = [];
+        const directories: string[] = [];
+        try {
+            for (const file of this.vfs.readdirSync(path)) {
+                try {
+                    const stats = this.vfs.statSync(vpath.combine(path, file));
+                    if (stats.isFile()) {
+                        files.push(file);
+                    }
+                    else if (stats.isDirectory()) {
+                        directories.push(file);
+                    }
+                }
+                catch { /*ignored*/ }
+            }
+        }
+        catch { /*ignored*/ }
+        return { files, directories };
+    }
 
-     public exit(exitCode?: number) {
-         this.exitCode = exitCode;
-         throw processExitSentinel;
-     }
+    public exit(exitCode?: number) {
+        this.exitCode = exitCode;
+        throw processExitSentinel;
+    }
 
-     public getFileSize(path: string) {
-         const stats = this._getStats(path);
-         return stats && stats.isFile() ? stats.size : 0;
-     }
+    public getFileSize(path: string) {
+        const stats = this._getStats(path);
+        return stats && stats.isFile() ? stats.size : 0;
+    }
 
-     public resolvePath(path: string) {
-         return vpath.resolve(this.vfs.cwd(), path);
-     }
+    public resolvePath(path: string) {
+        return vpath.resolve(this.vfs.cwd(), path);
+    }
 
-     public getExecutingFilePath() {
-         if (this._executingFilePath === undefined) throw new Error("ts.notImplemented");
-         return this._executingFilePath;
-     }
+    public getExecutingFilePath() {
+        if (this._executingFilePath === undefined) throw new Error("ts.notImplemented");
+        return this._executingFilePath;
+    }
 
-     public getModifiedTime(path: string) {
-         const stats = this._getStats(path);
-         return stats ? stats.mtime : undefined!; // TODO: GH#18217
-     }
+    public getModifiedTime(path: string) {
+        const stats = this._getStats(path);
+        return stats ? stats.mtime : undefined!; // TODO: GH#18217
+    }
 
-     public setModifiedTime(path: string, time: Date) {
-         this.vfs.utimesSync(path, time, time);
-     }
+    public setModifiedTime(path: string, time: Date) {
+        this.vfs.utimesSync(path, time, time);
+    }
 
-     public createHash(data: string): string {
-         return `${generateDjb2Hash(data)}-${data}`;
-     }
+    public createHash(data: string): string {
+        return `${generateDjb2Hash(data)}-${data}`;
+    }
 
-     public realpath(path: string) {
-         try {
-             return this.vfs.realpathSync(path);
-         }
-         catch {
-             return path;
-         }
-     }
+    public realpath(path: string) {
+        try {
+            return this.vfs.realpathSync(path);
+        }
+        catch {
+            return path;
+        }
+    }
 
-     public getEnvironmentVariable(name: string): string {
-         return (this._env && this._env[name])!; // TODO: GH#18217
-     }
+    public getEnvironmentVariable(name: string): string {
+        return (this._env && this._env[name])!; // TODO: GH#18217
+    }
 
-     private _getStats(path: string) {
-         try {
-             return this.vfs.existsSync(path) ? this.vfs.statSync(path) : undefined;
-         }
-         catch {
-             return undefined;
-         }
-     }
+    private _getStats(path: string) {
+        try {
+            return this.vfs.existsSync(path) ? this.vfs.statSync(path) : undefined;
+        }
+        catch {
+            return undefined;
+        }
+    }
 
-     now() {
-         return new Date(this.vfs.time());
-     }
- }
+    now() {
+        return new Date(this.vfs.time());
+    }
+}
 
- /**
-  * A fake `ts.ParseConfigHost` that leverages a virtual file system.
-  */
- export class ParseConfigHost implements ts.ParseConfigHost {
-     public readonly sys: System;
+/**
+ * A fake `ts.ParseConfigHost` that leverages a virtual file system.
+ */
+export class ParseConfigHost implements ts.ParseConfigHost {
+    public readonly sys: System;
 
-     constructor(sys: System | vfs.FileSystem) {
-         if (sys instanceof vfs.FileSystem) sys = new System(sys);
-         this.sys = sys;
-     }
+    constructor(sys: System | vfs.FileSystem) {
+        if (sys instanceof vfs.FileSystem) sys = new System(sys);
+        this.sys = sys;
+    }
 
-     public get vfs() {
-         return this.sys.vfs;
-     }
+    public get vfs() {
+        return this.sys.vfs;
+    }
 
-     public get useCaseSensitiveFileNames() {
-         return this.sys.useCaseSensitiveFileNames;
-     }
+    public get useCaseSensitiveFileNames() {
+        return this.sys.useCaseSensitiveFileNames;
+    }
 
-     public fileExists(fileName: string): boolean {
-         return this.sys.fileExists(fileName);
-     }
+    public fileExists(fileName: string): boolean {
+        return this.sys.fileExists(fileName);
+    }
 
-     public directoryExists(directoryName: string): boolean {
-         return this.sys.directoryExists(directoryName);
-     }
+    public directoryExists(directoryName: string): boolean {
+        return this.sys.directoryExists(directoryName);
+    }
 
-     public readFile(path: string): string | undefined {
-         return this.sys.readFile(path);
-     }
+    public readFile(path: string): string | undefined {
+        return this.sys.readFile(path);
+    }
 
-     public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
-         return this.sys.readDirectory(path, extensions, excludes, includes, depth);
-     }
- }
+    public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
+        return this.sys.readDirectory(path, extensions, excludes, includes, depth);
+    }
+}
 
 /**
  * A fake `ts.CompilerHost` that leverages a virtual file system.
  */
- export class CompilerHost implements ts.CompilerHost {
+export class CompilerHost implements ts.CompilerHost {
     public readonly sys: System;
     public readonly defaultLibLocation: string;
     public readonly outputs: documents.TextDocument[] = [];
@@ -374,9 +377,11 @@ import * as vpath from "./vpath";
             while (fs.shadowRoot) {
                 try {
                     const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ? fs.shadowRoot.statSync(canonicalFileName) : undefined!; // TODO: GH#18217
-                    if (shadowRootStats.dev !== stats.dev ||
+                    if (
+                        shadowRootStats.dev !== stats.dev ||
                         shadowRootStats.ino !== stats.ino ||
-                        shadowRootStats.mtimeMs !== stats.mtimeMs) {
+                        shadowRootStats.mtimeMs !== stats.mtimeMs
+                    ) {
                         break;
                     }
 
@@ -401,7 +406,7 @@ import * as vpath from "./vpath";
  *
  * @internal
  */
- export function generateDjb2Hash(data: string): string {
+export function generateDjb2Hash(data: string): string {
     let acc = 5381;
     for (let i = 0; i < data.length; i++) {
         acc = ((acc << 5) + acc) + data.charCodeAt(i);

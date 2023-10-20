@@ -17,6 +17,7 @@ import {
     IsolatedEmitHost,
 } from "./types";
 
+/** @internal */
 export function createEmitDeclarationHost(allProjectFiles: string[], tsLibFiles: string[], options: CompilerOptions, sys: System): IsolatedEmitHost {
     const getCompilerOptions = () => options;
     const getCurrentDirectory = () => ".";

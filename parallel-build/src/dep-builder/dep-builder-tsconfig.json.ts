@@ -73,8 +73,7 @@ async function loadBundlesDependencies(tsConfigs: string[]) {
         if (entry === undefined) return 0;
         if (entry.depth) return entry.depth;
 
-        
-        entry.depth = 1 + (entry.dependencies.length === 0? 0: Math.max(...entry.dependencies.map(depth)));
+        entry.depth = 1 + (entry.dependencies.length === 0 ? 0 : Math.max(...entry.dependencies.map(depth)));
         return entry.depth;
     }
 

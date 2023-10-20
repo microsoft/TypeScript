@@ -1,13 +1,22 @@
 import * as fs from "fs";
 import * as fsp from "fs/promises";
 
-import { compareStringsCaseSensitive,flatten, stableSort } from "../compiler/lang-utils";
-import { combinePaths,createGetCanonicalFileName, normalizePath } from "../compiler/path-utils";
-import { FileSystemEntries } from "../test-runner/tsc-infrastructure/vfs";
+import {
+    compareStringsCaseSensitive,
+    flatten,
+    stableSort,
+} from "../compiler/lang-utils";
+import {
+    combinePaths,
+    createGetCanonicalFileName,
+    normalizePath,
+} from "../compiler/path-utils";
+import {
+    FileSystemEntries,
+} from "../test-runner/tsc-infrastructure/vfs";
 
 const cache: Record<string, true> = {};
 export async function ensureDir(dirName: string) {
-
     const exists = cache[dirName] ??
         (await fsp.access(dirName).then(() => true, () => false));
 
@@ -29,7 +38,6 @@ export function addToQueue(fn: () => Promise<void>) {
 export function flushQueue() {
     return Promise.all(writeQueue);
 }
-
 
 /**
  * @param path directory of the tsconfig.json
@@ -117,4 +125,3 @@ function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
         return { files: [], directories: [] };
     }
 }
-

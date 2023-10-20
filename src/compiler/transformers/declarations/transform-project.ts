@@ -45,7 +45,7 @@ function joinToRootIfNeeded(rootDir: string, existingPath: string) {
     return normalizePath(pathIsAbsolute(existingPath) ? existingPath : sys.resolvePath(combinePaths(rootDir, existingPath)));
 }
 
-export function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions) {
+function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions) {
     const declarationDir = options.declarationDir ? joinToRootIfNeeded(rootDir, options.declarationDir) :
         options.outDir ? joinToRootIfNeeded(rootDir, options.outDir) :
         undefined;
@@ -56,17 +56,20 @@ export function createIsolatedDeclarationsEmitter(rootDir: string, options: Comp
 
         if (!source) return;
 
-        const actualDeclaration = emitDeclarationsForFile(source, [], [], options);
+        const { code, diagnostics } = emitDeclarationsForFile(source, [], [], options);
+        if (diagnostics.length > 0) {
+            throw new Error(`Cannot transform file '${source.fileName}' due to ${diagnostics.length} diagnostics`);
+        }
         const output = declarationDir ? changeAnyExtension(file.replace(rootDir, declarationDir), ".d.ts") :
             changeAnyExtension(file, ".d.ts");
         const dirPath = getDirectoryPath(output);
         ensureDirRecursive(dirPath, host);
-        host.writeFile(output, actualDeclaration.code, !!options.emitBOM);
+        host.writeFile(output, code, !!options.emitBOM);
         return output;
     };
 }
 
-export function emitDeclarationsForAllFiles(rootDir: string, files: string[], host: CompilerHost, options: CompilerOptions) {
+function emitDeclarationsForAllFiles(rootDir: string, files: string[], host: CompilerHost, options: CompilerOptions) {
     const transformer = createIsolatedDeclarationsEmitter(rootDir, options);
     for (const file of files) {
         try {
