@@ -2862,6 +2862,7 @@ declare namespace ts {
             private externalFiles;
             private missingFilesMap;
             private generatedFilesMap;
+            private recordChangesToUnresolvedImports;
             private hasAddedorRemovedFiles;
             private hasAddedOrRemovedSymlinks;
             protected languageService: LanguageService;

@@ -76,7 +76,9 @@ import {
     InstallPackageOptions,
     IScriptSnapshot,
     isDeclarationFileName,
+    isExternalModuleNameRelative,
     isInsideNodeModules,
+    isUnresolvedOrResolvedToJs,
     JSDocParsingMode,
     JsTyping,
     LanguageService,
@@ -390,6 +392,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      * @internal
      */
     cachedUnresolvedImportsPerFile: Map<Path, readonly string[]> = new Map();
+    private recordChangesToUnresolvedImports = false;
 
     /** @internal */
     lastCachedUnresolvedImportsList: SortedReadonlyArray<string> | undefined;
@@ -796,6 +799,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     resolveModuleNameLiterals(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
+        let needsUpdate = this.recordChangesToUnresolvedImports && this.cachedUnresolvedImportsPerFile.has(this.toPath(containingFile));
         return this.resolutionCache.resolveModuleNameLiterals(
             moduleLiterals,
             containingFile,
@@ -803,6 +807,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             options,
             containingSourceFile,
             reusedNames,
+            needsUpdate ? (existing, current, path, name) => {
+                if (!needsUpdate || isExternalModuleNameRelative(name)) return;
+                // If only unresolved flag is changed, update
+                if ((existing && isUnresolvedOrResolvedToJs(existing)) === isUnresolvedOrResolvedToJs(current)) return;
+                needsUpdate = false;
+                this.cachedUnresolvedImportsPerFile.delete(path);
+                this.lastCachedUnresolvedImportsList = undefined;
+            } : undefined,
         );
     }
 
@@ -1448,26 +1460,22 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         const useTypingsFromGlobalCache = this.useTypingsFromGlobalCache();
         if (!useTypingsFromGlobalCache) this.resolutionCache.invalidateResolutionsWithGlobalCachePass();
         else this.resolutionCache.invalidateResolutionsWithoutGlobalCachePass();
-        if (useTypingsFromGlobalCache && this.cachedUnresolvedImportsPerFile.size) this.resolutionCache.startRecordingFilesWithChangedResolutions();
+        if (useTypingsFromGlobalCache && this.cachedUnresolvedImportsPerFile.size) this.recordChangesToUnresolvedImports = true;
 
         const hasNewProgram = this.updateGraphWorker();
         const hasAddedorRemovedFiles = this.hasAddedorRemovedFiles;
         this.hasAddedorRemovedFiles = false;
         this.hasAddedOrRemovedSymlinks = false;
+        this.recordChangesToUnresolvedImports = false;
 
         if (useTypingsFromGlobalCache) {
-            const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
-            for (const file of changedFiles) {
-                // delete cached information for changed files
-                this.cachedUnresolvedImportsPerFile.delete(file);
-            }
             // 1. no changes in structure, no changes in unresolved imports - do nothing
             // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
             // (can reuse cached imports for files that were not changed)
             // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
             // (can reuse cached imports for files that were not changed)
             // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
-            if (!this.lastCachedUnresolvedImportsList || hasNewProgram || changedFiles.length) {
+            if (!this.lastCachedUnresolvedImportsList || hasNewProgram) {
                 this.lastCachedUnresolvedImportsList = getUnresolvedImports(
                     this.program!,
                     this.cachedUnresolvedImportsPerFile,
