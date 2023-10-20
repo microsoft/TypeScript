@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "lib": [
-            "es2018"
+            "es2018",
         ],
         "module": "Node16",
         "moduleResolution": "Node16",
@@ -19,11 +19,11 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "allowJs": true,
-        "checkJs": true
+        "checkJs": true,
     },
 
     "include": [
         "**/*.mjs",
-        "**/*.cjs"
-    ]
+        "**/*.cjs",
+    ],
 }

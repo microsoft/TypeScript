@@ -9,13 +9,13 @@
     // user's settings.json so take precedence.
     "[typescript][typescriptreact][javascript][javascriptreact][json][jsonc][yaml][github-actions-workflow]": {
         "editor.defaultFormatter": "dprint.dprint",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
     },
 
     // To ignore commits listed in .git-blame-ignore-revs in GitLens:
     "gitlens.advanced.blame.customArguments": [
         "--ignore-revs-file",
-        ".git-blame-ignore-revs"
+        ".git-blame-ignore-revs",
     ],
 
     // Match eslint-plugin-simple-import-sort in organize/auto-imports.
@@ -23,13 +23,13 @@
         "organizeImportsCollation": "unicode",
         "organizeImportsCaseFirst": "upper",
         "organizeImportsIgnoreCase": false,
-        "organizeImportsNumericCollation": true
+        "organizeImportsNumericCollation": true,
     },
     "javascript.unstable": {
         "organizeImportsCollation": "unicode",
         "organizeImportsCaseFirst": "upper",
         "organizeImportsIgnoreCase": false,
-        "organizeImportsNumericCollation": true
+        "organizeImportsNumericCollation": true,
     },
 
     // These options search the repo recursively and slow down
@@ -38,5 +38,5 @@
     "npm.autoDetect": "off",
     "grunt.autoDetect": "off",
     "jake.autoDetect": "off",
-    "gulp.autoDetect": "off"
+    "gulp.autoDetect": "off",
 }

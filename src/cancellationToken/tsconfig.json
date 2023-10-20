@@ -3,8 +3,8 @@
     "compilerOptions": {
         "module": "commonjs",
         "types": [
-            "node"
-        ]
+            "node",
+        ],
     },
-    "include": ["**/*"]
+    "include": ["**/*"],
 }

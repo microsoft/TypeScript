@@ -2,11 +2,11 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "types": [
-            "node"
-        ]
+            "node",
+        ],
     },
     "references": [
-        { "path": "../compiler" }
+        { "path": "../compiler" },
     ],
-    "include": ["**/*"]
+    "include": ["**/*"],
 }

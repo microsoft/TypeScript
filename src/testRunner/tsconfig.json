@@ -4,8 +4,8 @@
         "types": [
             "node",
             "mocha",
-            "chai"
-        ]
+            "chai",
+        ],
     },
     "references": [
         { "path": "../compiler" },
@@ -15,7 +15,7 @@
         { "path": "../server" },
         { "path": "../typingsInstallerCore" },
         { "path": "../deprecatedCompat" },
-        { "path": "../harness" }
+        { "path": "../harness" },
     ],
-    "include": ["**/*"]
+    "include": ["**/*"],
 }

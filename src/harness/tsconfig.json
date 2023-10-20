@@ -4,8 +4,8 @@
         "types": [
             "node",
             "mocha",
-            "chai"
-        ]
+            "chai",
+        ],
     },
     "references": [
         { "path": "../compiler" },
@@ -13,8 +13,8 @@
         { "path": "../jsTyping" },
         { "path": "../server" },
         { "path": "../typingsInstallerCore" },
-        { "path": "../deprecatedCompat" }
+        { "path": "../deprecatedCompat" },
     ],
 
-    "include": ["**/*"]
+    "include": ["**/*"],
 }

@@ -2,12 +2,12 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "types": [
-            "node"
-        ]
+            "node",
+        ],
     },
     "references": [
         { "path": "../compiler" },
-        { "path": "../jsTyping" }
+        { "path": "../jsTyping" },
     ],
-    "include": ["**/*"]
+    "include": ["**/*"],
 }
