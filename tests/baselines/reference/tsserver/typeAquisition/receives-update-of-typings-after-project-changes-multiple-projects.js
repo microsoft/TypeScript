@@ -1986,8 +1986,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/users/user/projects/project2/app2.js Text-1 "var x = require('foo');"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 After running Timeout callback:: count: 2
 
 PolledWatches::

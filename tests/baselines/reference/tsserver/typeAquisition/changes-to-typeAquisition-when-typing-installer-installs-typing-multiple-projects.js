@@ -1698,8 +1698,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/users/user/projects/project1/app.js SVC-1-0 "var x = require('bar');"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 3 Done: []
 Info seq  [hh:mm:ss:mss] Running: /users/user/projects/project2/jsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/user/projects/project2/jsconfig.json
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'bar' from '/users/user/projects/project2/app.js'. ========
@@ -1891,8 +1889,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/users/user/projects/project2/app2.js Text-1 "var x = require('foo');"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 After running Timeout callback:: count: 3
 
 PolledWatches::

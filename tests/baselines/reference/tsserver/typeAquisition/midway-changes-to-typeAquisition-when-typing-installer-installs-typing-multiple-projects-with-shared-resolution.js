@@ -1701,8 +1701,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/users/user/projects/project2/app2.js Text-1 "var x = require('foo');"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 5 Done: []
 Info seq  [hh:mm:ss:mss] Running: /users/user/projects/project1/jsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {

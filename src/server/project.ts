@@ -799,7 +799,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     resolveModuleNameLiterals(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
-        let needsUpdate = this.recordChangesToUnresolvedImports && this.cachedUnresolvedImportsPerFile.has(this.toPath(containingFile));
+        let invalidated = false;
         return this.resolutionCache.resolveModuleNameLiterals(
             moduleLiterals,
             containingFile,
@@ -807,11 +807,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             options,
             containingSourceFile,
             reusedNames,
-            needsUpdate ? (existing, current, path, name) => {
-                if (!needsUpdate || isExternalModuleNameRelative(name)) return;
+            this.recordChangesToUnresolvedImports ? (existing, current, path, name) => {
+                if (invalidated || isExternalModuleNameRelative(name)) return;
                 // If only unresolved flag is changed, update
                 if ((existing && isUnresolvedOrResolvedToJs(existing)) === isUnresolvedOrResolvedToJs(current)) return;
-                needsUpdate = false;
+                invalidated = true;
                 this.cachedUnresolvedImportsPerFile.delete(path);
                 this.lastCachedUnresolvedImportsList = undefined;
             } : undefined,
@@ -1469,20 +1469,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.recordChangesToUnresolvedImports = false;
 
         if (useTypingsFromGlobalCache) {
-            // 1. no changes in structure, no changes in unresolved imports - do nothing
-            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
-            // (can reuse cached imports for files that were not changed)
-            // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
-            // (can reuse cached imports for files that were not changed)
-            // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
-            if (!this.lastCachedUnresolvedImportsList || hasNewProgram) {
-                this.lastCachedUnresolvedImportsList = getUnresolvedImports(
-                    this.program!,
-                    this.cachedUnresolvedImportsPerFile,
-                    s => this.writeLog(s),
-                );
-            }
-
+            this.lastCachedUnresolvedImportsList ??= getUnresolvedImports(
+                this.program!,
+                this.cachedUnresolvedImportsPerFile,
+                s => this.writeLog(s),
+            );
             this.enqueueInstallTypingsForProject(hasAddedorRemovedFiles);
         }
         else {
