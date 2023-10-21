@@ -10014,6 +10014,7 @@ export interface UserPreferences {
     readonly interactiveInlayHints?: boolean;
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
+    readonly preferTypeOnlyAutoImports?: boolean;
     readonly organizeImportsIgnoreCase?: "auto" | boolean;
     readonly organizeImportsCollation?: "ordinal" | "unicode";
     readonly organizeImportsLocale?: string;
