@@ -29,9 +29,7 @@ describe("unittests:: tsserver:: completions", () => {
         };
 
         const host = createServerHost([aTs, bTs, tsconfig]);
-        const session = createSession(host, {
-            logger: createLoggerWithInMemoryLogs(host),
-        });
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([aTs, bTs], session);
 
         const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
@@ -53,17 +51,7 @@ describe("unittests:: tsserver:: completions", () => {
             command: ts.server.protocol.CommandTypes.CompletionDetails,
             arguments: {
                 ...requestLocation,
-                entryNames: [
-                    {
-                        name: "foo",
-                        source: "/a",
-                        data: {
-                            exportName: "foo",
-                            fileName: "/a.ts",
-                            exportMapKey,
-                        },
-                    },
-                ],
+                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
             },
         });
 
@@ -75,17 +63,7 @@ describe("unittests:: tsserver:: completions", () => {
             command: ts.server.protocol.CommandTypes.CompletionDetailsFull,
             arguments: {
                 ...requestLocation,
-                entryNames: [
-                    {
-                        name: "foo",
-                        source: "/a",
-                        data: {
-                            exportName: "foo",
-                            fileName: "/a.ts",
-                            exportMapKey,
-                        },
-                    },
-                ],
+                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
             },
         });
         baselineTsserverLogs("completions", "works", session);

@@ -8,9 +8,12 @@
 //// export enum TestEnum {}
 //// export function testFunction() {}
 //// export interface testInterface {}
-//// export namespace TestNamespaceTypeOnly {}
+//// export namespace TestNamespaceEmpty {}
+//// export namespace TestNamespaceWithType {
+////   export type testTypeInner = boolean;
+//// }
 //// export namespace TestNamespaceWithValue {
-////   export const testValueInner = true;   
+////   export const testValueInner = true;
 //// }
 //// export type testType = {};
 ////
