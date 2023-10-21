@@ -1,0 +1,13 @@
+nonTsxExtensionSelfClosingTag.ts(2,24): error TS1465: JSX tags are not permitted in `.ts` files. Did you mean to change the file extension to `.tsx`?
+nonTsxExtensionSelfClosingTag.ts(2,25): error TS2304: Cannot find name 'span'.
+
+
+==== nonTsxExtensionSelfClosingTag.ts (2 errors) ====
+    console.log("before");
+    export const _ = () => <span />;
+                           ~~~~~~~~
+!!! error TS1465: JSX tags are not permitted in `.ts` files. Did you mean to change the file extension to `.tsx`?
+                            ~~~~
+!!! error TS2304: Cannot find name 'span'.
+    console.log("after");
+    
