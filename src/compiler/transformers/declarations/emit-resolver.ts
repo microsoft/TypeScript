@@ -308,6 +308,7 @@ export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEm
         isDeclarationVisible,
         isLiteralConstDeclaration,
         isLiteralComputedName,
+        tryFindAmbientModule() { return undefined },
         getAllAccessorDeclarations(declaration) {
             const parentLinks = getNodeLinks(declaration.parent);
             const key = getMemberKey(declaration.name);

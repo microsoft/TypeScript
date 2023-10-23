@@ -32,13 +32,17 @@
             "parserIndexSignature11",
             "ES5SymbolProperty1",
             "indexSignatureMustHaveTypeAnnotation",
+            "computedPropertyNamesOnOverloads_ES5",
+            "computedPropertyNamesOnOverloads_ES6",
             // Computed property type is narrowed
             "computedPropertiesNarrowed",
             // error on used to be indexer, now it is a computed property
             "propertyAssignment",
             "invalidTaggedTemplateEscapeSequences", // Invalid escape sequences
             // duplicate field/accessor
-            "symbolDeclarationEmit12"
+            "symbolDeclarationEmit12",
+            // symbol merges with global eval and is not written to declarations.
+            "parserStrictMode8",
         ],
         "ts-bugs": [
             // https://github.com/microsoft/TypeScript/issues/55571

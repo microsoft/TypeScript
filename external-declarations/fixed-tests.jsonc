@@ -13,6 +13,26 @@
         ]
     },
     "test-categories": {
+        "to-investigate": [
+            "declarationEmitObjectLiteralAccessors1",
+            "declarationsWithRecursiveInternalTypesProduceUniqueTypeParams",
+        ],
+        "new-issue": [
+            "emitMethodCalledNew",
+            "indexTypeNoSubstitutionTemplateLiteral",
+            "staticPropertyNameConflicts",
+            "objectTypesIdentityWithConstructSignatures2",
+            "objectTypesIdentityWithConstructSignaturesDifferingParamCounts",
+            "objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints",
+            "objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints2",
+            "objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints3",
+            "objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType",
+            "objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2",
+            "objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterNames",
+            "objectTypesIdentityWithGenericConstructSignaturesOptionalParams",
+            "objectTypesIdentityWithGenericConstructSignaturesOptionalParams2",
+            "objectTypesIdentityWithGenericConstructSignaturesOptionalParams3",
+        ],
         "enum-issues": [
             "ambientConstLiterals",
             "constEnumErrors",
