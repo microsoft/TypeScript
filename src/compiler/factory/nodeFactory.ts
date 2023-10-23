@@ -1178,8 +1178,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         ensureUseStrict,
         liftToBlock,
         mergeLexicalEnvironment,
-        updateModifiers,
-        updateDecoratorsAndModifiers,
+        replaceModifiers,
+        replaceDecoratorsAndModifiers,
     };
 
     forEach(nodeFactoryPatchers, fn => fn(factory));
@@ -7100,8 +7100,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return statements;
     }
 
-    function updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags): T;
-    function updateModifiers(node: HasModifiers, modifiers: readonly Modifier[] | ModifierFlags) {
+    function replaceModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags): T;
+    function replaceModifiers(node: HasModifiers, modifiers: readonly Modifier[] | ModifierFlags) {
         let modifierArray;
         if (typeof modifiers === "number") {
             modifierArray = createModifiersFromModifierFlags(modifiers);
@@ -7137,8 +7137,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             Debug.assertNever(node);
     }
 
-    function updateDecoratorsAndModifiers<T extends HasModifiers & HasDecorators>(node: T, modifiers: readonly ModifierLike[]): T;
-    function updateDecoratorsAndModifiers(node: HasModifiers & HasDecorators, modifierArray: readonly ModifierLike[]) {
+    function replaceDecoratorsAndModifiers<T extends HasModifiers & HasDecorators>(node: T, modifiers: readonly ModifierLike[]): T;
+    function replaceDecoratorsAndModifiers(node: HasModifiers & HasDecorators, modifierArray: readonly ModifierLike[]) {
         return isParameter(node) ? updateParameterDeclaration(node, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
             isPropertyDeclaration(node) ? updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
             isMethodDeclaration(node) ? updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
