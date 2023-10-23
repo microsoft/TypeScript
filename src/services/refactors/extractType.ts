@@ -176,27 +176,31 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
     const current = getTokenAtPosition(file, startPosition);
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const cursorRequest = range.pos === range.end && considerEmptySpans;
+    const overlappingRange = nodeOverlapsWithStartEnd(current, file, range.pos, range.end);
 
     const firstType = findAncestor(current, node =>
         node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
-        (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end)));
+        (cursorRequest || overlappingRange));
     if (!firstType || !isTypeNode(firstType)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
 
     const checker = context.program.getTypeChecker();
     const enclosingNode = getEnclosingNode(firstType, isJS);
     if (enclosingNode === undefined) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
 
+    const expandedFirstType = getExpandedSelectionNode(firstType, enclosingNode);
+    if (!isTypeNode(expandedFirstType)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
+
     const typeList: TypeNode[] = [];
-    if ((isUnionTypeNode(firstType.parent) || isIntersectionTypeNode(firstType.parent)) && range.end > firstType.end) {
+    if ((isUnionTypeNode(expandedFirstType.parent) || isIntersectionTypeNode(expandedFirstType.parent)) && range.end > firstType.end) {
         // the only extraction cases in which multiple nodes may need to be selected to capture the entire type are union and intersection types
         addRange(
             typeList,
-            firstType.parent.types.filter(type => {
-                return type.getStart() >= range.pos && type.getEnd() <= range.end;
+            expandedFirstType.parent.types.filter(type => {
+                return nodeOverlapsWithStartEnd(type, file, range.pos, range.end);
             }),
         );
     }
-    const selection = typeList.length > 1 ? typeList : firstType;
+    const selection = typeList.length > 1 ? typeList : expandedFirstType;
 
     const typeParameters = collectTypeParameters(checker, selection, enclosingNode, file);
     if (!typeParameters) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
@@ -394,4 +398,16 @@ function getNodesToEdit(info: ExtractInfo) {
 
 function getEnclosingNode(node: Node, isJS: boolean) {
     return findAncestor(node, isStatement) || (isJS ? findAncestor(node, isJSDoc) : undefined);
+}
+
+function getExpandedSelectionNode(firstType: Node, enclosingNode: Node) {
+    // intended to capture the entire type in cases where the user selection is not exactly the entire type
+    // currently only implemented for union and intersection types
+    return findAncestor(firstType, node => {
+        if (node === enclosingNode) return "quit";
+        if (isUnionTypeNode(node.parent) || isIntersectionTypeNode(node.parent)) {
+            return true;
+        }
+        return false;
+    }) ?? firstType;
 }
