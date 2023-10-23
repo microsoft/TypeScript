@@ -9074,7 +9074,10 @@ export interface NodeFactory {
     cloneNode<T extends Node | undefined>(node: T): T;
     /** @internal */ updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
     /** @internal */ updateModifierLike<T extends HasModifiers & HasDecorators>(node: T, modifierLike: readonly ModifierLike[] | undefined): T;
-    /** @internal */ updatePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
+    /**
+     * Updates a node that contains a property name, replacing only the name of the node.
+     */
+    updatePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
 }
 
 /** @internal */
