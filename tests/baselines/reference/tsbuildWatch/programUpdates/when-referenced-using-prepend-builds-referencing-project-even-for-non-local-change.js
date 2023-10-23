@@ -335,7 +335,7 @@ After running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
-[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -455,7 +455,7 @@ Before running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:28 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -627,7 +627,7 @@ After running Timeout callback:: count: 1
 4: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
-[[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -742,7 +742,7 @@ Before running Timeout callback:: count: 1
 4: timerToBuildInvalidatedProject
 After running Timeout callback:: count: 0
 Output::
-[[90m12:02:00 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

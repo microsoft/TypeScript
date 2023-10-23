@@ -3,6 +3,14 @@ import {
     jsonToReadableText,
 } from "../helpers";
 import {
+    FsContents,
+} from "../helpers/contents";
+import {
+    getFsContentsForSampleProjectReferences,
+    getFsContentsForSampleProjectReferencesLogicConfig,
+    getSysForSampleProjectReferences,
+} from "../helpers/sampleProjectReferences";
+import {
     commonFile1,
     commonFile2,
     createBaseline,
@@ -15,86 +23,22 @@ import {
 import {
     createWatchedSystem,
     File,
-    getTsBuildProjectFile,
-    getTsBuildProjectFilePath,
     libFile,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
-    const enum SubProject {
-        core = "core",
-        logic = "logic",
-        tests = "tests",
-        ui = "ui",
-    }
-    type ReadonlyFile = Readonly<File>;
-    /** [tsconfig, index] | [tsconfig, index, anotherModule, someDecl] */
-    type SubProjectFiles = [tsconfig: ReadonlyFile, index: ReadonlyFile] | [tsconfig: ReadonlyFile, index: ReadonlyFile, anotherModule: ReadonlyFile, someDecl: ReadonlyFile];
-    function projectFilePath(subProject: SubProject, baseFileName: string) {
-        return `${getTsBuildProjectFilePath("sample1", subProject)}/${baseFileName.toLowerCase()}`;
-    }
-
-    function projectFile(subProject: SubProject, baseFileName: string): File {
-        return getTsBuildProjectFile("sample1", `${subProject}/${baseFileName}`);
-    }
-
-    function subProjectFiles(subProject: SubProject, anotherModuleAndSomeDecl?: true): SubProjectFiles {
-        const tsconfig = projectFile(subProject, "tsconfig.json");
-        const index = projectFile(subProject, "index.ts");
-        if (!anotherModuleAndSomeDecl) {
-            return [tsconfig, index];
-        }
-        const anotherModule = projectFile(SubProject.core, "anotherModule.ts");
-        const someDecl = projectFile(SubProject.core, "some_decl.ts");
-        return [tsconfig, index, anotherModule, someDecl];
-    }
-
-    function changeFile(fileName: string | (() => string), content: string | (() => string), caption: string): TscWatchCompileChange {
-        return {
-            caption,
-            edit: sys => sys.writeFile(ts.isString(fileName) ? fileName : fileName(), ts.isString(content) ? content : content()),
-            timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
-        };
-    }
-
-    function changeCore(content: () => string, caption: string) {
-        return changeFile(() => core[1].path, content, caption);
-    }
-
-    let core: SubProjectFiles;
-    let logic: SubProjectFiles;
-    let tests: SubProjectFiles;
-    let ui: SubProjectFiles;
-    let allFiles: readonly File[];
-
-    before(() => {
-        core = subProjectFiles(SubProject.core, /*anotherModuleAndSomeDecl*/ true);
-        logic = subProjectFiles(SubProject.logic);
-        tests = subProjectFiles(SubProject.tests);
-        ui = subProjectFiles(SubProject.ui);
-        allFiles = [libFile, ...core, ...logic, ...tests, ...ui];
-    });
-
-    after(() => {
-        core = undefined!;
-        logic = undefined!;
-        tests = undefined!;
-        ui = undefined!;
-        allFiles = undefined!;
-    });
-
     verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "creates solution in watch mode",
-        commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
-        sys: () => createWatchedSystem(allFiles, { currentDirectory: "/user/username/projects" }),
+        commandLineArgs: ["-b", "-w", "tests"],
+        sys: getSysForSampleProjectReferences,
     });
 
     it("verify building references watches only those projects", () => {
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(allFiles, { currentDirectory: "/user/username/projects" }));
+        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(getSysForSampleProjectReferences());
         const host = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
-        const solutionBuilder = ts.createSolutionBuilderWithWatch(host, [`sample1/${SubProject.tests}`], { watch: true });
-        solutionBuilder.buildReferences(`sample1/${SubProject.tests}`);
+        const solutionBuilder = ts.createSolutionBuilderWithWatch(host, ["tests"], { watch: true });
+        solutionBuilder.buildReferences("tests");
         runWatchBaseline({
             scenario: "programUpdates",
             subScenario: "verify building references watches only those projects",
@@ -108,13 +52,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     });
 
     describe("validates the changes and watched files", () => {
-        const newFileWithoutExtension = "newFile";
-        const newFile: File = {
-            path: projectFilePath(SubProject.core, `${newFileWithoutExtension}.ts`),
-            content: `export const newFileConst = 30;`,
-        };
-
-        function verifyProjectChanges(subScenario: string, allFilesGetter: () => readonly File[]) {
+        function verifyProjectChanges(subScenario: string, allFilesGetter: () => FsContents) {
             const buildLogicAndTests: TscWatchCompileChange = {
                 caption: "Build logic and tests",
                 edit: ts.noop,
@@ -124,33 +62,31 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
             verifyTscWatch({
                 scenario: "programUpdates",
                 subScenario: `${subScenario}/change builds changes and reports found errors message`,
-                commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
+                commandLineArgs: ["-b", "-w", "sample1/tests"],
                 sys: () =>
                     createWatchedSystem(
                         allFilesGetter(),
                         { currentDirectory: "/user/username/projects" },
                     ),
                 edits: [
-                    changeCore(() =>
-                        `${core[1].content}
-export class someClass { }`, "Make change to core"),
+                    {
+                        caption: "Make change to core",
+                        edit: sys => sys.appendFile("sample1/core/index.ts", `\nexport class someClass { }`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
+                    },
                     buildLogicAndTests,
                     // Another change requeues and builds it
-                    changeCore(() => core[1].content, "Revert core file"),
+                    {
+                        caption: "Revert core file",
+                        edit: sys => sys.replaceFileText("sample1/core/index.ts", `\nexport class someClass { }`, ""),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
+                    },
                     buildLogicAndTests,
                     {
                         caption: "Make two changes",
                         edit: sys => {
-                            const change1 = `${core[1].content}
-export class someClass { }`;
-                            sys.writeFile(core[1].path, change1);
-                            assert.equal(sys.writtenFiles.size, 1);
-                            sys.writtenFiles.clear();
-                            sys.writeFile(
-                                core[1].path,
-                                `${change1}
-export class someClass2 { }`,
-                            );
+                            sys.appendFile("sample1/core/index.ts", `\nexport class someClass { }`);
+                            sys.appendFile("sample1/core/index.ts", `\nexport class someClass2 { }`);
                         },
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
                     },
@@ -161,36 +97,40 @@ export class someClass2 { }`,
             verifyTscWatch({
                 scenario: "programUpdates",
                 subScenario: `${subScenario}/non local change does not start build of referencing projects`,
-                commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
+                commandLineArgs: ["-b", "-w", "sample1/tests"],
                 sys: () =>
                     createWatchedSystem(
                         allFilesGetter(),
                         { currentDirectory: "/user/username/projects" },
                     ),
-                edits: [
-                    changeCore(() =>
-                        `${core[1].content}
-function foo() { }`, "Make local change to core"),
-                ],
+                edits: [{
+                    caption: "Make local change to core",
+                    edit: sys => sys.appendFile("sample1/core/index.ts", `\nfunction foo() { }`),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
+                }],
             });
 
-            function changeNewFile(newFileContent: string) {
-                return changeFile(newFile.path, newFileContent, "Change to new File and build core");
-            }
             verifyTscWatch({
                 scenario: "programUpdates",
                 subScenario: `${subScenario}/builds when new file is added, and its subsequent updates`,
-                commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
+                commandLineArgs: ["-b", "-w", "sample1/tests"],
                 sys: () =>
                     createWatchedSystem(
                         allFilesGetter(),
                         { currentDirectory: "/user/username/projects" },
                     ),
                 edits: [
-                    changeNewFile(newFile.content),
+                    {
+                        caption: "Change to new File and build core",
+                        edit: sys => sys.writeFile("sample1/core/newfile.ts", `export const newFileConst = 30;`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
+                    },
                     buildLogicAndTests,
-                    changeNewFile(`${newFile.content}
-export class someClass2 { }`),
+                    {
+                        caption: "Change to new File and build core",
+                        edit: sys => sys.appendFile("sample1/core/newfile.ts", `\nexport class someClass2 { }`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
+                    },
                     buildLogicAndTests,
                 ],
             });
@@ -199,24 +139,20 @@ export class someClass2 { }`),
         describe("with simple project reference graph", () => {
             verifyProjectChanges(
                 "with simple project reference graph",
-                () => allFiles,
+                getFsContentsForSampleProjectReferences,
             );
         });
 
         describe("with circular project reference", () => {
             verifyProjectChanges(
                 "with circular project reference",
-                () => {
-                    const [coreTsconfig, ...otherCoreFiles] = core;
-                    const circularCoreConfig: File = {
-                        path: coreTsconfig.path,
-                        content: jsonToReadableText({
-                            compilerOptions: { composite: true, declaration: true },
-                            references: [{ path: "../tests", circular: true }],
-                        }),
-                    };
-                    return [libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests];
-                },
+                () => ({
+                    ...getFsContentsForSampleProjectReferences(),
+                    "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
+                        compilerOptions: { composite: true, declaration: true },
+                        references: [{ path: "../tests", circular: true }],
+                    }),
+                }),
             );
         });
     });
@@ -224,16 +160,16 @@ export class someClass2 { }`),
     verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "watches config files that are not present",
-        commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
-        sys: () =>
-            createWatchedSystem(
-                [libFile, ...core, logic[1], ...tests],
-                { currentDirectory: "/user/username/projects" },
-            ),
+        commandLineArgs: ["-b", "-w", "tests"],
+        sys: () => {
+            const sys = getSysForSampleProjectReferences();
+            sys.deleteFile("logic/tsconfig.json");
+            return sys;
+        },
         edits: [
             {
                 caption: "Write logic tsconfig and build logic",
-                edit: sys => sys.writeFile(logic[0].path, logic[0].content),
+                edit: sys => sys.writeFile("logic/tsconfig.json", getFsContentsForSampleProjectReferencesLogicConfig()),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds logic
             },
             {
@@ -245,58 +181,47 @@ export class someClass2 { }`),
         ],
     });
 
-    describe("when referenced using prepend, builds referencing project even for non local change", () => {
-        let coreIndex: File;
-        before(() => {
-            coreIndex = {
-                path: core[1].path,
-                content: `function foo() { return 10; }`,
-            };
-        });
-        after(() => {
-            coreIndex = undefined!;
-        });
-        const buildLogic: TscWatchCompileChange = {
-            caption: "Build logic",
-            edit: ts.noop,
-            // Builds logic
-            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-        };
-        verifyTscWatch({
-            scenario: "programUpdates",
-            subScenario: "when referenced using prepend builds referencing project even for non local change",
-            commandLineArgs: ["-b", "-w", `sample1/${SubProject.logic}`],
-            sys: () => {
-                const coreTsConfig: File = {
-                    path: core[0].path,
-                    content: jsonToReadableText({
-                        compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
-                    }),
-                };
-                const logicTsConfig: File = {
-                    path: logic[0].path,
-                    content: jsonToReadableText({
-                        compilerOptions: { ignoreDeprecations: "5.0", composite: true, declaration: true, outFile: "index.js" },
-                        references: [{ path: "../core", prepend: true }],
-                    }),
-                };
-                const logicIndex: File = {
-                    path: logic[1].path,
-                    content: `function bar() { return foo() + 1 };`,
-                };
-                return createWatchedSystem([libFile, coreTsConfig, coreIndex, logicTsConfig, logicIndex], { currentDirectory: "/user/username/projects" });
+    verifyTscWatch({
+        scenario: "programUpdates",
+        subScenario: "when referenced using prepend builds referencing project even for non local change",
+        commandLineArgs: ["-b", "-w", "sample1/logic"],
+        sys: () =>
+            createWatchedSystem({
+                [libFile.path]: libFile.content,
+                "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
+                    compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
+                }),
+                "/user/username/projects/sample1/core/index.ts": `function foo() { return 10; }`,
+                "/user/username/projects/sample1/logic/tsconfig.json": jsonToReadableText({
+                    compilerOptions: { ignoreDeprecations: "5.0", composite: true, declaration: true, outFile: "index.js" },
+                    references: [{ path: "../core", prepend: true }],
+                }),
+                "/user/username/projects/sample1/logic/index.ts": `function bar() { return foo() + 1 };`,
+            }, { currentDirectory: "/user/username/projects" }),
+        edits: [
+            {
+                caption: "Make non local change and build core",
+                edit: sys => sys.appendFile("sample1/core/index.ts", `\nfunction myFunc() { return 10; }`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
             },
-            edits: [
-                changeCore(() =>
-                    `${coreIndex.content}
-function myFunc() { return 10; }`, "Make non local change and build core"),
-                buildLogic,
-                changeCore(() =>
-                    `${coreIndex.content}
-function myFunc() { return 100; }`, "Make local change and build core"),
-                buildLogic,
-            ],
-        });
+            {
+                caption: "Build logic",
+                edit: ts.noop,
+                // Builds logic
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "Make local change and build core",
+                edit: sys => sys.replaceFileText("sample1/core/index.ts", `\nfunction myFunc() { return 10; }`, `\nfunction myFunc() { return 100; }`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
+            },
+            {
+                caption: "Build logic",
+                edit: ts.noop,
+                // Builds logic
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
     });
 
     describe("when referenced project change introduces error in the down stream project and then fixes it", () => {
@@ -367,28 +292,18 @@ createSomeObject().message;`,
             verifyTscWatch({
                 scenario: "programUpdates",
                 subScenario: `reportErrors/${subScenario}`,
-                commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`, ...buildOptions],
-                sys: () => createWatchedSystem(allFiles, { currentDirectory: "/user/username/projects" }),
+                commandLineArgs: ["-b", "-w", "tests", ...buildOptions],
+                sys: getSysForSampleProjectReferences,
                 edits: [
                     {
                         caption: "change logic",
-                        edit: sys =>
-                            sys.writeFile(
-                                logic[1].path,
-                                `${logic[1].content}
-let y: string = 10;`,
-                            ),
+                        edit: sys => sys.appendFile("logic/index.ts", `\nlet y: string = 10;`),
                         // Builds logic
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "change core",
-                        edit: sys =>
-                            sys.writeFile(
-                                core[1].path,
-                                `${core[1].content}
-let x: string = 10;`,
-                            ),
+                        edit: sys => sys.appendFile("core/index.ts", `\nlet x: string = 10;`),
                         // Builds core
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
@@ -506,27 +421,17 @@ let x: string = 10;`,
     verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "incremental updates in verbose mode",
-        commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`, "-verbose"],
-        sys: () => createWatchedSystem(allFiles, { currentDirectory: "/user/username/projects" }),
+        commandLineArgs: ["-b", "-w", "tests", "-verbose"],
+        sys: getSysForSampleProjectReferences,
         edits: [
             {
                 caption: "Make non dts change",
-                edit: sys =>
-                    sys.writeFile(
-                        logic[1].path,
-                        `${logic[1].content}
-function someFn() { }`,
-                    ),
+                edit: sys => sys.appendFile("logic/index.ts", `\nfunction someFn() { }`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build logic and updates tests
             },
             {
                 caption: "Make dts change",
-                edit: sys =>
-                    sys.writeFile(
-                        logic[1].path,
-                        `${logic[1].content}
-export function someFn() { }`,
-                    ),
+                edit: sys => sys.replaceFileText("logic/index.ts", `\nfunction someFn() { }`, `\nexport function someFn() { }`),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // build logic
                     sys.runQueuedTimeoutCallbacks(); // build tests
@@ -574,13 +479,13 @@ export function someFn() { }`,
     verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "should not trigger recompilation because of program emit",
-        commandLineArgs: ["-b", "-w", `sample1/${SubProject.core}`, "-verbose"],
-        sys: () => createWatchedSystem([libFile, ...core], { currentDirectory: "/user/username/projects" }),
+        commandLineArgs: ["-b", "-w", "core", "-verbose"],
+        sys: getSysForSampleProjectReferences,
         edits: [
             noopChange,
             {
                 caption: "Add new file",
-                edit: sys => sys.writeFile(`sample1/${SubProject.core}/file3.ts`, `export const y = 10;`),
+                edit: sys => sys.writeFile("core/file3.ts", `export const y = 10;`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             noopChange,
@@ -590,17 +495,19 @@ export function someFn() { }`,
     verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "should not trigger recompilation because of program emit with outDir specified",
-        commandLineArgs: ["-b", "-w", `sample1/${SubProject.core}`, "-verbose"],
-        sys: () => {
-            const [coreConfig, ...rest] = core;
-            const newCoreConfig: File = { path: coreConfig.path, content: jsonToReadableText({ compilerOptions: { composite: true, outDir: "outDir" } }) };
-            return createWatchedSystem([libFile, newCoreConfig, ...rest], { currentDirectory: "/user/username/projects" });
-        },
+        commandLineArgs: ["-b", "-w", "sample1/core", "-verbose"],
+        sys: () =>
+            createWatchedSystem({
+                ...getFsContentsForSampleProjectReferences(),
+                "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
+                    compilerOptions: { composite: true, outDir: "outDir" },
+                }),
+            }, { currentDirectory: "/user/username/projects" }),
         edits: [
             noopChange,
             {
                 caption: "Add new file",
-                edit: sys => sys.writeFile(`sample1/${SubProject.core}/file3.ts`, `export const y = 10;`),
+                edit: sys => sys.writeFile("sample1/core/file3.ts", `export const y = 10;`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             noopChange,

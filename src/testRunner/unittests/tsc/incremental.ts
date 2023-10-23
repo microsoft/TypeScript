@@ -9,6 +9,9 @@ import {
     libContent,
 } from "../helpers/contents";
 import {
+    getFsForNoEmitOnError,
+} from "../helpers/noEmitOnError";
+import {
     noChangeOnlyRuns,
     noChangeRun,
     TestTscEdit,
@@ -16,7 +19,6 @@ import {
 } from "../helpers/tsc";
 import {
     appendText,
-    loadProjectFromDisk,
     loadProjectFromFiles,
     prependText,
     replaceText,
@@ -119,7 +121,7 @@ describe("unittests:: tsc:: incremental::", () => {
     describe("with noEmitOnError", () => {
         let projFs: vfs.FileSystem;
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/noEmitOnError");
+            projFs = getFsForNoEmitOnError();
         });
         after(() => {
             projFs = undefined!;
@@ -130,7 +132,7 @@ describe("unittests:: tsc:: incremental::", () => {
                 scenario: "incremental",
                 subScenario,
                 fs: () => projFs,
-                commandLineArgs: ["--incremental", "-p", "src"],
+                commandLineArgs: ["--incremental"],
                 modifyFs,
                 edits: [
                     noChangeRun,
@@ -147,7 +149,7 @@ describe("unittests:: tsc:: incremental::", () => {
             "with noEmitOnError syntax errors",
             fs =>
                 fs.writeFileSync(
-                    "/src/src/main.ts",
+                    "src/main.ts",
                     `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
@@ -160,14 +162,14 @@ const a = {
             "with noEmitOnError semantic errors",
             fs =>
                 fs.writeFileSync(
-                    "/src/src/main.ts",
+                    "src/main.ts",
                     `import { A } from "../shared/types/db";
 const a: string = "hello";`,
                     "utf-8",
                 ),
             fs =>
                 fs.writeFileSync(
-                    "/src/src/main.ts",
+                    "src/main.ts",
                     `import { A } from "../shared/types/db";
 const a: string = 10;`,
                     "utf-8",

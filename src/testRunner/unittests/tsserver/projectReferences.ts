@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    dedent,
+} from "../../_namespaces/Utils";
+import {
     jsonToReadableText,
 } from "../helpers";
 import {
@@ -21,36 +24,110 @@ import {
 import {
     createServerHost,
     File,
-    getTsBuildProjectFile,
-    getTsBuildProjectFilePath,
     libFile,
     SymLink,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {
     describe("with container project", () => {
-        function getProjectFiles(project: string): [File, File] {
-            return [
-                getTsBuildProjectFile(project, "tsconfig.json"),
-                getTsBuildProjectFile(project, "index.ts"),
-            ];
+        function setup(tempFile?: File) {
+            const containerLibConfig: File = {
+                path: "/user/username/projects/container/lib/tsconfig.json",
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        outFile: "../built/local/lib.js",
+                        composite: true,
+                        declarationMap: true,
+                    },
+                    references: [],
+                    files: [
+                        "index.ts",
+                    ],
+                }),
+            };
+            const containerLibIndex: File = {
+                path: "/user/username/projects/container/lib/index.ts",
+                content: dedent`
+                    namespace container {
+                        export const myConst = 30;
+                    }
+                `,
+            };
+            const containerExecConfig: File = {
+                path: "/user/username/projects/container/exec/tsconfig.json",
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        ignoreDeprecations: "5.0",
+                        outFile: "../built/local/exec.js",
+                    },
+                    files: [
+                        "index.ts",
+                    ],
+                    references: [
+                        { path: "../lib", prepend: true },
+                    ],
+                }),
+            };
+            const containerExecIndex: File = {
+                path: "/user/username/projects/container/exec/index.ts",
+                content: dedent`
+                    namespace container {
+                        export function getMyConst() {
+                            return myConst;
+                        }
+                    }
+                `,
+            };
+            const containerCompositeExecConfig: File = {
+                path: "/user/username/projects/container/compositeExec/tsconfig.json",
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        ignoreDeprecations: "5.0",
+                        outFile: "../built/local/compositeExec.js",
+                        composite: true,
+                        declarationMap: true,
+                    },
+                    files: [
+                        "index.ts",
+                    ],
+                    references: [
+                        { path: "../lib", prepend: true },
+                    ],
+                }),
+            };
+            const containerCompositeExecIndex: File = {
+                path: "/user/username/projects/container/compositeExec/index.ts",
+                content: dedent`
+                    namespace container {
+                        export function getMyConst() {
+                            return myConst;
+                        }
+                    }
+                `,
+            };
+            const containerConfig: File = {
+                path: "/user/username/projects/container/tsconfig.json",
+                content: jsonToReadableText({
+                    files: [],
+                    include: [],
+                    references: [
+                        { path: "./exec" },
+                        { path: "./compositeExec" },
+                    ],
+                }),
+            };
+            const files = [libFile, containerLibConfig, containerLibIndex, containerExecConfig, containerExecIndex, containerCompositeExecConfig, containerCompositeExecIndex, containerConfig];
+            if (tempFile) files.push(tempFile);
+            const host = createHostWithSolutionBuild(files, [containerConfig.path]);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            return { files, session, containerConfig, containerCompositeExecIndex };
         }
 
-        const project = "container";
-        const containerLib = getProjectFiles("container/lib");
-        const containerExec = getProjectFiles("container/exec");
-        const containerCompositeExec = getProjectFiles("container/compositeExec");
-        const containerConfig = getTsBuildProjectFile(project, "tsconfig.json");
-        const files = [libFile, ...containerLib, ...containerExec, ...containerCompositeExec, containerConfig];
-
         it("does not error on container only project", () => {
-            const host = createHostWithSolutionBuild(files, [containerConfig.path]);
-
-            // Open external project for the folder
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const { files, session, containerConfig } = setup();
             const service = session.getProjectService();
             service.openExternalProjects([{
-                projectFileName: getTsBuildProjectFilePath(project, project),
+                projectFileName: "/user/username/projects/container/container",
                 rootFiles: files.map(f => ({ fileName: f.path })),
                 options: {},
             }]);
@@ -77,13 +154,12 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
         });
 
         it("can successfully find references with --out options", () => {
-            const host = createHostWithSolutionBuild(files, [containerConfig.path]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
-            openFilesForSession([containerCompositeExec[1]], session);
-            const myConstStart = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
+            const { session, containerCompositeExecIndex } = setup();
+            openFilesForSession([containerCompositeExecIndex], session);
+            const myConstStart = protocolLocationFromSubstring(containerCompositeExecIndex.content, "myConst");
             session.executeCommandSeq<ts.server.protocol.RenameRequest>({
                 command: ts.server.protocol.CommandTypes.Rename,
-                arguments: { file: containerCompositeExec[1].path, ...myConstStart },
+                arguments: { file: containerCompositeExecIndex.path, ...myConstStart },
             });
 
             baselineTsserverLogs("projectReferences", `can successfully find references with out option`, session);
@@ -94,20 +170,19 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: `/user/username/projects/temp/temp.ts`,
                 content: "let x = 10",
             };
-            const host = createHostWithSolutionBuild(files.concat([tempFile]), [containerConfig.path]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
-            openFilesForSession([containerCompositeExec[1]], session);
+            const { session, containerCompositeExecIndex } = setup(tempFile);
+            openFilesForSession([containerCompositeExecIndex], session);
             const service = session.getProjectService();
 
             // Open temp file and verify all projects alive
             openFilesForSession([tempFile], session);
 
             // Ref projects are loaded after as part of this command
-            const locationOfMyConst = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
+            const locationOfMyConst = protocolLocationFromSubstring(containerCompositeExecIndex.content, "myConst");
             session.executeCommandSeq<ts.server.protocol.RenameRequest>({
                 command: ts.server.protocol.CommandTypes.Rename,
                 arguments: {
-                    file: containerCompositeExec[1].path,
+                    file: containerCompositeExecIndex.path,
                     ...locationOfMyConst,
                 },
             });
@@ -117,7 +192,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             openFilesForSession([tempFile], session);
 
             // Close all files and open temp file, only inferred project should be alive
-            service.closeClientFile(containerCompositeExec[1].path);
+            service.closeClientFile(containerCompositeExecIndex.path);
             service.closeClientFile(tempFile.path);
             openFilesForSession([tempFile], session);
             baselineTsserverLogs("projectReferences", `ancestor and project ref management`, session);

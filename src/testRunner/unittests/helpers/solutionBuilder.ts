@@ -12,11 +12,7 @@ import {
 } from "./tsc";
 import {
     changeToHostTrackingWrittenFiles,
-    createWatchedSystem,
-    FileOrFolderOrSymLink,
-    FileOrFolderOrSymLinkMap,
     TestServerHost,
-    TestServerHostCreationParameters,
 } from "./virtualFileSystemWithWatch";
 
 export function createSolutionBuilderHostForBaseline(
@@ -61,8 +57,4 @@ export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: re
     sys.writeFile = originalWriteFile;
     sys.writtenFiles = undefined;
     return sys;
-}
-
-export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters) {
-    return solutionBuildWithBaseline(createWatchedSystem(files, params), solutionRoots);
 }

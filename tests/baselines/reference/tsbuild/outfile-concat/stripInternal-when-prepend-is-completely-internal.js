@@ -27,6 +27,7 @@ function f() {
     return "JS does hoists";
 }
 
+
 //// [/src/first/tsconfig.json]
 {
   "compilerOptions": {
@@ -78,10 +79,8 @@ class C {
     "outFile": "../2/second-output.js",
     "skipDefaultLibCheck": true
   },
-  "references": [
-  ]
+  "references": []
 }
-
 
 //// [/src/third/third_part1.ts]
 const B = 2;
@@ -112,17 +111,17 @@ const B = 2;
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:10 AM[0m] Projects in this build: 
+[[90m12:00:22 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:11 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
+[[90m12:00:23 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
 
-[[90m12:00:12 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:24 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:22 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
+[[90m12:00:34 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:23 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:35 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

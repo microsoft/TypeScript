@@ -139,13 +139,15 @@ export function testTscCompile(input: TestTscCompile) {
         makeSystemReadyForBaseline(sys);
         actualReadFileMap = {};
         const originalReadFile = sys.readFile;
-        sys.readFile = path => {
-            // Dont record libs
-            if (path.startsWith("/src/")) {
-                actualReadFileMap![path] = (ts.getProperty(actualReadFileMap!, path) || 0) + 1;
-            }
-            return originalReadFile.call(sys, path);
-        };
+        if (input.baselineReadFileCalls) {
+            sys.readFile = path => {
+                // Dont record libs
+                if (!path.startsWith(ts.getDirectoryPath(sys.getExecutingFilePath()))) {
+                    actualReadFileMap![path] = (ts.getProperty(actualReadFileMap!, path) || 0) + 1;
+                }
+                return originalReadFile.call(sys, path);
+            };
+        }
 
         const result = commandLineCallbacks(sys, originalReadFile);
         ts.executeCommandLine(

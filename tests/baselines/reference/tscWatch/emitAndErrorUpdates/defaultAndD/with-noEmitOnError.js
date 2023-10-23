@@ -1,9 +1,18 @@
 currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
+//// [/user/username/projects/noEmitOnError/tsconfig.json]
+{
+  "compilerOptions": {
+    "outDir": "./dev-build",
+    "noEmitOnError": true
+  }
+}
+
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
     name: string;
 }
+
 
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
@@ -11,17 +20,10 @@ const a = {
     lastName: 'sdsd'
 ;
 
+
 //// [/user/username/projects/noEmitOnError/src/other.ts]
 console.log("hi");
 export { }
-
-//// [/user/username/projects/noEmitOnError/tsconfig.json]
-{
-    "compilerOptions": {
-        "outDir": "./dev-build",
-        "noEmitOnError": true
-    }
-}
 
 
 //// [/a/lib/lib.d.ts]

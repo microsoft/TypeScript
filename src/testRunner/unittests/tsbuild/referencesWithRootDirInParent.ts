@@ -1,3 +1,6 @@
+import {
+    dedent,
+} from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
 import {
     jsonToReadableText,
@@ -6,14 +9,46 @@ import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
-    loadProjectFromDisk,
+    loadProjectFromFiles,
     replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
     let projFs: vfs.FileSystem;
     before(() => {
-        projFs = loadProjectFromDisk("tests/projects/projectReferenceWithRootDirInParent");
+        projFs = loadProjectFromFiles({
+            "/src/src/main/a.ts": dedent`
+                import { b } from './b';
+                const a = b;
+            `,
+            "/src/src/main/b.ts": dedent`
+                export const b = 0;
+            `,
+            "/src/src/main/tsconfig.json": jsonToReadableText({
+                extends: "../../tsconfig.base.json",
+                references: [
+                    { path: "../other" },
+                ],
+            }),
+            "/src/src/other/other.ts": dedent`
+                export const Other = 0;
+            `,
+            "/src/src/other/tsconfig.json": jsonToReadableText({
+                extends: "../../tsconfig.base.json",
+            }),
+            "/src/tsconfig.base.json": jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    declaration: true,
+                    rootDir: "./src/",
+                    outDir: "./dist/",
+                    skipDefaultLibCheck: true,
+                },
+                exclude: [
+                    "node_modules",
+                ],
+            }),
+        });
     });
 
     after(() => {

@@ -2,17 +2,17 @@ currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNam
 Input::
 //// [/user/username/projects/noEmitOnError/tsconfig.json]
 {
-    "compilerOptions": {
-        "outDir": "./dev-build",
-        "noEmitOnError": true
-    }
+  "compilerOptions": {
+    "outDir": "./dev-build",
+    "noEmitOnError": true
+  }
 }
-
 
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
     name: string;
 }
+
 
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
@@ -20,9 +20,11 @@ const a = {
     lastName: 'sdsd'
 ;
 
+
 //// [/user/username/projects/noEmitOnError/src/other.ts]
 console.log("hi");
 export { }
+
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -201,7 +203,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/noemitonerror/shared/types/db.ts (computed .d.ts)
+/user/username/projects/noemitonerror/shared/types/db.ts (used version)
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 /user/username/projects/noemitonerror/src/other.ts (computed .d.ts)
 
