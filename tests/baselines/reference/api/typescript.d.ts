@@ -9830,7 +9830,14 @@ declare namespace ts {
      */
     function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
     function emitDeclarationsForProject(projectPath: string, files: string[] | undefined, options: CompilerOptions, host: CompilerHost): string;
-    function emitDeclarationsForFile(sourceFile: SourceFile, allProjectFiles: string[], tsLibFiles: string[], options: CompilerOptions): {
+    function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions): (file: string, host: CompilerHost) => {
+        output?: undefined;
+        diagnostics?: undefined;
+    } | {
+        output: string;
+        diagnostics: Diagnostic[];
+    };
+    function emitDeclarationsForFile(sourceFile: SourceFile, options: CompilerOptions): {
         code: string;
         diagnostics: Diagnostic[];
     };

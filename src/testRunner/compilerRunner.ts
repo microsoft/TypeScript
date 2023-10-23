@@ -390,7 +390,7 @@ function removeOutFromOptions(tsConfig: ts.ParsedCommandLine | undefined) {
 
     const clone: ts.ParsedCommandLine = {
         ...tsConfig,
-        options: tsConfig.options,
+        options: ts.cloneCompilerOptions(tsConfig.options),
     };
     delete clone.options.outFile;
     delete clone.options.out;
@@ -398,9 +398,11 @@ function removeOutFromOptions(tsConfig: ts.ParsedCommandLine | undefined) {
 }
 export class IsolatedDeclarationTest extends CompilerTestBase {
     private dteDiagnostics: ts.Diagnostic[];
+    tscNonIsolatedDeclarationsErrors: ts.Diagnostic[];
     private isOutputEquivalent: boolean;
     private dteDtsFile: Compiler.TestFile[];
     private tscDtsFiles: Compiler.TestFile[];
+    tscIsolatedDeclarationsErrors: ts.Diagnostic[];
     constructor(fileName: string, testCaseContent: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
         super(
             fileName,
@@ -412,8 +414,6 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
             configurationOverrides,
             // /*forceIncludeAllFiles*/ true,
         );
-        const options = { ...this.options };
-        ts.setConfigFileInOptions(options, options && options.configFile);
 
         const currentDirectory = this.harnessSettings.currentDirectory ?? vfs.srcFolder;
         const dteResult = Compiler.compileDeclarationFilesWithIsolatedEmitter(
@@ -436,7 +436,10 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
                 unitName: this.result.host.vfs.realpathSync(f.file),
                 content: f.text,
             })];
+
         this.tscDtsFiles.sort((a, b) => this.result.host.vfs.stringComparer(a.unitName, b.unitName));
+        this.tscNonIsolatedDeclarationsErrors = this.result.diagnostics.filter(d => !IsolatedDeclarationTest.dteDiagnosticErrors.has(d.code));
+        this.tscIsolatedDeclarationsErrors = this.result.diagnostics.filter(d => IsolatedDeclarationTest.dteDiagnosticErrors.has(d.code));
 
         // If DTE is the same as TS output we don't need to do any extra checks.
         this.isOutputEquivalent = this.dteDtsFile.length === this.tscDtsFiles.length && this.dteDtsFile
@@ -472,7 +475,7 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
             "isolated-declarations/original/tsc",
             this.fileName,
             this.tscDtsFiles,
-            this.result.diagnostics.filter(p => IsolatedDeclarationTest.dteDiagnosticErrors.has(p.code)),
+            this.tscIsolatedDeclarationsErrors,
             this.toBeCompiled,
             this.otherFiles,
             this.options.pretty,

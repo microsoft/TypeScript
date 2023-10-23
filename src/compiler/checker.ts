@@ -7274,7 +7274,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 anyType : getNonMissingTypeOfSymbol(propertySymbol);
             const saveEnclosingDeclaration = context.enclosingDeclaration;
             context.enclosingDeclaration = undefined;
-            const decl = propertySymbol.declarations && first(propertySymbol.declarations);
+            const decl = propertySymbol.declarations && firstOrUndefined(propertySymbol.declarations);
 
             function hasAccessibleLateBindableName(decl: Declaration, enclosingDeclaration: Node | undefined) {
                 const name = getNameOfDeclaration(decl);
