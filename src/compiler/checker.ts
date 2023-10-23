@@ -6,6 +6,7 @@ import {
     addRange,
     addRelatedInfo,
     addSyntheticLeadingComment,
+    addToSeen,
     AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
@@ -254,6 +255,7 @@ import {
     getContainingClassStaticBlock,
     getContainingFunction,
     getContainingFunctionOrClassStaticBlock,
+    getContextualTypeFromParent,
     getDeclarationModifierFlagsFromSymbol,
     getDeclarationOfKind,
     getDeclarationsOfKind,
@@ -1655,6 +1657,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getTypeOfPropertyOfContextualType,
         getFullyQualifiedName,
         getResolvedSignature: (node, candidatesOutArray, argumentCount) => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
+        getContextualStringLiteralCompletionTypes,
         getCandidateSignaturesForStringLiteralCompletions,
         getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) => runWithoutResolvedSignatureCaching(node, () => getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp)),
         getExpandedParameters,
@@ -1834,6 +1837,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         isTypeParameterPossiblyReferenced,
         typeHasCallOrConstructSignatures,
     };
+
+    function getContextualStringLiteralCompletionTypes(expression: Expression) {
+        const seen = new Map<string, true>();
+
+        return [
+            ...getStringLiteralTypes(getContextualTypeFromParent(expression, checker, ContextFlags.None), seen),
+            ...getStringLiteralTypes(getContextualTypeFromParent(expression, checker, ContextFlags.Completions), seen),
+        ];
+    }
+
+    function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
+        if (!type) return emptyArray;
+        // skip constraint
+        type = type.flags & TypeFlags.TypeParameter ? getBaseConstraintOfType(type) || type : type;
+        return type.flags & TypeFlags.Union ? flatMap((type as UnionType).types, t => getStringLiteralTypes(t, uniques)) :
+            type.flags & TypeFlags.StringLiteral && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, (type as StringLiteralType).value) ? [type as StringLiteralType] : emptyArray;
+    }
 
     function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node) {
         const candidatesSet = new Set<Signature>();

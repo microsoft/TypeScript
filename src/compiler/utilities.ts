@@ -78,6 +78,7 @@ import {
     ContainerFlags,
     contains,
     containsPath,
+    ContextFlags,
     createGetCanonicalFileName,
     createMultiMap,
     createScanner,
@@ -118,6 +119,7 @@ import {
     EntityNameOrEntityNameExpression,
     EnumDeclaration,
     EqualityComparer,
+    EqualityOperator,
     equalOwnProperties,
     EqualsToken,
     equateValues,
@@ -10463,4 +10465,36 @@ export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclarati
         return false;
     }
     return !!getResolutionModeOverride(node.attributes);
+}
+
+/** @internal */
+export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {
+    switch (kind) {
+        case SyntaxKind.EqualsEqualsEqualsToken:
+        case SyntaxKind.EqualsEqualsToken:
+        case SyntaxKind.ExclamationEqualsEqualsToken:
+        case SyntaxKind.ExclamationEqualsToken:
+            return true;
+        default:
+            return false;
+    }
+}
+
+/** @internal */
+export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
+    const parent = walkUpParenthesizedExpressions(node.parent);
+    switch (parent.kind) {
+        case SyntaxKind.NewExpression:
+            return checker.getContextualType(parent as NewExpression, contextFlags);
+        case SyntaxKind.BinaryExpression: {
+            const { left, operatorToken, right } = parent as BinaryExpression;
+            return isEqualityOperatorKind(operatorToken.kind)
+                ? checker.getTypeAtLocation(node === right ? left : right)
+                : checker.getContextualType(node, contextFlags);
+        }
+        case SyntaxKind.CaseClause:
+            return checker.getTypeAtLocation((parent as CaseClause).parent.parent.expression);
+        default:
+            return checker.getContextualType(node, contextFlags);
+    }
 }

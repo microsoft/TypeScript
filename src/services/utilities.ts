@@ -29,7 +29,6 @@ import {
     CompilerOptions,
     ConditionalExpression,
     contains,
-    ContextFlags,
     createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createRange,
     createScanner,
@@ -59,7 +58,6 @@ import {
     EndOfFileToken,
     endsWith,
     ensureScriptKind,
-    EqualityOperator,
     escapeString,
     ExportAssignment,
     ExportDeclaration,
@@ -88,6 +86,7 @@ import {
     FunctionLikeDeclaration,
     getAssignmentDeclarationKind,
     getCombinedNodeFlagsAlwaysIncludeJSDoc,
+    getContextualTypeFromParent,
     getDirectoryPath,
     getEmitModuleKind,
     getEmitScriptTarget,
@@ -371,7 +370,6 @@ import {
     VariableDeclaration,
     visitEachChild,
     VoidExpression,
-    walkUpParenthesizedExpressions,
     YieldExpression,
 } from "./_namespaces/ts";
 
@@ -3360,43 +3358,11 @@ export function needsParentheses(expression: Expression): boolean {
 }
 
 /** @internal */
-export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
-    const parent = walkUpParenthesizedExpressions(node.parent);
-    switch (parent.kind) {
-        case SyntaxKind.NewExpression:
-            return checker.getContextualType(parent as NewExpression, contextFlags);
-        case SyntaxKind.BinaryExpression: {
-            const { left, operatorToken, right } = parent as BinaryExpression;
-            return isEqualityOperatorKind(operatorToken.kind)
-                ? checker.getTypeAtLocation(node === right ? left : right)
-                : checker.getContextualType(node, contextFlags);
-        }
-        case SyntaxKind.CaseClause:
-            return getSwitchedType(parent as CaseClause, checker);
-        default:
-            return checker.getContextualType(node, contextFlags);
-    }
-}
-
-/** @internal */
 export function quote(sourceFile: SourceFile, preferences: UserPreferences, text: string): string {
     // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
     const quotePreference = getQuotePreference(sourceFile, preferences);
     const quoted = JSON.stringify(text);
     return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, "\\'").replace(/\\"/g, '"')}'` : quoted;
-}
-
-/** @internal */
-export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {
-    switch (kind) {
-        case SyntaxKind.EqualsEqualsEqualsToken:
-        case SyntaxKind.EqualsEqualsToken:
-        case SyntaxKind.ExclamationEqualsEqualsToken:
-        case SyntaxKind.ExclamationEqualsToken:
-            return true;
-        default:
-            return false;
-    }
 }
 
 /** @internal */
@@ -3415,11 +3381,6 @@ export function isStringLiteralOrTemplate(node: Node): node is StringLiteralLike
 /** @internal */
 export function hasIndexSignature(type: Type): boolean {
     return !!type.getStringIndexType() || !!type.getNumberIndexType();
-}
-
-/** @internal */
-export function getSwitchedType(caseClause: CaseClause, checker: TypeChecker): Type | undefined {
-    return checker.getTypeAtLocation(caseClause.parent.parent.expression);
 }
 
 /** @internal */

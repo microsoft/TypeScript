@@ -105,7 +105,6 @@ import {
     getReplacementSpanForContextToken,
     getRootDeclaration,
     getSourceFileOfModule,
-    getSwitchedType,
     getSymbolId,
     getSynthesizedDeepClone,
     getTokenAtPosition,
@@ -3109,7 +3108,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
             return checker.getContextualType(parent as Expression);
         case SyntaxKind.CaseKeyword:
             const caseClause = tryCast(parent, isCaseClause);
-            return caseClause ? getSwitchedType(caseClause, checker) : undefined;
+            return caseClause ? checker.getTypeAtLocation(caseClause.parent.parent.expression) : undefined;
         case SyntaxKind.OpenBraceToken:
             return isJsxExpression(parent) && !isJsxElement(parent.parent) && !isJsxFragment(parent.parent) ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
         default:

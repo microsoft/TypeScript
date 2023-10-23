@@ -388,7 +388,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 //      });
                 return stringLiteralCompletionsForObjectLiteral(typeChecker, parent.parent);
             }
-            return fromContextualType() || fromContextualType(ContextFlags.None);
+            return toStringLiteralCompletionsFromTypes(typeChecker.getContextualStringLiteralCompletionTypes(node));
 
         case SyntaxKind.ElementAccessExpression: {
             const { expression, argumentExpression } = parent as ElementAccessExpression;
@@ -435,7 +435,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             const literals = contextualTypes.types.filter(literal => !tracker.hasValue(literal.value));
             return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
         default:
-            return fromContextualType() || fromContextualType(ContextFlags.None);
+            return toStringLiteralCompletionsFromTypes(typeChecker.getContextualStringLiteralCompletionTypes(node));
     }
 
     function fromUnionableLiteralType(grandParent: Node): StringLiteralCompletionsFromTypes | StringLiteralCompletionsFromProperties | undefined {
@@ -479,12 +479,12 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
     function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
-        const types = getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
-        if (!types.length) {
-            return;
-        }
-        return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false };
+        return toStringLiteralCompletionsFromTypes(getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags)));
     }
+}
+
+function toStringLiteralCompletionsFromTypes(types: readonly StringLiteralType[]): StringLiteralCompletionsFromTypes | undefined {
+    return types.length ? { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false } : undefined;
 }
 
 function walkUpParentheses(node: Node) {
