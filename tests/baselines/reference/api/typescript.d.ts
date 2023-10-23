@@ -8387,6 +8387,14 @@ declare namespace ts {
         createExportDefault(expression: Expression): ExportAssignment;
         createExternalModuleExport(exportName: Identifier): ExportDeclaration;
         restoreOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds?: OuterExpressionKinds): Expression;
+        /**
+         * Updates a node that may contain modifiers, replacing only the modifiers of the node.
+         */
+        updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
+        /**
+         * Updates a node that may contain decorators or modifiers, replacing only the decorators and modifiers of the node.
+         */
+        updateDecoratorsAndModifiers<T extends HasModifiers & HasDecorators>(node: T, modifiers: readonly ModifierLike[] | undefined): T;
     }
     interface CoreTransformationContext {
         readonly factory: NodeFactory;

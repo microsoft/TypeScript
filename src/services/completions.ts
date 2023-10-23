@@ -2023,7 +2023,7 @@ function getEntryForMemberCompletion(
         if (presentDecorators?.length) {
             const lastNode = completionNodes[completionNodes.length - 1];
             if (canHaveDecorators(lastNode)) {
-                completionNodes[completionNodes.length - 1] = factory.updateModifierLike(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
+                completionNodes[completionNodes.length - 1] = factory.updateDecoratorsAndModifiers(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
             }
         }
 
