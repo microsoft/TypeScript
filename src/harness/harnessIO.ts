@@ -616,15 +616,18 @@ export namespace Compiler {
 
         const host = new fakes.CompilerHost(tscHost.vfs, options, /*setParentNodes*/ true);
         const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
-        const commonSourceDirectory = ts.getCommonSourceDirectory(
+        let commonSourceDirectory = ts.getCommonSourceDirectory(
             options,
             () => programFileNames.filter(f => !vpath.isDeclaration(f)),
             currentDirectory,
             getCanonicalFileName,
         );
 
+        if (commonSourceDirectory.length === 0) {
+            commonSourceDirectory = currentDirectory;
+        }
         const diagnostics: ts.Diagnostic[] = [];
-        const transformer = ts.createIsolatedDeclarationsEmitter(commonSourceDirectory ?? currentDirectory, options);
+        const transformer = ts.createIsolatedDeclarationsEmitter(commonSourceDirectory, options);
         programFileNames.forEach(fileName => {
             if (vpath.isDeclaration(fileName)) {
                 return;
@@ -1040,6 +1043,7 @@ export namespace Compiler {
         let dtsCode = "/// [Declarations] ////\r\n\r\n";
         dtsCode += declarationContent(declarationFiles);
         if (errors.length > 0) {
+            dtsCode += "/// [Errors] ////\r\n\r\n";
             dtsCode += getErrorBaseline(tsSources, errors, prettyErrors);
         }
         // eslint-disable-next-line no-null/no-null

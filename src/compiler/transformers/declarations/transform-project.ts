@@ -40,7 +40,7 @@ function joinToRootIfNeeded(rootDir: string, existingPath: string) {
     return normalizePath(pathIsAbsolute(existingPath) ? existingPath : combinePaths(rootDir, existingPath));
 }
 
-function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions) {
+export function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions) {
     const declarationDir = options.declarationDir ? joinToRootIfNeeded(rootDir, options.declarationDir) :
         options.outDir ? joinToRootIfNeeded(rootDir, options.outDir) :
         undefined;
