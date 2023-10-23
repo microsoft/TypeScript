@@ -1642,7 +1642,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PropertyDeclaration: {
                 const named = node as AccessorDeclaration | MethodDeclaration | PropertyDeclaration;
                 if (isComputedPropertyName(named.name)) {
-                    return factory.updatePropertyName(named, visitEachChild(named.name, elideUnusedThisCaptureWorker, nullTransformationContext));
+                    return factory.replacePropertyName(named, visitEachChild(named.name, elideUnusedThisCaptureWorker, nullTransformationContext));
                 }
                 return node;
             }
@@ -1728,7 +1728,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PropertyDeclaration: {
                 const named = node as AccessorDeclaration | MethodDeclaration | PropertyDeclaration;
                 if (isComputedPropertyName(named.name)) {
-                    return factory.updatePropertyName(named, visitEachChild(named.name, injectSuperPresenceCheckWorker, nullTransformationContext));
+                    return factory.replacePropertyName(named, visitEachChild(named.name, injectSuperPresenceCheckWorker, nullTransformationContext));
                 }
                 return node;
             }

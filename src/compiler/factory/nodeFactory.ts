@@ -1181,7 +1181,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         mergeLexicalEnvironment,
         updateModifiers,
         updateModifierLike,
-        updatePropertyName,
+        replacePropertyName,
     };
 
     forEach(nodeFactoryPatchers, fn => fn(factory));
@@ -7151,8 +7151,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             Debug.assertNever(node);
     }
 
-    function updatePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
-    function updatePropertyName(node: AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment, name: PropertyName) {
+    function replacePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
+    function replacePropertyName(node: AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment, name: PropertyName) {
         switch (node.kind) {
             case SyntaxKind.GetAccessor:
                 return updateGetAccessorDeclaration(node, node.modifiers, name, node.parameters, node.type, node.body);

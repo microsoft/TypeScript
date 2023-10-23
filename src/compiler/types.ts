@@ -9077,7 +9077,7 @@ export interface NodeFactory {
     /**
      * Updates a node that contains a property name, replacing only the name of the node.
      */
-    updatePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
+    replacePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
 }
 
 /** @internal */
