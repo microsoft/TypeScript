@@ -23568,22 +23568,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !hasBaseType(checkClass, getDeclaringClass(p)) : false) ? undefined : checkClass;
     }
 
-    // Return true if the given type is deeply nested. We consider this to be the case when structural type comparisons
-    // for maxDepth or more occurrences or instantiations of the same type have been recorded on the given stack. The
-    // "sameness" of instantiations is determined by the getRecursionIdentity function. An intersection is considered
-    // deeply nested if any constituent of the intersection is deeply nested. It is possible, though highly unlikely, for
-    // the deeply nested check to be true in a situation where a chain of instantiations is not infinitely expanding.
-    // Effectively, we will generate a false positive when two types are structurally equal to at least maxDepth levels,
-    // but unequal at some level beyond that.
-    // In addition, this will also detect when an indexed access has been chained off of maxDepth more times (which is
-    // essentially the dual of the structural comparison), and likewise mark the type as deeply nested, potentially adding
-    // false positives for finite but deeply expanding indexed accesses (eg, for `Q[P1][P2][P3][P4][P5]`).
-    // It also detects when a recursive type reference has expanded maxDepth or more times, e.g. if the true branch of
-    // `type A<T> = null extends T ? [A<NonNullable<T>>] : [T]`
-    // has expanded into `[A<NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<T>>>>>>]`. In such cases we need
-    // to terminate the expansion, and we do so here.
+    // Return true if the given type is deeply nested. We consider this to be the case when the given stack contains
+    // maxDepth or more occurrences of types with the same recursion identity as the given type. The recursion identity
+    // provides a shared identity for type instantiations that repeat in some (possibly infinite) pattern. For example,
+    // in `type Deep<T> = { next: Deep<Deep<T>> }`, repeatedly referencing the `next` property leads to an infinite
+    // sequence of ever deeper instantiations with the same recursion identity (in this case the symbol associated with
+    // the object type literal).
+    // A homomorphic mapped type is considered deeply nested if its target type is deeply nested, and an intersection is
+    // considered deeply nested if any constituent of the intersection is deeply nested.
+    // It is possible, though highly unlikely, for the deeply nested check to be true in a situation where a chain of
+    // instantiations is not infinitely expanding. Effectively, we will generate a false positive when two types are
+    // structurally equal to at least maxDepth levels, but unequal at some level beyond that.
     function isDeeplyNestedType(type: Type, stack: Type[], depth: number, maxDepth = 3): boolean {
         if (depth >= maxDepth) {
+            if ((getObjectFlags(type) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped) {
+                type = getMappedTargetWithSymbol(type);
+            }
             if (type.flags & TypeFlags.Intersection) {
                 return some((type as IntersectionType).types, t => isDeeplyNestedType(t, stack, depth, maxDepth));
             }
@@ -23592,7 +23592,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let lastTypeId = 0;
             for (let i = 0; i < depth; i++) {
                 const t = stack[i];
-                if (t.flags & TypeFlags.Intersection ? some((t as IntersectionType).types, u => getRecursionIdentity(u) === identity) : getRecursionIdentity(t) === identity) {
+                if (hasMatchingRecursionIdentity(t, identity)) {
                     // We only count occurrences with a higher type id than the previous occurrence, since higher
                     // type ids are an indicator of newer instantiations caused by recursion.
                     if (t.id >= lastTypeId) {
@@ -23606,6 +23606,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return false;
+    }
+
+    // Unwrap nested homomorphic mapped types and return the deepest target type that has a symbol. This better
+    // preserves unique type identities for mapped types applied to explicitly written object literals. For example
+    // in `Mapped<{ x: Mapped<{ x: Mapped<{ x: string }>}>}>`, each of the mapped type applications will have a
+    // unique recursion identity (that of their target object type literal) and thus avoid appearing deeply nested.
+    function getMappedTargetWithSymbol(type: Type) {
+        let target;
+        while (
+            (getObjectFlags(type) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped &&
+            (target = getModifiersTypeFromMappedType(type as MappedType)) &&
+            (target.symbol || target.flags & TypeFlags.Intersection && some((target as IntersectionType).types, t => !!t.symbol))
+        ) {
+            type = target;
+        }
+        return type;
+    }
+
+    function hasMatchingRecursionIdentity(type: Type, identity: object): boolean {
+        if ((getObjectFlags(type) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped) {
+            type = getMappedTargetWithSymbol(type);
+        }
+        if (type.flags & TypeFlags.Intersection) {
+            return some((type as IntersectionType).types, t => hasMatchingRecursionIdentity(t, identity));
+        }
+        return getRecursionIdentity(type) === identity;
     }
 
     // The recursion identity of a type is an object identity that is shared among multiple instantiations of the type.
@@ -23623,28 +23649,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // unique AST node.
                 return (type as TypeReference).node!;
             }
-            if (type.symbol) {
-                // We track object types that have a symbol by that symbol (representing the origin of the type).
-                if (getObjectFlags(type) & ObjectFlags.Mapped) {
-                    // When a homomorphic mapped type is applied to a type with a symbol, we use the symbol of that
-                    // type as the recursion identity. This is a better strategy than using the symbol of the mapped
-                    // type, which doesn't work well for recursive mapped types.
-                    type = getMappedTargetWithSymbol(type);
-                }
-                if (!(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
-                    // We exclude the static side of a class since it shares its symbol with the instance side.
-                    return type.symbol;
-                }
+            if (type.symbol && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
+                // We track object types that have a symbol by that symbol (representing the origin of the type), but
+                // exclude the static side of a class since it shares its symbol with the instance side.
+                return type.symbol;
             }
             if (isTupleType(type)) {
                 return type.target;
             }
         }
         if (type.flags & TypeFlags.TypeParameter) {
+            // We use the symbol of the type parameter such that all "fresh" instantiations of that type parameter
+            // have the same recursion identity.
             return type.symbol;
         }
         if (type.flags & TypeFlags.IndexedAccess) {
-            // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P][Q] it is A
+            // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P1][P2][P3] it is A.
             do {
                 type = (type as IndexedAccessType).objectType;
             }
@@ -23656,14 +23676,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as ConditionalType).root;
         }
         return type;
-    }
-
-    function getMappedTargetWithSymbol(type: Type) {
-        let target = type;
-        while ((getObjectFlags(target) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped && isMappedTypeWithKeyofConstraintDeclaration(target as MappedType)) {
-            target = getModifiersTypeFromMappedType(target as MappedType);
-        }
-        return target.symbol ? target : type;
     }
 
     function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
