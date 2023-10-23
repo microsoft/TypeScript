@@ -407,6 +407,13 @@ export function transformDeclarations(context: TransformationContext) {
                 Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
             ));
         });
+        file.referencedFiles.forEach(ref => {
+            context.addDiagnostic(createDiagnosticForRange(
+                file,
+                ref,
+                Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+            ));
+        });
     }
 
     function handleTypeReferenceError(typeReferenceDirective: [specifier: string, mode: ResolutionMode], requestingNode: Node) {
@@ -661,7 +668,7 @@ export function transformDeclarations(context: TransformationContext) {
             node,
             combinedStatements,
             /*isDeclarationFile*/ true,
-            references,
+            isolatedDeclarations ? [] : references,
             isolatedDeclarations ? [] : typeReferences,
             node.hasNoDefaultLib,
             isolatedDeclarations ? [] : libReferences,

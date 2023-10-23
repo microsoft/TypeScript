@@ -43,7 +43,6 @@ import {
 } from "./tsc-infrastructure/vpath";
 import {
     loadTestCase,
-    readDirRecursive,
     runDeclarationTransformEmitter,
     runTypeScript,
     TestCompilationResult,
@@ -64,7 +63,6 @@ if (prefixed) {
 
 const outputPath = parsedArgs.outputPath ?? "./tsc-tests/run";
 const rootCasePaths = parsedArgs.rootPaths ?? ["./tests/source"];
-const libFolder = parsedArgs.libPath ?? path.join(rootCasePaths[0], "../lib");
 
 const filter = parsedArgs.default ? new RegExp(parsedArgs.default) : /.*\.ts/;
 const runType = parsedArgs.type === "all" ? { tsc: true, dte: true } :
@@ -95,8 +93,6 @@ async function main() {
         Object.entries(fileConfiguration?.["test-categories"] ?? {}).forEach(([name, tests]) => tests.forEach(t => testCategories.set(t, name)));
     }
 
-    const libFiles = (await readDirRecursive(libFolder)).map(n => normalizePath(path.join("/.lib", n)));
-
     const testsPerShared = shardCount && Math.round(allTests.length / shardCount);
     const [start, end] = shard === undefined || shardCount === undefined || testsPerShared === undefined ?
         [0, allTests.length] :
@@ -121,7 +117,7 @@ async function main() {
 
             if (runType.tsc) runAndWrite(testName, path.join(outputPath, "tsc", file), varConfig, runTypeScript);
 
-            if (runType.dte) runAndWrite(testName, path.join(outputPath, "dte", file), varConfig, (t, s) => runDeclarationTransformEmitter(t, libFiles, s));
+            if (runType.dte) runAndWrite(testName, path.join(outputPath, "dte", file), varConfig, (t, s) => runDeclarationTransformEmitter(t, s));
         }
         console.log(`    Ran: ${pad(count, 5)}/${allTests.length}`);
 

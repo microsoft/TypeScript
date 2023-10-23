@@ -10,7 +10,9 @@ import {
     EmitHost,
     EmitResolver,
     factory,
-    getDirectoryPath,
+    getDeclarationEmitExtensionForPath,
+    getNormalizedAbsolutePath,
+    getRelativePathFromDirectory,
     NewLineKind,
     normalizePath,
     pathIsAbsolute,
@@ -34,15 +36,8 @@ export function emitDeclarationsForProject(
     return rootDir;
 }
 
-function ensureDirRecursive(dirPath: string, host: CompilerHost) {
-    if (!host.directoryExists!(dirPath)) {
-        const parent = getDirectoryPath(dirPath);
-        ensureDirRecursive(parent, host);
-        (host as any).createDirectory(dirPath);
-    }
-}
 function joinToRootIfNeeded(rootDir: string, existingPath: string) {
-    return normalizePath(pathIsAbsolute(existingPath) ? existingPath : sys.resolvePath(combinePaths(rootDir, existingPath)));
+    return normalizePath(pathIsAbsolute(existingPath) ? existingPath : combinePaths(rootDir, existingPath));
 }
 
 export function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions) {
@@ -54,34 +49,28 @@ export function createIsolatedDeclarationsEmitter(rootDir: string, options: Comp
         file = normalizePath(file);
         const source = host.getSourceFile(file, options.target ?? ScriptTarget.ES2015);
 
-        if (!source) return;
+        if (!source) return {};
 
-        const actualDeclaration = emitDeclarationsForFile(source, [], [], options);
-        const output = declarationDir ? changeAnyExtension(file.replace(rootDir, declarationDir), ".d.ts") :
-            changeAnyExtension(file, ".d.ts");
-        const dirPath = getDirectoryPath(output);
-        ensureDirRecursive(dirPath, host);
+        const actualDeclaration = emitDeclarationsForFile(source, options);
+        const extension = getDeclarationEmitExtensionForPath(file);
+        const relativeToRoot = getRelativePathFromDirectory(rootDir, file, !host.useCaseSensitiveFileNames());
+        const declarationPath = !declarationDir ? file : getNormalizedAbsolutePath(combinePaths(declarationDir, relativeToRoot), host.getCurrentDirectory());
+        const output = changeAnyExtension(declarationPath, extension);
         host.writeFile(output, actualDeclaration.code, !!options.emitBOM);
-        return output;
+        return { output, diagnostics: actualDeclaration.diagnostics };
     };
 }
 
 export function emitDeclarationsForAllFiles(rootDir: string, files: string[], host: CompilerHost, options: CompilerOptions) {
     const transformer = createIsolatedDeclarationsEmitter(rootDir, options);
     for (const file of files) {
-        try {
-            transformer(file, host);
-        }
-        catch (e) {
-            console.error(`Failed to transform: ${file}`, e);
-        }
+        transformer(file, host);
     }
-    return { rootDir };
 }
 
-export function emitDeclarationsForFile(sourceFile: SourceFile, allProjectFiles: string[], tsLibFiles: string[], options: CompilerOptions) {
+export function emitDeclarationsForFile(sourceFile: SourceFile, options: CompilerOptions) {
     const getCompilerOptions = () => options;
-    const emitHost = createEmitDeclarationHost(allProjectFiles, tsLibFiles, options, sys);
+    const emitHost = createEmitDeclarationHost(options, sys);
     const emitResolver = createEmitDeclarationResolver(sourceFile, emitHost);
     const diagnostics: Diagnostic[] = [];
     const transformer = transformDeclarations({
@@ -103,6 +92,7 @@ export function emitDeclarationsForFile(sourceFile: SourceFile, allProjectFiles:
         onlyPrintJsDocStyle: true,
         newLine: options.newLine ?? NewLineKind.CarriageReturnLineFeed,
         target: options.target,
+        removeComments: options.removeComments,
     } as PrinterOptions);
 
     const code = printer.printFile(result);

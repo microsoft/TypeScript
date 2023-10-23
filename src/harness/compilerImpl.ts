@@ -241,7 +241,7 @@ export class CompilationResult {
     }
 }
 
-export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions, typeScriptVersion?: string): CompilationResult {
+export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions, typeScriptVersion?: string, forceDtsEmit?: boolean): CompilationResult {
     if (compilerOptions.project || !rootFiles || rootFiles.length === 0) {
         const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
         if (project) {
@@ -269,7 +269,14 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
     const program = ts.createProgram({ rootNames: rootFiles || [], options: compilerOptions, host, typeScriptVersion });
-    const emitResult = program.emit();
+    const emitResult = program.emit(
+        /*targetSourceFile*/ undefined,
+        /*writeFile*/ undefined,
+        /*cancellationToken*/ undefined,
+        /*emitOnly*/ undefined,
+        /*customTransformers*/ undefined,
+        /*forceDtsEmit*/ forceDtsEmit,
+    );
     const postErrors = ts.getPreEmitDiagnostics(program);
     const longerErrors = ts.length(preErrors) > postErrors.length ? preErrors : postErrors;
     const shorterErrors = longerErrors === preErrors ? postErrors : preErrors;

@@ -90,10 +90,14 @@ export class CompilerBaselineRunner extends RunnerBase {
         // Mocha holds onto the closure environment of the describe callback even after the test is done.
         // Everything declared here should be cleared out in the "after" callback.
         let compilerTest!: CompilerTest;
+        let isolatedTest!: IsolatedDeclarationTest;
         before(() => {
             let payload;
             if (test && test.content) {
                 payload = TestCaseParser.makeUnitsFromTest(test.content, test.file);
+            }
+            if (payload) {
+                isolatedTest = new IsolatedDeclarationTest(fileName, payload, configuration);
             }
             compilerTest = new CompilerTest(fileName, payload, configuration);
         });
@@ -103,8 +107,12 @@ export class CompilerBaselineRunner extends RunnerBase {
         it(`Correct JS output for ${fileName}`, () => (this.emit && compilerTest.verifyJavaScriptOutput()));
         it(`Correct Sourcemap output for ${fileName}`, () => compilerTest.verifySourceMapOutput());
         it(`Correct type/symbol baselines for ${fileName}`, () => compilerTest.verifyTypesAndSymbols());
+        it(`Correct dte emit for ${fileName}`, () => isolatedTest?.verifyDteOutput());
+        it(`Correct tsc emit for ${fileName}`, () => isolatedTest?.verifyTscOutput());
+        it(`Correct dte/tsc diff ${fileName}`, () => isolatedTest?.verifyDiff());
         after(() => {
             compilerTest = undefined!;
+            isolatedTest = undefined!;
         });
     }
 
@@ -126,7 +134,7 @@ export class CompilerBaselineRunner extends RunnerBase {
     }
 }
 
-class CompilerTest {
+class CompilerTestBase {
     private static varyBy: readonly string[] = [
         "module",
         "moduleResolution",
@@ -164,18 +172,18 @@ class CompilerTest {
         "resolveJsonModule",
         "allowArbitraryExtensions",
     ];
-    private fileName: string;
-    private justName: string;
-    private configuredName: string;
-    private harnessSettings: TestCaseParser.CompilerSettings;
-    private hasNonDtsFiles: boolean;
-    private result: compiler.CompilationResult;
-    private options: ts.CompilerOptions;
-    private tsConfigFiles: Compiler.TestFile[];
+    protected fileName: string;
+    protected justName: string;
+    protected configuredName: string;
+    protected harnessSettings: TestCaseParser.CompilerSettings;
+    protected hasNonDtsFiles: boolean;
+    protected result: compiler.CompilationResult;
+    protected options: ts.CompilerOptions;
+    protected tsConfigFiles: Compiler.TestFile[];
     // equivalent to the files that will be passed on the command line
-    private toBeCompiled: Compiler.TestFile[];
+    protected toBeCompiled: Compiler.TestFile[];
     // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
-    private otherFiles: Compiler.TestFile[];
+    protected otherFiles: Compiler.TestFile[];
 
     constructor(fileName: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
         const absoluteRootDir = vfs.srcFolder;
@@ -277,6 +285,15 @@ class CompilerTest {
         return { file, configurations, content };
     }
 
+    private createHarnessTestFile(unit: TestCaseParser.TestUnitData): Compiler.TestFile {
+        return {
+            unitName: unit.name,
+            content: unit.content,
+            fileOptions: unit.fileOptions,
+        };
+    }
+}
+class CompilerTest extends CompilerTestBase {
     public verifyDiagnostics() {
         // check errors
         Compiler.doErrorBaseline(
@@ -351,12 +368,124 @@ class CompilerTest {
             !!ts.length(this.result.diagnostics),
         );
     }
+}
 
-    private createHarnessTestFile(unit: TestCaseParser.TestUnitData): Compiler.TestFile {
-        return {
-            unitName: unit.name,
-            content: unit.content,
-            fileOptions: unit.fileOptions,
-        };
+function changeSettingForIsolatedDeclarations(settings: TestCaseParser.CompilerSettings) {
+    const clone: TestCaseParser.CompilerSettings = {
+        ...settings,
+        allowJS: "false",
+        checkJS: "false",
+        declaration: "true",
+        isolatedDeclarations: "true",
+        forceDtsEmit: "true",
+    };
+    delete clone.outFile;
+    delete clone.outfile;
+    delete clone.out;
+    return clone;
+}
+
+function removeOutFromOptions(tsConfig: ts.ParsedCommandLine | undefined) {
+    if (!tsConfig) return undefined;
+
+    const clone: ts.ParsedCommandLine = {
+        ...tsConfig,
+        options: tsConfig.options,
+    };
+    delete clone.options.outFile;
+    delete clone.options.out;
+    return clone;
+}
+export class IsolatedDeclarationTest extends CompilerTestBase {
+    private dteDiagnostics: ts.Diagnostic[];
+    private isOutputEquivalent: boolean;
+    private dteDtsFile: Compiler.TestFile[];
+    private tscDtsFiles: Compiler.TestFile[];
+    constructor(fileName: string, testCaseContent: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
+        super(
+            fileName,
+            {
+                ...testCaseContent,
+                settings: changeSettingForIsolatedDeclarations(testCaseContent.settings),
+                tsConfig: removeOutFromOptions(testCaseContent.tsConfig),
+            },
+            configurationOverrides,
+            // /*forceIncludeAllFiles*/ true,
+        );
+        const options = { ...this.options };
+        ts.setConfigFileInOptions(options, options && options.configFile);
+
+        const currentDirectory = this.harnessSettings.currentDirectory ?? vfs.srcFolder;
+        const dteResult = Compiler.compileDeclarationFilesWithIsolatedEmitter(
+            this.toBeCompiled,
+            this.otherFiles,
+            this.result.host,
+            this.options,
+            currentDirectory,
+        );
+        this.dteDiagnostics = dteResult.diagnostics;
+        this.dteDtsFile = [...ts.mapDefinedIterator(dteResult.dts, ([, f]) => ({
+            unitName: this.result.host.vfs.realpathSync(f.file),
+            content: f.text,
+        }))];
+        this.dteDtsFile.sort((a, b) => this.result.host.vfs.stringComparer(a.unitName, b.unitName));
+
+        // With force get JSON definition files we need to ignore
+        this.tscDtsFiles = [...ts.mapDefinedIterator(this.result.dts, ([name, f]) =>
+            name.endsWith(".d.json.ts") ? undefined : {
+                unitName: this.result.host.vfs.realpathSync(f.file),
+                content: f.text,
+            })];
+        this.tscDtsFiles.sort((a, b) => this.result.host.vfs.stringComparer(a.unitName, b.unitName));
+
+        // If DTE is the same as TS output we don't need to do any extra checks.
+        this.isOutputEquivalent = this.dteDtsFile.length === this.tscDtsFiles.length && this.dteDtsFile
+            .every((dteDecl, index) => {
+                const tscDecl = this.tscDtsFiles[index];
+                return tscDecl.unitName === dteDecl.unitName && dteDecl.content === tscDecl.content;
+            });
+    }
+    private static dteDiagnosticErrors = new Set([
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit.code,
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit.code,
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,
+        // ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit.code,
+    ]);
+
+    verifyDteOutput() {
+        if (this.isOutputEquivalent) return;
+        Compiler.doDeclarationBaseline(
+            this.configuredName,
+            "isolated-declarations/original/dte",
+            this.fileName,
+            this.dteDtsFile,
+            this.dteDiagnostics,
+            this.toBeCompiled,
+            this.otherFiles,
+            this.options.pretty,
+        );
+    }
+    verifyTscOutput() {
+        if (this.isOutputEquivalent) return;
+        Compiler.doDeclarationBaseline(
+            this.configuredName,
+            "isolated-declarations/original/tsc",
+            this.fileName,
+            this.tscDtsFiles,
+            this.result.diagnostics.filter(p => IsolatedDeclarationTest.dteDiagnosticErrors.has(p.code)),
+            this.toBeCompiled,
+            this.otherFiles,
+            this.options.pretty,
+        );
+    }
+    verifyDiff() {
+        if (this.isOutputEquivalent) return;
+        Compiler.doDeclarationDiffBaseline(
+            this.configuredName,
+            "isolated-declarations/original/diff",
+            this.fileName,
+            this.dteDtsFile,
+            this.tscDtsFiles,
+        );
     }
 }

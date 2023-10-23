@@ -1,5 +1,4 @@
 import * as fsp from "fs/promises";
-import * as path from "path";
 import * as ts from "typescript";
 
 import {
@@ -12,9 +11,6 @@ import {
     TestFile,
     Utils,
 } from "./tsc-infrastructure/compiler-run";
-import {
-    libs,
-} from "./tsc-infrastructure/options";
 import * as TestCaseParser from "./tsc-infrastructure/test-file-parser";
 import {
     changeExtension,
@@ -78,9 +74,7 @@ export function isRelevantTestFile(f: TestCaseParser.TestUnitData) {
     return isTypeScriptFile(f.name) && !isDeclarationFile(f.name) && f.content !== undefined;
 }
 
-export function runDeclarationTransformEmitter(caseData: TestCaseParser.TestCaseContent, libFiles: string[], settings: ts.CompilerOptions): TestCompilationResult {
-    const toSrc = (n: string) => vpath.combine("/src", n);
-    const projectFiles = [...caseData.testUnitData.map(o => toSrc(o.name)), ...libFiles];
+export function runDeclarationTransformEmitter(caseData: TestCaseParser.TestCaseContent, settings: ts.CompilerOptions): TestCompilationResult {
     settings = {
         ...settings,
         isolatedDeclarations: true,
@@ -91,13 +85,13 @@ export function runDeclarationTransformEmitter(caseData: TestCaseParser.TestCase
         .filter(isRelevantTestFile)
         .map(file => {
             const sourceFile = ts.createSourceFile(
-                toSrc(file.name),
+                file.name,
                 Utils.removeByteOrderMark(file.content),
                 settings.target ?? ts.ScriptTarget.ES2015,
                 /*setParentNodes*/ true,
                 file.name.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
             );
-            const declaration = ts.emitDeclarationsForFile(sourceFile, projectFiles, libs, settings);
+            const declaration = ts.emitDeclarationsForFile(sourceFile, settings);
             diagnostics.push(...declaration.diagnostics);
             return {
                 content: settings.emitBOM ? Utils.addUTF8ByteOrderMark(declaration.code) : declaration.code,
@@ -105,21 +99,4 @@ export function runDeclarationTransformEmitter(caseData: TestCaseParser.TestCase
             };
         });
     return { files, diagnostics };
-}
-
-export async function readDirRecursive(dir: string, relativePath = ""): Promise<string[]> {
-    const content = await fsp.readdir(dir);
-    const result: string[] = [];
-    for (const entry of content) {
-        const relativeChildPath = path.join(relativePath, entry);
-        const fsPath = path.join(dir, entry);
-        const stat = await fsp.stat(fsPath);
-        if (stat.isDirectory()) {
-            result.push(...await readDirRecursive(fsPath, relativeChildPath));
-        }
-        else {
-            result.push(relativeChildPath);
-        }
-    }
-    return result;
 }
