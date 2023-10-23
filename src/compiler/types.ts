@@ -5043,7 +5043,7 @@ export interface TypeChecker {
     isUndefinedSymbol(symbol: Symbol): boolean;
     isArgumentsSymbol(symbol: Symbol): boolean;
     isUnknownSymbol(symbol: Symbol): boolean;
-    /** @internal */ getMergedSymbol(symbol: Symbol): Symbol;
+    getMergedSymbol(symbol: Symbol): Symbol;
 
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
