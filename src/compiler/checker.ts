@@ -30204,6 +30204,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    function filterContextualTypeForLiteralExpressionOfObject(node: Node, contextualType: Type) {
+        if (!isLiteralExpressionOfObject(node)) {
+            return contextualType;
+        }
+        return filterType(contextualType, t => {
+            if (!t.symbol || !(t.symbol.flags & SymbolFlags.Class)) {
+                return true;
+            }
+            return every(getPropertiesOfType(t), p => !p.valueDeclaration || !isNamedDeclaration(p.valueDeclaration) || (!isPrivateIdentifier(p.valueDeclaration.name) && !(getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier)));
+        });
+    }
+
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
     // be "pushed" onto a node using the contextualType property.
     function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -30270,34 +30282,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
-    /**
-     * Whoa! Do you really want to use this function?
-     *
-     * Unless you're trying to get the *non-apparent* type for a
-     * value-literal type or you're authoring relevant portions of this algorithm,
-     * you probably meant to use 'getApparentTypeOfContextualType'.
-     * Otherwise this may not be very useful.
-     *
-     * In cases where you *are* working on this function, you should understand
-     * when it is appropriate to use 'getContextualType' and 'getApparentTypeOfContextualType'.
-     *
-     *   - Use 'getContextualType' when you are simply going to propagate the result to the expression.
-     *   - Use 'getApparentTypeOfContextualType' when you're going to need the members of the type.
-     *
-     * @param node the expression whose contextual type will be returned.
-     * @returns the contextual type of an expression.
-     */
-    function getContextualType(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
-        if (node.flags & NodeFlags.InWithStatement) {
-            // We cannot answer semantic questions within a with block, do not proceed any further
-            return undefined;
-        }
-        // Cached contextual types are obtained with no ContextFlags, so we can only consult them for
-        // requests with no ContextFlags.
-        const index = findContextualNode(node, /*includeCaches*/ !contextFlags);
-        if (index >= 0) {
-            return contextualTypes[index];
-        }
+    function getContextualTypeFromParent(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
         const { parent } = node;
         switch (parent.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -30369,6 +30354,41 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getContextualJsxElementAttributesType(parent as JsxOpeningLikeElement, contextFlags);
         }
         return undefined;
+    }
+
+    /**
+     * Whoa! Do you really want to use this function?
+     *
+     * Unless you're trying to get the *non-apparent* type for a
+     * value-literal type or you're authoring relevant portions of this algorithm,
+     * you probably meant to use 'getApparentTypeOfContextualType'.
+     * Otherwise this may not be very useful.
+     *
+     * In cases where you *are* working on this function, you should understand
+     * when it is appropriate to use 'getContextualType' and 'getApparentTypeOfContextualType'.
+     *
+     *   - Use 'getContextualType' when you are simply going to propagate the result to the expression.
+     *   - Use 'getApparentTypeOfContextualType' when you're going to need the members of the type.
+     *
+     * @param node the expression whose contextual type will be returned.
+     * @returns the contextual type of an expression.
+     */
+    function getContextualType(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
+        if (node.flags & NodeFlags.InWithStatement) {
+            // We cannot answer semantic questions within a with block, do not proceed any further
+            return undefined;
+        }
+        // Cached contextual types are obtained with no ContextFlags, so we can only consult them for
+        // requests with no ContextFlags.
+        const index = findContextualNode(node, /*includeCaches*/ !contextFlags);
+        if (index >= 0) {
+            return contextualTypes[index];
+        }
+        const contextualType = getContextualTypeFromParent(node, contextFlags);
+        if (!contextualType) {
+            return undefined;
+        }
+        return filterContextualTypeForLiteralExpressionOfObject(node, contextualType);
     }
 
     function pushCachedContextualType(node: Expression) {
@@ -38416,8 +38436,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
+        const filteredContextualType = filterContextualTypeForLiteralExpressionOfObject(node, contextualType);
         const contextNode = getContextNode(node);
-        pushContextualType(contextNode, contextualType, /*isCache*/ false);
+        pushContextualType(contextNode, filteredContextualType, /*isCache*/ false);
         pushInferenceContext(contextNode, inferenceContext);
         const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
         // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
@@ -38428,7 +38449,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We strip literal freshness when an appropriate contextual type is present such that contextually typed
         // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
         // here would be to not mark contextually typed literals as fresh in the first place.
-        const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ?
+        const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(filteredContextualType, node, /*contextFlags*/ undefined)) ?
             getRegularTypeOfLiteralType(type) : type;
         popInferenceContext();
         popContextualType();

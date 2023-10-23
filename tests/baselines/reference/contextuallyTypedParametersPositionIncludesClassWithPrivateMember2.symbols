@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts] ////
+
+=== contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 0, 0))
+
+  private foo = "foo";
+>foo : Symbol(Foo.foo, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 0, 11))
+
+  doStuff(cb: (arg: string) => void) {}
+>doStuff : Symbol(Foo.doStuff, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 1, 22))
+>cb : Symbol(cb, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 2, 10))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 2, 15))
+}
+
+interface FooLike {
+>FooLike : Symbol(FooLike, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 3, 1))
+
+  doStuff: (cb: (arg: number) => void) => void;
+>doStuff : Symbol(FooLike.doStuff, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 5, 19))
+>cb : Symbol(cb, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 6, 12))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 6, 17))
+}
+
+declare function useIt(arg: Foo | FooLike): void;
+>useIt : Symbol(useIt, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 7, 1))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 9, 23))
+>Foo : Symbol(Foo, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 0, 0))
+>FooLike : Symbol(FooLike, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 3, 1))
+
+useIt({
+>useIt : Symbol(useIt, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 7, 1))
+
+  doStuff: (arg) => {},
+>doStuff : Symbol(doStuff, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 11, 7))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersPositionIncludesClassWithPrivateMember2.ts, 12, 12))
+
+});
+
