@@ -38,20 +38,20 @@
             "computedPropertiesNarrowed",
             // error on used to be indexer, now it is a computed property
             "propertyAssignment",
-            "invalidTaggedTemplateEscapeSequences", // Invalid escape sequences 
+            "invalidTaggedTemplateEscapeSequences", // Invalid escape sequences
             // duplicate field/accessor
             "symbolDeclarationEmit12",
             // symbol merges with global eval and is not written to declarations.
             "parserStrictMode8",
         ],
         "ts-bugs": [
-           // https://github.com/microsoft/TypeScript/issues/55571 
-           "reExportAliasMakesInstantiated"
-       ],
+            // https://github.com/microsoft/TypeScript/issues/55571
+            "reExportAliasMakesInstantiated"
+        ],
         // Just Printing differences
         "print-differences": [
-            "parseBigInt", // number literals are normalized by ts 
-            "templateLiteralsSourceMap", // template literal is evaluated in constant value.
+            "parseBigInt", // number literals are normalized by ts
+            "templateLiteralsSourceMap" // template literal is evaluated in constant value.
         ],
         "enums-issues": [
             // External eval
@@ -64,12 +64,12 @@
             "verbatimModuleSyntaxConstEnumUsage",
             "templateLiteralTypes4",
             "enumConstantMembers",
-            // merge 
+            // merge
             "mergedEnumDeclarationCodeGen",
             "enumExportMergingES6",
-            "mergedDeclarations2",
+            "mergedDeclarations2"
         ],
-        // Some 9007 errors will result in differences. This is fine. 
+        // Some 9007 errors will result in differences. This is fine.
         "with-isolated-declaration-errors/9007": [
             // computed property differences
             "complicatedPrivacy",
@@ -78,8 +78,7 @@
             "overloadsWithComputedNames",
             "typeUsedAsTypeLiteralIndex", // computed property errors but in type aliases
             "forwardRefInEnum", // Circular enums result in different values
-            "enumErrors",
+            "enumErrors"
         ]
     }
 }
-

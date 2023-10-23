@@ -5,10 +5,11 @@
             9008, // Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit
             9009, // Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function
             9010, // Reference directives are not supported in isolated declaration mode.
-        ], 
+            9011 // Heritage_clause_for_Class_Expressions_is_not_allowed_with_isolatedDeclarations
+        ],
         "with-unreliable-errors": [
             2784, // 'get' and 'set' accessors cannot declare 'this' parameters.
-            1162, // An object member cannot be declared optional.
+            1162 // An object member cannot be declared optional.
         ]
     },
     "test-categories": {
@@ -46,9 +47,9 @@
             "enumErrors",
             "enumExportMergingES6",
             "verbatimModuleSyntaxConstEnumUsage",
-            "templateLiteralTypes4",
+            "templateLiteralTypes4"
         ],
-        "code-fixer-issues" : [
+        "code-fixer-issues": [
             "arrayFakeFlatNoCrashInferenceDeclarations",
             "commonJsImportClassExpression",
             "constEnumNamespaceReferenceCausesNoImport2",
@@ -70,20 +71,20 @@
             "reexportClassDefinition",
             "parserEqualsGreaterThanAfterFunction1",
             "parserSkippedTokens16",
-            "declarationFiles",
+            "declarationFiles"
         ],
         "not-fixed-with-unreliable-errors": [
             // Language service crash on computing diagnostic (call stack size exceeded)
             "binderBinaryExpressionStress",
-            // Bad syntax beyond recovery 
+            // Bad syntax beyond recovery
             "destructuringParameterDeclaration6",
-            "thisTypeInFunctionsNegative",
+            "thisTypeInFunctionsNegative"
         ],
         "with-unreliable-errors": [
             "thisTypeErrors", // Assertion to this in static context produces this in DTE and any in TSC
             "parseInvalidNonNullableTypes", // Prefix ! operator
-            "thisInConstructorParameter2", // this type used in invalid context 
-            "parseInvalidNullableTypes",  // Prefix ? operator
+            "thisInConstructorParameter2", // this type used in invalid context
+            "parseInvalidNullableTypes", // Prefix ? operator
             "ArrowFunction1", // Missing type annotation syntax error
             "parserX_ArrowFunction1", // Missing type annotation syntax error
             "typeParameterDirectlyConstrainedToItself", // Circular type constraints makes emit unreliable
@@ -100,10 +101,10 @@
             "duplicatePropertiesInTypeAssertions02",
             "parserCastVersusArrowFunction1",
             "invalidMultipleVariableDeclarations",
-            "validMultipleVariableDeclarations", 
+            "validMultipleVariableDeclarations",
             "augmentedTypesVar",
             "objectLiteralErrors",
-            "duplicateObjectLiteralProperty_computedName2", 
+            "duplicateObjectLiteralProperty_computedName2",
             "arrowFunctionExpressions",
             "castingTuple", // contains both duplicate variables and print differences.
             // Identifier expected.
@@ -137,18 +138,18 @@
             "decoratorsOnComputedProperties",
             "indexSignatureMustHaveTypeAnnotation",
             "intTypeCheck",
-            // Invalid escape sequences 
+            // Invalid escape sequences
             "invalidTaggedTemplateEscapeSequences",
             "objectTypeWithStringNamedPropertyOfIllegalCharacters",
             "noUsedBeforeDefinedErrorInTypeContext", // Variable used before definition in type context
-            "accessorBodyInTypeContext", //An implementation cannot be declared in ambient contexts.
+            "accessorBodyInTypeContext", // An implementation cannot be declared in ambient contexts.
             "commonJsExportTypeDeclarationError", // Duplicate name, TS resolves to the type alias symbol, DTE resolves to import. Neither is wrong, code is wrong.
             "parseAssertEntriesError", // Syntactic invalid import assertions.
             "decoratorMetadataWithImportDeclarationNameCollision7", // Import does not have the accessed member. TS removes the import as unused. A DTE will keep it as it is syntactically used.
             "classExtendingNonConstructor", // Not reported as isolated declaration error, but the extends clause is invalid.
             "nodeModulesImportTypeModeDeclarationEmitErrors1", // Invalid import asserts
-            "wellKnownSymbolExpando", // Expando function with well known symbols error in TS, but generate the expando function namepsace, DTE does not. 
-            "genericsWithDuplicateTypeParameters1", // Duplicate type parameters
+            "wellKnownSymbolExpando", // Expando function with well known symbols error in TS, but generate the expando function namepsace, DTE does not.
+            "genericsWithDuplicateTypeParameters1" // Duplicate type parameters
         ],
         "with-isolated-declaration-errors/9008": [
             "declarationEmitHasTypesRefOnNamespaceUse",
@@ -162,13 +163,12 @@
             // Will not actually error because of https://github.com/microsoft/TypeScript/issues/55636
             // In isolated declarations we walk the type in the return as if it was hand written in the variable
             // This triggers the difference in behavior described in the issue.
-            "jsxNamespaceGlobalReexport", 
-            
+            "jsxNamespaceGlobalReexport"
         ],
         "with-isolated-declaration-errors": [
             "typeFromPropertyAssignment38", // Nested expando functions. Can in principle be detected, but are not yet implemented
             "contextualReturnTypeOfIIFE2", // Nested expando functions. Can in principle be detected, but are not yet implemented
-            // Computed property errors a DTE can't detect 
+            // Computed property errors a DTE can't detect
             "complicatedPrivacy",
             "computedPropertyNames12_ES5",
             "computedPropertyNames12_ES6",
@@ -236,15 +236,15 @@
             "declarationEmitForModuleImportingModuleAugmentationRetainsImport" // Import augments and must be kept
         ],
         "ts-bugs": [
-             // Type parameter renamed
-             // Reported as https://github.com/microsoft/TypeScript/issues/55653
+            // Type parameter renamed
+            // Reported as https://github.com/microsoft/TypeScript/issues/55653
             "objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts",
             "objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames",
             "objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts",
             "typeAssertionToGenericFunctionType",
             // Default type parameters is written in declarations
-            "conditionalTypesSimplifyWhenTrivial", 
-            // https://github.com/microsoft/TypeScript/issues/55571 
+            "conditionalTypesSimplifyWhenTrivial",
+            // https://github.com/microsoft/TypeScript/issues/55571
             "reExportAliasMakesInstantiated"
         ],
         // Needs TS Fix
@@ -326,8 +326,7 @@
             "declarationEmitPropertyNumericStringKey",
             "templateLiteralsSourceMap", // template literal is evaluated in constant value.
             "nodeModulesImportTypeModeDeclarationEmit1", // resolution-mode in assert from type assertion is preserved
-            "literalTypesAndTypeAssertions", // (0 | 1) written in code is preserved by dte
-        ],
+            "literalTypesAndTypeAssertions" // (0 | 1) written in code is preserved by dte
+        ]
     }
 }
-

@@ -30,6 +30,7 @@ import {
     VariableDeclaration,
 } from "../../_namespaces/ts";
 
+/** @internal */
 export interface IsolatedEmitHost extends ModuleResolutionHost {
     readonly redirectTargetsMap: RedirectTargetsMap;
     getCommonSourceDirectory(): string;
@@ -43,6 +44,12 @@ export interface IsolatedEmitHost extends ModuleResolutionHost {
     useCaseSensitiveFileNames?(): boolean;
 }
 
+/** @internal */
+export type MemberKey = string & {
+    __memberKey: void;
+};
+
+/** @internal */
 export interface IsolatedEmitResolver {
     isLiteralComputedName(node: ComputedPropertyName): boolean;
     isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;

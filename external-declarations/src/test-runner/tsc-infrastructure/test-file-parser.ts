@@ -1,8 +1,19 @@
 import * as ts from "typescript";
-import { Path } from "typescript";
+import {
+    Path,
+} from "typescript";
 
-import { find, forEach, orderedRemoveItemAt } from "../../compiler/lang-utils";
-import { getBaseFileName, getDirectoryPath, getNormalizedAbsolutePath, normalizePath } from "../../compiler/path-utils";
+import {
+    find,
+    forEach,
+    orderedRemoveItemAt,
+} from "../../compiler/lang-utils";
+import {
+    getBaseFileName,
+    getDirectoryPath,
+    getNormalizedAbsolutePath,
+    normalizePath,
+} from "../../compiler/path-utils";
 import * as vfs from "./vfs";
 
 /** all the necessary information to set the right compiler settings */
@@ -65,12 +76,10 @@ export function splitContentByNewlines(content: string) {
     return lines;
 }
 
-
 export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "jsconfig.json" | undefined {
     const flc = getBaseFileName(filename).toLowerCase();
     return find(["tsconfig.json" as const, "jsconfig.json" as const], x => x === flc);
 }
-
 
 export function parseSymlinkFromTest(line: string, symlinks: vfs.FileSet | undefined) {
     const linkMetaData = linkRegex.exec(line);
@@ -81,7 +90,6 @@ export function parseSymlinkFromTest(line: string, symlinks: vfs.FileSet | undef
     symlinks[linkMetaData[2].trim()] = new vfs.Symlink(linkMetaData[1].trim());
     return symlinks;
 }
-
 
 export interface TestCaseContent {
     settings: CompilerSettings;
@@ -188,7 +196,7 @@ export function makeUnitsFromTest(code: string, fileName: string, rootDir?: stri
         useCaseSensitiveFileNames: false,
         readDirectory: () => [],
         fileExists: () => true,
-        readFile: (name) => forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined)
+        readFile: name => forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined),
     };
 
     // check if project has tsconfig.json in the list of files

@@ -10,7 +10,7 @@ import {
 } from "../../utils/fs-utils";
 
 export async function writeTestCase(testData: TestCaseContent & { BOM: string; }, path: string) {
-    await ensureDir(fsPath.dirname(path))
+    await ensureDir(fsPath.dirname(path));
     await fs.writeFile(path, await testCaseToString(testData));
 }
 export async function testCaseToString(testData: TestCaseContent & { BOM: string; }) {

@@ -40,7 +40,7 @@ function joinToRootIfNeeded(rootDir: string, existingPath: string) {
     return normalizePath(pathIsAbsolute(existingPath) ? existingPath : combinePaths(rootDir, existingPath));
 }
 
-export function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions) {
+function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions) {
     const declarationDir = options.declarationDir ? joinToRootIfNeeded(rootDir, options.declarationDir) :
         options.outDir ? joinToRootIfNeeded(rootDir, options.outDir) :
         undefined;
@@ -61,7 +61,7 @@ export function createIsolatedDeclarationsEmitter(rootDir: string, options: Comp
     };
 }
 
-export function emitDeclarationsForAllFiles(rootDir: string, files: string[], host: CompilerHost, options: CompilerOptions) {
+function emitDeclarationsForAllFiles(rootDir: string, files: string[], host: CompilerHost, options: CompilerOptions) {
     const transformer = createIsolatedDeclarationsEmitter(rootDir, options);
     for (const file of files) {
         transformer(file, host);

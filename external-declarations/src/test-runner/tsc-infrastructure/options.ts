@@ -1,10 +1,31 @@
-
 // Watch related options
 
-import { CompilerOptionsValue, Diagnostic,DiagnosticMessage, ImportsNotUsedAsValues, JsxEmit, ModuleDetectionKind, ModuleKind, ModuleResolutionKind, NewLineKind, PollingWatchKind, ScriptTarget, WatchDirectoryKind, WatchFileKind } from "typescript";
+import {
+    CompilerOptionsValue,
+    Diagnostic,
+    DiagnosticMessage,
+    ImportsNotUsedAsValues,
+    JsxEmit,
+    ModuleDetectionKind,
+    ModuleKind,
+    ModuleResolutionKind,
+    NewLineKind,
+    PollingWatchKind,
+    ScriptTarget,
+    WatchDirectoryKind,
+    WatchFileKind,
+} from "typescript";
 
-import { getEntries, isNullOrUndefined, mapDefined, startsWith, trimString } from "../../compiler/lang-utils";
-import { Diagnostics } from "./diagnosticInformationMap.generated";
+import {
+    getEntries,
+    isNullOrUndefined,
+    mapDefined,
+    startsWith,
+    trimString,
+} from "../../compiler/lang-utils";
+import {
+    Diagnostics,
+} from "./diagnosticInformationMap.generated";
 
 const jsxOptionMap = new Map(getEntries({
     "preserve": JsxEmit.Preserve,
@@ -13,7 +34,6 @@ const jsxOptionMap = new Map(getEntries({
     "react-jsx": JsxEmit.ReactJSX,
     "react-jsxdev": JsxEmit.ReactJSXDev,
 }));
-
 
 // NOTE: The order here is important to default lib ordering as entries will have the same
 //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
@@ -91,7 +111,7 @@ const libEntries: [string, string][] = [
     ["esnext.bigint", "lib.es2020.bigint.d.ts"],
     ["esnext.string", "lib.es2022.string.d.ts"],
     ["esnext.promise", "lib.es2021.promise.d.ts"],
-    ["esnext.weakref", "lib.es2021.weakref.d.ts"]
+    ["esnext.weakref", "lib.es2021.weakref.d.ts"],
 ];
 
 /**
@@ -110,7 +130,6 @@ export const libs = libEntries.map(entry => entry[0]);
  * @internal
  */
 export const libMap = new Map(libEntries);
-
 
 /** @internal */
 export const optionsForWatch = [
@@ -278,7 +297,7 @@ export const commonOptionsWithBuild = [
         paramType: Diagnostics.FILE_OR_DIRECTORY,
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Emit_a_v8_CPU_profile_of_the_compiler_run_for_debugging,
-        defaultValueDescription: "profile.cpuprofile"
+        defaultValueDescription: "profile.cpuprofile",
     },
     {
         name: "generateTrace",
@@ -287,7 +306,7 @@ export const commonOptionsWithBuild = [
         isCommandLineOnly: true,
         paramType: Diagnostics.DIRECTORY,
         category: Diagnostics.Compiler_Diagnostics,
-        description: Diagnostics.Generates_an_event_trace_and_a_list_of_types
+        description: Diagnostics.Generates_an_event_trace_and_a_list_of_types,
     },
     {
         name: "incremental",
@@ -296,7 +315,7 @@ export const commonOptionsWithBuild = [
         category: Diagnostics.Projects,
         description: Diagnostics.Save_tsbuildinfo_files_to_allow_for_incremental_compilation_of_projects,
         transpileOptionValue: undefined,
-        defaultValueDescription: Diagnostics.false_unless_composite_is_set
+        defaultValueDescription: Diagnostics.false_unless_composite_is_set,
     },
     {
         name: "declaration",
@@ -319,7 +338,7 @@ export const commonOptionsWithBuild = [
         category: Diagnostics.Emit,
         transpileOptionValue: undefined,
         defaultValueDescription: false,
-        description: Diagnostics.Create_sourcemaps_for_d_ts_files
+        description: Diagnostics.Create_sourcemaps_for_d_ts_files,
     },
     {
         name: "emitDeclarationOnly",
@@ -367,7 +386,7 @@ export const commonOptionsWithBuild = [
         category: Diagnostics.Command_line_Options,
         isCommandLineOnly: true,
         description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
-        defaultValueDescription: Diagnostics.Platform_specific
+        defaultValueDescription: Diagnostics.Platform_specific,
     },
 ] as const;
 
@@ -507,7 +526,7 @@ const commandOptionsWithoutBuild = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_a_set_of_bundled_library_declaration_files_that_describe_the_target_runtime_environment,
-        transpileOptionValue: undefined
+        transpileOptionValue: undefined,
     },
     {
         name: "allowJs",
@@ -574,7 +593,7 @@ const commandOptionsWithoutBuild = [
         paramType: Diagnostics.LOCATION,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_the_root_folder_within_your_source_files,
-        defaultValueDescription: Diagnostics.Computed_from_the_list_of_input_files
+        defaultValueDescription: Diagnostics.Computed_from_the_list_of_input_files,
     },
     {
         name: "composite",
@@ -689,7 +708,7 @@ const commandOptionsWithoutBuild = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_error_reporting_for_expressions_and_declarations_with_an_implied_any_type,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "strictNullChecks",
@@ -699,7 +718,7 @@ const commandOptionsWithoutBuild = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.When_type_checking_take_into_account_null_and_undefined,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "strictFunctionTypes",
@@ -709,7 +728,7 @@ const commandOptionsWithoutBuild = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.When_assigning_functions_check_to_ensure_parameters_and_the_return_values_are_subtype_compatible,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "strictBindCallApply",
@@ -719,7 +738,7 @@ const commandOptionsWithoutBuild = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Check_that_the_arguments_for_bind_call_and_apply_methods_match_the_original_function,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "strictPropertyInitialization",
@@ -729,7 +748,7 @@ const commandOptionsWithoutBuild = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Check_for_class_properties_that_are_declared_but_not_set_in_the_constructor,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "noImplicitThis",
@@ -739,7 +758,7 @@ const commandOptionsWithoutBuild = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_error_reporting_when_this_is_given_the_type_any,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "useUnknownInCatchVariables",
@@ -760,7 +779,7 @@ const commandOptionsWithoutBuild = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Ensure_use_strict_is_always_emitted,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
 
     // Additional Checks
@@ -852,7 +871,7 @@ const commandOptionsWithoutBuild = [
         paramType: Diagnostics.STRATEGY,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_how_TypeScript_looks_up_a_file_from_a_given_module_specifier,
-        defaultValueDescription: Diagnostics.module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node
+        defaultValueDescription: Diagnostics.module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node,
     },
     {
         name: "baseUrl",
@@ -860,7 +879,7 @@ const commandOptionsWithoutBuild = [
         affectsModuleResolution: true,
         isFilePath: true,
         category: Diagnostics.Modules,
-        description: Diagnostics.Specify_the_base_directory_to_resolve_non_relative_module_names
+        description: Diagnostics.Specify_the_base_directory_to_resolve_non_relative_module_names,
     },
     {
         // this option can only be specified in tsconfig.json
@@ -871,7 +890,7 @@ const commandOptionsWithoutBuild = [
         isTSConfigOnly: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_a_set_of_entries_that_re_map_imports_to_additional_lookup_locations,
-        transpileOptionValue: undefined
+        transpileOptionValue: undefined,
     },
     {
         // this option can only be specified in tsconfig.json
@@ -882,13 +901,13 @@ const commandOptionsWithoutBuild = [
         element: {
             name: "rootDirs",
             type: "string",
-            isFilePath: true
+            isFilePath: true,
         },
         affectsModuleResolution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Allow_multiple_folders_to_be_treated_as_one_when_resolving_modules,
         transpileOptionValue: undefined,
-        defaultValueDescription: Diagnostics.Computed_from_the_list_of_input_files
+        defaultValueDescription: Diagnostics.Computed_from_the_list_of_input_files,
     },
     {
         name: "typeRoots",
@@ -896,24 +915,24 @@ const commandOptionsWithoutBuild = [
         element: {
             name: "typeRoots",
             type: "string",
-            isFilePath: true
+            isFilePath: true,
         },
         affectsModuleResolution: true,
         category: Diagnostics.Modules,
-        description: Diagnostics.Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types
+        description: Diagnostics.Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types,
     },
     {
         name: "types",
         type: "list",
         element: {
             name: "types",
-            type: "string"
+            type: "string",
         },
         affectsProgramStructure: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_type_package_names_to_be_included_without_being_referenced_in_a_source_file,
-        transpileOptionValue: undefined
+        transpileOptionValue: undefined,
     },
     {
         name: "allowSyntheticDefaultImports",
@@ -922,7 +941,7 @@ const commandOptionsWithoutBuild = [
         affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Allow_import_x_from_y_when_a_module_doesn_t_have_a_default_export,
-        defaultValueDescription: Diagnostics.module_system_or_esModuleInterop
+        defaultValueDescription: Diagnostics.module_system_or_esModuleInterop,
     },
     {
         name: "esModuleInterop",
@@ -1020,7 +1039,7 @@ const commandOptionsWithoutBuild = [
         type: "string",
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_the_JSX_factory_function_used_when_targeting_React_JSX_emit_e_g_React_createElement_or_h,
-        defaultValueDescription: "`React.createElement`"
+        defaultValueDescription: "`React.createElement`",
     },
     {
         name: "jsxFragmentFactory",
@@ -1038,7 +1057,7 @@ const commandOptionsWithoutBuild = [
         affectsModuleResolution: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Asterisk,
-        defaultValueDescription: "react"
+        defaultValueDescription: "react",
     },
     {
         name: "resolveJsonModule",
@@ -1085,7 +1104,7 @@ const commandOptionsWithoutBuild = [
         type: "string",
         category: Diagnostics.Backwards_Compatibility,
         description: Diagnostics.No_longer_supported_In_early_versions_manually_set_the_text_encoding_for_reading_files,
-        defaultValueDescription: "utf8"
+        defaultValueDescription: "utf8",
     },
     {
         name: "emitBOM",
@@ -1100,14 +1119,14 @@ const commandOptionsWithoutBuild = [
         name: "newLine",
         type: new Map(getEntries({
             crlf: NewLineKind.CarriageReturnLineFeed,
-            lf: NewLineKind.LineFeed
+            lf: NewLineKind.LineFeed,
         })),
         affectsEmit: true,
         affectsBuildInfo: true,
         paramType: Diagnostics.NEWLINE,
         category: Diagnostics.Emit,
         description: Diagnostics.Set_the_newline_character_for_emitting_files,
-        defaultValueDescription: Diagnostics.Platform_specific
+        defaultValueDescription: Diagnostics.Platform_specific,
     },
     {
         name: "noErrorTruncation",
@@ -1310,7 +1329,7 @@ const commandOptionsWithoutBuild = [
         affectsBuildInfo: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Emit_ECMAScript_standard_compliant_class_fields,
-        defaultValueDescription: Diagnostics.true_for_ES2022_and_above_including_ESNext
+        defaultValueDescription: Diagnostics.true_for_ES2022_and_above_including_ESNext,
     },
     {
         name: "preserveValueImports",
@@ -1336,11 +1355,10 @@ const commandOptionsWithoutBuild = [
         isTSConfigOnly: true,
         element: {
             name: "plugin",
-            type: "object"
+            type: "object",
         },
         description: Diagnostics.Specify_a_list_of_language_service_plugins_to_include,
         category: Diagnostics.Editor_Support,
-
     },
     {
         name: "moduleDetection",
@@ -1353,7 +1371,7 @@ const commandOptionsWithoutBuild = [
         description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
         category: Diagnostics.Language_and_Environment,
         defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node16_as_modules,
-    }
+    },
 ] as const;
 
 /** @internal */
@@ -1362,9 +1380,7 @@ export const optionDeclarations = [
     ...commandOptionsWithoutBuild,
 ];
 
-
 export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption | CommandLineOptionOfListType;
-
 
 /** @internal */
 export interface CommandLineOptionOfStringType extends CommandLineOptionBase {
@@ -1386,10 +1402,9 @@ export interface CommandLineOptionOfBooleanType extends CommandLineOptionBase {
 
 /** @internal */
 export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-    type: Map<string, number | string>;  // an object literal mapping named values to actual values
+    type: Map<string, number | string>; // an object literal mapping named values to actual values
     defaultValueDescription: number | string | undefined | DiagnosticMessage;
 }
-
 
 /** @internal */
 export interface TsConfigOnlyOption extends CommandLineOptionBase {
@@ -1404,33 +1419,30 @@ export interface CommandLineOptionOfListType extends CommandLineOptionBase {
     listPreserveFalsyValues?: boolean;
 }
 
-
 /** @internal */
 export interface CommandLineOptionBase {
     name: string;
-    type: "string" | "number" | "boolean" | "object" | "list" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
-    isFilePath?: boolean;                                   // True if option value is a path or fileName
-    shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
-    description?: DiagnosticMessage;                        // The message describing what the command line switch does.
-    defaultValueDescription?: string | number | boolean | DiagnosticMessage;   // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
-    paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
-    isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
+    type: "string" | "number" | "boolean" | "object" | "list" | Map<string, number | string>; // a value of a primitive type, or an object literal mapping named values to actual values
+    isFilePath?: boolean; // True if option value is a path or fileName
+    shortName?: string; // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
+    description?: DiagnosticMessage; // The message describing what the command line switch does.
+    defaultValueDescription?: string | number | boolean | DiagnosticMessage; // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
+    paramType?: DiagnosticMessage; // The name to be used for a non-boolean option's parameter
+    isTSConfigOnly?: boolean; // True if option can only be specified via tsconfig.json file
     isCommandLineOnly?: boolean;
     showInSimplifiedHelpView?: boolean;
     category?: DiagnosticMessage;
-    strictFlag?: true;                                      // true if the option is one of the flag under strict
-    affectsSourceFile?: true;                               // true if we should recreate SourceFiles after this option changes
-    affectsModuleResolution?: true;                         // currently same effect as `affectsSourceFile`
-    affectsBindDiagnostics?: true;                          // true if this affects binding (currently same effect as `affectsSourceFile`)
-    affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
-    affectsEmit?: true;                                     // true if the options affects emit
-    affectsProgramStructure?: true;                         // true if program should be reconstructed from root files if option changes and does not affect module resolution as affectsModuleResolution indirectly means program needs to reconstructed
-    affectsDeclarationPath?: true;                          // true if the options affects declaration file path computed
-    affectsBuildInfo?: true;                                // true if this options should be emitted in buildInfo
-    transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
+    strictFlag?: true; // true if the option is one of the flag under strict
+    affectsSourceFile?: true; // true if we should recreate SourceFiles after this option changes
+    affectsModuleResolution?: true; // currently same effect as `affectsSourceFile`
+    affectsBindDiagnostics?: true; // true if this affects binding (currently same effect as `affectsSourceFile`)
+    affectsSemanticDiagnostics?: true; // true if option affects semantic diagnostics
+    affectsEmit?: true; // true if the options affects emit
+    affectsProgramStructure?: true; // true if program should be reconstructed from root files if option changes and does not affect module resolution as affectsModuleResolution indirectly means program needs to reconstructed
+    affectsDeclarationPath?: true; // true if the options affects declaration file path computed
+    affectsBuildInfo?: true; // true if this options should be emitted in buildInfo
+    transpileOptionValue?: boolean | undefined; // If set this means that the option should be set to this value when transpiling
 }
-
-
 
 function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
     if (isNullOrUndefined(value)) return undefined;
@@ -1444,12 +1456,10 @@ function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value
     }
 }
 
-
 function validateJsonOptionValue<T extends CompilerOptionsValue>(opt: CommandLineOption, value: T, errors: Diagnostic[]): T | undefined {
     if (isNullOrUndefined(value)) return undefined;
     return value;
 }
-
 
 /** @internal */
 export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {

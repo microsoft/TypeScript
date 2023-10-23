@@ -7,7 +7,9 @@ import ts from "typescript";
 import {
     normalizePath,
 } from "../compiler/path-utils";
-import { TestCaseContent } from "../test-runner/tsc-infrastructure/test-file-parser";
+import {
+    TestCaseContent,
+} from "../test-runner/tsc-infrastructure/test-file-parser";
 import {
     loadTestCase,
 } from "../test-runner/utils";
@@ -57,11 +59,11 @@ async function main() {
 
         const updatedTestFileName = testFile.replace(rootPath, "./fixer-test/expected");
         const result = await fixTestCase(caseData, {
-            target: ts.ScriptTarget.ES2019
+            target: ts.ScriptTarget.ES2019,
         });
-        const resultFiles = !(result instanceof Error)? result : [{
-                unitName: caseData.testUnitData[0].name,
-                content: `
+        const resultFiles = !(result instanceof Error) ? result : [{
+            unitName: caseData.testUnitData[0].name,
+            content: `
 ================= CODE MOD ERROR ==============
 ${result.message}
 ${result.stack}
@@ -71,21 +73,24 @@ ${result.stack}
 // ${caseData.code.split("\n").join("\n// ")}
 `,
         }];
-        await compareTestCase({
-            ...caseData,
-            testUnitData: caseData.testUnitData.map(u => ({
-                ...u,
-                content: resultFiles.find(o => o.unitName === u.name)?.content!,
-            })),
-        }, updatedTestFileName, !!parsedArgs.update);
+        await compareTestCase(
+            {
+                ...caseData,
+                testUnitData: caseData.testUnitData.map(u => ({
+                    ...u,
+                    content: resultFiles.find(o => o.unitName === u.name)?.content!,
+                })),
+            },
+            updatedTestFileName,
+            !!parsedArgs.update,
+        );
         console.log(`Ran: ${count}`);
     }
 }
 
-async function compareTestCase(testData: TestCaseContent & { BOM: string }, path: string, update: boolean) {
+async function compareTestCase(testData: TestCaseContent & { BOM: string; }, path: string, update: boolean) {
     const content = await testCaseToString(testData);
-    const original = 
-        !fsSync.existsSync(path) ? undefined: await fs.readFile(path, "utf-8");
+    const original = !fsSync.existsSync(path) ? undefined : await fs.readFile(path, "utf-8");
     if (content !== original) {
         if (!update) {
             throw new Error(`Expected \n${original}\n for file ${path} but seen \n${content}`);
@@ -95,6 +100,5 @@ async function compareTestCase(testData: TestCaseContent & { BOM: string }, path
         }
     }
 }
-
 
 main();

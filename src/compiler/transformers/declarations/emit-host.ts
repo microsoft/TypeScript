@@ -6,6 +6,7 @@ import {
     IsolatedEmitHost,
 } from "./types";
 
+/** @internal */
 export function createEmitDeclarationHost(options: CompilerOptions, sys: System): IsolatedEmitHost {
     const getCompilerOptions = () => options;
     const getCurrentDirectory = () => ".";

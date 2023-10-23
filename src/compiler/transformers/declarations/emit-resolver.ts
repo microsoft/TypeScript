@@ -96,10 +96,10 @@ import {
 import {
     IsolatedEmitHost,
     IsolatedEmitResolver,
+    MemberKey,
 } from "./types";
 import {
     getMemberKey,
-    MemberKey,
 } from "./utils";
 
 const knownFunctionMembers = new Set([
@@ -110,6 +110,8 @@ const knownFunctionMembers = new Set([
     "I:prototype",
     "I:length",
 ]);
+
+/** @internal */
 export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEmitHost): IsolatedEmitResolver {
     const { getNodeLinks, resolveMemberKey, resolveName } = bindSourceFileForDeclarationEmit(file, host);
 
