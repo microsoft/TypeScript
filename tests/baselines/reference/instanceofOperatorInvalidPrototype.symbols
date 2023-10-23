@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/instanceofOperatorInvalidPrototype.ts] ////
+
+=== instanceofOperatorInvalidPrototype.ts ===
+TypeError instanceof (() => 1);
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const arrowFunction = () => 1;
+>arrowFunction : Symbol(arrowFunction, Decl(instanceofOperatorInvalidPrototype.ts, 2, 5))
+
+TypeError instanceof arrowFunction;
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arrowFunction : Symbol(arrowFunction, Decl(instanceofOperatorInvalidPrototype.ts, 2, 5))
+
+function allowed() {}
+>allowed : Symbol(allowed, Decl(instanceofOperatorInvalidPrototype.ts, 3, 35))
+
+TypeError instanceof allowed;
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>allowed : Symbol(allowed, Decl(instanceofOperatorInvalidPrototype.ts, 3, 35))
+

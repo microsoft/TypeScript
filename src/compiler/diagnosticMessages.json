@@ -1924,6 +1924,10 @@
         "category": "Error",
         "code": 2359
     },
+    "The right-hand side of an 'instanceof' expression may not have an 'undefined' prototype.": {
+        "category": "Error",
+        "code": 2360
+    },
     "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2362

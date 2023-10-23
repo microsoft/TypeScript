@@ -1,0 +1,17 @@
+instanceofOperatorInvalidPrototype.ts(1,22): error TS2360: The right-hand side of an 'instanceof' expression may not have an 'undefined' prototype.
+instanceofOperatorInvalidPrototype.ts(4,22): error TS2360: The right-hand side of an 'instanceof' expression may not have an 'undefined' prototype.
+
+
+==== instanceofOperatorInvalidPrototype.ts (2 errors) ====
+    TypeError instanceof (() => 1);
+                         ~~~~~~~~~
+!!! error TS2360: The right-hand side of an 'instanceof' expression may not have an 'undefined' prototype.
+    
+    const arrowFunction = () => 1;
+    TypeError instanceof arrowFunction;
+                         ~~~~~~~~~~~~~
+!!! error TS2360: The right-hand side of an 'instanceof' expression may not have an 'undefined' prototype.
+    
+    function allowed() {}
+    TypeError instanceof allowed;
+    

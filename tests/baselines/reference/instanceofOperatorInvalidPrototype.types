@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/instanceofOperatorInvalidPrototype.ts] ////
+
+=== instanceofOperatorInvalidPrototype.ts ===
+TypeError instanceof (() => 1);
+>TypeError instanceof (() => 1) : boolean
+>TypeError : TypeErrorConstructor
+>(() => 1) : () => number
+>() => 1 : () => number
+>1 : 1
+
+const arrowFunction = () => 1;
+>arrowFunction : () => number
+>() => 1 : () => number
+>1 : 1
+
+TypeError instanceof arrowFunction;
+>TypeError instanceof arrowFunction : boolean
+>TypeError : TypeErrorConstructor
+>arrowFunction : () => number
+
+function allowed() {}
+>allowed : () => void
+
+TypeError instanceof allowed;
+>TypeError instanceof allowed : boolean
+>TypeError : TypeErrorConstructor
+>allowed : () => void
+
