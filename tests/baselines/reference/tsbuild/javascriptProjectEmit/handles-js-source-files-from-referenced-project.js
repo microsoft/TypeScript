@@ -152,22 +152,16 @@ File '/home/src/projects/myproject/node_modules/@my-package/a/package.json' exis
 File '/home/src/projects/myproject/node_modules/@my-package/a/src/util.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/node_modules/@my-package/a/src/util.ts', result '/home/src/projects/myproject/packages/a/src/util.ts'.
 ======== Module name '@my-package/a/src/util' was successfully resolved to '/home/src/projects/myproject/packages/a/src/util.ts' with Package ID '@my-package/a/src/util.ts@1.0.0'. ========
-[96mpackages/b/src/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module '@my-package/a/src/lib'. '/home/src/projects/myproject/packages/a/src/lib.js' implicitly has an 'any' type.
-  Try `npm i --save-dev @types/my-package__a` if it exists or add a new declaration (.d.ts) file containing `declare module '@my-package/a/src/lib';`
-
-[7m1[0m import { magicString } from "@my-package/a/src/lib";
-[7m [0m [91m                            ~~~~~~~~~~~~~~~~~~~~~~~[0m
-
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
+packages/a/dist/types/src/lib.d.ts
+  Imported via "@my-package/a/src/lib" from file 'packages/b/src/index.ts' with packageId '@my-package/a/src/lib.js@1.0.0'
+  File is output of project reference source 'packages/a/src/lib.js'
 packages/a/dist/types/src/util.d.ts
   Imported via "@my-package/a/src/util" from file 'packages/b/src/index.ts' with packageId '@my-package/a/src/util.ts@1.0.0'
   File is output of project reference source 'packages/a/src/util.ts'
 packages/b/src/index.ts
   Matched by include pattern './src' in 'packages/b/tsconfig.json'
-
-Found 1 error.
-
 
 
 Program root files: [
@@ -218,20 +212,23 @@ Program options: {
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
+/home/src/projects/myproject/packages/a/dist/types/src/lib.d.ts
 /home/src/projects/myproject/packages/a/dist/types/src/util.d.ts
 /home/src/projects/myproject/packages/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
+/home/src/projects/myproject/packages/a/dist/types/src/lib.d.ts
 /home/src/projects/myproject/packages/a/dist/types/src/util.d.ts
 /home/src/projects/myproject/packages/b/src/index.ts
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
+/home/src/projects/myproject/packages/a/dist/types/src/lib.d.ts (used version)
 /home/src/projects/myproject/packages/a/dist/types/src/util.d.ts (used version)
-/home/src/projects/myproject/packages/b/src/index.ts (used version)
+/home/src/projects/myproject/packages/b/src/index.ts (computed .d.ts during emit)
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 //// [/home/src/projects/myproject/packages/a/dist/types/src/lib.d.ts]
 export const magicString: "12";
@@ -310,19 +307,25 @@ export declare const magicNumber = 12;
   "size": 1131
 }
 
+//// [/home/src/projects/myproject/packages/b/dist/types/src/index.d.ts]
+export {};
+
+
 //// [/home/src/projects/myproject/packages/b/dist/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../a/dist/types/src/util.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7610027667-export declare const magicNumber = 12;\n","-5849137514-import { magicString } from \"@my-package/a/src/lib\";\nimport { magicNumber } from \"@my-package/a/src/util\";\nconst a: number = magicNumber;\nconst b: string = magicString;\nconsole.log({ a });\nconsole.log({ b });\n"],"root":[3],"options":{"allowJs":true,"composite":true,"declarationDir":"./types","emitDeclarationOnly":true,"outDir":"./","strict":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"../src/index.ts","start":28,"length":23,"code":7016,"category":1,"messageText":{"messageText":"Could not find a declaration file for module '@my-package/a/src/lib'. '/home/src/projects/myproject/packages/a/src/lib.js' implicitly has an 'any' type.","category":1,"code":7016,"next":[{"info":{"moduleReference":"@my-package/a/src/lib","packageName":"@my-package/a"}}]}}]]],"affectedFilesPendingEmit":[3],"emitSignatures":[3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../a/dist/types/src/lib.d.ts","../../a/dist/types/src/util.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7063618004-export const magicString: \"12\";\n","-7610027667-export declare const magicNumber = 12;\n",{"version":"-5849137514-import { magicString } from \"@my-package/a/src/lib\";\nimport { magicNumber } from \"@my-package/a/src/util\";\nconst a: number = magicNumber;\nconst b: string = magicString;\nconsole.log({ a });\nconsole.log({ b });\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"allowJs":true,"composite":true,"declarationDir":"./types","emitDeclarationOnly":true,"outDir":"./","strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./types/src/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/myproject/packages/b/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileNames": [
       "../../../../../../../a/lib/lib.d.ts",
+      "../../a/dist/types/src/lib.d.ts",
       "../../a/dist/types/src/util.d.ts",
       "../src/index.ts"
     ],
     "fileNamesList": [
       [
+        "../../a/dist/types/src/lib.d.ts",
         "../../a/dist/types/src/util.d.ts"
       ]
     ],
@@ -336,18 +339,26 @@ export declare const magicNumber = 12;
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
+      "../../a/dist/types/src/lib.d.ts": {
+        "version": "-7063618004-export const magicString: \"12\";\n",
+        "signature": "-7063618004-export const magicString: \"12\";\n"
+      },
       "../../a/dist/types/src/util.d.ts": {
         "version": "-7610027667-export declare const magicNumber = 12;\n",
         "signature": "-7610027667-export declare const magicNumber = 12;\n"
       },
       "../src/index.ts": {
+        "original": {
+          "version": "-5849137514-import { magicString } from \"@my-package/a/src/lib\";\nimport { magicNumber } from \"@my-package/a/src/util\";\nconst a: number = magicNumber;\nconst b: string = magicString;\nconsole.log({ a });\nconsole.log({ b });\n",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-5849137514-import { magicString } from \"@my-package/a/src/lib\";\nimport { magicNumber } from \"@my-package/a/src/util\";\nconst a: number = magicNumber;\nconst b: string = magicString;\nconsole.log({ a });\nconsole.log({ b });\n",
-        "signature": "-5849137514-import { magicString } from \"@my-package/a/src/lib\";\nimport { magicNumber } from \"@my-package/a/src/util\";\nconst a: number = magicNumber;\nconst b: string = magicString;\nconsole.log({ a });\nconsole.log({ b });\n"
+        "signature": "-3531856636-export {};\n"
       }
     },
     "root": [
       [
-        3,
+        4,
         "../src/index.ts"
       ]
     ],
@@ -361,54 +372,20 @@ export declare const magicNumber = 12;
     },
     "referencedMap": {
       "../src/index.ts": [
+        "../../a/dist/types/src/lib.d.ts",
         "../../a/dist/types/src/util.d.ts"
       ]
     },
-    "exportedModulesMap": {
-      "../src/index.ts": [
-        "../../a/dist/types/src/util.d.ts"
-      ]
-    },
+    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../../../a/lib/lib.d.ts",
+      "../../a/dist/types/src/lib.d.ts",
       "../../a/dist/types/src/util.d.ts",
-      [
-        "../src/index.ts",
-        [
-          {
-            "file": "../src/index.ts",
-            "start": 28,
-            "length": 23,
-            "code": 7016,
-            "category": 1,
-            "messageText": {
-              "messageText": "Could not find a declaration file for module '@my-package/a/src/lib'. '/home/src/projects/myproject/packages/a/src/lib.js' implicitly has an 'any' type.",
-              "category": 1,
-              "code": 7016,
-              "next": [
-                {
-                  "info": {
-                    "moduleReference": "@my-package/a/src/lib",
-                    "packageName": "@my-package/a"
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      ]
-    ],
-    "affectedFilesPendingEmit": [
-      [
-        "../src/index.ts",
-        "Dts"
-      ]
-    ],
-    "emitSignatures": [
       "../src/index.ts"
-    ]
+    ],
+    "latestChangedDtsFile": "./types/src/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1606
+  "size": 1355
 }
 

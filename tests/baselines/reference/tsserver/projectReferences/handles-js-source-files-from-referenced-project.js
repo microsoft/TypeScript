@@ -200,6 +200,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/node_modules/@my-pac
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/node_modules/@my-package/a/src/util.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/myproject/node_modules/@my-package/a/src/util.ts', result '/home/src/projects/myproject/packages/a/src/util.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name '@my-package/a/src/util' was successfully resolved to '/home/src/projects/myproject/packages/a/src/util.ts' with Package ID '@my-package/a/src/util.ts@1.0.0'. ========
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/packages/a/src/lib.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/packages/a/src/util.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/packages/b/src 1 undefined Project: /home/src/projects/myproject/packages/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -223,14 +224,17 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/myproject/packages/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/packages/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/packages/b/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/myproject/packages/a/src/lib.js Text-1 "export const magicString = \"12\";"
 	/home/src/projects/myproject/packages/a/src/util.ts Text-1 "export const magicNumber = 12;"
 	/home/src/projects/myproject/packages/b/src/index.ts SVC-1-0 "import { magicString } from \"@my-package/a/src/lib\";\nimport { magicNumber } from \"@my-package/a/src/util\";\nconst a: number = magicNumber;\nconst b: string = magicString;\nconsole.log({ a });\nconsole.log({ b });\n"
 
 
 	../../../../../../a/lib/lib.d.ts
 	  Default library for target 'es5'
+	../a/src/lib.js
+	  Imported via "@my-package/a/src/lib" from file 'src/index.ts' with packageId '@my-package/a/src/lib.js@1.0.0'
 	../a/src/util.ts
 	  Imported via "@my-package/a/src/util" from file 'src/index.ts' with packageId '@my-package/a/src/util.ts@1.0.0'
 	src/index.ts
@@ -256,8 +260,8 @@ Info seq  [hh:mm:ss:mss] event:
         "payload": {
           "projectId": "19de839b42336600c9ca4cf032699347534b5f43e7b3767eb2c8cf4e2a04e53f",
           "fileStats": {
-            "js": 0,
-            "jsSize": 0,
+            "js": 1,
+            "jsSize": 32,
             "jsx": 0,
             "jsxSize": 0,
             "ts": 2,
@@ -309,7 +313,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/myproject/packages/b
 Info seq  [hh:mm:ss:mss] For info: /home/src/projects/myproject/packages/b/tsconfig.json :: No config files found.
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/packages/b/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -341,6 +345,8 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 /home/src/projects/myproject/packages/a/package.json: *new*
+  {}
+/home/src/projects/myproject/packages/a/src/lib.js: *new*
   {}
 /home/src/projects/myproject/packages/a/src/util.ts: *new*
   {}
@@ -404,21 +410,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/home/src/projects/myproject/packages/b/src/index.ts",
-        "diagnostics": [
-          {
-            "start": {
-              "line": 1,
-              "offset": 29
-            },
-            "end": {
-              "line": 1,
-              "offset": 52
-            },
-            "text": "Could not find a declaration file for module '@my-package/a/src/lib'. '/home/src/projects/myproject/packages/a/src/lib.js' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/my-package__a` if it exists or add a new declaration (.d.ts) file containing `declare module '@my-package/a/src/lib';`",
-            "code": 7016,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
@@ -434,21 +426,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/home/src/projects/myproject/packages/b/src/index.ts",
-        "diagnostics": [
-          {
-            "start": {
-              "line": 1,
-              "offset": 29
-            },
-            "end": {
-              "line": 1,
-              "offset": 52
-            },
-            "text": "Could not find a declaration file for module '@my-package/a/src/lib'. '/home/src/projects/myproject/packages/a/src/lib.js' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/my-package__a` if it exists or add a new declaration (.d.ts) file containing `declare module '@my-package/a/src/lib';`",
-            "code": 7016,
-            "category": "suggestion"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:

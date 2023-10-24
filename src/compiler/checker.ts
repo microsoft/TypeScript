@@ -5015,7 +5015,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (sourceFile.symbol) {
-                if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
+                if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension) && !host.getProjectReferenceRedirect(resolvedModule.resolvedFileName)) {
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
                 if (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext) {

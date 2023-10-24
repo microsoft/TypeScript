@@ -4036,10 +4036,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     continue;
                 }
 
-                const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension);
-                const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
                 const resolvedFileName = resolution.resolvedFileName;
+                const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
+                // Consider the resolution as to "js" file only if its not from referenced project
+                const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension) && !getProjectReferenceRedirect(resolvedFileName);
+                const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
 
                 if (isFromNodeModulesSearch) {
                     currentNodeModulesDepth++;
