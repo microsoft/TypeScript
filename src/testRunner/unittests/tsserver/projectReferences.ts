@@ -9,6 +9,9 @@ import {
     jsonToReadableText,
 } from "../helpers";
 import {
+    getFsContentsForReferencedProjectWithJs,
+} from "../helpers/referencedProjectWithJs";
+import {
     solutionBuildWithBaseline,
 } from "../helpers/solutionBuilder";
 import {
@@ -1692,5 +1695,18 @@ const b: B = new B();`,
             baselineDisableReferencedProjectLoad(false,       false,   false,   false); // Loaded     | Via redirect | index.ts, helper.ts |
         }
         /* eslint-enable local/argument-trivia */
+    });
+
+    it("handles js source files from referenced project", () => {
+        const host = createServerHost(getFsContentsForReferencedProjectWithJs());
+        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+
+        openFilesForSession(["/home/src/projects/myproject/packages/b/src/index.ts"], session);
+        verifyGetErrRequest({
+            session,
+            files: ["/home/src/projects/myproject/packages/b/src/index.ts"],
+        });
+
+        baselineTsserverLogs("projectReferences", "handles js source files from referenced project", session);
     });
 });

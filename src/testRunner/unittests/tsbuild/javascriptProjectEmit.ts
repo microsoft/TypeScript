@@ -3,12 +3,21 @@ import {
     symbolLibContent,
 } from "../helpers/contents";
 import {
+    getFsContentsForReferencedProjectWithJs,
+} from "../helpers/referencedProjectWithJs";
+import {
     verifyTsc,
 } from "../helpers/tsc";
+import {
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 import {
     loadProjectFromFiles,
     replaceText,
 } from "../helpers/vfs";
+import {
+    createWatchedSystem,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
     verifyTsc({
@@ -284,5 +293,18 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                     }`,
             }, symbolLibContent),
         commandLineArgs: ["-b", "/src"],
+    });
+
+    verifyTscWatch({
+        scenario: "javascriptProjectEmit",
+        subScenario: "handles js source files from referenced project",
+        sys: () =>
+            createWatchedSystem(
+                getFsContentsForReferencedProjectWithJs(),
+                {
+                    currentDirectory: "/home/src/projects/myproject",
+                },
+            ),
+        commandLineArgs: ["--b", "packages/b", "-v", "--explainFiles"],
     });
 });
