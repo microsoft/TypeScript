@@ -1,0 +1,17 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/enumBasics2.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -9,8 +9,8 @@
+     z
+ }
+ declare enum Bar {
+     a,// ok
+-    b = 2,// ok
++    b,// ok
+     c,// ok
+     d
+ }

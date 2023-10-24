@@ -1,0 +1,16 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/es6/Symbols/symbolProperty58.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -3,5 +3,7 @@
+ //// [/.src/symbolProperty58.d.ts]
+ interface SymbolConstructor {
+     foo: string;
+ }
+-declare var obj: invalid;
++declare var obj: {
++    [Symbol.foo]: number;
++};

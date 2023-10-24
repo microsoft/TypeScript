@@ -1,0 +1,15 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/constEnums/constEnum2.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -5,6 +5,6 @@
+ declare const enum D {
+     d = 10,
+     e,
+     f,
+-    g = 0
++    g
+ }

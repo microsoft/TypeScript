@@ -1,0 +1,15 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/es6/Symbols/symbolProperty53.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,4 +1,6 @@
+ 
+ 
+ //// [/.src/symbolProperty53.d.ts]
+-declare var obj: invalid;
++declare var obj: {
++    [Symbol.for]: number;
++};

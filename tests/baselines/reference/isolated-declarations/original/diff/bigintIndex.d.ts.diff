@@ -1,0 +1,16 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/bigintIndex.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -14,5 +14,7 @@
+ declare const a: {};
+ declare const b: {
+     [1n]: number;
+ };
+-declare const c: invalid;
++declare const c: {
++    [bigNum]: number;
++};

@@ -1,0 +1,31 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/enums/enumConstantMembers.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -22,17 +22,17 @@
+     a = Infinity,
+     b = Infinity,
+     c = Infinity,
+     d = NaN,
+-    e = NaN,
+-    f = Infinity,
+-    g = -Infinity
++    e,
++    f,
++    g
+ }
+ declare const enum E6 {
+     a = Infinity,
+     b = Infinity,
+     c = Infinity,
+     d = NaN,
+-    e = NaN,
+-    f = Infinity,
+-    g = -Infinity
++    e,
++    f,
++    g
+ }
