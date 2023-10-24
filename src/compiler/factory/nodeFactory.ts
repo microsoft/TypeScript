@@ -1,5 +1,6 @@
 import {
     __String,
+    AccessorDeclaration,
     addRange,
     append,
     appendIfUnique,
@@ -1180,6 +1181,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         mergeLexicalEnvironment,
         replaceModifiers,
         replaceDecoratorsAndModifiers,
+        replacePropertyName,
     };
 
     forEach(nodeFactoryPatchers, fn => fn(factory));
@@ -7147,6 +7149,26 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isClassExpression(node) ? updateClassExpression(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             isClassDeclaration(node) ? updateClassDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             Debug.assertNever(node);
+    }
+
+    function replacePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
+    function replacePropertyName(node: AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment, name: PropertyName) {
+        switch (node.kind) {
+            case SyntaxKind.GetAccessor:
+                return updateGetAccessorDeclaration(node, node.modifiers, name, node.parameters, node.type, node.body);
+            case SyntaxKind.SetAccessor:
+                return updateSetAccessorDeclaration(node, node.modifiers, name, node.parameters, node.body);
+            case SyntaxKind.MethodDeclaration:
+                return updateMethodDeclaration(node, node.modifiers, node.asteriskToken, name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body);
+            case SyntaxKind.MethodSignature:
+                return updateMethodSignature(node, node.modifiers, name, node.questionToken, node.typeParameters, node.parameters, node.type);
+            case SyntaxKind.PropertyDeclaration:
+                return updatePropertyDeclaration(node, node.modifiers, name, node.questionToken ?? node.exclamationToken, node.type, node.initializer);
+            case SyntaxKind.PropertySignature:
+                return updatePropertySignature(node, node.modifiers, name, node.questionToken, node.type);
+            case SyntaxKind.PropertyAssignment:
+                return updatePropertyAssignment(node, name, node.initializer);
+        }
     }
 
     function asNodeArray<T extends Node>(array: readonly T[]): NodeArray<T>;

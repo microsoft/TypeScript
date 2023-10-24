@@ -572,10 +572,11 @@ try {
         __extends(C2, _super);
         function C2() {
             var _a;
+            var _this = this;
             var env_29 = { stack: [], error: void 0, hasError: false };
             try {
                 var d16 = __addDisposableResource(env_29, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
-                return _super.call(this) || this;
+                _this = _super.call(this) || this;
             }
             catch (e_29) {
                 env_29.error = e_29;
@@ -584,6 +585,7 @@ try {
             finally {
                 __disposeResources(env_29);
             }
+            return _this;
         }
         return C2;
     }(C1));
@@ -591,10 +593,11 @@ try {
         __extends(C3, _super);
         function C3() {
             var _a;
+            var _this = this;
             var env_30 = { stack: [], error: void 0, hasError: false };
             try {
-                var _this = _super.call(this) || this;
                 var d17 = __addDisposableResource(env_30, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false);
+                _this = _super.call(this) || this;
                 _this.y = 1;
             }
             catch (e_30) {
