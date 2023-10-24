@@ -123,10 +123,28 @@ declare const doubleSeparator = 123456789n;
 declare const oneTwoOrThree: (x: 1n | 2n | 3n) => bigint;
 /// [Errors] ////
 
+parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.
+parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type 'bigint'.
+parseBigInt.ts(56,21): error TS1121: Octal literals are not allowed. Use the syntax '0o123'.
+parseBigInt.ts(56,25): error TS1005: ',' expected.
+parseBigInt.ts(57,22): error TS1352: A bigint literal cannot use exponential notation.
+parseBigInt.ts(58,19): error TS1353: A bigint literal must be an integer.
+parseBigInt.ts(59,26): error TS1353: A bigint literal must be an integer.
+parseBigInt.ts(60,23): error TS1177: Binary digit expected.
+parseBigInt.ts(61,20): error TS1178: Octal digit expected.
+parseBigInt.ts(62,20): error TS1125: Hexadecimal digit expected.
+parseBigInt.ts(63,26): error TS2304: Cannot find name '_123n'.
 parseBigInt.ts(63,26): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parseBigInt.ts(64,30): error TS6188: Numeric separators are not allowed here.
+parseBigInt.ts(65,33): error TS6189: Multiple consecutive numeric separators are not permitted.
+parseBigInt.ts(69,15): error TS2345: Argument of type '0n' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,15): error TS2345: Argument of type '0' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,34): error TS2345: Argument of type '1' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,53): error TS2345: Argument of type '2' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,72): error TS2345: Argument of type '3' is not assignable to parameter of type '1n | 3n | 2n'.
 
 
-==== parseBigInt.ts (1 errors) ====
+==== parseBigInt.ts (19 errors) ====
     // All bases should allow "n" suffix
     const bin = 0b101, binBig = 0b101n; // 5, 5n
     const oct = 0o567, octBig = 0o567n; // 375, 375n
@@ -178,24 +196,60 @@ parseBigInt.ts(63,26): error TS9007: Declaration emit for this file requires typ
     
     // Plus not allowed on literals
     const unaryPlus = +123n;
+                       ~~~~
+!!! error TS2736: Operator '+' cannot be applied to type 'bigint'.
     const unaryPlusHex = +0x123n;
+                          ~~~~~~
+!!! error TS2736: Operator '+' cannot be applied to type 'bigint'.
     
     // Parsing errors
     // In separate blocks because they each declare an "n" variable
     { const legacyOct = 0123n; }
+                        ~~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o123'.
+                            ~
+!!! error TS1005: ',' expected.
     { const scientific = 1e2n; }
+                         ~~~~
+!!! error TS1352: A bigint literal cannot use exponential notation.
     { const decimal = 4.1n; }
+                      ~~~~
+!!! error TS1353: A bigint literal must be an integer.
     { const leadingDecimal = .1n; }
+                             ~~~
+!!! error TS1353: A bigint literal must be an integer.
     const emptyBinary = 0bn; // should error but infer 0n
+                          
+!!! error TS1177: Binary digit expected.
     const emptyOct = 0on; // should error but infer 0n
+                       
+!!! error TS1178: Octal digit expected.
     const emptyHex = 0xn; // should error but infer 0n
+                       
+!!! error TS1125: Hexadecimal digit expected.
     const leadingSeparator = _123n;
+                             ~~~~~
+!!! error TS2304: Cannot find name '_123n'.
                              ~~~~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     const trailingSeparator = 123_n;
+                                 ~
+!!! error TS6188: Numeric separators are not allowed here.
     const doubleSeparator = 123_456__789n;
+                                    ~
+!!! error TS6189: Multiple consecutive numeric separators are not permitted.
     
     // Using literals as types
     const oneTwoOrThree = (x: 1n | 2n | 3n): bigint => x ** 2n;
     oneTwoOrThree(0n); oneTwoOrThree(1n); oneTwoOrThree(2n); oneTwoOrThree(3n);
+                  ~~
+!!! error TS2345: Argument of type '0n' is not assignable to parameter of type '1n | 3n | 2n'.
     oneTwoOrThree(0);  oneTwoOrThree(1);  oneTwoOrThree(2);  oneTwoOrThree(3);
+                  ~
+!!! error TS2345: Argument of type '0' is not assignable to parameter of type '1n | 3n | 2n'.
+                                     ~
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type '1n | 3n | 2n'.
+                                                        ~
+!!! error TS2345: Argument of type '2' is not assignable to parameter of type '1n | 3n | 2n'.
+                                                                           ~
+!!! error TS2345: Argument of type '3' is not assignable to parameter of type '1n | 3n | 2n'.

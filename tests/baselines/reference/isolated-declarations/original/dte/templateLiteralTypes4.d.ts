@@ -470,9 +470,11 @@ declare function f4<T extends boolean>(s: `**${T}**`): T;
 
 templateLiteralTypes4.ts(43,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 templateLiteralTypes4.ts(43,60): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+templateLiteralTypes4.ts(285,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
+templateLiteralTypes4.ts(289,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
 
 
-==== templateLiteralTypes4.ts (2 errors) ====
+==== templateLiteralTypes4.ts (4 errors) ====
     // infer from number
     type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100
     type TNumber1 = "-100" extends `${infer N extends number}` ? N : never; // -100
@@ -762,10 +764,14 @@ templateLiteralTypes4.ts(43,60): error TS9007: Declaration emit for this file re
     p.getIndex(0); // ok, 0 is a valid index
     p.getIndex(1); // ok, 1 is a valid index
     p.getIndex(2); // error, 2 is not a valid index
+               ~
+!!! error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
     
     p.setIndex(0, 0); // ok, 0 is a valid index
     p.setIndex(1, 0); // ok, 1 is a valid index
     p.setIndex(2, 3); // error, 2 is not a valid index
+               ~
+!!! error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
     
     // function inference
     declare function f1<T extends string | number>(s: `**${T}**`): T;

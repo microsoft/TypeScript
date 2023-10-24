@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,17 +1,24 @@
+@@ -1,19 +1,26 @@
  
  
  //// [/.src/typeUsedAsTypeLiteralIndex.d.ts]
@@ -33,3 +33,5 @@
 +    [K4]: number;
      k4: string;
  };
+ /// [Errors] ////
+ 

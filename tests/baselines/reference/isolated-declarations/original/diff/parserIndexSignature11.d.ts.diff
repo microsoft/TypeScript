@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,7 +1,8 @@
+@@ -1,8 +1,9 @@
  
  
  //// [/.src/parserIndexSignature11.d.ts]
@@ -14,3 +14,4 @@
      [p1: string]: any;
      [p2: string, p3: number]: any;
  }
+ /// [Errors] ////

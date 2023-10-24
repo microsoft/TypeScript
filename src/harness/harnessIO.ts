@@ -1038,20 +1038,24 @@ export namespace Compiler {
         type: string,
         header: string,
         dteDeclarationFiles: readonly TestFile[],
+        dteDiagnostics: readonly ts.Diagnostic[],
         tscDeclarationFiles: readonly TestFile[],
-        reason: string,
+        tscDiagnostics: readonly ts.Diagnostic[],
+        tsSources: readonly TestFile[],
+        prettyErrors: boolean | undefined,
+        reason: string | undefined,
     ) {
         const Diff = require("diff");
-        const dteContent = declarationContent(dteDeclarationFiles);
-        const tscContent = declarationContent(tscDeclarationFiles);
+        const dteContent = declarationContent(dteDeclarationFiles, tsSources, dteDiagnostics, prettyErrors);
+        const tscContent = declarationContent(tscDeclarationFiles, tsSources, tscDiagnostics, prettyErrors);
 
-        let fullDiff = "// [[Reason: " + reason +"]] ////\r\n\r\n";
+        let fullDiff = "// [[Reason: " + reason + "]] ////\r\n\r\n";
         fullDiff += "//// [" + header + "] ////\r\n\r\n";
         fullDiff += Diff.createTwoFilesPatch("TSC", "DTE", tscContent, dteContent, "declarations", "declarations");
 
         Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts.diff`), fullDiff);
     }
-    function declarationContent(declarationFiles: readonly TestFile[]) {
+    function declarationContent(declarationFiles: readonly TestFile[], tsSources: readonly TestFile[], errors: readonly ts.Diagnostic[], prettyErrors?: boolean) {
         let dtsCode = "";
         if (declarationFiles.length > 0) {
             dtsCode += "\r\n\r\n";
@@ -1061,11 +1065,14 @@ export namespace Compiler {
                 dtsCode += declFile.content + (i < (declarationFiles.length - 1) ? "\r\n" : "");
             }
         }
+        if (errors.length > 0) {
+            dtsCode += "/// [Errors] ////\r\n\r\n";
+            dtsCode += getErrorBaseline(tsSources, errors, prettyErrors);
+        }
         return dtsCode;
     }
-    export function doDeclarationBaseline(baselinePath: string, type: string, header: string, declarationFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], prettyErrors?: boolean) {
+    export function doDeclarationBaseline(baselinePath: string, type: string, header: string, declarationFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], tsSources: readonly TestFile[], prettyErrors?: boolean) {
         let tsCode = "";
-        const tsSources = otherFiles.concat(toBeCompiled);
         tsCode += "//// [" + header + "] ////\r\n\r\n";
 
         for (let i = 0; i < tsSources.length; i++) {
@@ -1074,11 +1081,8 @@ export namespace Compiler {
         }
 
         let dtsCode = "/// [Declarations] ////\r\n\r\n";
-        dtsCode += declarationContent(declarationFiles);
-        if (errors.length > 0) {
-            dtsCode += "/// [Errors] ////\r\n\r\n";
-            dtsCode += getErrorBaseline(tsSources, errors, prettyErrors);
-        }
+        dtsCode += declarationContent(declarationFiles, tsSources, errors, prettyErrors);
+
         // eslint-disable-next-line no-null/no-null
         Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts`), tsCode.length > 0 ? tsCode + "\r\n\r\n" + dtsCode : null);
     }

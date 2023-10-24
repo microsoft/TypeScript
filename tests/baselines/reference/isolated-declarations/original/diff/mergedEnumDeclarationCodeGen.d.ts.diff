@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -5,6 +5,6 @@
+@@ -5,9 +5,9 @@
      a = 0,
      b = 0
  }
@@ -13,3 +13,6 @@
 -    c = 0
 +    c
  }
+ /// [Errors] ////
+ 
+ mergedEnumDeclarationCodeGen.ts(3,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

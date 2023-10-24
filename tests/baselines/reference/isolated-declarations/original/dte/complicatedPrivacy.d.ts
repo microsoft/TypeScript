@@ -168,15 +168,19 @@ declare namespace mglo5 {
 
 complicatedPrivacy.ts(5,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 complicatedPrivacy.ts(7,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+complicatedPrivacy.ts(11,24): error TS1054: A 'get' accessor cannot have parameters.
 complicatedPrivacy.ts(11,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 complicatedPrivacy.ts(18,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 complicatedPrivacy.ts(24,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 complicatedPrivacy.ts(33,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+complicatedPrivacy.ts(35,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+complicatedPrivacy.ts(35,6): error TS2693: 'number' only refers to a type, but is being used as a value here.
 complicatedPrivacy.ts(40,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported member 'i6'.
 complicatedPrivacy.ts(74,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 
 
-==== complicatedPrivacy.ts (8 errors) ====
+==== complicatedPrivacy.ts (12 errors) ====
     module m1 {
         export module m2 {
     
@@ -192,6 +196,8 @@ complicatedPrivacy.ts(74,13): error TS9007: Declaration emit for this file requi
     
             export class C2 implements m3.i3 {
                 public get p1(arg) {
+                           ~~
+!!! error TS1054: A 'get' accessor cannot have parameters.
                            ~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
                     return new C1();
@@ -224,6 +230,10 @@ complicatedPrivacy.ts(74,13): error TS9007: Declaration emit for this file requi
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         {
         [number]: C1; // Used to be indexer, now it is a computed property
+        ~~~~~~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
         }) {
         }
     
@@ -264,6 +274,8 @@ complicatedPrivacy.ts(74,13): error TS9007: Declaration emit for this file requi
         export module m3 {
     
             export class c_pr  implements mglo5.i5, mglo5.i6 {
+                                                          ~~
+!!! error TS2694: Namespace 'mglo5' has no exported member 'i6'.
                 f1() {
                 ~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

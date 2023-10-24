@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -7,6 +7,6 @@
+@@ -7,9 +7,9 @@
  export declare enum Animals {
      Dog = 2
  }
@@ -13,3 +13,6 @@
 -    CatDog = 3
 +    CatDog
  }
+ /// [Errors] ////
+ 
+ enumExportMergingES6.ts(8,2): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

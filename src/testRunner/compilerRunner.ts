@@ -160,6 +160,7 @@ interface CompilerTestEnvironment {
     toBeCompiled: Compiler.TestFile[];
     otherFiles: Compiler.TestFile[];
     tsConfigFiles: Compiler.TestFile[];
+    allFiles: Compiler.TestFile[];
     compilerOptions: ts.CompilerOptions & Compiler.HarnessOptions;
     configuredName: string;
     hasNonDtsFiles: boolean;
@@ -221,6 +222,7 @@ class CompilerTestBase {
     protected toBeCompiled: Compiler.TestFile[];
     // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
     protected otherFiles: Compiler.TestFile[];
+    protected allFiles: Compiler.TestFile[];
 
     constructor(compilerEnvironment: CompilerTestEnvironment) {
         this.fileName = compilerEnvironment.fileName;
@@ -229,6 +231,7 @@ class CompilerTestBase {
         this.configuredName = compilerEnvironment.configuredName;
         this.toBeCompiled = compilerEnvironment.toBeCompiled;
         this.otherFiles = compilerEnvironment.otherFiles;
+        this.allFiles = compilerEnvironment.allFiles;
         this.tsConfigFiles = compilerEnvironment.tsConfigFiles;
 
         this.harnessSettings = compilerEnvironment.testCaseContent.settings;
@@ -341,6 +344,7 @@ class CompilerTestBase {
             configurationOverrides,
             typeScriptVersion,
             symlinks: testCaseContent.symlinks,
+            allFiles: ts.concatenate(toBeCompiled, otherFiles),
         };
     }
 
@@ -528,9 +532,8 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
             "isolated-declarations/original/dte",
             this.fileName,
             this.dteDtsFile,
-            this.dteDiagnostics,
-            this.toBeCompiled,
-            this.otherFiles,
+            ts.concatenate(this.dteDiagnostics, this.tscNonIsolatedDeclarationsErrors),
+            this.allFiles,
             this.options.pretty,
         );
     }
@@ -541,9 +544,8 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
             "isolated-declarations/original/tsc",
             this.fileName,
             this.tscDtsFiles,
-            this.tscIsolatedDeclarationsErrors,
-            this.toBeCompiled,
-            this.otherFiles,
+            ts.concatenate(this.tscIsolatedDeclarationsErrors, this.tscNonIsolatedDeclarationsErrors),
+            this.allFiles,
             this.options.pretty,
         );
     }
@@ -554,7 +556,11 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
             "isolated-declarations/original/diff",
             this.fileName,
             this.dteDtsFile,
+            ts.concatenate(this.dteDiagnostics, this.tscNonIsolatedDeclarationsErrors),
             this.tscDtsFiles,
+            ts.concatenate(this.tscIsolatedDeclarationsErrors, this.tscNonIsolatedDeclarationsErrors),
+            this.allFiles,
+            this.options.pretty,
             this.harnessSettings.isolatedDeclarationDiffReason,
         );
     }

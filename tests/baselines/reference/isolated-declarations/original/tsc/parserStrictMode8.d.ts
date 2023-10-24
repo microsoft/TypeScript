@@ -10,3 +10,14 @@ function eval() {
 
 
 //// [/.src/parserStrictMode8.d.ts]
+/// [Errors] ////
+
+parserStrictMode8.ts(2,10): error TS1100: Invalid use of 'eval' in strict mode.
+
+
+==== parserStrictMode8.ts (1 errors) ====
+    "use strict";
+    function eval() {
+             ~~~~
+!!! error TS1100: Invalid use of 'eval' in strict mode.
+    }

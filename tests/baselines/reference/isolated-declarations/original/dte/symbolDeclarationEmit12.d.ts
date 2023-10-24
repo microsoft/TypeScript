@@ -34,10 +34,12 @@ declare namespace M {
 /// [Errors] ////
 
 symbolDeclarationEmit12.ts(5,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+symbolDeclarationEmit12.ts(9,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
 symbolDeclarationEmit12.ts(9,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
 
 
-==== symbolDeclarationEmit12.ts (2 errors) ====
+==== symbolDeclarationEmit12.ts (4 errors) ====
     module M {
         interface I { }
         export class C {
@@ -50,7 +52,11 @@ symbolDeclarationEmit12.ts(9,13): error TS9007: Declaration emit for this file r
             }
             get [Symbol.toPrimitive]() { return undefined; }
                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
+                ~~~~~~~~~~~~~~~~~~~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
             set [Symbol.toPrimitive](x: I) { }
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
         }
     }

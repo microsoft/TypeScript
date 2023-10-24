@@ -78,13 +78,18 @@ declare namespace Ambient {
 
 enum2.ts(2,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enum2.ts(3,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enum2.ts(3,9): error TS1281: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.
 enum2.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enum2.ts(4,9): error TS1281: Cannot access 'X' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.X' instead.
 enum2.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enum2.ts(9,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+script-namespaces.ts(1,11): error TS1280: Namespaces are not allowed in global script files when 'isolatedModules' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.
 
 
-==== script-namespaces.ts (0 errors) ====
+==== script-namespaces.ts (1 errors) ====
     namespace Instantiated {
+              ~~~~~~~~~~~~
+!!! error TS1280: Namespaces are not allowed in global script files when 'isolatedModules' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.
         export const x = 1;
     }
     namespace Uninstantiated {
@@ -104,7 +109,7 @@ enum2.ts(9,5): error TS9007: Declaration emit for this file requires type resolu
     declare enum Enum { X = 1_000_000 }
     const d = 'd';
     
-==== enum2.ts (5 errors) ====
+==== enum2.ts (7 errors) ====
     enum Enum {
         D = d,
         ~
@@ -112,9 +117,13 @@ enum2.ts(9,5): error TS9007: Declaration emit for this file requires type resolu
         E = A, // error
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~
+!!! error TS1281: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.
         Y = X, // error
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~
+!!! error TS1281: Cannot access 'X' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.X' instead.
         Z = Enum.A
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

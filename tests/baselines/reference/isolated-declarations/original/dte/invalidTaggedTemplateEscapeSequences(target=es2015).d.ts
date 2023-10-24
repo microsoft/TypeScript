@@ -57,6 +57,9 @@ declare const a14: invalid;
 invalidTaggedTemplateEscapeSequences.ts(5,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 invalidTaggedTemplateEscapeSequences.ts(6,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 invalidTaggedTemplateEscapeSequences.ts(7,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+invalidTaggedTemplateEscapeSequences.ts(8,15): error TS1125: Hexadecimal digit expected.
+invalidTaggedTemplateEscapeSequences.ts(8,33): error TS1125: Hexadecimal digit expected.
+invalidTaggedTemplateEscapeSequences.ts(8,75): error TS1125: Hexadecimal digit expected.
 invalidTaggedTemplateEscapeSequences.ts(9,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 invalidTaggedTemplateEscapeSequences.ts(11,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 invalidTaggedTemplateEscapeSequences.ts(12,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -74,7 +77,7 @@ invalidTaggedTemplateEscapeSequences.ts(23,13): error TS9007: Declaration emit f
 invalidTaggedTemplateEscapeSequences.ts(24,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 
 
-==== invalidTaggedTemplateEscapeSequences.ts (18 errors) ====
+==== invalidTaggedTemplateEscapeSequences.ts (21 errors) ====
     function tag (str: any, ...args: any[]): any {
       return str
     }
@@ -89,6 +92,12 @@ invalidTaggedTemplateEscapeSequences.ts(24,13): error TS9007: Declaration emit f
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`; // should error with NoSubstitutionTemplate
+                  
+!!! error TS1125: Hexadecimal digit expected.
+                                    
+!!! error TS1125: Hexadecimal digit expected.
+                                                                              
+!!! error TS1125: Hexadecimal digit expected.
     const z = tag`\u{hello} \xtraordinary wonderful \uworld` // should work with Tagged NoSubstitutionTemplate
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,4 +1,6 @@
+@@ -1,16 +1,15 @@
  
  
  //// [/.src/parserComputedPropertyName2.d.ts]
@@ -13,3 +13,17 @@
 +declare var v: {
 +    [e]: number;
 +};
+ /// [Errors] ////
+ 
+-parserComputedPropertyName2.ts(1,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ parserComputedPropertyName2.ts(1,12): error TS2304: Cannot find name 'e'.
+ 
+ 
+-==== parserComputedPropertyName2.ts (2 errors) ====
++==== parserComputedPropertyName2.ts (1 errors) ====
+     var v = { [e]: 1 };
+-              ~~~
+-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                ~
+ !!! error TS2304: Cannot find name 'e'.
+\ No newline at end of file

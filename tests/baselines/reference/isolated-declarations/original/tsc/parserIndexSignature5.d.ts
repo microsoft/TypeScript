@@ -12,3 +12,17 @@ interface I {
 //// [/.src/parserIndexSignature5.d.ts]
 interface I {
 }
+/// [Errors] ////
+
+parserIndexSignature5.ts(2,3): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+parserIndexSignature5.ts(2,4): error TS2304: Cannot find name 'a'.
+
+
+==== parserIndexSignature5.ts (2 errors) ====
+    interface I {
+      [a] // Used to be indexer, now it is a computed property
+      ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+       ~
+!!! error TS2304: Cannot find name 'a'.
+    }

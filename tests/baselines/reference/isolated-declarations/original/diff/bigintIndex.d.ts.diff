@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -14,5 +14,7 @@
+@@ -14,9 +14,11 @@
  declare const a: {};
  declare const b: {
      [1n]: number;
@@ -14,3 +14,37 @@
 +declare const c: {
 +    [bigNum]: number;
 +};
+ /// [Errors] ////
+ 
+ a.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+ a.ts(8,11): error TS2538: Type '1n' cannot be used as an index type.
+@@ -27,9 +29,8 @@
+ b.ts(2,14): error TS1005: ';' expected.
+ b.ts(2,19): error TS1128: Declaration or statement expected.
+ b.ts(3,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+ b.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+-b.ts(4,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ 
+ 
+ ==== a.ts (5 errors) ====
+     interface BigIntIndex<E> {
+@@ -65,9 +66,9 @@
+     typedArray["1"] = 0xBB;
+     typedArray[2] = 0xCC;
+     
+     // {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
+-==== b.ts (6 errors) ====
++==== b.ts (5 errors) ====
+     // BigInt cannot be used as an object literal property
+     const a = {1n: 123};
+                ~~
+ !!! error TS1136: Property assignment expected.
+@@ -80,7 +81,5 @@
+ !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+     const c = {[bigNum]: 789};
+                ~~~~~~~~
+ !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+-               ~~~~~~~~
+-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+     
+\ No newline at end of file

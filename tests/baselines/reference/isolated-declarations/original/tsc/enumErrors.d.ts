@@ -115,33 +115,69 @@ declare enum E14 {
 }
 /// [Errors] ////
 
+enumErrors.ts(2,6): error TS2431: Enum name cannot be 'any'.
+enumErrors.ts(3,6): error TS2431: Enum name cannot be 'number'.
+enumErrors.ts(4,6): error TS2431: Enum name cannot be 'string'.
+enumErrors.ts(5,6): error TS2431: Enum name cannot be 'boolean'.
 enumErrors.ts(9,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumErrors.ts(9,9): error TS18033: Type 'Number' is not assignable to type 'number' as required for computed enum member values.
+  'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
 enumErrors.ts(14,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumErrors.ts(20,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumErrors.ts(21,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumErrors.ts(26,9): error TS18033: Type 'boolean' is not assignable to type 'number' as required for computed enum member values.
 enumErrors.ts(27,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumErrors.ts(27,9): error TS18033: Type 'Date' is not assignable to type 'number' as required for computed enum member values.
 enumErrors.ts(28,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumErrors.ts(28,9): error TS18033: Type 'Window & typeof globalThis' is not assignable to type 'number' as required for computed enum member values.
 enumErrors.ts(29,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumErrors.ts(29,9): error TS18033: Type '{}' is not assignable to type 'number' as required for computed enum member values.
 enumErrors.ts(30,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumErrors.ts(30,9): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
 enumErrors.ts(36,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumErrors.ts(36,9): error TS18033: Type 'Date' is not assignable to type 'number' as required for computed enum member values.
 enumErrors.ts(37,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumErrors.ts(37,9): error TS18033: Type 'Window & typeof globalThis' is not assignable to type 'number' as required for computed enum member values.
 enumErrors.ts(38,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumErrors.ts(38,9): error TS18033: Type '{}' is not assignable to type 'number' as required for computed enum member values.
 enumErrors.ts(39,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumErrors.ts(40,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumErrors.ts(40,9): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
+enumErrors.ts(48,18): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+enumErrors.ts(49,24): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+enumErrors.ts(49,26): error TS2452: An enum member cannot have a numeric name.
+enumErrors.ts(50,28): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+enumErrors.ts(50,30): error TS2452: An enum member cannot have a numeric name.
+enumErrors.ts(50,31): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+enumErrors.ts(53,16): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+enumErrors.ts(53,22): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+enumErrors.ts(53,30): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+enumErrors.ts(53,33): error TS2452: An enum member cannot have a numeric name.
 
 
-==== enumErrors.ts (13 errors) ====
+==== enumErrors.ts (37 errors) ====
     // Enum named with PredefinedTypes
     enum any { }
+         ~~~
+!!! error TS2431: Enum name cannot be 'any'.
     enum number { }
+         ~~~~~~
+!!! error TS2431: Enum name cannot be 'number'.
     enum string { }
+         ~~~~~~
+!!! error TS2431: Enum name cannot be 'string'.
     enum boolean { }
+         ~~~~~~~
+!!! error TS2431: Enum name cannot be 'boolean'.
     
     // Enum with computed member initializer of type Number
     enum E5 {
         C = new Number(30)
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~~~~~~~~~~~~~~
+!!! error TS18033: Type 'Number' is not assignable to type 'number' as required for computed enum member values.
+!!! error TS18033:   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
     }
     
     enum E9 {
@@ -165,18 +201,28 @@ enumErrors.ts(40,5): error TS9007: Declaration emit for this file requires type 
     // Enum with computed member intializer of other types
     enum E11 {
         A = true,
+            ~~~~
+!!! error TS18033: Type 'boolean' is not assignable to type 'number' as required for computed enum member values.
         B = new Date(),
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~~~~~~~~~~
+!!! error TS18033: Type 'Date' is not assignable to type 'number' as required for computed enum member values.
         C = window,
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~~~~~~
+!!! error TS18033: Type 'Window & typeof globalThis' is not assignable to type 'number' as required for computed enum member values.
         D = {},
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~~
+!!! error TS18033: Type '{}' is not assignable to type 'number' as required for computed enum member values.
         E = (() => 'foo')(),
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~~~~~~~~~~~~~~~
+!!! error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
     }
     
     // Enum with string valued member and computed member initializers
@@ -185,18 +231,26 @@ enumErrors.ts(40,5): error TS9007: Declaration emit for this file requires type 
         B = new Date(),
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~~~~~~~~~~
+!!! error TS18033: Type 'Date' is not assignable to type 'number' as required for computed enum member values.
         C = window,
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~~~~~~
+!!! error TS18033: Type 'Window & typeof globalThis' is not assignable to type 'number' as required for computed enum member values.
         D = {},
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~~
+!!! error TS18033: Type '{}' is not assignable to type 'number' as required for computed enum member values.
         E = 1 + 1,
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         F = (() => 'foo')(),
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            ~~~~~~~~~~~~~~~
+!!! error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
     }
     
     // Enum with incorrect syntax
@@ -205,9 +259,29 @@ enumErrors.ts(40,5): error TS9007: Declaration emit for this file requires type 
         postValueComma = 1,
     
         postSemicolon;
+                     ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
         postColonValueComma: 2,
+                           ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                             ~
+!!! error TS2452: An enum member cannot have a numeric name.
         postColonValueSemicolon: 3;
+                               ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                                 ~
+!!! error TS2452: An enum member cannot have a numeric name.
+                                  ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
     };
     
     enum E14 { a, b: any "hello" += 1, c, d}
+                   ~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                         ~~~~~~~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                                 ~~
+!!! error TS1357: An enum member name must be followed by a ',', '=', or '}'.
+                                    ~
+!!! error TS2452: An enum member cannot have a numeric name.
     

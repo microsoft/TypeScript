@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -22,17 +22,17 @@
+@@ -22,20 +22,20 @@
      a = Infinity,
      b = Infinity,
      c = Infinity,
@@ -29,3 +29,6 @@
 +    f,
 +    g
  }
+ /// [Errors] ////
+ 
+ enumConstantMembers.ts(22,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -56,13 +56,25 @@ type T4 = {
 };
 /// [Errors] ////
 
+typeUsedAsTypeLiteralIndex.ts(3,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+typeUsedAsTypeLiteralIndex.ts(3,6): error TS2690: 'K' only refers to a type, but is being used as a value here. Did you mean to use 'P in K'?
 typeUsedAsTypeLiteralIndex.ts(6,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+typeUsedAsTypeLiteralIndex.ts(13,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+typeUsedAsTypeLiteralIndex.ts(13,6): error TS2690: 'K2' only refers to a type, but is being used as a value here. Did you mean to use 'K in K2'?
+typeUsedAsTypeLiteralIndex.ts(18,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+typeUsedAsTypeLiteralIndex.ts(18,6): error TS2690: 'K3' only refers to a type, but is being used as a value here. Did you mean to use 'K in K3'?
+typeUsedAsTypeLiteralIndex.ts(23,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+typeUsedAsTypeLiteralIndex.ts(23,6): error TS2693: 'K4' only refers to a type, but is being used as a value here.
 
 
-==== typeUsedAsTypeLiteralIndex.ts (1 errors) ====
+==== typeUsedAsTypeLiteralIndex.ts (9 errors) ====
     type K = number | string;
     type T = {
         [K]: number;  // Did you mean to use 'P in K'?
+        ~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~
+!!! error TS2690: 'K' only refers to a type, but is being used as a value here. Did you mean to use 'P in K'?
     }
     
     const K1 = Symbol();
@@ -75,16 +87,28 @@ typeUsedAsTypeLiteralIndex.ts(6,12): error TS9007: Declaration emit for this fil
     type K2 = "x" | "y";
     type T2 = {
         [K2]: number;  // Did you mean to use 'K in K2'?
+        ~~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~~
+!!! error TS2690: 'K2' only refers to a type, but is being used as a value here. Did you mean to use 'K in K2'?
     }
     
     type K3 = number | string;
     type T3 = {
         [K3]: number; // Did you mean to use 'K in K3'?
+        ~~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~~
+!!! error TS2690: 'K3' only refers to a type, but is being used as a value here. Did you mean to use 'K in K3'?
     }
     
     type K4 = number | string;
     type T4 = {
         [K4]: number;
+        ~~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~~
+!!! error TS2693: 'K4' only refers to a type, but is being used as a value here.
         k4: string;
     }
     

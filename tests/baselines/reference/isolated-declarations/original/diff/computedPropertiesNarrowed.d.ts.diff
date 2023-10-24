@@ -32,3 +32,45 @@
  declare const uu: unique symbol;
  export declare let o6: {
      [uu]: number;
+@@ -29,24 +35,21 @@
+ export declare const o9: invalid;
+ export {};
+ /// [Errors] ////
+ 
+-computedPropertiesNarrowed.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ computedPropertiesNarrowed.ts(18,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+-computedPropertiesNarrowed.ts(22,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++computedPropertiesNarrowed.ts(20,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ computedPropertiesNarrowed.ts(26,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ computedPropertiesNarrowed.ts(37,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ computedPropertiesNarrowed.ts(47,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ 
+ 
+-==== computedPropertiesNarrowed.ts (6 errors) ====
++==== computedPropertiesNarrowed.ts (5 errors) ====
+     const x: 0 | 1 = Math.random()? 0: 1;
+     declare function assert(n: number): asserts n is 1;
+     assert(x);
+     export let o = {
+         [x]: 1 // error narrow type !== declared type
+-        ~~~
+-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+     }
+     
+     
+     const y: 0 = 0
+@@ -62,12 +65,12 @@
+                        ~~~~~
+ !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+     
+     let u = Symbol();
++            ~~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+     export let o4 = {
+         [u]: 1 // Should error, nut a unique symbol
+-        ~~~
+-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+     }
+     
+     export let o5  ={
+         [Symbol()]: 1 // Should error

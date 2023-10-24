@@ -11,3 +11,12 @@ var v = { [e]: 1 };
 declare var v: {
     [e]: number;
 };
+/// [Errors] ////
+
+parserComputedPropertyName2.ts(1,12): error TS2304: Cannot find name 'e'.
+
+
+==== parserComputedPropertyName2.ts (1 errors) ====
+    var v = { [e]: 1 };
+               ~
+!!! error TS2304: Cannot find name 'e'.
