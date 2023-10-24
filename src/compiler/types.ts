@@ -876,7 +876,7 @@ export const enum ModifierFlags {
     Deprecated =         1 << 16, // Deprecated tag.
 
     // Cache-only JSDoc-modifiers. Should match order of Syntactic/JSDoc modifiers, above.
-    /** @internal */ JSDocPublic = 1 << 23, // if this value changes, `adjustJSDocModifierFlags` must change accordingly
+    /** @internal */ JSDocPublic = 1 << 23, // if this value changes, `selectEffectiveModifierFlags` must change accordingly
     /** @internal */ JSDocPrivate = 1 << 24,
     /** @internal */ JSDocProtected = 1 << 25,
     /** @internal */ JSDocReadonly = 1 << 26,
