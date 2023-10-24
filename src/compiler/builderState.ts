@@ -84,11 +84,11 @@ export interface BuilderState {
      */
     hasCalledUpdateShapeSignature?: Set<Path>;
     /**
-     * Stores signatures before before the update till affected file is commited
+     * Stores signatures before before the update till affected file is committed
      */
     oldSignatures?: Map<Path, string | false>;
     /**
-     * Stores exportedModulesMap before the update till affected file is commited
+     * Stores exportedModulesMap before the update till affected file is committed
      */
     oldExportedModulesMap?: Map<Path, ReadonlySet<Path> | false>;
     /**

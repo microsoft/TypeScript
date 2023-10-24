@@ -155,7 +155,31 @@ FsWatchesRecursive::
 /:
   {}
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/jsconfig.json","fileNames":["/app.js"],"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/tmp","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/jsconfig.json",
+      "fileNames": [
+        "/app.js"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "configFilePath": "/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "cachePath": "/tmp",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
@@ -165,10 +189,28 @@ TI:: [hh:mm:ss:mss] Typing names in '/package.json' dependencies: ["@zkat/cacach
 TI:: [hh:mm:ss:mss] Searching for typing names in /node_modules; all files: ["/node_modules/@zkat/cacache/package.json"]
 TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["@zkat/cacache"],"filesToWatch":["/bower_components","/package.json","/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["@zkat/cacache"],"filesToWatch":["/bower_components","/package.json","/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "@zkat/cacache"
+      ],
+      "filesToWatch": [
+        "/bower_components",
+        "/package.json",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/jsconfig.json","files":["/bower_components","/package.json","/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/jsconfig.json",
+      "files": [
+        "/bower_components",
+        "/package.json",
+        "/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /jsconfig.json WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /jsconfig.json WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 2000 undefined Project: /jsconfig.json WatchType: File location for typing installer
@@ -177,7 +219,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /no
 TI:: [hh:mm:ss:mss] Installing typings ["@zkat/cacache"]
 TI:: [hh:mm:ss:mss] Npm config file: /tmp/package.json
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::beginInstallTypes","eventId":1,"typingsInstallerVersion":"FakeVersion","projectName":"/jsconfig.json"}
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 1,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/jsconfig.json"
+    }
 TI:: [hh:mm:ss:mss] #1 with arguments'["@types/zkat__cacache@tsFakeMajor.Minor"]'.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
@@ -251,11 +298,41 @@ TI:: After installWorker
 TI:: [hh:mm:ss:mss] Installed typings ["@types/zkat__cacache@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/tmp/node_modules/@types/zkat__cacache/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/jsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typings":["/tmp/node_modules/@types/zkat__cacache/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/jsconfig.json",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "configFilePath": "/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typings": [
+        "/tmp/node_modules/@types/zkat__cacache/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::endInstallTypes","eventId":1,"projectName":"/jsconfig.json","packagesToInstall":["@types/zkat__cacache@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 1,
+      "projectName": "/jsconfig.json",
+      "packagesToInstall": [
+        "@types/zkat__cacache@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }
 Before running Timeout callback:: count: 2
 13: /jsconfig.json
 14: *ensureProjectForOpenFiles*
@@ -279,7 +356,32 @@ Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoIm
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/jsconfig.json","fileNames":["/app.js","/tmp/node_modules/@types/zkat__cacache/index.d.ts"],"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/tmp","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/jsconfig.json",
+      "fileNames": [
+        "/app.js",
+        "/tmp/node_modules/@types/zkat__cacache/index.d.ts"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "configFilePath": "/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "cachePath": "/tmp",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
@@ -288,15 +390,47 @@ TI:: [hh:mm:ss:mss] Typing names in '/package.json' dependencies: ["@zkat/cacach
 TI:: [hh:mm:ss:mss] Searching for typing names in /node_modules; all files: ["/node_modules/@zkat/cacache/package.json"]
 TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["@zkat/cacache"],"filesToWatch":["/bower_components","/package.json","/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["@zkat/cacache"],"filesToWatch":["/bower_components","/package.json","/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "@zkat/cacache"
+      ],
+      "filesToWatch": [
+        "/bower_components",
+        "/package.json",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/jsconfig.json"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/jsconfig.json"
+    }
 TI:: [hh:mm:ss:mss] Installing typings ["@zkat/cacache"]
 TI:: [hh:mm:ss:mss] '@zkat/cacache':: 'zkat__cacache' already has an up-to-date typing - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/jsconfig.json","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"allowJs":true,"maxNodeModuleJsDepth":2,"allowSyntheticDefaultImports":true,"skipLibCheck":true,"noEmit":true,"configFilePath":"/jsconfig.json","allowNonTsExtensions":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/jsconfig.json",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "configFilePath": "/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2

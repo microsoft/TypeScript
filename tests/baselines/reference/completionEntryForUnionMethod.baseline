@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionEntryForUnionMethod.ts ===
 // var y: Array<string>|Array<number>;
 // y.map(
