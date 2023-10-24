@@ -176,7 +176,7 @@ function getNewFileImportsAndAddExportInOldFile(
             if (hasSyntacticModifier(decl, ModifierFlags.Default)) {
                 oldFileDefault = name;
             }
-            else if (!oldFileNamedImports.includes (name.text)) {
+            else if (!oldFileNamedImports.includes(name.text)) {
                 oldFileNamedImports.push(name.text);
             }
         }
