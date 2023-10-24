@@ -1988,7 +1988,7 @@ function getEntryForMemberCompletion(
                 // and we need to make sure the modifiers are uniform for all nodes/signatures.
                 modifiers = node.modifierFlagsCache | requiredModifiers;
             }
-            node = factory.updateModifiers(node, modifiers);
+            node = factory.replaceModifiers(node, modifiers);
             completionNodes.push(node);
         },
         body,
@@ -2018,12 +2018,12 @@ function getEntryForMemberCompletion(
             modifiers &= ~ModifierFlags.Public;
         }
         modifiers |= allowedAndPresent;
-        completionNodes = completionNodes.map(node => factory.updateModifiers(node, modifiers));
+        completionNodes = completionNodes.map(node => factory.replaceModifiers(node, modifiers));
         // Add back the decorators that were already present.
         if (presentDecorators?.length) {
             const lastNode = completionNodes[completionNodes.length - 1];
             if (canHaveDecorators(lastNode)) {
-                completionNodes[completionNodes.length - 1] = factory.updateModifierLike(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
+                completionNodes[completionNodes.length - 1] = factory.replaceDecoratorsAndModifiers(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
             }
         }
 
