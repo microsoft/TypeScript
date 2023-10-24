@@ -863,13 +863,14 @@ export const enum ModifierFlags {
     Async =              1 << 9,  // Property/Method/Function
     Default =            1 << 10, // Function/Class (export default declaration)
     Const =              1 << 11, // Const enum
-    HasComputedJSDocModifiers = 1 << 12, // Indicates the computed modifier flags include modifiers from JSDoc.
+    Deprecated =         1 << 12, // Deprecated tag.
+    Override =           1 << 13, // Override method.
+    In =                 1 << 14, // Contravariance modifier
+    Out =                1 << 15, // Covariance modifier
+    Decorator =          1 << 16, // Contains a decorator.
 
-    Deprecated =         1 << 13, // Deprecated tag.
-    Override =           1 << 14, // Override method.
-    In =                 1 << 15, // Contravariance modifier
-    Out =                1 << 16, // Covariance modifier
-    Decorator =          1 << 17, // Contains a decorator.
+    HasComputedJSDocModifiers = 1 << 27, // Indicates the computed modifier flags include modifiers from JSDoc.
+    HasExcessJDocModifiers = 1 << 28, // Indicates that there are JSDoc modifiers that are not in the cache and must be recalculated. For use with nodes in TS files only.
     HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
     AccessibilityModifier = Public | Private | Protected,
@@ -878,6 +879,7 @@ export const enum ModifierFlags {
     NonPublicAccessibilityModifier = Private | Protected,
 
     TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out,
+    JSDocOnlyModifier = Deprecated,
     ExportDefault = Export | Default,
     All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Decorator,
     Modifier = All & ~Decorator,
