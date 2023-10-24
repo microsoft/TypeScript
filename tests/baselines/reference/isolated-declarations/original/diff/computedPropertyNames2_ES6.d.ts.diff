@@ -1,0 +1,47 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames2_ES6.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -16,17 +16,15 @@
+ computedPropertyNames2_ES6.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ computedPropertyNames2_ES6.ts(5,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ computedPropertyNames2_ES6.ts(6,9): error TS2378: A 'get' accessor must return a value.
+ computedPropertyNames2_ES6.ts(6,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+-computedPropertyNames2_ES6.ts(7,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ computedPropertyNames2_ES6.ts(7,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ computedPropertyNames2_ES6.ts(8,16): error TS2378: A 'get' accessor must return a value.
+ computedPropertyNames2_ES6.ts(8,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+-computedPropertyNames2_ES6.ts(9,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ computedPropertyNames2_ES6.ts(9,31): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ 
+ 
+-==== computedPropertyNames2_ES6.ts (10 errors) ====
++==== computedPropertyNames2_ES6.ts (8 errors) ====
+     var methodName = "method";
+     var accessorName = "accessor";
+     class C {
+         [methodName]() { }
+@@ -40,19 +38,15 @@
+ !!! error TS2378: A 'get' accessor must return a value.
+             ~~~~~~~~~~~~~~
+ !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+         set [accessorName](v) { }
+-            ~~~~~~~~~~~~~~
+-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                            ~
+ !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+         static get [accessorName]() { }
+                    ~~~~~~~~~~~~~~
+ !!! error TS2378: A 'get' accessor must return a value.
+                    ~~~~~~~~~~~~~~
+ !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+         static set [accessorName](v) { }
+-                   ~~~~~~~~~~~~~~
+-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                                   ~
+ !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+     }
+\ No newline at end of file

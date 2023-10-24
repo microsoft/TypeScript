@@ -1,0 +1,32 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName33.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -5,23 +5,20 @@
+     [e]: invalid;
+ }
+ /// [Errors] ////
+ 
+-parserComputedPropertyName33.ts(3,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ parserComputedPropertyName33.ts(3,6): error TS2304: Cannot find name 'e'.
+ parserComputedPropertyName33.ts(3,6): error TS4031: Public property '[e]' of exported class has or is using private name 'e'.
+ parserComputedPropertyName33.ts(3,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ parserComputedPropertyName33.ts(4,6): error TS2304: Cannot find name 'e2'.
+ parserComputedPropertyName33.ts(4,12): error TS1005: ';' expected.
+ parserComputedPropertyName33.ts(5,1): error TS1128: Declaration or statement expected.
+ 
+ 
+-==== parserComputedPropertyName33.ts (7 errors) ====
++==== parserComputedPropertyName33.ts (6 errors) ====
+     class C {
+         // No ASI
+         [e] = 0
+-        ~~~
+-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+          ~
+ !!! error TS2304: Cannot find name 'e'.
+          ~
+ !!! error TS4031: Public property '[e]' of exported class has or is using private name 'e'.

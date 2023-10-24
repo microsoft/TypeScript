@@ -442,12 +442,13 @@ class CompilerTest extends CompilerTestBase {
 }
 
 export class IsolatedDeclarationTest extends CompilerTestBase {
-    private dteDiagnostics: ts.Diagnostic[];
-    tscNonIsolatedDeclarationsErrors: ts.Diagnostic[];
+    private dteDiagnostics: readonly ts.Diagnostic[];
+    private tscNonIsolatedDeclarationsErrors: readonly ts.Diagnostic[];
     private isOutputEquivalent: boolean;
     private dteDtsFile: Compiler.TestFile[];
     private tscDtsFiles: Compiler.TestFile[];
-    tscIsolatedDeclarationsErrors: ts.Diagnostic[];
+    private tscIsolatedDeclarationsErrors: readonly ts.Diagnostic[];
+    private isDiagnosticEquivalent: boolean;
 
     static transformEnvironment(compilerEnvironment: CompilerTestEnvironment): CompilerTestEnvironment {
         const clonedOptions: ts.CompilerOptions & Compiler.HarnessOptions = ts.cloneCompilerOptions(compilerEnvironment.compilerOptions);
@@ -493,7 +494,7 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
             this.options,
             currentDirectory,
         );
-        this.dteDiagnostics = dteResult.diagnostics;
+        this.dteDiagnostics = ts.sortAndDeduplicateDiagnostics(dteResult.diagnostics);
         this.dteDtsFile = [...ts.mapDefinedIterator(dteResult.dts, ([, f]) => ({
             unitName: this.result.host.vfs.realpathSync(f.file),
             content: f.text,
@@ -508,8 +509,9 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
             })];
 
         this.tscDtsFiles.sort((a, b) => this.result.host.vfs.stringComparer(a.unitName, b.unitName));
-        this.tscNonIsolatedDeclarationsErrors = this.result.diagnostics.filter(d => !IsolatedDeclarationTest.dteDiagnosticErrors.has(d.code));
-        this.tscIsolatedDeclarationsErrors = this.result.diagnostics.filter(d => IsolatedDeclarationTest.dteDiagnosticErrors.has(d.code));
+        const tscDiagnostics = ts.sortAndDeduplicateDiagnostics(this.result.diagnostics);
+        this.tscNonIsolatedDeclarationsErrors = tscDiagnostics.filter(d => !IsolatedDeclarationTest.dteDiagnosticErrors.has(d.code));
+        this.tscIsolatedDeclarationsErrors = tscDiagnostics.filter(d => IsolatedDeclarationTest.dteDiagnosticErrors.has(d.code));
 
         // If DTE is the same as TS output we don't need to do any extra checks.
         this.isOutputEquivalent = this.dteDtsFile.length === this.tscDtsFiles.length && this.dteDtsFile
@@ -517,16 +519,27 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
                 const tscDecl = this.tscDtsFiles[index];
                 return tscDecl.unitName === dteDecl.unitName && dteDecl.content === tscDecl.content;
             });
+
+        this.isDiagnosticEquivalent = this.tscIsolatedDeclarationsErrors.length === this.dteDiagnostics.length &&
+            this.dteDiagnostics.every((dteDiag, index) => {
+                const tscDiag = this.tscIsolatedDeclarationsErrors[index];
+                return tscDiag.code === dteDiag.code
+                    && tscDiag.file?.fileName === dteDiag.file?.fileName
+                    && tscDiag.start === dteDiag.start
+                    && tscDiag.length === dteDiag.length;
+            });
     }
     private static dteDiagnosticErrors = new Set([
         ts.Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit.code,
         ts.Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit.code,
         ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,
-        // ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit.code,
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit.code,
+        ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code,
+        ts.Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
     ]);
 
     verifyDteOutput() {
-        if (this.isOutputEquivalent) return;
+        if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
         Compiler.doDeclarationBaseline(
             this.configuredName,
             "isolated-declarations/original/dte",
@@ -538,7 +551,7 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
         );
     }
     verifyTscOutput() {
-        if (this.isOutputEquivalent) return;
+        if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
         Compiler.doDeclarationBaseline(
             this.configuredName,
             "isolated-declarations/original/tsc",
@@ -550,7 +563,7 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
         );
     }
     verifyDiff() {
-        if (this.isOutputEquivalent) return;
+        if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
         Compiler.doDeclarationDiffBaseline(
             this.configuredName,
             "isolated-declarations/original/diff",
