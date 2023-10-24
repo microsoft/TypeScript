@@ -1,10 +1,10 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "types": ["node"],
+        "types": ["node"]
     },
 
     "references": [],
 
-    "include": ["**/*"],
+    "include": ["**/*"]
 }

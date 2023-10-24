@@ -3,7 +3,7 @@
     "compilerOptions": {
     },
     "references": [
-        { "path": "../compiler" },
+        { "path": "../compiler" }
     ],
-    "include": ["**/*"],
+    "include": ["**/*"]
 }

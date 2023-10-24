@@ -3,14 +3,14 @@
 
     "compilerOptions": {
         "types": [
-            "node",
-        ],
+            "node"
+        ]
     },
     "references": [
         { "path": "../compiler" },
         { "path": "../services" },
         { "path": "../jsTyping" },
-        { "path": "../server" },
+        { "path": "../server" }
     ],
-    "include": ["**/*"],
+    "include": ["**/*"]
 }

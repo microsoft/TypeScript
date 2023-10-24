@@ -18,8 +18,8 @@
             "group": "build",
             "hide": true,
             "problemMatcher": [
-                "$tsc",
-            ],
+                "$tsc"
+            ]
         },
         {
             "label": "tsc: watch ./src",
@@ -29,8 +29,8 @@
             "group": "build",
             "isBackground": true,
             "problemMatcher": [
-                "$tsc-watch",
-            ],
+                "$tsc-watch"
+            ]
         },
         {
             "label": "npm: build:compiler",
@@ -38,8 +38,8 @@
             "script": "build:compiler",
             "group": "build",
             "problemMatcher": [
-                "$tsc",
-            ],
+                "$tsc"
+            ]
         },
         {
             "label": "npm: build:tests",
@@ -47,8 +47,8 @@
             "script": "build:tests:notypecheck",
             "group": "build",
             "problemMatcher": [
-                "$tsc",
-            ],
-        },
-    ],
+                "$tsc"
+            ]
+        }
+    ]
 }
