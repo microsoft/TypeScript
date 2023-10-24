@@ -1,5 +1,6 @@
 //@declaration: true
 
+null instanceof (function () { });
 null instanceof (() => { });
 ({}) instanceof null; // Ok because null is a subtype of function
 

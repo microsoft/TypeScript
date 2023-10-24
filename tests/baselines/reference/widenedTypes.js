@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/widenedTypes.ts] ////
 
 //// [widenedTypes.ts]
+null instanceof (function () { });
 null instanceof (() => { });
 ({}) instanceof null; // Ok because null is a subtype of function
 
@@ -26,6 +27,7 @@ var arr: string[] = [3, null]; // not assignable because null is not widened. BC
 var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
 
 //// [widenedTypes.js]
+null instanceof (function () { });
 null instanceof (function () { });
 ({}) instanceof null; // Ok because null is a subtype of function
 null in {};

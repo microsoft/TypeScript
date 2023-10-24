@@ -1,6 +1,11 @@
 //// [tests/cases/compiler/widenedTypes.ts] ////
 
 === widenedTypes.ts ===
+null instanceof (function () { });
+>null instanceof (function () { }) : boolean
+>(function () { }) : () => void
+>function () { } : () => void
+
 null instanceof (() => { });
 >null instanceof (() => { }) : boolean
 >(() => { }) : () => void
