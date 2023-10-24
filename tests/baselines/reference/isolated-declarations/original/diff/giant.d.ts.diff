@@ -1,0 +1,47 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/giant.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -39,8 +39,9 @@
+     new (p2?: string): any;
+     new (...p3: any[]): any;
+     new (p4: string, p5?: string): any;
+     new (p6: string, ...p7: any[]): any;
++    [p]: any;
+     [p1: string]: any;
+     [p2: string, p3: number]: any;
+     p: any;
+     p1?: any;
+@@ -91,8 +92,9 @@
+         new (p2?: string): any;
+         new (...p3: any[]): any;
+         new (p4: string, p5?: string): any;
+         new (p6: string, ...p7: any[]): any;
++        [p]: any;
+         [p1: string]: any;
+         [p2: string, p3: number]: any;
+         p: any;
+         p1?: any;
+@@ -206,8 +208,9 @@
+         new (p2?: string): any;
+         new (...p3: any[]): any;
+         new (p4: string, p5?: string): any;
+         new (p6: string, ...p7: any[]): any;
++        [p]: any;
+         [p1: string]: any;
+         [p2: string, p3: number]: any;
+         p: any;
+         p1?: any;
+@@ -265,8 +268,9 @@
+         new (p2?: string): any;
+         new (...p3: any[]): any;
+         new (p4: string, p5?: string): any;
+         new (p6: string, ...p7: any[]): any;
++        [p]: any;
+         [p1: string]: any;
+         [p2: string, p3: number]: any;
+         p: any;
+         p1?: any;

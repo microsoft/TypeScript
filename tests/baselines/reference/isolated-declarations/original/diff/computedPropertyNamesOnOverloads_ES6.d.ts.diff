@@ -1,0 +1,14 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesOnOverloads_ES6.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -5,6 +5,5 @@
+ declare var accessorName: string;
+ declare class C {
+     [methodName](v: string): invalid;
+     [methodName](): invalid;
+-    [methodName](v?: string): invalid;
+ }

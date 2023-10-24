@@ -309,7 +309,7 @@ export namespace Compiler {
         return fileName;
     }
 
-    interface HarnessOptions {
+    export interface HarnessOptions {
         useCaseSensitiveFileNames?: boolean;
         includeBuiltFile?: string;
         baselineFile?: string;
@@ -357,7 +357,7 @@ export namespace Compiler {
                 if (value === undefined) {
                     throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
                 }
-                if (name === "typeScriptVersion") {
+                if (name === "typeScriptVersion" || name === "isolatedDeclarationDiffReason") {
                     continue;
                 }
                 const option = getCommandLineOption(name);
@@ -403,7 +403,7 @@ export namespace Compiler {
         fileOptions?: any;
     }
 
-    export function compileFiles(
+    export function prepareEnvironment(
         inputFiles: TestFile[],
         otherFiles: TestFile[],
         harnessSettings: TestCaseParser.CompilerSettings | undefined,
@@ -411,7 +411,7 @@ export namespace Compiler {
         // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
         currentDirectory: string | undefined,
         symlinks?: vfs.FileSet,
-    ): compiler.CompilationResult {
+    ): HarnessCompilerEnvironment {
         const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
         options.target = ts.getEmitScriptTarget(options);
         options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
@@ -458,8 +458,39 @@ export namespace Compiler {
         }
 
         ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
-        const host = new fakes.CompilerHost(fs, options);
-        const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion, options.forceDtsEmit);
+
+        return {
+            fileSystem: fs,
+            compilerOptions: options,
+            programFileNames,
+            symlinks,
+            typeScriptVersion,
+        };
+    }
+    export function compileFiles(
+        inputFiles: TestFile[],
+        otherFiles: TestFile[],
+        harnessSettings: TestCaseParser.CompilerSettings | undefined,
+        compilerOptions: ts.CompilerOptions | undefined,
+        // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
+        currentDirectory: string | undefined,
+        symlinks?: vfs.FileSet,
+    ): compiler.CompilationResult {
+        const config = prepareEnvironment(inputFiles, otherFiles, harnessSettings, compilerOptions, currentDirectory, symlinks);
+        return compileFilesWithEnvironment(config);
+    }
+    export interface HarnessCompilerEnvironment {
+        fileSystem: vfs.FileSystem;
+        compilerOptions: ts.CompilerOptions & HarnessOptions;
+        programFileNames: string[];
+        typeScriptVersion?: string;
+        symlinks: vfs.FileSet | undefined;
+    }
+    export function compileFilesWithEnvironment(
+        { fileSystem, compilerOptions, programFileNames, symlinks, typeScriptVersion }: HarnessCompilerEnvironment,
+    ): compiler.CompilationResult {
+        const host = new fakes.CompilerHost(fileSystem, compilerOptions);
+        const result = compiler.compileFiles(host, programFileNames, compilerOptions, typeScriptVersion, compilerOptions.forceDtsEmit);
         result.symlinks = symlinks;
         return result;
     }
@@ -614,7 +645,8 @@ export namespace Compiler {
                 });
         }
 
-        const host = new fakes.CompilerHost(tscHost.vfs, options, /*setParentNodes*/ true);
+        const fs = tscHost.vfs.shadowRoot ? tscHost.vfs.shadowRoot.shadow() : tscHost.vfs;
+        const host = new fakes.CompilerHost(fs, options, /*setParentNodes*/ false);
         const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
         let commonSourceDirectory = ts.getCommonSourceDirectory(
             options,
@@ -1007,16 +1039,17 @@ export namespace Compiler {
         header: string,
         dteDeclarationFiles: readonly TestFile[],
         tscDeclarationFiles: readonly TestFile[],
+        reason: string,
     ) {
         const Diff = require("diff");
         const dteContent = declarationContent(dteDeclarationFiles);
         const tscContent = declarationContent(tscDeclarationFiles);
 
-        let fullDiff = "// [[Reason: ]] ////\r\n\r\n";
+        let fullDiff = "// [[Reason: " + reason +"]] ////\r\n\r\n";
         fullDiff += "//// [" + header + "] ////\r\n\r\n";
-        fullDiff += Diff.createTwoFilesPatch("DTE", "TSC", dteContent, tscContent, "DTE output", "TSC output");
+        fullDiff += Diff.createTwoFilesPatch("TSC", "DTE", tscContent, dteContent, "declarations", "declarations");
 
-        Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts`), fullDiff);
+        Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts.diff`), fullDiff);
     }
     function declarationContent(declarationFiles: readonly TestFile[]) {
         let dtsCode = "";

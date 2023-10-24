@@ -1,0 +1,20 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/enums/enumErrors.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -16,10 +16,10 @@
+     A = 0,
+     B = 0
+ }
+ declare enum E10 {
+-    A = 0,
+-    B = 0
++    A,
++    B
+ }
+ declare enum E11 {
+     A,
+     B,

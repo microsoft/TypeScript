@@ -1,0 +1,18 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/mergedDeclarations2.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -4,9 +4,9 @@
+ declare enum Foo {
+     b = 0
+ }
+ declare enum Foo {
+-    a = 0
++    a
+ }
+ declare namespace Foo {
+     var x: invalid;
+ }

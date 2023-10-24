@@ -1,0 +1,15 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/enums/enumExportMergingES6.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -7,6 +7,6 @@
+ export declare enum Animals {
+     Dog = 2
+ }
+ export declare enum Animals {
+-    CatDog = 3
++    CatDog
+ }

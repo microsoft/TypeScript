@@ -90,16 +90,19 @@ export class CompilerBaselineRunner extends RunnerBase {
         // Mocha holds onto the closure environment of the describe callback even after the test is done.
         // Everything declared here should be cleared out in the "after" callback.
         let compilerTest!: CompilerTest;
-        let isolatedTest!: IsolatedDeclarationTest;
+        let environment!: CompilerTestEnvironment;
         before(() => {
             let payload;
             if (test && test.content) {
                 payload = TestCaseParser.makeUnitsFromTest(test.content, test.file);
             }
-            if (payload) {
-                isolatedTest = new IsolatedDeclarationTest(fileName, payload, configuration);
-            }
-            compilerTest = new CompilerTest(fileName, payload, configuration);
+            environment = CompilerTest.initializeCompilerEnvironment(fileName, payload, configuration);
+            const fileSystem = environment.fileSystem.makeReadonly();
+
+            compilerTest = new CompilerTest({
+                ...environment,
+                fileSystem: fileSystem.shadow(),
+            });
         });
         it(`Correct errors for ${fileName}`, () => compilerTest.verifyDiagnostics());
         it(`Correct module resolution tracing for ${fileName}`, () => compilerTest.verifyModuleResolution());
@@ -107,12 +110,30 @@ export class CompilerBaselineRunner extends RunnerBase {
         it(`Correct JS output for ${fileName}`, () => (this.emit && compilerTest.verifyJavaScriptOutput()));
         it(`Correct Sourcemap output for ${fileName}`, () => compilerTest.verifySourceMapOutput());
         it(`Correct type/symbol baselines for ${fileName}`, () => compilerTest.verifyTypesAndSymbols());
-        it(`Correct dte emit for ${fileName}`, () => isolatedTest?.verifyDteOutput());
-        it(`Correct tsc emit for ${fileName}`, () => isolatedTest?.verifyTscOutput());
-        it(`Correct dte/tsc diff ${fileName}`, () => isolatedTest?.verifyDiff());
+
+        // We share all ASTs between the two runs to improve performance
+        // To ensure the tests don't interfere with each other, we run the isolated tests after
+        // node.symbol can be a source of interference.
+        describe("isolated declarations", () => {
+            let isolatedTest: IsolatedDeclarationTest;
+            before(() => {
+                isolatedTest = new IsolatedDeclarationTest({
+                    ...environment,
+                    fileSystem: environment.fileSystem.shadow(),
+                });
+            });
+            it(`Correct dte emit for ${fileName}`, () => isolatedTest.verifyDteOutput());
+            it(`Correct tsc emit for ${fileName}`, () => isolatedTest.verifyTscOutput());
+            it(`Correct dte/tsc diff ${fileName}`, () => isolatedTest.verifyDiff());
+
+            after(() => {
+                isolatedTest = undefined!;
+            });
+        });
+
         after(() => {
             compilerTest = undefined!;
-            isolatedTest = undefined!;
+            environment = undefined!;
         });
     }
 
@@ -132,6 +153,22 @@ export class CompilerBaselineRunner extends RunnerBase {
             }
         }
     }
+}
+interface CompilerTestEnvironment {
+    fileName: string;
+    justName: string;
+    toBeCompiled: Compiler.TestFile[];
+    otherFiles: Compiler.TestFile[];
+    tsConfigFiles: Compiler.TestFile[];
+    compilerOptions: ts.CompilerOptions & Compiler.HarnessOptions;
+    configuredName: string;
+    hasNonDtsFiles: boolean;
+    testCaseContent: TestCaseParser.TestCaseContent;
+    configurationOverrides?: TestCaseParser.CompilerSettings;
+    fileSystem: vfs.FileSystem;
+    programFileNames: string[];
+    symlinks: vfs.FileSet | undefined;
+    typeScriptVersion?: string;
 }
 
 class CompilerTestBase {
@@ -185,13 +222,27 @@ class CompilerTestBase {
     // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
     protected otherFiles: Compiler.TestFile[];
 
-    constructor(fileName: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
-        const absoluteRootDir = vfs.srcFolder;
-        this.fileName = fileName;
-        this.justName = vpath.basename(fileName);
-        this.configuredName = this.justName;
+    constructor(compilerEnvironment: CompilerTestEnvironment) {
+        this.fileName = compilerEnvironment.fileName;
+        this.justName = compilerEnvironment.justName;
+        this.hasNonDtsFiles = compilerEnvironment.hasNonDtsFiles;
+        this.configuredName = compilerEnvironment.configuredName;
+        this.toBeCompiled = compilerEnvironment.toBeCompiled;
+        this.otherFiles = compilerEnvironment.otherFiles;
+        this.tsConfigFiles = compilerEnvironment.tsConfigFiles;
+
+        this.harnessSettings = compilerEnvironment.testCaseContent.settings;
+
+        this.result = Compiler.compileFilesWithEnvironment(compilerEnvironment);
+
+        this.options = this.result.options;
+    }
+
+    public static initializeCompilerEnvironment(fileName: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings): CompilerTestEnvironment {
+        const justName = vpath.basename(fileName);
+        let configuredName = justName;
         if (configurationOverrides) {
-            let configuredName = "";
+            configuredName = "";
             const keys = Object
                 .keys(configurationOverrides)
                 .sort();
@@ -202,9 +253,9 @@ class CompilerTestBase {
                 configuredName += `${key.toLowerCase()}=${configurationOverrides[key].toLowerCase()}`;
             }
             if (configuredName) {
-                const extname = vpath.extname(this.justName);
-                const basename = vpath.basename(this.justName, extname, /*ignoreCase*/ true);
-                this.configuredName = `${basename}(${configuredName})${extname}`;
+                const extname = vpath.extname(justName);
+                const basename = vpath.basename(justName, extname, /*ignoreCase*/ true);
+                configuredName = `${basename}(${configuredName})${extname}`;
             }
         }
 
@@ -216,29 +267,30 @@ class CompilerTestBase {
             testCaseContent = { ...testCaseContent, settings: { ...testCaseContent.settings, ...configurationOverrides } };
         }
 
+        const absoluteRootDir = vfs.srcFolder;
         const units = testCaseContent.testUnitData;
-        this.toBeCompiled = [];
-        this.otherFiles = [];
-        this.hasNonDtsFiles = units.some(unit => !ts.fileExtensionIs(unit.name, ts.Extension.Dts));
-        this.harnessSettings = testCaseContent.settings;
+        let toBeCompiled = [];
+        const otherFiles = [];
+        const hasNonDtsFiles = testCaseContent.testUnitData.some(unit => !ts.fileExtensionIs(unit.name, ts.Extension.Dts));
+        const harnessSettings = testCaseContent.settings;
         let tsConfigOptions: ts.CompilerOptions | undefined;
-        this.tsConfigFiles = [];
+        const tsConfigFiles = [];
         if (testCaseContent.tsConfig) {
             tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
-            this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!));
+            tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!));
             for (const unit of units) {
                 if (testCaseContent.tsConfig.fileNames.includes(ts.getNormalizedAbsolutePath(unit.name, absoluteRootDir))) {
-                    this.toBeCompiled.push(this.createHarnessTestFile(unit));
+                    toBeCompiled.push(this.createHarnessTestFile(unit));
                 }
                 else {
-                    this.otherFiles.push(this.createHarnessTestFile(unit));
+                    otherFiles.push(this.createHarnessTestFile(unit));
                 }
             }
         }
         else {
-            const baseUrl = this.harnessSettings.baseUrl;
+            const baseUrl = harnessSettings.baseUrl;
             if (baseUrl !== undefined && !ts.isRootedDiskPath(baseUrl)) {
-                this.harnessSettings.baseUrl = ts.getNormalizedAbsolutePath(baseUrl, absoluteRootDir);
+                harnessSettings.baseUrl = ts.getNormalizedAbsolutePath(baseUrl, absoluteRootDir);
             }
 
             const lastUnit = units[units.length - 1];
@@ -247,15 +299,15 @@ class CompilerTestBase {
             // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
 
             if (testCaseContent.settings.noImplicitReferences || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
-                this.toBeCompiled.push(this.createHarnessTestFile(lastUnit));
+                toBeCompiled.push(this.createHarnessTestFile(lastUnit));
                 units.forEach(unit => {
                     if (unit.name !== lastUnit.name) {
-                        this.otherFiles.push(this.createHarnessTestFile(unit));
+                        otherFiles.push(this.createHarnessTestFile(unit));
                     }
                 });
             }
             else {
-                this.toBeCompiled = units.map(unit => {
+                toBeCompiled = units.map(unit => {
                     return this.createHarnessTestFile(unit);
                 });
             }
@@ -265,16 +317,31 @@ class CompilerTestBase {
             tsConfigOptions.configFile!.fileName = tsConfigOptions.configFilePath;
         }
 
-        this.result = Compiler.compileFiles(
-            this.toBeCompiled,
-            this.otherFiles,
-            this.harnessSettings,
-            /*options*/ tsConfigOptions,
-            /*currentDirectory*/ this.harnessSettings.currentDirectory,
+        const { fileSystem, compilerOptions, programFileNames, typeScriptVersion } = Compiler.prepareEnvironment(
+            toBeCompiled,
+            otherFiles,
+            harnessSettings,
+            tsConfigOptions,
+            harnessSettings.currentDirectory,
             testCaseContent.symlinks,
         );
 
-        this.options = this.result.options;
+        return {
+            fileName,
+            justName,
+            toBeCompiled,
+            programFileNames,
+            fileSystem,
+            otherFiles,
+            tsConfigFiles,
+            compilerOptions,
+            configuredName,
+            hasNonDtsFiles,
+            testCaseContent,
+            configurationOverrides,
+            typeScriptVersion,
+            symlinks: testCaseContent.symlinks,
+        };
     }
 
     public static getConfigurations(file: string): CompilerFileBasedTest {
@@ -285,7 +352,7 @@ class CompilerTestBase {
         return { file, configurations, content };
     }
 
-    private createHarnessTestFile(unit: TestCaseParser.TestUnitData): Compiler.TestFile {
+    private static createHarnessTestFile(unit: TestCaseParser.TestUnitData): Compiler.TestFile {
         return {
             unitName: unit.name,
             content: unit.content,
@@ -370,32 +437,6 @@ class CompilerTest extends CompilerTestBase {
     }
 }
 
-function changeSettingForIsolatedDeclarations(settings: TestCaseParser.CompilerSettings) {
-    const clone: TestCaseParser.CompilerSettings = {
-        ...settings,
-        allowJS: "false",
-        checkJS: "false",
-        declaration: "true",
-        isolatedDeclarations: "true",
-        forceDtsEmit: "true",
-    };
-    delete clone.outFile;
-    delete clone.outfile;
-    delete clone.out;
-    return clone;
-}
-
-function removeOutFromOptions(tsConfig: ts.ParsedCommandLine | undefined) {
-    if (!tsConfig) return undefined;
-
-    const clone: ts.ParsedCommandLine = {
-        ...tsConfig,
-        options: ts.cloneCompilerOptions(tsConfig.options),
-    };
-    delete clone.options.outFile;
-    delete clone.options.out;
-    return clone;
-}
 export class IsolatedDeclarationTest extends CompilerTestBase {
     private dteDiagnostics: ts.Diagnostic[];
     tscNonIsolatedDeclarationsErrors: ts.Diagnostic[];
@@ -403,17 +444,42 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
     private dteDtsFile: Compiler.TestFile[];
     private tscDtsFiles: Compiler.TestFile[];
     tscIsolatedDeclarationsErrors: ts.Diagnostic[];
-    constructor(fileName: string, testCaseContent: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
-        super(
-            fileName,
-            {
-                ...testCaseContent,
-                settings: changeSettingForIsolatedDeclarations(testCaseContent.settings),
-                tsConfig: removeOutFromOptions(testCaseContent.tsConfig),
+
+    static transformEnvironment(compilerEnvironment: CompilerTestEnvironment): CompilerTestEnvironment {
+        const clonedOptions: ts.CompilerOptions & Compiler.HarnessOptions = ts.cloneCompilerOptions(compilerEnvironment.compilerOptions);
+        clonedOptions.declaration = true;
+        clonedOptions.isolatedDeclarations = true;
+        clonedOptions.allowJs = false;
+        clonedOptions.checkJs = false;
+        clonedOptions.skipLibCheck = true;
+        clonedOptions.forceDtsEmit = true;
+        delete clonedOptions.outFile;
+        delete clonedOptions.out;
+
+        const clonedSettings: TestCaseParser.CompilerSettings = {
+            ...compilerEnvironment.testCaseContent.settings,
+            allowJS: "false",
+            checkJS: "false",
+            declaration: "true",
+            isolatedDeclarations: "true",
+            forceDtsEmit: "true",
+            skipLibCheck: "true",
+        };
+        delete clonedSettings.outFile;
+        delete clonedSettings.outfile;
+        delete clonedSettings.out;
+
+        return {
+            ...compilerEnvironment,
+            testCaseContent: {
+                ...compilerEnvironment.testCaseContent,
+                settings: clonedSettings,
             },
-            configurationOverrides,
-            // /*forceIncludeAllFiles*/ true,
-        );
+            compilerOptions: clonedOptions,
+        };
+    }
+    constructor(compilerEnvironment: CompilerTestEnvironment) {
+        super(IsolatedDeclarationTest.transformEnvironment(compilerEnvironment));
 
         const currentDirectory = this.harnessSettings.currentDirectory ?? vfs.srcFolder;
         const dteResult = Compiler.compileDeclarationFilesWithIsolatedEmitter(
@@ -489,6 +555,7 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
             this.fileName,
             this.dteDtsFile,
             this.tscDtsFiles,
+            this.harnessSettings.isolatedDeclarationDiffReason,
         );
     }
 }

@@ -371,7 +371,7 @@ export class CompilerHost implements ts.CompilerHost {
         // and so any options bag will be keyed as "[object Object]", and we'll incorrectly share
         // SourceFiles parsed with different options. But fixing this doesn't expose any bugs and
         // doubles the memory usage of a test run, so I'm leaving it for now.
-        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersionOrOptions=${languageVersionOrOptions},setParentNodes=${this._setParentNodes}]`;
+        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersionOrOptions=${languageVersionOrOptions},setParentNodes=${this._setParentNodes},accessPath=${canonicalFileName}]`;
         if (cacheKey) {
             const meta = this.vfs.filemeta(canonicalFileName);
             const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;

@@ -1,0 +1,15 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName14.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,4 +1,6 @@
+ 
+ 
+ //// [/.src/parserComputedPropertyName14.d.ts]
+-declare var v: {};
++declare var v: {
++    [e](): number;
++};

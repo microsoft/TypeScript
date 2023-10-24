@@ -1,0 +1,14 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty1.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,6 @@
+ 
+ 
+ //// [/.src/parserES5SymbolProperty1.d.ts]
+ interface I {
++    [Symbol.iterator]: string;
+ }

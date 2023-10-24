@@ -1,0 +1,16 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty1.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -4,5 +4,7 @@
+ interface SymbolConstructor {
+     foo: string;
+ }
+ declare var Symbol: SymbolConstructor;
+-declare var obj: invalid;
++declare var obj: {
++    [Symbol.foo]: number;
++};

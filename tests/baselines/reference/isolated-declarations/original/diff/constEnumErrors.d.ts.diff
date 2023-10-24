@@ -1,0 +1,18 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/constEnumErrors.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -6,9 +6,9 @@
+ }
+ declare namespace E {
+ }
+ declare const enum E1 {
+-    X = 0,
++    X,
+     Y,
+     Y1
+ }
+ declare const enum E2 {

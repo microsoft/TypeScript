@@ -47,7 +47,9 @@ export function createIsolatedDeclarationsEmitter(rootDir: string, options: Comp
     rootDir = normalizePath(rootDir);
     return (file: string, host: CompilerHost) => {
         file = normalizePath(file);
-        const source = host.getSourceFile(file, options.target ?? ScriptTarget.ES2015);
+        const source = host.getSourceFile(file, {
+            languageVersion: options.target ?? ScriptTarget.ES2015,
+        });
 
         if (!source) return {};
 

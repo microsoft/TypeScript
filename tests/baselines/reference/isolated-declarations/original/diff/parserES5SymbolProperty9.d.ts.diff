@@ -1,0 +1,15 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty9.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,4 +1,6 @@
+ 
+ 
+ //// [/.src/parserES5SymbolProperty9.d.ts]
+-declare var x: {};
++declare var x: {
++    [Symbol.toPrimitive]: string;
++};
