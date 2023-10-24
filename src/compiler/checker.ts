@@ -21491,7 +21491,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
             }
             if (target.flags & TypeFlags.Union) {
-                return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), target as UnionType, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
+                return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), target as UnionType, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive), intersectionState);
             }
             if (target.flags & TypeFlags.Intersection) {
                 return typeRelatedToEachType(source, target as IntersectionType, reportErrors, IntersectionState.Target);
@@ -21525,7 +21525,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let result = Ternary.True;
             const sourceTypes = source.types;
             for (const sourceType of sourceTypes) {
-                const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false);
+                const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false, IntersectionState.None);
                 if (!related) {
                     return Ternary.False;
                 }
@@ -21534,7 +21534,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
-        function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
+        function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             const targetTypes = target.types;
             if (target.flags & TypeFlags.Union) {
                 if (containsType(targetTypes, source)) {
@@ -21561,14 +21561,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const match = getMatchingUnionConstituentForType(target as UnionType, source);
                 if (match) {
-                    const related = isRelatedTo(source, match, RecursionFlags.Target, /*reportErrors*/ false);
+                    const related = isRelatedTo(source, match, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
                     if (related) {
                         return related;
                     }
                 }
             }
             for (const type of targetTypes) {
-                const related = isRelatedTo(source, type, RecursionFlags.Target, /*reportErrors*/ false);
+                const related = isRelatedTo(source, type, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
                 if (related) {
                     return related;
                 }
@@ -21577,7 +21577,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Elaborate only if we can find a best matching type in the target union
                 const bestMatchingType = getBestMatchingType(source, target, isRelatedTo);
                 if (bestMatchingType) {
-                    isRelatedTo(source, bestMatchingType, RecursionFlags.Target, /*reportErrors*/ true);
+                    isRelatedTo(source, bestMatchingType, RecursionFlags.Target, /*reportErrors*/ true, /*headMessage*/ undefined, intersectionState);
                 }
             }
             return Ternary.False;
