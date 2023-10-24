@@ -3,5 +3,5 @@
 === a.js ===
 class C { constructor(public x) { }}
 >C : Symbol(C, Decl(a.js, 0, 0))
->x : Symbol(x, Decl(a.js, 0, 22))
+>x : Symbol(C.x, Decl(a.js, 0, 22))
 

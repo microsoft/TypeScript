@@ -6924,45 +6924,18 @@ function getModifierFlagsWorker(node: Node, includeJSDoc: boolean, alwaysInclude
         return ModifierFlags.None;
     }
 
-    // Calculate the modifier flags for a given node, and cache them based on the file containing the node.
-    // For a TypeScript file, the cache will only contain syntactic modifiers and potentially the `Deprecated` JSDoc modifier.
-    // For a JavaScript file, the cache will contain both syntactic and JSDoc modifiers.
-
     if (!(node.modifierFlagsCache & ModifierFlags.HasComputedFlags)) {
         node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
     }
 
-    let jsdocModifierFlags: ModifierFlags | undefined;
-    if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
-        jsdocModifierFlags = getJSDocModifierFlagsNoCache(node);
-        if (isInJSFile(node)) {
-            node.modifierFlagsCache |= jsdocModifierFlags | ModifierFlags.HasComputedJSDocModifiers;
+    if (alwaysIncludeJSDoc || includeJSDoc && isInJSFile(node)) {
+        if (!(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
+            node.modifierFlagsCache |= getRawJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
         }
-        else {
-            node.modifierFlagsCache |= (jsdocModifierFlags & ModifierFlags.Deprecated) | ModifierFlags.HasComputedJSDocModifiers;
-            if (jsdocModifierFlags & ~node.modifierFlagsCache & ~ModifierFlags.Deprecated) {
-                // If there are other JSDoc modifiers aside from `@deprecated` that aren't also in the set of syntactic modifiers for the node,
-                // we can add a flag indicating we need to recompute JSDoc modifiers when `alwaysIncludeJSDoc` is true.
-                node.modifierFlagsCache |= ModifierFlags.HasExcessJDocModifiers;
-            }
-        }
+        return selectEffectiveModifierFlags(node.modifierFlagsCache);
     }
 
-    const modifiers = node.modifierFlagsCache & ~(ModifierFlags.HasComputedFlags | ModifierFlags.HasComputedJSDocModifiers | ModifierFlags.HasExcessJDocModifiers);
-    if (includeJSDoc || alwaysIncludeJSDoc) {
-        if (!isInJSFile(node) && alwaysIncludeJSDoc && node.modifierFlagsCache & ModifierFlags.HasExcessJDocModifiers) {
-            // If we are requesting JSDoc modifiers in a TS file, we only need to recalculate additional JSDoc modifiers if the cache indicates there are any to find.
-            // We recalculate the JSDoc modifiers since they may overlap with the syntactic modifiers in the cache. While this isn't as efficient as caching the modifiers,
-            // it is rare to use JSDoc for modifiers like `@private` in a TS file.
-            jsdocModifierFlags ??= getJSDocModifierFlagsNoCache(node);
-            return modifiers | jsdocModifierFlags;
-        }
-        return modifiers;
-    }
-    else {
-        // We are requesting only syntactic modifiers. filter out any JSDoc modifiers in the cache.
-        return (isInJSFile(node) ? modifiers & ~ModifierFlags.TypeScriptModifier : modifiers) & ~ModifierFlags.JSDocOnlyModifier;
-    }
+    return selectSyntacticModifierFlags(node.modifierFlagsCache);
 }
 
 /**
@@ -6992,20 +6965,33 @@ export function getSyntacticModifierFlags(node: Node): ModifierFlags {
     return getModifierFlagsWorker(node, /*includeJSDoc*/ false);
 }
 
-function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
+function getRawJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = ModifierFlags.None;
     if (!!node.parent && !isParameter(node)) {
         if (isInJSFile(node)) {
-            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.Public;
-            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
-            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
-            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
-            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.Override;
+            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
+            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
+            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.JSDocProtected;
+            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
+            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
         }
         if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
     }
 
     return flags;
+}
+
+function selectSyntacticModifierFlags(flags: ModifierFlags) {
+    return flags & ModifierFlags.SyntacticModifiers;
+}
+
+function selectEffectiveModifierFlags(flags: ModifierFlags) {
+    return (flags & ModifierFlags.NonCacheOnlyModifiers) |
+        ((flags & ModifierFlags.JSDocCacheOnlyModifiers) >>> 23); // shift ModifierFlags.JSDoc* to match ModifierFlags.*
+}
+
+function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
+    return selectEffectiveModifierFlags(getRawJSDocModifierFlagsNoCache(node));
 }
 
 /**

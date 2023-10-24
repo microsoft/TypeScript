@@ -851,26 +851,45 @@ export const enum NodeFlags {
 // dprint-ignore
 export const enum ModifierFlags {
     None =               0,
-    Export =             1 << 0,  // Declarations
-    Ambient =            1 << 1,  // Declarations
-    Public =             1 << 2,  // Property/Method
-    Private =            1 << 3,  // Property/Method
-    Protected =          1 << 4,  // Property/Method
-    Static =             1 << 5,  // Property/Method
-    Readonly =           1 << 6,  // Property/Method
-    Accessor =           1 << 7,  // Property
-    Abstract =           1 << 8,  // Class/Method/ConstructSignature
-    Async =              1 << 9,  // Property/Method/Function
-    Default =            1 << 10, // Function/Class (export default declaration)
-    Const =              1 << 11, // Const enum
-    Deprecated =         1 << 12, // Deprecated tag.
-    Override =           1 << 13, // Override method.
-    In =                 1 << 14, // Contravariance modifier
-    Out =                1 << 15, // Covariance modifier
-    Decorator =          1 << 16, // Contains a decorator.
 
-    HasComputedJSDocModifiers = 1 << 27, // Indicates the computed modifier flags include modifiers from JSDoc.
-    HasExcessJDocModifiers = 1 << 28, // Indicates that there are JSDoc modifiers that are not in the cache and must be recalculated. For use with nodes in TS files only.
+    // Syntactic/JSDoc modifiers
+    Public =             1 << 0,  // Property/Method
+    Private =            1 << 1,  // Property/Method
+    Protected =          1 << 2,  // Property/Method
+    Readonly =           1 << 3,  // Property/Method
+    Override =           1 << 4,  // Override method.
+    
+    // Syntactic-only modifiers
+    Export =             1 << 5,  // Declarations
+    Abstract =           1 << 6,  // Class/Method/ConstructSignature
+    Ambient =            1 << 7,  // Declarations
+    Static =             1 << 8,  // Property/Method
+    Accessor =           1 << 9,  // Property
+    Async =              1 << 10, // Property/Method/Function
+    Default =            1 << 11, // Function/Class (export default declaration)
+    Const =              1 << 12, // Const enum
+    In =                 1 << 13, // Contravariance modifier
+    Out =                1 << 14, // Covariance modifier
+    Decorator =          1 << 15, // Contains a decorator.
+
+    // JSDoc-only modifiers
+    Deprecated =         1 << 16, // Deprecated tag.
+
+    // Cache-only JSDoc-modifiers. Should match order of Syntactic/JSDoc modifiers, above.
+    /** @internal */ JSDocPublic = 1 << 23, // if this value changes, `adjustJSDocModifierFlags` must change accordingly
+    /** @internal */ JSDocPrivate = 1 << 24,
+    /** @internal */ JSDocProtected = 1 << 25,
+    /** @internal */ JSDocReadonly = 1 << 26,
+    /** @internal */ JSDocOverride = 1 << 27,
+
+    /** @internal */ SyntacticOrJSDocModifiers = Public | Private | Protected | Readonly | Override,
+    /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Decorator,
+    /** @internal */ SyntacticModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers,
+    /** @internal */ JSDocCacheOnlyModifiers = JSDocPublic | JSDocPrivate | JSDocProtected | JSDocReadonly | JSDocOverride,
+    /** @internal */ JSDocOnlyModifiers = Deprecated,
+    /** @internal */ NonCacheOnlyModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers | JSDocOnlyModifiers,
+
+    HasComputedJSDocModifiers = 1 << 28, // Indicates the computed modifier flags include modifiers from JSDoc.
     HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
     AccessibilityModifier = Public | Private | Protected,
@@ -879,7 +898,6 @@ export const enum ModifierFlags {
     NonPublicAccessibilityModifier = Private | Protected,
 
     TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out,
-    JSDocOnlyModifier = Deprecated,
     ExportDefault = Export | Default,
     All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Decorator,
     Modifier = All & ~Decorator,
