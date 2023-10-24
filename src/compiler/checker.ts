@@ -29976,7 +29976,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
         return mapType(type, t => {
-            if (isGenericMappedType(t) && !t.declaration.nameType) {
+            if (isGenericMappedType(t) && (!t.declaration.nameType || isFilteringMappedType(t))) {
                 const constraint = getConstraintTypeFromMappedType(t);
                 const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
                 const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
