@@ -1,7 +1,9 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
 } from "../helpers/tsserver";
@@ -82,7 +84,7 @@ describe("unittests:: tsserver:: symlinkCache", () => {
                 resolvedFileName: "/one/two/foo",
             },
         });
-        cache.setSymlinksFromResolutions([], map);
+        cache.setSymlinksFromResolutions(ts.noop, ts.noop, map);
     });
 });
 

@@ -1,3 +1,6 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     commonFile1,
@@ -6,10 +9,8 @@ import {
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    customTypesMap,
     logConfiguredProjectsHasOpenRefStatus,
     logInferredProjectsOrphanStatus,
     openExternalProjectForSession,
@@ -20,6 +21,9 @@ import {
     toExternalFiles,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
+import {
+    customTypesMap,
+} from "../helpers/typingsInstaller";
 import {
     createServerHost,
     File,

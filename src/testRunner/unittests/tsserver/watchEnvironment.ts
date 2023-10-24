@@ -1,3 +1,7 @@
+import {
+    createLoggerWithInMemoryLogs,
+    Logger,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     commonFile1,
@@ -5,16 +9,15 @@ import {
 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    Logger,
     openExternalProjectForSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     setCompilerOptionsForInferredProjectsRequestForSession,
     TestSession,
     toExternalFiles,
+    verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -493,5 +496,36 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFile is single watcher 
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([index], session);
         baselineTsserverLogs("watchEnvironment", "when watchFile is single watcher per file", session);
+    });
+});
+
+describe("unittests:: tsserver:: watchEnvironment:: watching at workspaces codespaces style", () => {
+    it("watching npm install in codespaces where workspaces folder is hosted at root", () => {
+        const config: File = {
+            path: "/workspaces/somerepo/src/tsconfig.json",
+            content: "{}",
+        };
+        const main: File = {
+            path: "/workspaces/somerepo/src/main.ts",
+            content: `import { randomSeed } from "random-seed";\nrandomSeed();`,
+        };
+        const randomSeed: File = {
+            path: "/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts",
+            content: `export function randomSeed(): string;`,
+        };
+        const host = createServerHost([config, main, randomSeed, libFile], { inodeWatching: true, runWithoutRecursiveWatches: true });
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host), canUseEvents: true, noGetErrOnBackgroundUpdate: true });
+        openFilesForSession([main], session);
+        verifyGetErrRequest({ session, files: [main] });
+        // npm ci
+        // clear part
+        host.deleteFolder("/workspaces/somerepo/node_modules", /*recursive*/ true);
+        verifyGetErrRequest({ session, files: [main], existingTimeouts: true });
+        host.runQueuedTimeoutCallbacks();
+        // Install part
+        host.ensureFileOrFolder(randomSeed);
+        verifyGetErrRequest({ session, files: [main], existingTimeouts: true });
+        host.runQueuedTimeoutCallbacks();
+        baselineTsserverLogs("watchEnvironment", "watching npm install in codespaces where workspaces folder is hosted at root", session);
     });
 });

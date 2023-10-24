@@ -59,6 +59,19 @@ FsWatches::
 /b.d.ts: *new*
   {}
 
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "findSourceDefinition",
+      "arguments": {
+        "file": "/a.ts",
+        "line": 1,
+        "offset": 10
+      },
+      "seq": 2,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/auxiliaryProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -74,7 +87,32 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Before request
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": [
+        {
+          "file": "/b.js",
+          "start": {
+            "line": 1,
+            "offset": 14
+          },
+          "end": {
+            "line": 1,
+            "offset": 15
+          },
+          "contextStart": {
+            "line": 1,
+            "offset": 1
+          },
+          "contextEnd": {
+            "line": 1,
+            "offset": 18
+          }
+        }
+      ],
+      "responseRequired": true
+    }
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -86,13 +124,15 @@ FsWatches::
 /b.js: *new*
   {}
 
+Before request
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
         "file": "/b.js"
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b.js 500 undefined WatchType: Closed Script info
@@ -124,10 +164,10 @@ FsWatches *deleted*::
 /b.js:
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
@@ -143,23 +183,78 @@ TI:: typing installer creation complete
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject2*","fileNames":["/b.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject2*",
+      "fileNames": [
+        "/b.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/bower_components","/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject2*","files":["/bower_components","/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject2*",
+      "files": [
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject2*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject2*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)

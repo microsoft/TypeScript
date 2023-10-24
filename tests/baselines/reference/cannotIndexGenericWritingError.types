@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/cannotIndexGenericWritingError.ts] ////
+
+=== cannotIndexGenericWritingError.ts ===
+// From #47357
+
+function foo<T extends Record<string | symbol, any>>(target: T, p: string | symbol) {
+>foo : <T extends Record<string | symbol, any>>(target: T, p: string | symbol) => void
+>target : T
+>p : string | symbol
+
+    target[p] = ""; // error
+>target[p] = "" : ""
+>target[p] : any
+>target : T
+>p : string | symbol
+>"" : ""
+}
+
+function foo2<T extends number[] & { [s: string]: number | string }>(target: T, p: string | number) {
+>foo2 : <T extends number[] & { [s: string]: string | number; }>(target: T, p: string | number) => void
+>s : string
+>target : T
+>p : string | number
+
+    target[p] = 1; // error
+>target[p] = 1 : 1
+>target[p] : any
+>target : T
+>p : string | number
+>1 : 1
+
+    target[1] = 1; // ok
+>target[1] = 1 : 1
+>target[1] : number
+>target : T
+>1 : 1
+>1 : 1
+}

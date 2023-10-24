@@ -46,10 +46,10 @@ FsWatchesRecursive::
 /a/b/node_modules: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
@@ -65,19 +65,60 @@ TI:: typing installer creation complete
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/b/file1.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["test"],"projectRootPath":"/a/b","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/b/file1.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [
+        "test"
+      ],
+      "projectRootPath": "/a/b",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Searching for typing names in /a/b/node_modules; all files: []
 TI:: [hh:mm:ss:mss]     Found package names: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["test"]
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["test"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["test"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "test"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["/a/b/bower_components","/a/b/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
@@ -86,7 +127,27 @@ TI:: [hh:mm:ss:mss] Installing typings ["test"]
 TI:: [hh:mm:ss:mss] 'test':: Entry for package 'test' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":["test"],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [
+        "test"
+      ],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 

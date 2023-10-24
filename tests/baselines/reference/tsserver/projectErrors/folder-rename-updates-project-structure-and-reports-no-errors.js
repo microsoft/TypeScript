@@ -26,13 +26,13 @@ Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/projects/myproject/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/myproject/tsconfig.json 2000 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingStart",
-     "body": {
-      "projectName": "/a/b/projects/myproject/tsconfig.json",
-      "reason": "Creating possible configured project for /a/b/projects/myproject/bar/app.ts to open"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/a/b/projects/myproject/tsconfig.json",
+        "reason": "Creating possible configured project for /a/b/projects/myproject/bar/app.ts to open"
+      }
     }
 Info seq  [hh:mm:ss:mss] Config: /a/b/projects/myproject/tsconfig.json : {
  "rootNames": [
@@ -68,126 +68,126 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingFinish",
-     "body": {
-      "projectName": "/a/b/projects/myproject/tsconfig.json"
-     }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "telemetry",
-     "body": {
-      "telemetryEventName": "projectInfo",
-      "payload": {
-       "projectId": "c56abb8c7c51bef5953613f05226da8e72cd9eafe09ab58ca2ccd81b65ba193a",
-       "fileStats": {
-        "js": 0,
-        "jsSize": 0,
-        "jsx": 0,
-        "jsxSize": 0,
-        "ts": 2,
-        "tsSize": 154,
-        "tsx": 0,
-        "tsxSize": 0,
-        "dts": 0,
-        "dtsSize": 0,
-        "deferred": 0,
-        "deferredSize": 0
-       },
-       "compilerOptions": {
-        "module": "none"
-       },
-       "typeAcquisition": {
-        "enable": false,
-        "include": false,
-        "exclude": false
-       },
-       "extends": false,
-       "files": false,
-       "include": false,
-       "exclude": true,
-       "compileOnSave": false,
-       "configFileName": "tsconfig.json",
-       "projectType": "configured",
-       "languageServiceEnabled": true,
-       "version": "FakeVersion"
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/a/b/projects/myproject/tsconfig.json"
       }
-     }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "configFileDiag",
-     "body": {
-      "triggerFile": "/a/b/projects/myproject/bar/app.ts",
-      "configFile": "/a/b/projects/myproject/tsconfig.json",
-      "diagnostics": [
-       {
-        "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-        "code": 6053,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Array'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Boolean'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Function'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'IArguments'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Number'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Object'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'RegExp'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'String'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 1,
-         "offset": 37
-        },
-        "end": {
-         "line": 1,
-         "offset": 45
-        },
-        "text": "Unknown compiler option 'targer'. Did you mean 'target'?",
-        "code": 5025,
-        "category": "error",
-        "fileName": "/a/b/projects/myproject/tsconfig.json"
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "c56abb8c7c51bef5953613f05226da8e72cd9eafe09ab58ca2ccd81b65ba193a",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 154,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "module": "none"
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": true,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/a/b/projects/myproject/bar/app.ts",
+        "configFile": "/a/b/projects/myproject/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 1,
+              "offset": 37
+            },
+            "end": {
+              "line": 1,
+              "offset": 45
+            },
+            "text": "Unknown compiler option 'targer'. Did you mean 'target'?",
+            "code": 5025,
+            "category": "error",
+            "fileName": "/a/b/projects/myproject/tsconfig.json"
+          }
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] Project '/a/b/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -245,13 +245,13 @@ Before running Timeout callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/a/b/projects/myproject/bar/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/b/projects/myproject/bar/app.ts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 0
 
@@ -260,13 +260,13 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/a/b/projects/myproject/bar/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/a/b/projects/myproject/bar/app.ts",
+        "diagnostics": []
+      }
     }
 After running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -276,22 +276,22 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "/a/b/projects/myproject/bar/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/a/b/projects/myproject/bar/app.ts",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 2
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 2
+      }
     }
 After running Immedidate callback:: count: 0
 
@@ -380,14 +380,14 @@ Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /a/b/projects/myproject/bar/app.ts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/a/b/projects/myproject/bar/app.ts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/a/b/projects/myproject/bar/app.ts"
+        ]
+      }
     }
 After running Timeout callback:: count: 1
 12: checkOne
@@ -415,13 +415,13 @@ Before running Timeout callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/a/b/projects/myproject/bar/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/b/projects/myproject/bar/app.ts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 0
 
@@ -450,13 +450,13 @@ Before running Timeout callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/a/b/projects/myproject/bar/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/b/projects/myproject/bar/app.ts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 0
 
@@ -465,13 +465,13 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/a/b/projects/myproject/bar/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/a/b/projects/myproject/bar/app.ts",
+        "diagnostics": []
+      }
     }
 After running Immedidate callback:: count: 1
 5: suggestionCheck
@@ -481,21 +481,21 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "/a/b/projects/myproject/bar/app.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/a/b/projects/myproject/bar/app.ts",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 3
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 3
+      }
     }
 After running Immedidate callback:: count: 0
