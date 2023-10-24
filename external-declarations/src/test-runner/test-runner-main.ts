@@ -67,7 +67,7 @@ const rootCasePaths = parsedArgs.rootPaths ?? ["./tests/source"];
 const filter = parsedArgs.default ? new RegExp(parsedArgs.default) : /.*\.ts/;
 const runType = parsedArgs.type === "all" ? { tsc: true, dte: true } :
     parsedArgs.type === "tsc" ? { tsc: true, dte: false } :
-    { tsc: false, dte: true };
+        { tsc: false, dte: true };
 
 const allTests = rootCasePaths
     .map(r => readAllFiles(r, filter))
@@ -128,6 +128,7 @@ async function main() {
 
             if (parsedArgs.forceIsolatedDeclarations) {
                 settings.isolatedDeclarations = true;
+                settings.declarationMap = true;
             }
             // Not supported
             delete settings.outFile;
@@ -141,6 +142,7 @@ async function main() {
                 .flatMap(r => [
                     "// " + r.fileName,
                     r.content,
+                    r.declarationMap ?? "",
                 ])
                 .join(IO.newLine()) +
                 `
@@ -192,6 +194,7 @@ async function main() {
 message: ${e.message},
 ${e.stack},
 `,
+                        declarationMap: undefined,
                     }],
                 };
             }

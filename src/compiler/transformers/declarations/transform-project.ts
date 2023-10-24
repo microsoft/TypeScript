@@ -1,5 +1,6 @@
 import {
     base64encode,
+    changeAnyExtension,
     combinePaths,
     CompilerHost,
     CompilerOptions,
@@ -14,19 +15,20 @@ import {
     EmitResolver,
     ensureTrailingDirectorySeparator,
     factory,
-    getDeclarationEmitExtensionForPath,
-    getNormalizedAbsolutePath,
-    getRelativePathFromDirectory,
     getBaseFileName,
+    getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     getNewLineCharacter,
+    getNormalizedAbsolutePath,
     getOutputPathsFor,
+    getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
     getRootLength,
     getSourceFilePathInNewDir,
     NewLineKind,
     normalizePath,
     normalizeSlashes,
+    pathIsAbsolute,
     PrinterOptions,
     ScriptTarget,
     SourceFile,
@@ -34,8 +36,6 @@ import {
     sys,
     TransformationContext,
     transformDeclarations,
-    pathIsAbsolute,
-    changeAnyExtension,
 } from "../../_namespaces/ts";
 
 export function emitDeclarationsForProject(
@@ -88,6 +88,8 @@ function emitDeclarationsForAllFiles(rootDir: string, files: string[], host: Com
 }
 
 export function emitDeclarationsForFile(sourceFile: SourceFile, options: CompilerOptions) {
+    options.declaration = true;
+    options.declarationMap = true;
     const emitHost = createEmitDeclarationHost(options, sys);
     const emitResolver = createEmitDeclarationResolver(sourceFile, emitHost);
     const diagnostics: Diagnostic[] = [];
