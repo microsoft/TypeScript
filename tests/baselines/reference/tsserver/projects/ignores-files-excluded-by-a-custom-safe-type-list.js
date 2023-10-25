@@ -44,9 +44,9 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TypeAcquisition:: {
- "include": [
-  "duck-types"
- ],
- "exclude": [],
- "enable": true
+  "include": [
+    "duck-types"
+  ],
+  "exclude": [],
+  "enable": true
 }

@@ -10,7 +10,12 @@ function fn2() { }
 let x: string = 10;
 
 //// [/user/username/projects/myproject/dependency/tsconfig.json]
-{"compilerOptions":{"composite":true,"outFile":"../dependency.js"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outFile": "../dependency.js"
+  }
+}
 
 //// [/user/username/projects/myproject/usage/usage.ts]
 fn1();
@@ -19,7 +24,17 @@ fnErr();
 
 
 //// [/user/username/projects/myproject/usage/tsconfig.json]
-{"compilerOptions":{"composite":true,"outFile":"../usage.js"},"references":[{"path":"../dependency"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outFile": "../usage.js"
+  },
+  "references": [
+    {
+      "path": "../dependency"
+    }
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

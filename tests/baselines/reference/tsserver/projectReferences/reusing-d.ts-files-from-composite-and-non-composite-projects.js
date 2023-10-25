@@ -21,7 +21,19 @@ import { b } from "@ref/compositeb/b";
 export const x = 10;
 
 //// [/user/username/projects/myproject/compositea/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"../dist/","rootDir":"../","baseUrl":"../","paths":{"@ref/*":["./dist/*"]}}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../dist/",
+    "rootDir": "../",
+    "baseUrl": "../",
+    "paths": {
+      "@ref/*": [
+        "./dist/*"
+      ]
+    }
+  }
+}
 
 //// [/user/username/projects/myproject/dist/compositeb/b.d.ts]
 export declare function b(): void;
@@ -30,13 +42,42 @@ export declare function b(): void;
 export function b() {}
 
 //// [/user/username/projects/myproject/compositeb/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"../dist/","rootDir":"../","baseUrl":"../","paths":{"@ref/*":["./dist/*"]}}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../dist/",
+    "rootDir": "../",
+    "baseUrl": "../",
+    "paths": {
+      "@ref/*": [
+        "./dist/*"
+      ]
+    }
+  }
+}
 
 //// [/user/username/projects/myproject/compositec/c.ts]
 import { b } from "@ref/compositeb/b";
 
 //// [/user/username/projects/myproject/compositec/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"../dist/","rootDir":"../","baseUrl":"../","paths":{"@ref/*":["./*"]}},"references":[{"path":"../compositeb"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../dist/",
+    "rootDir": "../",
+    "baseUrl": "../",
+    "paths": {
+      "@ref/*": [
+        "./*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../compositeb"
+    }
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/compositea

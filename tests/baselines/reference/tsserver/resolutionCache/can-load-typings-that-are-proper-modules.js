@@ -64,7 +64,7 @@ TI:: typing installer creation complete
 
 //// [/a/cache/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 

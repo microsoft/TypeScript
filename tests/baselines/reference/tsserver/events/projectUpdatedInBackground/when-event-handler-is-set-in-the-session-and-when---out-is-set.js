@@ -5,7 +5,11 @@ Before request
 export let x = 1
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"out":"/a/out.js"}}
+{
+  "compilerOptions": {
+    "out": "/a/out.js"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -133,12 +137,12 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 1,
-              "offset": 21
+              "line": 3,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 26
+              "line": 3,
+              "offset": 10
             },
             "text": "Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '\"ignoreDeprecations\": \"5.0\"' to silence this error.\n  Use 'outFile' instead.",
             "code": 5101,

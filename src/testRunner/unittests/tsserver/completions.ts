@@ -1,7 +1,12 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
 } from "../helpers/tsserver";
@@ -71,7 +76,7 @@ describe("unittests:: tsserver:: completions", () => {
         const projectRoot = "e:/myproject";
         const appPackage: File = {
             path: `${projectRoot}/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 version: "0.1.0",
                 dependencies: {
@@ -92,7 +97,7 @@ import {
         const localAtTypes = `${localNodeModules}/@types`;
         const localReactPackage: File = {
             path: `${localAtTypes}/react/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "@types/react",
                 version: "16.9.14",
             }),
@@ -104,7 +109,7 @@ import {
         };
         const localReactRouterDomPackage: File = {
             path: `${localNodeModules}/react-router-dom/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "react-router-dom",
                 version: "5.1.2",
             }),
@@ -115,7 +120,7 @@ import {
         };
         const localPropTypesPackage: File = {
             path: `${localAtTypes}/prop-types/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "@types/prop-types",
                 version: "15.7.3",
             }),
@@ -133,7 +138,7 @@ import {
         const globalAtTypes = `${globalTypingsCacheLocation}/node_modules/@types`;
         const globalReactRouterDomPackage: File = {
             path: `${globalAtTypes}/react-router-dom/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "@types/react-router-dom",
                 version: "5.1.2",
             }),

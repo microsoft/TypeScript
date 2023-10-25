@@ -20,15 +20,26 @@ const x = 10;
 const y = 20;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true}}
+{
+  "compilerOptions": {
+    "incremental": true
+  }
+}
 
 
 /a/lib/tsc.js -i -p tsconfig.json
 Output::
 
 
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"project":"/users/username/projects/project/tsconfig.json","configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "project": "/users/username/projects/project/tsconfig.json",
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -128,8 +139,15 @@ const z = 10;
 Output::
 
 
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"project":"/users/username/projects/project/tsconfig.json","configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "project": "/users/username/projects/project/tsconfig.json",
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

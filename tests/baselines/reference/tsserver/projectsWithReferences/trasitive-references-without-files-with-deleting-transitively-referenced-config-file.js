@@ -15,13 +15,46 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/a/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/user/username/projects/myproject/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../refs/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/a/index.ts]
 export class A {}
@@ -258,7 +291,11 @@ Before running Timeout callback:: count: 3
 5: *ensureProjectForOpenFiles*
 6: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/a/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json

@@ -11,7 +11,14 @@ export let x = 1
 export let y: number
 
 //// [/a/b/jsconfig.json]
-{"compilerOptions":{"allowJs":true},"exclude":["node_modules"]}
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /a/b
@@ -77,7 +84,7 @@ TI:: typing installer creation complete
 
 //// [/a/typings/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 

@@ -2,7 +2,17 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/bar/tsconfig.json]
-{"include":["index.ts"],"compilerOptions":{"lib":["dom","es2017"]}}
+{
+  "include": [
+    "index.ts"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "es2017"
+    ]
+  }
+}
 
 //// [/user/username/projects/myproject/bar/index.ts]
 
@@ -11,7 +21,16 @@ export function bar() {
 }
 
 //// [/user/username/projects/myproject/foo/tsconfig.json]
-{"include":["index.ts"],"compilerOptions":{"lib":["es2017"]}}
+{
+  "include": [
+    "index.ts"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "es2017"
+    ]
+  }
+}
 
 //// [/user/username/projects/myproject/foo/index.ts]
 

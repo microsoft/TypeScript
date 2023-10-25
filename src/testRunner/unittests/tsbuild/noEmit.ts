@@ -1,4 +1,7 @@
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc";
@@ -14,7 +17,7 @@ describe("unittests:: tsbuild:: noEmit", () => {
             fs: () =>
                 loadProjectFromFiles({
                     "/src/a.ts": aTsContent,
-                    "/src/tsconfig.json": JSON.stringify({
+                    "/src/tsconfig.json": jsonToReadableText({
                         compilerOptions: { noEmit: true },
                     }),
                 }),

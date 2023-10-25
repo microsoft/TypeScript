@@ -2,7 +2,14 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/src/tsconfig.json]
-{"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out","traceResolution":true}}
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "Node16",
+    "outDir": "../out",
+    "traceResolution": true
+  }
+}
 
 //// [/user/username/projects/myproject/src/fileA.ts]
 import { foo } from "./fileB.mjs";
@@ -15,7 +22,10 @@ export function foo() {
 
 
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
+{
+  "name": "app",
+  "version": "1.0.0"
+}
 
 //// [/a/lib/lib.es2016.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -223,7 +233,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Before running Timeout callback:: count: 1
 1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module"
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
@@ -380,7 +394,10 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Before running Timeout callback:: count: 1
 6: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
+{
+  "name": "app",
+  "version": "1.0.0"
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
@@ -748,7 +765,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Before running Timeout callback:: count: 1
 16: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module"
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation

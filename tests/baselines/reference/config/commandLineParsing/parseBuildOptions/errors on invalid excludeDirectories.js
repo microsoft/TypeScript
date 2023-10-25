@@ -3,7 +3,7 @@ buildOptions::
 {}
 WatchOptions::
 {
- "excludeDirectories": []
+  "excludeDirectories": []
 }
 Projects::
 .

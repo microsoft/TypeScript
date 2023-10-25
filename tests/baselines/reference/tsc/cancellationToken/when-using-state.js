@@ -21,7 +21,12 @@ export class C {
 export class D { }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"incremental":true,"declaration":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -39,8 +44,17 @@ interface Array<T> { length: number; [n: number]: T; }
 
 Output::
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -255,8 +269,17 @@ Cancelled!!
 Operation ws cancelled:: true
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -387,8 +410,17 @@ Input::
 
 Output::
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -547,8 +579,17 @@ Input::
 
 Output::
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

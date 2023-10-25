@@ -8,7 +8,15 @@ class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }
 declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }
 
 //// [/a/b/projects/myproject/tsconfig.json]
-{"compilerOptions":{"module":"none","targer":"es5"},"exclude":["node_modules"]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "targer": "es5"
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -174,12 +182,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 37
+              "line": 4,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 45
+              "line": 4,
+              "offset": 13
             },
             "text": "Unknown compiler option 'targer'. Did you mean 'target'?",
             "code": 5025,

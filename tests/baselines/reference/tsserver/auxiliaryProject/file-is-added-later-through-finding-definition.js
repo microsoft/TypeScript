@@ -3,9 +3,9 @@ Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't 
 Before request
 //// [/user/users/projects/myproject/node_modules/@types/yargs/package.json]
 {
- "name": "@types/yargs",
- "version": "1.0.0",
- "types": "./index.d.ts"
+  "name": "@types/yargs",
+  "version": "1.0.0",
+  "types": "./index.d.ts"
 }
 
 //// [/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts]
@@ -20,9 +20,9 @@ export declare function command(command: string, cb: (yargs: Yargs) => void): vo
 
 //// [/user/users/projects/myproject/node_modules/yargs/package.json]
 {
- "name": "yargs",
- "version": "1.0.0",
- "main": "index.js"
+  "name": "yargs",
+  "version": "1.0.0",
+  "main": "index.js"
 }
 
 //// [/user/users/projects/myproject/node_modules/yargs/callback.js]

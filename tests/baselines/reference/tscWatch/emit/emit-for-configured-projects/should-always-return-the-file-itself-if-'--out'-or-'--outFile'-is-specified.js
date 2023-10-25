@@ -16,7 +16,12 @@ interface GlobalFoo { age: number }
 export var Foo4 = 10;
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"module":"system","outFile":"/a/b/out.js"}}
+{
+  "compilerOptions": {
+    "module": "system",
+    "outFile": "/a/b/out.js"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -41,8 +46,20 @@ Output::
 
 
 
-Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
-Program options: {"module":4,"outFile":"/a/b/out.js","watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/file1Consumer1.ts",
+  "/a/b/file1Consumer2.ts",
+  "/a/b/globalFile3.ts",
+  "/a/b/moduleFile1.ts",
+  "/a/b/moduleFile2.ts"
+]
+Program options: {
+  "module": 4,
+  "outFile": "/a/b/out.js",
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -145,8 +162,20 @@ Output::
 
 
 
-Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
-Program options: {"module":4,"outFile":"/a/b/out.js","watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/file1Consumer1.ts",
+  "/a/b/file1Consumer2.ts",
+  "/a/b/globalFile3.ts",
+  "/a/b/moduleFile1.ts",
+  "/a/b/moduleFile2.ts"
+]
+Program options: {
+  "module": 4,
+  "outFile": "/a/b/out.js",
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

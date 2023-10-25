@@ -5,7 +5,11 @@ Before request
 import {Foo} from "./moduleFile1"; export var y = 10;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"isolatedModules":true}}
+{
+  "compilerOptions": {
+    "isolatedModules": true
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

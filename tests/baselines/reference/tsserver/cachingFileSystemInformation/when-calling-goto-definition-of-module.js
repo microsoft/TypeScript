@@ -17,7 +17,27 @@ export class Bookshelf { }
                 
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"target":"es6","module":"es6","baseUrl":"./","paths":{"~/*":["*"]}},"exclude":["api","build","node_modules","public","seeds","sql_updates","tests.build"]}
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "baseUrl": "./",
+    "paths": {
+      "~/*": [
+        "*"
+      ]
+    }
+  },
+  "exclude": [
+    "api",
+    "build",
+    "node_modules",
+    "public",
+    "seeds",
+    "sql_updates",
+    "tests.build"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -188,7 +208,16 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info seq  [hh:mm:ss:mss] fileExists:: [{"key":"/a/b/models/tsconfig.json","count":1},{"key":"/a/b/models/jsconfig.json","count":1}]
+Info seq  [hh:mm:ss:mss] fileExists:: [
+  {
+    "key": "/a/b/models/tsconfig.json",
+    "count": 1
+  },
+  {
+    "key": "/a/b/models/jsconfig.json",
+    "count": 1
+  }
+]
 Info seq  [hh:mm:ss:mss] directoryExists:: []
 Info seq  [hh:mm:ss:mss] getDirectories:: []
 Info seq  [hh:mm:ss:mss] readFile:: []

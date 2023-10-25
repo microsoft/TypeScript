@@ -15,13 +15,39 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/packages/B/package.json]
-{"main":"lib/index.js","types":"lib/index.d.ts"}
+{
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts"
+}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.json]
-{"compilerOptions":{"outDir":"lib","rootDir":"src","composite":true},"include":["src"],"references":[{"path":"../B"}]}
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "composite": true
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../B"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/B/tsconfig.json]
-{"compilerOptions":{"outDir":"lib","rootDir":"src","composite":true},"include":["src"]}
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "composite": true
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/A/src/index.ts]
 import { foo } from '@issue/b';

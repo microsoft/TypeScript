@@ -54,8 +54,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -98,11 +104,19 @@ exitCode:: ExitStatus.undefined
 
 
 
-Change:: Changing config to {"compilerOptions":{"skipLibCheck":true}}
+Change:: Changing config to {
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
+}
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"skipLibCheck":true}}
+{
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -121,8 +135,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
-Program options: {"skipLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts"
+]
+Program options: {
+  "skipLibCheck": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -138,11 +159,19 @@ No shapes updated in the builder::
 exitCode:: ExitStatus.undefined
 
 
-Change:: Changing config to {"compilerOptions":{"skipDefaultLibCheck":true}}
+Change:: Changing config to {
+  "compilerOptions": {
+    "skipDefaultLibCheck": true
+  }
+}
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"skipDefaultLibCheck":true}}
+{
+  "compilerOptions": {
+    "skipDefaultLibCheck": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -166,8 +195,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
-Program options: {"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts"
+]
+Program options: {
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -183,11 +219,15 @@ No shapes updated in the builder::
 exitCode:: ExitStatus.undefined
 
 
-Change:: Changing config to {"compilerOptions":{}}
+Change:: Changing config to {
+  "compilerOptions": {}
+}
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 
 Before running Timeout callback:: count: 1
@@ -216,8 +256,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -232,11 +278,19 @@ No shapes updated in the builder::
 exitCode:: ExitStatus.undefined
 
 
-Change:: Changing config to {"compilerOptions":{"skipDefaultLibCheck":true}}
+Change:: Changing config to {
+  "compilerOptions": {
+    "skipDefaultLibCheck": true
+  }
+}
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"skipDefaultLibCheck":true}}
+{
+  "compilerOptions": {
+    "skipDefaultLibCheck": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -260,8 +314,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
-Program options: {"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts"
+]
+Program options: {
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -276,11 +337,19 @@ No shapes updated in the builder::
 exitCode:: ExitStatus.undefined
 
 
-Change:: Changing config to {"compilerOptions":{"skipLibCheck":true}}
+Change:: Changing config to {
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
+}
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"skipLibCheck":true}}
+{
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -299,8 +368,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
-Program options: {"skipLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts"
+]
+Program options: {
+  "skipLibCheck": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -316,11 +392,15 @@ No shapes updated in the builder::
 exitCode:: ExitStatus.undefined
 
 
-Change:: Changing config to {"compilerOptions":{}}
+Change:: Changing config to {
+  "compilerOptions": {}
+}
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 
 Before running Timeout callback:: count: 1
@@ -349,8 +429,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

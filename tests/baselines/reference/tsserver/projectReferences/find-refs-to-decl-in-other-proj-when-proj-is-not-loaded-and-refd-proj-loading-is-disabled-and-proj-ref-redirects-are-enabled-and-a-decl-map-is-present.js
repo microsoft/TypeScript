@@ -3,9 +3,17 @@ Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't 
 Before request
 //// [/user/username/projects/myproject/a/tsconfig.json]
 {
-        "compilerOptions": {"disableReferencedProjectLoad":true,"disableSourceOfProjectReferenceRedirect":false,"composite":true},
-        "references": [{ "path": "../b" }]
+  "compilerOptions": {
+    "disableReferencedProjectLoad": true,
+    "disableSourceOfProjectReferenceRedirect": false,
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../b"
     }
+  ]
+}
 
 //// [/user/username/projects/myproject/a/index.ts]
 import { B } from "../b/lib";
@@ -14,11 +22,11 @@ const b: B = new B();
 
 //// [/user/username/projects/myproject/b/tsconfig.json]
 {
-"compilerOptions": {
+  "compilerOptions": {
     "declarationMap": true,
     "outDir": "lib",
     "composite": true
-}
+  }
 }
 
 //// [/user/username/projects/myproject/b/index.ts]
@@ -38,7 +46,16 @@ export declare class B {
 //# sourceMappingURL=index.d.ts.map
 
 //// [/user/username/projects/myproject/b/lib/index.d.ts.map]
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IACV,CAAC;CACJ"}
+{
+  "version": 3,
+  "file": "index.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../index.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,qBAAa,CAAC;IACV,CAAC;CACJ"
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

@@ -780,6 +780,7 @@ import {
     JSDocSatisfiesTag,
     JSDocSignature,
     JSDocTemplateTag,
+    JSDocThisTag,
     JSDocTypeAssertion,
     JSDocTypedefTag,
     JSDocTypeExpression,
@@ -1009,6 +1010,7 @@ import {
     tokenToString,
     tracing,
     TracingNode,
+    TrackedSymbol,
     TransientSymbol,
     TransientSymbolLinks,
     tryAddToSet,
@@ -6423,6 +6425,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 symbolDepth: undefined,
                 inferTypeParameters: undefined,
                 approximateLength: 0,
+                trackedSymbols: undefined,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -6921,6 +6924,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const cachedResult = links?.serializedTypes?.get(key);
                 if (cachedResult) {
+                    // TODO:: check if we instead store late painted statements associated with this?
+                    cachedResult.trackedSymbols?.forEach(
+                        ([symbol, enclosingDeclaration, meaning]) =>
+                            context.tracker.trackSymbol(
+                                symbol,
+                                enclosingDeclaration,
+                                meaning,
+                            ),
+                    );
                     if (cachedResult.truncating) {
                         context.truncating = true;
                     }
@@ -6941,7 +6953,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const result = transform(type);
                 const addedLength = context.approximateLength - startLength;
                 if (!context.reportedDiagnostic && !context.encounteredError) {
-                    links?.serializedTypes?.set(key, { node: result, truncating: context.truncating, addedLength });
+                    links?.serializedTypes?.set(key, {
+                        node: result,
+                        truncating: context.truncating,
+                        addedLength,
+                        trackedSymbols: context.trackedSymbols,
+                    });
                 }
                 context.visitedTypes.delete(typeId);
                 if (id) {
@@ -8816,12 +8833,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function addExportModifier(node: Extract<HasModifiers, Statement>) {
                 const flags = (getEffectiveModifierFlags(node) | ModifierFlags.Export) & ~ModifierFlags.Ambient;
-                return factory.updateModifiers(node, flags);
+                return factory.replaceModifiers(node, flags);
             }
 
             function removeExportModifier(node: Extract<HasModifiers, Statement>) {
                 const flags = getEffectiveModifierFlags(node) & ~ModifierFlags.Export;
-                return factory.updateModifiers(node, flags);
+                return factory.replaceModifiers(node, flags);
             }
 
             function visitSymbolTable(symbolTable: SymbolTable, suppressNewPrivateContext?: boolean, propertyAsAlias?: boolean) {
@@ -8858,6 +8875,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
                     if (context.reportedDiagnostic) {
                         oldcontext.reportedDiagnostic = context.reportedDiagnostic; // hoist diagnostic result into outer context
+                    }
+                    if (context.trackedSymbols) {
+                        if (!oldContext.trackedSymbols) oldContext.trackedSymbols = context.trackedSymbols;
+                        else Debug.assert(context.trackedSymbols === oldContext.trackedSymbols);
                     }
                     context = oldContext;
                 }
@@ -9120,7 +9141,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         newModifierFlags |= ModifierFlags.Default;
                     }
                     if (newModifierFlags) {
-                        node = factory.updateModifiers(node, newModifierFlags | getEffectiveModifierFlags(node));
+                        node = factory.replaceModifiers(node, newModifierFlags | getEffectiveModifierFlags(node));
                     }
                 }
                 results.push(node);
@@ -17845,7 +17866,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (indexInfo) {
                 if (accessFlags & AccessFlags.NoIndexSignatures && indexInfo.keyType !== numberType) {
                     if (accessExpression) {
-                        error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
+                        if (accessFlags & AccessFlags.Writing) {
+                            error(accessExpression, Diagnostics.Type_0_is_generic_and_can_only_be_indexed_for_reading, typeToString(originalObjectType));
+                        }
+                        else {
+                            error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
+                        }
                     }
                     return undefined;
                 }
@@ -23563,22 +23589,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !hasBaseType(checkClass, getDeclaringClass(p)) : false) ? undefined : checkClass;
     }
 
-    // Return true if the given type is deeply nested. We consider this to be the case when structural type comparisons
-    // for maxDepth or more occurrences or instantiations of the same type have been recorded on the given stack. The
-    // "sameness" of instantiations is determined by the getRecursionIdentity function. An intersection is considered
-    // deeply nested if any constituent of the intersection is deeply nested. It is possible, though highly unlikely, for
-    // the deeply nested check to be true in a situation where a chain of instantiations is not infinitely expanding.
-    // Effectively, we will generate a false positive when two types are structurally equal to at least maxDepth levels,
-    // but unequal at some level beyond that.
-    // In addition, this will also detect when an indexed access has been chained off of maxDepth more times (which is
-    // essentially the dual of the structural comparison), and likewise mark the type as deeply nested, potentially adding
-    // false positives for finite but deeply expanding indexed accesses (eg, for `Q[P1][P2][P3][P4][P5]`).
-    // It also detects when a recursive type reference has expanded maxDepth or more times, e.g. if the true branch of
-    // `type A<T> = null extends T ? [A<NonNullable<T>>] : [T]`
-    // has expanded into `[A<NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<T>>>>>>]`. In such cases we need
-    // to terminate the expansion, and we do so here.
+    // Return true if the given type is deeply nested. We consider this to be the case when the given stack contains
+    // maxDepth or more occurrences of types with the same recursion identity as the given type. The recursion identity
+    // provides a shared identity for type instantiations that repeat in some (possibly infinite) pattern. For example,
+    // in `type Deep<T> = { next: Deep<Deep<T>> }`, repeatedly referencing the `next` property leads to an infinite
+    // sequence of ever deeper instantiations with the same recursion identity (in this case the symbol associated with
+    // the object type literal).
+    // A homomorphic mapped type is considered deeply nested if its target type is deeply nested, and an intersection is
+    // considered deeply nested if any constituent of the intersection is deeply nested.
+    // It is possible, though highly unlikely, for the deeply nested check to be true in a situation where a chain of
+    // instantiations is not infinitely expanding. Effectively, we will generate a false positive when two types are
+    // structurally equal to at least maxDepth levels, but unequal at some level beyond that.
     function isDeeplyNestedType(type: Type, stack: Type[], depth: number, maxDepth = 3): boolean {
         if (depth >= maxDepth) {
+            if ((getObjectFlags(type) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped) {
+                type = getMappedTargetWithSymbol(type);
+            }
             if (type.flags & TypeFlags.Intersection) {
                 return some((type as IntersectionType).types, t => isDeeplyNestedType(t, stack, depth, maxDepth));
             }
@@ -23587,7 +23613,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let lastTypeId = 0;
             for (let i = 0; i < depth; i++) {
                 const t = stack[i];
-                if (t.flags & TypeFlags.Intersection ? some((t as IntersectionType).types, u => getRecursionIdentity(u) === identity) : getRecursionIdentity(t) === identity) {
+                if (hasMatchingRecursionIdentity(t, identity)) {
                     // We only count occurrences with a higher type id than the previous occurrence, since higher
                     // type ids are an indicator of newer instantiations caused by recursion.
                     if (t.id >= lastTypeId) {
@@ -23601,6 +23627,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return false;
+    }
+
+    // Unwrap nested homomorphic mapped types and return the deepest target type that has a symbol. This better
+    // preserves unique type identities for mapped types applied to explicitly written object literals. For example
+    // in `Mapped<{ x: Mapped<{ x: Mapped<{ x: string }>}>}>`, each of the mapped type applications will have a
+    // unique recursion identity (that of their target object type literal) and thus avoid appearing deeply nested.
+    function getMappedTargetWithSymbol(type: Type) {
+        let target;
+        while (
+            (getObjectFlags(type) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped &&
+            (target = getModifiersTypeFromMappedType(type as MappedType)) &&
+            (target.symbol || target.flags & TypeFlags.Intersection && some((target as IntersectionType).types, t => !!t.symbol))
+        ) {
+            type = target;
+        }
+        return type;
+    }
+
+    function hasMatchingRecursionIdentity(type: Type, identity: object): boolean {
+        if ((getObjectFlags(type) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped) {
+            type = getMappedTargetWithSymbol(type);
+        }
+        if (type.flags & TypeFlags.Intersection) {
+            return some((type as IntersectionType).types, t => hasMatchingRecursionIdentity(t, identity));
+        }
+        return getRecursionIdentity(type) === identity;
     }
 
     // The recursion identity of a type is an object identity that is shared among multiple instantiations of the type.
@@ -23618,28 +23670,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // unique AST node.
                 return (type as TypeReference).node!;
             }
-            if (type.symbol) {
-                // We track object types that have a symbol by that symbol (representing the origin of the type).
-                if (getObjectFlags(type) & ObjectFlags.Mapped) {
-                    // When a homomorphic mapped type is applied to a type with a symbol, we use the symbol of that
-                    // type as the recursion identity. This is a better strategy than using the symbol of the mapped
-                    // type, which doesn't work well for recursive mapped types.
-                    type = getMappedTargetWithSymbol(type);
-                }
-                if (!(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
-                    // We exclude the static side of a class since it shares its symbol with the instance side.
-                    return type.symbol;
-                }
+            if (type.symbol && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
+                // We track object types that have a symbol by that symbol (representing the origin of the type), but
+                // exclude the static side of a class since it shares its symbol with the instance side.
+                return type.symbol;
             }
             if (isTupleType(type)) {
                 return type.target;
             }
         }
         if (type.flags & TypeFlags.TypeParameter) {
+            // We use the symbol of the type parameter such that all "fresh" instantiations of that type parameter
+            // have the same recursion identity.
             return type.symbol;
         }
         if (type.flags & TypeFlags.IndexedAccess) {
-            // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P][Q] it is A
+            // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P1][P2][P3] it is A.
             do {
                 type = (type as IndexedAccessType).objectType;
             }
@@ -23651,14 +23697,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as ConditionalType).root;
         }
         return type;
-    }
-
-    function getMappedTargetWithSymbol(type: Type) {
-        let target = type;
-        while ((getObjectFlags(target) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped && isMappedTypeWithKeyofConstraintDeclaration(target as MappedType)) {
-            target = getModifiersTypeFromMappedType(target as MappedType);
-        }
-        return target.symbol ? target : type;
     }
 
     function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -27672,13 +27710,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
-            const type = !(computedType.flags & TypeFlags.Union) && declaredType.flags & TypeFlags.Union ? declaredType : computedType;
-            if (type.flags & TypeFlags.Union) {
+            // As long as the computed type is a subset of the declared type, we use the full declared type to detect
+            // a discriminant property. In cases where the computed type isn't a subset, e.g because of a preceding type
+            // predicate narrowing, we use the actual computed type.
+            if (declaredType.flags & TypeFlags.Union || computedType.flags & TypeFlags.Union) {
                 const access = getCandidateDiscriminantPropertyAccess(expr);
                 if (access) {
                     const name = getAccessedPropertyName(access);
-                    if (name && isDiscriminantProperty(type, name)) {
-                        return access;
+                    if (name) {
+                        const type = declaredType.flags & TypeFlags.Union && isTypeSubsetOf(computedType, declaredType) ? declaredType : computedType;
+                        if (isDiscriminantProperty(type, name)) {
+                            return access;
+                        }
                     }
                 }
             }
@@ -29523,8 +29566,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
             // contextual type for 'this' is 'obj'.
             const parent = walkUpParenthesizedExpressions(func.parent);
-            if (parent.kind === SyntaxKind.BinaryExpression && (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                const target = (parent as BinaryExpression).left;
+            if (isAssignmentExpression(parent)) {
+                const target = parent.left;
                 if (isAccessExpression(target)) {
                     const { expression } = target;
                     // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
@@ -37085,7 +37128,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkVoidExpression(node: VoidExpression): Type {
-        checkExpression(node.expression);
+        checkNodeDeferred(node);
         return undefinedWideningType;
     }
 
@@ -41218,6 +41261,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkJSDocParameterTag(node: JSDocParameterTag) {
         checkSourceElement(node.typeExpression);
     }
+
     function checkJSDocPropertyTag(node: JSDocPropertyTag) {
         checkSourceElement(node.typeExpression);
     }
@@ -41230,6 +41274,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!node.type && !isJSDocConstructSignature(node)) {
                 reportImplicitAny(node, anyType);
             }
+        }
+    }
+
+    function checkJSDocThisTag(node: JSDocThisTag) {
+        const host = getEffectiveJSDocHost(node);
+        if (host && isArrowFunction(host)) {
+            error(node.tagName, Diagnostics.An_arrow_function_cannot_have_a_this_parameter);
         }
     }
 
@@ -45951,6 +46002,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkJSDocAccessibilityModifiers(node as JSDocPublicTag | JSDocProtectedTag | JSDocPrivateTag);
             case SyntaxKind.JSDocSatisfiesTag:
                 return checkJSDocSatisfiesTag(node as JSDocSatisfiesTag);
+            case SyntaxKind.JSDocThisTag:
+                return checkJSDocThisTag(node as JSDocThisTag);
             case SyntaxKind.IndexedAccessType:
                 return checkIndexedAccessType(node as IndexedAccessTypeNode);
             case SyntaxKind.MappedType:
@@ -46197,6 +46250,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.AsExpression:
             case SyntaxKind.ParenthesizedExpression:
                 checkAssertionDeferred(node as AssertionExpression | JSDocTypeAssertion);
+                break;
+            case SyntaxKind.VoidExpression:
+                checkExpression((node as VoidExpression).expression);
                 break;
             case SyntaxKind.BinaryExpression:
                 if (isInstanceOfExpression(node)) {
@@ -50342,6 +50398,7 @@ interface NodeBuilderContext {
     // State
     encounteredError: boolean;
     reportedDiagnostic: boolean;
+    trackedSymbols: TrackedSymbol[] | undefined;
     visitedTypes: Set<number> | undefined;
     symbolDepth: Map<string, number> | undefined;
     inferTypeParameters: TypeParameter[] | undefined;
@@ -50382,6 +50439,8 @@ class SymbolTrackerImpl implements SymbolTracker {
                 this.onDiagnosticReported();
                 return true;
             }
+            // Skip recording type parameters as they dont contribute to late painted statements
+            if (!(symbol.flags & SymbolFlags.TypeParameter)) (this.context.trackedSymbols ??= []).push([symbol, enclosingDeclaration, meaning]);
         }
         return false;
     }
