@@ -3685,17 +3685,16 @@ function getCompletionData(
                 : undefined;
         const nameSymbol = name && typeChecker.getSymbolAtLocation(name);
         const nameSymbolId = nameSymbol && getSymbolId(nameSymbol);
-        if (!nameSymbolId) {
+        if (!nameSymbolId) { // Not a property access or entity name
             addLiteralSymbol();
             return;
         }
 
         if (addToSeen(seenPropertySymbols, nameSymbolId)) {
-            const leftMostName = getLeftMostName(computedPropertyNameExpression); // The completion is for `Symbol`, not `iterator`.
+            const leftMostName = getLeftMostName(computedPropertyNameExpression);
             const leftMostNameSymbol = leftMostName && typeChecker.getSymbolAtLocation(leftMostName);
-            // If this is nested like for `namespace N { export const sym = Symbol(); }`, we'll add the completion for `N`.
             const firstAccessibleSymbol = leftMostNameSymbol && getFirstSymbolInChain(leftMostNameSymbol, contextToken, typeChecker);
-            if (!firstAccessibleSymbol) {
+            if (!firstAccessibleSymbol) { // Symbol is not accessible from completion location
                 addLiteralSymbol();
                 return;
             }
@@ -3766,6 +3765,9 @@ function getCompletionData(
             symbols.push(symbol);
         }
 
+        /** Combines a property access expression (from the completion location to the left-most name in the computed property expression)
+         * and the computed property expression itself to return an expression to access the computed property from the completion location.
+         * Assumes that the left-most symbol is accessible so there should always be a way to access the computed property symbolically. */
         function createComputedPropertyAccess(nameSymbol: Symbol, leftMostNameSymbol: Symbol, computedPropertyNameExpression: Expression) {
             let node: Node | undefined;
             if (!isTransientSymbol(nameSymbol)) {
