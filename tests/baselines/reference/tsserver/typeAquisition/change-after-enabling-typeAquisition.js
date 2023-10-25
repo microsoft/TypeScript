@@ -734,6 +734,10 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 3 *changed*
 
+Before running PendingInstalls callback:: count: 0
+
+After running PendingInstalls callback:: count: 0
+
 Before running Timeout callback:: count: 1
 7: *ensureProjectForOpenFiles*
 
@@ -766,24 +770,4 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 0
-
-Before running Timeout callback:: count: 0
-
-After running Timeout callback:: count: 0
-
-Before running PendingInstalls callback:: count: 0
-
-After running PendingInstalls callback:: count: 0
-
-Before running Timeout callback:: count: 0
-
-After running Timeout callback:: count: 0
-
-Before running Timeout callback:: count: 0
-
-After running Timeout callback:: count: 0
-
-Before running Timeout callback:: count: 0
-
 After running Timeout callback:: count: 0
