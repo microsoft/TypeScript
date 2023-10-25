@@ -908,4 +908,55 @@ console.log(a);`,
         }],
         baselinePrograms: true,
     });
+
+    verifyTsc({
+        scenario: "incremental",
+        subScenario: "generates typerefs correctly",
+        commandLineArgs: ["-p", `/src/project`],
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "outDir",
+                        checkJs: true,
+                    },
+                    include: ["src"],
+                }),
+                "/src/project/src/box.ts": Utils.dedent`
+                    export interface Box<T> {
+                        unbox(): T
+                    }
+                `,
+                "/src/project/src/bug.js": Utils.dedent`
+                    import * as B from "./box.js"
+                    import * as W from "./wrap.js"
+
+                    /**
+                     * @template {object} C
+                     * @param {C} source
+                     * @returns {W.Wrap<C>}
+                     */
+                    const wrap = source => {
+                    throw source
+                    }
+
+                    /**
+                     * @returns {B.Box<number>}
+                     */
+                    const box = (n = 0) => ({ unbox: () => n })
+
+                    export const bug = wrap({ n: box(1) });
+                `,
+                "/src/project/src/wrap.ts": Utils.dedent`
+                    export type Wrap<C> = {
+                        [K in keyof C]: { wrapped: C[K] }
+                    }
+                `,
+            }),
+        edits: [{
+            caption: "modify js file",
+            edit: fs => appendText(fs, "/src/project/src/bug.js", `export const something = 1;`),
+        }],
+    });
 });
