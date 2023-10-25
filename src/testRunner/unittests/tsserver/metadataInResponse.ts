@@ -4,6 +4,9 @@ import {
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openFilesForSession,
@@ -18,7 +21,7 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
     const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
     const tsconfig: File = {
         path: "/tsconfig.json",
-        content: JSON.stringify({
+        content: jsonToReadableText({
             compilerOptions: { plugins: [{ name: "myplugin" }] },
         }),
     };

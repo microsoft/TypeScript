@@ -21,7 +21,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["index.ts"]}
+{
+  "files": [
+    "index.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject

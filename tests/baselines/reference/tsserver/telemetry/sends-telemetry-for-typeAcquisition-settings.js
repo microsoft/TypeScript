@@ -5,7 +5,17 @@ Before request
 
 
 //// [/jsconfig.json]
-{"compilerOptions":{},"typeAcquisition":{"enable":true,"include":["hunter2","hunter3"],"exclude":[]}}
+{
+  "compilerOptions": {},
+  "typeAcquisition": {
+    "enable": true,
+    "include": [
+      "hunter2",
+      "hunter3"
+    ],
+    "exclude": []
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -111,7 +121,7 @@ TI:: typing installer creation complete
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 

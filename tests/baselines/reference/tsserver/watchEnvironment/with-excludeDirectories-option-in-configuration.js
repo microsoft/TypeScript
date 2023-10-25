@@ -24,7 +24,16 @@ export { foo } from "./foo";
 export function foo(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"include":["src"],"watchOptions":{"excludeDirectories":["node_modules"]}}
+{
+  "include": [
+    "src"
+  ],
+  "watchOptions": {
+    "excludeDirectories": [
+      "node_modules"
+    ]
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

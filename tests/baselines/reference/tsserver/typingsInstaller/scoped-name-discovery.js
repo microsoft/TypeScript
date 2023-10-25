@@ -8,19 +8,27 @@ Creating project service
 {}
 
 //// [/package.json]
-{"dependencies":{"@zkat/cacache":"1.0.0"}}
+{
+  "dependencies": {
+    "@zkat/cacache": "1.0.0"
+  }
+}
 
 //// [/node_modules/commander/index.js]
 
 
 //// [/node_modules/commander/package.json]
-{"name":"commander"}
+{
+  "name": "commander"
+}
 
 //// [/node_modules/@zkat/cacache/index.js]
 
 
 //// [/node_modules/@zkat/cacache/package.json]
-{"name":"@zkat/cacache"}
+{
+  "name": "@zkat/cacache"
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /
@@ -103,41 +111,41 @@ TI:: typing installer creation complete
 
 //// [/tmp/node_modules/types-registry/index.json]
 {
- "entries": {
-  "zkat__cacache": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
-  },
-  "nested": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
-  },
-  "commander": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
+  "entries": {
+    "zkat__cacache": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    },
+    "nested": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    },
+    "commander": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
   }
- }
 }
 
 
@@ -225,7 +233,9 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typingsInstallerVersion": "FakeVersion",
       "projectName": "/jsconfig.json"
     }
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/zkat__cacache@tsFakeMajor.Minor"]'.
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/zkat__cacache@tsFakeMajor.Minor"
+]'.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -255,7 +265,9 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /jsconfig.json
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/zkat__cacache@tsFakeMajor.Minor"]':: true
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/zkat__cacache@tsFakeMajor.Minor"
+]':: true
 TI:: Before installWorker
 
 PolledWatches::

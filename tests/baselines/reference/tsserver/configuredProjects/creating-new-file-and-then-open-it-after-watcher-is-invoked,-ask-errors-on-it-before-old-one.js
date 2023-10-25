@@ -21,7 +21,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"include":["./src"]}
+{
+  "include": [
+    "./src"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

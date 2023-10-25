@@ -32,8 +32,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.ts"]
-Program options: {"noEmit":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.ts"
+]
+Program options: {
+  "noEmit": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -92,8 +98,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.ts"]
-Program options: {"noEmit":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.ts"
+]
+Program options: {
+  "noEmit": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

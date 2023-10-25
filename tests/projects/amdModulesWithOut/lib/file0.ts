@@ -1,1 +1,0 @@
-const myGlob = 20;

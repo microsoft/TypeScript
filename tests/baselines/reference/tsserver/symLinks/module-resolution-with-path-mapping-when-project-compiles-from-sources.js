@@ -19,13 +19,28 @@ import {C} from "@microsoft/recognizers-text";
 new C();
 
 //// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json]
-{"compilerOptions":{"rootDir":"src","baseUrl":"./","paths":{"@microsoft/*":["../*"]}},"include":["src"]}
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": "./",
+    "paths": {
+      "@microsoft/*": [
+        "../*"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/src/recognizers-text.ts]
 export class C { method () { return 10; } }
 
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/package.json]
-{"typings":"dist/types/recognizers-text.d.ts"}
+{
+  "typings": "dist/types/recognizers-text.d.ts"
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -590,7 +605,21 @@ Before running Timeout callback:: count: 2
 13: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 14: *ensureProjectForOpenFiles*
 //// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json]
-{"compilerOptions":{"rootDir":"src","baseUrl":"./","paths":{"@microsoft/*":["../*"]},"resolveJsonModule":true},"include":["src"]}
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": "./",
+    "paths": {
+      "@microsoft/*": [
+        "../*"
+      ]
+    },
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json

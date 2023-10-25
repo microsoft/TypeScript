@@ -19,7 +19,19 @@ export const x = "type1";
 
 
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project1/typeroot1/sometype/index.d.ts]
 export type TheNum = "type1";
@@ -31,7 +43,16 @@ export const y = 10;
 export const y = 10
 
 //// [/home/src/projects/project2/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project3/utils.d.ts]
 export const y = 10;
@@ -40,7 +61,16 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project3/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project4/utils.d.ts]
 export const y = 10;
@@ -49,7 +79,17 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project4/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["esnext","dom","webworker"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "esnext",
+      "dom",
+      "webworker"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/lib/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
@@ -256,8 +296,30 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1 1 undefined Wi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1 1 undefined Wild card directory
 
 
-Program root files: ["/home/src/projects/project1/core.d.ts","/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/core.d.ts",
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "project": "/home/src/projects/project1",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
@@ -586,8 +648,30 @@ project1/typeroot1/sometype/index.d.ts
 
 
 
-Program root files: ["/home/src/projects/project1/core.d.ts","/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/core.d.ts",
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "project": "/home/src/projects/project1",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/lib/lib.dom.d.ts
@@ -851,8 +935,30 @@ project1/typeroot1/sometype/index.d.ts
 
 
 
-Program root files: ["/home/src/projects/project1/core.d.ts","/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/core.d.ts",
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "project": "/home/src/projects/project1",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /home/src/lib/lib.dom.d.ts
@@ -1071,8 +1177,29 @@ project1/typeroot1/sometype/index.d.ts
 
 
 
-Program root files: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "project": "/home/src/projects/project1",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/lib/lib.dom.d.ts
@@ -1324,8 +1451,29 @@ project1/typeroot1/sometype/index.d.ts
 
 
 
-Program root files: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "project": "/home/src/projects/project1",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
@@ -1531,7 +1679,20 @@ Change:: change program options to update module resolution
 
 Input::
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1","./typeroot2"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1",
+      "./typeroot2"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -1585,8 +1746,30 @@ project1/typeroot1/sometype/index.d.ts
 
 
 
-Program root files: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1","/home/src/projects/project1/typeroot2"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1",
+    "/home/src/projects/project1/typeroot2"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "project": "/home/src/projects/project1",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
@@ -1646,7 +1829,19 @@ Change:: change program options to update module resolution and also update lib 
 
 Input::
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
 
@@ -1742,8 +1937,29 @@ project1/typeroot1/sometype/index.d.ts
 
 
 
-Program root files: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "project": "/home/src/projects/project1",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/lib/lib.dom.d.ts
@@ -2034,8 +2250,29 @@ project1/typeroot1/sometype/index.d.ts
 
 
 
-Program root files: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "project": "/home/src/projects/project1",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/lib/lib.dom.d.ts
@@ -2307,8 +2544,29 @@ project1/typeroot1/sometype/index.d.ts
 
 
 
-Program root files: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "project": "/home/src/projects/project1",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /home/src/lib/lib.dom.d.ts

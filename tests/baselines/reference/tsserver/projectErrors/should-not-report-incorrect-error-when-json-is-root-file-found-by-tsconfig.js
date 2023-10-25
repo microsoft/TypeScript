@@ -23,7 +23,17 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"resolveJsonModule":true,"composite":true,"outDir":"dist"},"include":["./src/*.ts","./src/*.json"]}
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "composite": true,
+    "outDir": "dist"
+  },
+  "include": [
+    "./src/*.ts",
+    "./src/*.json"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

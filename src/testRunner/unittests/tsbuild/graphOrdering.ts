@@ -1,6 +1,9 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
+import {
+    jsonToReadableText,
+} from "../helpers";
 
 describe("unittests:: tsbuild - graph-ordering", () => {
     let host: fakes.SolutionBuilderHost | undefined;
@@ -80,15 +83,11 @@ describe("unittests:: tsbuild - graph-ordering", () => {
             fileSystem.mkdirpSync(`/project/${proj}`);
             fileSystem.writeFileSync(`/project/${proj}/${proj}.ts`, "export {}");
             const configFileName = getProjectFileName(proj);
-            const configContent = JSON.stringify(
-                {
-                    compilerOptions: { composite: true },
-                    files: [`./${proj}.ts`],
-                    references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` })),
-                },
-                undefined,
-                2,
-            );
+            const configContent = jsonToReadableText({
+                compilerOptions: { composite: true },
+                files: [`./${proj}.ts`],
+                references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` })),
+            });
             fileSystem.writeFileSync(configFileName, configContent);
             projFileNames.push(configFileName);
         }

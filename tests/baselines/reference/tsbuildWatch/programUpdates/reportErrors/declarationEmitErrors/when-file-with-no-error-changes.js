@@ -23,7 +23,11 @@ export var myClassWithError = class {
 export class myClass { }
 
 //// [/user/username/projects/solution/app/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 
 /a/lib/tsc.js -b -w app
@@ -40,8 +44,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/solution/app/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/solution/app/fileWithError.ts",
+  "/user/username/projects/solution/app/fileWithoutError.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/solution/app/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -96,8 +107,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/solution/app/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/solution/app/fileWithError.ts",
+  "/user/username/projects/solution/app/fileWithoutError.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/solution/app/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

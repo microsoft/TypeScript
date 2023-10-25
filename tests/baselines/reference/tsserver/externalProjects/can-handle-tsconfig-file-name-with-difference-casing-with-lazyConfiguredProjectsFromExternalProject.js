@@ -5,7 +5,9 @@ Before request
 let x = 1
 
 //// [/a/b/tsconfig.json]
-{"include":[]}
+{
+  "include": []
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

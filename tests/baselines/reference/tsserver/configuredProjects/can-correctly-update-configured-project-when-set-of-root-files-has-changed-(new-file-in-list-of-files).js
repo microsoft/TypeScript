@@ -8,7 +8,12 @@ let x = 1
 let y = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["f1.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f1.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /a/b
@@ -50,7 +55,13 @@ Before running Timeout callback:: count: 2
 1: /a/b/tsconfig.json
 2: *ensureProjectForOpenFiles*
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["f1.ts","f2.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f1.ts",
+    "f2.ts"
+  ]
+}
 
 
 PolledWatches::

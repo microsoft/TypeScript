@@ -26,7 +26,18 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/project/tsconfig.json]
-{"compilerOptions":{"outFile":"../output/common.js","target":"es5"},"files":["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]}
+{
+  "compilerOptions": {
+    "outFile": "../output/common.js",
+    "target": "es5"
+  },
+  "files": [
+    "/a/b/output/AnotherDependency/file1.d.ts",
+    "/a/b/dependencies/file2.d.ts",
+    "/a/b/project/src/main.ts",
+    "/a/b/project/src/main2.ts"
+  ]
+}
 
 
 /a/lib/tsc.js --w -p /a/b/project/tsconfig.json
@@ -43,8 +54,19 @@ Output::
 
 
 
-Program root files: ["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]
-Program options: {"outFile":"/a/b/output/common.js","target":1,"watch":true,"project":"/a/b/project/tsconfig.json","configFilePath":"/a/b/project/tsconfig.json"}
+Program root files: [
+  "/a/b/output/AnotherDependency/file1.d.ts",
+  "/a/b/dependencies/file2.d.ts",
+  "/a/b/project/src/main.ts",
+  "/a/b/project/src/main2.ts"
+]
+Program options: {
+  "outFile": "/a/b/output/common.js",
+  "target": 1,
+  "watch": true,
+  "project": "/a/b/project/tsconfig.json",
+  "configFilePath": "/a/b/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

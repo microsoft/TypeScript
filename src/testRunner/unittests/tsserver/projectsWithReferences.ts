@@ -2,43 +2,40 @@ import {
     createLoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    getFsContentsForSampleProjectReferences,
+} from "../helpers/sampleProjectReferences";
+import {
     baselineTsserverLogs,
     createProjectService,
 } from "../helpers/tsserver";
 import {
     createServerHost,
     File,
-    getTsBuildProjectFile,
     libFile,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
     it("on sample project", () => {
-        const coreConfig = getTsBuildProjectFile("sample1", "core/tsconfig.json");
-        const coreIndex = getTsBuildProjectFile("sample1", "core/index.ts");
-        const coreAnotherModule = getTsBuildProjectFile("sample1", "core/anotherModule.ts");
-        const coreSomeDecl = getTsBuildProjectFile("sample1", "core/some_decl.d.ts");
-        const logicConfig = getTsBuildProjectFile("sample1", "logic/tsconfig.json");
-        const logicIndex = getTsBuildProjectFile("sample1", "logic/index.ts");
-        const testsConfig = getTsBuildProjectFile("sample1", "tests/tsconfig.json");
-        const testsIndex = getTsBuildProjectFile("sample1", "tests/index.ts");
-        const host = createServerHost([libFile, coreConfig, coreIndex, coreAnotherModule, coreSomeDecl, logicConfig, logicIndex, testsConfig, testsIndex]);
+        const host = createServerHost(getFsContentsForSampleProjectReferences());
         const logger = createLoggerWithInMemoryLogs(host);
         const service = createProjectService(host, { logger });
-        service.openClientFile(testsIndex.path);
+        service.openClientFile("/user/username/projects/sample1/tests/index.ts");
 
         // local edit in ts file
-        host.appendFile(logicIndex.path, `function foo() {}`);
+        host.appendFile("/user/username/projects/sample1/logic/index.ts", `function foo() {}`);
         host.runQueuedTimeoutCallbacks();
 
         // non local edit in ts file
-        host.appendFile(logicIndex.path, `export function gfoo() {}`);
+        host.appendFile("/user/username/projects/sample1/logic/index.ts", `export function gfoo() {}`);
         host.runQueuedTimeoutCallbacks();
 
         // change in project reference config file
         host.writeFile(
-            logicConfig.path,
-            JSON.stringify({
+            "/user/username/projects/sample1/logic/tsconfig.json",
+            jsonToReadableText({
                 compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
                 references: [{ path: "../core" }],
             }),
@@ -51,14 +48,14 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
         function createService() {
             const aConfig: File = {
                 path: `/user/username/projects/myproject/a/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { composite: true },
                     files: ["index.ts"],
                 }),
             };
             const bConfig: File = {
                 path: `/user/username/projects/myproject/b/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                     files: ["index.ts"],
                     references: [{ path: `../a` }],
@@ -66,7 +63,7 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
             };
             const cConfig: File = {
                 path: `/user/username/projects/myproject/c/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                     files: ["index.ts"],
                     references: [{ path: `../b` }],
@@ -117,7 +114,7 @@ export class A {}`,
             const cTsConfigJson = JSON.parse(cConfig.content);
             host.ensureFileOrFolder(nRefsTs);
             cTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
-            host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson));
+            host.writeFile(cConfig.path, jsonToReadableText(cTsConfigJson));
             host.runQueuedTimeoutCallbacks();
 
             // revert the edit on config file
@@ -135,7 +132,7 @@ export class A {}`,
             const bTsConfigJson = JSON.parse(bConfig.content);
             host.ensureFileOrFolder(nRefsTs);
             bTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
-            host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson));
+            host.writeFile(bConfig.path, jsonToReadableText(bTsConfigJson));
             host.runQueuedTimeoutCallbacks();
 
             // revert the edit on config file
@@ -171,18 +168,18 @@ export class A {}`,
         function createService() {
             const aConfig: File = {
                 path: `/user/username/projects/myproject/a/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true } }),
+                content: jsonToReadableText({ compilerOptions: { composite: true } }),
             };
             const bConfig: File = {
                 path: `/user/username/projects/myproject/b/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                     references: [{ path: `../a` }],
                 }),
             };
             const cConfig: File = {
                 path: `/user/username/projects/myproject/c/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                     references: [{ path: `../b` }],
                 }),
@@ -232,7 +229,7 @@ export class A {}`,
             const cTsConfigJson = JSON.parse(cConfig.content);
             host.ensureFileOrFolder(nRefsTs);
             cTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
-            host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson));
+            host.writeFile(cConfig.path, jsonToReadableText(cTsConfigJson));
             host.runQueuedTimeoutCallbacks();
 
             // revert the edit on config file
@@ -250,7 +247,7 @@ export class A {}`,
             const bTsConfigJson = JSON.parse(bConfig.content);
             host.ensureFileOrFolder(nRefsTs);
             bTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
-            host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson));
+            host.writeFile(bConfig.path, jsonToReadableText(bTsConfigJson));
             host.runQueuedTimeoutCallbacks();
 
             // revert the edit on config file

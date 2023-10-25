@@ -5,7 +5,48 @@ Before request
 
 
 //// [/tsconfig.json]
-{"compilerOptions":{"project":"","outFile":"hunter2.js","outDir":"hunter2","rootDir":"hunter2","baseUrl":"hunter2","rootDirs":["hunter2"],"typeRoots":["hunter2"],"types":["hunter2"],"sourceRoot":"hunter2","mapRoot":"hunter2","jsxFactory":"hunter2","out":"hunter2","reactNamespace":"hunter2","charset":"hunter2","locale":"hunter2","declarationDir":"hunter2","paths":{"*":["hunter2"]},"declaration":true,"lib":["es6","dom","hunter2"],"checkJs":"hunter2","unknownCompilerOption":"hunter2"},"files":["/a.ts"]}
+{
+  "compilerOptions": {
+    "project": "",
+    "outFile": "hunter2.js",
+    "outDir": "hunter2",
+    "rootDir": "hunter2",
+    "baseUrl": "hunter2",
+    "rootDirs": [
+      "hunter2"
+    ],
+    "typeRoots": [
+      "hunter2"
+    ],
+    "types": [
+      "hunter2"
+    ],
+    "sourceRoot": "hunter2",
+    "mapRoot": "hunter2",
+    "jsxFactory": "hunter2",
+    "out": "hunter2",
+    "reactNamespace": "hunter2",
+    "charset": "hunter2",
+    "locale": "hunter2",
+    "declarationDir": "hunter2",
+    "paths": {
+      "*": [
+        "hunter2"
+      ]
+    },
+    "declaration": true,
+    "lib": [
+      "es6",
+      "dom",
+      "hunter2"
+    ],
+    "checkJs": "hunter2",
+    "unknownCompilerOption": "hunter2"
+  },
+  "files": [
+    "/a.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -179,12 +220,12 @@ Info seq  [hh:mm:ss:mss] event:
               {
                 "span": {
                   "start": {
-                    "line": 1,
-                    "offset": 172
+                    "line": 15,
+                    "offset": 7
                   },
                   "end": {
-                    "line": 1,
-                    "offset": 181
+                    "line": 15,
+                    "offset": 16
                   },
                   "file": "/tsconfig.json"
                 },
@@ -212,12 +253,12 @@ Info seq  [hh:mm:ss:mss] event:
               {
                 "span": {
                   "start": {
-                    "line": 1,
-                    "offset": 497
+                    "line": 40,
+                    "offset": 5
                   },
                   "end": {
-                    "line": 1,
-                    "offset": 504
+                    "line": 40,
+                    "offset": 12
                   },
                   "file": "/tsconfig.json"
                 },
@@ -229,12 +270,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 34
+              "line": 4,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 43
+              "line": 4,
+              "offset": 14
             },
             "text": "Option 'out' cannot be specified with option 'outFile'.",
             "code": 5053,
@@ -243,12 +284,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 183
+              "line": 17,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 195
+              "line": 17,
+              "offset": 17
             },
             "text": "Option 'sourceRoot can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.",
             "code": 5051,
@@ -257,12 +298,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 206
+              "line": 18,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 215
+              "line": 18,
+              "offset": 14
             },
             "text": "Option 'mapRoot' cannot be specified without specifying option 'sourceMap' or option 'declarationMap'.",
             "code": 5069,
@@ -271,12 +312,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 226
+              "line": 19,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 238
+              "line": 19,
+              "offset": 17
             },
             "text": "Option 'reactNamespace' cannot be specified with option 'jsxFactory'.",
             "code": 5053,
@@ -285,12 +326,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 249
+              "line": 20,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 254
+              "line": 20,
+              "offset": 10
             },
             "text": "Option 'declarationDir' cannot be specified with option 'out'.",
             "code": 5053,
@@ -299,12 +340,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 249
+              "line": 20,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 254
+              "line": 20,
+              "offset": 10
             },
             "text": "Option 'out' cannot be specified with option 'outFile'.",
             "code": 5053,
@@ -313,12 +354,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 249
+              "line": 20,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 254
+              "line": 20,
+              "offset": 10
             },
             "text": "Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '\"ignoreDeprecations\": \"5.0\"' to silence this error.\n  Use 'outFile' instead.",
             "code": 5101,
@@ -327,12 +368,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 265
+              "line": 21,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 281
+              "line": 21,
+              "offset": 21
             },
             "text": "Option 'reactNamespace' cannot be specified with option 'jsxFactory'.",
             "code": 5053,
@@ -341,12 +382,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 292
+              "line": 22,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 301
+              "line": 22,
+              "offset": 14
             },
             "text": "Option 'charset' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '\"ignoreDeprecations\": \"5.0\"' to silence this error.",
             "code": 5101,
@@ -355,12 +396,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 331
+              "line": 24,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 347
+              "line": 24,
+              "offset": 21
             },
             "text": "Option 'declarationDir' cannot be specified with option 'out'.",
             "code": 5053,
@@ -409,12 +450,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 312
+              "line": 23,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 320
+              "line": 23,
+              "offset": 13
             },
             "text": "Option 'locale' can only be specified on command line.",
             "code": 6266,
@@ -423,12 +464,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 422
+              "line": 34,
+              "offset": 7
             },
             "end": {
-              "line": 1,
-              "offset": 431
+              "line": 34,
+              "offset": 16
             },
             "text": "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'es2023', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'webworker.iterable', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.date', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asyncgenerator', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'es2019.array', 'es2019.object', 'es2019.string', 'es2019.symbol', 'es2019.intl', 'es2020.bigint', 'es2020.date', 'es2020.promise', 'es2020.sharedmemory', 'es2020.string', 'es2020.symbol.wellknown', 'es2020.intl', 'es2020.number', 'es2021.promise', 'es2021.string', 'es2021.weakref', 'es2021.intl', 'es2022.array', 'es2022.error', 'es2022.intl', 'es2022.object', 'es2022.sharedmemory', 'es2022.string', 'es2022.regexp', 'es2023.array', 'es2023.collection', 'esnext.array', 'esnext.collection', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.disposable', 'esnext.bigint', 'esnext.string', 'esnext.promise', 'esnext.weakref', 'esnext.decorators', 'decorators', 'decorators.legacy'.",
             "code": 6046,
@@ -437,12 +478,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 443
+              "line": 36,
+              "offset": 16
             },
             "end": {
-              "line": 1,
-              "offset": 452
+              "line": 36,
+              "offset": 25
             },
             "text": "Compiler option 'checkJs' requires a value of type boolean.",
             "code": 5024,
@@ -451,12 +492,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 453
+              "line": 37,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 476
+              "line": 37,
+              "offset": 28
             },
             "text": "Unknown compiler option 'unknownCompilerOption'.",
             "code": 5023,

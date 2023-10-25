@@ -4,7 +4,9 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 
 
 //// [/node_modules/@a/b/package.json]
-{"name":"@a/b"}
+{
+  "name": "@a/b"
+}
 
 
 ts.JsTyping.discoverTypings::

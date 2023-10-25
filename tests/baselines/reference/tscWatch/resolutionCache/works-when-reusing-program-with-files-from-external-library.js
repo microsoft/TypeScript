@@ -25,7 +25,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/projects/myProject/src/tsconfig.json]
-{"compilerOptions":{"allowJs":true,"rootDir":".","outDir":"../dist","moduleResolution":"node","maxNodeModuleJsDepth":1}}
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "rootDir": ".",
+    "outDir": "../dist",
+    "moduleResolution": "node",
+    "maxNodeModuleJsDepth": 1
+  }
+}
 
 
 /a/lib/tsc.js --w -p /a/b/projects/myProject/src
@@ -37,8 +45,20 @@ Output::
 
 
 
-Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
-Program options: {"allowJs":true,"rootDir":"/a/b/projects/myProject/src","outDir":"/a/b/projects/myProject/dist","moduleResolution":2,"maxNodeModuleJsDepth":1,"watch":true,"project":"/a/b/projects/myProject/src","configFilePath":"/a/b/projects/myProject/src/tsconfig.json"}
+Program root files: [
+  "/a/b/projects/myProject/src/file1.ts",
+  "/a/b/projects/myProject/src/file2.ts"
+]
+Program options: {
+  "allowJs": true,
+  "rootDir": "/a/b/projects/myProject/src",
+  "outDir": "/a/b/projects/myProject/dist",
+  "moduleResolution": 2,
+  "maxNodeModuleJsDepth": 1,
+  "watch": true,
+  "project": "/a/b/projects/myProject/src",
+  "configFilePath": "/a/b/projects/myProject/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -125,8 +145,20 @@ Output::
 
 
 
-Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
-Program options: {"allowJs":true,"rootDir":"/a/b/projects/myProject/src","outDir":"/a/b/projects/myProject/dist","moduleResolution":2,"maxNodeModuleJsDepth":1,"watch":true,"project":"/a/b/projects/myProject/src","configFilePath":"/a/b/projects/myProject/src/tsconfig.json"}
+Program root files: [
+  "/a/b/projects/myProject/src/file1.ts",
+  "/a/b/projects/myProject/src/file2.ts"
+]
+Program options: {
+  "allowJs": true,
+  "rootDir": "/a/b/projects/myProject/src",
+  "outDir": "/a/b/projects/myProject/dist",
+  "moduleResolution": 2,
+  "maxNodeModuleJsDepth": 1,
+  "watch": true,
+  "project": "/a/b/projects/myProject/src",
+  "configFilePath": "/a/b/projects/myProject/src/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

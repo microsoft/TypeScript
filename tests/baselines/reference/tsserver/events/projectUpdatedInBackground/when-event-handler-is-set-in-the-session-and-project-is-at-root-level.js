@@ -21,7 +21,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/project/tsconfig.json]
-{"compilerOptions":{"typeRoots":[]}}
+{
+  "compilerOptions": {
+    "typeRoots": []
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

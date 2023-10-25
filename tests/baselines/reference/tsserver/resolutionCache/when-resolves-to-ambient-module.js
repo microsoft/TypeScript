@@ -26,7 +26,18 @@ const y = x;
 export const x = 10;
 
 //// [/user/username/projects/myproject/src/tsconfig.json]
-{"compilerOptions":{"module":"amd","moduleResolution":"classic","target":"es5","outDir":"../out","baseUrl":"./","typeRoots":["typings"]}}
+{
+  "compilerOptions": {
+    "module": "amd",
+    "moduleResolution": "classic",
+    "target": "es5",
+    "outDir": "../out",
+    "baseUrl": "./",
+    "typeRoots": [
+      "typings"
+    ]
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
