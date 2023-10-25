@@ -3674,15 +3674,15 @@ function getCompletionData(
         const computedPropertyName = firstDefined(symbol.declarations, decl => tryCast(getNameOfDeclaration(decl), isComputedPropertyName));
         if (!computedPropertyName) {
             addLiteralSymbol();
-            return;  
-        } 
-         
+            return;
+        }
+
         const computedPropertyNameExpression = computedPropertyName.expression;
-        const name = isEntityName(computedPropertyNameExpression) 
+        const name = isEntityName(computedPropertyNameExpression)
             ? computedPropertyNameExpression
-            : isPropertyAccessExpression(computedPropertyNameExpression) 
-                ? computedPropertyNameExpression.name 
-                : undefined;
+            : isPropertyAccessExpression(computedPropertyNameExpression)
+            ? computedPropertyNameExpression.name
+            : undefined;
         const nameSymbol = name && typeChecker.getSymbolAtLocation(name);
         const nameSymbolId = nameSymbol && getSymbolId(nameSymbol);
         if (!nameSymbolId) { // Not a property access or entity name
@@ -3715,16 +3715,17 @@ function getCompletionData(
                 if (!node) {
                     // Switch to literal symbol if user doesn't want insert text
                     symbols[index] = symbol;
-                } else {
+                }
+                else {
                     const printer = createPrinter({
                         removeComments: true,
                         module: compilerOptions.module,
                         target: compilerOptions.target,
                         omitTrailingSemicolon: true,
                     });
-                    const origin: SymbolOriginInfoComputedPropertyName = { 
-                        kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.SymbolMemberNoExport) | SymbolOriginInfoKind.ComputedPropertyName, 
-                        symbolName: printer.printNode(EmitHint.Unspecified, node, contextToken.getSourceFile())
+                    const origin: SymbolOriginInfoComputedPropertyName = {
+                        kind: getNullableSymbolOriginInfoKind(SymbolOriginInfoKind.SymbolMemberNoExport) | SymbolOriginInfoKind.ComputedPropertyName,
+                        symbolName: printer.printNode(EmitHint.Unspecified, node, contextToken.getSourceFile()),
                     };
                     symbolToOriginInfoMap[index] = origin;
                 }
@@ -3780,7 +3781,8 @@ function getCompletionData(
                 node = createPropertyAccess(computedPropertyNameExpression as OnlyPropertyAccess);
                 function createPropertyAccess(n: OnlyPropertyAccess): Expression {
                     if (isIdentifier(n)) {
-                        return leftMostNodeAccessExpression! as Expression; //TODO ! and cast
+                        Debug.assertNode(leftMostNodeAccessExpression, isExpression);
+                        return leftMostNodeAccessExpression;
                     }
 
                     return factory.createPropertyAccessExpression(createPropertyAccess(n.expression), n.name);
@@ -4596,7 +4598,7 @@ function getCompletionData(
                 if (declaration && isClassElement(declaration) && declaration.name && isComputedPropertyName(declaration.name)) {
                     const origin: SymbolOriginInfoComputedPropertyName = {
                         kind: SymbolOriginInfoKind.ComputedPropertyName,
-                        symbolName: typeChecker.symbolToString(symbol)
+                        symbolName: typeChecker.symbolToString(symbol),
                     };
                     symbolToOriginInfoMap[index] = origin;
                 }
