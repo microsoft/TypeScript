@@ -30,12 +30,21 @@ class StructDecoder<const Descriptor extends StructDescriptor> extends Decoder<
 declare const i32Decoder: Decoder<number>;
 declare const i64Decoder: Decoder<bigint>;
 
-const structDecoder = new StructDecoder([
+const structDecoder1 = new StructDecoder([
   ["a", i32Decoder],
   ["b", i64Decoder],
 ]);
 
-const struct = structDecoder.decode(new ArrayBuffer(100));
+const struct1 = structDecoder1.decode(new ArrayBuffer(100));
 
-const v: number = struct.a;
-const v2: bigint = struct.b;
+const v1_1: number = struct1.a;
+const v1_2: bigint = struct1.b;
+
+declare const descriptor2: [["a", Decoder<number>], ["b", Decoder<string>], ...["c", Decoder<bigint>][]]
+const structDecoder2 = new StructDecoder(descriptor2);
+
+const struct2 = structDecoder2.decode(new ArrayBuffer(100));
+
+const v2_1: number = struct2.a;
+const v2_2: string = struct2.b;
+const v2_3: bigint = struct2.c;

@@ -80,8 +80,8 @@ declare const i64Decoder: Decoder<bigint>;
 >i64Decoder : Symbol(i64Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 27, 13))
 >Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
 
-const structDecoder = new StructDecoder([
->structDecoder : Symbol(structDecoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 29, 5))
+const structDecoder1 = new StructDecoder([
+>structDecoder1 : Symbol(structDecoder1, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 29, 5))
 >StructDecoder : Symbol(StructDecoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 16, 2))
 
   ["a", i32Decoder],
@@ -92,22 +92,58 @@ const structDecoder = new StructDecoder([
 
 ]);
 
-const struct = structDecoder.decode(new ArrayBuffer(100));
->struct : Symbol(struct, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 34, 5))
->structDecoder.decode : Symbol(Decoder.decode, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 26))
->structDecoder : Symbol(structDecoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 29, 5))
+const struct1 = structDecoder1.decode(new ArrayBuffer(100));
+>struct1 : Symbol(struct1, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 34, 5))
+>structDecoder1.decode : Symbol(Decoder.decode, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 26))
+>structDecoder1 : Symbol(structDecoder1, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 29, 5))
 >decode : Symbol(Decoder.decode, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 26))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
-const v: number = struct.a;
->v : Symbol(v, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 36, 5))
->struct.a : Symbol(a)
->struct : Symbol(struct, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 34, 5))
+const v1_1: number = struct1.a;
+>v1_1 : Symbol(v1_1, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 36, 5))
+>struct1.a : Symbol(a)
+>struct1 : Symbol(struct1, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 34, 5))
 >a : Symbol(a)
 
-const v2: bigint = struct.b;
->v2 : Symbol(v2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 37, 5))
->struct.b : Symbol(b)
->struct : Symbol(struct, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 34, 5))
+const v1_2: bigint = struct1.b;
+>v1_2 : Symbol(v1_2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 37, 5))
+>struct1.b : Symbol(b)
+>struct1 : Symbol(struct1, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 34, 5))
 >b : Symbol(b)
+
+declare const descriptor2: [["a", Decoder<number>], ["b", Decoder<string>], ...["c", Decoder<bigint>][]]
+>descriptor2 : Symbol(descriptor2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 39, 13))
+>Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+>Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+>Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+
+const structDecoder2 = new StructDecoder(descriptor2);
+>structDecoder2 : Symbol(structDecoder2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 40, 5))
+>StructDecoder : Symbol(StructDecoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 16, 2))
+>descriptor2 : Symbol(descriptor2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 39, 13))
+
+const struct2 = structDecoder2.decode(new ArrayBuffer(100));
+>struct2 : Symbol(struct2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 42, 5))
+>structDecoder2.decode : Symbol(Decoder.decode, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 26))
+>structDecoder2 : Symbol(structDecoder2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 40, 5))
+>decode : Symbol(Decoder.decode, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 26))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const v2_1: number = struct2.a;
+>v2_1 : Symbol(v2_1, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 44, 5))
+>struct2.a : Symbol(a)
+>struct2 : Symbol(struct2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 42, 5))
+>a : Symbol(a)
+
+const v2_2: string = struct2.b;
+>v2_2 : Symbol(v2_2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 45, 5))
+>struct2.b : Symbol(b)
+>struct2 : Symbol(struct2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 42, 5))
+>b : Symbol(b)
+
+const v2_3: bigint = struct2.c;
+>v2_3 : Symbol(v2_3, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 46, 5))
+>struct2.c : Symbol(c)
+>struct2 : Symbol(struct2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 42, 5))
+>c : Symbol(c)
 
