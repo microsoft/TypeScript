@@ -3769,7 +3769,7 @@ function getCompletionData(
         function createComputedPropertyAccess(nameSymbol: Symbol, leftMostNameSymbol: Symbol, computedPropertyNameExpression: Expression) {
             let node: Node | undefined;
             if (!isTransientSymbol(nameSymbol)) {
-                node = typeChecker.symbolToEntityName(nameSymbol, /*meaning*/ undefined!, contextToken, NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope);
+                node = typeChecker.symbolToNode(nameSymbol, /*meaning*/ undefined!, contextToken, NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope);
             }
             else {
                 // Object literals assigned as const
