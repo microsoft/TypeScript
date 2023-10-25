@@ -8877,7 +8877,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     if (context.trackedSymbols) {
                         if (!oldContext.trackedSymbols) oldContext.trackedSymbols = context.trackedSymbols;
-                        else oldContext.trackedSymbols.push(...context.trackedSymbols);
+                        else Debug.assert(context.trackedSymbols === oldContext.trackedSymbols);
                     }
                     context = oldContext;
                 }
@@ -50423,12 +50423,13 @@ class SymbolTrackerImpl implements SymbolTracker {
     }
 
     trackSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags): boolean {
-        (this.context.trackedSymbols ??= []).push([symbol, enclosingDeclaration, meaning]);
         if (this.inner?.trackSymbol && !this.disableTrackSymbol) {
             if (this.inner.trackSymbol(symbol, enclosingDeclaration, meaning)) {
                 this.onDiagnosticReported();
                 return true;
             }
+            // Skip recording type parameters as they dont contribute to late painted statements
+            if (!(symbol.flags & SymbolFlags.TypeParameter)) (this.context.trackedSymbols ??= []).push([symbol, enclosingDeclaration, meaning]);
         }
         return false;
     }
