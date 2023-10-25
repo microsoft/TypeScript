@@ -13665,7 +13665,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
         if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
             // We have a { [P in keyof T]: X }
-            if (nameType && isTupleType(modifiersType)) {
+            if (isTupleType(modifiersType)) {
                 forEachType(getUnionType(getElementTypes(modifiersType).map((_, i) => getStringLiteralType("" + i))), addMemberForKeyType);
             }
             else if (isArrayType(modifiersType)) {
