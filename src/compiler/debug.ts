@@ -108,6 +108,8 @@ export interface LoggingHost {
     log(level: LogLevel, s: string): void;
 }
 
+const kDebugDescription = typeof globalThis === "object" ? globalThis.Symbol.for("debug.description") : "__tsDebuggerDisplay";
+
 /** @internal */
 export namespace Debug {
     /* eslint-disable prefer-const */
@@ -508,28 +510,29 @@ export namespace Debug {
 
     let flowNodeProto: FlowNodeBase | undefined;
 
+    function flowNodeDebugDescription(this: FlowNodeBase) {
+        const flowHeader = this.flags & FlowFlags.Start ? "FlowStart" :
+            this.flags & FlowFlags.BranchLabel ? "FlowBranchLabel" :
+            this.flags & FlowFlags.LoopLabel ? "FlowLoopLabel" :
+            this.flags & FlowFlags.Assignment ? "FlowAssignment" :
+            this.flags & FlowFlags.TrueCondition ? "FlowTrueCondition" :
+            this.flags & FlowFlags.FalseCondition ? "FlowFalseCondition" :
+            this.flags & FlowFlags.SwitchClause ? "FlowSwitchClause" :
+            this.flags & FlowFlags.ArrayMutation ? "FlowArrayMutation" :
+            this.flags & FlowFlags.Call ? "FlowCall" :
+            this.flags & FlowFlags.ReduceLabel ? "FlowReduceLabel" :
+            this.flags & FlowFlags.Unreachable ? "FlowUnreachable" :
+            "UnknownFlow";
+        const remainingFlags = this.flags & ~(FlowFlags.Referenced - 1);
+        return `${flowHeader}${remainingFlags ? ` (${formatFlowFlags(remainingFlags)})` : ""}`;
+    }
+
     function attachFlowNodeDebugInfoWorker(flowNode: FlowNodeBase) {
         if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line local/no-in-operator
             Object.defineProperties(flowNode, {
+                [kDebugDescription]: { value: flowNodeDebugDescription },
                 // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
-                __tsDebuggerDisplay: {
-                    value(this: FlowNodeBase) {
-                        const flowHeader = this.flags & FlowFlags.Start ? "FlowStart" :
-                            this.flags & FlowFlags.BranchLabel ? "FlowBranchLabel" :
-                            this.flags & FlowFlags.LoopLabel ? "FlowLoopLabel" :
-                            this.flags & FlowFlags.Assignment ? "FlowAssignment" :
-                            this.flags & FlowFlags.TrueCondition ? "FlowTrueCondition" :
-                            this.flags & FlowFlags.FalseCondition ? "FlowFalseCondition" :
-                            this.flags & FlowFlags.SwitchClause ? "FlowSwitchClause" :
-                            this.flags & FlowFlags.ArrayMutation ? "FlowArrayMutation" :
-                            this.flags & FlowFlags.Call ? "FlowCall" :
-                            this.flags & FlowFlags.ReduceLabel ? "FlowReduceLabel" :
-                            this.flags & FlowFlags.Unreachable ? "FlowUnreachable" :
-                            "UnknownFlow";
-                        const remainingFlags = this.flags & ~(FlowFlags.Referenced - 1);
-                        return `${flowHeader}${remainingFlags ? ` (${formatFlowFlags(remainingFlags)})` : ""}`;
-                    },
-                },
+                // __tsDebuggerDisplay: { value: flowNodeDebugDescription, },
                 __debugFlowFlags: {
                     get(this: FlowNodeBase) {
                         return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true);
@@ -611,17 +614,18 @@ export namespace Debug {
         const weakTypeTextMap = new WeakMap<Type, string>();
         const weakNodeTextMap = new WeakMap<Node, string>();
 
+        function symbolDebugDescription(this: Symbol) {
+            const symbolHeader = this.flags & SymbolFlags.Transient ? "TransientSymbol" :
+                "Symbol";
+            const remainingSymbolFlags = this.flags & ~SymbolFlags.Transient;
+            return `${symbolHeader} '${symbolName(this)}'${remainingSymbolFlags ? ` (${formatSymbolFlags(remainingSymbolFlags)})` : ""}`;
+        }
+
         // Add additional properties in debug mode to assist with debugging.
         Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
+            [kDebugDescription]: { value: symbolDebugDescription },
             // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
-            __tsDebuggerDisplay: {
-                value(this: Symbol) {
-                    const symbolHeader = this.flags & SymbolFlags.Transient ? "TransientSymbol" :
-                        "Symbol";
-                    const remainingSymbolFlags = this.flags & ~SymbolFlags.Transient;
-                    return `${symbolHeader} '${symbolName(this)}'${remainingSymbolFlags ? ` (${formatSymbolFlags(remainingSymbolFlags)})` : ""}`;
-                },
-            },
+            // __tsDebuggerDisplay: { value: symbolDebugDescription, },
             __debugFlags: {
                 get(this: Symbol) {
                     return formatSymbolFlags(this.flags);
@@ -629,37 +633,39 @@ export namespace Debug {
             },
         });
 
+        function typeDebugDescription(this: Type) {
+            const typeHeader = this.flags & TypeFlags.Intrinsic ? `IntrinsicType ${(this as IntrinsicType).intrinsicName}${(this as IntrinsicType).debugIntrinsicName ? ` (${(this as IntrinsicType).debugIntrinsicName})` : ""}` :
+                this.flags & TypeFlags.Nullable ? "NullableType" :
+                this.flags & TypeFlags.StringOrNumberLiteral ? `LiteralType ${JSON.stringify((this as LiteralType).value)}` :
+                this.flags & TypeFlags.BigIntLiteral ? `LiteralType ${(this as BigIntLiteralType).value.negative ? "-" : ""}${(this as BigIntLiteralType).value.base10Value}n` :
+                this.flags & TypeFlags.UniqueESSymbol ? "UniqueESSymbolType" :
+                this.flags & TypeFlags.Enum ? "EnumType" :
+                this.flags & TypeFlags.Union ? "UnionType" :
+                this.flags & TypeFlags.Intersection ? "IntersectionType" :
+                this.flags & TypeFlags.Index ? "IndexType" :
+                this.flags & TypeFlags.IndexedAccess ? "IndexedAccessType" :
+                this.flags & TypeFlags.Conditional ? "ConditionalType" :
+                this.flags & TypeFlags.Substitution ? "SubstitutionType" :
+                this.flags & TypeFlags.TypeParameter ? "TypeParameter" :
+                this.flags & TypeFlags.Object ?
+                (this as ObjectType).objectFlags & ObjectFlags.ClassOrInterface ? "InterfaceType" :
+                    (this as ObjectType).objectFlags & ObjectFlags.Reference ? "TypeReference" :
+                    (this as ObjectType).objectFlags & ObjectFlags.Tuple ? "TupleType" :
+                    (this as ObjectType).objectFlags & ObjectFlags.Anonymous ? "AnonymousType" :
+                    (this as ObjectType).objectFlags & ObjectFlags.Mapped ? "MappedType" :
+                    (this as ObjectType).objectFlags & ObjectFlags.ReverseMapped ? "ReverseMappedType" :
+                    (this as ObjectType).objectFlags & ObjectFlags.EvolvingArray ? "EvolvingArrayType" :
+                    "ObjectType" :
+                "Type";
+            const remainingObjectFlags = this.flags & TypeFlags.Object ? (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask : 0;
+            return `${typeHeader}${this.symbol ? ` '${symbolName(this.symbol)}'` : ""}${remainingObjectFlags ? ` (${formatObjectFlags(remainingObjectFlags)})` : ""}`;
+        }
+
         Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
+            [kDebugDescription]: { value: typeDebugDescription },
             // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
-            __tsDebuggerDisplay: {
-                value(this: Type) {
-                    const typeHeader = this.flags & TypeFlags.Intrinsic ? `IntrinsicType ${(this as IntrinsicType).intrinsicName}${(this as IntrinsicType).debugIntrinsicName ? ` (${(this as IntrinsicType).debugIntrinsicName})` : ""}` :
-                        this.flags & TypeFlags.Nullable ? "NullableType" :
-                        this.flags & TypeFlags.StringOrNumberLiteral ? `LiteralType ${JSON.stringify((this as LiteralType).value)}` :
-                        this.flags & TypeFlags.BigIntLiteral ? `LiteralType ${(this as BigIntLiteralType).value.negative ? "-" : ""}${(this as BigIntLiteralType).value.base10Value}n` :
-                        this.flags & TypeFlags.UniqueESSymbol ? "UniqueESSymbolType" :
-                        this.flags & TypeFlags.Enum ? "EnumType" :
-                        this.flags & TypeFlags.Union ? "UnionType" :
-                        this.flags & TypeFlags.Intersection ? "IntersectionType" :
-                        this.flags & TypeFlags.Index ? "IndexType" :
-                        this.flags & TypeFlags.IndexedAccess ? "IndexedAccessType" :
-                        this.flags & TypeFlags.Conditional ? "ConditionalType" :
-                        this.flags & TypeFlags.Substitution ? "SubstitutionType" :
-                        this.flags & TypeFlags.TypeParameter ? "TypeParameter" :
-                        this.flags & TypeFlags.Object ?
-                        (this as ObjectType).objectFlags & ObjectFlags.ClassOrInterface ? "InterfaceType" :
-                            (this as ObjectType).objectFlags & ObjectFlags.Reference ? "TypeReference" :
-                            (this as ObjectType).objectFlags & ObjectFlags.Tuple ? "TupleType" :
-                            (this as ObjectType).objectFlags & ObjectFlags.Anonymous ? "AnonymousType" :
-                            (this as ObjectType).objectFlags & ObjectFlags.Mapped ? "MappedType" :
-                            (this as ObjectType).objectFlags & ObjectFlags.ReverseMapped ? "ReverseMappedType" :
-                            (this as ObjectType).objectFlags & ObjectFlags.EvolvingArray ? "EvolvingArrayType" :
-                            "ObjectType" :
-                        "Type";
-                    const remainingObjectFlags = this.flags & TypeFlags.Object ? (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask : 0;
-                    return `${typeHeader}${this.symbol ? ` '${symbolName(this.symbol)}'` : ""}${remainingObjectFlags ? ` (${formatObjectFlags(remainingObjectFlags)})` : ""}`;
-                },
-            },
+            // __tsDebuggerDisplay: { value: typeDebugDescription },
+
             __debugFlags: {
                 get(this: Type) {
                     return formatTypeFlags(this.flags);
@@ -703,52 +709,53 @@ export namespace Debug {
             objectAllocator.getSourceFileConstructor(),
         ];
 
+        function nodeDebugDescription(this: Node) {
+            const nodeHeader = isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
+                isIdentifier(this) ? `Identifier '${idText(this)}'` :
+                isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
+                isStringLiteral(this) ? `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
+                isNumericLiteral(this) ? `NumericLiteral ${this.text}` :
+                isBigIntLiteral(this) ? `BigIntLiteral ${this.text}n` :
+                isTypeParameterDeclaration(this) ? "TypeParameterDeclaration" :
+                isParameter(this) ? "ParameterDeclaration" :
+                isConstructorDeclaration(this) ? "ConstructorDeclaration" :
+                isGetAccessorDeclaration(this) ? "GetAccessorDeclaration" :
+                isSetAccessorDeclaration(this) ? "SetAccessorDeclaration" :
+                isCallSignatureDeclaration(this) ? "CallSignatureDeclaration" :
+                isConstructSignatureDeclaration(this) ? "ConstructSignatureDeclaration" :
+                isIndexSignatureDeclaration(this) ? "IndexSignatureDeclaration" :
+                isTypePredicateNode(this) ? "TypePredicateNode" :
+                isTypeReferenceNode(this) ? "TypeReferenceNode" :
+                isFunctionTypeNode(this) ? "FunctionTypeNode" :
+                isConstructorTypeNode(this) ? "ConstructorTypeNode" :
+                isTypeQueryNode(this) ? "TypeQueryNode" :
+                isTypeLiteralNode(this) ? "TypeLiteralNode" :
+                isArrayTypeNode(this) ? "ArrayTypeNode" :
+                isTupleTypeNode(this) ? "TupleTypeNode" :
+                isOptionalTypeNode(this) ? "OptionalTypeNode" :
+                isRestTypeNode(this) ? "RestTypeNode" :
+                isUnionTypeNode(this) ? "UnionTypeNode" :
+                isIntersectionTypeNode(this) ? "IntersectionTypeNode" :
+                isConditionalTypeNode(this) ? "ConditionalTypeNode" :
+                isInferTypeNode(this) ? "InferTypeNode" :
+                isParenthesizedTypeNode(this) ? "ParenthesizedTypeNode" :
+                isThisTypeNode(this) ? "ThisTypeNode" :
+                isTypeOperatorNode(this) ? "TypeOperatorNode" :
+                isIndexedAccessTypeNode(this) ? "IndexedAccessTypeNode" :
+                isMappedTypeNode(this) ? "MappedTypeNode" :
+                isLiteralTypeNode(this) ? "LiteralTypeNode" :
+                isNamedTupleMember(this) ? "NamedTupleMember" :
+                isImportTypeNode(this) ? "ImportTypeNode" :
+                formatSyntaxKind(this.kind);
+            return `${nodeHeader}${this.flags ? ` (${formatNodeFlags(this.flags)})` : ""}`;
+        }
+
         for (const ctor of nodeConstructors) {
             if (!hasProperty(ctor.prototype, "__debugKind")) {
                 Object.defineProperties(ctor.prototype, {
+                    [kDebugDescription]: { value: nodeDebugDescription },
                     // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
-                    __tsDebuggerDisplay: {
-                        value(this: Node) {
-                            const nodeHeader = isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
-                                isIdentifier(this) ? `Identifier '${idText(this)}'` :
-                                isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
-                                isStringLiteral(this) ? `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
-                                isNumericLiteral(this) ? `NumericLiteral ${this.text}` :
-                                isBigIntLiteral(this) ? `BigIntLiteral ${this.text}n` :
-                                isTypeParameterDeclaration(this) ? "TypeParameterDeclaration" :
-                                isParameter(this) ? "ParameterDeclaration" :
-                                isConstructorDeclaration(this) ? "ConstructorDeclaration" :
-                                isGetAccessorDeclaration(this) ? "GetAccessorDeclaration" :
-                                isSetAccessorDeclaration(this) ? "SetAccessorDeclaration" :
-                                isCallSignatureDeclaration(this) ? "CallSignatureDeclaration" :
-                                isConstructSignatureDeclaration(this) ? "ConstructSignatureDeclaration" :
-                                isIndexSignatureDeclaration(this) ? "IndexSignatureDeclaration" :
-                                isTypePredicateNode(this) ? "TypePredicateNode" :
-                                isTypeReferenceNode(this) ? "TypeReferenceNode" :
-                                isFunctionTypeNode(this) ? "FunctionTypeNode" :
-                                isConstructorTypeNode(this) ? "ConstructorTypeNode" :
-                                isTypeQueryNode(this) ? "TypeQueryNode" :
-                                isTypeLiteralNode(this) ? "TypeLiteralNode" :
-                                isArrayTypeNode(this) ? "ArrayTypeNode" :
-                                isTupleTypeNode(this) ? "TupleTypeNode" :
-                                isOptionalTypeNode(this) ? "OptionalTypeNode" :
-                                isRestTypeNode(this) ? "RestTypeNode" :
-                                isUnionTypeNode(this) ? "UnionTypeNode" :
-                                isIntersectionTypeNode(this) ? "IntersectionTypeNode" :
-                                isConditionalTypeNode(this) ? "ConditionalTypeNode" :
-                                isInferTypeNode(this) ? "InferTypeNode" :
-                                isParenthesizedTypeNode(this) ? "ParenthesizedTypeNode" :
-                                isThisTypeNode(this) ? "ThisTypeNode" :
-                                isTypeOperatorNode(this) ? "TypeOperatorNode" :
-                                isIndexedAccessTypeNode(this) ? "IndexedAccessTypeNode" :
-                                isMappedTypeNode(this) ? "MappedTypeNode" :
-                                isLiteralTypeNode(this) ? "LiteralTypeNode" :
-                                isNamedTupleMember(this) ? "NamedTupleMember" :
-                                isImportTypeNode(this) ? "ImportTypeNode" :
-                                formatSyntaxKind(this.kind);
-                            return `${nodeHeader}${this.flags ? ` (${formatNodeFlags(this.flags)})` : ""}`;
-                        },
-                    },
+                    // __tsDebuggerDisplay: { value: nodeDebugDescription, },
                     __debugKind: {
                         get(this: Node) {
                             return formatSyntaxKind(this.kind);

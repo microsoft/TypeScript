@@ -1102,6 +1102,7 @@ const enum IterationUse {
     SpreadFlag = 1 << 5,
     DestructuringFlag = 1 << 6,
     PossiblyOutOfBounds = 1 << 7,
+    ReturnType = 1 << 8,
 
     // Spread, Destructuring, Array element assignment
     Element = AllowsSyncIterablesFlag,
@@ -1114,8 +1115,8 @@ const enum IterationUse {
     YieldStar = AllowsSyncIterablesFlag | YieldStarFlag,
     AsyncYieldStar = AllowsSyncIterablesFlag | AllowsAsyncIterablesFlag | YieldStarFlag,
 
-    GeneratorReturnType = AllowsSyncIterablesFlag,
-    AsyncGeneratorReturnType = AllowsAsyncIterablesFlag,
+    GeneratorReturnType = AllowsSyncIterablesFlag | ReturnType,
+    AsyncGeneratorReturnType = AllowsAsyncIterablesFlag | ReturnType,
 }
 
 const enum IterationTypeKind {
@@ -42859,8 +42860,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const cacheKey = use & IterationUse.AllowsAsyncIterablesFlag ? "iterationTypesOfAsyncIterable" : "iterationTypesOfIterable";
-        const cachedTypes = getCachedIterationTypes(type, cacheKey);
-        if (cachedTypes) return cachedTypes === noIterationTypes ? undefined : cachedTypes;
+        const isReturnType = use & IterationUse.ReturnType;
+        if (!isReturnType) {
+            // Do not use the cached value when collecting the iteration types of a return type as they may
+            // not consider all constituents.
+            const cachedTypes = getCachedIterationTypes(type, cacheKey);
+            if (cachedTypes) return cachedTypes === noIterationTypes ? undefined : cachedTypes;
+        }
 
         let allIterationTypes: IterationTypes[] | undefined;
         for (const constituent of (type as UnionType).types) {
@@ -42873,8 +42879,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addRelatedInfo(rootDiag, ...errorOutputContainer.errors);
                     }
                 }
-                setCachedIterationTypes(type, cacheKey, noIterationTypes);
-                return undefined;
+                if (!isReturnType) {
+                    // Do not exit early or cache the iteration types of a return type as they consider all constituents.
+                    setCachedIterationTypes(type, cacheKey, noIterationTypes);
+                    return undefined;
+                }
             }
             else if (errorOutputContainer?.errors?.length) {
                 for (const diag of errorOutputContainer.errors) {
@@ -42886,7 +42895,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes) : noIterationTypes;
-        setCachedIterationTypes(type, cacheKey, iterationTypes);
+        if (!isReturnType) {
+            // Do not cache the iteration types of a return type as they consider all constituents. Other usages
+            // will exit early when a non-iterable union member is found.
+            setCachedIterationTypes(type, cacheKey, iterationTypes);
+        }
         return iterationTypes === noIterationTypes ? undefined : iterationTypes;
     }
 
