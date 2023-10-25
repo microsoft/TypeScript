@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
     runWatchBaseline,
@@ -13,7 +16,7 @@ import {
 it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
     const solution: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             references: [
                 { path: "./shared/tsconfig.json" },
                 { path: "./webpack/tsconfig.json" },
@@ -23,7 +26,7 @@ it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers",
     };
     const sharedConfig: File = {
         path: `/user/username/projects/myproject/shared/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             compilerOptions: { composite: true },
         }),
     };
@@ -37,7 +40,7 @@ export function f2() { } // trailing`,
     };
     const webpackConfig: File = {
         path: `/user/username/projects/myproject/webpack/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             compilerOptions: { composite: true },
             references: [{ path: "../shared/tsconfig.json" }],
         }),

@@ -41,7 +41,15 @@ export { C } from "./c";
 
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"target":"es5","module":"commonjs","declaration":true,"emitDeclarationOnly":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -53,8 +61,21 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/a.ts",
+  "/users/username/projects/project/b.ts",
+  "/users/username/projects/project/c.ts",
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "target": 1,
+  "module": 1,
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -295,8 +316,21 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/a.ts",
+  "/users/username/projects/project/b.ts",
+  "/users/username/projects/project/c.ts",
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "target": 1,
+  "module": 1,
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

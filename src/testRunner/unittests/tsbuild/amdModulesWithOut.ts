@@ -1,5 +1,11 @@
 import * as ts from "../../_namespaces/ts";
+import {
+    dedent,
+} from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
+import {
+    jsonToReadableText,
+} from "../helpers";
 import {
     verifyTsc,
 } from "../helpers/tsc";
@@ -11,7 +17,7 @@ import {
     addTripleSlashRef,
     appendText,
     enableStrict,
-    loadProjectFromDisk,
+    loadProjectFromFiles,
     removeRest,
     replaceText,
 } from "../helpers/vfs";
@@ -19,7 +25,45 @@ import {
 describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     let outFileFs: vfs.FileSystem;
     before(() => {
-        outFileFs = loadProjectFromDisk("tests/projects/amdModulesWithOut");
+        outFileFs = loadProjectFromFiles({
+            "/src/app/file3.ts": dedent`
+                export const z = 30;
+                import { x } from "file1";
+            `,
+            "/src/app/file4.ts": `const myVar = 30;`,
+            "/src/app/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    ignoreDeprecations: "5.0",
+                    target: "es5",
+                    module: "amd",
+                    composite: true,
+                    strict: false,
+                    sourceMap: true,
+                    declarationMap: true,
+                    outFile: "module.js",
+                },
+                exclude: ["module.d.ts"],
+                references: [
+                    { path: "../lib", prepend: true },
+                ],
+            }),
+            "/src/lib/file0.ts": `const myGlob = 20;`,
+            "/src/lib/file1.ts": `export const x = 10;`,
+            "/src/lib/file2.ts": `export const y = 20;`,
+            "/src/lib/global.ts": `const globalConst = 10;`,
+            "/src/lib/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    target: "es5",
+                    module: "amd",
+                    composite: true,
+                    sourceMap: true,
+                    declarationMap: true,
+                    strict: false,
+                    outFile: "module.js",
+                },
+                exclude: ["module.d.ts"],
+            }),
+        });
     });
     after(() => {
         outFileFs = undefined!;

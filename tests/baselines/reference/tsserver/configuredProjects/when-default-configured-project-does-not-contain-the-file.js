@@ -16,7 +16,15 @@ import {foo} from "../foo/lib";
 foo();
 
 //// [/user/username/projects/myproject/foo/tsconfig.json]
-{"include":["index.ts"],"compilerOptions":{"declaration":true,"outDir":"lib"}}
+{
+  "include": [
+    "index.ts"
+  ],
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "lib"
+  }
+}
 
 //// [/user/username/projects/myproject/foo/index.ts]
 export function foo() {}

@@ -11,7 +11,11 @@ export function module2() {}
 import { module1 } from "module1";import { module2 } from "module2";
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"traceResolution":true}}
+{
+  "compilerOptions": {
+    "traceResolution": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

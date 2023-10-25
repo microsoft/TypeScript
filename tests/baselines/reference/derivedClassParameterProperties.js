@@ -174,8 +174,7 @@ var Derived6 = /** @class */ (function (_super) {
         var _this = this;
         _this.a = 1;
         var b = 2;
-        _this = _super.call(this) || this;
-        return _this;
+        return _this = _super.call(this) || this;
     }
     return Derived6;
 }(Base));

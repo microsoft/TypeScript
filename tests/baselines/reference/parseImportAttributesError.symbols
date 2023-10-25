@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/parseImportAttributesError.ts] ////
+
+=== /index.ts ===
+export type LocalInterface =
+>LocalInterface : Symbol(LocalInterface, Decl(index.ts, 0, 0))
+
+    & import("pkg", { with: {1234, "resolution-mode": "require"} }).RequireInterface
+    & import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface;
+>"pkg" : Symbol("/node_modules/pkg/import", Decl(import.d.ts, 0, 0))
+>with : Symbol(with, Decl(index.ts, 2, 21))
+>1234 : Symbol(1234, Decl(index.ts, 2, 29))
+>"resolution-mode" : Symbol("resolution-mode", Decl(index.ts, 2, 34))
+
+export const a = (null as any as import("pkg", { with: {1234, "resolution-mode": "require"} }).RequireInterface);
+>a : Symbol(a, Decl(index.ts, 4, 12))
+
+export const b = (null as any as import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface);
+>b : Symbol(b, Decl(index.ts, 5, 12))
+
+=== /node_modules/pkg/import.d.ts ===
+export interface ImportInterface {}
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+
+=== /node_modules/pkg/require.d.ts ===
+export interface RequireInterface {}
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+

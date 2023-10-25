@@ -52,33 +52,78 @@ TI:: typing installer creation complete
 
 //// [/tmp/node_modules/types-registry/index.json]
 {
- "entries": {
-  "foo": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
+  "entries": {
+    "foo": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
   }
- }
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["@bar/common","@bar/router","foo"],"projectRootPath":"/a/b","cachePath":"/tmp","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/b/app.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [
+        "@bar/common",
+        "@bar/router",
+        "foo"
+      ],
+      "projectRootPath": "/a/b",
+      "cachePath": "/tmp",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["@bar/common","@bar/router","foo"]
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["@bar/common","@bar/router","foo"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["@bar/common","@bar/router","foo"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "@bar/common",
+        "@bar/router",
+        "foo"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["/a/b/bower_components","/a/b/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
@@ -88,8 +133,15 @@ TI:: [hh:mm:ss:mss] '@bar/common':: Entry for package 'bar__common' does not exi
 TI:: [hh:mm:ss:mss] '@bar/router':: Entry for package 'bar__router' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] Npm config file: /tmp/package.json
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::beginInstallTypes","eventId":1,"typingsInstallerVersion":"FakeVersion","projectName":"/dev/null/inferredProject1*"}
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/foo@tsFakeMajor.Minor"]'.
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 1,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/dev/null/inferredProject1*"
+    }
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/foo@tsFakeMajor.Minor"
+]'.
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -100,7 +152,9 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/foo@tsFakeMajor.Minor"]':: true
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/foo@tsFakeMajor.Minor"
+]':: true
 TI:: Before installWorker
 
 PolledWatches::
@@ -118,6 +172,37 @@ TI:: After installWorker
 TI:: [hh:mm:ss:mss] Installed typings ["@types/foo@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files []
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":["@bar/common","@bar/router","foo"],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [
+        "@bar/common",
+        "@bar/router",
+        "foo"
+      ],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/foo@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 1,
+      "projectName": "/dev/null/inferredProject1*",
+      "packagesToInstall": [
+        "@types/foo@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }

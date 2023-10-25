@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionsCommentsClassMembers.ts ===
 // /** This is comment for c1*/
 // class c1 {

@@ -71,8 +71,15 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 
 
-Program root files: ["/home/user/projects/myproject/src/file.ts"]
-Program options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/home/user/projects/myproject/src/file.ts"
+]
+Program options: {
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "watch": true,
+  "configFilePath": "/home/user/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

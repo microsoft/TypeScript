@@ -11,7 +11,17 @@ declare class Promise<T> {}
 var x: Promise<string>;
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5"]}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "lib": [
+      "es5"
+    ]
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /src
@@ -65,7 +75,18 @@ Before running Timeout callback:: count: 2
 1: /src/tsconfig.json
 2: *ensureProjectForOpenFiles*
 //// [/src/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5","es2015.promise"]}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "lib": [
+      "es5",
+      "es2015.promise"
+    ]
+  }
+}
 
 
 FsWatches::

@@ -20,7 +20,19 @@ export const x = "type1";
 
 
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project1/typeroot1/sometype/index.d.ts]
 export type TheNum = "type1";
@@ -32,7 +44,16 @@ export const y = 10;
 export const y = 10
 
 //// [/home/src/projects/project2/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project3/utils.d.ts]
 export const y = 10;
@@ -41,7 +62,16 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project3/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project4/utils.d.ts]
 export const y = 10;
@@ -50,7 +80,17 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project4/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["esnext","dom","webworker"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "esnext",
+      "dom",
+      "webworker"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/lib/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
@@ -737,7 +777,20 @@ Before running Timeout callback:: count: 2
 13: /home/src/projects/project1/tsconfig.json
 14: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1","./typeroot2"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1",
+      "./typeroot2"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
@@ -855,7 +908,19 @@ Before running Timeout callback:: count: 3
 18: /home/src/projects/project1/tsconfig.json
 19: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
 

@@ -8,7 +8,12 @@ import {} from "./b";
 export {};
 
 //// [/tsconfig.json]
-{"files":["./a.ts","./b.ts"]}
+{
+  "files": [
+    "./a.ts",
+    "./b.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -133,12 +138,12 @@ Info seq  [hh:mm:ss:mss] response:
           "textChanges": [
             {
               "start": {
-                "line": 1,
-                "offset": 21
+                "line": 4,
+                "offset": 6
               },
               "end": {
-                "line": 1,
-                "offset": 27
+                "line": 4,
+                "offset": 12
               },
               "newText": "c.ts"
             }

@@ -10,7 +10,13 @@ export function fn5() { }
 
 
 //// [/user/username/projects/myproject/dependency/tsconfig.json]
-{"compilerOptions":{"composite":true,"declarationMap":true,"declarationDir":"../decls"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declarationMap": true,
+    "declarationDir": "../decls"
+  }
+}
 
 //// [/user/username/projects/myproject/main/main.ts]
 import {
@@ -29,7 +35,18 @@ fn5();
 
 
 //// [/user/username/projects/myproject/main/tsconfig.json]
-{"compilerOptions":{"composite":true,"declarationMap":true,"disableSourceOfProjectReferenceRedirect":true},"references":[{"path":"../dependency"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declarationMap": true,
+    "disableSourceOfProjectReferenceRedirect": true
+  },
+  "references": [
+    {
+      "path": "../dependency"
+    }
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -522,7 +539,16 @@ Before running Timeout callback:: count: 2
 1: /user/username/projects/myproject/main/tsconfig.json
 2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map]
-{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}
+{
+  "version": 3,
+  "file": "FnS.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../dependency/FnS.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/main/tsconfig.json

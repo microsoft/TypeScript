@@ -153,6 +153,7 @@ import "./unittests/tsserver/events/largeFileReferenced";
 import "./unittests/tsserver/events/projectLanguageServiceState";
 import "./unittests/tsserver/events/projectLoading";
 import "./unittests/tsserver/events/projectUpdatedInBackground";
+import "./unittests/tsserver/events/watchEvents";
 import "./unittests/tsserver/exportMapCache";
 import "./unittests/tsserver/extends";
 import "./unittests/tsserver/externalProjects";
