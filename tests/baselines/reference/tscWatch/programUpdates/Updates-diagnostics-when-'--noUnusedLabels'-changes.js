@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -16,7 +17,11 @@ interface Array<T> { length: number; [n: number]: T; }
 label: while (1) {}
 
 //// [/tsconfig.json]
-{"compilerOptions":{"allowUnusedLabels":true}}
+{
+  "compilerOptions": {
+    "allowUnusedLabels": true
+  }
+}
 
 
 /a/lib/tsc.js -w -p /tsconfig.json
@@ -28,8 +33,16 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "allowUnusedLabels": true,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a.ts
@@ -43,18 +56,16 @@ Shape signatures in builder refreshed for::
 /a.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/tsconfig.json:
+/a.ts: *new*
   {}
-/a.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -68,9 +79,16 @@ Change:: Disable  allowUnsusedLabels
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"allowUnusedLabels":false}}
+{
+  "compilerOptions": {
+    "allowUnusedLabels": false
+  }
+}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
@@ -84,8 +102,16 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "allowUnusedLabels": false,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a.ts
@@ -96,20 +122,6 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -118,9 +130,16 @@ Change:: Enable  allowUnsusedLabels
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"allowUnusedLabels":true}}
+{
+  "compilerOptions": {
+    "allowUnusedLabels": true
+  }
+}
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
@@ -129,8 +148,16 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "allowUnusedLabels": true,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a.ts
@@ -141,20 +168,6 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
 
 exitCode:: ExitStatus.undefined
 

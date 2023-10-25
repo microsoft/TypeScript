@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -27,13 +28,26 @@ export const Fragment: unique symbol;
 
 
 //// [/user/username/projects/myproject/node_modules/react/package.json]
-{"name":"react","version":"0.0.1"}
+{
+  "name": "react",
+  "version": "0.0.1"
+}
 
 //// [/user/username/projects/myproject/index.tsx]
 export const App = () => <div propA={true}></div>;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"jsx":"react-jsx","jsxImportSource":"react","forceConsistentCasingInFileNames":true},"files":["node_modules/react/Jsx-Runtime/index.d.ts","index.tsx"]}
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "forceConsistentCasingInFileNames": true
+  },
+  "files": [
+    "node_modules/react/Jsx-Runtime/index.d.ts",
+    "index.tsx"
+  ]
+}
 
 
 /a/lib/tsc.js --w --p . --explainFiles
@@ -46,9 +60,9 @@ Output::
     Part of 'files' list in tsconfig.json
     Imported via "react/jsx-runtime" from file '/user/username/projects/myproject/index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 
-  [96mtsconfig.json[0m:[93m1[0m:[93m115[0m
-    [7m1[0m {"compilerOptions":{"jsx":"react-jsx","jsxImportSource":"react","forceConsistentCasingInFileNames":true},"files":["node_modules/react/Jsx-Runtime/index.d.ts","index.tsx"]}
-    [7m [0m [96m                                                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+  [96mtsconfig.json[0m:[93m8[0m:[93m5[0m
+    [7m8[0m     "node_modules/react/Jsx-Runtime/index.d.ts",
+    [7m [0m [96m    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
     File is matched by 'files' list specified here.
 
 ../../../../a/lib/lib.d.ts
@@ -62,8 +76,19 @@ index.tsx
 
 
 
-Program root files: ["/user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts","/user/username/projects/myproject/index.tsx"]
-Program options: {"jsx":4,"jsxImportSource":"react","forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts",
+  "/user/username/projects/myproject/index.tsx"
+]
+Program options: {
+  "jsx": 4,
+  "jsxImportSource": "react",
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -78,23 +103,25 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index.tsx (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts:
+/user/username/projects/myproject/index.tsx: *new*
   {}
-/user/username/projects/myproject/index.tsx:
+/user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/node_modules/react/package.json: *new*
   {}
-/user/username/projects/myproject/node_modules/react/package.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/node_modules: *new*
   {}
 
 exitCode:: ExitStatus.undefined

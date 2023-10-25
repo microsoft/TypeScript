@@ -12,7 +12,5 @@
 // It would be nice if in the future,
 // We could include that last 'else'.
 
-verify.rangesAreOccurrences(false);
-
-goTo.marker();
-verify.occurrencesAtPositionCount(2);
+verify.baselineDocumentHighlights();
+verify.baselineDocumentHighlights("");

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/src/project/main.ts]
 export const x = 10;
@@ -31,8 +32,15 @@ Output::
 
 
 
-Program root files: ["/src/project/main.ts"]
-Program options: {"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/main.ts"
+]
+Program options: {
+  "project": "/src/project",
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -46,20 +54,16 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /src/project/main.ts (used version)
 
-PolledWatches::
-/src/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/src/project/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/src/project/main.ts:
+/src/project/main.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/src/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/src/project:
+/src/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined

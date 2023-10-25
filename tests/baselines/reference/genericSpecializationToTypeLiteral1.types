@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericSpecializationToTypeLiteral1.ts ===
+//// [tests/cases/compiler/genericSpecializationToTypeLiteral1.ts] ////
+
+=== genericSpecializationToTypeLiteral1.ts ===
 interface IEnumerable<T> {
 
     zip<TResult>(second: IEnumerable<T>, resultSelector: (first: T, second: T, index: number) => TResult): IEnumerable<TResult>;

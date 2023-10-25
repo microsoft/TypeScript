@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -16,10 +17,35 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.json]
-{"compilerOptions":{"outDir":"lib","rootDir":"src","composite":true,"preserveSymlinks":true},"include":["src"],"references":[{"path":"../B"}]}
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "composite": true,
+    "preserveSymlinks": true
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../B"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/B/tsconfig.json]
-{"compilerOptions":{"outDir":"lib","rootDir":"src","composite":true,"preserveSymlinks":true},"include":["src"]}
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "composite": true,
+    "preserveSymlinks": true
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/A/src/test.ts]
 import { foo } from '@issue/b/lib/foo';
@@ -223,8 +249,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/A/src/test.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/A/lib","rootDir":"/user/username/projects/myproject/packages/A/src","composite":true,"preserveSymlinks":true,"configFilePath":"/user/username/projects/myproject/packages/A/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/A/src/test.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/A/lib",
+  "rootDir": "/user/username/projects/myproject/packages/A/src",
+  "composite": true,
+  "preserveSymlinks": true,
+  "configFilePath": "/user/username/projects/myproject/packages/A/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -243,39 +277,41 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/b/src/bar/foo.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules:
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
+/user/username/projects/myproject/packages/a/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types:
+/user/username/projects/myproject/packages/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
+/user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/packages/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/b/tsconfig.json:
+/user/username/projects/myproject/packages/a/src/test.ts: *new*
   {}
-/user/username/projects/myproject/packages/a/src/test.ts:
+/user/username/projects/myproject/packages/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/b/src/foo.ts:
+/user/username/projects/myproject/packages/b/package.json: *new*
   {}
-/user/username/projects/myproject/packages/b/src/bar/foo.ts:
+/user/username/projects/myproject/packages/b/src/bar/foo.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/packages/b/src/foo.ts: *new*
   {}
-/user/username/projects/myproject/packages/b/package.json:
+/user/username/projects/myproject/packages/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/b/src:
+/user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/packages/a/src:
+/user/username/projects/myproject/packages/a/src: *new*
   {}
-/user/username/projects/myproject/node_modules:
+/user/username/projects/myproject/packages/b/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined

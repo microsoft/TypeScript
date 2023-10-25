@@ -1,4 +1,6 @@
-=== tests/cases/compiler/vardecl.ts ===
+//// [tests/cases/compiler/vardecl.ts] ////
+
+=== vardecl.ts ===
 var simpleVar;
 >simpleVar : any
 
@@ -64,7 +66,7 @@ var n1: { [s: string]: number; };
 >s : string
 
 var c : {
->c : { new?(): any; }
+>c : { "new"?(): any; }
 
         new? (): any;
 >new : () => any
@@ -121,7 +123,7 @@ var n4: {
 }[];
 
 var d4: {
->d4 : { foo(n: string, x: { x: number; y: number; }): { x: number; y: number; }; }
+>d4 : { foo(n: string, x: {    x: number;    y: number;}): {    x: number;    y: number;}; }
 
     foo(n: string, x: { x: number; y: number; }): {
 >foo : (n: string, x: {    x: number;    y: number;}) => {    x: number;    y: number;}

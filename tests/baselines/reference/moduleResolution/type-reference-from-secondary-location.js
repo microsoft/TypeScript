@@ -12,6 +12,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -38,6 +39,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -58,7 +60,9 @@ Resolution:: {
 
 
 //// [/root/node_modules/lib/package.json]
-{"typings":"typings/lib.d.ts"}
+{
+  "typings": "typings/lib.d.ts"
+}
 
 Resolving "lib" from /root/src/app.ts typesRoots: [/root/src/types] with host that doesnt have directoryExists
 Resolution:: {
@@ -68,6 +72,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -97,6 +102,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -120,7 +126,9 @@ Resolution:: {
 
 
 //// [/root/node_modules/@types/lib/package.json]
-{"typings":"typings/lib.d.ts"}
+{
+  "typings": "typings/lib.d.ts"
+}
 
 Resolving "lib" from /root/src/app.ts typesRoots: [/root/src/types] with host that doesnt have directoryExists
 Resolution:: {
@@ -130,6 +138,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",

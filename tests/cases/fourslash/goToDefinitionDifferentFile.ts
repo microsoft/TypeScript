@@ -14,4 +14,4 @@
 ////class fooCls implements /*remoteInterfaceReference*/remoteInterface { }
 ////var fooVar = /*remoteModuleReference*/remoteModule.foo;
 
-verify.goToDefinitionForMarkers("remoteVariable", "remoteFunction", "remoteClass", "remoteInterface", "remoteModule");
+verify.baselineGetDefinitionAtPosition("remoteVariableReference", "remoteFunctionReference", "remoteClassReference", "remoteInterfaceReference", "remoteModuleReference");

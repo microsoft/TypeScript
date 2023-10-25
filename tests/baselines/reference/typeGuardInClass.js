@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardInClass.ts] ////
+
 //// [typeGuardInClass.ts]
 let x: string | number;
 

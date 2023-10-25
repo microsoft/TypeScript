@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/namedTypes/classWithOnlyPublicMembersEquivalentToInterface2.ts ===
+//// [tests/cases/conformance/types/namedTypes/classWithOnlyPublicMembersEquivalentToInterface2.ts] ////
+
+=== classWithOnlyPublicMembersEquivalentToInterface2.ts ===
 // no errors expected
 
 class C {
@@ -10,7 +12,6 @@ class C {
     public y(a: number): number { return null; }
 >y : (a: number) => number
 >a : number
->null : null
 
     public get z() { return 1; }
 >z : number

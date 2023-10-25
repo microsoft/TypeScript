@@ -1,10 +1,21 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/index.ts]
 import type { TheNum } from 'pkg2'
 export const theNum: TheNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/tsconfig.json]
-{"compilerOptions":{"outDir":"build","preserveSymlinks":true},"references":[{"path":"../pkg2"}]}
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "preserveSymlinks": true
+  },
+  "references": [
+    {
+      "path": "../pkg2"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/pkg2/const.ts]
 export type TheNum = 42;
@@ -13,10 +24,21 @@ export type TheNum = 42;
 export type { TheNum } from 'const';
 
 //// [/user/username/projects/myproject/packages/pkg2/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"build","baseUrl":".","preserveSymlinks":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "build",
+    "baseUrl": ".",
+    "preserveSymlinks": true
+  }
+}
 
 //// [/user/username/projects/myproject/packages/pkg2/package.json]
-{"name":"pkg2","version":"1.0.0","main":"build/index.js"}
+{
+  "name": "pkg2",
+  "version": "1.0.0",
+  "main": "build/index.js"
+}
 
 //// [/user/username/projects/myproject/node_modules/pkg2] symlink(/user/username/projects/myproject/packages/pkg2)
 //// [/a/lib/lib.d.ts]
@@ -57,6 +79,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -85,8 +108,18 @@ File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it 
 ======== Module name 'const' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg2/const.ts","/user/username/projects/myproject/packages/pkg2/index.ts"]
-Program options: {"composite":true,"outDir":"/user/username/projects/myproject/packages/pkg2/build","baseUrl":"/user/username/projects/myproject/packages/pkg2","preserveSymlinks":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg2/const.ts",
+  "/user/username/projects/myproject/packages/pkg2/index.ts"
+]
+Program options: {
+  "composite": true,
+  "outDir": "/user/username/projects/myproject/packages/pkg2/build",
+  "baseUrl": "/user/username/projects/myproject/packages/pkg2",
+  "preserveSymlinks": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -103,8 +136,15 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/const.ts (computed .d.ts during emit)
 /user/username/projects/myproject/packages/pkg2/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","preserveSymlinks":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "preserveSymlinks": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -123,12 +163,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts (used version)
 /user/username/projects/myproject/node_modules/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.Success
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAlreadySeen.ts] ////
+
 //// [exportAlreadySeen.ts]
 module M {
     export export var x = 1;

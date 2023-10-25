@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatBug2.ts ===
+//// [tests/cases/compiler/assignmentCompatBug2.ts] ////
+
+=== assignmentCompatBug2.ts ===
 var b2: { b: number;} = { a: 0 }; // error
 >b2 : { b: number; }
 >b : number
@@ -121,7 +123,6 @@ b3 = {
 >k : (a: any) => any
 >(a) =>{ return null; } : (a: any) => any
 >a : any
->null : null
 
 }; // ok
 
@@ -150,6 +151,5 @@ b3 = {
 >k : (a: any) => any
 >(a) =>{ return null; } : (a: any) => any
 >a : any
->null : null
 
 }; // error

@@ -1,6 +1,8 @@
 import * as evaluator from "../../_namespaces/evaluator";
 import * as ts from "../../_namespaces/ts";
-import { ScriptTarget } from "../../_namespaces/ts";
+import {
+    ScriptTarget,
+} from "../../_namespaces/ts";
 
 describe("unittests:: evaluation:: esDecorators", () => {
     const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2021 };
@@ -704,7 +706,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
             });
         });
         // Disabled pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
-        describe.skip(".access", () => {
+        describe(".access", () => {
             describe("for: class", () => {
                 it("is not set", () => {
                     const { context } = exec`
@@ -716,7 +718,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 });
             });
             describe("for: method", () => {
-                it("is { get }", () => {
+                it("is { has, get }", () => {
                     const { context } = exec`
                         export let context;
                         export class C {
@@ -725,10 +727,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     `;
                     assert.isObject(context.access);
-                    assert.hasAllKeys(context.access, ["get"]);
+                    assert.hasAllKeys(context.access, ["has", "get"]);
+                    assert.isFunction(context.access.has);
                     assert.isFunction(context.access.get);
                 });
-                it("accesses value using 'this'", () => {
+                it("test public element presence via .has", () => {
                     const { context, C } = exec`
                         export let context;
                         export class C {
@@ -736,27 +739,56 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static method() {}
                         }
                     `;
-                    assert.strictEqual(context.access.get.call(C), C.method);
-
-                    const obj = { method() {} };
-                    assert.strictEqual(context.access.get.call(obj), obj.method);
+                    assert.isTrue(context.access.has(C));
+                    assert.isTrue(context.access.has({ method() {} }));
+                    assert.isFalse(context.access.has({}));
                 });
-                it("can access value for private name", () => {
-                    const { context, C } = exec`
+                it("test private element presence via .has", () => {
+                    const { context, C, D } = exec`
                         export let context;
                         export class C {
                             @((t, c) => { context = c; })
                             static #method() {}
                         }
+                        export class D {
+                            static #method() {}
+                        }
                     `;
-                    assert.isFunction(context.access.get.call(C));
-
-                    const obj = { ["#method"]() {} };
-                    assert.throws(() => context.access.get.call(obj));
+                    assert.isTrue(context.access.has(C));
+                    assert.isFalse(context.access.has(D));
+                    assert.isFalse(context.access.has({}));
+                });
+                it("read public element of argument", () => {
+                    const { context, C } = exec`
+                        export let context;
+                        export class C {
+                            @((t, c) => { context = c; })
+                            static method() {}
+                        }
+                    `;
+                    assert.strictEqual(context.access.get(C), C.method);
+                    const obj = { method() {} };
+                    assert.isTrue(context.access.has(obj));
+                    assert.strictEqual(context.access.get(obj), obj.method);
+                });
+                it("read private element of argument", () => {
+                    const { context, C, D } = exec`
+                        export let context;
+                        export class C {
+                            @((t, c) => { context = c; })
+                            static #method() {}
+                        }
+                        export class D {
+                            static #method() {}
+                        }
+                    `;
+                    assert.isFunction(context.access.get(C));
+                    assert.throws(() => context.access.get(D));
+                    assert.throws(() => context.access.get({ ["#method"]() {} }));
                 });
             });
             describe("for: getter", () => {
-                it("is { get }", () => {
+                it("is { has, get }", () => {
                     const { context } = exec`
                         export let context;
                         export class C {
@@ -765,10 +797,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     `;
                     assert.isObject(context.access);
-                    assert.hasAllKeys(context.access, ["get"]);
+                    assert.hasAllKeys(context.access, ["has", "get"]);
+                    assert.isFunction(context.access.has);
                     assert.isFunction(context.access.get);
                 });
-                it("accesses value using 'this'", () => {
+                it("test public element presence via .has", () => {
                     const { context, C } = exec`
                         export let context;
                         export class C {
@@ -776,27 +809,58 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static get x() { return 1; }
                         }
                     `;
-                    assert.strictEqual(context.access.get.call(C), 1);
-
-                    const obj = { x: 2 };
-                    assert.strictEqual(context.access.get.call(obj), 2);
+                    assert.isTrue(context.access.has(C));
+                    assert.isTrue(context.access.has({
+                        get x() {
+                            return 2;
+                        },
+                    }));
+                    assert.isFalse(context.access.has({}));
                 });
-                it("can access value for private name", () => {
+                it("test private element presence via .has", () => {
+                    const { context, C, D } = exec`
+                        export let context;
+                        export class C {
+                            @((t, c) => { context = c; })
+                            static #method() {}
+                        }
+                        export class D {
+                            static #method() {}
+                        }
+                    `;
+                    assert.isTrue(context.access.has(C));
+                    assert.isFalse(context.access.has(D));
+                    assert.isFalse(context.access.has({}));
+                });
+                it("read public element of argument", () => {
                     const { context, C } = exec`
+                        export let context;
+                        export class C {
+                            @((t, c) => { context = c; })
+                            static get x() { return 1; }
+                        }
+                    `;
+                    assert.strictEqual(context.access.get(C), 1);
+                    assert.strictEqual(context.access.get({ x: 2 }), 2);
+                });
+                it("read private element of argument", () => {
+                    const { context, C, D } = exec`
                         export let context;
                         export class C {
                             @((t, c) => { context = c; })
                             static get #x() { return 1; }
                         }
+                        export class D {
+                            static get #x() { return 1; }
+                        }
                     `;
-                    assert.strictEqual(context.access.get.call(C), 1);
-
-                    const obj = { "#x": 2 };
-                    assert.throws(() => context.access.get.call(obj));
+                    assert.strictEqual(context.access.get(C), 1);
+                    assert.throws(() => context.access.get(D));
+                    assert.throws(() => context.access.get({ "#x": 2 }));
                 });
             });
             describe("for: setter", () => {
-                it("is { set }", () => {
+                it("is { has, set }", () => {
                     const { context } = exec`
                         export let context;
                         export class C {
@@ -805,10 +869,38 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     `;
                     assert.isObject(context.access);
-                    assert.hasAllKeys(context.access, ["set"]);
+                    assert.hasAllKeys(context.access, ["has", "set"]);
+                    assert.isFunction(context.access.has);
                     assert.isFunction(context.access.set);
                 });
-                it("accesses value using 'this'", () => {
+                it("test public element presence via .has", () => {
+                    const { context, C } = exec`
+                        export let context;
+                        export class C {
+                            @((t, c) => { context = c; })
+                            static set x(v: number) { }
+                        }
+                    `;
+                    assert.isTrue(context.access.has(C));
+                    assert.isTrue(context.access.has({ x: 2 }));
+                    assert.isFalse(context.access.has({}));
+                });
+                it("test private element presence via .has", () => {
+                    const { context, C, D } = exec`
+                        export let context;
+                        export class C {
+                            @((t, c) => { context = c; })
+                            static set #x(v: number) { }
+                        }
+                        export class D {
+                            static set #x(v: number) { }
+                        }
+                    `;
+                    assert.isTrue(context.access.has(C));
+                    assert.isFalse(context.access.has(D));
+                    assert.isFalse(context.access.has({ "#x": 2 }));
+                });
+                it("write public element of argument", () => {
                     const { context, C } = exec`
                         export let context;
                         export class C {
@@ -817,29 +909,31 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static y: number;
                         }
                     `;
-                    context.access.set.call(C, 1);
+                    context.access.set(C, 1);
                     assert.strictEqual(C.y, 1);
 
                     const obj = { x: 2 };
-                    context.access.set.call(obj, 3);
+                    context.access.set(obj, 3);
                     assert.strictEqual(obj.x, 3);
                 });
-                it("can access value for private name", () => {
-                    const { context, C } = exec`
+                it("write private element of argument", () => {
+                    const { context, C, D } = exec`
                         export let context;
                         export class C {
                             @((t, c) => { context = c; })
                             static set #x(v: number) {}
                         }
+                        export class D {
+                            static set #x(v: number) {}
+                        }
                     `;
-                    context.access.set.call(C, 1);
-
-                    const obj = { "#x": 2 };
-                    assert.throws(() => context.access.set.call(obj, 3));
+                    context.access.set(C, 1);
+                    assert.throws(() => context.access.set(D, 3));
+                    assert.throws(() => context.access.set({ "#x": 2 }, 3));
                 });
             });
             describe("for: field", () => {
-                it("is { get, set }", () => {
+                it("is { has, get, set }", () => {
                     const { context } = exec`
                         export let context;
                         export class C {
@@ -848,11 +942,39 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     `;
                     assert.isObject(context.access);
-                    assert.hasAllKeys(context.access, ["get", "set"]);
+                    assert.hasAllKeys(context.access, ["has", "get", "set"]);
+                    assert.isFunction(context.access.has);
                     assert.isFunction(context.access.get);
                     assert.isFunction(context.access.set);
                 });
-                it("accesses value using 'this'", () => {
+                it("test public element presence via .has", () => {
+                    const { context, C } = exec`
+                        export let context;
+                        export class C {
+                            @((t, c) => { context = c; })
+                            static x: number = 1;
+                        }
+                    `;
+                    assert.isTrue(context.access.has(C));
+                    assert.isTrue(context.access.has({ x: 2 }));
+                    assert.isFalse(context.access.has({}));
+                });
+                it("test private element presence via .has", () => {
+                    const { context, C, D } = exec`
+                        export let context;
+                        export class C {
+                            @((t, c) => { context = c; })
+                            static #x: number = 1;
+                        }
+                        export class D {
+                            static #x: number = 1;
+                        }
+                    `;
+                    assert.isTrue(context.access.has(C));
+                    assert.isFalse(context.access.has(D));
+                    assert.isFalse(context.access.has({ "#x": 2 }));
+                });
+                it("read/write public element of argument", () => {
                     const { context, C } = exec`
                         export let context;
                         export class C {
@@ -861,36 +983,41 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     `;
 
-                    assert.strictEqual(context.access.get.call(C), 1);
-                    context.access.set.call(C, 2);
+                    assert.strictEqual(context.access.get(C), 1);
+                    context.access.set(C, 2);
                     assert.strictEqual(C.x, 2);
 
                     const obj = { x: 2 };
-                    assert.strictEqual(context.access.get.call(obj), 2);
-                    context.access.set.call(obj, 3);
+                    assert.strictEqual(context.access.get(obj), 2);
+                    context.access.set(obj, 3);
                     assert.strictEqual(obj.x, 3);
                 });
-                it("can access value for private name", () => {
-                    const { context, C } = exec`
+                it("read/write private element of argument", () => {
+                    const { context, C, D } = exec`
                         export let context;
                         export class C {
                             @((t, c) => { context = c; })
                             static #x: number = 1;
                             static getX() { return this.#x; }
                         }
+                        export class D {
+                            static #x: number = 1;
+                        }
                     `;
 
-                    assert.strictEqual(context.access.get.call(C), 1);
-                    context.access.set.call(C, 2);
+                    assert.strictEqual(context.access.get(C), 1);
+                    context.access.set(C, 2);
                     assert.strictEqual(C.getX(), 2);
 
-                    const obj = { "#x": 2 };
-                    assert.throws(() => context.access.get.call(obj));
-                    assert.throws(() => context.access.set.call(obj, 3));
+                    assert.throws(() => context.access.get(D));
+                    assert.throws(() => context.access.set(D, 3));
+
+                    assert.throws(() => context.access.get({ "#x": 2 }));
+                    assert.throws(() => context.access.set({ "#x": 2 }, 3));
                 });
             });
             describe("for: auto-accessor", () => {
-                it("is { get, set }", () => {
+                it("is { has, get, set }", () => {
                     const { context } = exec`
                         export let context;
                         export class C {
@@ -898,11 +1025,39 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static accessor x: number;
                         }
                     `;
-                    assert.hasAllKeys(context.access, ["get", "set"]);
+                    assert.hasAllKeys(context.access, ["has", "get", "set"]);
+                    assert.isFunction(context.access.has);
                     assert.isFunction(context.access.get);
                     assert.isFunction(context.access.set);
                 });
-                it("accesses value using 'this'", () => {
+                it("test public element presence via .has", () => {
+                    const { context, C } = exec`
+                        export let context;
+                        export class C {
+                            @((t, c) => { context = c; })
+                            static accessor x: number = 1;
+                        }
+                    `;
+                    assert.isTrue(context.access.has(C));
+                    assert.isTrue(context.access.has({ x: 2 }));
+                    assert.isFalse(context.access.has({}));
+                });
+                it("test private element presence via .has", () => {
+                    const { context, C, D } = exec`
+                        export let context;
+                        export class C {
+                            @((t, c) => { context = c; })
+                            static accessor #x: number = 1;
+                        }
+                        export class D {
+                            static accessor #x: number = 1;
+                        }
+                    `;
+                    assert.isTrue(context.access.has(C));
+                    assert.isFalse(context.access.has(D));
+                    assert.isFalse(context.access.has({ "#x": 2 }));
+                });
+                it("read/write public element of argument", () => {
                     const { context, C } = exec`
                         export let context;
                         export class C {
@@ -911,32 +1066,37 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     `;
 
-                    assert.strictEqual(context.access.get.call(C), 1);
-                    context.access.set.call(C, 2);
+                    assert.strictEqual(context.access.get(C), 1);
+                    context.access.set(C, 2);
                     assert.strictEqual(C.x, 2);
 
                     const obj = { x: 2 };
-                    assert.strictEqual(context.access.get.call(obj), 2);
-                    context.access.set.call(obj, 3);
+                    assert.strictEqual(context.access.get(obj), 2);
+                    context.access.set(obj, 3);
                     assert.strictEqual(obj.x, 3);
                 });
-                it("can access value for private name", () => {
-                    const { context, C } = exec`
+                it("read/write private element of argument", () => {
+                    const { context, C, D } = exec`
                         export let context;
                         export class C {
                             @((t, c) => { context = c; })
                             static accessor #x: number = 1;
                             static getX() { return this.#x; }
                         }
+                        export class D {
+                            static accessor #x: number = 1;
+                        }
                     `;
 
-                    assert.strictEqual(context.access.get.call(C), 1);
-                    context.access.set.call(C, 2);
+                    assert.strictEqual(context.access.get(C), 1);
+                    context.access.set(C, 2);
                     assert.strictEqual(C.getX(), 2);
 
-                    const obj = { "#x": 2 };
-                    assert.throws(() => context.access.get.call(obj));
-                    assert.throws(() => context.access.set.call(obj, 3));
+                    assert.throws(() => context.access.get(D));
+                    assert.throws(() => context.access.set(D, 3));
+
+                    assert.throws(() => context.access.get({ "#x": 2 }));
+                    assert.throws(() => context.access.set({ "#x": 2 }, 3));
                 });
             });
         });
@@ -980,7 +1140,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         @((t, c) => { context = c; }) class C {
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
             });
             describe("for: method", () => {
@@ -1030,7 +1190,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static method() {}
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1111,7 +1271,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static get x() { return 1; }
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1192,7 +1352,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static set x(v: number) {}
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1273,7 +1433,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static x: number;
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1354,7 +1514,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static accessor x: number;
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1573,12 +1733,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 `;
                 assert.strictEqual(C.x, 2);
             });
-            it("multiple initializer pipe-throughs applied in reverse order", () => {
+            it("multiple initializer pipe-throughs applied in order", () => {
                 const { C } = exec`
-                    function initializer(x) { return x + 1; }
                     export class C {
-                        @((t, c) => x => [...x, 3])
                         @((t, c) => x => [...x, 2])
+                        @((t, c) => x => [...x, 3])
                         static x: number[] = [1];
                     }
                 `;
@@ -1641,12 +1800,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 `;
                 assert.strictEqual(C.x, 2);
             });
-            it("multiple initializer pipe-throughs applied in reverse order", () => {
+            it("multiple init pipe-throughs applied in order", () => {
                 const { C } = exec`
-                    function initializer(x) { return x + 1; }
                     export class C {
-                        @((t, c) => ({ init: x => [...x, 3] }))
                         @((t, c) => ({ init: x => [...x, 2] }))
+                        @((t, c) => ({ init: x => [...x, 3] }))
                         static accessor x: number[] = [1];
                     }
                 `;
@@ -1705,10 +1863,42 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 assert.throws(() => main("abc"));
             });
         });
+        it("accessor 'init' evaluation order (#54267)", () => {
+            const { main } = exec`
+                function minusTwo({ set }: any, ctx: any) {
+                    return {
+                        set(v) { set.call(this, v - 2); },
+                        init(v) { return v - 2; },
+                    };
+                }
+
+                function timesFour({ set }: any, ctx: any) {
+                    return {
+                        set(v) { set.call(this, v * 4); },
+                        init(v) { return v * 4; }
+                    };
+                }
+
+                class C {
+                    @minusTwo @timesFour accessor x = 5;
+                }
+
+                export const main = () => {
+                    const obj = new C();
+                    const afterInit = obj.x;
+                    obj.x = 5;
+                    const afterSet = obj.x;
+                    return { afterInit, afterSet };
+                };
+            `;
+            const { afterInit, afterSet } = main();
+            assert.strictEqual(afterInit, 12);
+            assert.strictEqual(afterSet, 12);
+        });
     });
 
-    const nodeVersion = ts.Version.tryParse(process.version);
-    const supportsClassStaticBlock = nodeVersion && nodeVersion.major >= 16;
+    const nodeVersion = new ts.Version(process.versions.node);
+    const supportsClassStaticBlock = nodeVersion.major >= 16;
 
     const targets = [
         // NOTE: Class static blocks weren't supported in Node v14
@@ -2006,11 +2196,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 // order and applied to the replacement class:
                 "static block evaluation",
                 "static field initializer evaluation",
-                "static field injected initializer evaluation 2",
                 "static field injected initializer evaluation 1",
+                "static field injected initializer evaluation 2",
                 "static auto-accessor initializer evaluation",
-                "static auto-accessor injected initializer evaluation 2",
                 "static auto-accessor injected initializer evaluation 1",
+                "static auto-accessor injected initializer evaluation 2",
                 // NOTE: at this point, static private fields will be installed (TODO: on the replacement class)
 
                 // finally, class extra initializers are applied in the order they were added (i.e., methods before fields,
@@ -2052,18 +2242,18 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 // next, instance initializers (i.e., fields, auto-accessors, and static blocks) are evaluated in document
                 // order:
                 "instance field initializer evaluation",
-                "instance field injected initializer evaluation 2",
                 "instance field injected initializer evaluation 1",
+                "instance field injected initializer evaluation 2",
                 "instance auto-accessor initializer evaluation",
-                "instance auto-accessor injected initializer evaluation 2",
                 "instance auto-accessor injected initializer evaluation 1",
+                "instance auto-accessor injected initializer evaluation 2",
                 // NOTE: at this point, instance private fields will be installed.
 
                 // finally, statements in the constructor after the call to `super()` are evaluated:
                 "post-super constructor evaluation",
 
                 // and now evaluation has completed:
-                "done"
+                "done",
             ]);
         });
 
@@ -2223,13 +2413,12 @@ describe("unittests:: evaluation:: esDecorators", () => {
             });
 
             // see https://github.com/tc39/proposal-decorators#access-and-metadata-sidechanneling
-            // Disabled, pending the outcome of https://github.com/tc39/proposal-decorators/issues/494
-            it.skip(`dependency injection (${targetName})`, () => {
+            it(`dependency injection (${targetName})`, () => {
                 const { result } = exec`
-                    const INJECTIONS = new WeakMap<object, { injectionKey: string, set: (this: any, value: any) => void }[]>();
+                    const INJECTIONS = new WeakMap<object, { injectionKey: string, set: (object: any, value: any) => void }[]>();
 
                     function createInjections() {
-                        const injections: { injectionKey: string, set: (this: any, value: any) => void }[] = [];
+                        const injections: { injectionKey: string, set: (object: any, value: any) => void }[] = [];
 
                         function injectable<T extends new (...args: any) => any>(Class: T, context: ClassDecoratorContext<T>) {
                             INJECTIONS.set(Class, injections);
@@ -2259,7 +2448,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             let instance = new Class();
 
                             for (const { injectionKey, set } of INJECTIONS.get(Class) || []) {
-                                set.call(instance, this.lookup(injectionKey));
+                                set(instance, this.lookup(injectionKey));
                             }
 
                             return instance;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePredicateStructuralMatch.ts ===
+//// [tests/cases/compiler/typePredicateStructuralMatch.ts] ////
+
+=== typePredicateStructuralMatch.ts ===
 // Repro from #12235
 
 getResults1([]);
@@ -51,9 +53,9 @@ function getResults1(value: Results | { data: Results }): Results {
     return isResponseInData(value) ? value.data : value;
 >isResponseInData : Symbol(isResponseInData, Decl(typePredicateStructuralMatch.ts, 9, 24))
 >value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 15, 21))
->value.data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 11, 63))
+>value.data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 15, 39))
 >value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 15, 21))
->data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 11, 63))
+>data : Symbol(data, Decl(typePredicateStructuralMatch.ts, 15, 39))
 >value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 15, 21))
 }
 

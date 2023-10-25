@@ -1,9 +1,14 @@
+currentDirectory:: /home/username/project useCaseSensitiveFileNames: true
 Input::
 //// [/home/username/project/app/file.ts]
 var a = 10;
 
 //// [/home/username/project/tsconfig.json]
-{"include":["app/**/*.ts"]}
+{
+  "include": [
+    "app/**/*.ts"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -28,8 +33,13 @@ Output::
 
 
 
-Program root files: ["/home/username/project/app/file.ts"]
-Program options: {"watch":true,"configFilePath":"/home/username/project/tsconfig.json"}
+Program root files: [
+  "/home/username/project/app/file.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/home/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -44,19 +54,19 @@ Shape signatures in builder refreshed for::
 /home/username/project/app/file.ts (used version)
 
 PolledWatches::
-/home/username/project/node_modules/@types:
+/home/username/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/home/username/project/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/home/username/project/app/file.ts:
+/home/username/project/app/file.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/home/username/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/home/username/project/app:
+/home/username/project/app: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -74,6 +84,9 @@ var a = 10;
 var b = 10;
 
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
@@ -82,8 +95,13 @@ Output::
 
 
 
-Program root files: ["/home/username/project/app/file.ts"]
-Program options: {"watch":true,"configFilePath":"/home/username/project/tsconfig.json"}
+Program root files: [
+  "/home/username/project/app/file.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/home/username/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -95,22 +113,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/username/project/app/file.ts (computed .d.ts)
-
-PolledWatches::
-/home/username/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/username/project/tsconfig.json:
-  {}
-/home/username/project/app/file.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/username/project/app:
-  {}
 
 exitCode:: ExitStatus.undefined
 

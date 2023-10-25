@@ -1,12 +1,14 @@
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(30,5): error TS2322: Type '{ type: "number"; value: number; multipleOf: number; format: string; }' is not assignable to type 'Primitive'.
-  Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(41,5): error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-  Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
-tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): error TS2322: Type '{ p1: "right"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-  Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
+excessPropertyCheckWithMultipleDiscriminants.ts(30,5): error TS2353: Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
+excessPropertyCheckWithMultipleDiscriminants.ts(41,5): error TS2353: Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
+excessPropertyCheckWithMultipleDiscriminants.ts(50,5): error TS2353: Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
+excessPropertyCheckWithMultipleDiscriminants.ts(57,5): error TS2353: Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
+excessPropertyCheckWithMultipleDiscriminants.ts(83,5): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
+excessPropertyCheckWithMultipleDiscriminants.ts(93,5): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
+excessPropertyCheckWithMultipleDiscriminants.ts(131,5): error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute | OneToOneAttribute'.
+excessPropertyCheckWithMultipleDiscriminants.ts(137,5): error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute'.
 
 
-==== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts (3 errors) ====
+==== excessPropertyCheckWithMultipleDiscriminants.ts (8 errors) ====
     // Repro from #32657
     
     interface Base<T> {
@@ -37,9 +39,8 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): erro
         type: "number",
         value: 10,
         multipleOf: 5, // excess property
-        ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ type: "number"; value: number; multipleOf: number; format: string; }' is not assignable to type 'Primitive'.
-!!! error TS2322:   Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
+        ~~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
         format: "what?"
     }
     
@@ -51,18 +52,19 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): erro
         p1: 'left',
         p2: false,
         p3: 42,
-        ~~~~~~
-!!! error TS2322: Type '{ p1: "left"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-!!! error TS2322:   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
+        ~~
+!!! error TS2353: Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
         p4: "hello"
     };
     
-    // This has no excess error because variant one and three are both applicable.
+    // This has excess error because variant two is not applicable.
     const b: DisjointDiscriminants = {
         p1: 'left',
         p2: true,
         p3: 42,
         p4: "hello"
+        ~~
+!!! error TS2353: Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.
     };
     
     // This has excess error because variant two is the only applicable case
@@ -70,9 +72,96 @@ tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts(57,5): erro
         p1: 'right',
         p2: false,
         p3: 42,
-        ~~~~~~
-!!! error TS2322: Type '{ p1: "right"; p2: false; p3: number; p4: string; }' is not assignable to type 'DisjointDiscriminants'.
-!!! error TS2322:   Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
+        ~~
+!!! error TS2353: Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "right"; p2: false; p4: string; }'.
         p4: "hello"
+    };
+    
+    // Repro from #51873
+    
+    interface Common {
+        type: "A" | "B" | "C" | "D";
+        n: number;
+    }
+    interface A {
+        type: "A";
+        a?: number;
+    }
+    interface B {
+        type: "B";
+        b?: number;
+    }
+    
+    type CommonWithOverlappingOptionals = Common | (Common & A) | (Common & B);
+    
+    // Should reject { b } because reduced to Common | (Common & A)
+    const c1: CommonWithOverlappingOptionals = {
+        type: "A",
+        n: 1,
+        a: 1,
+        b: 1  // excess property
+        ~
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | (Common & A)'.
+    }
+    
+    type CommonWithDisjointOverlappingOptionals = Common | A | B;
+    
+    // Should still reject { b } because reduced to Common | A, even though these are now disjoint
+    const c2: CommonWithDisjointOverlappingOptionals = {
+        type: "A",
+        n: 1,
+        a: 1,
+        b: 1  // excess property
+        ~
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Common | A'.
+    }
+    
+    // Repro from https://github.com/microsoft/TypeScript/pull/51884#issuecomment-1472736068
+    
+    export type BaseAttribute<T> = {
+        type?: string | undefined;
+        required?: boolean | undefined;
+        defaultsTo?: T | undefined;
+    };
+    
+    export type Attribute =
+        | string
+        | StringAttribute
+        | NumberAttribute
+        | OneToOneAttribute
+    
+    export type Attribute2 =
+        | string
+        | StringAttribute
+        | NumberAttribute
+    
+    export type StringAttribute = BaseAttribute<string> & {
+        type: 'string';
+    };
+    
+    export type NumberAttribute = BaseAttribute<number> & {
+        type: 'number';
+        autoIncrement?: boolean | undefined;
+    };
+    
+    export type OneToOneAttribute = BaseAttribute<any> & {
+        model: string;
+    };
+    
+    // both should error due to excess properties
+    const attributes: Attribute = {
+        type: 'string',
+        autoIncrement: true,
+        ~~~~~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute | OneToOneAttribute'.
+        required: true,
+    };
+    
+    const attributes2: Attribute2 = {
+        type: 'string',
+        autoIncrement: true,
+        ~~~~~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'autoIncrement' does not exist in type 'StringAttribute'.
+        required: true,
     };
     

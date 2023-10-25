@@ -1,5 +1,20 @@
-Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:12.000] request:
+currentDirectory:: / useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a/b/file1.js]
+let x =1;
+
+//// [/a/b/file2.d.ts]
+
+                interface T {
+                    name: string;
+                };
+                interface T {
+                    name: number;
+                };
+
+
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
@@ -19,35 +34,15 @@ Info 1    [00:00:12.000] request:
       "seq": 1,
       "type": "request"
     }
-Before request
-//// [/a/b/file1.js]
-let x =1;
-
-//// [/a/b/file2.d.ts]
-
-                interface T {
-                    name: string;
-                };
-                interface T {
-                    name: number;
-                };
-
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-Info 2    [00:00:13.000] FileWatcher:: Added:: WatchInfo: /a/b/file1.js 500 undefined WatchType: Closed Script info
-Info 3    [00:00:14.000] FileWatcher:: Added:: WatchInfo: /a/b/file2.d.ts 500 undefined WatchType: Closed Script info
-Info 4    [00:00:15.000] Starting updateGraphWorker: Project: project1
-Info 5    [00:00:16.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: project1 WatchType: Missing file
-Info 6    [00:00:17.000] Finishing updateGraphWorker: Project: project1 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 7    [00:00:18.000] Project 'project1' (External)
-Info 8    [00:00:19.000] 	Files (2)
-	/a/b/file1.js
-	/a/b/file2.d.ts
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file1.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file2.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: project1
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: project1 WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: project1 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project 'project1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/a/b/file1.js Text-1 "let x =1;"
+	/a/b/file2.d.ts Text-1 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
 
 
 	a/b/file1.js
@@ -55,15 +50,125 @@ Info 8    [00:00:19.000] 	Files (2)
 	a/b/file2.d.ts
 	  Root file specified for compilation
 
-Info 9    [00:00:20.000] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: Creating typing installer
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/file1.js: *new*
+  {}
+/a/b/file2.d.ts: *new*
+  {}
+
+TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Updating types-registry npm package...
+TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
+TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/types-registry/index.json]
+{
+  "entries": {}
+}
+
+
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "project1",
+      "fileNames": [
+        "/a/b/file1.js",
+        "/a/b/file2.d.ts"
+      ],
+      "compilerOptions": {
+        "skipLibCheck": false,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "include": [],
+        "exclude": [],
+        "enable": true
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules",
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "project1",
+      "files": [
+        "/a/b/bower_components",
+        "/a/b/node_modules",
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Project: project1 WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Project: project1 WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: project1 WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: project1 WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: project1 WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: project1 WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "project1",
+      "typeAcquisition": {
+        "include": [],
+        "exclude": [],
+        "enable": true
+      },
+      "compilerOptions": {
+        "skipLibCheck": false,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
 After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/bower_components:
+/bower_components: *new*
   {"pollingInterval":500}
-/node_modules:
+/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -73,15 +178,12 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/a:
+/a: *new*
   {}
 
-Info 10   [00:00:21.000] response:
-    {
-      "response": true,
-      "responseRequired": true
-    }
-Info 11   [00:00:22.000] request:
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
@@ -90,48 +192,9 @@ Info 11   [00:00:22.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/file1.js:
-  {}
-/a/b/file2.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/bower_components:
-  {"pollingInterval":500}
-/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/file1.js:
-  {}
-/a/b/file2.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
-Info 12   [00:00:23.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": [],
       "responseRequired": true
     }
+After request

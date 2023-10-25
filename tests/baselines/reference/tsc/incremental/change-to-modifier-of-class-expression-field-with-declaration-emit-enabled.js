@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,7 +33,11 @@ type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"declaration":true}}
+{
+  "compilerOptions": {
+    "declaration": true
+  }
+}
 
 
 

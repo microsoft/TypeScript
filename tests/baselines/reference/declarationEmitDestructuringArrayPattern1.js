@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDestructuringArrayPattern1.ts] ////
+
 //// [declarationEmitDestructuringArrayPattern1.ts]
 var [] = [1, "hello"]; // Dont emit anything
 var [x] = [1, "hello"]; // emit x: number

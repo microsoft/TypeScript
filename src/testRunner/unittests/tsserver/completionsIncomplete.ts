@@ -1,12 +1,16 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
+import {
+    baselineTsserverLogs,
+    createSession,
+    openFilesForSession,
+} from "../helpers/tsserver";
 import {
     createServerHost,
     File,
-} from "../virtualFileSystemWithWatch";
-import {
-    createSession,
-    openFilesForSession,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 function createExportingModuleFile(path: string, exportPrefix: string, exportCount: number): File {
     return {
@@ -16,10 +20,12 @@ function createExportingModuleFile(path: string, exportPrefix: string, exportCou
 }
 
 function createExportingModuleFiles(pathPrefix: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
-    return ts.arrayOf(fileCount, fileIndex => createExportingModuleFile(
-        `${pathPrefix}_${fileIndex}.ts`,
-        getExportPrefix(fileIndex),
-        exportCount));
+    return ts.arrayOf(fileCount, fileIndex =>
+        createExportingModuleFile(
+            `${pathPrefix}_${fileIndex}.ts`,
+            getExportPrefix(fileIndex),
+            exportCount,
+        ));
 }
 
 function createNodeModulesPackage(packageName: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
@@ -41,12 +47,12 @@ function createNodeModulesPackage(packageName: string, fileCount: number, export
 
 const indexFile: File = {
     path: "/index.ts",
-    content: ""
+    content: "",
 };
 
 const tsconfigFile: File = {
     path: "/tsconfig.json",
-    content: `{ "compilerOptions": { "module": "commonjs" } }`
+    content: `{ "compilerOptions": { "module": "commonjs" } }`,
 };
 
 const packageJsonFile: File = {
@@ -76,6 +82,7 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
                 assert(!completions.isIncomplete);
                 assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), exportingFiles.length);
             });
+        baselineTsserverLogs("completionsIncomplete", "works", session);
     });
 
     it("resolves more when available from module specifier cache (1)", () => {
@@ -86,6 +93,7 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
         typeToTriggerCompletions(indexFile.path, "a", completions => {
             assert(!completions.isIncomplete);
         });
+        baselineTsserverLogs("completionsIncomplete", "resolves more when available from module specifier cache (1)", session);
     });
 
     it("resolves more when available from module specifier cache (2)", () => {
@@ -97,6 +105,7 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
         typeToTriggerCompletions(indexFile.path, "a", completions => assert(completions.isIncomplete))
             .backspace()
             .type("a", completions => assert(!completions.isIncomplete));
+        baselineTsserverLogs("completionsIncomplete", "resolves more when available from module specifier cache (2)", session);
     });
 
     it("ambient module specifier resolutions do not count against the resolution limit", () => {
@@ -113,6 +122,7 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
             assert(!completions.isIncomplete);
             assert.lengthOf(completions.entries.filter(e => (e.data as any)?.moduleSpecifier), ambientFiles.length * 5 + exportingFiles.length);
         });
+        baselineTsserverLogs("completionsIncomplete", "ambient module specifier resolutions do not count against the resolution limit", session);
     });
 
     it("works with PackageJsonAutoImportProvider", () => {
@@ -127,8 +137,10 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
                 assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a")), 50);
                 assertCompletionDetailsOk(
                     indexFile.path,
-                    completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!);
+                    completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!,
+                );
             });
+        baselineTsserverLogs("completionsIncomplete", "works with PackageJsonAutoImportProvider", session);
     });
 
     it("works for transient symbols between requests", () => {
@@ -152,12 +164,13 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
                 const sigint = completions.entries.find(e => e.name === "SIGINT");
                 assert((sigint!.data as any).moduleSpecifier);
             });
+        baselineTsserverLogs("completionsIncomplete", "works for transient symbols between requests", session);
     });
 });
 
 function setup(files: File[]) {
     const host = createServerHost(files);
-    const session = createSession(host);
+    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
     const projectService = session.getProjectService();
     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
         command: ts.server.protocol.CommandTypes.Configure,
@@ -168,8 +181,8 @@ function setup(files: File[]) {
                 includeCompletionsWithInsertText: true,
                 includeCompletionsForImportStatements: true,
                 includePackageJsonAutoImports: "auto",
-            }
-        }
+            },
+        },
     });
 
     return { host, session, projectService, typeToTriggerCompletions, assertCompletionDetailsOk };
@@ -205,7 +218,7 @@ function setup(files: File[]) {
                     triggerKind: isIncompleteContinuation
                         ? ts.server.protocol.CompletionTriggerKind.TriggerForIncompleteCompletions
                         : undefined,
-                }
+                },
             }).response as ts.server.protocol.CompletionInfo;
 
             cb?.(ts.Debug.checkDefined(response));
@@ -260,8 +273,8 @@ function setup(files: File[]) {
                     name: entry.name,
                     source: entry.source,
                     data: entry.data,
-                }]
-            }
+                }],
+            },
         }).response as ts.server.protocol.CompletionEntryDetails[];
 
         assert(details[0]);

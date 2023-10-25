@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -16,52 +17,147 @@ interface Array<T> { length: number; [n: number]: T; }
 export const pkg0 = 0;
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/user/username/projects/myproject/pkg1/index.ts]
 export const pkg1 = 1;
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../pkg0"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../pkg0"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/pkg2/index.ts]
 export const pkg2 = 2;
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../pkg0"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../pkg0"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/pkg3/index.ts]
 export const pkg3 = 3;
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../pkg0"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../pkg0"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/pkg4/index.ts]
 export const pkg4 = 4;
 
 //// [/user/username/projects/myproject/pkg4/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../pkg0"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../pkg0"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/pkg5/index.ts]
 export const pkg5 = 5;
 
 //// [/user/username/projects/myproject/pkg5/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../pkg0"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../pkg0"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/pkg6/index.ts]
 export const pkg6 = 6;
 
 //// [/user/username/projects/myproject/pkg6/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../pkg0"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../pkg0"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/pkg7/index.ts]
 export const pkg7 = 7;
 
 //// [/user/username/projects/myproject/pkg7/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../pkg0"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../pkg0"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"references":[{"path":"./pkg0"},{"path":"./pkg1"},{"path":"./pkg2"},{"path":"./pkg3"},{"path":"./pkg4"},{"path":"./pkg5"},{"path":"./pkg6"},{"path":"./pkg7"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./pkg0"
+    },
+    {
+      "path": "./pkg1"
+    },
+    {
+      "path": "./pkg2"
+    },
+    {
+      "path": "./pkg3"
+    },
+    {
+      "path": "./pkg4"
+    },
+    {
+      "path": "./pkg5"
+    },
+    {
+      "path": "./pkg6"
+    },
+    {
+      "path": "./pkg7"
+    }
+  ],
+  "files": []
+}
 
 
 /a/lib/tsc.js -b -w -v
@@ -116,8 +212,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -131,8 +233,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/pkg1/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg1/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -146,8 +254,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg1/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg2/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -161,8 +275,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg2/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/pkg3/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg3/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg3/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -176,8 +296,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg3/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/pkg4/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg4/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg4/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -191,8 +317,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg4/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/pkg5/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg5/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg5/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -206,8 +338,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg5/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/pkg6/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg6/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg6/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -221,8 +359,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg6/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/pkg7/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg7/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg7/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -236,60 +380,58 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg7/index.ts (computed .d.ts during emit)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
+/user/username/projects/myproject/pkg0/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg0/index.ts:
+/user/username/projects/myproject/pkg0/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
+/user/username/projects/myproject/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg1/index.ts:
+/user/username/projects/myproject/pkg1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
+/user/username/projects/myproject/pkg2/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg2/index.ts:
+/user/username/projects/myproject/pkg2/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
+/user/username/projects/myproject/pkg3/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg3/index.ts:
+/user/username/projects/myproject/pkg3/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
+/user/username/projects/myproject/pkg4/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg4/index.ts:
+/user/username/projects/myproject/pkg4/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
+/user/username/projects/myproject/pkg5/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg5/index.ts:
+/user/username/projects/myproject/pkg5/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
+/user/username/projects/myproject/pkg6/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg6/index.ts:
+/user/username/projects/myproject/pkg6/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
+/user/username/projects/myproject/pkg7/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg7/index.ts:
+/user/username/projects/myproject/pkg7/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
+/user/username/projects/myproject/pkg0: *new*
   {}
-/user/username/projects/myproject/pkg1:
+/user/username/projects/myproject/pkg1: *new*
   {}
-/user/username/projects/myproject/pkg2:
+/user/username/projects/myproject/pkg2: *new*
   {}
-/user/username/projects/myproject/pkg3:
+/user/username/projects/myproject/pkg3: *new*
   {}
-/user/username/projects/myproject/pkg4:
+/user/username/projects/myproject/pkg4: *new*
   {}
-/user/username/projects/myproject/pkg5:
+/user/username/projects/myproject/pkg5: *new*
   {}
-/user/username/projects/myproject/pkg6:
+/user/username/projects/myproject/pkg6: *new*
   {}
-/user/username/projects/myproject/pkg7:
+/user/username/projects/myproject/pkg7: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -790,6 +932,9 @@ Input::
 export const pkg0 = 0;const someConst2 = 10;
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:02:40 AM[0m] File change detected. Starting incremental compilation...
@@ -830,8 +975,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -842,62 +993,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -971,63 +1066,9 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1039,6 +1080,10 @@ Input::
 export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;
 
 
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:03:17 AM[0m] File change detected. Starting incremental compilation...
@@ -1049,8 +1094,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1061,62 +1112,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1189,6 +1184,10 @@ Change:: build pkg1,pkg2,pkg3,pkg4,pkg5
 
 Input::
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
 Output::
 [[90m12:03:33 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'pkg0/tsconfig.json'
 
@@ -1222,8 +1221,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg1/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg1/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1233,8 +1238,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg2/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1244,8 +1255,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg3/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg3/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg3/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1255,8 +1272,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg4/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg4/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg4/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1266,8 +1289,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg5/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg5/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg5/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1276,62 +1305,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1345,6 +1318,9 @@ Change:: build pkg6,pkg7
 
 Input::
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:03:53 AM[0m] Project 'pkg6/tsconfig.json' is out of date because output 'pkg6/index.js' is older than input 'pkg0/tsconfig.json'
 
@@ -1362,8 +1338,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg6/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg6/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg6/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1373,8 +1355,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg7/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg7/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg7/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1383,62 +1371,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1449,63 +1381,9 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1517,6 +1395,10 @@ Input::
 export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;
 
 
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:04:04 AM[0m] File change detected. Starting incremental compilation...
@@ -1527,8 +1409,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1539,62 +1427,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1669,6 +1501,10 @@ Change:: build pkg1,pkg2,pkg3,pkg4,pkg5
 
 Input::
 
+Before running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+7: timerToBuildInvalidatedProject
 Output::
 [[90m12:04:21 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'pkg0/tsconfig.json'
 
@@ -1702,8 +1538,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg1/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg1/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1713,8 +1555,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg2/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1724,8 +1572,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg3/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg3/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg3/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1735,8 +1589,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg4/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg4/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg4/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1746,8 +1606,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg5/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg5/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg5/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1756,62 +1622,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1828,6 +1638,10 @@ Input::
 export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;
 
 
+Before running Timeout callback:: count: 1
+8: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:04:43 AM[0m] File change detected. Starting incremental compilation...
@@ -1858,8 +1672,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1870,62 +1690,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -2000,6 +1764,9 @@ Change:: build pkg6,pkg7
 
 Input::
 
+Before running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 [[90m12:05:11 AM[0m] Project 'pkg6/tsconfig.json' is out of date because output 'pkg6/index.js' is older than input 'pkg0/tsconfig.json'
 
@@ -2017,8 +1784,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg6/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg6/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg6/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -2028,8 +1801,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg7/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg7/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg7/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -2038,62 +1817,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -2104,63 +1827,9 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg4/index.ts:
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg5/index.ts:
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg6/index.ts:
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg7/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-/user/username/projects/myproject/pkg4:
-  {}
-/user/username/projects/myproject/pkg5:
-  {}
-/user/username/projects/myproject/pkg6:
-  {}
-/user/username/projects/myproject/pkg7:
-  {}
 
 exitCode:: ExitStatus.undefined
 

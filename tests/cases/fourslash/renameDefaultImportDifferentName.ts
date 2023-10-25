@@ -11,12 +11,10 @@
 ////let b = new [|B|]();
 ////b.test();
 
-goTo.marker("1");
-verify.occurrencesAtPositionCount(1);
-
 const [CDef, C, B0Def, B0, B1] = test.ranges();
 const bRanges = [B0, B1];
 
-verify.rangesAreRenameLocations([C]);
-verify.rangesAreRenameLocations(bRanges);
-verify.baselineFindAllReferences('1', '2')
+verify.baselineFindAllReferences('1', '2');
+verify.baselineRename(C);
+verify.baselineRename(bRanges);
+verify.baselineDocumentHighlights("1");

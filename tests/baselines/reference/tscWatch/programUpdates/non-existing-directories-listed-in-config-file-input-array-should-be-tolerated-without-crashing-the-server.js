@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/file1.ts]
 let t = 10;
@@ -34,7 +35,11 @@ Output::
 
 
 Program root files: []
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 
@@ -43,20 +48,16 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/a/b/node_modules/@types:
+/a/b/app: *new*
   {"pollingInterval":500}
-/a/b/app:
+/a/b/something: *new*
   {"pollingInterval":500}
-/a/b/test:
-  {"pollingInterval":500}
-/a/b/something:
+/a/b/test: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

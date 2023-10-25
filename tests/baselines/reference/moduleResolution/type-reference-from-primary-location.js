@@ -12,6 +12,7 @@ Resolution:: {
     "isExternalLibraryImport": false
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json"
   ]
 }
@@ -23,7 +24,9 @@ Resolution:: {
 
 
 //// [/root/src/types/lib/package.json]
-{"types":"typings/lib.d.ts"}
+{
+  "types": "typings/lib.d.ts"
+}
 
 Resolving "lib" from /root/src/app.ts typesRoots: [/root/src/types] with host that doesnt have directoryExists
 Resolution:: {
@@ -32,6 +35,9 @@ Resolution:: {
     "resolvedFileName": "/root/src/types/lib/typings/lib.d.ts",
     "isExternalLibraryImport": false
   },
+  "failedLookupLocations": [
+    "/root/src/types/lib.d.ts"
+  ],
   "affectingLocations": [
     "/root/src/types/lib/package.json"
   ]
@@ -51,6 +57,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -65,7 +72,9 @@ Resolution:: {
 
 
 //// [/root/src/node_modules/lib/package.json]
-{"types":"typings/lib.d.ts"}
+{
+  "types": "typings/lib.d.ts"
+}
 
 Resolving "lib" from /root/src/app.ts typesRoots: [/root/src/types] with host that doesnt have directoryExists
 Resolution:: {
@@ -75,6 +84,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib.d.ts"
@@ -98,6 +108,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",
@@ -115,7 +126,9 @@ Resolution:: {
 
 
 //// [/root/src/node_modules/@types/lib/package.json]
-{"types":"typings/lib.d.ts"}
+{
+  "types": "typings/lib.d.ts"
+}
 
 Resolving "lib" from /root/src/app.ts typesRoots: [/root/src/types] with host that doesnt have directoryExists
 Resolution:: {
@@ -125,6 +138,7 @@ Resolution:: {
     "isExternalLibraryImport": true
   },
   "failedLookupLocations": [
+    "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json",
     "/root/src/types/lib/index.d.ts",
     "/root/src/node_modules/lib/package.json",

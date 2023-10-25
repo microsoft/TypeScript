@@ -61,7 +61,6 @@ import {
     nodeIsMissing,
     ParameterDeclaration,
     parseIsolatedJSDocComment,
-    Push,
     Scanner,
     ScriptTarget,
     SemanticMeaning,
@@ -153,15 +152,16 @@ export function createClassifier(): Classifier {
                 handleToken();
                 lastNonTriviaToken = token;
             }
-            const end = scanner.getTextPos();
-            pushEncodedClassification(scanner.getTokenPos(), end, offset, classFromKind(token), spans);
+            const end = scanner.getTokenEnd();
+            pushEncodedClassification(scanner.getTokenStart(), end, offset, classFromKind(token), spans);
             if (end >= text.length) {
                 const end = getNewEndOfLineState(scanner, token, lastOrUndefined(templateStack));
                 if (end !== undefined) {
                     endOfLineState = end;
                 }
             }
-        } while (token !== SyntaxKind.EndOfFileToken);
+        }
+        while (token !== SyntaxKind.EndOfFileToken);
 
         function handleToken(): void {
             switch (token) {
@@ -214,7 +214,7 @@ export function createClassifier(): Classifier {
                         const lastTemplateStackToken = lastOrUndefined(templateStack);
 
                         if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
-                            token = scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
+                            token = scanner.reScanTemplateToken(/*isTaggedTemplate*/ false);
 
                             // Only pop on a TemplateTail; a TemplateMiddle indicates there is more for us.
                             if (token === SyntaxKind.TemplateTail) {
@@ -258,21 +258,25 @@ export function createClassifier(): Classifier {
 /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
 /// we have a series of divide operator. this list allows us to be more accurate by ruling out
 /// locations where a regexp cannot exist.
-const noRegexTable: true[] = arrayToNumericMap<SyntaxKind, true>([
-    SyntaxKind.Identifier,
-    SyntaxKind.StringLiteral,
-    SyntaxKind.NumericLiteral,
-    SyntaxKind.BigIntLiteral,
-    SyntaxKind.RegularExpressionLiteral,
-    SyntaxKind.ThisKeyword,
-    SyntaxKind.PlusPlusToken,
-    SyntaxKind.MinusMinusToken,
-    SyntaxKind.CloseParenToken,
-    SyntaxKind.CloseBracketToken,
-    SyntaxKind.CloseBraceToken,
-    SyntaxKind.TrueKeyword,
-    SyntaxKind.FalseKeyword,
-], token => token, () => true);
+const noRegexTable: true[] = arrayToNumericMap<SyntaxKind, true>(
+    [
+        SyntaxKind.Identifier,
+        SyntaxKind.StringLiteral,
+        SyntaxKind.NumericLiteral,
+        SyntaxKind.BigIntLiteral,
+        SyntaxKind.RegularExpressionLiteral,
+        SyntaxKind.ThisKeyword,
+        SyntaxKind.PlusPlusToken,
+        SyntaxKind.MinusMinusToken,
+        SyntaxKind.CloseParenToken,
+        SyntaxKind.CloseBracketToken,
+        SyntaxKind.CloseBraceToken,
+        SyntaxKind.TrueKeyword,
+        SyntaxKind.FalseKeyword,
+    ],
+    token => token,
+    () => true,
+);
 
 function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplateStack: SyntaxKind | undefined): EndOfLineState | undefined {
     switch (token) {
@@ -312,7 +316,7 @@ function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplat
     }
 }
 
-function pushEncodedClassification(start: number, end: number, offset: number, classification: ClassificationType, result: Push<number>): void {
+function pushEncodedClassification(start: number, end: number, offset: number, classification: ClassificationType, result: number[]): void {
     if (classification === ClassificationType.whiteSpace) {
         // Don't bother with whitespace classifications.  They're not needed.
         return;
@@ -364,14 +368,22 @@ function convertClassificationsToResult(classifications: Classifications, text: 
 
 function convertClassification(type: ClassificationType): TokenClass {
     switch (type) {
-        case ClassificationType.comment: return TokenClass.Comment;
-        case ClassificationType.keyword: return TokenClass.Keyword;
-        case ClassificationType.numericLiteral: return TokenClass.NumberLiteral;
-        case ClassificationType.bigintLiteral: return TokenClass.BigIntLiteral;
-        case ClassificationType.operator: return TokenClass.Operator;
-        case ClassificationType.stringLiteral: return TokenClass.StringLiteral;
-        case ClassificationType.whiteSpace: return TokenClass.Whitespace;
-        case ClassificationType.punctuation: return TokenClass.Punctuation;
+        case ClassificationType.comment:
+            return TokenClass.Comment;
+        case ClassificationType.keyword:
+            return TokenClass.Keyword;
+        case ClassificationType.numericLiteral:
+            return TokenClass.NumberLiteral;
+        case ClassificationType.bigintLiteral:
+            return TokenClass.BigIntLiteral;
+        case ClassificationType.operator:
+            return TokenClass.Operator;
+        case ClassificationType.stringLiteral:
+            return TokenClass.StringLiteral;
+        case ClassificationType.whiteSpace:
+            return TokenClass.Whitespace;
+        case ClassificationType.punctuation:
+            return TokenClass.Punctuation;
         case ClassificationType.identifier:
         case ClassificationType.className:
         case ClassificationType.enumName:
@@ -406,7 +418,7 @@ function canFollow(keyword1: SyntaxKind, keyword2: SyntaxKind): boolean {
     }
 }
 
-function getPrefixFromLexState(lexState: EndOfLineState): { readonly prefix: string, readonly pushTemplate?: true } {
+function getPrefixFromLexState(lexState: EndOfLineState): { readonly prefix: string; readonly pushTemplate?: true; } {
     // If we're in a string literal, then prepend: "\
     // (and a newline).  That way when we lex we'll think we're still in a string literal.
     //
@@ -414,7 +426,7 @@ function getPrefixFromLexState(lexState: EndOfLineState): { readonly prefix: str
     // (and a newline).  That way when we lex we'll think we're still in a multiline comment.
     switch (lexState) {
         case EndOfLineState.InDoubleQuoteStringLiteral:
-            return { prefix: "\"\\\n" };
+            return { prefix: '"\\\n' };
         case EndOfLineState.InSingleQuoteStringLiteral:
             return { prefix: "'\\\n" };
         case EndOfLineState.InMultiLineCommentTrivia:
@@ -627,37 +639,61 @@ function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, chec
 
 /** Returns true if there exists a module that introduces entities on the value side. */
 function hasValueSideModule(symbol: Symbol): boolean {
-    return some(symbol.declarations, declaration =>
-        isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated);
+    return some(symbol.declarations, declaration => isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated);
 }
 
 function getClassificationTypeName(type: ClassificationType): ClassificationTypeNames {
     switch (type) {
-        case ClassificationType.comment: return ClassificationTypeNames.comment;
-        case ClassificationType.identifier: return ClassificationTypeNames.identifier;
-        case ClassificationType.keyword: return ClassificationTypeNames.keyword;
-        case ClassificationType.numericLiteral: return ClassificationTypeNames.numericLiteral;
-        case ClassificationType.bigintLiteral: return ClassificationTypeNames.bigintLiteral;
-        case ClassificationType.operator: return ClassificationTypeNames.operator;
-        case ClassificationType.stringLiteral: return ClassificationTypeNames.stringLiteral;
-        case ClassificationType.whiteSpace: return ClassificationTypeNames.whiteSpace;
-        case ClassificationType.text: return ClassificationTypeNames.text;
-        case ClassificationType.punctuation: return ClassificationTypeNames.punctuation;
-        case ClassificationType.className: return ClassificationTypeNames.className;
-        case ClassificationType.enumName: return ClassificationTypeNames.enumName;
-        case ClassificationType.interfaceName: return ClassificationTypeNames.interfaceName;
-        case ClassificationType.moduleName: return ClassificationTypeNames.moduleName;
-        case ClassificationType.typeParameterName: return ClassificationTypeNames.typeParameterName;
-        case ClassificationType.typeAliasName: return ClassificationTypeNames.typeAliasName;
-        case ClassificationType.parameterName: return ClassificationTypeNames.parameterName;
-        case ClassificationType.docCommentTagName: return ClassificationTypeNames.docCommentTagName;
-        case ClassificationType.jsxOpenTagName: return ClassificationTypeNames.jsxOpenTagName;
-        case ClassificationType.jsxCloseTagName: return ClassificationTypeNames.jsxCloseTagName;
-        case ClassificationType.jsxSelfClosingTagName: return ClassificationTypeNames.jsxSelfClosingTagName;
-        case ClassificationType.jsxAttribute: return ClassificationTypeNames.jsxAttribute;
-        case ClassificationType.jsxText: return ClassificationTypeNames.jsxText;
-        case ClassificationType.jsxAttributeStringLiteralValue: return ClassificationTypeNames.jsxAttributeStringLiteralValue;
-        default: return undefined!; // TODO: GH#18217 throw Debug.assertNever(type);
+        case ClassificationType.comment:
+            return ClassificationTypeNames.comment;
+        case ClassificationType.identifier:
+            return ClassificationTypeNames.identifier;
+        case ClassificationType.keyword:
+            return ClassificationTypeNames.keyword;
+        case ClassificationType.numericLiteral:
+            return ClassificationTypeNames.numericLiteral;
+        case ClassificationType.bigintLiteral:
+            return ClassificationTypeNames.bigintLiteral;
+        case ClassificationType.operator:
+            return ClassificationTypeNames.operator;
+        case ClassificationType.stringLiteral:
+            return ClassificationTypeNames.stringLiteral;
+        case ClassificationType.whiteSpace:
+            return ClassificationTypeNames.whiteSpace;
+        case ClassificationType.text:
+            return ClassificationTypeNames.text;
+        case ClassificationType.punctuation:
+            return ClassificationTypeNames.punctuation;
+        case ClassificationType.className:
+            return ClassificationTypeNames.className;
+        case ClassificationType.enumName:
+            return ClassificationTypeNames.enumName;
+        case ClassificationType.interfaceName:
+            return ClassificationTypeNames.interfaceName;
+        case ClassificationType.moduleName:
+            return ClassificationTypeNames.moduleName;
+        case ClassificationType.typeParameterName:
+            return ClassificationTypeNames.typeParameterName;
+        case ClassificationType.typeAliasName:
+            return ClassificationTypeNames.typeAliasName;
+        case ClassificationType.parameterName:
+            return ClassificationTypeNames.parameterName;
+        case ClassificationType.docCommentTagName:
+            return ClassificationTypeNames.docCommentTagName;
+        case ClassificationType.jsxOpenTagName:
+            return ClassificationTypeNames.jsxOpenTagName;
+        case ClassificationType.jsxCloseTagName:
+            return ClassificationTypeNames.jsxCloseTagName;
+        case ClassificationType.jsxSelfClosingTagName:
+            return ClassificationTypeNames.jsxSelfClosingTagName;
+        case ClassificationType.jsxAttribute:
+            return ClassificationTypeNames.jsxAttribute;
+        case ClassificationType.jsxText:
+            return ClassificationTypeNames.jsxText;
+        case ClassificationType.jsxAttributeStringLiteralValue:
+            return ClassificationTypeNames.jsxAttributeStringLiteralValue;
+        default:
+            return undefined!; // TODO: GH#18217 Debug.assertNever(type);
     }
 }
 
@@ -668,7 +704,7 @@ function convertClassificationsToSpans(classifications: Classifications): Classi
     for (let i = 0; i < dense.length; i += 3) {
         result.push({
             textSpan: createTextSpan(dense[i], dense[i + 1]),
-            classificationType: getClassificationTypeName(dense[i + 2])
+            classificationType: getClassificationTypeName(dense[i + 2]),
         });
     }
 
@@ -701,16 +737,16 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
     }
 
     function classifyLeadingTriviaAndGetTokenStart(token: Node): number {
-        triviaScanner.setTextPos(token.pos);
+        triviaScanner.resetTokenState(token.pos);
         while (true) {
-            const start = triviaScanner.getTextPos();
+            const start = triviaScanner.getTokenEnd();
             // only bother scanning if we have something that could be trivia.
             if (!couldStartTrivia(sourceFile.text, start)) {
                 return start;
             }
 
             const kind = triviaScanner.scan();
-            const end = triviaScanner.getTextPos();
+            const end = triviaScanner.getTokenEnd();
             const width = end - start;
 
             // The moment we get something that isn't trivia, then stop processing.
@@ -732,7 +768,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                     // Classifying a comment might cause us to reuse the trivia scanner
                     // (because of jsdoc comments).  So after we classify the comment make
                     // sure we set the scanner position back to where it needs to be.
-                    triviaScanner.setTextPos(end);
+                    triviaScanner.resetTokenState(end);
                     continue;
 
                 case SyntaxKind.ConflictMarkerTrivia:
@@ -990,17 +1026,17 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
             }
         }
         pushClassification(start, i - start, ClassificationType.comment);
-        mergeConflictScanner.setTextPos(i);
+        mergeConflictScanner.resetTokenState(i);
 
-        while (mergeConflictScanner.getTextPos() < end) {
+        while (mergeConflictScanner.getTokenEnd() < end) {
             classifyDisabledCodeToken();
         }
     }
 
     function classifyDisabledCodeToken() {
-        const start = mergeConflictScanner.getTextPos();
+        const start = mergeConflictScanner.getTokenEnd();
         const tokenKind = mergeConflictScanner.scan();
-        const end = mergeConflictScanner.getTextPos();
+        const end = mergeConflictScanner.getTokenEnd();
 
         const type = classifyTokenType(tokenKind);
         if (type) {
@@ -1089,18 +1125,22 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                 const parent = token.parent;
                 if (tokenKind === SyntaxKind.EqualsToken) {
                     // the '=' in a variable declaration is special cased here.
-                    if (parent.kind === SyntaxKind.VariableDeclaration ||
+                    if (
+                        parent.kind === SyntaxKind.VariableDeclaration ||
                         parent.kind === SyntaxKind.PropertyDeclaration ||
                         parent.kind === SyntaxKind.Parameter ||
-                        parent.kind === SyntaxKind.JsxAttribute) {
+                        parent.kind === SyntaxKind.JsxAttribute
+                    ) {
                         return ClassificationType.operator;
                     }
                 }
 
-                if (parent.kind === SyntaxKind.BinaryExpression ||
+                if (
+                    parent.kind === SyntaxKind.BinaryExpression ||
                     parent.kind === SyntaxKind.PrefixUnaryExpression ||
                     parent.kind === SyntaxKind.PostfixUnaryExpression ||
-                    parent.kind === SyntaxKind.ConditionalExpression) {
+                    parent.kind === SyntaxKind.ConditionalExpression
+                ) {
                     return ClassificationType.operator;
                 }
             }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMap-Comments.ts] ////
+
 //// [sourceMap-Comments.ts]
 module sas.tools {
     export class Test {

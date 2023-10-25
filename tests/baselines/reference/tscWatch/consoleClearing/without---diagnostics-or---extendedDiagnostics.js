@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/f.ts]
 
@@ -25,8 +26,12 @@ Output::
 
 
 
-Program root files: ["/f.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/f.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -40,15 +45,11 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /f.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/f.ts:
+/a/lib/lib.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/f.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -63,6 +64,9 @@ Input::
 //
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
@@ -71,8 +75,12 @@ Output::
 
 
 
-Program root files: ["/f.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/f.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -83,16 +91,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /f.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/f.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

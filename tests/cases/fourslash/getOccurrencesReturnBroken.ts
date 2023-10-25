@@ -30,21 +30,5 @@
 //       where if an arrow function starts with a statement, we try to parse a body
 //       as if it was missing curly braces. If the behavior changes in the future,
 //       a change to this test is very much welcome.
-verify.rangesAreOccurrences(false);
-
-for (var i = 1; i <= test.markers().length; i++) {
-    goTo.marker("" + i);
-
-    switch (i) {
-        case 0:
-        case 1:
-            verify.occurrencesAtPositionCount(0);
-            break;
-        case 3:
-            verify.occurrencesAtPositionCount(1); // 'return' is an instance member
-            break;
-        case 4:
-            verify.occurrencesAtPositionCount(4);
-            break;
-    }
-}
+verify.baselineDocumentHighlights();
+verify.baselineDocumentHighlights(test.markers());

@@ -1,13 +1,17 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
+import {
+    baselineTsserverLogs,
+    createSession,
+    openFilesForSession,
+} from "../helpers/tsserver";
 import {
     createServerHost,
     File,
     SymLink,
-} from "../virtualFileSystemWithWatch";
-import {
-    createSession,
-    openFilesForSession,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 const appTsconfigJson: File = {
     path: "/packages/app/tsconfig.json",
@@ -20,17 +24,17 @@ const appTsconfigJson: File = {
                 "baseUrl": "."
             }
             "references": [{ "path": "../dep" }]
-        }`
+        }`,
 };
 
 const appSrcIndexTs: File = {
     path: "/packages/app/src/index.ts",
-    content: `import "dep/does/not/exist";`
+    content: `import "dep/does/not/exist";`,
 };
 
 const depPackageJson: File = {
     path: "/packages/dep/package.json",
-    content: `{ "name": "dep", "main": "dist/index.js", "types": "dist/index.d.ts" }`
+    content: `{ "name": "dep", "main": "dist/index.js", "types": "dist/index.d.ts" }`,
 };
 
 const depTsconfigJson: File = {
@@ -38,18 +42,18 @@ const depTsconfigJson: File = {
     content: `
         {
             "compilerOptions": { "outDir": "dist", "rootDir": "src", "module": "commonjs" }
-        }`
+        }`,
 };
 
 const depSrcIndexTs: File = {
     path: "/packages/dep/src/index.ts",
     content: `
-        import "./sub/folder";`
+        import "./sub/folder";`,
 };
 
 const depSrcSubFolderIndexTs: File = {
     path: "/packages/dep/src/sub/folder/index.ts",
-    content: `export const dep = 0;`
+    content: `export const dep = 0;`,
 };
 
 const link: SymLink = {
@@ -64,8 +68,9 @@ describe("unittests:: tsserver:: symlinkCache", () => {
         const project = projectService.configuredProjects.get(appTsconfigJson.path)!;
         assert.deepEqual(
             project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as ts.Path),
-            { real: "/packages/dep/", realPath: "/packages/dep/" as ts.Path }
+            { real: "/packages/dep/", realPath: "/packages/dep/" as ts.Path },
         );
+        baselineTsserverLogs("symlinkCache", "contains symlinks discovered by project references resolution after program creation", session);
     });
 
     it("works for paths close to the root", () => {
@@ -77,9 +82,9 @@ describe("unittests:: tsserver:: symlinkCache", () => {
                 primary: true,
                 originalPath: "/foo",
                 resolvedFileName: "/one/two/foo",
-            }
+            },
         });
-        cache.setSymlinksFromResolutions([], map);
+        cache.setSymlinksFromResolutions(ts.noop, ts.noop, map);
     });
 });
 
@@ -93,7 +98,7 @@ function setup() {
         depSrcSubFolderIndexTs,
         link,
     ]);
-    const session = createSession(host);
+    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
     const projectService = session.getProjectService();
     return {
         host,

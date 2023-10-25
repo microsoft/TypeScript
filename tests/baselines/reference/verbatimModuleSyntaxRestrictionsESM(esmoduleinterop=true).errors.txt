@@ -1,14 +1,6 @@
 /main.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 
 
-==== /main.ts (1 errors) ====
-    import CJSy = require("./decl"); // error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
-    import type CJSy2 = require("./decl"); // ok I guess?
-    import CJSy3 from "./decl"; // ok in esModuleInterop
-    import * as types from "./types"; // ok
-    CJSy;
 ==== /decl.d.ts (0 errors) ====
     declare class CJSy {}
     export = CJSy;
@@ -22,4 +14,18 @@
 ==== /types.ts (0 errors) ====
     interface Typey {}
     export type { Typey };
+    
+==== /main.ts (1 errors) ====
+    import CJSy = require("./decl"); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    import type CJSy2 = require("./decl"); // ok I guess?
+    import CJSy3 from "./decl"; // ok in esModuleInterop
+    import * as types from "./types"; // ok
+    CJSy;
+    
+==== /ns.ts (0 errors) ====
+    export namespace ns {
+        export enum A {}
+    }
     

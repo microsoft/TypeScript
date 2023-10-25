@@ -1,9 +1,14 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/username/project/src/file1.ts]
 
 
 //// [/a/username/project/tsconfig.json]
-{"watchOptions":{"synchronousWatchDirectory":true}}
+{
+  "watchOptions": {
+    "synchronousWatchDirectory": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -28,8 +33,14 @@ Output::
 
 
 
-Program root files: ["/a/username/project/src/file1.ts"]
-Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
+Program root files: [
+  "/a/username/project/src/file1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/username/project/tsconfig.json",
+  "configFilePath": "/a/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -44,22 +55,20 @@ Shape signatures in builder refreshed for::
 /a/username/project/src/file1.ts (used version)
 
 PolledWatches::
-/a/username/project/node_modules/@types:
+/a/username/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/a/username/project/src/file1.ts:
+/a/username/project: *new*
   {}
-/a/lib/lib.d.ts:
+/a/username/project/src: *new*
   {}
-/a/username/project:
+/a/username/project/src/file1.ts: *new*
   {}
-/a/username/project/src:
+/a/username/project/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -75,6 +84,9 @@ Input::
 
 //// [/a/username/project/src/file1.ts] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
@@ -83,8 +95,14 @@ Output::
 
 
 
-Program root files: ["/a/username/project/src/file2.ts"]
-Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
+Program root files: [
+  "/a/username/project/src/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/username/project/tsconfig.json",
+  "configFilePath": "/a/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -101,18 +119,20 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /a/username/project:
   {}
 /a/username/project/src:
   {}
-/a/username/project/src/file2.ts:
+/a/username/project/src/file2.ts: *new*
+  {}
+/a/username/project/tsconfig.json:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/username/project/src/file1.ts:
+  {}
 
 exitCode:: ExitStatus.undefined
 

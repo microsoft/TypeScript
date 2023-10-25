@@ -14,5 +14,4 @@
 /////** @satisfies {/*use*/[|T|]} comment */
 ////const foo = { a: 1 };
 
-goTo.marker("use");
-verify.goToDefinitionIs("def");
+verify.baselineGetDefinitionAtPosition("use");

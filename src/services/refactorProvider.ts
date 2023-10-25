@@ -2,11 +2,14 @@ import {
     ApplicableRefactorInfo,
     arrayFrom,
     flatMapIterator,
+    InteractiveRefactorArguments,
     Refactor,
     RefactorContext,
     RefactorEditInfo,
 } from "./_namespaces/ts";
-import { refactorKindBeginsWith } from "./_namespaces/ts.refactor";
+import {
+    refactorKindBeginsWith,
+} from "./_namespaces/ts.refactor";
 
 // A map with the refactor code as key, the refactor itself as value
 // e.g.  nonSuggestableRefactors[refactorCode] -> the refactor you want
@@ -22,15 +25,15 @@ export function registerRefactor(name: string, refactor: Refactor) {
 }
 
 /** @internal */
-export function getApplicableRefactors(context: RefactorContext): ApplicableRefactorInfo[] {
+export function getApplicableRefactors(context: RefactorContext, includeInteractiveActions?: boolean): ApplicableRefactorInfo[] {
     return arrayFrom(flatMapIterator(refactors.values(), refactor =>
         context.cancellationToken && context.cancellationToken.isCancellationRequested() ||
-        !refactor.kinds?.some(kind => refactorKindBeginsWith(kind, context.kind)) ? undefined :
-        refactor.getAvailableActions(context)));
+            !refactor.kinds?.some(kind => refactorKindBeginsWith(kind, context.kind)) ? undefined :
+            refactor.getAvailableActions(context, includeInteractiveActions)));
 }
 
 /** @internal */
-export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string): RefactorEditInfo | undefined {
+export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined {
     const refactor = refactors.get(refactorName);
-    return refactor && refactor.getEditsForAction(context, actionName);
+    return refactor && refactor.getEditsForAction(context, actionName, interactiveRefactorArguments);
 }

@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/solution useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -22,7 +23,11 @@ export var myClassWithError = class {
 export class myClass { }
 
 //// [/user/username/projects/solution/app/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 
 /a/lib/tsc.js -b -w app
@@ -39,8 +44,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/solution/app/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/solution/app/fileWithError.ts",
+  "/user/username/projects/solution/app/fileWithoutError.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/solution/app/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -57,18 +69,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewitherror.ts (used version)
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts during emit)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/solution/app/tsconfig.json:
+/user/username/projects/solution/app/filewitherror.ts: *new*
   {}
-/user/username/projects/solution/app/filewitherror.ts:
+/user/username/projects/solution/app/filewithouterror.ts: *new*
   {}
-/user/username/projects/solution/app/filewithouterror.ts:
+/user/username/projects/solution/app/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/solution/app:
+/user/username/projects/solution/app: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -84,6 +94,9 @@ export var myClassWithError = class {
     };
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
@@ -92,8 +105,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/solution/app/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/solution/app/fileWithError.ts",
+  "/user/username/projects/solution/app/fileWithoutError.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/solution/app/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -105,20 +125,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewitherror.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/solution/app/tsconfig.json:
-  {}
-/user/username/projects/solution/app/filewitherror.ts:
-  {}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/solution/app:
-  {}
 
 exitCode:: ExitStatus.undefined
 

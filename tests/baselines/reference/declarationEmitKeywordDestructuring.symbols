@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitKeywordDestructuring.ts ===
+//// [tests/cases/compiler/declarationEmitKeywordDestructuring.ts] ////
+
+=== declarationEmitKeywordDestructuring.ts ===
 type P = {
 >P : Symbol(P, Decl(declarationEmitKeywordDestructuring.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts] ////
+
 //// [numericIndexerConstrainsPropertyDeclarations.ts]
 // String indexer types constrain the types of named properties in their containing type
 

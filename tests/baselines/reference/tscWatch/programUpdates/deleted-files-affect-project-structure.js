@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/f1.ts]
 export * from "./f2"
@@ -31,8 +32,13 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"noImplicitAny":true}
+Program root files: [
+  "/a/b/f1.ts"
+]
+Program options: {
+  "watch": true,
+  "noImplicitAny": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -52,19 +58,15 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (used version)
 /a/b/f1.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/f1.ts:
+/a/b/f1.ts: *new*
   {}
-/a/b/f2.ts:
+/a/b/f2.ts: *new*
   {}
-/a/c/f3.ts:
+/a/c/f3.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -121,6 +123,9 @@ Change:: Delete f2
 Input::
 //// [/a/b/f2.ts] deleted
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
@@ -134,8 +139,13 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"noImplicitAny":true}
+Program root files: [
+  "/a/b/f1.ts"
+]
+Program options: {
+  "watch": true,
+  "noImplicitAny": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -148,6 +158,8 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (computed .d.ts)
 
 PolledWatches::
+/a/b/f2: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /a/b/f1.ts:
@@ -155,8 +167,10 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
-FsWatchesRecursive::
-/a:
+FsWatches *deleted*::
+/a/b/f2.ts:
+  {}
+/a/c/f3.ts:
   {}
 
 exitCode:: ExitStatus.undefined

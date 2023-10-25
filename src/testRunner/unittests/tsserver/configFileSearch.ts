@@ -1,38 +1,33 @@
 import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
+import {
+    baselineTsserverLogs,
+    createProjectService,
+} from "../helpers/tsserver";
+import {
     createServerHost,
     File,
     libFile,
-} from "../virtualFileSystemWithWatch";
-import {
-    baselineTsserverLogs,
-    checkNumberOfConfiguredProjects,
-    checkNumberOfInferredProjects,
-    checkNumberOfProjects,
-    createLoggerWithInMemoryLogs,
-    createProjectService,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
-describe("unittests:: tsserver:: searching for config file", () => {
+describe("unittests:: tsserver:: configFileSearch:: searching for config file", () => {
     it("should stop at projectRootPath if given", () => {
         const f1 = {
             path: "/a/file1.ts",
-            content: ""
+            content: "",
         };
         const configFile = {
             path: "/tsconfig.json",
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([f1, configFile]);
-        const service = createProjectService(host);
+        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/a");
-
-        checkNumberOfConfiguredProjects(service, 0);
-        checkNumberOfInferredProjects(service, 1);
 
         service.closeClientFile(f1.path);
         service.openClientFile(f1.path);
-        checkNumberOfConfiguredProjects(service, 1);
-        checkNumberOfInferredProjects(service, 0);
+        baselineTsserverLogs("configFileSerach", "should stop at projectRootPath if given", service);
     });
 
     it("should use projectRootPath when searching for inferred project again", () => {
@@ -40,15 +35,15 @@ describe("unittests:: tsserver:: searching for config file", () => {
         const configFileLocation = `${projectDir}/src`;
         const f1 = {
             path: `${configFileLocation}/file1.ts`,
-            content: ""
+            content: "",
         };
         const configFile = {
             path: `${configFileLocation}/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const configFile2 = {
             path: "/a/b/projects/tsconfig.json",
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([f1, libFile, configFile, configFile2]);
         const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -57,7 +52,6 @@ describe("unittests:: tsserver:: searching for config file", () => {
         // Delete config file - should create inferred project and not configured project
         host.deleteFile(configFile.path);
         host.runQueuedTimeoutCallbacks();
-        checkNumberOfProjects(service, { inferredProjects: 1 });
         baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again", service);
     });
 
@@ -66,15 +60,15 @@ describe("unittests:: tsserver:: searching for config file", () => {
         const configFileLocation = `${projectDir}/src`;
         const f1 = {
             path: `${configFileLocation}/file1.ts`,
-            content: ""
+            content: "",
         };
         const configFile = {
             path: `${configFileLocation}/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const configFile2 = {
             path: "/a/b/projects/tsconfig.json",
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([f1, libFile, configFile, configFile2]);
         const service = createProjectService(host, {
@@ -94,11 +88,11 @@ describe("unittests:: tsserver:: searching for config file", () => {
         const projectRoot = "/a/b/projects/project";
         const file: File = {
             path: `${projectRoot}/src/index.ts`,
-            content: "let y = 10"
+            content: "let y = 10",
         };
         const tsconfig: File = {
             path: `${projectRoot}/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         function openClientFile(files: File[]) {
             const host = createServerHost(files);

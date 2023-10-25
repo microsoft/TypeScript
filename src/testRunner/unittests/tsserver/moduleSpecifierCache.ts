@@ -1,20 +1,24 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    baselineTsserverLogs,
+    createSession,
+    openFilesForSession,
+} from "../helpers/tsserver";
 import {
     createServerHost,
     File,
     SymLink,
-} from "../virtualFileSystemWithWatch";
-import {
-    baselineTsserverLogs,
-    configuredProjectAt,
-    createLoggerWithInMemoryLogs,
-    createSession,
-    openFilesForSession,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 const packageJson: File = {
     path: "/package.json",
-    content: `{ "dependencies": { "mobx": "*" } }`
+    content: `{ "dependencies": { "mobx": "*" } }`,
 };
 const aTs: File = {
     path: "/src/a.ts",
@@ -38,15 +42,15 @@ const tsconfig: File = {
 };
 const ambientDeclaration: File = {
     path: "/src/ambient.d.ts",
-    content: "declare module 'ambient' {}"
+    content: "declare module 'ambient' {}",
 };
 const mobxPackageJson: File = {
     path: "/node_modules/mobx/package.json",
-    content: `{ "name": "mobx", "version": "1.0.0" }`
+    content: jsonToReadableText({ name: "mobx", version: "1.0.0" }),
 };
 const mobxDts: File = {
     path: "/node_modules/mobx/index.d.ts",
-    content: "export declare function observable(): unknown;"
+    content: "export declare function observable(): unknown;",
 };
 
 describe("unittests:: tsserver:: moduleSpecifierCache", () => {
@@ -60,7 +64,7 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         const { session, moduleSpecifierCache, triggerCompletions } = setup();
         // Completion at an import statement will calculate and cache module specifiers
         triggerCompletions({ file: cTs.path, line: 1, offset: cTs.content.length + 1 });
-        session.logger.info(`mobxCache: ${JSON.stringify(moduleSpecifierCache.get(cTs.path as ts.Path, mobxDts.path as ts.Path, {}, {}), undefined, " ")}`);
+        session.logger.info(`mobxCache: ${jsonToReadableText(moduleSpecifierCache.get(cTs.path as ts.Path, mobxDts.path as ts.Path, {}, {}))}`);
         baselineTsserverLogs("moduleSpecifierCache", "caches module specifiers within a file", session);
     });
 
@@ -113,7 +117,7 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         getWithPreferences({});
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { preferences }
+            arguments: { preferences },
         });
         // Nothing changes yet
         getWithPreferences({});
@@ -126,14 +130,14 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         // Test other affecting preference
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { preferences: { importModuleSpecifierEnding: "js" } }
+            arguments: { preferences: { importModuleSpecifierEnding: "js" } },
         });
         triggerCompletions({ file: bTs.path, line: 1, offset: 3 });
         getWithPreferences(preferences);
         baselineTsserverLogs("moduleSpecifierCache", "invalidates the cache when user preferences change", session);
 
         function getWithPreferences(preferences: ts.UserPreferences) {
-            session.logger.info(`moduleSpecifierCache for ${JSON.stringify(preferences)} (${bTs.path} -> ${aTs.path}) ${JSON.stringify(moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, preferences, {}), undefined, " ")}`);
+            session.logger.info(`moduleSpecifierCache for ${jsonToReadableText(preferences)} (${bTs.path} -> ${aTs.path}) ${jsonToReadableText(moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, preferences, {}))}`);
         }
     });
 });
@@ -143,7 +147,7 @@ function setup() {
     const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
     openFilesForSession([aTs, bTs, cTs], session);
     const projectService = session.getProjectService();
-    const project = configuredProjectAt(projectService, 0);
+    const project = projectService.configuredProjects.get(tsconfig.path)!;
     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
         command: ts.server.protocol.CommandTypes.Configure,
         arguments: {
@@ -153,7 +157,7 @@ function setup() {
                 includeCompletionsWithInsertText: true,
                 includeCompletionsWithSnippetText: true,
             },
-        }
+        },
     });
     triggerCompletions({ file: bTs.path, line: 1, offset: 3 });
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/codeGeneration/importStatements.ts] ////
+
 //// [importStatements.ts]
 module A {
     export class Point {

@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -19,28 +20,77 @@ export const typing = 10;
 export const pkg0 = 0;
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.json]
-{"complerOptions":{"composite":true},"include":["**/*.ts","../typings/xterm.d.ts"]}
+{
+  "complerOptions": {
+    "composite": true
+  },
+  "include": [
+    "**/*.ts",
+    "../typings/xterm.d.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/pkg1/index.ts]
 export const pkg1 = 1;
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.json]
-{"complerOptions":{"composite":true},"include":["**/*.ts","../typings/xterm.d.ts"]}
+{
+  "complerOptions": {
+    "composite": true
+  },
+  "include": [
+    "**/*.ts",
+    "../typings/xterm.d.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/pkg2/index.ts]
 export const pkg2 = 2;
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.json]
-{"complerOptions":{"composite":true},"include":["**/*.ts","../typings/xterm.d.ts"]}
+{
+  "complerOptions": {
+    "composite": true
+  },
+  "include": [
+    "**/*.ts",
+    "../typings/xterm.d.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/pkg3/index.ts]
 export const pkg3 = 3;
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.json]
-{"complerOptions":{"composite":true},"include":["**/*.ts","../typings/xterm.d.ts"]}
+{
+  "complerOptions": {
+    "composite": true
+  },
+  "include": [
+    "**/*.ts",
+    "../typings/xterm.d.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":[],"include":[],"references":[{"path":"./pkg0"},{"path":"./pkg1"},{"path":"./pkg2"},{"path":"./pkg3"}]}
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./pkg0"
+    },
+    {
+      "path": "./pkg1"
+    },
+    {
+      "path": "./pkg2"
+    },
+    {
+      "path": "./pkg3"
+    }
+  ]
+}
 
 
 /a/lib/tsc.js --b --w
@@ -75,8 +125,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -93,8 +149,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg0/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-Program root files: ["/user/username/projects/myproject/pkg1/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg1/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -111,8 +173,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg1/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-Program root files: ["/user/username/projects/myproject/pkg2/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg2/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -129,8 +197,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg2/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-Program root files: ["/user/username/projects/myproject/pkg3/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg3/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg3/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -147,38 +221,36 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg3/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
+/user/username/projects/myproject/pkg0/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg0/index.ts:
+/user/username/projects/myproject/pkg0/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/typings/xterm.d.ts:
+/user/username/projects/myproject/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
+/user/username/projects/myproject/pkg1/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg1/index.ts:
+/user/username/projects/myproject/pkg2/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
+/user/username/projects/myproject/pkg2/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg2/index.ts:
+/user/username/projects/myproject/pkg3/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
+/user/username/projects/myproject/pkg3/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/pkg3/index.ts:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/tsconfig.json:
+/user/username/projects/myproject/typings/xterm.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
+/user/username/projects/myproject/pkg0: *new*
   {}
-/user/username/projects/myproject/pkg1:
+/user/username/projects/myproject/pkg1: *new*
   {}
-/user/username/projects/myproject/pkg2:
+/user/username/projects/myproject/pkg2: *new*
   {}
-/user/username/projects/myproject/pkg3:
+/user/username/projects/myproject/pkg3: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -219,6 +291,13 @@ Input::
 export const typing = 10;export const typing1 = 10;
 
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
@@ -251,8 +330,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -265,8 +350,14 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-Program root files: ["/user/username/projects/myproject/pkg1/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg1/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -279,8 +370,14 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-Program root files: ["/user/username/projects/myproject/pkg2/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg2/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -293,8 +390,14 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-Program root files: ["/user/username/projects/myproject/pkg3/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg3/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg3/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -307,40 +410,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg3/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-/user/username/projects/myproject/pkg3:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
@@ -352,9 +421,26 @@ Change:: change pkg references
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":[],"include":[],"references":[{"path":"./pkg0"},{"path":"./pkg1"},{"path":"./pkg2"}]}
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./pkg0"
+    },
+    {
+      "path": "./pkg1"
+    },
+    {
+      "path": "./pkg2"
+    }
+  ]
+}
 
 
+Before running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
@@ -363,24 +449,28 @@ Output::
 
 
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
 /user/username/projects/myproject/pkg0/index.ts:
   {}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
+/user/username/projects/myproject/pkg0/tsconfig.json:
   {}
 /user/username/projects/myproject/pkg1/index.ts:
   {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
+/user/username/projects/myproject/pkg1/tsconfig.json:
   {}
 /user/username/projects/myproject/pkg2/index.ts:
   {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
 /user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/pkg3/index.ts:
+  {}
+/user/username/projects/myproject/pkg3/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -389,6 +479,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/pkg1:
   {}
 /user/username/projects/myproject/pkg2:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/pkg3:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -401,6 +495,13 @@ Input::
 export const typing = 10;
 
 
+Before running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
@@ -427,8 +528,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -441,8 +548,14 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-Program root files: ["/user/username/projects/myproject/pkg1/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg1/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -455,8 +568,14 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-Program root files: ["/user/username/projects/myproject/pkg2/index.ts","/user/username/projects/myproject/typings/xterm.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg2/index.ts",
+  "/user/username/projects/myproject/typings/xterm.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -469,34 +588,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg0/index.ts:
-  {}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg1/index.ts:
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/pkg2/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {}
-/user/username/projects/myproject/pkg1:
-  {}
-/user/username/projects/myproject/pkg2:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
@@ -507,29 +598,56 @@ Change:: change pkg references to remove all watches
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":[],"include":[],"references":[]}
+{
+  "files": [],
+  "include": [],
+  "references": []
+}
 
 
+Before running Timeout callback:: count: 1
+11: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:57 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/user/username/projects/myproject/tsconfig.json' is empty.
+[96mtsconfig.json[0m:[93m2[0m:[93m12[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/user/username/projects/myproject/tsconfig.json' is empty.
 
-[7m1[0m {"files":[],"include":[],"references":[]}
-[7m [0m [91m         ~~[0m
+[7m2[0m   "files": [],
+[7m [0m [91m           ~~[0m
 
 [[90m12:01:58 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-PolledWatches::
-
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/pkg0:
+  {}
+/user/username/projects/myproject/pkg1:
+  {}
+/user/username/projects/myproject/pkg2:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -541,15 +659,9 @@ Input::
 export const typing = 10;export const typing1 = 10;
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

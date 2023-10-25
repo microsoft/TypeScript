@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts] ////
+
+=== parserIndexSignature8.ts ===
 var foo: { [index: any]; }; // expect an error here
 >foo : Symbol(foo, Decl(parserIndexSignature8.ts, 0, 3))
 >index : Symbol(index, Decl(parserIndexSignature8.ts, 0, 12))

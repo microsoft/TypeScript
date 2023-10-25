@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts ===
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts] ////
+
+=== classWithConstructors.ts ===
 module NonGeneric {
 >NonGeneric : Symbol(NonGeneric, Decl(classWithConstructors.ts, 0, 0))
 

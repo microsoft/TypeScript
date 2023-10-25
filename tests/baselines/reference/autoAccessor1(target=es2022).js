@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor1.ts] ////
+
 //// [autoAccessor1.ts]
 class C1 {
     accessor a: any;
@@ -16,9 +18,9 @@ class C1 {
     get b() { return this.#b_accessor_storage; }
     set b(value) { this.#b_accessor_storage = value; }
     static #c_accessor_storage;
-    static get c() { return this.#c_accessor_storage; }
-    static set c(value) { this.#c_accessor_storage = value; }
+    static get c() { return C1.#c_accessor_storage; }
+    static set c(value) { C1.#c_accessor_storage = value; }
     static #d_accessor_storage = 2;
-    static get d() { return this.#d_accessor_storage; }
-    static set d(value) { this.#d_accessor_storage = value; }
+    static get d() { return C1.#d_accessor_storage; }
+    static set d(value) { C1.#d_accessor_storage = value; }
 }

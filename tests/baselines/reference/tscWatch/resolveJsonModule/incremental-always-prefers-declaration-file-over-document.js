@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/src/project/main.ts]
 import data from "./data.json"; let x: string = data;
@@ -10,9 +11,9 @@ declare var val: string; export default val;
 
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "resolveJsonModule": true
-    }
+  "compilerOptions": {
+    "resolveJsonModule": true
+  }
 }
 
 //// [/a/lib/lib.d.ts]
@@ -43,8 +44,17 @@ Output::
 
 
 
-Program root files: ["/src/project/data.d.json.ts","/src/project/main.ts"]
-Program options: {"resolveJsonModule":true,"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/data.d.json.ts",
+  "/src/project/main.ts"
+]
+Program options: {
+  "resolveJsonModule": true,
+  "project": "/src/project",
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -61,22 +71,18 @@ Shape signatures in builder refreshed for::
 /src/project/data.d.json.ts (used version)
 /src/project/main.ts (used version)
 
-PolledWatches::
-/src/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/src/project/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/src/project/data.d.json.ts:
+/src/project/data.d.json.ts: *new*
   {}
-/src/project/main.ts:
+/src/project/main.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/src/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/src/project:
+/src/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -158,12 +164,15 @@ Change:: Change json setting
 Input::
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "resolveJsonModule": false
-    }
+  "compilerOptions": {
+    "resolveJsonModule": false
+  }
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
@@ -177,8 +186,17 @@ Output::
 
 
 
-Program root files: ["/src/project/data.d.json.ts","/src/project/main.ts"]
-Program options: {"resolveJsonModule":false,"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/data.d.json.ts",
+  "/src/project/main.ts"
+]
+Program options: {
+  "resolveJsonModule": false,
+  "project": "/src/project",
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -188,24 +206,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-PolledWatches::
-/src/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/src/project/tsconfig.json:
-  {}
-/src/project/data.d.json.ts:
-  {}
-/src/project/main.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/src/project:
-  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts] ////
+
 //// [errorSuperCalls.ts]
 //super call in class constructor with no base type
 class NoBase {
@@ -144,8 +146,7 @@ var Derived = /** @class */ (function (_super) {
     //super call with type arguments 
     function Derived() {
         var _this = _super.call(this) || this;
-        _this = _super.call(this) || this;
-        return _this;
+        return _super.call(this) || this;
     }
     return Derived;
 }(Base));

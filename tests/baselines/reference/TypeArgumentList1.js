@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/TypeArgumentList1.ts] ////
+
 //// [TypeArgumentList1.ts]
 Foo<A,B,\ C>(4, 5, 6);
 

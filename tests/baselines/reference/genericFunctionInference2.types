@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctionInference2.ts ===
+//// [tests/cases/compiler/genericFunctionInference2.ts] ////
+
+=== genericFunctionInference2.ts ===
 // Repro from #30685
 
 type Reducer<S> = (state: S) => S;
@@ -92,5 +94,4 @@ enhancer4.onChange(null);
 >enhancer4.onChange : (e: any) => void
 >enhancer4 : { onChange: (e: any) => void; onSubmit: (e: any) => void; }
 >onChange : (e: any) => void
->null : null
 

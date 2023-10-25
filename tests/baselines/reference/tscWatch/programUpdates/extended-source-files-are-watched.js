@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -19,13 +20,25 @@ let x = 1
 let y = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "/a/b/commonFile1.ts",
+    "/a/b/commonFile2.ts"
+  ]
+}
 
 //// [/a/b/first.tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/a/b/second.tsconfig.json]
-{"extends":"./first.tsconfig.json"}
+{
+  "extends": "./first.tsconfig.json"
+}
 
 
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
@@ -37,8 +50,15 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -55,21 +75,15 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/commonfile1.ts: *new*
   {}
-/a/b/commonfile1.ts:
+/a/b/commonfile2.ts: *new*
   {}
-/a/b/commonfile2.ts:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -86,9 +100,19 @@ Change:: Change config to extend another config
 
 Input::
 //// [/a/b/tsconfig.json]
-{"extends":"./second.tsconfig.json","compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+{
+  "extends": "./second.tsconfig.json",
+  "compilerOptions": {},
+  "files": [
+    "/a/b/commonFile1.ts",
+    "/a/b/commonFile2.ts"
+  ]
+}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
@@ -97,8 +121,16 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "strict": true,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -112,25 +144,19 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/commonfile1.ts:
   {}
 /a/b/commonfile2.ts:
   {}
+/a/b/first.tsconfig.json: *new*
+  {}
+/a/b/second.tsconfig.json: *new*
+  {}
+/a/b/tsconfig.json:
+  {}
 /a/lib/lib.d.ts:
   {}
-/a/b/second.tsconfig.json:
-  {}
-/a/b/first.tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -149,9 +175,16 @@ Change:: Change first extended config
 
 Input::
 //// [/a/b/first.tsconfig.json]
-{"compilerOptions":{"strict":false}}
+{
+  "compilerOptions": {
+    "strict": false
+  }
+}
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
@@ -160,8 +193,16 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":false,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "strict": false,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -174,26 +215,6 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile2.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/second.tsconfig.json:
-  {}
-/a/b/first.tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -210,9 +231,17 @@ Change:: Change second extended config
 
 Input::
 //// [/a/b/second.tsconfig.json]
-{"extends":"./first.tsconfig.json","compilerOptions":{"strictNullChecks":true}}
+{
+  "extends": "./first.tsconfig.json",
+  "compilerOptions": {
+    "strictNullChecks": true
+  }
+}
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
@@ -221,8 +250,17 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":false,"strictNullChecks":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "strict": false,
+  "strictNullChecks": true,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -235,26 +273,6 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile2.ts
 
 No shapes updated in the builder::
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/second.tsconfig.json:
-  {}
-/a/b/first.tsconfig.json:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -263,9 +281,18 @@ Change:: Change config to stop extending another config
 
 Input::
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "/a/b/commonFile1.ts",
+    "/a/b/commonFile2.ts"
+  ]
+}
 
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
@@ -274,8 +301,15 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -289,21 +323,21 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/commonfile1.ts:
   {}
 /a/b/commonfile2.ts:
   {}
+/a/b/tsconfig.json:
+  {}
 /a/lib/lib.d.ts:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/b/first.tsconfig.json:
+  {}
+/a/b/second.tsconfig.json:
+  {}
 
 exitCode:: ExitStatus.undefined
 

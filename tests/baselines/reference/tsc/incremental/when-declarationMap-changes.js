@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -21,7 +22,13 @@ const x = 10;
 const y = 10;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"noEmitOnError":true,"declaration":true,"composite":true}}
+{
+  "compilerOptions": {
+    "noEmitOnError": true,
+    "declaration": true,
+    "composite": true
+  }
+}
 
 
 

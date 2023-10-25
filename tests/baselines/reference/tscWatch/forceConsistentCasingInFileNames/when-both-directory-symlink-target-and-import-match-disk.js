@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/XY/a.ts]
 
@@ -28,7 +29,13 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true,"outFile":"out.js","module":"system"}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "outFile": "out.js",
+    "module": "system"
+  }
+}
 
 
 /a/lib/tsc.js --w --p . --explainFiles
@@ -49,8 +56,19 @@ b.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/XY/a.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "outFile": "/user/username/projects/myproject/out.js",
+  "module": 4,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -63,23 +81,25 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/b.ts:
+/user/username/projects/myproject/b.ts: *new*
   {}
-/user/username/projects/myproject/xy/a.ts:
+/user/username/projects/myproject/link/a.ts: *new*
   {}
-/user/username/projects/myproject/link/a.ts:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/xy/a.ts: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -142,6 +162,9 @@ export const b = 2;
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
@@ -159,8 +182,19 @@ b.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/XY/a.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "outFile": "/user/username/projects/myproject/out.js",
+  "module": 4,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -171,26 +205,6 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/user/username/projects/myproject/xy/a.ts:
-  {}
-/user/username/projects/myproject/link/a.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

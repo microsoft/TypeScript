@@ -1,6 +1,13 @@
+currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/web/package.json]
-{"name":"@this/package","type":"module","exports":{".":"./dist/index.js"}}
+{
+  "name": "@this/package",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}
 
 //// [/Users/name/projects/web/index.ts]
 import * as me from "@this/package";
@@ -9,7 +16,16 @@ export function thing(): void {}
 
 
 //// [/Users/name/projects/web/tsconfig.json]
-{"compilerOptions":{"module":"nodenext","outDir":"./dist","declarationDir":"./types","composite":true,"forceConsistentCasingInFileNames":true,"traceResolution":true}}
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "outDir": "./dist",
+    "declarationDir": "./types",
+    "composite": true,
+    "forceConsistentCasingInFileNames": true,
+    "traceResolution": true
+  }
+}
 
 //// [/a/lib/lib.esnext.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -33,7 +49,7 @@ Output::
 Found 'package.json' at '/Users/name/projects/web/package.json'.
 ======== Resolving module '@this/package' from '/Users/name/projects/web/index.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/Users/name/projects/web/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath '.' with target './dist/index.js'.
 File '/Users/name/projects/web/index.ts' exists - use it as a name resolution result.
@@ -52,8 +68,20 @@ index.ts
 
 
 
-Program root files: ["/Users/name/projects/web/index.ts"]
-Program options: {"module":199,"outDir":"/Users/name/projects/web/dist","declarationDir":"/Users/name/projects/web/types","composite":true,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/web/tsconfig.json"}
+Program root files: [
+  "/Users/name/projects/web/index.ts"
+]
+Program options: {
+  "module": 199,
+  "outDir": "/Users/name/projects/web/dist",
+  "declarationDir": "/Users/name/projects/web/types",
+  "composite": true,
+  "forceConsistentCasingInFileNames": true,
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "configFilePath": "/Users/name/projects/web/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.esnext.full.d.ts
@@ -68,21 +96,23 @@ Shape signatures in builder refreshed for::
 /users/name/projects/web/index.ts (computed .d.ts during emit)
 
 PolledWatches::
-/users/name/projects/web/node_modules/@types:
+/users/name/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/name/projects/web/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/name/projects/web/tsconfig.json:
+/a/lib/lib.esnext.full.d.ts: *new*
   {}
-/users/name/projects/web/index.ts:
+/users/name/projects/web/index.ts: *new*
   {}
-/a/lib/lib.esnext.full.d.ts:
+/users/name/projects/web/package.json: *new*
   {}
-/users/name/projects/web/package.json:
+/users/name/projects/web/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/name/projects/web:
+/users/name/projects/web: *new*
   {}
 
 exitCode:: ExitStatus.undefined

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts] ////
+
 //// [inferredFunctionReturnTypeIsEmptyType.ts]
 function foo() {
     if (true) {

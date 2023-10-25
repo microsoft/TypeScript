@@ -10,7 +10,6 @@ import {
     MapLike,
     normalizePath,
     normalizeSlashes,
-    stringContains,
     sys,
     toPath,
     version,
@@ -25,6 +24,7 @@ import {
     InstallTypingHost,
     nowString,
     PackageInstalledResponse,
+    stringifyIndented,
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
@@ -118,11 +118,12 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
             typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
             throttleLimit,
-            log);
+            log,
+        );
         this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0], validateDefaultNpmLocation, this.installTypingHost);
 
         // If the NPM path contains spaces and isn't wrapped in quotes, do so.
-        if (stringContains(this.npmPath, " ") && this.npmPath[0] !== `"`) {
+        if (this.npmPath.includes(" ") && this.npmPath[0] !== `"`) {
             this.npmPath = `"${this.npmPath}"`;
         }
         if (this.log.isEnabled()) {
@@ -158,54 +159,52 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), this.installTypingHost, this.log);
     }
 
-    listen() {
-        process.on("message", (req: TypingInstallerRequestUnion) => {
-            if (this.delayedInitializationError) {
-                // report initializationFailed error
-                this.sendResponse(this.delayedInitializationError);
-                this.delayedInitializationError = undefined;
+    handleRequest(req: TypingInstallerRequestUnion) {
+        if (this.delayedInitializationError) {
+            // report initializationFailed error
+            this.sendResponse(this.delayedInitializationError);
+            this.delayedInitializationError = undefined;
+        }
+        switch (req.kind) {
+            case "discover":
+                this.install(req);
+                break;
+            case "closeProject":
+                this.closeProject(req);
+                break;
+            case "typesRegistry": {
+                const typesRegistry: { [key: string]: MapLike<string>; } = {};
+                this.typesRegistry.forEach((value, key) => {
+                    typesRegistry[key] = value;
+                });
+                const response: TypesRegistryResponse = { kind: EventTypesRegistry, typesRegistry };
+                this.sendResponse(response);
+                break;
             }
-            switch (req.kind) {
-                case "discover":
-                    this.install(req);
-                    break;
-                case "closeProject":
-                    this.closeProject(req);
-                    break;
-                case "typesRegistry": {
-                    const typesRegistry: { [key: string]: MapLike<string> } = {};
-                    this.typesRegistry.forEach((value, key) => {
-                        typesRegistry[key] = value;
-                    });
-                    const response: TypesRegistryResponse = { kind: EventTypesRegistry, typesRegistry };
-                    this.sendResponse(response);
-                    break;
-                }
-                case "installPackage": {
-                    const { fileName, packageName, projectName, projectRootPath } = req;
-                    const cwd = getDirectoryOfPackageJson(fileName, this.installTypingHost) || projectRootPath;
-                    if (cwd) {
-                        this.installWorker(-1, [packageName], cwd, success => {
-                            const message = success ? `Package ${packageName} installed.` : `There was an error installing ${packageName}.`;
-                            const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success, message };
-                            this.sendResponse(response);
-                        });
-                    }
-                    else {
-                        const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success: false, message: "Could not determine a project root path." };
+            case "installPackage": {
+                const { fileName, packageName, projectName, projectRootPath } = req;
+                const cwd = getDirectoryOfPackageJson(fileName, this.installTypingHost) || projectRootPath;
+                if (cwd) {
+                    this.installWorker(-1, [packageName], cwd, success => {
+                        const message = success ? `Package ${packageName} installed.` : `There was an error installing ${packageName}.`;
+                        const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success, message };
                         this.sendResponse(response);
-                    }
-                    break;
+                    });
                 }
-                default:
-                    Debug.assertNever(req);
+                else {
+                    const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success: false, message: "Could not determine a project root path." };
+                    this.sendResponse(response);
+                }
+                break;
             }
-        });
+            default:
+                Debug.assertNever(req);
+        }
     }
 
     protected sendResponse(response: TypingInstallerResponseUnion) {
         if (this.log.isEnabled()) {
-            this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
+            this.log.writeLine(`Sending response:${stringifyIndented(response)}`);
         }
         process.send!(response); // TODO: GH#18217
         if (this.log.isEnabled()) {
@@ -272,8 +271,11 @@ process.on("disconnect", () => {
     }
     process.exit(0);
 });
-const installer = new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
-installer.listen();
+let installer: NodeTypingsInstaller | undefined;
+process.on("message", (req: TypingInstallerRequestUnion) => {
+    installer ??= new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/ 5, log); // TODO: GH#18217
+    installer.handleRequest(req);
+});
 
 function indent(newline: string, str: string | undefined): string {
     return str && str.length

@@ -1,3 +1,4 @@
+currentDirectory:: C:/ useCaseSensitiveFileNames: false
 Input::
 //// [C:/project/a.ts]
 
@@ -27,7 +28,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [C:/project/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 
 C:/a/lib/tsc.js --w --p C://project --explainFiles
@@ -47,8 +52,17 @@ project/b.ts
 
 
 
-Program root files: ["C:/project/a.ts","C:/project/b.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"C:/project","explainFiles":true,"configFilePath":"C:/project/tsconfig.json"}
+Program root files: [
+  "C:/project/a.ts",
+  "C:/project/b.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "C:/project",
+  "explainFiles": true,
+  "configFilePath": "C:/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 C:/a/lib/lib.d.ts
@@ -66,21 +80,21 @@ c:/project/a.ts (used version)
 c:/project/b.ts (used version)
 
 PolledWatches::
-c:/project/node_modules/@types:
+c:/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/project/tsconfig.json:
+c:/a/lib/lib.d.ts: *new*
   {}
-c:/project/a.ts:
+c:/project/a.ts: *new*
   {}
-c:/project/b.ts:
+c:/project/b.ts: *new*
   {}
-c:/a/lib/lib.d.ts:
+c:/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-c:/project:
+c:/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -114,6 +128,9 @@ export const b = 2;
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
@@ -130,8 +147,17 @@ project/b.ts
 
 
 
-Program root files: ["C:/project/a.ts","C:/project/b.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"C:/project","explainFiles":true,"configFilePath":"C:/project/tsconfig.json"}
+Program root files: [
+  "C:/project/a.ts",
+  "C:/project/b.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "C:/project",
+  "explainFiles": true,
+  "configFilePath": "C:/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 C:/a/lib/lib.d.ts
@@ -145,24 +171,6 @@ C:/project/b.ts
 Shape signatures in builder refreshed for::
 c:/project/a.ts (computed .d.ts)
 c:/project/b.ts (computed .d.ts)
-
-PolledWatches::
-c:/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-c:/project/tsconfig.json:
-  {}
-c:/project/a.ts:
-  {}
-c:/project/b.ts:
-  {}
-c:/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-c:/project:
-  {}
 
 exitCode:: ExitStatus.undefined
 

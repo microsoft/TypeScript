@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js
+emittedFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js
 sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts
 -------------------------------------------------------------------
 >>>var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
@@ -1216,7 +1216,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 4 >         ^^^^
 5 >             ^^^^^
 6 >                  ^^
-7 >                    ^^^^^->
+7 >                    ^
+8 >                     ^^^^->
 1 >
   >
   >
@@ -1225,12 +1226,14 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 4 >          == 
 5 >             nameB
 6 >                  ) 
+7 >                    {
 1 >Emitted(34, 1) Source(46, 1) + SourceIndex(0)
 2 >Emitted(34, 5) Source(46, 5) + SourceIndex(0)
 3 >Emitted(34, 10) Source(46, 10) + SourceIndex(0)
 4 >Emitted(34, 14) Source(46, 14) + SourceIndex(0)
 5 >Emitted(34, 19) Source(46, 19) + SourceIndex(0)
 6 >Emitted(34, 21) Source(46, 21) + SourceIndex(0)
+7 >Emitted(34, 22) Source(46, 22) + SourceIndex(0)
 ---
 >>>    console.log(skillB);
 1->^^^^
@@ -1241,7 +1244,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 6 >                ^^^^^^
 7 >                      ^
 8 >                       ^
-1->{
+1->
   >    
 2 >    console
 3 >           .
@@ -1260,11 +1263,14 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 8 >Emitted(35, 25) Source(47, 25) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >}
-1 >Emitted(36, 2) Source(48, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(36, 1) Source(48, 1) + SourceIndex(0)
+2 >Emitted(36, 2) Source(48, 2) + SourceIndex(0)
 ---
 >>>function getRobotB() {
 1->

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/divergentAccessorsVisibility1.ts ===
+//// [tests/cases/compiler/divergentAccessorsVisibility1.ts] ////
+
+=== divergentAccessorsVisibility1.ts ===
 class Base {
 >Base : Symbol(Base, Decl(divergentAccessorsVisibility1.ts, 0, 0))
 

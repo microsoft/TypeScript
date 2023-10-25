@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames17_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames17_ES5.ts] ////
+
+=== computedPropertyNames17_ES5.ts ===
 var b: boolean;
 >b : boolean
 
@@ -32,6 +34,5 @@ class C {
 
     set [null](v) { }
 >[null] : any
->null : null
 >v : any
 }

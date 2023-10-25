@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -33,8 +34,13 @@ Output::
 
 
 
-Program root files: ["/a/c/f2.ts","/a/d/f3.ts"]
-Program options: {"allowNonTsExtensions":true}
+Program root files: [
+  "/a/c/f2.ts",
+  "/a/d/f3.ts"
+]
+Program options: {
+  "allowNonTsExtensions": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -51,17 +57,13 @@ Shape signatures in builder refreshed for::
 /a/c/f2.ts (used version)
 /a/d/f3.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/c/f2.ts:
+/a/c/f2.ts: *new*
   {}
-/a/d/f3.ts:
+/a/d/f3.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -89,8 +91,12 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts"]
-Program options: {"allowNonTsExtensions":true}
+Program root files: [
+  "/a/b/f1.ts"
+]
+Program options: {
+  "allowNonTsExtensions": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -110,19 +116,15 @@ Shape signatures in builder refreshed for::
 /a/d/f3.ts (used version)
 /a/b/f1.ts (used version)
 
-PolledWatches::
-
 FsWatches::
+/a/b/f1.ts: *new*
+  {}
 /a/c/f2.ts:
   {}
 /a/d/f3.ts:
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b/f1.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -150,5 +152,7 @@ __exportStar(require("../d/f3"), exports);
 
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 First program is not updated:: true
 Second program is not updated:: true

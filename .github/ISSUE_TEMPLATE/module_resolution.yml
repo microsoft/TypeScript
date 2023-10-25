@@ -1,0 +1,103 @@
+name: Module resolution
+description: Report a problem with module resolution
+title: 'Module resolution:'
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Module resolution can be very difficult to configure correctly!
+
+        Be sure you've read the docs and asked for help in other places before filling out this form.
+
+        Most module resolution bug reports are actually misconfigurations, so we require a thorough pre-investigation before we can look into any potential issues.
+
+        Many module problems can be automatically detected with [Are The Types Wrong?](https://arethetypeswrong.github.io/) and you should use this tool first if it appears that the module shape is wrong.
+
+        Let's make sure you're ready to file a module resolution bug.
+
+  - type: markdown
+    attributes:
+      value: |
+        A module resolution bug requires five things:
+
+        1. A module that's trying to import some target module
+        2. That target module
+        3. The configuration of the importing module
+        4. The configuration of the target module
+        5. A difference in runtime behavior
+
+        You will also be required to post a cloneable repository. This repo must involve running `tsc`, not a third-party tool (e.g. vue-tsc, ngc, expo, ...)
+
+  - type: input
+    id: repo-url
+    attributes:
+      label: Demo Repo
+      description: Post a cloneable repo that reproduces the issue. We will run `npm`, `yarn`, or `pnpm` here, but will not invoke more complex build scripts or other build tools.
+      placeholder: https://github.com/ghost/myrepro
+    validations:
+      required: true
+
+  - type: dropdown
+    id: defect-kind
+    attributes:
+      label: Which of the following problems are you reporting?
+      options:
+        - The module specifier resolves at runtime, but not at build time
+        - The module specifier resolves at build time, but shouldn't because it doesn't at runtime
+        - The module specifier resolves, but to the wrong file
+        - The module specifier resolves to the right file, but something about the types are wrong
+        - Something else more complicated which I'll explain in more detail
+    validations:
+      required: true
+
+  - type: textarea
+    id: code-proof
+    attributes:
+      label: Demonstrate the defect described above with a code sample.
+      description: This should be at most four lines of code, and come from your demo repo.
+      placeholder: import * as foo from "./bar"; // Should not resolve
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Run `tsc --showConfig` and paste its output here
+      description: Repros that depend on running within external tools (yarn, pnpm, esbuild, etc.) are not TypeScript defects and will not be investigated.
+      placeholder: '> tsc --showConfig'
+    validations:
+      required: true
+
+  - type: textarea
+    id: traceResolution
+    attributes:
+      label: Run `tsc --traceResolution` and paste its output here
+      description: Run `tsc --traceResolution` and paste the output here.
+      placeholder: '> tsc --traceResolution'
+    validations:
+      required: true
+
+  - type: textarea
+    id: import-package-json
+    attributes:
+      label: Paste the `package.json` of the *importing* module, if it exists
+      placeholder: 'my_project/package.json'
+    validations:
+      required: true
+
+  - type: textarea
+    id: export-package-json
+    attributes:
+      label: Paste the `package.json` of the *target* module, if it exists
+      placeholder: 'node_modules/somepkg/package.json'
+    validations:
+      required: true
+
+  - type: textarea
+    id: comments
+    attributes:
+      label: Any other comments can go here
+      placeholder: 'Have a nice day!'
+    validations:
+      required: true

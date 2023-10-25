@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideMethod.ts] ////
+
 //// [accessorsOverrideMethod.ts]
 class A {
     m() { }

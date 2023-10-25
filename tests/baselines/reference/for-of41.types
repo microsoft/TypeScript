@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of41.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of41.ts] ////
+
+=== for-of41.ts ===
 var array = [{x: [0], y: {p: ""}}]
 >array : { x: number[]; y: { p: string; }; }[]
 >[{x: [0], y: {p: ""}}] : { x: number[]; y: { p: string; }; }[]

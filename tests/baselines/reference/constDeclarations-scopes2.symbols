@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations-scopes2.ts ===
+//// [tests/cases/compiler/constDeclarations-scopes2.ts] ////
+
+=== constDeclarations-scopes2.ts ===
 // global
 const c = "string";
 >c : Symbol(c, Decl(constDeclarations-scopes2.ts, 1, 5))

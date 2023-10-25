@@ -1,5 +1,6 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
-// import * as /*FIND ALL REFS*/[|Bar|] from "does-not-exist";
+// <|import * as /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Bar|] from "does-not-exist";|>
 // 
 // let a: [|Bar|];
 // let b: [|Bar|]<string>;
@@ -8,111 +9,43 @@
 // let e: [|Bar|].X<string>;
 // let f: [|Bar|].X.Y;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "alias",
-      "name": "import Bar",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 38
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 38
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 47,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 59,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 107,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 121,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 143,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // <|import * as /*FIND ALL REFS*/[|Bar|] from "does-not-exist";|>
+  // 
+  // let a: Bar;
+  // let b: Bar<string>;
+  // --- (line: 5) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import Bar",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
-// import * as [|Bar|] from "does-not-exist";
+// <|import * as [|{| isWriteAccess: true |}Bar|] from "does-not-exist";|>
 // 
 // let a: /*FIND ALL REFS*/[|Bar|];
 // let b: [|Bar|]<string>;
@@ -121,104 +54,46 @@
 // let e: [|Bar|].X<string>;
 // let f: [|Bar|].X.Y;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "alias",
-      "name": "import Bar",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 38
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 38
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 47,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 59,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 107,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 121,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 143,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // <|import * as [|Bar|] from "does-not-exist";|>
+  // 
+  // let a: /*FIND ALL REFS*/Bar;
+  // let b: Bar<string>;
+  // let c: Bar<string, number>;
+  // let d: Bar.X;
+  // let e: Bar.X<string>;
+  // let f: Bar.X.Y;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import Bar",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
-// import * as [|Bar|] from "does-not-exist";
+// <|import * as [|{| isWriteAccess: true |}Bar|] from "does-not-exist";|>
 // 
 // let a: [|Bar|];
 // let b: /*FIND ALL REFS*/[|Bar|]<string>;
@@ -227,104 +102,46 @@
 // let e: [|Bar|].X<string>;
 // let f: [|Bar|].X.Y;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "alias",
-      "name": "import Bar",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 38
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 38
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 47,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 59,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 107,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 121,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 143,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // <|import * as [|Bar|] from "does-not-exist";|>
+  // 
+  // let a: Bar;
+  // let b: /*FIND ALL REFS*/Bar<string>;
+  // let c: Bar<string, number>;
+  // let d: Bar.X;
+  // let e: Bar.X<string>;
+  // let f: Bar.X.Y;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import Bar",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
-// import * as [|Bar|] from "does-not-exist";
+// <|import * as [|{| isWriteAccess: true |}Bar|] from "does-not-exist";|>
 // 
 // let a: [|Bar|];
 // let b: [|Bar|]<string>;
@@ -333,104 +150,46 @@
 // let e: [|Bar|].X<string>;
 // let f: [|Bar|].X.Y;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "alias",
-      "name": "import Bar",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 38
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 38
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 47,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 59,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 107,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 121,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 143,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // <|import * as [|Bar|] from "does-not-exist";|>
+  // 
+  // let a: Bar;
+  // let b: Bar<string>;
+  // let c: /*FIND ALL REFS*/Bar<string, number>;
+  // let d: Bar.X;
+  // let e: Bar.X<string>;
+  // let f: Bar.X.Y;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import Bar",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
-// import * as [|Bar|] from "does-not-exist";
+// <|import * as [|{| isWriteAccess: true |}Bar|] from "does-not-exist";|>
 // 
 // let a: [|Bar|];
 // let b: [|Bar|]<string>;
@@ -439,104 +198,46 @@
 // let e: [|Bar|].X<string>;
 // let f: [|Bar|].X.Y;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "alias",
-      "name": "import Bar",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 38
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 38
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 47,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 59,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 107,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 121,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 143,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // <|import * as [|Bar|] from "does-not-exist";|>
+  // 
+  // let a: Bar;
+  // let b: Bar<string>;
+  // let c: Bar<string, number>;
+  // let d: /*FIND ALL REFS*/Bar.X;
+  // let e: Bar.X<string>;
+  // let f: Bar.X.Y;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import Bar",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
-// import * as [|Bar|] from "does-not-exist";
+// <|import * as [|{| isWriteAccess: true |}Bar|] from "does-not-exist";|>
 // 
 // let a: [|Bar|];
 // let b: [|Bar|]<string>;
@@ -545,104 +246,46 @@
 // let e: /*FIND ALL REFS*/[|Bar|].X<string>;
 // let f: [|Bar|].X.Y;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "alias",
-      "name": "import Bar",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 38
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 38
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 47,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 59,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 107,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 121,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 143,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // <|import * as [|Bar|] from "does-not-exist";|>
+  // 
+  // let a: Bar;
+  // let b: Bar<string>;
+  // let c: Bar<string, number>;
+  // let d: Bar.X;
+  // let e: /*FIND ALL REFS*/Bar.X<string>;
+  // let f: Bar.X.Y;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import Bar",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
-// import * as [|Bar|] from "does-not-exist";
+// <|import * as [|{| isWriteAccess: true |}Bar|] from "does-not-exist";|>
 // 
 // let a: [|Bar|];
 // let b: [|Bar|]<string>;
@@ -651,102 +294,44 @@
 // let e: [|Bar|].X<string>;
 // let f: /*FIND ALL REFS*/[|Bar|].X.Y;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "alias",
-      "name": "import Bar",
-      "textSpan": {
-        "start": 12,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 38
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 38
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 47,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 59,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 107,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 121,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 143,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // <|import * as [|Bar|] from "does-not-exist";|>
+  // 
+  // let a: Bar;
+  // let b: Bar<string>;
+  // let c: Bar<string, number>;
+  // let d: Bar.X;
+  // let e: Bar.X<string>;
+  // let f: /*FIND ALL REFS*/Bar.X.Y;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import Bar",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
 // import * as Bar from "does-not-exist";
 // 
@@ -757,86 +342,76 @@
 // let e: Bar.[|X|]<string>;
 // let f: Bar.X.Y;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "type",
-      "name": "type Bar.X = /*unresolved*/ any",
-      "textSpan": {
-        "start": 111,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "aliasName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "/*unresolved*/",
-          "kind": "text"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 111,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 125,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // import * as Bar from "does-not-exist";
+  // 
+  // let a: Bar;
+  // let b: Bar<string>;
+  // let c: Bar<string, number>;
+  // let d: Bar./*FIND ALL REFS*/[|X|];
+  // let e: Bar.X<string>;
+  // let f: Bar.X.Y;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Bar.X = /*unresolved*/ any",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "aliasName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "/*unresolved*/",
+      "kind": "text"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
 // import * as Bar from "does-not-exist";
 // 
@@ -847,209 +422,178 @@
 // let e: Bar./*FIND ALL REFS*/[|X|]<string>;
 // let f: Bar.X.Y;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "type",
-      "name": "type Bar.X = /*unresolved*/ any",
-      "textSpan": {
-        "start": 125,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "aliasName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "/*unresolved*/",
-          "kind": "text"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 111,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 125,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // --- (line: 3) skipped ---
+  // let b: Bar<string>;
+  // let c: Bar<string, number>;
+  // let d: Bar.X;
+  // let e: Bar./*FIND ALL REFS*/[|X|]<string>;
+  // let f: Bar.X.Y;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Bar.X = /*unresolved*/ any",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "aliasName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "/*unresolved*/",
+      "kind": "text"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
-// import * as Bar from "does-not-exist";
-// 
-// let a: Bar;
-// let b: Bar<string>;
+// --- (line: 4) skipped ---
 // let c: Bar<string, number>;
 // let d: Bar.X;
 // let e: Bar.X<string>;
 // let f: Bar./*FIND ALL REFS*/[|X|].Y;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "type",
-      "name": "",
-      "textSpan": {
-        "start": 147,
-        "length": 1
-      },
-      "displayParts": []
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 147,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // --- (line: 4) skipped ---
+  // let c: Bar<string, number>;
+  // let d: Bar.X;
+  // let e: Bar.X<string>;
+  // let f: Bar./*FIND ALL REFS*/[|X|].Y;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "",
+    "displayParts": []
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
-// import * as Bar from "does-not-exist";
-// 
-// let a: Bar;
-// let b: Bar<string>;
+// --- (line: 4) skipped ---
 // let c: Bar<string, number>;
 // let d: Bar.X;
 // let e: Bar.X<string>;
 // let f: Bar.X./*FIND ALL REFS*/[|Y|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-      "kind": "type",
-      "name": "type Bar.X.Y = /*unresolved*/ any",
-      "textSpan": {
-        "start": 149,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "aliasName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "X",
-          "kind": "aliasName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Y",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "/*unresolved*/",
-          "kind": "text"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 149,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts ===
+  // --- (line: 4) skipped ---
+  // let c: Bar<string, number>;
+  // let d: Bar.X;
+  // let e: Bar.X<string>;
+  // let f: Bar.X./*FIND ALL REFS*/[|Y|];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Bar.X.Y = /*unresolved*/ any",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "aliasName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "X",
+      "kind": "aliasName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Y",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "/*unresolved*/",
+      "kind": "text"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

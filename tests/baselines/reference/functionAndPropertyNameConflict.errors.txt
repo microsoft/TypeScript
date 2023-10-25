@@ -1,8 +1,8 @@
-tests/cases/compiler/functionAndPropertyNameConflict.ts(2,12): error TS2300: Duplicate identifier 'aaaaa'.
-tests/cases/compiler/functionAndPropertyNameConflict.ts(3,16): error TS2300: Duplicate identifier 'aaaaa'.
+functionAndPropertyNameConflict.ts(2,12): error TS2300: Duplicate identifier 'aaaaa'.
+functionAndPropertyNameConflict.ts(3,16): error TS2300: Duplicate identifier 'aaaaa'.
 
 
-==== tests/cases/compiler/functionAndPropertyNameConflict.ts (2 errors) ====
+==== functionAndPropertyNameConflict.ts (2 errors) ====
     class C65 {
         public aaaaa() { }
                ~~~~~

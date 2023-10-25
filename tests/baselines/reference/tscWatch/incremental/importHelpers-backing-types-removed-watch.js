@@ -1,3 +1,4 @@
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -18,13 +19,20 @@ declare const console: { log(msg: any): void; };
 export function __assign(...args: any[]): any;
 
 //// [/users/username/projects/project/node_modules/tslib/package.json]
-{"name":"tslib","version":"0.0.1"}
+{
+  "name": "tslib",
+  "version": "0.0.1"
+}
 
 //// [/users/username/projects/project/index.tsx]
 export const x = {...{}};
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"importHelpers":true}}
+{
+  "compilerOptions": {
+    "importHelpers": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -36,8 +44,14 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"importHelpers":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "importHelpers": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -55,25 +69,27 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/users/username/projects/project/index.tsx:
+/users/username/projects/project/index.tsx: *new*
   {}
-/users/username/projects/project/node_modules/tslib/index.d.ts:
+/users/username/projects/project/node_modules/tslib/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/users/username/projects/project/node_modules/tslib/package.json: *new*
   {}
-/users/username/projects/project/node_modules/tslib/package.json:
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules:
+/users/username/projects/project: *new*
   {}
-/users/username/projects/project:
+/users/username/projects/project/node_modules: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -93,6 +109,30 @@ Input::
 //// [/users/username/projects/project/node_modules/tslib/index.d.ts] deleted
 //// [/users/username/projects/project/node_modules/tslib/package.json] deleted
 
+PolledWatches *deleted*::
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches *deleted*::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/index.tsx:
+  {}
+/users/username/projects/project/node_modules/tslib/index.d.ts:
+  {}
+/users/username/projects/project/node_modules/tslib/package.json:
+  {}
+/users/username/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive *deleted*::
+/users/username/projects/project:
+  {}
+/users/username/projects/project/node_modules:
+  {}
+
 Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] Starting compilation in watch mode...
@@ -106,8 +146,14 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"importHelpers":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "importHelpers": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -122,21 +168,25 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/users/username/projects/project/index.tsx:
+/users/username/projects/project/index.tsx: *new*
   {}
-/a/lib/lib.d.ts:
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules:
+/users/username/projects/project: *new*
   {}
-/users/username/projects/project:
+/users/username/projects/project/node_modules: *new*
   {}
 
 exitCode:: ExitStatus.undefined

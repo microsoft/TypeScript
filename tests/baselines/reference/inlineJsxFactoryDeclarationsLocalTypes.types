@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryDeclarationsLocalTypes.tsx] ////
+
+=== renderer.d.ts ===
 export namespace dom {
     namespace JSX {
         interface IntrinsicElements {
@@ -33,7 +35,7 @@ export function dom(): dom.JSX.Element;
 >dom : any
 >JSX : any
 
-=== tests/cases/conformance/jsx/inline/renderer2.d.ts ===
+=== renderer2.d.ts ===
 export namespace predom {
     namespace JSX {
         interface IntrinsicElements {
@@ -68,7 +70,7 @@ export function predom(): predom.JSX.Element;
 >predom : any
 >JSX : any
 
-=== tests/cases/conformance/jsx/inline/component.tsx ===
+=== component.tsx ===
 /** @jsx predom */
 import { predom } from "./renderer2"
 >predom : () => predom.JSX.Element
@@ -189,24 +191,24 @@ export default <h></h>
 >h : any
 >h : any
 
-=== tests/cases/conformance/jsx/inline/index.tsx ===
+=== index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer"
 >dom : () => dom.JSX.Element
 
 import prerendered, {MySFC, MyClass, tree} from "./component";
->prerendered : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
->MySFC : (props: { x: number; y: number; children?: import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]; }) => import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>prerendered : import("renderer2").predom.JSX.Element
+>MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
 >MyClass : typeof MyClass
->tree : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>tree : import("renderer2").predom.JSX.Element
 
 let elem = prerendered;
->elem : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
->prerendered : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>elem : import("renderer2").predom.JSX.Element
+>prerendered : import("renderer2").predom.JSX.Element
 
 elem = <h></h>; // Expect assignability error here
 >elem = <h></h> : dom.JSX.Element
->elem : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>elem : import("renderer2").predom.JSX.Element
 ><h></h> : dom.JSX.Element
 >h : any
 >h : any
@@ -320,7 +322,7 @@ const _tree = <DOMSFC x={1} y={2}><DOMClass x={3} y={4} /><DOMClass x={5} y={6} 
 const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
 >_brokenTree : dom.JSX.Element
 ><MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC> : dom.JSX.Element
->MySFC : (props: { x: number; y: number; children?: import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]; }) => import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
 >x : number
 >1 : 1
 >y : number
@@ -337,7 +339,7 @@ const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={
 >5 : 5
 >y : number
 >6 : 6
->MySFC : (props: { x: number; y: number; children?: import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]; }) => import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
 
 // Should fail, nondom isn't allowed as children of dom
 const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
@@ -348,7 +350,7 @@ const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
 >1 : 1
 >y : number
 >2 : 2
->tree : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
->tree : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
+>tree : import("renderer2").predom.JSX.Element
+>tree : import("renderer2").predom.JSX.Element
 >DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
 

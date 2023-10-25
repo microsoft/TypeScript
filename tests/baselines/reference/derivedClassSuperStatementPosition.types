@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts] ////
+
+=== derivedClassSuperStatementPosition.ts ===
 class DerivedBasic extends Object {
 >DerivedBasic : DerivedBasic
 >Object : Object
@@ -109,7 +111,6 @@ class DerivedComments extends Object {
 >this.x : any
 >this : this
 >x : any
->null : null
 
         // c7
     }
@@ -145,7 +146,6 @@ class DerivedCommentsInvalidThis extends Object {
 >this.x : any
 >this : this
 >x : any
->null : null
 
         // c7
     }

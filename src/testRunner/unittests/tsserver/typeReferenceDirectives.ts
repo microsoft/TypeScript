@@ -1,13 +1,19 @@
 import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    baselineTsserverLogs,
+    createSession,
+    openFilesForSession,
+} from "../helpers/tsserver";
+import {
     createServerHost,
     File,
     libFile,
-} from "../virtualFileSystemWithWatch";
-import {
-    checkNumberOfProjects,
-    checkProjectActualFiles,
-    createProjectService,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: typeReferenceDirectives", () => {
     it("when typeReferenceDirective contains UpperCasePackage", () => {
@@ -18,7 +24,7 @@ describe("unittests:: tsserver:: typeReferenceDirectives", () => {
     constructor(name: string, width: number, height: number, onSelect: Function);
     Name: string;
     SelectedFile: string;
-}`
+}`,
         };
         const appLib: File = {
             path: `${libProjectLocation}/@app/lib/index.d.ts`,
@@ -27,7 +33,7 @@ declare class TestLib {
     issue: BrokenTest;
     constructor();
     test(): void;
-}`
+}`,
         };
         const testProjectLocation = `/user/username/projects/myproject/test`;
         const testFile: File = {
@@ -43,52 +49,51 @@ declare class TestLib {
         var x = new BrokenTest('',0,0,null);
 
     }
-}`
+}`,
         };
         const testConfig: File = {
             path: `${testProjectLocation}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     module: "amd",
-                    typeRoots: ["../lib/@types", "../lib/@app"]
-                }
-            })
+                    typeRoots: ["../lib/@types", "../lib/@app"],
+                },
+            }),
         };
 
         const files = [typeLib, appLib, testFile, testConfig, libFile];
         const host = createServerHost(files);
-        const service = createProjectService(host);
-        service.openClientFile(testFile.path);
-        checkNumberOfProjects(service, { configuredProjects: 1 });
-        const project = service.configuredProjects.get(testConfig.path)!;
-        checkProjectActualFiles(project, files.map(f => f.path));
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([testFile], session);
         host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
-        host.checkTimeoutQueueLengthAndRun(2);
+        host.runQueuedTimeoutCallbacks();
+        baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective contains UpperCasePackage", session);
     });
 
     it("when typeReferenceDirective is relative path and in a sibling folder", () => {
         const projectPath = `/user/username/projects/myproject/background`;
         const file: File = {
             path: `${projectPath}/a.ts`,
-            content: "let x = 10;"
+            content: "let x = 10;",
         };
         const tsconfig: File = {
             path: `${projectPath}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     types: [
-                        "../typedefs/filesystem"
-                    ]
-                }
-            })
+                        "../typedefs/filesystem",
+                    ],
+                },
+            }),
         };
         const filesystem: File = {
             path: `/user/username/projects/myproject/typedefs/filesystem.d.ts`,
-            content: `interface LocalFileSystem { someProperty: string; }`
+            content: `interface LocalFileSystem { someProperty: string; }`,
         };
         const files = [file, tsconfig, filesystem, libFile];
         const host = createServerHost(files);
-        const service = createProjectService(host);
-        service.openClientFile(file.path);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([file], session);
+        baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective is relative path and in a sibling folder", session);
     });
 });

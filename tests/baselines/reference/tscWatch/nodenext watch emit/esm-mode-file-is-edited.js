@@ -1,6 +1,15 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/project/tsconfig.json]
-{"compilerOptions":{"strict":true,"target":"es2020","module":"nodenext","moduleResolution":"nodenext","outDir":"../dist"}}
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es2020",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "../dist"
+  }
+}
 
 //// [/project/src/index.ts]
 import * as Thing from "thing";
@@ -11,7 +20,13 @@ Thing.fn();
 declare module "thing";
 
 //// [/project/package.json]
-{"name":"some-proj","version":"1.0.0","description":"","type":"module","main":"index.js"}
+{
+  "name": "some-proj",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js"
+}
 
 //// [/a/lib/lib.es2020.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -36,8 +51,20 @@ Output::
 
 
 
-Program root files: ["/project/src/deps.d.ts","/project/src/index.ts"]
-Program options: {"strict":true,"target":7,"module":199,"moduleResolution":99,"outDir":"/dist","watch":true,"project":"/project/tsconfig.json","configFilePath":"/project/tsconfig.json"}
+Program root files: [
+  "/project/src/deps.d.ts",
+  "/project/src/index.ts"
+]
+Program options: {
+  "strict": true,
+  "target": 7,
+  "module": 199,
+  "moduleResolution": 99,
+  "outDir": "/dist",
+  "watch": true,
+  "project": "/project/tsconfig.json",
+  "configFilePath": "/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2020.full.d.ts
@@ -54,22 +81,18 @@ Shape signatures in builder refreshed for::
 /project/src/deps.d.ts (used version)
 /project/src/index.ts (used version)
 
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/project/tsconfig.json:
+/a/lib/lib.es2020.full.d.ts: *new*
   {}
-/project/src/deps.d.ts:
+/project/src/deps.d.ts: *new*
   {}
-/project/src/index.ts:
+/project/src/index.ts: *new*
   {}
-/a/lib/lib.es2020.full.d.ts:
+/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/project:
+/project: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -88,6 +111,9 @@ import * as Thing from "thing";
 Thing.fn();
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
@@ -96,8 +122,20 @@ Output::
 
 
 
-Program root files: ["/project/src/deps.d.ts","/project/src/index.ts"]
-Program options: {"strict":true,"target":7,"module":199,"moduleResolution":99,"outDir":"/dist","watch":true,"project":"/project/tsconfig.json","configFilePath":"/project/tsconfig.json"}
+Program root files: [
+  "/project/src/deps.d.ts",
+  "/project/src/index.ts"
+]
+Program options: {
+  "strict": true,
+  "target": 7,
+  "module": 199,
+  "moduleResolution": 99,
+  "outDir": "/dist",
+  "watch": true,
+  "project": "/project/tsconfig.json",
+  "configFilePath": "/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.es2020.full.d.ts
@@ -109,24 +147,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /project/src/index.ts (computed .d.ts)
-
-PolledWatches::
-/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/project/tsconfig.json:
-  {}
-/project/src/deps.d.ts:
-  {}
-/project/src/index.ts:
-  {}
-/a/lib/lib.es2020.full.d.ts:
-  {}
-
-FsWatchesRecursive::
-/project:
-  {}
 
 exitCode:: ExitStatus.undefined
 

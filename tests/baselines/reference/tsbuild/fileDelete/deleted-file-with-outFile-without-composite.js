@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -27,7 +28,12 @@ export function child2() {
 
 
 //// [/src/child/tsconfig.json]
-{"compilerOptions":{"outFile":"../childResult.js","module":"amd"}}
+{
+  "compilerOptions": {
+    "outFile": "../childResult.js",
+    "module": "amd"
+  }
+}
 
 
 

@@ -1,10 +1,10 @@
-tests/cases/compiler/assignmentToReferenceTypes.ts(5,1): error TS2708: Cannot use namespace 'M' as a value.
-tests/cases/compiler/assignmentToReferenceTypes.ts(9,1): error TS2629: Cannot assign to 'C' because it is a class.
-tests/cases/compiler/assignmentToReferenceTypes.ts(13,1): error TS2628: Cannot assign to 'E' because it is an enum.
-tests/cases/compiler/assignmentToReferenceTypes.ts(16,1): error TS2630: Cannot assign to 'f' because it is a function.
+assignmentToReferenceTypes.ts(5,1): error TS2708: Cannot use namespace 'M' as a value.
+assignmentToReferenceTypes.ts(9,1): error TS2629: Cannot assign to 'C' because it is a class.
+assignmentToReferenceTypes.ts(13,1): error TS2628: Cannot assign to 'E' because it is an enum.
+assignmentToReferenceTypes.ts(16,1): error TS2630: Cannot assign to 'f' because it is a function.
 
 
-==== tests/cases/compiler/assignmentToReferenceTypes.ts (4 errors) ====
+==== assignmentToReferenceTypes.ts (4 errors) ====
     // Should all be allowed
     
     module M {

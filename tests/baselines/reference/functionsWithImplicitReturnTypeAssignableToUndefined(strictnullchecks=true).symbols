@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts] ////
+
+=== functionsWithImplicitReturnTypeAssignableToUndefined.ts ===
+function f1(): unknown {
+>f1 : Symbol(f1, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 0, 0))
+
+    if (Math.random() < 0.5) return true;
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    // Implicit return, but undefined is always assignable to unknown.
+}
+
+type MyUnknown = unknown;
+>MyUnknown : Symbol(MyUnknown, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 4, 1))
+
+function f2(): unknown {
+>f2 : Symbol(f2, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 6, 25))
+
+    if (Math.random() < 0.5) return true;
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    // Implicit return, but undefined is always assignable to unknown.
+}
+
+function f3(): any {
+>f3 : Symbol(f3, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 11, 1))
+
+    // Implicit return, but undefined is always assignable to any.
+}
+
+function f4(): void {
+>f4 : Symbol(f4, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 15, 1))
+
+    // Implicit return, but undefined is always assignable to void.
+}
+
+function f5(): {} {
+>f5 : Symbol(f5, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 19, 1))
+
+    if (Math.random() < 0.5) return {};
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    // Implicit return, but undefined is assignable to object when strictNullChecks is off.
+}
+
+function f6(): Record<string, any> {
+>f6 : Symbol(f6, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 25, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    if (Math.random() < 0.5) return { "foo": true };
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>"foo" : Symbol("foo", Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 28, 37))
+
+    // Implicit return, but undefined is assignable to records (which are just fancy objects)
+    // when strictNullChecks is off.
+}
+
+function f7(): null {
+>f7 : Symbol(f7, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 32, 1))
+
+    if (Math.random() < 0.5) return null;
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    // Implicit return, but undefined is assignable to null when strictNullChecks is off.
+}
+
+function f8(): string | null {
+>f8 : Symbol(f8, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 38, 1))
+
+    if (Math.random() < 0.5) return "foo";
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    // Implicit return, but undefined is assignable to null when strictNullChecks is off.
+}

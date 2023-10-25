@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/app.ts]
 let x = 1
@@ -16,7 +17,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/tsconfig.json]
-{"include":["app.ts"]}
+{
+  "include": [
+    "app.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p /A/B/tsconfig.json
@@ -28,8 +33,14 @@ Output::
 
 
 
-Program root files: ["/A/B/app.ts"]
-Program options: {"watch":true,"project":"/A/B/tsconfig.json","configFilePath":"/A/B/tsconfig.json"}
+Program root files: [
+  "/A/B/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/A/B/tsconfig.json",
+  "configFilePath": "/A/B/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -43,19 +54,13 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/app.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/app.ts: *new*
   {}
-/a/b/app.ts:
+/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

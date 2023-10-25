@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -19,7 +20,11 @@ import { x } from "./file2";
 export const x = 10;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"outDir":"dist"}}
+{
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}
 
 
 /a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
@@ -31,8 +36,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/src/file1.ts","/user/username/projects/myproject/src/file2.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/dist","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/file1.ts",
+  "/user/username/projects/myproject/src/file2.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/dist",
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -50,26 +63,26 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/src/file1.ts:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/src/file2.ts:
+/user/username/projects/myproject/dist: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/src: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject/src/file1.ts: *new*
   {}
-/user/username/projects/myproject/dist:
+/user/username/projects/myproject/src/file2.ts: *new*
   {}
-/user/username/projects/myproject/src:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -90,29 +103,9 @@ Change:: No change
 
 Input::
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
-/user/username/projects/myproject/src/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/dist:
-  {}
-/user/username/projects/myproject/src:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -125,6 +118,12 @@ export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
 
+Before running Timeout callback:: count: 2
+1: timerToUpdateProgram
+3: timerToUpdateChildWatches
+Invoking Timeout callback:: timeoutId:: 1:: timerToUpdateProgram
+After running Timeout callback:: count: 1
+3: timerToUpdateChildWatches
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
@@ -137,8 +136,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/src/file1.ts","/user/username/projects/myproject/src/file2.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/dist","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/file1.ts",
+  "/user/username/projects/myproject/src/file2.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/dist",
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -153,14 +160,12 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/file2.ts:
+/user/username/projects/myproject/src/file2.ts: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject:
@@ -169,8 +174,14 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/myproject/src/file2.ts:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -180,6 +191,19 @@ Change:: Pending directory watchers and program update
 
 Input::
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateChildWatches
+After running Timeout callback:: count: 2
+5: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 2
+5: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+After running Timeout callback:: count: 1
+8: timerToUpdateChildWatches
+Before running Timeout callback:: count: 1
+8: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
@@ -193,8 +217,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/src/file1.ts","/user/username/projects/myproject/src/renamed.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/dist","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/file1.ts",
+  "/user/username/projects/myproject/src/renamed.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/dist",
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -211,12 +243,14 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/src/file2.ts:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/file1.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject:
@@ -225,10 +259,12 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/renamed.ts:
+/user/username/projects/myproject/src/file1.ts:
   {}
-
-FsWatchesRecursive::
+/user/username/projects/myproject/src/renamed.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 exitCode:: ExitStatus.undefined
 

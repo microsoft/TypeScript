@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/file.ts]
 function one() {}
@@ -30,8 +31,13 @@ Output::
 
 
 
-Program root files: ["/a/b/file.ts"]
-Program options: {"watch":true,"noUnusedLocals":true}
+Program root files: [
+  "/a/b/file.ts"
+]
+Program options: {
+  "watch": true,
+  "noUnusedLocals": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -45,15 +51,11 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/file.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/a/b/file.ts:
+/a/b/file.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/a/lib/lib.d.ts: *new*
   {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
@@ -79,6 +81,9 @@ export function two() {
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
@@ -87,8 +92,13 @@ Output::
 
 
 
-Program root files: ["/a/b/file.ts"]
-Program options: {"watch":true,"noUnusedLocals":true}
+Program root files: [
+  "/a/b/file.ts"
+]
+Program options: {
+  "watch": true,
+  "noUnusedLocals": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -99,16 +109,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/b/file.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/a/b/file.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

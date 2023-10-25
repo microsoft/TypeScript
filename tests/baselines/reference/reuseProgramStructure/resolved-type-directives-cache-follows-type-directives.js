@@ -3,15 +3,12 @@ File: /types/typedefs/index.d.ts
 
 
 declare var $: number
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 /// <reference types='typedefs'/>
 
 var x = $
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -19,12 +16,15 @@ typedefs: {
     "isExternalLibraryImport": false
   },
   "failedLookupLocations": [
+    "/types/typedefs.d.ts",
     "/types/typedefs/package.json"
   ]
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
@@ -34,15 +34,12 @@ File: /types/typedefs/index.d.ts
 
 
 declare var $: number
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 /// <reference types='typedefs'/>
 
 var x = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -50,12 +47,15 @@ typedefs: {
     "isExternalLibraryImport": false
   },
   "failedLookupLocations": [
+    "/types/typedefs.d.ts",
     "/types/typedefs/package.json"
   ]
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
@@ -65,11 +65,11 @@ File: /a.ts
 
 
 var x = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
@@ -79,8 +79,6 @@ File: /types/typedefs/index.d.ts
 
 
 declare var $: number
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 /// <reference types="typedefs"/>
@@ -88,8 +86,7 @@ File: /a.ts
                 
 
 var x = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -97,11 +94,13 @@ typedefs: {
     "isExternalLibraryImport": false
   },
   "failedLookupLocations": [
+    "/types/typedefs.d.ts",
     "/types/typedefs/package.json"
   ]
 }
 typedefs2: {
   "failedLookupLocations": [
+    "/types/typedefs2.d.ts",
     "/types/typedefs2/package.json",
     "/types/typedefs2/index.d.ts",
     "/node_modules/typedefs2/package.json",
@@ -114,7 +113,9 @@ typedefs2: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 /a.ts(2,39): error TS2688: Cannot find type definition file for 'typedefs2'.
 

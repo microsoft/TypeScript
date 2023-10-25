@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameFieldInitializer.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldInitializer.ts] ////
+
+=== privateNameFieldInitializer.ts ===
 class A {
 >A : Symbol(A, Decl(privateNameFieldInitializer.ts, 0, 0))
 
