@@ -3790,8 +3790,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
         if (meaning & SymbolFlags.Value) {
             if (isPrimitiveTypeName(name)) {
-                if (isExtendedByInterface(errorLocation)) {
-                    error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_an_interface_can_only_extend_named_types_and_classes, unescapeLeadingUnderscores(name));
+                const grandparent = errorLocation.parent.parent;
+                if (grandparent && grandparent.parent && isHeritageClause(grandparent)) {
+                    const heritageKind = grandparent.token;
+                    const containerKind = grandparent.parent.kind;
+                    if (containerKind === SyntaxKind.InterfaceDeclaration && heritageKind === SyntaxKind.ExtendsKeyword) {
+                        error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_It_can_only_extend_other_named_object_types, unescapeLeadingUnderscores(name));
+                    }
+                    else if (containerKind === SyntaxKind.ClassDeclaration && heritageKind === SyntaxKind.ExtendsKeyword) {
+                        error(errorLocation, Diagnostics.A_class_cannot_extend_a_primitive_type_like_0_Classes_can_only_extend_constructable_values, unescapeLeadingUnderscores(name));
+                    }
+                    else if (containerKind === SyntaxKind.ClassDeclaration && heritageKind === SyntaxKind.ImplementsKeyword) {
+                        error(errorLocation, Diagnostics.A_class_cannot_implement_a_primitive_type_like_0_It_can_only_implement_other_named_object_types, unescapeLeadingUnderscores(name));
+                    }
                 }
                 else {
                     error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
@@ -3813,17 +3824,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return true;
             }
-        }
-        return false;
-    }
-
-    function isExtendedByInterface(node: Node): boolean {
-        const grandparent = node.parent.parent;
-        const parentOfGrandparent = grandparent.parent;
-        if (grandparent && parentOfGrandparent) {
-            const isExtending = isHeritageClause(grandparent) && grandparent.token === SyntaxKind.ExtendsKeyword;
-            const isInterface = isInterfaceDeclaration(parentOfGrandparent);
-            return isExtending && isInterface;
         }
         return false;
     }
