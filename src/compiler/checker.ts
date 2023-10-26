@@ -11438,12 +11438,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : errorType;
 
             if (!popTypeResolution()) {
-                if (exportSymbol) {
-                    reportCircularityError(exportSymbol);
-                }
-                else {
-                    reportCircularityError(symbol);
-                }
+                reportCircularityError(exportSymbol ?? symbol);
                 return links.type = errorType;
             }
         }
@@ -11461,7 +11456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function reportCircularityError(symbol: Symbol) {
-        const declaration = symbol.valueDeclaration as VariableLikeDeclaration;
+        const declaration = symbol.valueDeclaration;
         // Check if variable has type annotation that circularly references the variable itself
         if (declaration) {
             if (getEffectiveTypeAnnotationNode(declaration)) {
@@ -11475,7 +11470,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     symbolToString(symbol));
             }
         }
-        else if (symbol.declarations) {
+        else if ((symbol.flags & SymbolFlags.Alias) && symbol.declarations?.length) {
             error(symbol.declarations[0], Diagnostics.Circular_definition_of_import_alias_0,
                 symbolToString(symbol));
         }
