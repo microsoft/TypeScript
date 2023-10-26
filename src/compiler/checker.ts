@@ -11882,8 +11882,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         else if ((symbol.flags & SymbolFlags.Alias) && symbol.declarations?.length) {
-            error(symbol.declarations[0], Diagnostics.Circular_definition_of_import_alias_0,
-                symbolToString(symbol));
+            error(symbol.declarations[0], Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
         }
         // Circularities could also result from parameters in function expressions that end up
         // having themselves as contextual types following type argument inference. In those cases
