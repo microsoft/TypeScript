@@ -10,10 +10,27 @@ export function foo(): void;
 export function foo(): void;
 
 //// [/Users/name/projects/web/node_modules/@types/yargs/package.json]
-{"name":"yargs","version":"17.0.12","exports":{".":{"types":{"import":"./index.d.mts","default":"./index.d.ts"}}}}
+{
+  "name": "yargs",
+  "version": "17.0.12",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./index.d.mts",
+        "default": "./index.d.ts"
+      }
+    }
+  }
+}
 
 //// [/Users/name/projects/web/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"nodenext","forceConsistentCasingInFileNames":true,"traceResolution":true}}
+{
+  "compilerOptions": {
+    "moduleResolution": "nodenext",
+    "forceConsistentCasingInFileNames": true,
+    "traceResolution": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -98,8 +115,17 @@ src/bin.ts
 
 
 
-Program root files: ["/Users/name/projects/web/src/bin.ts"]
-Program options: {"moduleResolution":99,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/web/tsconfig.json"}
+Program root files: [
+  "/Users/name/projects/web/src/bin.ts"
+]
+Program options: {
+  "moduleResolution": 99,
+  "forceConsistentCasingInFileNames": true,
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "configFilePath": "/Users/name/projects/web/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

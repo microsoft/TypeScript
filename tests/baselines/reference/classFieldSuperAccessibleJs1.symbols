@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/classFieldSuperAccessibleJs1.ts] ////
+
+=== index.js ===
+class C {
+>C : Symbol(C, Decl(index.js, 0, 0), Decl(index.js, 2, 1))
+
+  static blah1 = 123;
+>blah1 : Symbol(C.blah1, Decl(index.js, 0, 9))
+}
+C.blah2 = 456;
+>C.blah2 : Symbol(C.blah2, Decl(index.js, 2, 1))
+>C : Symbol(C, Decl(index.js, 0, 0), Decl(index.js, 2, 1))
+>blah2 : Symbol(C.blah2, Decl(index.js, 2, 1))
+
+class D extends C {
+>D : Symbol(D, Decl(index.js, 3, 14))
+>C : Symbol(C, Decl(index.js, 0, 0), Decl(index.js, 2, 1))
+
+  static {
+    console.log(super.blah1);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super.blah1 : Symbol(C.blah1, Decl(index.js, 0, 9))
+>super : Symbol(C, Decl(index.js, 0, 0), Decl(index.js, 2, 1))
+>blah1 : Symbol(C.blah1, Decl(index.js, 0, 9))
+
+    console.log(super.blah2);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super.blah2 : Symbol(C.blah2, Decl(index.js, 2, 1))
+>super : Symbol(C, Decl(index.js, 0, 0), Decl(index.js, 2, 1))
+>blah2 : Symbol(C.blah2, Decl(index.js, 2, 1))
+  }
+}
+

@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/jsDeclarationsGlobalFileConstFunctionNamed.ts] ////
+
+=== file.js ===
+const SomeConstructor = function Named() {
+>SomeConstructor : Symbol(SomeConstructor, Decl(file.js, 0, 5))
+>Named : Symbol(Named, Decl(file.js, 0, 23))
+
+	this.x = 1;
+>this.x : Symbol(Named.x, Decl(file.js, 0, 42))
+>this : Symbol(Named, Decl(file.js, 0, 23))
+>x : Symbol(Named.x, Decl(file.js, 0, 42))
+
+};
+
+const SomeConstructor2 = function Named() {
+>SomeConstructor2 : Symbol(SomeConstructor2, Decl(file.js, 4, 5), Decl(file.js, 5, 2))
+>Named : Symbol(Named, Decl(file.js, 4, 24))
+
+};
+SomeConstructor2.staticMember = "str";
+>SomeConstructor2.staticMember : Symbol(SomeConstructor2.staticMember, Decl(file.js, 5, 2))
+>SomeConstructor2 : Symbol(SomeConstructor2, Decl(file.js, 4, 5), Decl(file.js, 5, 2))
+>staticMember : Symbol(SomeConstructor2.staticMember, Decl(file.js, 5, 2))
+
+const SomeConstructor3 = function Named() {
+>SomeConstructor3 : Symbol(SomeConstructor3, Decl(file.js, 8, 5), Decl(file.js, 10, 2))
+>Named : Symbol(Named, Decl(file.js, 8, 24))
+
+	this.x = 1;
+>this.x : Symbol(Named.x, Decl(file.js, 8, 43))
+>this : Symbol(Named, Decl(file.js, 8, 24))
+>x : Symbol(Named.x, Decl(file.js, 8, 43))
+
+};
+SomeConstructor3.staticMember = "str";
+>SomeConstructor3.staticMember : Symbol(SomeConstructor3.staticMember, Decl(file.js, 10, 2))
+>SomeConstructor3 : Symbol(SomeConstructor3, Decl(file.js, 8, 5), Decl(file.js, 10, 2))
+>staticMember : Symbol(SomeConstructor3.staticMember, Decl(file.js, 10, 2))
+
+const SelfReference = function Named() {
+>SelfReference : Symbol(SelfReference, Decl(file.js, 13, 5), Decl(file.js, 16, 1))
+>Named : Symbol(Named, Decl(file.js, 13, 21))
+
+    if (!(this instanceof Named)) return new Named();
+>this : Symbol(Named, Decl(file.js, 13, 21))
+>Named : Symbol(Named, Decl(file.js, 13, 21))
+>Named : Symbol(Named, Decl(file.js, 13, 21))
+
+    this.x = 1;
+>this.x : Symbol(Named.x, Decl(file.js, 14, 53))
+>this : Symbol(Named, Decl(file.js, 13, 21))
+>x : Symbol(Named.x, Decl(file.js, 14, 53))
+}
+SelfReference.staticMember = "str";
+>SelfReference.staticMember : Symbol(SelfReference.staticMember, Decl(file.js, 16, 1))
+>SelfReference : Symbol(SelfReference, Decl(file.js, 13, 5), Decl(file.js, 16, 1))
+>staticMember : Symbol(SelfReference.staticMember, Decl(file.js, 16, 1))
+

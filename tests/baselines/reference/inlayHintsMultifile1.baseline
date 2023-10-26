@@ -1,0 +1,36 @@
+// === Inlay Hints ===
+async function foo () {
+                     ^
+{
+  "text": ": Promise<Foo>",
+  "position": 21,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+function bar () { return import('./a') }
+               ^
+{
+  "text": ": Promise<typeof import(\"/a\")>",
+  "position": 83,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+async function main () {
+                      ^
+{
+  "text": ": Promise<void>",
+  "position": 131,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+    const a = await foo()
+           ^
+{
+  "text": ": Foo",
+  "position": 145,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

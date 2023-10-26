@@ -19,21 +19,34 @@ declare const console: { log(msg: any): void; };
 export function __assign(...args: any[]): any;
 
 //// [/users/username/projects/project/node_modules/tslib/package.json]
-{"name":"tslib","version":"0.0.1"}
+{
+  "name": "tslib",
+  "version": "0.0.1"
+}
 
 //// [/users/username/projects/project/index.tsx]
 export const x = {...{}};
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"importHelpers":true}}
+{
+  "compilerOptions": {
+    "importHelpers": true
+  }
+}
 
 
 /a/lib/tsc.js -i
 Output::
 
 
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"importHelpers":true,"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "importHelpers": true,
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -142,8 +155,14 @@ Found 1 error in index.tsx[90m:1[0m
 
 
 
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"importHelpers":true,"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "importHelpers": true,
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

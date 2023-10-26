@@ -14,7 +14,7 @@ Fs::
 configFileName:: tsconfig.json
 CompilerOptions::
 {
- "configFilePath": "tsconfig.json"
+  "configFilePath": "tsconfig.json"
 }
 Errors::
 [96mtsconfig.json[0m:[93m2[0m:[93m13[0m - [91merror[0m[90m TS6258: [0m'module' should be set inside the 'compilerOptions' object of the config json file

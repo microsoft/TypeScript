@@ -7,7 +7,11 @@ import * as data from './data.json'
 { "foo": 1 }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node"}}
+{
+  "compilerOptions": {
+    "moduleResolution": "node"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -37,8 +41,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"moduleResolution":2,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "moduleResolution": 2,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -86,7 +96,12 @@ Change:: Enable resolveJsonModule
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node","resolveJsonModule":true}}
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "resolveJsonModule": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -100,8 +115,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"moduleResolution":2,"resolveJsonModule":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "moduleResolution": 2,
+  "resolveJsonModule": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

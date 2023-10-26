@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue8.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue8.ts ===
+function foo(cond1: boolean, cond2: boolean) {
+>foo : Symbol(foo, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 0))
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 13))
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 28))
+
+    switch (true) {
+        case cond1:
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 13))
+
+            cond1; // Should be true
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 13))
+
+            //  ^?
+            cond2; // Should be boolean
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 28))
+
+            //  ^?
+            break;
+
+        case cond2:
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 28))
+
+            cond1; // Should be false?
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 13))
+
+            //  ^?
+            cond2; // Should be true
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 28))
+
+            //  ^?
+            break;
+
+        default:
+            cond1; // Should be false?
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 13))
+
+            //  ^?
+            cond2; // Should be false?
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 28))
+
+            //  ^?
+            break;
+    }
+
+    cond1; // Should be boolean
+>cond1 : Symbol(cond1, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 13))
+
+    //  ^?
+    cond2; // Should be boolean
+>cond2 : Symbol(cond2, Decl(narrowByClauseExpressionInSwitchTrue8.ts, 0, 28))
+
+    //  ^?
+}
+

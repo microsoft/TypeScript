@@ -1,0 +1,132 @@
+// === Inlay Hints ===
+foo2(1, 2);
+     ^
+{
+  "text": "",
+  "position": 257,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "c",
+      "span": {
+        "start": 55,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesInSpan2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo2(1, 2);
+        ^
+{
+  "text": "",
+  "position": 260,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "d",
+      "span": {
+        "start": 66,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesInSpan2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo3(1, 2);
+     ^
+{
+  "text": "",
+  "position": 269,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "e",
+      "span": {
+        "start": 95,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesInSpan2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo3(1, 2);
+        ^
+{
+  "text": "",
+  "position": 272,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "f",
+      "span": {
+        "start": 106,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesInSpan2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo4(1, 2);
+     ^
+{
+  "text": "",
+  "position": 281,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "g",
+      "span": {
+        "start": 135,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesInSpan2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo4(1, 2);
+        ^
+{
+  "text": "",
+  "position": 284,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "h",
+      "span": {
+        "start": 146,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesInSpan2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}

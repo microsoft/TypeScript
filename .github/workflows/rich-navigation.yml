@@ -1,4 +1,4 @@
-name: "Rich Navigation Indexing"
+name: 'Rich Navigation Indexing'
 on:
   workflow_dispatch:
   push:
@@ -24,14 +24,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 5
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v3
 
       - name: Install dependencies
-        run:  npm ci
+        run: npm ci
 
       - uses: microsoft/RichCodeNavIndexer@v0.1
         with:

@@ -1,8 +1,8 @@
 0.ts --lib --sourcemap
 CompilerOptions::
 {
- "lib": [],
- "sourceMap": true
+  "lib": [],
+  "sourceMap": true
 }
 WatchOptions::
 

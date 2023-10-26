@@ -24,10 +24,25 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/Users/username/dev/project/tsconfig.json]
-{"extends":"./tsconfig.all.json"}
+{
+  "extends": "./tsconfig.all.json"
+}
 
 //// [/Users/username/dev/project/tsconfig.all.json]
-{"compilerOptions":{"baseUrl":".","paths":{"file2":["./file2.js"]},"typeRoots":["./types"],"forceConsistentCasingInFileNames":true}}
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "file2": [
+        "./file2.js"
+      ]
+    },
+    "typeRoots": [
+      "./types"
+    ],
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
