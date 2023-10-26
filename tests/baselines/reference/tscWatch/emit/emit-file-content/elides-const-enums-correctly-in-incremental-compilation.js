@@ -32,8 +32,12 @@ Output::
 
 
 
-Program root files: ["/user/someone/projects/myproject/file3.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/user/someone/projects/myproject/file3.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -54,13 +58,13 @@ Shape signatures in builder refreshed for::
 /user/someone/projects/myproject/file3.ts (used version)
 
 FsWatches::
-/user/someone/projects/myproject/file3.ts: *new*
-  {}
-/user/someone/projects/myproject/file2.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/someone/projects/myproject/file1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/someone/projects/myproject/file2.ts: *new*
+  {}
+/user/someone/projects/myproject/file3.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -100,8 +104,12 @@ Output::
 
 
 
-Program root files: ["/user/someone/projects/myproject/file3.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/user/someone/projects/myproject/file3.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

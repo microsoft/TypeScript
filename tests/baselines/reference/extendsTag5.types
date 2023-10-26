@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/extendsTag5.ts] ////
+
 === /a.js ===
 /**
  * @typedef {{

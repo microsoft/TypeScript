@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts ===
+//// [tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts] ////
+
+=== objectLiteralFunctionArgContextualTyping.ts ===
 interface I {
     value: string;
 >value : string

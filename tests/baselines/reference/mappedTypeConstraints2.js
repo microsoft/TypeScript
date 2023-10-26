@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts] ////
+
 //// [mappedTypeConstraints2.ts]
 type Mapped1<K extends string> = { [P in K]: { a: P } };
 

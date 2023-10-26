@@ -8,7 +8,13 @@ import * as debug from "debug"
 import * as debug from "debug"
 
 //// [/users/username/projects/proj/tsconfig.json]
-{"files":["foo/boo/app.ts","foo/boo/moo/app.ts"],"moduleResolution":"Classic"}
+{
+  "files": [
+    "foo/boo/app.ts",
+    "foo/boo/moo/app.ts"
+  ],
+  "moduleResolution": "Classic"
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -100,17 +106,17 @@ export {}
 PolledWatches::
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/proj/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/proj/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/proj/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/proj/foo/boo/moo/app.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/proj/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -176,9 +182,9 @@ Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/proj/tsconfig.json
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/users/username/projects/proj/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/proj/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -186,11 +192,11 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/proj/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /users/username/projects/proj/foo/boo/moo/app.ts:
   {}
-/a/lib/lib.d.ts:
+/users/username/projects/proj/tsconfig.json:
   {}
 
 FsWatchesRecursive::

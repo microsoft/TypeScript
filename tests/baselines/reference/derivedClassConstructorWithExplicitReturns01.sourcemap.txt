@@ -5,7 +5,7 @@ sourceRoot:
 sources: derivedClassConstructorWithExplicitReturns01.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/derivedClassConstructorWithExplicitReturns01.js
+emittedFile:derivedClassConstructorWithExplicitReturns01.js
 sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 -------------------------------------------------------------------
 >>>var __extends = (this && this.__extends) || (function () {
@@ -270,36 +270,27 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 >>>        var _this = _super.call(this, a) || this;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^
-3 >                    ^^^^^^^^^^^^^^^^^^
-4 >                                      ^
-5 >                                       ^
-6 >                                        ^^^^^^^^^
-7 >                                                 ^^^^->
-1->
-2 >        constructor(a = 100) {
-  >                
-3 >                    super(
-4 >                                      a
-5 >                                       )
-6 >                                        ;
-  >                                        
-  >                                                if (Math.random() < 0.5) {
-  >                                                    "You win!"
-  >                                                    return {
-  >                                                        cProp: 1,
-  >                                                        dProp: () => this,
-  >                                                        foo() { return "You win!!!!!" }
-  >                                                    };
-  >                                                }
-  >                                                else
-  >                                                    return null;
-  >                                            }
-1->Emitted(33, 9) Source(19, 5) + SourceIndex(0)
+3 >                    ^^^^^^
+4 >                          ^^^^^^^^^^^^
+5 >                                      ^
+6 >                                       ^
+7 >                                        ^^^^^^^^^
+8 >                                                 ^^^^->
+1->) {
+  >        
+2 >        
+3 >                    super
+4 >                          (
+5 >                                      a
+6 >                                       )
+7 >                                        ;
+1->Emitted(33, 9) Source(20, 9) + SourceIndex(0)
 2 >Emitted(33, 21) Source(20, 9) + SourceIndex(0)
-3 >Emitted(33, 39) Source(20, 15) + SourceIndex(0)
-4 >Emitted(33, 40) Source(20, 16) + SourceIndex(0)
-5 >Emitted(33, 41) Source(20, 17) + SourceIndex(0)
-6 >Emitted(33, 50) Source(32, 6) + SourceIndex(0)
+3 >Emitted(33, 27) Source(20, 14) + SourceIndex(0)
+4 >Emitted(33, 39) Source(20, 15) + SourceIndex(0)
+5 >Emitted(33, 40) Source(20, 16) + SourceIndex(0)
+6 >Emitted(33, 41) Source(20, 17) + SourceIndex(0)
+7 >Emitted(33, 50) Source(20, 18) + SourceIndex(0)
 ---
 >>>        _this.dProp = function () { return _this; };
 1->^^^^^^^^
@@ -340,6 +331,7 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 7 >                         ^^^
 8 >                            ^^^
 9 >                               ^^
+10>                                 ^
 1 >
   >
   >    constructor(a = 100) {
@@ -354,6 +346,7 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 7 >                          < 
 8 >                            0.5
 9 >                               ) 
+10>                                 {
 1 >Emitted(35, 9) Source(22, 9) + SourceIndex(0)
 2 >Emitted(35, 13) Source(22, 13) + SourceIndex(0)
 3 >Emitted(35, 17) Source(22, 17) + SourceIndex(0)
@@ -363,12 +356,13 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 7 >Emitted(35, 29) Source(22, 29) + SourceIndex(0)
 8 >Emitted(35, 32) Source(22, 32) + SourceIndex(0)
 9 >Emitted(35, 34) Source(22, 34) + SourceIndex(0)
+10>Emitted(35, 35) Source(22, 35) + SourceIndex(0)
 ---
 >>>            "You win!";
 1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^
 3 >                      ^
-1 >{
+1 >
   >            
 2 >            "You win!"
 3 >                      
@@ -467,11 +461,14 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 2 >Emitted(41, 15) Source(28, 15) + SourceIndex(0)
 ---
 >>>        }
-1 >^^^^^^^^^
-2 >         ^^^^->
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^->
 1 >
-  >        }
-1 >Emitted(42, 10) Source(29, 10) + SourceIndex(0)
+  >        
+2 >        }
+1 >Emitted(42, 9) Source(29, 9) + SourceIndex(0)
+2 >Emitted(42, 10) Source(29, 10) + SourceIndex(0)
 ---
 >>>        else
 >>>            return null;

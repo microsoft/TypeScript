@@ -43,8 +43,13 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts","/users/username/projects/project/bar.d.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/foo.ts",
+  "/users/username/projects/project/bar.d.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -62,21 +67,21 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/bar.d.ts (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/foo.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/bar.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/foo.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -117,8 +122,13 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts","/users/username/projects/project/bar.d.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/foo.ts",
+  "/users/username/projects/project/bar.d.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

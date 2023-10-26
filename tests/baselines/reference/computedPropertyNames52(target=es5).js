@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames52.ts] ////
+
 //// [computedPropertyNames52.js]
 const array = [];
 for (let i = 0; i < 10; ++i) {
@@ -15,7 +17,7 @@ var _loop_1 = function (i) {
     var _b = void 0, _c = void 0;
     array.push((_c = /** @class */ (function () {
             function C() {
-                this[_b] = function () { return C; };
+                this[_b] = function () { return _c; };
             }
             return C;
         }()),

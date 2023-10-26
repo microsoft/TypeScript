@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declareExternalModuleWithExportAssignedFundule.ts ===
+//// [tests/cases/compiler/declareExternalModuleWithExportAssignedFundule.ts] ////
+
+=== declareExternalModuleWithExportAssignedFundule.ts ===
 declare module "express" {
 >"express" : typeof import("express")
 

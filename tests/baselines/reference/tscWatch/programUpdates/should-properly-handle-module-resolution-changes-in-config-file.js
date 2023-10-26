@@ -40,8 +40,15 @@ Output::
 
 
 
-Program root files: ["/a/b/file1.ts"]
-Program options: {"moduleResolution":2,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/file1.ts"
+]
+Program options: {
+  "moduleResolution": 2,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -59,11 +66,11 @@ Shape signatures in builder refreshed for::
 /a/b/file1.ts (used version)
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/file1.ts: *new*
   {}
 /a/b/node_modules/module1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -99,8 +106,15 @@ Output::
 
 
 
-Program root files: ["/a/b/file1.ts"]
-Program options: {"moduleResolution":1,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/file1.ts"
+]
+Program options: {
+  "moduleResolution": 1,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -116,9 +130,9 @@ Shape signatures in builder refreshed for::
 /a/b/file1.ts (computed .d.ts)
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/file1.ts:
+  {}
+/a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}

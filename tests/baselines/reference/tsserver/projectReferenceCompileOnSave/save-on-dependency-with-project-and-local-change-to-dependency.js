@@ -7,7 +7,13 @@ export function fn2() { }
 
 
 //// [/user/username/projects/myproject/dependency/tsconfig.json]
-{"compilerOptions":{"composite":true,"declarationDir":"../decls"},"compileOnSave":true}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declarationDir": "../decls"
+  },
+  "compileOnSave": true
+}
 
 //// [/user/username/projects/myproject/usage/usage.ts]
 import {
@@ -19,7 +25,14 @@ fn2();
 
 
 //// [/user/username/projects/myproject/usage/tsconfig.json]
-{"compileOnSave":true,"references":[{"path":"../dependency"}]}
+{
+  "compileOnSave": true,
+  "references": [
+    {
+      "path": "../dependency"
+    }
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -120,27 +133,27 @@ After request
 PolledWatches::
 /user/username/projects/myproject/decls: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/usage/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/dependency/fns.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/dependency/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/usage/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/usage: *new*
-  {}
 /user/username/projects/myproject/dependency: *new*
+  {}
+/user/username/projects/myproject/usage: *new*
   {}
 
 Before request
@@ -202,21 +215,21 @@ After request
 PolledWatches::
 /user/username/projects/myproject/decls:
   {"pollingInterval":500}
-/user/username/projects/myproject/usage/node_modules/@types:
+/user/username/projects/myproject/dependency/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
+/user/username/projects/myproject/usage/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/dependency/node_modules/@types: *new*
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/usage/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -224,9 +237,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/usage:
-  {}
 /user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/usage:
   {}
 
 Before request
@@ -395,13 +408,13 @@ export declare function fn2(): void;
 
 
 PolledWatches::
-/user/username/projects/myproject/usage/node_modules/@types:
+/user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
+/user/username/projects/myproject/usage/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/dependency/node_modules/@types:
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -409,19 +422,19 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/usage/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/usage/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/usage:
+/user/username/projects/myproject/decls: *new*
   {}
 /user/username/projects/myproject/dependency:
   {}
-/user/username/projects/myproject/decls: *new*
+/user/username/projects/myproject/usage:
   {}
 
 Before request

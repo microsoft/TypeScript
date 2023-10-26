@@ -8,7 +8,11 @@ import {} from "./"
 
 
 //// [/a/username/project/tsconfig.json]
-{"watchOptions":{"synchronousWatchDirectory":true}}
+{
+  "watchOptions": {
+    "synchronousWatchDirectory": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -95,7 +99,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /a/username/project: *new*
   {}
@@ -103,7 +107,7 @@ FsWatches::
   {}
 /a/username/project/src/file1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/username/project/tsconfig.json: *new*
   {}
 
 Before request
@@ -200,7 +204,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /a/username/project:
   {}
@@ -208,9 +212,9 @@ FsWatches::
   {}
 /a/username/project/src/file1.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /a/username/project/src/file2.ts: *new*
+  {}
+/a/username/project/tsconfig.json:
   {}
 
 Before request

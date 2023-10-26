@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ExportAssignment7.ts ===
+//// [tests/cases/compiler/ExportAssignment7.ts] ////
+
+=== ExportAssignment7.ts ===
 export class C {
 >C : Symbol(C, Decl(ExportAssignment7.ts, 0, 0))
 }

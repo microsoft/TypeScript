@@ -21,7 +21,19 @@ import { b } from "@ref/compositeb/b";
 export const x = 10;
 
 //// [/user/username/projects/myproject/compositea/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"../dist/","rootDir":"../","baseUrl":"../","paths":{"@ref/*":["./dist/*"]}}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../dist/",
+    "rootDir": "../",
+    "baseUrl": "../",
+    "paths": {
+      "@ref/*": [
+        "./dist/*"
+      ]
+    }
+  }
+}
 
 //// [/user/username/projects/myproject/dist/compositeb/b.d.ts]
 export declare function b(): void;
@@ -30,13 +42,42 @@ export declare function b(): void;
 export function b() {}
 
 //// [/user/username/projects/myproject/compositeb/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"../dist/","rootDir":"../","baseUrl":"../","paths":{"@ref/*":["./dist/*"]}}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../dist/",
+    "rootDir": "../",
+    "baseUrl": "../",
+    "paths": {
+      "@ref/*": [
+        "./dist/*"
+      ]
+    }
+  }
+}
 
 //// [/user/username/projects/myproject/compositec/c.ts]
 import { b } from "@ref/compositeb/b";
 
 //// [/user/username/projects/myproject/compositec/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"../dist/","rootDir":"../","baseUrl":"../","paths":{"@ref/*":["./*"]}},"references":[{"path":"../compositeb"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../dist/",
+    "rootDir": "../",
+    "baseUrl": "../",
+    "paths": {
+      "@ref/*": [
+        "./*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../compositeb"
+    }
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/compositea
@@ -206,37 +247,37 @@ export const x = 10;export const y = 30;
 PolledWatches::
 /user/username/projects/myproject/compositea/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/compositec/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/compositec/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/compositea/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/compositea/a2.ts: *new*
   {}
-/user/username/projects/myproject/dist/compositeb/b.d.ts: *new*
+/user/username/projects/myproject/compositea/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/compositec/tsconfig.json: *new*
+/user/username/projects/myproject/compositeb/b.ts: *new*
   {}
 /user/username/projects/myproject/compositeb/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/compositeb/b.ts: *new*
+/user/username/projects/myproject/compositec/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/dist/compositeb/b.d.ts: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/compositea: *new*
   {}
-/user/username/projects/myproject/dist: *new*
+/user/username/projects/myproject/compositeb: *new*
   {}
 /user/username/projects/myproject/compositec: *new*
   {}
-/user/username/projects/myproject/compositeb: *new*
+/user/username/projects/myproject/dist: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/compositea/tsconfig.json

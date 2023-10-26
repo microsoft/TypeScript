@@ -22,7 +22,11 @@ declare namespace Config { const value: string;}
 console.log(Config.value);
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true}}
+{
+  "compilerOptions": {
+    "incremental": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -34,8 +38,15 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/globals.d.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/globals.d.ts",
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -53,19 +64,19 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.ts (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/globals.d.ts: *new*
   {}
 /users/username/projects/project/index.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -147,19 +158,19 @@ Input::
 //// [/users/username/projects/project/globals.d.ts] deleted
 
 PolledWatches *deleted*::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/users/username/projects/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /users/username/projects/project/globals.d.ts:
   {}
 /users/username/projects/project/index.ts:
   {}
-/a/lib/lib.d.ts:
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::
@@ -179,8 +190,14 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -194,17 +211,17 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.ts (computed .d.ts)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/index.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

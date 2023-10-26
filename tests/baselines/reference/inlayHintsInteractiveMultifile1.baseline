@@ -1,0 +1,129 @@
+// === Inlay Hints ===
+async function foo () {
+                     ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "Promise",
+      "span": {
+        "start": -1,
+        "length": 7
+      },
+      "file": "lib.d.ts"
+    },
+    {
+      "text": "<"
+    },
+    {
+      "text": "Foo",
+      "span": {
+        "start": 17,
+        "length": 3
+      },
+      "file": "/a.ts"
+    },
+    {
+      "text": ">"
+    }
+  ],
+  "position": 21,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+function bar () { return import('./a') }
+               ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "Promise",
+      "span": {
+        "start": -1,
+        "length": 7
+      },
+      "file": "lib.d.ts"
+    },
+    {
+      "text": "<"
+    },
+    {
+      "text": "typeof "
+    },
+    {
+      "text": "import("
+    },
+    {
+      "text": "'/a'"
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": ">"
+    }
+  ],
+  "position": 83,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+async function main () {
+                      ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "Promise",
+      "span": {
+        "start": -1,
+        "length": 7
+      },
+      "file": "lib.d.ts"
+    },
+    {
+      "text": "<"
+    },
+    {
+      "text": "void"
+    },
+    {
+      "text": ">"
+    }
+  ],
+  "position": 131,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+    const a = await foo()
+           ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "Foo",
+      "span": {
+        "start": 17,
+        "length": 3
+      },
+      "file": "/a.ts"
+    }
+  ],
+  "position": 145,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

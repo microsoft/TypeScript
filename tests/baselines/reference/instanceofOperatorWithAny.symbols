@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithAny.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithAny.ts] ////
+
+=== instanceofOperatorWithAny.ts ===
 var a: any;
 >a : Symbol(a, Decl(instanceofOperatorWithAny.ts, 0, 3))
 

@@ -14,7 +14,14 @@ class C {}
 
 
 //// [/tsconfig.json]
-{"files":["./file1.d.ts","./a/lib.d.ts","./a/file3.d.ts","/a/lib.es6.d.ts"]}
+{
+  "files": [
+    "./file1.d.ts",
+    "./a/lib.d.ts",
+    "./a/file3.d.ts",
+    "/a/lib.es6.d.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -83,13 +90,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
+/a/file3.d.ts: *new*
   {}
 /a/lib.d.ts: *new*
   {}
-/a/file3.d.ts: *new*
-  {}
 /a/lib.es6.d.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 Before request

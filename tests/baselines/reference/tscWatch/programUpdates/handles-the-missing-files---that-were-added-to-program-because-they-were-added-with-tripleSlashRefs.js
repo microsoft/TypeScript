@@ -37,8 +37,12 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/a/b/commonFile1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -98,8 +102,12 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/a/b/commonFile1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -118,9 +126,9 @@ Shape signatures in builder refreshed for::
 FsWatches::
 /a/b/commonfile1.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /a/b/commonfile2.ts: *new*
+  {}
+/a/lib/lib.d.ts:
   {}
 
 exitCode:: ExitStatus.undefined

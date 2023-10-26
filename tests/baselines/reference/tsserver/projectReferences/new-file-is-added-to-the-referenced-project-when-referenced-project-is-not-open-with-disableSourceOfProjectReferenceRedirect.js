@@ -2,7 +2,15 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "exclude": [
+    "temp"
+  ]
+}
 
 //// [/user/username/projects/myproject/projects/project1/class1.ts]
 class class1 {}
@@ -11,7 +19,18 @@ class class1 {}
 declare class class1 {}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true,"disableSourceOfProjectReferenceRedirect":true},"references":[{"path":"../project1"}]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true,
+    "disableSourceOfProjectReferenceRedirect": true
+  },
+  "references": [
+    {
+      "path": "../project1"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/projects/project2/class2.ts]
 class class2 {}
@@ -118,29 +137,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2: *new*
-  {}
 /user/username/projects/myproject/projects/project1: *new*
+  {}
+/user/username/projects/myproject/projects/project2: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
@@ -185,31 +204,31 @@ Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/projects/
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
 /user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
   {}
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
@@ -228,11 +247,11 @@ declare class class3 {}
 
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -242,19 +261,19 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
 /user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -299,31 +318,31 @@ Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/projects/
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/projects/project1/class3.d.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
 /user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
   {}
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
@@ -353,23 +372,23 @@ Before running Timeout callback:: count: 2
 //// [/user/username/projects/myproject/projects/project1/class3.d.ts] deleted
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -377,9 +396,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
 /user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -421,31 +440,31 @@ Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/projects/
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
 /user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
   {}
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
@@ -464,11 +483,11 @@ declare class class3 {}
 
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -478,19 +497,19 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
 /user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -535,29 +554,29 @@ Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/projects/
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/projects/project1/class3.d.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
 /user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
   {}

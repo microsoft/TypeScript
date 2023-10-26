@@ -10,7 +10,12 @@ Creating project service
 
 
 //// [/a/b/package.json]
-{"name":"test","dependencies":{"express":"^3.1.0"}}
+{
+  "name": "test",
+  "dependencies": {
+    "express": "^3.1.0"
+  }
+}
 
 //// [/typesMap.json]
 {
@@ -75,67 +80,95 @@ TI:: typing installer creation complete
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {
-  "commander": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
-  },
-  "express": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
-  },
-  "jquery": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
-  },
-  "moment": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
-  },
-  "lodash": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
+  "entries": {
+    "commander": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    },
+    "express": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    },
+    "jquery": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    },
+    "moment": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    },
+    "lodash": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
   }
- }
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/a/app/test.csproj","fileNames":["/a/b/file3.d.ts","/a/b/lodash.js","/a/b/commander.js"],"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"include":["jquery","moment","lodash","commander"],"exclude":[],"enable":true},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/a/app/test.csproj",
+      "fileNames": [
+        "/a/b/file3.d.ts",
+        "/a/b/lodash.js",
+        "/a/b/commander.js"
+      ],
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "include": [
+          "jquery",
+          "moment",
+          "lodash",
+          "commander"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/app",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
@@ -144,10 +177,36 @@ TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","moment","lodash","comm
 TI:: [hh:mm:ss:mss] Typing names in '/a/b/package.json' dependencies: ["express"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","moment","lodash","commander","express"],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["jquery","moment","lodash","commander","express"],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "jquery",
+        "moment",
+        "lodash",
+        "commander",
+        "express"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/package.json",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/a/app/test.csproj","files":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/a/app/test.csproj",
+      "files": [
+        "/a/b/bower_components",
+        "/a/b/package.json",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test.csproj WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/package.json 2000 undefined Project: /a/app/test.csproj WatchType: File location for typing installer
@@ -160,21 +219,38 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 TI:: [hh:mm:ss:mss] Installing typings ["jquery","moment","lodash","commander","express"]
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::beginInstallTypes","eventId":1,"typingsInstallerVersion":"FakeVersion","projectName":"/a/app/test.csproj"}
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor","@types/moment@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor","@types/express@tsFakeMajor.Minor"]'.
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor","@types/moment@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor","@types/express@tsFakeMajor.Minor"]':: true
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 1,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/a/app/test.csproj"
+    }
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/jquery@tsFakeMajor.Minor",
+  "@types/moment@tsFakeMajor.Minor",
+  "@types/lodash@tsFakeMajor.Minor",
+  "@types/commander@tsFakeMajor.Minor",
+  "@types/express@tsFakeMajor.Minor"
+]'.
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/jquery@tsFakeMajor.Minor",
+  "@types/moment@tsFakeMajor.Minor",
+  "@types/lodash@tsFakeMajor.Minor",
+  "@types/commander@tsFakeMajor.Minor",
+  "@types/express@tsFakeMajor.Minor"
+]':: true
 TI:: Before installWorker
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/app/bower_components: *new*
+  {"pollingInterval":500}
+/a/app/node_modules: *new*
   {"pollingInterval":500}
 /a/b/bower_components: *new*
   {"pollingInterval":500}
 /a/b/node_modules: *new*
   {"pollingInterval":500}
-/a/app/bower_components: *new*
-  {"pollingInterval":500}
-/a/app/node_modules: *new*
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -203,10 +279,50 @@ declare const lodash: { x: number }
 TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor","@types/moment@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor","@types/express@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/moment/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts","/a/data/node_modules/@types/express/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/a/app/test.csproj","typeAcquisition":{"include":["jquery","moment","lodash","commander"],"exclude":[],"enable":true},"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/moment/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts","/a/data/node_modules/@types/express/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/a/app/test.csproj",
+      "typeAcquisition": {
+        "include": [
+          "jquery",
+          "moment",
+          "lodash",
+          "commander"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [
+        "/a/data/node_modules/@types/jquery/index.d.ts",
+        "/a/data/node_modules/@types/moment/index.d.ts",
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/commander/index.d.ts",
+        "/a/data/node_modules/@types/express/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Scheduled: /a/app/test.csproj
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::endInstallTypes","eventId":1,"projectName":"/a/app/test.csproj","packagesToInstall":["@types/jquery@tsFakeMajor.Minor","@types/moment@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor","@types/express@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 1,
+      "projectName": "/a/app/test.csproj",
+      "packagesToInstall": [
+        "@types/jquery@tsFakeMajor.Minor",
+        "@types/moment@tsFakeMajor.Minor",
+        "@types/lodash@tsFakeMajor.Minor",
+        "@types/commander@tsFakeMajor.Minor",
+        "@types/express@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }
 Before running Timeout callback:: count: 1
 1: /a/app/test.csproj
 
@@ -237,7 +353,40 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/a/app/test.csproj","fileNames":["/a/b/file3.d.ts","/a/data/node_modules/@types/commander/index.d.ts","/a/data/node_modules/@types/express/index.d.ts","/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/moment/index.d.ts","/a/b/lodash.js","/a/b/commander.js"],"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typeAcquisition":{"include":["jquery","moment","lodash","commander"],"exclude":[],"enable":true},"unresolvedImports":[],"projectRootPath":"/a/app","cachePath":"/a/data","kind":"discover"}
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/a/app/test.csproj",
+      "fileNames": [
+        "/a/b/file3.d.ts",
+        "/a/data/node_modules/@types/commander/index.d.ts",
+        "/a/data/node_modules/@types/express/index.d.ts",
+        "/a/data/node_modules/@types/jquery/index.d.ts",
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/moment/index.d.ts",
+        "/a/b/lodash.js",
+        "/a/b/commander.js"
+      ],
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "include": [
+          "jquery",
+          "moment",
+          "lodash",
+          "commander"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/app",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Cache location was already processed...
@@ -245,11 +394,57 @@ TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","moment","lodash","comm
 TI:: [hh:mm:ss:mss] Typing names in '/a/b/package.json' dependencies: ["express"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/moment/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts","/a/data/node_modules/@types/express/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/moment/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts","/a/data/node_modules/@types/express/index.d.ts"],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/package.json","/a/b/node_modules","/a/app/bower_components","/a/app/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [
+        "/a/data/node_modules/@types/jquery/index.d.ts",
+        "/a/data/node_modules/@types/moment/index.d.ts",
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/commander/index.d.ts",
+        "/a/data/node_modules/@types/express/index.d.ts"
+      ],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/package.json",
+        "/a/b/node_modules",
+        "/a/app/bower_components",
+        "/a/app/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/a/app/test.csproj"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/a/app/test.csproj"
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/a/app/test.csproj","typeAcquisition":{"include":["jquery","moment","lodash","commander"],"exclude":[],"enable":true},"compilerOptions":{"allowJS":true,"moduleResolution":2,"allowNonTsExtensions":true,"noEmitForJsFiles":true},"typings":["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/moment/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts","/a/data/node_modules/@types/express/index.d.ts"],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/a/app/test.csproj",
+      "typeAcquisition": {
+        "include": [
+          "jquery",
+          "moment",
+          "lodash",
+          "commander"
+        ],
+        "exclude": [],
+        "enable": true
+      },
+      "compilerOptions": {
+        "allowJS": true,
+        "moduleResolution": 2,
+        "allowNonTsExtensions": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [
+        "/a/data/node_modules/@types/jquery/index.d.ts",
+        "/a/data/node_modules/@types/moment/index.d.ts",
+        "/a/data/node_modules/@types/lodash/index.d.ts",
+        "/a/data/node_modules/@types/commander/index.d.ts",
+        "/a/data/node_modules/@types/express/index.d.ts"
+      ],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 0

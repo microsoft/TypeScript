@@ -24,10 +24,28 @@ let x = 10;
 let y = 10;
 
 //// [/user/username/projects/myproject/app1/tsconfig.json]
-{"files":["app.ts","../core/core.ts"],"compilerOptions":{"outFile":"build/output.js"},"compileOnSave":true}
+{
+  "files": [
+    "app.ts",
+    "../core/core.ts"
+  ],
+  "compilerOptions": {
+    "outFile": "build/output.js"
+  },
+  "compileOnSave": true
+}
 
 //// [/user/username/projects/myproject/app2/tsconfig.json]
-{"files":["app.ts","../core/core.ts"],"compilerOptions":{"outFile":"build/output.js"},"compileOnSave":true}
+{
+  "files": [
+    "app.ts",
+    "../core/core.ts"
+  ],
+  "compilerOptions": {
+    "outFile": "build/output.js"
+  },
+  "compileOnSave": true
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -100,11 +118,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/myproject/app1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/core/core.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
   {}
 
 Before request
@@ -177,21 +195,21 @@ After request
 PolledWatches::
 /user/username/projects/myproject/app1/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/app2/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/app2/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
-/user/username/projects/myproject/core/core.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
+/user/username/projects/myproject/app1/tsconfig.json:
+  {}
 /user/username/projects/myproject/app2/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/core/core.ts:
   {}
 
 Before request
@@ -232,17 +250,17 @@ After request
 PolledWatches::
 /user/username/projects/myproject/app1/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/app2/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/app2/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/app1/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/app1/tsconfig.json:
   {}
 /user/username/projects/myproject/app2/tsconfig.json:
   {}

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing4.ts] ////
+
 //// [superCallBeforeThisAccessing4.ts]
 class D extends null {
     private _t;
@@ -36,8 +38,7 @@ var D = /** @class */ (function (_super) {
     function D() {
         var _this = this;
         _this._t;
-        _this = _super.call(this) || this;
-        return _this;
+        return _this = _super.call(this) || this;
     }
     return D;
 }(null));

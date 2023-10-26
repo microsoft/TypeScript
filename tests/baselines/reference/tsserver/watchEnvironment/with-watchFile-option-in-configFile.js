@@ -18,7 +18,11 @@ interface Array<T> { length: number; [n: number]: T; }
 let y = 1
 
 //// [/a/b/tsconfig.json]
-{"watchOptions":{"watchFile":"UseFsEvents"}}
+{
+  "watchOptions": {
+    "watchFile": "UseFsEvents"
+  }
+}
 
 //// [/a/b/commonFile1.ts]
 let x = 1
@@ -87,9 +91,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/commonfile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}

@@ -73,7 +73,19 @@ export const file = 10;
 export const x = "type1";
 
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project1/typeroot1/sometype/index.d.ts]
 export type TheNum = "type1";
@@ -85,7 +97,16 @@ export const y = 10;
 export const y = 10
 
 //// [/home/src/projects/project2/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project2/utils.d.ts]
 export const y = 10;
@@ -94,7 +115,16 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project3/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project3/utils.d.ts]
 export const y = 10;
@@ -103,7 +133,17 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project4/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["esnext","dom","webworker"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "esnext",
+      "dom",
+      "webworker"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project4/utils.d.ts]
 export const y = 10;
@@ -115,6 +155,7 @@ Output::
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
@@ -129,6 +170,7 @@ Scoped package detected, looking in 'typescript__lib-webworker'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/node_modules/@typescript/lib-webworker.js' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-webworker.jsx' does not exist.
@@ -139,6 +181,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-scripthost'
 File '/home/src/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
@@ -153,6 +196,7 @@ Scoped package detected, looking in 'typescript__lib-scripthost'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-scripthost'
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/node_modules/@typescript/lib-scripthost.js' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-scripthost.jsx' does not exist.
@@ -163,6 +207,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-es5'
 File '/home/src/projects/node_modules/@typescript/lib-es5.ts' does not exist.
@@ -177,6 +222,7 @@ Scoped package detected, looking in 'typescript__lib-es5'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-es5'
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/node_modules/@typescript/lib-es5.js' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-es5.jsx' does not exist.
@@ -194,6 +240,7 @@ Resolving real path for '/home/src/projects/project1/typeroot1/sometype/index.d.
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
@@ -208,6 +255,7 @@ Scoped package detected, looking in 'typescript__lib-dom'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/node_modules/@typescript/lib-dom.js' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom.jsx' does not exist.
@@ -238,8 +286,28 @@ project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
 exitCode:: ExitStatus.Success
-Program root files: ["/home/src/projects/project1/core.d.ts","/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"project":"/home/src/projects/project1","explainFiles":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/core.d.ts",
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "project": "/home/src/projects/project1",
+  "explainFiles": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/lib/lib.es5.d.ts

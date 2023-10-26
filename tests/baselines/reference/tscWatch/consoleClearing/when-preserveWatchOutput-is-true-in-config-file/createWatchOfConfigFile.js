@@ -4,7 +4,11 @@ Input::
 
 
 //// [/tsconfig.json]
-{"compilerOptions":{"preserveWatchOutput":true}}
+{
+  "compilerOptions": {
+    "preserveWatchOutput": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,8 +33,14 @@ Output::
 
 
 
-Program root files: ["/f.ts","/a/lib/lib.d.ts"]
-Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/f.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "preserveWatchOutput": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /f.ts
@@ -45,11 +55,11 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 
 FsWatches::
-/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /f.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -79,8 +89,14 @@ Output::
 
 
 
-Program root files: ["/f.ts","/a/lib/lib.d.ts"]
-Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/f.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "preserveWatchOutput": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /f.ts

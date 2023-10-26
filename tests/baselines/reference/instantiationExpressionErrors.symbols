@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts] ////
+
+=== instantiationExpressionErrors.ts ===
 declare let f: { <T>(): T, g<U>(): U };
 >f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
 >T : Symbol(T, Decl(instantiationExpressionErrors.ts, 0, 18))

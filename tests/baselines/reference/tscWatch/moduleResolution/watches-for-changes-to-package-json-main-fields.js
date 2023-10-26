@@ -1,14 +1,22 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
-{"name":"pkg1","version":"1.0.0","main":"build/index.js"}
+{
+  "name": "pkg1",
+  "version": "1.0.0",
+  "main": "build/index.js"
+}
 
 //// [/user/username/projects/myproject/packages/pkg1/index.ts]
 import type { TheNum } from 'pkg2'
 export const theNum: TheNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/tsconfig.json]
-{"compilerOptions":{"outDir":"build"}}
+{
+  "compilerOptions": {
+    "outDir": "build"
+  }
+}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.d.ts]
 export type TheNum = 42;
@@ -20,7 +28,11 @@ export type { TheNum } from './const.js';
 export type TheStr = string;
 
 //// [/user/username/projects/myproject/packages/pkg2/package.json]
-{"name":"pkg2","version":"1.0.0","main":"build/index.js"}
+{
+  "name": "pkg2",
+  "version": "1.0.0",
+  "main": "build/index.js"
+}
 
 //// [/user/username/projects/myproject/node_modules/pkg2] symlink(/user/username/projects/myproject/packages/pkg2)
 //// [/a/lib/lib.d.ts]
@@ -45,6 +57,7 @@ Output::
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -75,8 +88,16 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","project":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "project": "/user/username/projects/myproject/packages/pkg1/tsconfig.json",
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -97,39 +118,39 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/node_modules: *new*
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/myproject/packages/pkg1/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/pkg1/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts: *new*
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts: *new*
   {}
 /user/username/projects/myproject/packages/pkg2/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2: *new*
-  {}
 /user/username/projects/myproject/node_modules: *new*
   {}
 /user/username/projects/myproject/packages/pkg1: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -146,7 +167,11 @@ Change:: reports import errors after change to package file
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg2/package.json]
-{"name":"pkg2","version":"1.0.0","main":"build/other.js"}
+{
+  "name": "pkg2",
+  "version": "1.0.0",
+  "main": "build/other.js"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -163,6 +188,7 @@ Output::
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -190,8 +216,16 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","project":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "project": "/user/username/projects/myproject/packages/pkg1/tsconfig.json",
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -207,35 +241,35 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/node_modules:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/packages/pkg1/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/packages/pkg2/package.json:
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {}
 /user/username/projects/myproject/packages/pkg2/build/other.d.ts: *new*
   {}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
-  {}
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -256,7 +290,11 @@ Change:: removes those errors when a package file is changed back
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg2/package.json]
-{"name":"pkg2","version":"1.0.0","main":"build/index.js"}
+{
+  "name": "pkg2",
+  "version": "1.0.0",
+  "main": "build/index.js"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -273,6 +311,7 @@ Output::
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -303,8 +342,16 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","project":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "project": "/user/username/projects/myproject/packages/pkg1/tsconfig.json",
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -323,31 +370,31 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/node_modules:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/packages/pkg1/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {}
-/user/username/projects/myproject/packages/pkg2/package.json:
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts: *new*
   {}
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts: *new*
+/user/username/projects/myproject/packages/pkg2/package.json:
   {}
 
 FsWatches *deleted*::

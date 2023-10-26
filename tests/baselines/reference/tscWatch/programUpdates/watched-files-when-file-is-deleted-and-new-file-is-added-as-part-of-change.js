@@ -29,8 +29,14 @@ Output::
 
 
 
-Program root files: ["/home/username/project/src/file1.ts"]
-Program options: {"watch":true,"project":"/home/username/project/tsconfig.json","configFilePath":"/home/username/project/tsconfig.json"}
+Program root files: [
+  "/home/username/project/src/file1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/home/username/project/tsconfig.json",
+  "configFilePath": "/home/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -49,11 +55,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/username/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /home/username/project/src/file1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/home/username/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -86,8 +92,14 @@ Output::
 
 
 
-Program root files: ["/home/username/project/src/file2.ts"]
-Program options: {"watch":true,"project":"/home/username/project/tsconfig.json","configFilePath":"/home/username/project/tsconfig.json"}
+Program root files: [
+  "/home/username/project/src/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/home/username/project/tsconfig.json",
+  "configFilePath": "/home/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -105,11 +117,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/username/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /home/username/project/src/file2.ts: *new*
+  {}
+/home/username/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::

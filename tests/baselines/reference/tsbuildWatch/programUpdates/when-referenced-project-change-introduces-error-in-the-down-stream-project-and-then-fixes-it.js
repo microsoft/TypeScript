@@ -28,14 +28,24 @@ export function createSomeObject(): SomeObject
 }
 
 //// [/user/username/projects/sample1/Library/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/user/username/projects/sample1/App/app.ts]
 import { createSomeObject } from "../Library/library";
 createSomeObject().message;
 
 //// [/user/username/projects/sample1/App/tsconfig.json]
-{"references":[{"path":"../Library"}]}
+{
+  "references": [
+    {
+      "path": "../Library"
+    }
+  ]
+}
 
 
 /a/lib/tsc.js -b -w App
@@ -47,8 +57,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/sample1/Library/library.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/Library/library.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/Library/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -62,8 +78,13 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/sample1/library/library.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/sample1/App/app.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/App/app.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/App/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -81,19 +102,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/app/app.ts (used version)
 
 FsWatches::
-/user/username/projects/sample1/library/tsconfig.json: *new*
-  {}
-/user/username/projects/sample1/library/library.ts: *new*
+/user/username/projects/sample1/app/app.ts: *new*
   {}
 /user/username/projects/sample1/app/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/app/app.ts: *new*
+/user/username/projects/sample1/library/library.ts: *new*
+  {}
+/user/username/projects/sample1/library/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/library: *new*
-  {}
 /user/username/projects/sample1/app: *new*
+  {}
+/user/username/projects/sample1/library: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -219,8 +240,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/sample1/Library/library.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/Library/library.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/Library/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -232,8 +259,13 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.ts (computed .d.ts)
 
-Program root files: ["/user/username/projects/sample1/App/app.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/App/app.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/App/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -354,8 +386,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/sample1/Library/library.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/Library/library.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/Library/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -367,8 +405,13 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.ts (computed .d.ts)
 
-Program root files: ["/user/username/projects/sample1/App/app.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/App/app.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/App/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

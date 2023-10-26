@@ -1,4 +1,6 @@
-=== tests/cases/compiler/caller.js ===
+//// [tests/cases/compiler/elidedJSImport1.ts] ////
+
+=== caller.js ===
 import * as fs from 'fs';
 >fs : any
 
@@ -23,7 +25,7 @@ console.log('TruffleContract is ', typeof TruffleContract, TruffleContract); // 
 >TruffleContract : any
 
 
-=== tests/cases/compiler/node_modules/@truffle/contract/index.d.ts ===
+=== node_modules/@truffle/contract/index.d.ts ===
 declare module "@truffle/contract" {
 >"@truffle/contract" : typeof import("@truffle/contract")
 

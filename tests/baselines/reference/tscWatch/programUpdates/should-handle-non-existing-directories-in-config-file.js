@@ -4,7 +4,13 @@ Input::
 let x = 1;
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{},"include":["src/**/*","notexistingfolder/*"]}
+{
+  "compilerOptions": {},
+  "include": [
+    "src/**/*",
+    "notexistingfolder/*"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,8 +35,14 @@ Output::
 
 
 
-Program root files: ["/a/src/app.ts"]
-Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program root files: [
+  "/a/src/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -49,11 +61,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /a/src/app.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

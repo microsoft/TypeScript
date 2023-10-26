@@ -1,0 +1,28 @@
+mod.mts(1,51): error TS2858: Import attribute values must be string literal expressions.
+mod.mts(2,51): error TS2858: Import attribute values must be string literal expressions.
+mod.mts(3,51): error TS2858: Import attribute values must be string literal expressions.
+mod.mts(4,51): error TS2858: Import attribute values must be string literal expressions.
+mod.mts(5,51): error TS2858: Import attribute values must be string literal expressions.
+mod.mts(6,65): error TS2858: Import attribute values must be string literal expressions.
+
+
+==== mod.mts (6 errors) ====
+    import * as thing1 from "./mod.mjs" with { field: 0 };
+                                                      ~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    import * as thing2 from "./mod.mjs" with { field: `a` };
+                                                      ~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    import * as thing3 from "./mod.mjs" with { field: /a/g };
+                                                      ~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    import * as thing4 from "./mod.mjs" with { field: ["a"] };
+                                                      ~~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    import * as thing5 from "./mod.mjs" with { field: { a: 0 } };
+                                                      ~~~~~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    import * as thing6 from "./mod.mjs" with { type: "json", field: 0..toString() };
+                                                                    ~~~~~~~~~~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    

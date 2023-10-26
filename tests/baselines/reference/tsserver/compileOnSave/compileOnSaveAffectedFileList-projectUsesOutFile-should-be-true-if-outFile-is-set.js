@@ -8,7 +8,12 @@ let x = 1
 let y = 1
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"outFile":"/a/out.js"},"compileOnSave":true}
+{
+  "compilerOptions": {
+    "outFile": "/a/out.js"
+  },
+  "compileOnSave": true
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -70,9 +75,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json: *new*
-  {}
 /a/b.ts: *new*
+  {}
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

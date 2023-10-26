@@ -31,7 +31,15 @@ class TestClass1 {
 }
 
 //// [/user/username/projects/myproject/test/tsconfig.json]
-{"compilerOptions":{"module":"amd","typeRoots":["../lib/@types","../lib/@app"]}}
+{
+  "compilerOptions": {
+    "module": "amd",
+    "typeRoots": [
+      "../lib/@types",
+      "../lib/@app"
+    ]
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -119,23 +127,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/user/username/projects/myproject/test/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/lib/@types/uppercasepackage/index.d.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/lib/@app/lib/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/lib/@types/uppercasepackage/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/test/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/test: *new*
-  {}
 /user/username/projects/myproject/lib: *new*
+  {}
+/user/username/projects/myproject/lib/@app: *new*
   {}
 /user/username/projects/myproject/lib/@types: *new*
   {}
-/user/username/projects/myproject/lib/@app: *new*
+/user/username/projects/myproject/test: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/lib/@app/lib/index.d.ts 1:: WatchInfo: /user/username/projects/myproject/lib/@app/lib/index.d.ts 500 undefined WatchType: Closed Script info

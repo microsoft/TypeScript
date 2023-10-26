@@ -32,10 +32,17 @@ interface Array<T> { length: number; [n: number]: T; }
 
 
 //// [/src/projects/a/tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/src/projects/b/package.json]
-{"name":"b","type":"module"}
+{
+  "name": "b",
+  "type": "module"
+}
 
 //// [/src/projects/b/src/index.ts]
 import pg from "pg";
@@ -43,13 +50,21 @@ pg.foo();
 
 
 //// [/src/projects/b/tsconfig.json]
-{"compilerOptions":{"strict":true,"module":"node16"}}
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "node16"
+  }
+}
 
 //// [/src/projects/node_modules/@types/pg/index.d.ts]
 export function foo(): void;
 
 //// [/src/projects/node_modules/@types/pg/package.json]
-{"name":"@types/pg","types":"index.d.ts"}
+{
+  "name": "@types/pg",
+  "types": "index.d.ts"
+}
 
 
 
@@ -91,6 +106,7 @@ Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/src/projects/b/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/b/package.json' exists according to earlier cached lookups.
 Loading module 'pg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/src/projects/b/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/src/projects/b/node_modules' does not exist, skipping all lookups in it.
 File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.

@@ -1,14 +1,29 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
-{"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"module"}
+{
+  "name": "pkg1",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "type": "module"
+}
 
 //// [/user/username/projects/myproject/packages/pkg1/index.ts]
 import type { TheNum } from 'pkg2'
 export const theNum: TheNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/tsconfig.json]
-{"compilerOptions":{"outDir":"build","module":"node16"},"references":[{"path":"../pkg2"}]}
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "module": "node16"
+  },
+  "references": [
+    {
+      "path": "../pkg2"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/pkg2/const.cts]
 export type TheNum = 42;
@@ -17,10 +32,21 @@ export type TheNum = 42;
 export type { TheNum } from './const.cjs';
 
 //// [/user/username/projects/myproject/packages/pkg2/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"build","module":"node16"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "build",
+    "module": "node16"
+  }
+}
 
 //// [/user/username/projects/myproject/packages/pkg2/package.json]
-{"name":"pkg2","version":"1.0.0","main":"build/index.js","type":"module"}
+{
+  "name": "pkg2",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "type": "module"
+}
 
 //// [/user/username/projects/myproject/node_modules/pkg2] symlink(/user/username/projects/myproject/packages/pkg2)
 //// [/a/lib/lib.es2022.full.d.ts]
@@ -71,6 +97,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -105,8 +132,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg2/const.cts","/user/username/projects/myproject/packages/pkg2/index.ts"]
-Program options: {"composite":true,"outDir":"/user/username/projects/myproject/packages/pkg2/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg2/const.cts",
+  "/user/username/projects/myproject/packages/pkg2/index.ts"
+]
+Program options: {
+  "composite": true,
+  "outDir": "/user/username/projects/myproject/packages/pkg2/build",
+  "module": 100,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2022.full.d.ts
@@ -123,8 +160,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/const.cts (computed .d.ts during emit)
 /user/username/projects/myproject/packages/pkg2/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "module": 100,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2022.full.d.ts
@@ -155,7 +200,11 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
+/user/username/projects/myproject/packages/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg1/package.json: *new*
+  {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/packages/pkg2/const.cts: *new*
   {}
@@ -163,17 +212,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/packages/pkg2/package.json: *new*
   {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/pkg1/index.ts: *new*
-  {}
-/user/username/projects/myproject/packages/pkg1/package.json: *new*
+/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2: *new*
-  {}
 /user/username/projects/myproject/packages/pkg1: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -289,7 +334,12 @@ Change:: reports import errors after change to package file
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
-{"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"commonjs"}
+{
+  "name": "pkg1",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "type": "commonjs"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -309,6 +359,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -352,8 +403,16 @@ File '/package.json' does not exist.
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "module": 100,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2022.full.d.ts
@@ -374,7 +433,12 @@ Change:: removes those errors when a package file is changed back
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
-{"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"module"}
+{
+  "name": "pkg1",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "type": "module"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -394,6 +458,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -428,8 +493,16 @@ File '/package.json' does not exist.
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "module": 100,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2022.full.d.ts
@@ -451,7 +524,12 @@ Change:: reports import errors after change to package file
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
-{"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"commonjs"}
+{
+  "name": "pkg1",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "type": "commonjs"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -471,6 +549,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -514,8 +593,16 @@ File '/package.json' does not exist.
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "module": 100,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2022.full.d.ts
@@ -536,7 +623,12 @@ Change:: removes those errors when a package file is changed to cjs extensions
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg2/package.json]
-{"name":"pkg2","version":"1.0.0","main":"build/index.cjs","type":"module"}
+{
+  "name": "pkg2",
+  "version": "1.0.0",
+  "main": "build/index.cjs",
+  "type": "module"
+}
 
 //// [/user/username/projects/myproject/packages/pkg2/index.cts]
 export type { TheNum } from './const.cjs';
@@ -578,6 +670,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -612,8 +705,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg2/const.cts","/user/username/projects/myproject/packages/pkg2/index.cts"]
-Program options: {"composite":true,"outDir":"/user/username/projects/myproject/packages/pkg2/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg2/const.cts",
+  "/user/username/projects/myproject/packages/pkg2/index.cts"
+]
+Program options: {
+  "composite": true,
+  "outDir": "/user/username/projects/myproject/packages/pkg2/build",
+  "module": 100,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2022.full.d.ts
@@ -626,8 +729,16 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/index.cts (computed .d.ts)
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "module": 100,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2022.full.d.ts
@@ -654,19 +765,19 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json:
-  {}
-/user/username/projects/myproject/packages/pkg2/const.cts:
-  {}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
-  {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/package.json:
   {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/const.cts:
+  {}
 /user/username/projects/myproject/packages/pkg2/index.cts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -674,9 +785,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg2:
-  {}
 /user/username/projects/myproject/packages/pkg1:
+  {}
+/user/username/projects/myproject/packages/pkg2:
   {}
 
 exitCode:: ExitStatus.undefined

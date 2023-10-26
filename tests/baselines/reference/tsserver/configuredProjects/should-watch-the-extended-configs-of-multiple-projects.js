@@ -5,16 +5,28 @@ Creating project service
 {}
 
 //// [/user/username/projects/myproject/a/tsconfig.json]
-{"extends":"../extended/alpha.tsconfig.json","files":["a.ts"]}
+{
+  "extends": "../extended/alpha.tsconfig.json",
+  "files": [
+    "a.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/a/a.ts]
 let a = 1;
 
 //// [/user/username/projects/myproject/extended/bravo.tsconfig.json]
-{"extends":"./alpha.tsconfig.json"}
+{
+  "extends": "./alpha.tsconfig.json"
+}
 
 //// [/user/username/projects/myproject/b/tsconfig.json]
-{"extends":"../extended/bravo.tsconfig.json","files":["b.ts"]}
+{
+  "extends": "../extended/bravo.tsconfig.json",
+  "files": [
+    "b.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/b/b.ts]
 let b = 1;
@@ -112,7 +124,11 @@ Before running Timeout callback:: count: 3
 2: /user/username/projects/myproject/b/tsconfig.json
 3: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/extended/alpha.tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 
 PolledWatches::
@@ -120,19 +136,19 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/a/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/b/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/extended/alpha.tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/b/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/extended/alpha.tsconfig.json: *new*
   {}
 /user/username/projects/myproject/extended/bravo.tsconfig.json: *new*
   {}
@@ -212,7 +228,12 @@ Before running Timeout callback:: count: 2
 4: /user/username/projects/myproject/b/tsconfig.json
 5: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/extended/bravo.tsconfig.json]
-{"extends":"./alpha.tsconfig.json","compilerOptions":{"strict":false}}
+{
+  "extends": "./alpha.tsconfig.json",
+  "compilerOptions": {
+    "strict": false
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/b/tsconfig.json
@@ -272,7 +293,9 @@ Before running Timeout callback:: count: 2
 6: /user/username/projects/myproject/b/tsconfig.json
 7: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/b/tsconfig.json]
-{"extends":"../extended/alpha.tsconfig.json"}
+{
+  "extends": "../extended/alpha.tsconfig.json"
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/b/tsconfig.json
@@ -332,19 +355,19 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/a/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/b/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/a/tsconfig.json:
   {}
-/user/username/projects/myproject/extended/alpha.tsconfig.json:
-  {}
 /user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/extended/alpha.tsconfig.json:
   {}
 
 FsWatches *deleted*::

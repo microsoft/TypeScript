@@ -1,7 +1,9 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
 } from "../helpers/tsserver";
@@ -18,7 +20,7 @@ describe("unittests:: tsserver:: getApplicableRefactors", () => {
         openFilesForSession([aTs], session);
         session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
             command: ts.server.protocol.CommandTypes.GetApplicableRefactors,
-            arguments: { file: aTs.path, line: 1, offset: 1 }
+            arguments: { file: aTs.path, line: 1, offset: 1 },
         });
         baselineTsserverLogs("getApplicableRefactors", "works when taking position", session);
     });

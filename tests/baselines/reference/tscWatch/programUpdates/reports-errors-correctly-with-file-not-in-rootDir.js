@@ -7,7 +7,12 @@ import { x } from "../b";
 export const x = 10;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"rootDir":".","outDir":"lib"}}
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "lib"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -37,8 +42,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"rootDir":"/user/username/projects/myproject","outDir":"/user/username/projects/myproject/lib","watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "rootDir": "/user/username/projects/myproject",
+  "outDir": "/user/username/projects/myproject/lib",
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -62,13 +74,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/a.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/b.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -115,8 +127,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"rootDir":"/user/username/projects/myproject","outDir":"/user/username/projects/myproject/lib","watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "rootDir": "/user/username/projects/myproject",
+  "outDir": "/user/username/projects/myproject/lib",
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

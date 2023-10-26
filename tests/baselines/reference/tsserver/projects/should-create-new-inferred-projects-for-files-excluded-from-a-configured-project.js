@@ -70,9 +70,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/commonfile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file

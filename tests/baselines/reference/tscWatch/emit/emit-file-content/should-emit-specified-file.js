@@ -35,8 +35,16 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts","/a/b/f2.ts","/a/b/f3.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/f1.ts",
+  "/a/b/f2.ts",
+  "/a/b/f3.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -57,13 +65,13 @@ Shape signatures in builder refreshed for::
 /a/b/f3.ts (used version)
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/f1.ts: *new*
   {}
 /a/b/f2.ts: *new*
   {}
 /a/b/f3.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -116,8 +124,16 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts","/a/b/f2.ts","/a/b/f3.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/f1.ts",
+  "/a/b/f2.ts",
+  "/a/b/f3.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -168,8 +184,16 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts","/a/b/f2.ts","/a/b/f3.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/f1.ts",
+  "/a/b/f2.ts",
+  "/a/b/f3.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

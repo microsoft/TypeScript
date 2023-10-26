@@ -1,4 +1,6 @@
-=== tests/cases/compiler/use.ts ===
+//// [tests/cases/compiler/commonJsImportClassExpression.ts] ////
+
+=== use.ts ===
 import Chunk = require('./mod1')
 >Chunk : typeof Chunk
 
@@ -10,7 +12,7 @@ c.chunk;
 >c : Chunk
 >chunk : number
 
-=== tests/cases/compiler/mod1.ts ===
+=== mod1.ts ===
 export = class {
 >class {    chunk = 1} : typeof (Anonymous class)
 

@@ -36,13 +36,13 @@ Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingStart",
-     "body": {
-      "projectName": "/tsconfig.json",
-      "reason": "Creating possible configured project for /classes.ts to open"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/tsconfig.json",
+        "reason": "Creating possible configured project for /classes.ts to open"
+      }
     }
 Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
@@ -74,110 +74,110 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingFinish",
-     "body": {
-      "projectName": "/tsconfig.json"
-     }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "telemetry",
-     "body": {
-      "telemetryEventName": "projectInfo",
-      "payload": {
-       "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
-       "fileStats": {
-        "js": 0,
-        "jsSize": 0,
-        "jsx": 0,
-        "jsxSize": 0,
-        "ts": 2,
-        "tsSize": 302,
-        "tsx": 0,
-        "tsxSize": 0,
-        "dts": 0,
-        "dtsSize": 0,
-        "deferred": 0,
-        "deferredSize": 0
-       },
-       "compilerOptions": {},
-       "typeAcquisition": {
-        "enable": false,
-        "include": false,
-        "exclude": false
-       },
-       "extends": false,
-       "files": false,
-       "include": false,
-       "exclude": false,
-       "compileOnSave": false,
-       "configFileName": "tsconfig.json",
-       "projectType": "configured",
-       "languageServiceEnabled": true,
-       "version": "FakeVersion"
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/tsconfig.json"
       }
-     }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "configFileDiag",
-     "body": {
-      "triggerFile": "/classes.ts",
-      "configFile": "/tsconfig.json",
-      "diagnostics": [
-       {
-        "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-        "code": 6053,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Array'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Boolean'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Function'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'IArguments'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Number'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Object'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'RegExp'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'String'.",
-        "code": 2318,
-        "category": "error"
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 302,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/classes.ts",
+        "configFile": "/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -223,14 +223,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 2,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -280,6 +280,16 @@ Info seq  [hh:mm:ss:mss] response:
           }
         },
         "entries": [
+          {
+            "name": "render",
+            "kind": "method",
+            "kindModifiers": "abstract",
+            "sortText": "11",
+            "insertText": "render(): Element {\n}",
+            "filterText": "render",
+            "hasAction": true,
+            "source": "ClassMemberSnippet/"
+          },
           {
             "name": "abstract",
             "kind": "keyword",
@@ -357,15 +367,6 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
-          },
-          {
-            "name": "render",
-            "kind": "method",
-            "kindModifiers": "abstract",
-            "sortText": "17",
-            "insertText": "render(): Element {\n}",
-            "hasAction": true,
-            "source": "ClassMemberSnippet/"
           }
         ]
       },
@@ -517,6 +518,16 @@ Info seq  [hh:mm:ss:mss] response:
         },
         "entries": [
           {
+            "name": "render2",
+            "kind": "method",
+            "kindModifiers": "abstract",
+            "sortText": "11",
+            "insertText": "render2(): Element {\n}",
+            "filterText": "render2",
+            "hasAction": true,
+            "source": "ClassMemberSnippet/"
+          },
+          {
             "name": "abstract",
             "kind": "keyword",
             "kindModifiers": "",
@@ -593,15 +604,6 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
-          },
-          {
-            "name": "render2",
-            "kind": "method",
-            "kindModifiers": "abstract",
-            "sortText": "17",
-            "insertText": "render2(): Element {\n}",
-            "hasAction": true,
-            "source": "ClassMemberSnippet/"
           }
         ]
       },

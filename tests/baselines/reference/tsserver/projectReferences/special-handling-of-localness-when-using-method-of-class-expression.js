@@ -15,10 +15,34 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/solution/tsconfig.json]
-{"files":[],"references":[{"path":"./api"},{"path":"./app"}]}
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./api"
+    },
+    {
+      "path": "./app"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/api/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"dist","rootDir":"src"},"include":["src"],"references":[{"path":"../shared"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/api/src/server.ts]
 import * as shared from "../../shared/dist";
@@ -26,7 +50,21 @@ const instance = new shared.foo();
 instance.fly();
 
 //// [/user/username/projects/solution/app/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"dist","rootDir":"src"},"include":["src"],"references":[{"path":"../shared"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/app/src/app.ts]
 import * as shared from "../../shared/dist";
@@ -34,7 +72,16 @@ const instance = new shared.foo();
 instance.fly();
 
 //// [/user/username/projects/solution/shared/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"dist","rootDir":"src"},"include":["src"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/user/username/projects/solution/shared/src/index.ts]
 export const foo = class { fly() {} };
@@ -137,21 +184,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/solution/api/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/solution/api/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/solution/shared/tsconfig.json: *new*
+/user/username/projects/solution/api/tsconfig.json: *new*
   {}
 /user/username/projects/solution/shared/src/index.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/solution/shared/tsconfig.json: *new*
   {}
 /user/username/projects/solution/tsconfig.json: *new*
   {}
@@ -159,9 +206,9 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/solution/api/src: *new*
   {}
-/user/username/projects/solution/shared/src: *new*
-  {}
 /user/username/projects/solution/shared: *new*
+  {}
+/user/username/projects/solution/shared/src: *new*
   {}
 
 Before request
@@ -344,39 +391,39 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/solution/api/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/solution/shared/node_modules/@types: *new*
+/user/username/projects/solution/api/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/solution/app/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/shared/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/solution/api/tsconfig.json:
-  {}
-/user/username/projects/solution/shared/tsconfig.json:
-  {}
-/user/username/projects/solution/shared/src/index.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/solution/tsconfig.json:
+/user/username/projects/solution/api/tsconfig.json:
+  {}
+/user/username/projects/solution/app/src/app.ts: *new*
   {}
 /user/username/projects/solution/app/tsconfig.json: *new*
   {}
-/user/username/projects/solution/app/src/app.ts: *new*
+/user/username/projects/solution/shared/src/index.ts:
+  {}
+/user/username/projects/solution/shared/tsconfig.json:
+  {}
+/user/username/projects/solution/tsconfig.json:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/solution/api/src:
   {}
-/user/username/projects/solution/shared/src:
+/user/username/projects/solution/app/src: *new*
   {}
 /user/username/projects/solution/shared:
   {}
-/user/username/projects/solution/app/src: *new*
+/user/username/projects/solution/shared/src:
   {}

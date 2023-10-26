@@ -8,7 +8,12 @@ declare const x: string;
 var y = 1;
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"composite":true},"compileOnSave":true}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "compileOnSave": true
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -72,9 +77,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json: *new*
-  {}
 /a/b.ts: *new*
+  {}
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

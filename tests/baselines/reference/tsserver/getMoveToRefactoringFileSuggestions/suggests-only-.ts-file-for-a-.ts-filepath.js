@@ -26,7 +26,17 @@ interface ka {
 
 
 //// [/tsconfig.json]
-{"files":["./file1.ts","./file2.tsx","./file3.mts","./file4.cts","./file5.js","./file6.d.ts","./file7.ts"]}
+{
+  "files": [
+    "./file1.ts",
+    "./file2.tsx",
+    "./file3.mts",
+    "./file4.cts",
+    "./file5.js",
+    "./file6.d.ts",
+    "./file7.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -110,8 +120,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /file2.tsx: *new*
   {}
 /file3.mts: *new*
@@ -123,6 +131,8 @@ FsWatches::
 /file6.d.ts: *new*
   {}
 /file7.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 Before request

@@ -1,11 +1,11 @@
-tests/cases/compiler/argumentsSpreadRestIterables.tsx(1,22): error TS2304: Cannot find name 'Iterable'.
-tests/cases/compiler/argumentsSpreadRestIterables.tsx(8,21): error TS2461: Type '"hello"' is not an array type.
-tests/cases/compiler/argumentsSpreadRestIterables.tsx(10,27): error TS2461: Type '"hello"' is not an array type.
-tests/cases/compiler/argumentsSpreadRestIterables.tsx(15,19): error TS2461: Type '"hello"' is not an array type.
-tests/cases/compiler/argumentsSpreadRestIterables.tsx(17,25): error TS2461: Type '"hello"' is not an array type.
+argumentsSpreadRestIterables.tsx(1,22): error TS2304: Cannot find name 'Iterable'.
+argumentsSpreadRestIterables.tsx(8,21): error TS2461: Type '"hello"' is not an array type.
+argumentsSpreadRestIterables.tsx(10,27): error TS2461: Type '"hello"' is not an array type.
+argumentsSpreadRestIterables.tsx(15,19): error TS2461: Type '"hello"' is not an array type.
+argumentsSpreadRestIterables.tsx(17,25): error TS2461: Type '"hello"' is not an array type.
 
 
-==== tests/cases/compiler/argumentsSpreadRestIterables.tsx (5 errors) ====
+==== argumentsSpreadRestIterables.tsx (5 errors) ====
     declare const itNum: Iterable<number>
                          ~~~~~~~~
 !!! error TS2304: Cannot find name 'Iterable'.

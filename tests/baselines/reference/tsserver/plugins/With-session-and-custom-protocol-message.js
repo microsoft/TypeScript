@@ -5,7 +5,15 @@ Before request
 class c { prop = "hello"; foo() { return this.prop; } }
 
 //// [/tsconfig.json]
-{"compilerOptions":{"plugins":[{"name":"some-plugin"}]}}
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "some-plugin"
+      }
+    ]
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -83,9 +91,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -102,10 +110,10 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 addProtocolHandler: {
- "command": "testProtocolCommand",
- "arguments": "testProtocolCommandRequest",
- "seq": 2,
- "type": "request"
+  "command": "testProtocolCommand",
+  "arguments": "testProtocolCommandRequest",
+  "seq": 2,
+  "type": "request"
 }
 Info seq  [hh:mm:ss:mss] response:
     {

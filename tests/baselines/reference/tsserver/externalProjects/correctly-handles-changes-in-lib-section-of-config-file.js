@@ -11,7 +11,17 @@ declare class Promise<T> {}
 var x: Promise<string>;
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5"]}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "lib": [
+      "es5"
+    ]
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /src
@@ -65,13 +75,24 @@ Before running Timeout callback:: count: 2
 1: /src/tsconfig.json
 2: *ensureProjectForOpenFiles*
 //// [/src/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5","es2015.promise"]}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "lib": [
+      "es5",
+      "es2015.promise"
+    ]
+  }
+}
 
 
 FsWatches::
-/src/tsconfig.json: *new*
-  {}
 /compiler/lib.es5.d.ts: *new*
+  {}
+/src/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -134,11 +155,11 @@ Info seq  [hh:mm:ss:mss] 		Projects: /src/tsconfig.json
 After running Timeout callback:: count: 0
 
 FsWatches::
-/src/tsconfig.json:
+/compiler/lib.es2015.promise.d.ts: *new*
   {}
 /compiler/lib.es5.d.ts:
   {}
-/compiler/lib.es2015.promise.d.ts: *new*
+/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::

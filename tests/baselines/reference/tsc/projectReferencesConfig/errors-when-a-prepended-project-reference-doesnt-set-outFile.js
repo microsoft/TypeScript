@@ -20,16 +20,16 @@ export { };
 
 //// [/primary/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": [
-  {
-   "path": "../someProj",
-   "prepend": true
-  }
- ]
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": [
+    {
+      "path": "../someProj",
+      "prepend": true
+    }
+  ]
 }
 
 //// [/someProj/b.ts]
@@ -37,27 +37,27 @@ const x = 100;
 
 //// [/someProj/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": []
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": []
 }
 
 
 
 Output::
 /lib/tsc --p /primary/tsconfig.json --ignoreDeprecations 5.0
-[96mprimary/tsconfig.json[0m:[93m7[0m:[93m3[0m - [91merror[0m[90m TS6308: [0mCannot prepend project '/someProj' because it does not have 'outFile' set
+[96mprimary/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6308: [0mCannot prepend project '/someProj' because it does not have 'outFile' set
 
-[7m 7[0m   {
-[7m  [0m [91m  ~[0m
-[7m 8[0m    "path": "../someProj",
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m 9[0m    "prepend": true
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~[0m
-[7m10[0m   }
-[7m  [0m [91m~~~[0m
+[7m 7[0m     {
+[7m  [0m [91m    ~[0m
+[7m 8[0m       "path": "../someProj",
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m 9[0m       "prepend": true
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error in primary/tsconfig.json[90m:7[0m

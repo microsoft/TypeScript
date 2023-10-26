@@ -1,8 +1,13 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     TestSessionOptions,
@@ -26,15 +31,15 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
                         info.session?.addProtocolHandler(testProtocolCommand, request => {
-                            session.logger.log(`addProtocolHandler: ${JSON.stringify(request, undefined, " ")}`);
+                            session.logger.log(`addProtocolHandler: ${jsonToReadableText(request)}`);
                             return {
-                                response: testProtocolCommandResponse
+                                response: testProtocolCommandResponse,
                             };
                         });
                         return Harness.LanguageService.makeDefaultProxy(info);
-                    }
+                    },
                 }),
-                error: undefined
+                error: undefined,
             };
         };
         const session = createSession(host, { ...opts, logger: createLoggerWithInMemoryLogs(host) });
@@ -47,14 +52,14 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     plugins: [
                         ...[...expectedToLoad, ...notToLoad].map(name => ({ name })),
-                        { transform: "some-transform" }
-                    ]
-                }
-            })
+                        { transform: "some-transform" },
+                    ],
+                },
+            }),
         };
         const { session } = createHostWithPlugin([aTs, tsconfig, libFile]);
         openFilesForSession([aTs], session);
@@ -67,7 +72,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
             path: "/tsconfig.json",
-            content: "{}"
+            content: "{}",
         };
         const { session } = createHostWithPlugin([aTs, tsconfig, libFile], { globalPlugins: [...expectedToLoad, ...notToLoad] });
         openFilesForSession([aTs], session);
@@ -79,13 +84,13 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     plugins: [
-                        { name: pluginName }
-                    ]
-                }
-            })
+                        { name: pluginName },
+                    ],
+                },
+            }),
         };
 
         const { session } = createHostWithPlugin([aTs, tsconfig, libFile]);
@@ -94,7 +99,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
 
         session.executeCommandSeq({
             command: testProtocolCommand,
-            arguments: testProtocolCommandRequest
+            arguments: testProtocolCommandRequest,
         });
 
         baselineTsserverLogs("plugins", "With session and custom protocol message", session);
@@ -104,11 +109,11 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         const aTs: File = { path: `/user/username/projects/myproject/a.ts`, content: `export const x = 10;` };
         const tsconfig: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
-                    plugins: [{ name: "some-plugin" }]
-                }
-            })
+                    plugins: [{ name: "some-plugin" }],
+                },
+            }),
         };
 
         const externalFiles: ts.MapLike<string[]> = {
@@ -124,23 +129,26 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                     session.logger.log(`PluginFactory Invoke`);
                     return {
                         create: Harness.LanguageService.makeDefaultProxy,
-                        getExternalFiles: () => externalFiles[moduleName]
+                        getExternalFiles: () => externalFiles[moduleName],
                     };
                 },
-                error: undefined
+                error: undefined,
             };
         };
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([aTs], session);
-        session.logger.log(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
+        session.logger.log(`ExternalFiles:: ${jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
-        host.writeFile(tsconfig.path, JSON.stringify({
-            compilerOptions: {
-                plugins: [{ name: "some-other-plugin" }]
-            }
-        }));
+        host.writeFile(
+            tsconfig.path,
+            jsonToReadableText({
+                compilerOptions: {
+                    plugins: [{ name: "some-other-plugin" }],
+                },
+            }),
+        );
         host.runQueuedTimeoutCallbacks();
-        session.logger.log(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
+        session.logger.log(`ExternalFiles:: ${jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
         baselineTsserverLogs("plugins", "gets external files with config file reload", session);
     });
@@ -150,21 +158,21 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
     it("getSupportedCodeFixes can be proxied", () => {
         const aTs: File = {
             path: "/a.ts",
-            content: `class c { prop = "hello"; foo() { const x = 0; } }`
+            content: `class c { prop = "hello"; foo() { const x = 0; } }`,
         };
         const bTs: File = {
             path: "/b.ts",
-            content: aTs.content
+            content: aTs.content,
         };
         const cTs: File = {
             path: "/c.ts",
-            content: aTs.content
+            content: aTs.content,
         };
         const config: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({
-                compilerOptions: { plugins: [{ name: "myplugin" }] }
-            })
+            content: jsonToReadableText({
+                compilerOptions: { plugins: [{ name: "myplugin" }] },
+            }),
         };
         const host = createServerHost([aTs, bTs, cTs, config, libFile]);
         host.require = () => {
@@ -172,7 +180,7 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
                         const proxy = Harness.LanguageService.makeDefaultProxy(info);
-                        proxy.getSupportedCodeFixes = (fileName) => {
+                        proxy.getSupportedCodeFixes = fileName => {
                             switch (fileName) {
                                 case "/a.ts":
                                     return ["a"];
@@ -184,9 +192,9 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
                             }
                         };
                         return proxy;
-                    }
+                    },
                 }),
-                error: undefined
+                error: undefined,
             };
         };
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -197,21 +205,103 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
         });
         session.executeCommandSeq<ts.server.protocol.GetSupportedCodeFixesRequest>({
             command: ts.server.protocol.CommandTypes.GetSupportedCodeFixes,
-            arguments: { file: aTs.path }
+            arguments: { file: aTs.path },
         });
         session.executeCommandSeq<ts.server.protocol.GetSupportedCodeFixesRequest>({
             command: ts.server.protocol.CommandTypes.GetSupportedCodeFixes,
-            arguments: { file: bTs.path }
+            arguments: { file: bTs.path },
         });
         session.executeCommandSeq<ts.server.protocol.GetSupportedCodeFixesRequest>({
             command: ts.server.protocol.CommandTypes.GetSupportedCodeFixes,
-            arguments: { file: cTs.path }
+            arguments: { file: cTs.path },
         });
         session.executeCommandSeq<ts.server.protocol.GetSupportedCodeFixesRequest>({
             command: ts.server.protocol.CommandTypes.GetSupportedCodeFixes,
-            arguments: { projectFileName: config.path }
+            arguments: { projectFileName: config.path },
         });
 
         baselineTsserverLogs("plugins", "getSupportedCodeFixes can be proxied", session);
+    });
+});
+
+describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
+    it("new files with non ts extensions and wildcard matching", () => {
+        const aTs: File = {
+            path: "/user/username/projects/myproject/a.ts",
+            content: `export const a = 10;`,
+        };
+        const dTs: File = {
+            path: "/user/username/projects/myproject/d.ts",
+            content: `export const d = 10;`,
+        };
+        const bVue: File = {
+            path: "/user/username/projects/myproject/b.vue",
+            content: "bVue file",
+        };
+        const config: File = {
+            path: "/user/username/projects/myproject/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: { composite: true },
+                include: ["*.ts", "*.vue"],
+            }),
+        };
+        const host = createServerHost([aTs, dTs, bVue, config, libFile]);
+        const externalFiles = new Map<ts.server.Project, string[]>();
+        host.require = () => {
+            return {
+                module: () => ({
+                    create(info: ts.server.PluginCreateInfo) {
+                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
+                        info.languageServiceHost.getScriptKind = fileName =>
+                            ts.fileExtensionIs(fileName, ".vue") ?
+                                ts.ScriptKind.TS :
+                                originalScriptKind(fileName);
+                        const originalGetScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(info.languageServiceHost);
+                        info.languageServiceHost.getScriptSnapshot = fileName =>
+                            ts.fileExtensionIs(fileName, ".vue") ?
+                                ts.ScriptSnapshot.fromString(`export const y = "${info.languageServiceHost.readFile(fileName)}";`) :
+                                originalGetScriptSnapshot(fileName);
+                        return proxy;
+                    },
+                    getExternalFiles: (project: ts.server.Project, updateLevel: ts.ProgramUpdateLevel) => {
+                        if (project.projectKind !== ts.server.ProjectKind.Configured) return [];
+                        if (updateLevel === ts.ProgramUpdateLevel.Update) {
+                            const existing = externalFiles.get(project);
+                            if (existing) {
+                                session.logger.log(`getExternalFiles:: Returning cached .vue files`);
+                                return existing;
+                            }
+                        }
+                        session.logger.log(`getExternalFiles:: Getting new list of .vue files`);
+                        const configFile = project.getProjectName();
+                        const config = ts.readJsonConfigFile(configFile, project.readFile.bind(project));
+                        const parseHost: ts.ParseConfigHost = {
+                            useCaseSensitiveFileNames: project.useCaseSensitiveFileNames(),
+                            fileExists: project.fileExists.bind(project),
+                            readFile: project.readFile.bind(project),
+                            readDirectory: (...args) => {
+                                args[1] = [".vue"];
+                                return project.readDirectory(...args);
+                            },
+                        };
+                        const parsed = ts.parseJsonSourceFileConfigFileContent(config, parseHost, project.getCurrentDirectory());
+                        externalFiles.set(project, parsed.fileNames);
+                        return parsed.fileNames;
+                    },
+                }),
+                error: undefined,
+            };
+        };
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host), globalPlugins: ["myplugin"] });
+        openFilesForSession([aTs], session);
+
+        host.writeFile("/user/username/projects/myproject/c.vue", "cVue file");
+        host.runQueuedTimeoutCallbacks();
+
+        host.appendFile(dTs.path, "export const x = 10;");
+        host.runQueuedTimeoutCallbacks();
+
+        baselineTsserverLogs("plugins", "new files with non ts extensions with wildcard matching", session);
     });
 });

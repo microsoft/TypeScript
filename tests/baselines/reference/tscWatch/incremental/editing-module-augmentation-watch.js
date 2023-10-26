@@ -25,7 +25,12 @@ export {}; declare module "classnames" { interface Result { foo } }
 import classNames from "classnames"; classNames().foo;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","incremental":true}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "incremental": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -37,8 +42,16 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/src/index.ts","/users/username/projects/project/src/types/classnames.d.ts"]
-Program options: {"module":1,"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/src/index.ts",
+  "/users/username/projects/project/src/types/classnames.d.ts"
+]
+Program options: {
+  "module": 1,
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -59,29 +72,29 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-/users/username/projects/project/src/index.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/node_modules/classnames/index.d.ts: *new*
   {}
+/users/username/projects/project/src/index.ts: *new*
+  {}
 /users/username/projects/project/src/types/classnames.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/src: *new*
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/node_modules: *new*
   {}
-/users/username/projects/project: *new*
+/users/username/projects/project/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -188,29 +201,29 @@ export {}; declare module "classnames" { interface Result {} }
 
 
 PolledWatches *deleted*::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/users/username/projects/project/tsconfig.json:
-  {}
-/users/username/projects/project/src/index.ts:
+/a/lib/lib.d.ts:
   {}
 /users/username/projects/project/node_modules/classnames/index.d.ts:
   {}
+/users/username/projects/project/src/index.ts:
+  {}
 /users/username/projects/project/src/types/classnames.d.ts:
   {}
-/a/lib/lib.d.ts:
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::
-/users/username/projects/project/src:
+/users/username/projects/project:
   {}
 /users/username/projects/project/node_modules:
   {}
-/users/username/projects/project:
+/users/username/projects/project/src:
   {}
 
 Output::
@@ -226,8 +239,16 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/src/index.ts","/users/username/projects/project/src/types/classnames.d.ts"]
-Program options: {"module":1,"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/src/index.ts",
+  "/users/username/projects/project/src/types/classnames.d.ts"
+]
+Program options: {
+  "module": 1,
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -244,29 +265,29 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/index.ts (computed .d.ts)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-/users/username/projects/project/src/index.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/node_modules/classnames/index.d.ts: *new*
   {}
+/users/username/projects/project/src/index.ts: *new*
+  {}
 /users/username/projects/project/src/types/classnames.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/src: *new*
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/node_modules: *new*
   {}
-/users/username/projects/project: *new*
+/users/username/projects/project/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined

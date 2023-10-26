@@ -1,17 +1,17 @@
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(1,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(6,7): error TS2300: Duplicate identifier 'Box'.
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(8,11): error TS2300: Duplicate identifier 'Circle'.
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(11,16): error TS1005: '=' expected.
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(14,13): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(14,20): error TS1005: '=' expected.
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(15,13): error TS2300: Duplicate identifier 'Box'.
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(15,16): error TS1005: '=' expected.
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(16,13): error TS2300: Duplicate identifier 'Circle'.
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(16,19): error TS1005: '=' expected.
-tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts(17,15): error TS1005: '=' expected.
+exportDeclaration_missingBraces.ts(1,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+exportDeclaration_missingBraces.ts(6,7): error TS2300: Duplicate identifier 'Box'.
+exportDeclaration_missingBraces.ts(8,11): error TS2300: Duplicate identifier 'Circle'.
+exportDeclaration_missingBraces.ts(11,16): error TS1005: '=' expected.
+exportDeclaration_missingBraces.ts(14,13): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+exportDeclaration_missingBraces.ts(14,20): error TS1005: '=' expected.
+exportDeclaration_missingBraces.ts(15,13): error TS2300: Duplicate identifier 'Box'.
+exportDeclaration_missingBraces.ts(15,16): error TS1005: '=' expected.
+exportDeclaration_missingBraces.ts(16,13): error TS2300: Duplicate identifier 'Circle'.
+exportDeclaration_missingBraces.ts(16,19): error TS1005: '=' expected.
+exportDeclaration_missingBraces.ts(17,15): error TS1005: '=' expected.
 
 
-==== tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts (11 errors) ====
+==== exportDeclaration_missingBraces.ts (11 errors) ====
     enum Numbers {
          ~~~~~~~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
@@ -36,19 +36,19 @@ tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces
     export type Numbers;
                 ~~~~~~~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-!!! related TS1369 tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts:14:13: Did you mean 'export type { Numbers }'?
+!!! related TS1369 exportDeclaration_missingBraces.ts:14:13: Did you mean 'export type { Numbers }'?
                        ~
 !!! error TS1005: '=' expected.
     export type Box;
                 ~~~
 !!! error TS2300: Duplicate identifier 'Box'.
-!!! related TS1369 tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts:15:13: Did you mean 'export type { Box }'?
+!!! related TS1369 exportDeclaration_missingBraces.ts:15:13: Did you mean 'export type { Box }'?
                    ~
 !!! error TS1005: '=' expected.
     export type Circle;
                 ~~~~~~
 !!! error TS2300: Duplicate identifier 'Circle'.
-!!! related TS1369 tests/cases/conformance/externalModules/typeOnly/exportDeclaration_missingBraces.ts:16:13: Did you mean 'export type { Circle }'?
+!!! related TS1369 exportDeclaration_missingBraces.ts:16:13: Did you mean 'export type { Circle }'?
                       ~
 !!! error TS1005: '=' expected.
     export type ns;

@@ -39,8 +39,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/d/f0.ts"]
-Program options: {"module":2}
+Program root files: [
+  "/users/username/projects/project/d/f0.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -58,11 +62,11 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/d/f0.ts (used version)
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /users/username/projects/project/d/f0.ts: *new*
   {}
 /users/username/projects/project/f1.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -117,8 +121,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/d/f0.ts"]
-Program options: {"module":2}
+Program root files: [
+  "/users/username/projects/project/d/f0.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -165,8 +173,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/d/f0.ts"]
-Program options: {"module":2}
+Program root files: [
+  "/users/username/projects/project/d/f0.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -179,9 +191,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/d/f0.ts (computed .d.ts)
 
 FsWatches::
-/users/username/projects/project/d/f0.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/d/f0.ts:
   {}
 
 FsWatches *deleted*::
@@ -230,8 +242,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/d/f0.ts"]
-Program options: {"module":2}
+Program root files: [
+  "/users/username/projects/project/d/f0.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -248,9 +264,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/d/f0.ts (computed .d.ts)
 
 FsWatches::
-/users/username/projects/project/d/f0.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/d/f0.ts:
   {}
 /users/username/projects/project/f1.ts: *new*
   {}

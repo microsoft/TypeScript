@@ -2,7 +2,18 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/project/src/common/tsconfig.json]
-{"compilerOptions":{"composite":true,"declarationMap":true,"outDir":"../../out","baseUrl":"..","disableSourceOfProjectReferenceRedirect":false},"include":["./**/*"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declarationMap": true,
+    "outDir": "../../out",
+    "baseUrl": "..",
+    "disableSourceOfProjectReferenceRedirect": false
+  },
+  "include": [
+    "./**/*"
+  ]
+}
 
 //// [/user/username/projects/project/src/common/input/keyboard.ts]
 function bar() { return "just a random function so .d.ts location doesnt match"; }
@@ -16,7 +27,29 @@ function testEvaluateKeyboardEvent() {
 
 
 //// [/user/username/projects/project/src/tsconfig.json]
-{"compilerOptions":{"composite":true,"declarationMap":true,"outDir":"../out","baseUrl":".","paths":{"common/*":["./common/*"]},"tsBuildInfoFile":"../out/src.tsconfig.tsbuildinfo","disableSourceOfProjectReferenceRedirect":false},"include":["./**/*"],"references":[{"path":"./common"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declarationMap": true,
+    "outDir": "../out",
+    "baseUrl": ".",
+    "paths": {
+      "common/*": [
+        "./common/*"
+      ]
+    },
+    "tsBuildInfoFile": "../out/src.tsconfig.tsbuildinfo",
+    "disableSourceOfProjectReferenceRedirect": false
+  },
+  "include": [
+    "./**/*"
+  ],
+  "references": [
+    {
+      "path": "./common"
+    }
+  ]
+}
 
 //// [/user/username/projects/project/src/terminal.ts]
 import { evaluateKeyboardEvent } from 'common/input/keyboard';
@@ -347,21 +380,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/project/src/common/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/project/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/project/src/common/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/project/src/common/input/keyboard.test.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/project/src/common/tsconfig.json: *new*
   {}
 /user/username/projects/project/src/tsconfig.json: *new*
   {}
@@ -464,29 +497,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/project/src/common/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/src/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/project/src/common/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/project/src/common/input/keyboard.test.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/project/src/common/tsconfig.json:
   {}
 /user/username/projects/project/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/project/src/common:
-  {}
 /user/username/projects/project/src: *new*
+  {}
+/user/username/projects/project/src/common:
   {}
 
 Before request

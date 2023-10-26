@@ -5,7 +5,15 @@ Before request
 export const x = 10;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"plugins":[{"name":"some-plugin"}]}}
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "some-plugin"
+      }
+    ]
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -88,24 +96,26 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/somefile.txt: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/somefile.txt: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-ExternalFiles:: ["someFile.txt"]
+ExternalFiles:: [
+  "someFile.txt"
+]
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -114,7 +124,15 @@ Before running Timeout callback:: count: 2
 1: /user/username/projects/myproject/tsconfig.json
 2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"plugins":[{"name":"some-other-plugin"}]}}
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "some-other-plugin"
+      }
+    ]
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
@@ -169,9 +187,9 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/someotherfile.txt: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -179,13 +197,15 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-ExternalFiles:: ["someOtherFile.txt"]
+ExternalFiles:: [
+  "someOtherFile.txt"
+]

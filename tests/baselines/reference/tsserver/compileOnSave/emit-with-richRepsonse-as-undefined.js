@@ -8,7 +8,17 @@ const x = 1;
 const y = 2;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compileOnSave":true,"compilerOptions":{"outDir":"test","noEmitOnError":true,"declaration":true},"exclude":["node_modules"]}
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "outDir": "test",
+    "noEmitOnError": true,
+    "declaration": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -94,11 +104,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/file2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -231,13 +241,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/file2.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/test/file1.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::

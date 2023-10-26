@@ -29,8 +29,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"module":2}
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -48,11 +52,11 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (used version)
 
 FsWatches::
-/users/username/projects/project/foo.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/bar.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/foo.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -91,8 +95,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"module":2}
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -105,9 +113,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (computed .d.ts)
 
 FsWatches::
-/users/username/projects/project/foo.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/foo.ts:
   {}
 
 FsWatches *deleted*::
@@ -144,8 +152,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"module":2}
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -161,11 +173,11 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (computed .d.ts)
 
 FsWatches::
-/users/username/projects/project/foo.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
 /users/username/projects/project/bar.d.ts: *new*
+  {}
+/users/username/projects/project/foo.ts:
   {}
 
 FsWatchesRecursive::

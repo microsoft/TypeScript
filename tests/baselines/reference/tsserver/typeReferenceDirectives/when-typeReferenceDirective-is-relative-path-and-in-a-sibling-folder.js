@@ -5,7 +5,13 @@ Before request
 let x = 10;
 
 //// [/user/username/projects/myproject/background/tsconfig.json]
-{"compilerOptions":{"types":["../typedefs/filesystem"]}}
+{
+  "compilerOptions": {
+    "types": [
+      "../typedefs/filesystem"
+    ]
+  }
+}
 
 //// [/user/username/projects/myproject/typedefs/filesystem.d.ts]
 interface LocalFileSystem { someProperty: string; }
@@ -97,11 +103,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/myproject/background/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/typedefs/filesystem.d.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::

@@ -35,7 +35,11 @@ Output::
 
 
 Program root files: []
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 
@@ -46,9 +50,9 @@ No shapes updated in the builder::
 PolledWatches::
 /a/b/app: *new*
   {"pollingInterval":500}
-/a/b/test: *new*
-  {"pollingInterval":500}
 /a/b/something: *new*
+  {"pollingInterval":500}
+/a/b/test: *new*
   {"pollingInterval":500}
 
 FsWatches::

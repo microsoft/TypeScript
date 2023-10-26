@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/moduleExportsSystem/topLevelVarHoistingCommonJS.ts] ////
+
 //// [topLevelVarHoistingCommonJS.ts]
 declare var _: any;
 

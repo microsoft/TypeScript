@@ -21,14 +21,22 @@ interface Array<T> { length: number; [n: number]: T; }
 import {C} from "./c/fc"; console.log(C)
 
 //// [/users/username/projects/a/tsconfig.json]
-{"compilerOptions":{"module":"commonjs"}}
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
 
 //// [/users/username/projects/a/c] symlink(/users/username/projects/c)
 //// [/users/username/projects/b/b.ts]
 import {C} from "./c/fc"; console.log(C)
 
 //// [/users/username/projects/b/tsconfig.json]
-{"compilerOptions":{"module":"commonjs"}}
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
 
 //// [/users/username/projects/b/c] symlink(/users/username/projects/c)
 
@@ -102,11 +110,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/a/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/a/c/fc.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -186,21 +194,21 @@ After request
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/a/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /users/username/projects/a/c/fc.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/b/tsconfig.json: *new*
+/users/username/projects/a/tsconfig.json:
   {}
 /users/username/projects/b/c/fc.ts: *new*
+  {}
+/users/username/projects/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -248,19 +256,19 @@ After request
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/b/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
-/users/username/projects/b/tsconfig.json:
+/users/username/projects/a/tsconfig.json:
   {}
 /users/username/projects/b/c/fc.ts:
+  {}
+/users/username/projects/b/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -314,15 +322,15 @@ After request
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/b/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/a/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/a/tsconfig.json:
   {}
 /users/username/projects/b/tsconfig.json:
   {}

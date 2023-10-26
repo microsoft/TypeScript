@@ -20,7 +20,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"composite":true},"include":["./","./**/*.json"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "./",
+    "./**/*.json"
+  ]
+}
 
 
 /a/lib/tsc.js -w --extendedDiagnostics
@@ -46,8 +54,16 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts"]
-Program options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/f1.ts",
+  "/user/username/projects/myproject/f2.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -71,13 +87,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/f1.ts: *new*
   {}
 /user/username/projects/myproject/f2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -205,8 +221,17 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 
-Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
-Program options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/f1.ts",
+  "/user/username/projects/myproject/f2.ts",
+  "/user/username/projects/myproject/new-file.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -227,15 +252,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/f1.ts:
   {}
 /user/username/projects/myproject/f2.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/new-file.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -357,8 +382,17 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
-Program options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/f1.ts",
+  "/user/username/projects/myproject/f2.ts",
+  "/user/username/projects/myproject/new-file.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

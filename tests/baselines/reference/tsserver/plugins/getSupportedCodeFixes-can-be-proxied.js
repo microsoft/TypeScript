@@ -11,7 +11,15 @@ class c { prop = "hello"; foo() { const x = 0; } }
 class c { prop = "hello"; foo() { const x = 0; } }
 
 //// [/tsconfig.json]
-{"compilerOptions":{"plugins":[{"name":"myplugin"}]}}
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "myplugin"
+      }
+    ]
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -98,13 +106,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /b.ts: *new*
   {}
 /c.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -141,11 +149,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /c.ts:
   {}
-/a/lib/lib.d.ts:
+/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -188,9 +196,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/tsconfig.json:
   {}
 
 FsWatches *deleted*::

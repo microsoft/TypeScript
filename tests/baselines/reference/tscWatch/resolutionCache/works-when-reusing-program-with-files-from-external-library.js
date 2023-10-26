@@ -25,7 +25,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/projects/myProject/src/tsconfig.json]
-{"compilerOptions":{"allowJs":true,"rootDir":".","outDir":"../dist","moduleResolution":"node","maxNodeModuleJsDepth":1}}
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "rootDir": ".",
+    "outDir": "../dist",
+    "moduleResolution": "node",
+    "maxNodeModuleJsDepth": 1
+  }
+}
 
 
 /a/lib/tsc.js --w -p /a/b/projects/myProject/src
@@ -37,8 +45,20 @@ Output::
 
 
 
-Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
-Program options: {"allowJs":true,"rootDir":"/a/b/projects/myProject/src","outDir":"/a/b/projects/myProject/dist","moduleResolution":2,"maxNodeModuleJsDepth":1,"watch":true,"project":"/a/b/projects/myProject/src","configFilePath":"/a/b/projects/myProject/src/tsconfig.json"}
+Program root files: [
+  "/a/b/projects/myProject/src/file1.ts",
+  "/a/b/projects/myProject/src/file2.ts"
+]
+Program options: {
+  "allowJs": true,
+  "rootDir": "/a/b/projects/myProject/src",
+  "outDir": "/a/b/projects/myProject/dist",
+  "moduleResolution": 2,
+  "maxNodeModuleJsDepth": 1,
+  "watch": true,
+  "project": "/a/b/projects/myProject/src",
+  "configFilePath": "/a/b/projects/myProject/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -59,25 +79,25 @@ Shape signatures in builder refreshed for::
 /a/b/projects/myproject/src/file2.ts (used version)
 
 PolledWatches::
-/a/b/projects/myproject/src/node_modules: *new*
+/a/b/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/node_modules: *new*
+/a/b/projects/myproject/src/node_modules: *new*
   {"pollingInterval":500}
 /a/b/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/myproject/node_modules/@types: *new*
+/a/b/projects/node_modules: *new*
   {"pollingInterval":500}
 /a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/projects/myproject/src/tsconfig.json: *new*
+/a/b/projects/myproject/node_modules/module1/index.js: *new*
   {}
 /a/b/projects/myproject/src/file1.ts: *new*
   {}
-/a/b/projects/myproject/node_modules/module1/index.js: *new*
-  {}
 /a/b/projects/myproject/src/file2.ts: *new*
+  {}
+/a/b/projects/myproject/src/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -125,8 +145,20 @@ Output::
 
 
 
-Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
-Program options: {"allowJs":true,"rootDir":"/a/b/projects/myProject/src","outDir":"/a/b/projects/myProject/dist","moduleResolution":2,"maxNodeModuleJsDepth":1,"watch":true,"project":"/a/b/projects/myProject/src","configFilePath":"/a/b/projects/myProject/src/tsconfig.json"}
+Program root files: [
+  "/a/b/projects/myProject/src/file1.ts",
+  "/a/b/projects/myProject/src/file2.ts"
+]
+Program options: {
+  "allowJs": true,
+  "rootDir": "/a/b/projects/myProject/src",
+  "outDir": "/a/b/projects/myProject/dist",
+  "moduleResolution": 2,
+  "maxNodeModuleJsDepth": 1,
+  "watch": true,
+  "project": "/a/b/projects/myProject/src",
+  "configFilePath": "/a/b/projects/myProject/src/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

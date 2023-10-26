@@ -26,8 +26,12 @@ Output::
 
 
 
-Program root files: ["/f.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/f.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -42,9 +46,9 @@ Shape signatures in builder refreshed for::
 /f.ts (used version)
 
 FsWatches::
-/f.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/f.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -71,8 +75,12 @@ Output::
 
 
 
-Program root files: ["/f.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/f.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

@@ -28,7 +28,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [c:/project/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 
 c:/a/lib/tsc.js --w --p c://project --explainFiles
@@ -48,8 +52,17 @@ project/b.ts
 
 
 
-Program root files: ["c:/project/a.ts","c:/project/b.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"c:/project","explainFiles":true,"configFilePath":"c:/project/tsconfig.json"}
+Program root files: [
+  "c:/project/a.ts",
+  "c:/project/b.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "c:/project",
+  "explainFiles": true,
+  "configFilePath": "c:/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 c:/a/lib/lib.d.ts
@@ -71,13 +84,13 @@ c:/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/project/tsconfig.json: *new*
+c:/a/lib/lib.d.ts: *new*
   {}
 c:/project/a.ts: *new*
   {}
 c:/project/b.ts: *new*
   {}
-c:/a/lib/lib.d.ts: *new*
+c:/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -134,8 +147,17 @@ project/b.ts
 
 
 
-Program root files: ["c:/project/a.ts","c:/project/b.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"c:/project","explainFiles":true,"configFilePath":"c:/project/tsconfig.json"}
+Program root files: [
+  "c:/project/a.ts",
+  "c:/project/b.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "c:/project",
+  "explainFiles": true,
+  "configFilePath": "c:/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 c:/a/lib/lib.d.ts

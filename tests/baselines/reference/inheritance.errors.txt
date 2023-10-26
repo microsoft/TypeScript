@@ -1,10 +1,10 @@
-tests/cases/compiler/inheritance.ts(31,12): error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
-tests/cases/compiler/inheritance.ts(32,12): error TS2416: Property 'g' in type 'Baad' is not assignable to the same property in base type 'Good'.
+inheritance.ts(31,12): error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
+inheritance.ts(32,12): error TS2416: Property 'g' in type 'Baad' is not assignable to the same property in base type 'Good'.
   Type '(n: number) => number' is not assignable to type '() => number'.
     Target signature provides too few arguments. Expected 1 or more, but got 0.
 
 
-==== tests/cases/compiler/inheritance.ts (2 errors) ====
+==== inheritance.ts (2 errors) ====
     class B1 {
         public x;
     }

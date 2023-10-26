@@ -5,13 +5,19 @@ Before request
 export const foo: number;
 
 //// [/a/node_modules/foo/package.json]
-{"name":"foo","version":"1.2.3"}
+{
+  "name": "foo",
+  "version": "1.2.3"
+}
 
 //// [/b/node_modules/foo/index.d.ts]
 export const foo: number;
 
 //// [/b/node_modules/foo/package.json]
-{"name":"foo","version":"1.2.3"}
+{
+  "name": "foo",
+  "version": "1.2.3"
+}
 
 //// [/a/user.ts]
 import("foo");
@@ -96,13 +102,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
-/b/user.ts: *new*
-  {}
 /a/node_modules/foo/package.json: *new*
   {}
 /b/node_modules/foo/package.json: *new*
+  {}
+/b/user.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -147,11 +153,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
-  {}
 /a/node_modules/foo/package.json:
   {}
 /b/node_modules/foo/package.json:
+  {}
+/tsconfig.json:
   {}
 
 FsWatches *deleted*::

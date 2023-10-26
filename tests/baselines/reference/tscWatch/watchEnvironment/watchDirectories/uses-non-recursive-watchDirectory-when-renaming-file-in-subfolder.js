@@ -4,7 +4,11 @@ Input::
 
 
 //// [/a/username/project/tsconfig.json]
-{"watchOptions":{"synchronousWatchDirectory":true}}
+{
+  "watchOptions": {
+    "synchronousWatchDirectory": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,8 +33,14 @@ Output::
 
 
 
-Program root files: ["/a/username/project/src/file1.ts"]
-Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
+Program root files: [
+  "/a/username/project/src/file1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/username/project/tsconfig.json",
+  "configFilePath": "/a/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -49,15 +59,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json: *new*
-  {}
-/a/username/project/src/file1.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
   {}
 /a/username/project: *new*
   {}
 /a/username/project/src: *new*
+  {}
+/a/username/project/src/file1.ts: *new*
+  {}
+/a/username/project/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -85,8 +95,14 @@ Output::
 
 
 
-Program root files: ["/a/username/project/src/file2.ts"]
-Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
+Program root files: [
+  "/a/username/project/src/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/username/project/tsconfig.json",
+  "configFilePath": "/a/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -103,8 +119,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /a/username/project:
@@ -112,6 +126,8 @@ FsWatches::
 /a/username/project/src:
   {}
 /a/username/project/src/file2.ts: *new*
+  {}
+/a/username/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::

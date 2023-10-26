@@ -40,11 +40,11 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Host watch options changed to {"excludeFiles":["/user/username/projects/myproject/file2.ts"]}, it will be take effect for next watches.
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -117,9 +117,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/file1.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/file1.ts: *new*
   {}
 
 Before request
@@ -295,6 +295,17 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/user/username/projects/myproject/node_modules/module1/index.d.ts Text-1 "export function foo(): string;"
 	/user/username/projects/myproject/file2.ts Text-2 "export function bar(){}\n            bar();"
 	/user/username/projects/myproject/file1.ts Text-1 "import { foo } from \"module1\";\n                foo();\n                import { bar } from \"./file2\";\n                bar();"
+
+
+	../../../../a/lib/lib.d.ts
+	  Default library for target 'es5'
+	node_modules/module1/index.d.ts
+	  Imported via "module1" from file 'file1.ts'
+	file2.ts
+	  Imported via "./file2" from file 'file1.ts'
+	  Root file specified for compilation
+	file1.ts
+	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:

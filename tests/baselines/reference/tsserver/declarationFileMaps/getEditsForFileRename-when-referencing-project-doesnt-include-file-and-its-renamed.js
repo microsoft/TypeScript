@@ -5,13 +5,33 @@ Before request
 
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"declarationMap":true,"outDir":"./build"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./build"
+  }
+}
 
 //// [/b/src/b.ts]
 
 
 //// [/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"./build"},"include":["./src"],"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./build"
+  },
+  "include": [
+    "./src"
+  ],
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

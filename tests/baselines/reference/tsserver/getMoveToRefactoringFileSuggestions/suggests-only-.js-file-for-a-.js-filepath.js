@@ -17,7 +17,15 @@ class C {}
 
 
 //// [/tsconfig.json]
-{"files":["./file1.js","./file2.js","./file3.mts","./file4.ts","./file5.js"]}
+{
+  "files": [
+    "./file1.js",
+    "./file2.js",
+    "./file3.mts",
+    "./file4.ts",
+    "./file5.js"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -91,8 +99,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /file2.js: *new*
   {}
 /file3.mts: *new*
@@ -100,6 +106,8 @@ FsWatches::
 /file4.ts: *new*
   {}
 /file5.js: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 Before request

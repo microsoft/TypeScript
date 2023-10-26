@@ -8,7 +8,11 @@ import {} from "./"
 
 
 //// [/a/username/project/tsconfig.json]
-{"watchOptions":{"synchronousWatchDirectory":true}}
+{
+  "watchOptions": {
+    "synchronousWatchDirectory": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -91,11 +95,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/username/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /a/username/project/src/file1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/username/project/tsconfig.json: *new*
   {}
 
 Before request
@@ -212,11 +216,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/username/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /a/username/project/src/file1.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /a/username/project/src/file2.ts: *new*
+  {}
+/a/username/project/tsconfig.json:
   {}

@@ -1,5 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import { libFile } from "./virtualFileSystemWithWatch";
+import {
+    libFile,
+} from "./virtualFileSystemWithWatch";
 
 export function compilerOptionsToConfigJson(options: ts.CompilerOptions) {
     return ts.optionMapToObject(ts.serializeCompilerOptions(options));
@@ -22,4 +24,8 @@ interface Symbol {
 
 export interface FsContents {
     [path: string]: string;
+}
+
+export function libPath(forLib: string) {
+    return `${ts.getDirectoryPath(libFile.path)}/lib.${forLib}.d.ts`;
 }

@@ -38,6 +38,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/app.ts 25
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Directory '/user/username/projects/myproject/node_modules' does not exist, skipping all lookups in it.
@@ -51,6 +52,7 @@ Scoped package detected, looking in 'myapp__ts-types'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
@@ -82,8 +84,16 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -100,25 +110,25 @@ Shape signatures in builder refreshed for::
 PolledWatches::
 /user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/lib/app.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/lib: *new*
-  {}
 /user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/lib: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -139,9 +149,9 @@ export const unrelated = 10;
 
 
 PolledWatches::
-/user/username/projects/node_modules:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -151,17 +161,17 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/lib/app.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/lib:
-  {}
 /user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/lib:
   {}
 /user/username/projects/myproject/node_modules: *new*
   {}
@@ -208,6 +218,7 @@ CreatingProgramWith::
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
@@ -221,6 +232,7 @@ Scoped package detected, looking in 'myapp__ts-types'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
@@ -236,8 +248,16 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -295,6 +315,7 @@ CreatingProgramWith::
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types.ts' does not exist.
@@ -311,6 +332,7 @@ Scoped package detected, looking in 'myapp__ts-types'
 Directory '/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types.js' does not exist.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types.jsx' does not exist.
@@ -328,8 +350,16 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -414,6 +444,7 @@ CreatingProgramWith::
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json' does not exist.
@@ -432,8 +463,16 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node
 
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -459,19 +498,19 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/lib/app.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/lib:
-  {}
 /user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/lib:
   {}
 /user/username/projects/myproject/node_modules:
   {}

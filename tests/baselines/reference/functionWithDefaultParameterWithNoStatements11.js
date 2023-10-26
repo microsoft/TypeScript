@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements11.ts] ////
+
 //// [functionWithDefaultParameterWithNoStatements11.ts]
 var v: any[];
 

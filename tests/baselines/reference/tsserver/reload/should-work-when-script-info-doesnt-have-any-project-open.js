@@ -90,9 +90,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /a/b/app.ts: *new*
+  {}
+/a/lib/lib.d.ts:
   {}
 
 contents of closed file:: Content of /a/b/app.ts:: let x = 1
@@ -112,14 +112,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "reload",
-     "request_seq": 3,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "reload",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -146,14 +146,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "reload",
-     "request_seq": 4,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "reload",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -241,9 +241,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /a/b/app.ts: *new*
+  {}
+/a/lib/lib.d.ts:
   {}
 
 contents of closed file:: Content of /a/b/app.ts:: let x = 1
@@ -263,14 +263,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "reload",
-     "request_seq": 7,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "reload",
+      "request_seq": 7,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -297,14 +297,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "reload",
-     "request_seq": 8,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "reload",
+      "request_seq": 8,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {

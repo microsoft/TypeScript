@@ -20,7 +20,12 @@ const x = 10;
 const y = 20;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"outFile":"out.js"}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "outFile": "out.js"
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -32,8 +37,16 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"outFile":"/users/username/projects/project/out.js","watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "outFile": "/users/username/projects/project/out.js",
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -45,19 +58,19 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/file1.ts: *new*
   {}
 /users/username/projects/project/file2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

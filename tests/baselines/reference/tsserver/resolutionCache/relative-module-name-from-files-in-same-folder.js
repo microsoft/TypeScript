@@ -14,7 +14,11 @@ import { module1 } from "./module1";import { module2 } from "../module2";
 import { module1 } from "./module1";import { module2 } from "../module2";
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"traceResolution":true}}
+{
+  "compilerOptions": {
+    "traceResolution": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -127,7 +131,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/module2.ts: *new*
   {}
@@ -135,7 +139,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src/module1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

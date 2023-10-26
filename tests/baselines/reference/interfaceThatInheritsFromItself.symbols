@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts] ////
+
+=== interfaceThatInheritsFromItself.ts ===
 interface Foo extends Foo { // error
 >Foo : Symbol(Foo, Decl(interfaceThatInheritsFromItself.ts, 0, 0))
 >Foo : Symbol(Foo, Decl(interfaceThatInheritsFromItself.ts, 0, 0))

@@ -24,10 +24,25 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/Users/username/dev/project/tsconfig.json]
-{"extends":"./tsconfig.all.json"}
+{
+  "extends": "./tsconfig.all.json"
+}
 
 //// [/Users/username/dev/project/tsconfig.all.json]
-{"compilerOptions":{"baseUrl":".","paths":{"file2":["./file2.js"]},"typeRoots":["./types"],"forceConsistentCasingInFileNames":true}}
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "file2": [
+        "./file2.js"
+      ]
+    },
+    "typeRoots": [
+      "./types"
+    ],
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -104,13 +119,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/users/username/dev/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/dev/project/tsconfig.all.json: *new*
   {}
-/users/username/dev/project/types/file2/index.d.ts: *new*
+/users/username/dev/project/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/dev/project/types/file2/index.d.ts: *new*
   {}
 
 FsWatchesRecursive::

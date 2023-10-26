@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts ===
+//// [tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts] ////
+
+=== errorRecoveryWithDotFollowedByNamespaceKeyword.ts ===
 namespace A {
 >A : typeof A
 

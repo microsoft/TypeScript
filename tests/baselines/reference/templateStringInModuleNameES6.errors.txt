@@ -1,12 +1,12 @@
-tests/cases/conformance/es6/templates/templateStringInModuleNameES6.ts(1,1): error TS2304: Cannot find name 'declare'.
-tests/cases/conformance/es6/templates/templateStringInModuleNameES6.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/es6/templates/templateStringInModuleNameES6.ts(1,16): error TS1443: Module declaration names may only use ' or " quoted strings.
-tests/cases/conformance/es6/templates/templateStringInModuleNameES6.ts(4,1): error TS2304: Cannot find name 'declare'.
-tests/cases/conformance/es6/templates/templateStringInModuleNameES6.ts(4,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/es6/templates/templateStringInModuleNameES6.ts(4,16): error TS1443: Module declaration names may only use ' or " quoted strings.
+templateStringInModuleNameES6.ts(1,1): error TS2304: Cannot find name 'declare'.
+templateStringInModuleNameES6.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+templateStringInModuleNameES6.ts(1,16): error TS1443: Module declaration names may only use ' or " quoted strings.
+templateStringInModuleNameES6.ts(4,1): error TS2304: Cannot find name 'declare'.
+templateStringInModuleNameES6.ts(4,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+templateStringInModuleNameES6.ts(4,16): error TS1443: Module declaration names may only use ' or " quoted strings.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInModuleNameES6.ts (6 errors) ====
+==== templateStringInModuleNameES6.ts (6 errors) ====
     declare module `M1` {
     ~~~~~~~
 !!! error TS2304: Cannot find name 'declare'.

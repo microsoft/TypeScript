@@ -1,8 +1,8 @@
-tests/cases/compiler/typeParametersInStaticAccessors.ts(2,29): error TS2302: Static members cannot reference class type parameters.
-tests/cases/compiler/typeParametersInStaticAccessors.ts(3,28): error TS2302: Static members cannot reference class type parameters.
+typeParametersInStaticAccessors.ts(2,29): error TS2302: Static members cannot reference class type parameters.
+typeParametersInStaticAccessors.ts(3,28): error TS2302: Static members cannot reference class type parameters.
 
 
-==== tests/cases/compiler/typeParametersInStaticAccessors.ts (2 errors) ====
+==== typeParametersInStaticAccessors.ts (2 errors) ====
     class foo<T> {
         static get Foo(): () => T { return null; }
                                 ~

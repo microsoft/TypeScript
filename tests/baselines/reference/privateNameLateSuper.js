@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameLateSuper.ts] ////
+
 //// [privateNameLateSuper.ts]
 class B {}
 class A extends B {

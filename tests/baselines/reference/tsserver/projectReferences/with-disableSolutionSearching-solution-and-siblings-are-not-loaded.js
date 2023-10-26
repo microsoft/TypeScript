@@ -15,10 +15,31 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/solution/tsconfig.json]
-{"files":[],"include":[],"references":[{"path":"./compiler"},{"path":"./services"}]}
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./compiler"
+    },
+    {
+      "path": "./services"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/compiler/tsconfig.json]
-{"compilerOptions":{"composite":true,"module":"none","disableSolutionSearching":true},"files":["./types.ts","./program.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "none",
+    "disableSolutionSearching": true
+  },
+  "files": [
+    "./types.ts",
+    "./program.ts"
+  ]
+}
 
 //// [/user/username/projects/solution/compiler/types.ts]
 
@@ -38,7 +59,19 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 //// [/user/username/projects/solution/services/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["./services.ts"],"references":[{"path":"../compiler"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "./services.ts"
+  ],
+  "references": [
+    {
+      "path": "../compiler"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/services/services.ts]
 
@@ -111,19 +144,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/solution/compiler/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/solution/compiler/tsconfig.json: *new*
   {}
 /user/username/projects/solution/compiler/types.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
   {}
 
 Before request

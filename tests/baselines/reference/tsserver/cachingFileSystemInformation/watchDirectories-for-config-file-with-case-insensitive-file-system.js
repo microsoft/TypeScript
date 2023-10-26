@@ -21,7 +21,42 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/Users/someuser/work/applications/frontend/tsconfig.json]
-{"compilerOptions":{"strict":true,"strictNullChecks":true,"target":"es2016","module":"commonjs","moduleResolution":"node","sourceMap":true,"noEmitOnError":true,"experimentalDecorators":true,"emitDecoratorMetadata":true,"types":["node","jest"],"noUnusedLocals":true,"outDir":"./compiled","typeRoots":["types","node_modules/@types"],"baseUrl":".","paths":{"*":["types/*"]}},"include":["src/**/*"],"exclude":["node_modules","compiled"]}
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "es2016",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": [
+      "node",
+      "jest"
+    ],
+    "noUnusedLocals": true,
+    "outDir": "./compiled",
+    "typeRoots": [
+      "types",
+      "node_modules/@types"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "types/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "compiled"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /Users/someuser/work/applications/frontend/src/app/utils
@@ -107,17 +142,17 @@ export class Cookie { }
 
 
 PolledWatches::
-/users/someuser/work/applications/frontend/types: *new*
-  {"pollingInterval":500}
 /users/someuser/work/applications/frontend/node_modules: *new*
+  {"pollingInterval":500}
+/users/someuser/work/applications/frontend/types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/someuser/work/applications/frontend/tsconfig.json: *new*
+/a/lib/lib.es2016.full.d.ts: *new*
   {}
 /users/someuser/work/applications/frontend/src/app/redux/configurestore.ts: *new*
   {}
-/a/lib/lib.es2016.full.d.ts: *new*
+/users/someuser/work/applications/frontend/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -166,29 +201,48 @@ Info seq  [hh:mm:ss:mss] 		Projects: /Users/someuser/work/applications/frontend/
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/users/someuser/work/applications/frontend/types:
-  {"pollingInterval":500}
 /users/someuser/work/applications/frontend/node_modules:
+  {"pollingInterval":500}
+/users/someuser/work/applications/frontend/types:
   {"pollingInterval":500}
 
 FsWatches::
-/users/someuser/work/applications/frontend/tsconfig.json:
+/a/lib/lib.es2016.full.d.ts:
   {}
 /users/someuser/work/applications/frontend/src/app/redux/configurestore.ts:
   {}
-/a/lib/lib.es2016.full.d.ts:
-  {}
 /users/someuser/work/applications/frontend/src/app/utils/cookie.ts: *new*
+  {}
+/users/someuser/work/applications/frontend/tsconfig.json:
   {}
 
 FsWatchesRecursive::
 /users/someuser/work/applications/frontend/src:
   {}
 
-Info seq  [hh:mm:ss:mss] fileExists:: [{"key":"/users/someuser/work/applications/frontend/src/app/utils/cookie.ts","count":1},{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
-Info seq  [hh:mm:ss:mss] directoryExists:: [{"key":"/users/someuser/work/applications/frontend/src/app/utils/cookie.ts","count":1}]
+Info seq  [hh:mm:ss:mss] fileExists:: [
+  {
+    "key": "/users/someuser/work/applications/frontend/src/app/utils/cookie.ts",
+    "count": 1
+  },
+  {
+    "key": "/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts",
+    "count": 1
+  }
+]
+Info seq  [hh:mm:ss:mss] directoryExists:: [
+  {
+    "key": "/users/someuser/work/applications/frontend/src/app/utils/cookie.ts",
+    "count": 1
+  }
+]
 Info seq  [hh:mm:ss:mss] getDirectories:: []
-Info seq  [hh:mm:ss:mss] readFile:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
+Info seq  [hh:mm:ss:mss] readFile:: [
+  {
+    "key": "/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts",
+    "count": 1
+  }
+]
 Info seq  [hh:mm:ss:mss] readDirectory:: []
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Search path: /Users/someuser/work/applications/frontend/src/app/utils

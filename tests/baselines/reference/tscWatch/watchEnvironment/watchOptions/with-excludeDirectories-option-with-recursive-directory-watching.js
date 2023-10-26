@@ -29,7 +29,16 @@ export function fooBar(): string;
 export function temp(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"exclude":["node_modules"],"watchOptions":{"excludeDirectories":["**/temp"]}}
+{
+  "exclude": [
+    "node_modules"
+  ],
+  "watchOptions": {
+    "excludeDirectories": [
+      "**/temp"
+    ]
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -41,8 +50,13 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/src/main.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/main.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -69,11 +83,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/src/main.ts: *new*
-  {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
+/user/username/projects/myproject: *new*
   {}
 /user/username/projects/myproject/node_modules: *new*
   {}
@@ -81,11 +93,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
   {}
 /user/username/projects/myproject/src: *new*
   {}
-/user/username/projects/myproject: *new*
+/user/username/projects/myproject/src/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined

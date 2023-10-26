@@ -21,7 +21,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["index.ts"]}
+{
+  "files": [
+    "index.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
@@ -68,6 +72,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+DocumentRegistry::
+  Key:: undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined
+    /user/username/projects/myproject/index.ts: TS 1
+    /user/username/projects/myproject/module1.d.ts: TS 1
+    /a/lib/lib.d.ts: TS 1
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -82,6 +91,10 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+DocumentRegistry::
+  Key:: undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined
+    /user/username/projects/myproject/index.ts: TS 1
+    /a/lib/lib.d.ts: TS 1
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -99,3 +112,8 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+DocumentRegistry::
+  Key:: undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined
+    /user/username/projects/myproject/index.ts: TS 1
+    /a/lib/lib.d.ts: TS 1
+    /user/username/projects/myproject/module1.d.ts: TS 1

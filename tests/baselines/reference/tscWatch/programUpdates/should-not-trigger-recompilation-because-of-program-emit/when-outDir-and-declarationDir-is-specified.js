@@ -20,7 +20,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"module":"amd","outDir":"build","declaration":true,"declarationDir":"decls"}}
+{
+  "compilerOptions": {
+    "module": "amd",
+    "outDir": "build",
+    "declaration": true,
+    "declarationDir": "decls"
+  }
+}
 
 
 /a/lib/tsc.js -w -p /user/username/projects/myproject/tsconfig.json
@@ -32,8 +39,19 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts"]
-Program options: {"module":2,"outDir":"/user/username/projects/myproject/build","declaration":true,"declarationDir":"/user/username/projects/myproject/decls","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/file1.ts",
+  "/user/username/projects/myproject/src/file2.ts"
+]
+Program options: {
+  "module": 2,
+  "outDir": "/user/username/projects/myproject/build",
+  "declaration": true,
+  "declarationDir": "/user/username/projects/myproject/decls",
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -57,19 +75,19 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/file1.ts: *new*
   {}
 /user/username/projects/myproject/src/file2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src: *new*
-  {}
 /user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -131,8 +149,20 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts","/user/username/projects/myproject/src/file3.ts"]
-Program options: {"module":2,"outDir":"/user/username/projects/myproject/build","declaration":true,"declarationDir":"/user/username/projects/myproject/decls","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/file1.ts",
+  "/user/username/projects/myproject/src/file2.ts",
+  "/user/username/projects/myproject/src/file3.ts"
+]
+Program options: {
+  "module": 2,
+  "outDir": "/user/username/projects/myproject/build",
+  "declaration": true,
+  "declarationDir": "/user/username/projects/myproject/decls",
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -153,21 +183,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/file1.ts:
   {}
 /user/username/projects/myproject/src/file2.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/src/file3.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 /user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/src:
   {}
 
 exitCode:: ExitStatus.undefined

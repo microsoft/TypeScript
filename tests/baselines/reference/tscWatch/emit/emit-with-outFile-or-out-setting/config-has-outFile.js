@@ -7,7 +7,11 @@ let x = 1
 let y = 1
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"outFile":"/a/out.js"}}
+{
+  "compilerOptions": {
+    "outFile": "/a/out.js"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,8 +36,17 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/a.ts
@@ -45,13 +58,13 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 FsWatches::
-/a/tsconfig.json: *new*
-  {}
 /a/a.ts: *new*
   {}
 /a/b.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
+  {}
+/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -84,8 +97,17 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/a.ts
@@ -122,8 +144,17 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/a.ts

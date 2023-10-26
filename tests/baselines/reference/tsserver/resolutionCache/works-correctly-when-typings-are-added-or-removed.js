@@ -8,7 +8,12 @@ let x = 1;
 export let a: number
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{},"exclude":["node_modules"]}
+{
+  "compilerOptions": {},
+  "exclude": [
+    "node_modules"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/project
@@ -133,9 +138,9 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

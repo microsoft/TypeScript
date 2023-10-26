@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dottedModuleName2.ts ===
+//// [tests/cases/compiler/dottedModuleName2.ts] ////
+
+=== dottedModuleName2.ts ===
 module A.B {
 >A : Symbol(A, Decl(dottedModuleName2.ts, 0, 0), Decl(dottedModuleName2.ts, 18, 21))
 >B : Symbol(B, Decl(dottedModuleName2.ts, 0, 9), Decl(dottedModuleName2.ts, 21, 9))

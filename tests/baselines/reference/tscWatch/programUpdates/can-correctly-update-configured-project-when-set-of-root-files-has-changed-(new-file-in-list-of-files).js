@@ -20,7 +20,12 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["f1.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f1.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
@@ -32,8 +37,14 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/f1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -48,9 +59,9 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (used version)
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/f1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -66,7 +77,13 @@ Change:: Modify config to make f2 as root too
 
 Input::
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["f1.ts","f2.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f1.ts",
+    "f2.ts"
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -80,8 +97,15 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts","/a/b/f2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/f1.ts",
+  "/a/b/f2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -98,13 +122,13 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (computed .d.ts)
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/f1.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /a/b/f2.ts: *new*
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
   {}
 
 exitCode:: ExitStatus.undefined

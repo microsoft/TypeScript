@@ -1,8 +1,10 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/nodeResolution3.ts] ////
+
+=== a.ts ===
 import y = require("b");
 >y : Symbol(y, Decl(a.ts, 0, 0))
 
-=== tests/cases/compiler/node_modules/b/index.d.ts ===
+=== node_modules/b/index.d.ts ===
 export var x: number;
 >x : Symbol(x, Decl(index.d.ts, 0, 10))
 

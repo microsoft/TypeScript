@@ -38,11 +38,11 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Host watch options changed to {"fallbackPolling":1}, it will be take effect for next watches.
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -110,11 +110,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/b/tsconfig.json: *new*
-  {"pollingInterval":2000}
 /a/b: *new*
   {"pollingInterval":500}
 /a/b/commonfile2.ts: *new*
   {"pollingInterval":500}
+/a/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}

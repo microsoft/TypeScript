@@ -2,14 +2,21 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/node_modules/memfs/package.json]
-{ "name": "memfs", "version": "1.0.0", "types": "lib/index.d.ts" }
+{
+  "name": "memfs",
+  "version": "1.0.0",
+  "types": "lib/index.d.ts"
+}
 
 //// [/node_modules/memfs/lib/index.d.ts]
 /// <reference types="node" />
 export declare class Volume {}
 
 //// [/node_modules/@types/node/package.json]
-{ "name": "@types/node", "version": "1.0.0" }
+{
+  "name": "@types/node",
+  "version": "1.0.0"
+}
 
 //// [/node_modules/@types/node/index.d.ts]
 export declare class Stats {}
@@ -107,11 +114,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /node_modules/@types/node/package.json: *new*
   {}
 /package.json: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -558,7 +565,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/node_modules/@types/node/index",
             "data": {
               "exportName": "Stats",
-              "exportMapKey": "Stats|*|",
+              "exportMapKey": "5 * Stats ",
               "fileName": "/node_modules/@types/node/index.d.ts"
             }
           },
@@ -572,7 +579,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "Volume",
-              "exportMapKey": "Volume|*|",
+              "exportMapKey": "6 * Volume ",
               "fileName": "/node_modules/memfs/lib/index.d.ts",
               "isPackageJsonImport": true
             }

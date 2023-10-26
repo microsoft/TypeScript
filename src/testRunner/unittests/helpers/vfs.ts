@@ -1,8 +1,10 @@
-import * as Harness from "../../_namespaces/Harness";
-import { getDirectoryPath } from "../../_namespaces/ts";
+import {
+    getDirectoryPath,
+} from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import * as vpath from "../../_namespaces/vpath";
-import { libContent } from "./contents";
+import {
+    libContent,
+} from "./contents";
 
 export interface FsOptions {
     libContentToAppend?: string;
@@ -15,19 +17,6 @@ function valueOfFsOptions(options: FsOptionsOrLibContentsToAppend | undefined, k
     return typeof options === "string" ?
         key === "libContentToAppend" ? options : undefined :
         options?.[key];
-}
-
-/**
- * Load project from disk into /src folder
- */
-export function loadProjectFromDisk(
-    root: string,
-    options?: FsOptionsOrLibContentsToAppend
-): vfs.FileSystem {
-    const resolver = vfs.createResolver(Harness.IO);
-    return loadProjectFromFiles({
-        ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver)
-    }, options);
 }
 
 /**
@@ -56,7 +45,7 @@ export function replaceText(fs: vfs.FileSystem, path: string, oldText: string, n
         throw new Error(`File ${path} does not exist`);
     }
     const old = fs.readFileSync(path, "utf-8");
-    if (old.indexOf(oldText) < 0) {
+    if (!old.includes(oldText)) {
         throw new Error(`Text "${oldText}" does not exist in file ${path}`);
     }
     const newContent = old.replace(oldText, newText);
@@ -84,13 +73,21 @@ export function enableStrict(fs: vfs.FileSystem, path: string) {
 }
 
 export function addTestPrologue(fs: vfs.FileSystem, path: string, prologue: string) {
-    prependText(fs, path, `${prologue}
-`);
+    prependText(
+        fs,
+        path,
+        `${prologue}
+`,
+    );
 }
 
 export function addShebang(fs: vfs.FileSystem, project: string, file: string) {
-    prependText(fs, `src/${project}/${file}.ts`, `#!someshebang ${project} ${file}
-`);
+    prependText(
+        fs,
+        `src/${project}/${file}.ts`,
+        `#!someshebang ${project} ${file}
+`,
+    );
 }
 
 export function restContent(project: string, file: string) {
@@ -121,13 +118,21 @@ export function changeStubToRest(fs: vfs.FileSystem, project: string, file: stri
 export function addSpread(fs: vfs.FileSystem, project: string, file: string) {
     const path = `src/${project}/${file}.ts`;
     const content = fs.readFileSync(path, "utf8");
-    fs.writeFileSync(path, `${content}
+    fs.writeFileSync(
+        path,
+        `${content}
 function ${project}${file}Spread(...b: number[]) { }
 const ${project}${file}_ar = [20, 30];
-${project}${file}Spread(10, ...${project}${file}_ar);`);
+${project}${file}Spread(10, ...${project}${file}_ar);`,
+    );
 
-    replaceText(fs, `src/${project}/tsconfig.json`, `"strict": false,`, `"strict": false,
-    "downlevelIteration": true,`);
+    replaceText(
+        fs,
+        `src/${project}/tsconfig.json`,
+        `"strict": false,`,
+        `"strict": false,
+    "downlevelIteration": true,`,
+    );
 }
 
 export function getTripleSlashRef(project: string) {
@@ -136,7 +141,11 @@ export function getTripleSlashRef(project: string) {
 
 export function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: string) {
     fs.writeFileSync(getTripleSlashRef(project), `declare class ${project}${file} { }`);
-    prependText(fs, `src/${project}/${file}.ts`, `///<reference path="./tripleRef.d.ts"/>
+    prependText(
+        fs,
+        `src/${project}/${file}.ts`,
+        `///<reference path="./tripleRef.d.ts"/>
 const ${file}Const = new ${project}${file}();
-`);
+`,
+    );
 }

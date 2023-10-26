@@ -7,10 +7,26 @@ export interface IfaceA {}
 export const instanceA: IfaceA = {};
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"outDir":"bin","declaration":true,"declarationMap":true,"composite":true}}
+{
+  "compilerOptions": {
+    "outDir": "bin",
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true
+  }
+}
 
 //// [/a/bin/a.d.ts.map]
-{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC"}
+{
+  "version": 3,
+  "file": "a.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../a.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC"
+}
 
 //// [/a/bin/a.d.ts]
 export declare function fnA(): void;
@@ -20,13 +36,29 @@ export declare const instanceA: IfaceA;
 //# sourceMappingURL=a.d.ts.map
 
 //// [/b/tsconfig.json]
-{"compilerOptions":{"outDir":"bin","declaration":true,"declarationMap":true,"composite":true}}
+{
+  "compilerOptions": {
+    "outDir": "bin",
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true
+  }
+}
 
 //// [/b/b.ts]
 export function fnB() {}
 
 //// [/b/bin/b.d.ts.map]
-{"version":3,"file":"b.d.ts","sourceRoot":"","sources":["../b.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}
+{
+  "version": 3,
+  "file": "b.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../b.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,wBAAgB,GAAG,SAAK"
+}
 
 //// [/b/bin/b.d.ts]
 export declare function fnB(): void;
@@ -38,7 +70,19 @@ import * as b from "../b/b";
 export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }
 
 //// [/user/tsconfig.json]
-{"file":["user.ts"],"references":[{"path":"../a"},{"path":"../b"}]}
+{
+  "file": [
+    "user.ts"
+  ],
+  "references": [
+    {
+      "path": "../a"
+    },
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 //// [/dummy/dummy.ts]
 let a = 10;
@@ -111,20 +155,20 @@ FsWatchesRecursive::
   {}
 
 ts.getFileEmitOutput: /a/a.ts: {
- "outputFiles": [
-  {
-   "name": "/a/bin/a.d.ts.map",
-   "writeByteOrderMark": false,
-   "text": "{\"version\":3,\"file\":\"a.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../a.ts\"],\"names\":[],\"mappings\":\"AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC\"}"
-  },
-  {
-   "name": "/a/bin/a.d.ts",
-   "writeByteOrderMark": false,
-   "text": "export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# sourceMappingURL=a.d.ts.map"
-  }
- ],
- "emitSkipped": false,
- "diagnostics": []
+  "outputFiles": [
+    {
+      "name": "/a/bin/a.d.ts.map",
+      "writeByteOrderMark": false,
+      "text": "{\"version\":3,\"file\":\"a.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../a.ts\"],\"names\":[],\"mappings\":\"AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC\"}"
+    },
+    {
+      "name": "/a/bin/a.d.ts",
+      "writeByteOrderMark": false,
+      "text": "export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# sourceMappingURL=a.d.ts.map"
+    }
+  ],
+  "emitSkipped": false,
+  "diagnostics": []
 }
 Before request
 
@@ -154,9 +198,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
-  {}
 /a/a.ts: *new*
+  {}
+/a/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -243,9 +287,9 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/tsconfig.json:
-  {}
 /a/a.ts:
+  {}
+/a/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -257,20 +301,20 @@ FsWatchesRecursive *deleted*::
   {}
 
 ts.getFileEmitOutput: /b/b.ts: {
- "outputFiles": [
-  {
-   "name": "/b/bin/b.d.ts.map",
-   "writeByteOrderMark": false,
-   "text": "{\"version\":3,\"file\":\"b.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../b.ts\"],\"names\":[],\"mappings\":\"AAAA,wBAAgB,GAAG,SAAK\"}"
-  },
-  {
-   "name": "/b/bin/b.d.ts",
-   "writeByteOrderMark": false,
-   "text": "export declare function fnB(): void;\n//# sourceMappingURL=b.d.ts.map"
-  }
- ],
- "emitSkipped": false,
- "diagnostics": []
+  "outputFiles": [
+    {
+      "name": "/b/bin/b.d.ts.map",
+      "writeByteOrderMark": false,
+      "text": "{\"version\":3,\"file\":\"b.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../b.ts\"],\"names\":[],\"mappings\":\"AAAA,wBAAgB,GAAG,SAAK\"}"
+    },
+    {
+      "name": "/b/bin/b.d.ts",
+      "writeByteOrderMark": false,
+      "text": "export declare function fnB(): void;\n//# sourceMappingURL=b.d.ts.map"
+    }
+  ],
+  "emitSkipped": false,
+  "diagnostics": []
 }
 Before request
 
@@ -300,9 +344,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/b/tsconfig.json:
-  {}
 /b/b.ts: *new*
+  {}
+/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -421,21 +465,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/a.ts: *new*
+  {}
+/a/tsconfig.json: *new*
+  {}
 /b/tsconfig.json:
   {}
 /user/tsconfig.json: *new*
   {}
-/a/tsconfig.json: *new*
-  {}
-/a/a.ts: *new*
-  {}
 
 FsWatchesRecursive::
+/a: *new*
+  {}
 /b:
   {}
 /user: *new*
-  {}
-/a: *new*
   {}
 
 Before request
@@ -522,23 +566,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/b/tsconfig.json:
-  {}
-/user/tsconfig.json:
+/a/a.ts:
   {}
 /a/tsconfig.json:
   {}
-/a/a.ts:
+/b/tsconfig.json:
+  {}
+/user/tsconfig.json:
   {}
 /user/user.ts: *new*
   {}
 
 FsWatchesRecursive::
+/a:
+  {}
 /b:
   {}
 /user:
-  {}
-/a:
   {}
 
 Before request
@@ -596,11 +640,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/tsconfig.json:
+  {}
 /b/tsconfig.json:
   {}
 /user/tsconfig.json:
-  {}
-/a/tsconfig.json:
   {}
 /user/user.ts:
   {}
@@ -610,11 +654,11 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
+/a:
+  {}
 /b:
   {}
 /user:
-  {}
-/a:
   {}
 
 Before request
@@ -653,23 +697,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/a.ts: *new*
+  {}
+/a/tsconfig.json:
+  {}
 /b/tsconfig.json:
   {}
 /user/tsconfig.json:
   {}
-/a/tsconfig.json:
-  {}
 /user/user.ts:
-  {}
-/a/a.ts: *new*
   {}
 
 FsWatchesRecursive::
+/a:
+  {}
 /b:
   {}
 /user:
-  {}
-/a:
   {}
 
 Before request
@@ -762,21 +806,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
+/a/a.ts:
+  {}
+/a/tsconfig.json:
+  {}
 /b/tsconfig.json:
   {}
 /user/tsconfig.json:
   {}
-/a/tsconfig.json:
-  {}
 /user/user.ts:
-  {}
-/a/a.ts:
   {}
 
 FsWatchesRecursive *deleted*::
+/a:
+  {}
 /b:
   {}
 /user:
-  {}
-/a:
   {}

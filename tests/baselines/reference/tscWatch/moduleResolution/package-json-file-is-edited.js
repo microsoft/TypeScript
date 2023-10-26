@@ -1,7 +1,13 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/src/tsconfig.json]
-{"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out"}}
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "Node16",
+    "outDir": "../out"
+  }
+}
 
 //// [/user/username/projects/myproject/src/fileA.ts]
 import { foo } from "./fileB.mjs";
@@ -14,7 +20,10 @@ export function foo() {
 
 
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
+{
+  "name": "app",
+  "version": "1.0.0"
+}
 
 //// [/a/lib/lib.es2016.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -90,8 +99,20 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 un
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -106,27 +127,27 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (used version)
 
 PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/src/filea.ts: *new*
-  {}
-/user/username/projects/myproject/src: *new*
-  {}
 /a/lib/lib.es2016.full.d.ts: *new*
   {}
 /user/username/projects/myproject/package.json: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
+/user/username/projects/myproject/src/filea.ts: *new*
+  {}
+/user/username/projects/myproject/src/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -147,7 +168,11 @@ Change:: Modify package json file to add type module
 
 Input::
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -204,8 +229,20 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -218,12 +255,12 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
@@ -232,15 +269,15 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/filea.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
 /a/lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
+/user/username/projects/myproject/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -259,7 +296,10 @@ Change:: Modify package.json file to remove type module
 
 Input::
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
+{
+  "name": "app",
+  "version": "1.0.0"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -321,8 +361,20 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -335,27 +387,27 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/filea.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
 /a/lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
+/user/username/projects/myproject/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -429,8 +481,20 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -441,29 +505,29 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/filea.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
 /a/lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
+/user/username/projects/myproject/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -477,7 +541,11 @@ Change:: Modify package json file to add type module
 
 Input::
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -535,8 +603,20 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -549,12 +629,12 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
@@ -565,15 +645,15 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/filea.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
 /a/lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
+/user/username/projects/myproject/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -661,8 +741,20 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -675,29 +767,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/filea.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
 /a/lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
+/user/username/projects/myproject/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::

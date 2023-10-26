@@ -31,8 +31,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/file1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -47,9 +51,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/file1.ts (used version)
 
 FsWatches::
-/users/username/projects/project/file1.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/file1.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -88,8 +92,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/file1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -105,9 +113,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/file1.ts (computed .d.ts)
 
 FsWatches::
-/users/username/projects/project/file1.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/file1.ts:
   {}
 /users/username/projects/project/modulefile.ts: *new*
   {}

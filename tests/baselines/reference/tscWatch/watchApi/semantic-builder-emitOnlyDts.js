@@ -1,7 +1,12 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"composite":true,"noEmitOnError":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "noEmitOnError": true
+  }
+}
 
 //// [/user/username/projects/myproject/main.ts]
 export const x: string = 10;
@@ -37,8 +42,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.ts"]
-Program options: {"composite":true,"noEmitOnError":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.ts"
+]
+Program options: {
+  "composite": true,
+  "noEmitOnError": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -62,13 +74,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
 /user/username/projects/myproject/other.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -174,13 +186,13 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/main.ts:
   {}
 /user/username/projects/myproject/other.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::
@@ -195,8 +207,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.ts"]
-Program options: {"composite":true,"noEmitOnError":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.ts"
+]
+Program options: {
+  "composite": true,
+  "noEmitOnError": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -216,13 +235,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/main.ts: *new*
   {}
 /user/username/projects/myproject/other.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

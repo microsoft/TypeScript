@@ -29,7 +29,16 @@ export function fooBar(): string;
 export function temp(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"exclude":["node_modules"],"watchOptions":{"excludeDirectories":["**/temp"]}}
+{
+  "exclude": [
+    "node_modules"
+  ],
+  "watchOptions": {
+    "excludeDirectories": [
+      "**/temp"
+    ]
+  }
+}
 
 
 /a/lib/tsc.js -w -extendedDiagnostics
@@ -60,8 +69,14 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excl
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/src/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -88,11 +103,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/src/main.ts: *new*
-  {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
+/user/username/projects/myproject: *new*
   {}
 /user/username/projects/myproject/node_modules: *new*
   {}
@@ -100,11 +113,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
   {}
 /user/username/projects/myproject/src: *new*
   {}
-/user/username/projects/myproject: *new*
+/user/username/projects/myproject/src/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined

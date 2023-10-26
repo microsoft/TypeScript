@@ -15,13 +15,55 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/a/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../refs/*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/a/index.ts]
 export class A {}
@@ -159,7 +201,24 @@ Before running Timeout callback:: count: 3
 2: /user/username/projects/myproject/c/tsconfig.json
 3: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../nrefs/*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/nrefs/a.d.ts]
 export class X {}
@@ -175,29 +234,29 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/b/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/a/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject: *new*
   {}
+/user/username/projects/myproject/a/index.ts: *new*
+  {}
+/user/username/projects/myproject/a/tsconfig.json: *new*
+  {}
 /user/username/projects/myproject/b/index.ts: *new*
   {}
-/user/username/projects/myproject/a/index.ts: *new*
+/user/username/projects/myproject/b/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/c/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/refs/a.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
 
 FsWatchesRecursive::
+/user/username/projects/myproject/a: *new*
+  {}
 /user/username/projects/myproject/b: *new*
   {}
 /user/username/projects/myproject/refs: *new*
-  {}
-/user/username/projects/myproject/a: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
@@ -280,29 +339,29 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/a/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject:
   {}
-/user/username/projects/myproject/b/index.ts:
-  {}
 /user/username/projects/myproject/a/index.ts:
   {}
-/user/username/projects/myproject/refs/a.d.ts:
+/user/username/projects/myproject/a/tsconfig.json:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/c/tsconfig.json:
   {}
 /user/username/projects/myproject/nrefs/a.d.ts: *new*
   {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/b:
-  {}
 /user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/b:
   {}
 /user/username/projects/myproject/nrefs: *new*
   {}
@@ -319,7 +378,24 @@ Before running Timeout callback:: count: 2
 4: /user/username/projects/myproject/c/tsconfig.json
 5: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../refs/*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json
@@ -400,29 +476,29 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/a/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject:
   {}
-/user/username/projects/myproject/b/index.ts:
-  {}
 /user/username/projects/myproject/a/index.ts:
   {}
-/user/username/projects/myproject/refs/a.d.ts:
+/user/username/projects/myproject/a/tsconfig.json:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/c/tsconfig.json:
   {}
 /user/username/projects/myproject/nrefs/a.d.ts:
   {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/b:
-  {}
 /user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/b:
   {}
 /user/username/projects/myproject/refs: *new*
   {}

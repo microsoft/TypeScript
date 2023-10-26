@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/initializerWithThisPropertyAccess.ts] ////
+
 //// [initializerWithThisPropertyAccess.ts]
 class A {
     a: number;

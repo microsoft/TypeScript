@@ -8,7 +8,12 @@ import { x } from "./old";
 export const x = 0;
 
 //// [/a/tsconfig.json]
-{"files":["./old.ts","./user.ts"]}
+{
+  "files": [
+    "./old.ts",
+    "./user.ts"
+  ]
+}
 
 //// [/b/user.ts]
 import { x } from "../a/old";
@@ -74,9 +79,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json: *new*
-  {}
 /a/old.ts: *new*
+  {}
+/a/tsconfig.json: *new*
   {}
 
 Before request
@@ -143,9 +148,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
-  {}
 /a/old.ts:
+  {}
+/a/tsconfig.json:
   {}
 /b/tsconfig.json: *new*
   {}
@@ -174,12 +179,12 @@ Info seq  [hh:mm:ss:mss] response:
           "textChanges": [
             {
               "start": {
-                "line": 1,
-                "offset": 12
+                "line": 3,
+                "offset": 6
               },
               "end": {
-                "line": 1,
-                "offset": 20
+                "line": 3,
+                "offset": 14
               },
               "newText": "new.ts"
             }

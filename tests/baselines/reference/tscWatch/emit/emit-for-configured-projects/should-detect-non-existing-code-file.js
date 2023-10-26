@@ -40,8 +40,14 @@ Output::
 
 
 
-Program root files: ["/a/b/referenceFile1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/referenceFile1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -60,9 +66,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/referencefile1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -116,8 +122,14 @@ Output::
 
 
 
-Program root files: ["/a/b/referenceFile1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/referenceFile1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -153,9 +165,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/referencefile1.ts:
+  {}
+/a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}
@@ -185,8 +197,15 @@ Output::
 
 
 
-Program root files: ["/a/b/moduleFile2.ts","/a/b/referenceFile1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/moduleFile2.ts",
+  "/a/b/referenceFile1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -202,13 +221,13 @@ Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (computed .d.ts)
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/modulefile2.ts: *new*
   {}
 /a/b/referencefile1.ts:
   {}
-/a/lib/lib.d.ts:
+/a/b/tsconfig.json:
   {}
-/a/b/modulefile2.ts: *new*
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::

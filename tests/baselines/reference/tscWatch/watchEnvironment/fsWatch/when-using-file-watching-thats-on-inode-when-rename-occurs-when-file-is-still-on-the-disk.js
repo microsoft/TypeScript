@@ -20,7 +20,15 @@ import { foo } from "./foo"; foo();
 export declare function foo(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json] Inode:: 10
-{"watchOptions":{"watchFile":"useFsEvents"},"files":["foo.ts","main.ts"]}
+{
+  "watchOptions": {
+    "watchFile": "useFsEvents"
+  },
+  "files": [
+    "foo.ts",
+    "main.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -w --extendedDiagnostics
@@ -44,8 +52,15 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-Program root files: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/foo.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -69,14 +84,14 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {"inode":10}
+/a/lib/lib.d.ts: *new*
+  {"inode":3}
 /user/username/projects/myproject/foo.ts: *new*
   {"inode":9}
 /user/username/projects/myproject/main.ts: *new*
   {"inode":8}
-/a/lib/lib.d.ts: *new*
-  {"inode":3}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"inode":10}
 
 exitCode:: ExitStatus.undefined
 
@@ -107,14 +122,14 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"inode":10}
-/user/username/projects/myproject/main.ts:
-  {"inode":8}
 /a/lib/lib.d.ts:
   {"inode":3}
 /user/username/projects/myproject/foo.ts:
   {"inode":13} *new*
+/user/username/projects/myproject/main.ts:
+  {"inode":8}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":10}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.ts:
@@ -148,8 +163,15 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/foo.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -183,14 +205,14 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"inode":10}
-/user/username/projects/myproject/main.ts:
-  {"inode":8}
 /a/lib/lib.d.ts:
   {"inode":3}
 /user/username/projects/myproject/foo.ts:
   {"inode":14} *new*
+/user/username/projects/myproject/main.ts:
+  {"inode":8}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":10}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.ts:
@@ -222,8 +244,15 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/foo.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

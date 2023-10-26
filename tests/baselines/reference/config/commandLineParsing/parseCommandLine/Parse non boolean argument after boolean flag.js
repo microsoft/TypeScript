@@ -1,7 +1,7 @@
 --noImplicitAny t 0.ts
 CompilerOptions::
 {
- "noImplicitAny": true
+  "noImplicitAny": true
 }
 WatchOptions::
 

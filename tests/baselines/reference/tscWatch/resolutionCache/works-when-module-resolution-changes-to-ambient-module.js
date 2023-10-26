@@ -31,8 +31,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -47,19 +51,19 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/foo.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/foo.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -102,9 +106,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/foo.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/foo.ts:
   {}
 
 FsWatchesRecursive::
@@ -128,8 +132,12 @@ sysLog:: /users/username/projects/project/node_modules/@types:: Changing watcher
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -153,13 +161,13 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/foo.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
-/users/username/projects/project/node_modules/@types/node/package.json: *new*
+/users/username/projects/project/foo.ts:
   {}
 /users/username/projects/project/node_modules/@types/node/index.d.ts: *new*
+  {}
+/users/username/projects/project/node_modules/@types/node/package.json: *new*
   {}
 
 FsWatchesRecursive::

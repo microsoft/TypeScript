@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts ===
+//// [tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts] ////
+
+=== typeVariableConstraintedToAliasNotAssignableToUnion.ts ===
 declare class TableClass<S = any> {
 >TableClass : Symbol(TableClass, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 0))
 >S : Symbol(S, Decl(typeVariableConstraintedToAliasNotAssignableToUnion.ts, 0, 25))

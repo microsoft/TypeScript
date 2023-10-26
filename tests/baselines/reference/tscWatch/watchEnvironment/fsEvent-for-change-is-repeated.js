@@ -36,8 +36,13 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-Program root files: ["main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true}
+Program root files: [
+  "main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -52,15 +57,15 @@ Shape signatures in builder refreshed for::
 /user/username/projects/project/main.ts (used version)
 
 PolledWatches::
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/project/main.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/project/main.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -94,8 +99,13 @@ CreatingProgramWith::
 
 
 
-Program root files: ["main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true}
+Program root files: [
+  "main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -156,8 +166,13 @@ CreatingProgramWith::
 
 
 
-Program root files: ["main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true}
+Program root files: [
+  "main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

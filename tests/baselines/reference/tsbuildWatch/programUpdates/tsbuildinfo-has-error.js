@@ -32,8 +32,14 @@ Output::
 
 
 
-Program root files: ["/src/project/main.ts"]
-Program options: {"watch":true,"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/main.ts"
+]
+Program options: {
+  "watch": true,
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -48,9 +54,9 @@ Shape signatures in builder refreshed for::
 /src/project/main.ts (used version)
 
 FsWatches::
-/src/project/tsconfig.json: *new*
-  {}
 /src/project/main.ts: *new*
+  {}
+/src/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

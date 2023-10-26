@@ -4,7 +4,11 @@ Input::
 var a = 10;
 
 //// [/home/username/project/tsconfig.json]
-{"include":["app/**/*.ts"]}
+{
+  "include": [
+    "app/**/*.ts"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,8 +33,13 @@ Output::
 
 
 
-Program root files: ["/home/username/project/app/file.ts"]
-Program options: {"watch":true,"configFilePath":"/home/username/project/tsconfig.json"}
+Program root files: [
+  "/home/username/project/app/file.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/home/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -49,11 +58,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/username/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /home/username/project/app/file.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/home/username/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -86,8 +95,13 @@ Output::
 
 
 
-Program root files: ["/home/username/project/app/file.ts"]
-Program options: {"watch":true,"configFilePath":"/home/username/project/tsconfig.json"}
+Program root files: [
+  "/home/username/project/app/file.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/home/username/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

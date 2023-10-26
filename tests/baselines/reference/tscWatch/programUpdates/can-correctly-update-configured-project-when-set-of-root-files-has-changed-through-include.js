@@ -17,7 +17,12 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/Project/tsconfig.json]
-{"include":[".","./**/*.json"]}
+{
+  "include": [
+    ".",
+    "./**/*.json"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p .
@@ -29,8 +34,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/Project/file1.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/Project/file1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject/Project",
+  "configFilePath": "/user/username/projects/myproject/Project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -45,19 +56,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project/file1.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/project/file1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -92,8 +103,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/Project/file1.ts","/user/username/projects/myproject/Project/file2.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/Project/file1.ts",
+  "/user/username/projects/myproject/Project/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject/Project",
+  "configFilePath": "/user/username/projects/myproject/Project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -107,21 +125,21 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project/file2.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/project/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/project/file1.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/project/file2.ts: *new*
+  {}
+/user/username/projects/myproject/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::

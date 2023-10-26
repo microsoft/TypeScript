@@ -20,7 +20,11 @@ let x = 1
 let y = 1
 
 //// [/a/b/tsconfig.json]
-{"watchOptions":{"fallbackPolling":"PriorityInterval"}}
+{
+  "watchOptions": {
+    "fallbackPolling": "PriorityInterval"
+  }
+}
 
 
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
@@ -37,8 +41,15 @@ sysLog:: /a/lib/lib.d.ts:: Changing to watchFile
 sysLog:: /a/b:: Changing to watchFile
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -56,16 +67,16 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (used version)
 
 PolledWatches::
-/a/b/tsconfig.json: *new*
-  {"pollingInterval":2000}
+/a/b: *new*
+  {"pollingInterval":500}
 /a/b/commonfile1.ts: *new*
   {"pollingInterval":250}
 /a/b/commonfile2.ts: *new*
   {"pollingInterval":250}
+/a/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":250}
-/a/b: *new*
-  {"pollingInterval":500}
 
 exitCode:: ExitStatus.undefined
 
