@@ -1,4 +1,7 @@
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     getCommandLineArgsForLibResolution,
     getSysForLibResolution,
 } from "../helpers/libraryResolution";
@@ -20,7 +23,7 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 edit: sys =>
                     sys.writeFile(
                         "/home/src/projects/project1/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 composite: true,
                                 typeRoots: ["./typeroot1", "./typeroot2"],
@@ -36,7 +39,7 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 edit: sys => {
                     sys.writeFile(
                         "/home/src/projects/project1/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 composite: true,
                                 typeRoots: ["./typeroot1"],

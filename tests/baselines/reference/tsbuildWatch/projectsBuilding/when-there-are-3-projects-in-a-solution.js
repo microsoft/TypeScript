@@ -17,22 +17,57 @@ interface Array<T> { length: number; [n: number]: T; }
 export const pkg0 = 0;
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/user/username/projects/myproject/pkg1/index.ts]
 export const pkg1 = 1;
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../pkg0"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../pkg0"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/pkg2/index.ts]
 export const pkg2 = 2;
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../pkg0"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../pkg0"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"references":[{"path":"./pkg0"},{"path":"./pkg1"},{"path":"./pkg2"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./pkg0"
+    },
+    {
+      "path": "./pkg1"
+    },
+    {
+      "path": "./pkg2"
+    }
+  ],
+  "files": []
+}
 
 
 /a/lib/tsc.js -b -w -v
@@ -62,8 +97,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -77,8 +118,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/pkg1/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg1/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -92,8 +139,14 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg1/index.ts (computed .d.ts during emit)
 
-Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg2/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -347,8 +400,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -455,8 +514,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg0/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -559,8 +624,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg1/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg1/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -570,8 +641,14 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/pkg2/index.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

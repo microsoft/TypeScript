@@ -17,7 +17,13 @@ function bar() {
 const xy = 3;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compileOnSave":true,"compilerOptions":{"declaration":false,"module":"none"}}
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "declaration": false,
+    "module": "none"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

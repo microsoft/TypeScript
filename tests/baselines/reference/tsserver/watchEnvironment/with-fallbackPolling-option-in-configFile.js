@@ -18,7 +18,11 @@ interface Array<T> { length: number; [n: number]: T; }
 let y = 1
 
 //// [/a/b/tsconfig.json]
-{"watchOptions":{"fallbackPolling":"PriorityInterval"}}
+{
+  "watchOptions": {
+    "fallbackPolling": "PriorityInterval"
+  }
+}
 
 //// [/a/b/commonFile1.ts]
 let x = 1
@@ -38,11 +42,11 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Host watch options changed to {"fallbackPolling":1}, it will be take effect for next watches.
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {

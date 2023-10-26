@@ -15,10 +15,34 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/solution/tsconfig.json]
-{"files":[],"references":[{"path":"./api"},{"path":"./app"}]}
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./api"
+    },
+    {
+      "path": "./app"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/api/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"dist","rootDir":"src"},"include":["src"],"references":[{"path":"../shared"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/api/src/server.ts]
 import * as shared from "../../shared/dist";
@@ -26,7 +50,21 @@ const instance = new shared.foo();
 instance.fly();
 
 //// [/user/username/projects/solution/app/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"dist","rootDir":"src"},"include":["src"],"references":[{"path":"../shared"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/app/src/app.ts]
 import * as shared from "../../shared/dist";
@@ -34,7 +72,16 @@ const instance = new shared.foo();
 instance.fly();
 
 //// [/user/username/projects/solution/shared/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"dist","rootDir":"src"},"include":["src"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/user/username/projects/solution/shared/src/index.ts]
 export const foo = class { fly() {} };

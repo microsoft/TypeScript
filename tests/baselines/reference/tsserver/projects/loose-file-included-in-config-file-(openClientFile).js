@@ -5,7 +5,12 @@ Creating project service
 let x =1;
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["f1.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f1.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*

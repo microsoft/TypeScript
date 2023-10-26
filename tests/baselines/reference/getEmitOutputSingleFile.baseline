@@ -1,3 +1,4 @@
+// === EmitOutput ===
 EmitSkipped: false
 
 FileName : outputDir/singleFile.js

@@ -1,6 +1,5 @@
 import {
     BaseNodeFactory,
-    CheckMode,
     CreateSourceFileOptions,
     EmitHelperFactory,
     GetCanonicalFileName,
@@ -376,9 +375,12 @@ export const enum SyntaxKind {
     DefaultClause,
     HeritageClause,
     CatchClause,
-    AssertClause,
-    AssertEntry,
-    ImportTypeAssertionContainer,
+
+    ImportAttributes,
+    ImportAttribute,
+    /** @deprecated */ AssertClause = ImportAttributes,
+    /** @deprecated */ AssertEntry = ImportAttribute,
+    /** @deprecated */ ImportTypeAssertionContainer,
 
     // Property assignments
     PropertyAssignment,
@@ -849,25 +851,45 @@ export const enum NodeFlags {
 // dprint-ignore
 export const enum ModifierFlags {
     None =               0,
-    Export =             1 << 0,  // Declarations
-    Ambient =            1 << 1,  // Declarations
-    Public =             1 << 2,  // Property/Method
-    Private =            1 << 3,  // Property/Method
-    Protected =          1 << 4,  // Property/Method
-    Static =             1 << 5,  // Property/Method
-    Readonly =           1 << 6,  // Property/Method
-    Accessor =           1 << 7,  // Property
-    Abstract =           1 << 8,  // Class/Method/ConstructSignature
-    Async =              1 << 9,  // Property/Method/Function
-    Default =            1 << 10, // Function/Class (export default declaration)
-    Const =              1 << 11, // Const enum
-    HasComputedJSDocModifiers = 1 << 12, // Indicates the computed modifier flags include modifiers from JSDoc.
 
-    Deprecated =         1 << 13, // Deprecated tag.
-    Override =           1 << 14, // Override method.
-    In =                 1 << 15, // Contravariance modifier
-    Out =                1 << 16, // Covariance modifier
-    Decorator =          1 << 17, // Contains a decorator.
+    // Syntactic/JSDoc modifiers
+    Public =             1 << 0,  // Property/Method
+    Private =            1 << 1,  // Property/Method
+    Protected =          1 << 2,  // Property/Method
+    Readonly =           1 << 3,  // Property/Method
+    Override =           1 << 4,  // Override method.
+    
+    // Syntactic-only modifiers
+    Export =             1 << 5,  // Declarations
+    Abstract =           1 << 6,  // Class/Method/ConstructSignature
+    Ambient =            1 << 7,  // Declarations
+    Static =             1 << 8,  // Property/Method
+    Accessor =           1 << 9,  // Property
+    Async =              1 << 10, // Property/Method/Function
+    Default =            1 << 11, // Function/Class (export default declaration)
+    Const =              1 << 12, // Const enum
+    In =                 1 << 13, // Contravariance modifier
+    Out =                1 << 14, // Covariance modifier
+    Decorator =          1 << 15, // Contains a decorator.
+
+    // JSDoc-only modifiers
+    Deprecated =         1 << 16, // Deprecated tag.
+
+    // Cache-only JSDoc-modifiers. Should match order of Syntactic/JSDoc modifiers, above.
+    /** @internal */ JSDocPublic = 1 << 23, // if this value changes, `selectEffectiveModifierFlags` must change accordingly
+    /** @internal */ JSDocPrivate = 1 << 24,
+    /** @internal */ JSDocProtected = 1 << 25,
+    /** @internal */ JSDocReadonly = 1 << 26,
+    /** @internal */ JSDocOverride = 1 << 27,
+
+    /** @internal */ SyntacticOrJSDocModifiers = Public | Private | Protected | Readonly | Override,
+    /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Decorator,
+    /** @internal */ SyntacticModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers,
+    /** @internal */ JSDocCacheOnlyModifiers = JSDocPublic | JSDocPrivate | JSDocProtected | JSDocReadonly | JSDocOverride,
+    /** @internal */ JSDocOnlyModifiers = Deprecated,
+    /** @internal */ NonCacheOnlyModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers | JSDocOnlyModifiers,
+
+    HasComputedJSDocModifiers = 1 << 28, // Indicates the computed modifier flags include modifiers from JSDoc.
     HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
     AccessibilityModifier = Public | Private | Protected,
@@ -1129,6 +1151,8 @@ export type HasChildren =
     | ImportDeclaration
     | AssertClause
     | AssertEntry
+    | ImportAttributes
+    | ImportAttribute
     | ImportClause
     | NamespaceImport
     | NamespaceExport
@@ -1688,7 +1712,7 @@ export interface QualifiedName extends Node, FlowContainer {
 
 export type EntityName = Identifier | QualifiedName;
 
-export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+export type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
 
 export type MemberName = Identifier | PrivateIdentifier;
 
@@ -2141,10 +2165,11 @@ export interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTy
     readonly kind: TKind;
 }
 
+/** @deprecated */
 export interface ImportTypeAssertionContainer extends Node {
     readonly kind: SyntaxKind.ImportTypeAssertionContainer;
     readonly parent: ImportTypeNode;
-    readonly assertClause: AssertClause;
+    /** @deprecated */ readonly assertClause: AssertClause;
     readonly multiLine?: boolean;
 }
 
@@ -2152,7 +2177,8 @@ export interface ImportTypeNode extends NodeWithTypeArguments {
     readonly kind: SyntaxKind.ImportType;
     readonly isTypeOf: boolean;
     readonly argument: TypeNode;
-    readonly assertions?: ImportTypeAssertionContainer;
+    /** @deprecated */ readonly assertions?: ImportTypeAssertionContainer;
+    readonly attributes?: ImportAttributes;
     readonly qualifier?: EntityName;
 }
 
@@ -3047,12 +3073,17 @@ export interface TaggedTemplateExpression extends MemberExpression {
     /** @internal */ questionDotToken?: QuestionDotToken; // NOTE: Invalid syntax, only used to report a grammar error.
 }
 
+export interface InstanceofExpression extends BinaryExpression {
+    readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
+}
+
 export type CallLikeExpression =
     | CallExpression
     | NewExpression
     | TaggedTemplateExpression
     | Decorator
-    | JsxOpeningLikeElement;
+    | JsxOpeningLikeElement
+    | InstanceofExpression;
 
 export interface AsExpression extends Expression {
     readonly kind: SyntaxKind.AsExpression;
@@ -3602,7 +3633,8 @@ export interface ImportDeclaration extends Statement {
     readonly importClause?: ImportClause;
     /** If this is not a StringLiteral it will be a grammar error. */
     readonly moduleSpecifier: Expression;
-    readonly assertClause?: AssertClause;
+    /** @deprecated */ readonly assertClause?: AssertClause;
+    readonly attributes?: ImportAttributes;
 }
 
 export type NamedImportBindings =
@@ -3627,19 +3659,29 @@ export interface ImportClause extends NamedDeclaration {
     readonly namedBindings?: NamedImportBindings;
 }
 
-export type AssertionKey = Identifier | StringLiteral;
+/** @deprecated */
+export type AssertionKey = ImportAttributeName;
 
-export interface AssertEntry extends Node {
-    readonly kind: SyntaxKind.AssertEntry;
-    readonly parent: AssertClause;
-    readonly name: AssertionKey;
+/** @deprecated */
+export type AssertEntry = ImportAttribute;
+
+/** @deprecated */
+export type AssertClause = ImportAttributes;
+
+export type ImportAttributeName = Identifier | StringLiteral;
+
+export interface ImportAttribute extends Node {
+    readonly kind: SyntaxKind.ImportAttribute;
+    readonly parent: ImportAttributes;
+    readonly name: ImportAttributeName;
     readonly value: Expression;
 }
 
-export interface AssertClause extends Node {
-    readonly kind: SyntaxKind.AssertClause;
+export interface ImportAttributes extends Node {
+    readonly token: SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword;
+    readonly kind: SyntaxKind.ImportAttributes;
     readonly parent: ImportDeclaration | ExportDeclaration;
-    readonly elements: NodeArray<AssertEntry>;
+    readonly elements: NodeArray<ImportAttribute>;
     readonly multiLine?: boolean;
 }
 
@@ -3672,7 +3714,8 @@ export interface ExportDeclaration extends DeclarationStatement, JSDocContainer 
     readonly exportClause?: NamedExportBindings;
     /** If this is not a StringLiteral it will be a grammar error. */
     readonly moduleSpecifier?: Expression;
-    readonly assertClause?: AssertClause;
+    /** @deprecated */ readonly assertClause?: AssertClause;
+    readonly attributes?: ImportAttributes;
 }
 
 export interface NamedImports extends Node {
@@ -5010,7 +5053,7 @@ export interface TypeChecker {
      */
     getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
     /** @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
-    /** @internal */ getResolvedSignatureForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node, candidatesOutArray: Signature[], checkMode?: CheckMode): Signature | undefined;
+    /** @internal */ getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node): Signature[];
     /** @internal */ getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
     /** @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
     /** @internal */ containsArgumentsReference(declaration: SignatureDeclaration): boolean;
@@ -5020,7 +5063,7 @@ export interface TypeChecker {
     isUndefinedSymbol(symbol: Symbol): boolean;
     isArgumentsSymbol(symbol: Symbol): boolean;
     isUnknownSymbol(symbol: Symbol): boolean;
-    /** @internal */ getMergedSymbol(symbol: Symbol): Symbol;
+    getMergedSymbol(symbol: Symbol): Symbol;
 
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
@@ -5652,6 +5695,7 @@ export interface EmitResolver {
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
+    tryFindAmbientModule(moduleReferenceExpression: Expression): Symbol | undefined;
 }
 
 // dprint-ignore
@@ -6008,10 +6052,13 @@ export interface NodeLinks {
 }
 
 /** @internal */
+export type TrackedSymbol = [symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags];
+/** @internal */
 export interface SerializedTypeEntry {
     node: TypeNode;
     truncating?: boolean;
     addedLength: number;
+    trackedSymbols: readonly TrackedSymbol[] | undefined;
 }
 
 // dprint-ignore
@@ -6694,7 +6741,6 @@ export interface Signature {
     declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
     typeParameters?: readonly TypeParameter[];   // Type parameters (undefined if non-generic)
     parameters: readonly Symbol[];               // Parameters
-    /** @internal */
     thisParameter?: Symbol;             // symbol of this-type parameter
     /** @internal */
     // See comment in `instantiateSignature` for why these are set lazily.
@@ -8420,8 +8466,8 @@ export interface NodeFactory {
     updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
     createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
     updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
-    createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
-    updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
+    createImportTypeNode(argument: TypeNode, attributes?: ImportAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+    updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, attributes: ImportAttributes | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
     createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
     updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
     createThisTypeNode(): ThisTypeNode;
@@ -8601,16 +8647,21 @@ export interface NodeFactory {
     updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
     createImportEqualsDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
     updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-    createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
-    updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+    createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes): ImportDeclaration;
+    updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined): ImportDeclaration;
     createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
     updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
-    createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
-    updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
-    createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
-    updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
-    createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
-    updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+    /** @deprecated */ createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
+    /** @deprecated */ updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
+    /** @deprecated */ createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
+    /** @deprecated */ updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
+    /** @deprecated */ createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+    /** @deprecated */ updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+    createImportAttributes(elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
+    /** @internal */ createImportAttributes(elements: NodeArray<ImportAttribute>, multiLine?: boolean, token?: ImportAttributes["token"]): ImportAttributes;
+    updateImportAttributes(node: ImportAttributes, elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
+    createImportAttribute(name: ImportAttributeName, value: Expression): ImportAttribute;
+    updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute;
     createNamespaceImport(name: Identifier): NamespaceImport;
     updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
     createNamespaceExport(name: Identifier): NamespaceExport;
@@ -8621,8 +8672,8 @@ export interface NodeFactory {
     updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
     createExportAssignment(modifiers: readonly ModifierLike[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
     updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment;
-    createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
-    updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
+    createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, attributes?: ImportAttributes): ExportDeclaration;
+    updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, attributes: ImportAttributes | undefined): ExportDeclaration;
     createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
     updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
     createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
@@ -9044,8 +9095,18 @@ export interface NodeFactory {
      * @internal
      */
     cloneNode<T extends Node | undefined>(node: T): T;
-    /** @internal */ updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
-    /** @internal */ updateModifierLike<T extends HasModifiers & HasDecorators>(node: T, modifierLike: readonly ModifierLike[] | undefined): T;
+    /**
+     * Updates a node that may contain modifiers, replacing only the modifiers of the node.
+     */
+    replaceModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
+    /**
+     * Updates a node that may contain decorators or modifiers, replacing only the decorators and modifiers of the node.
+     */
+    replaceDecoratorsAndModifiers<T extends HasModifiers & HasDecorators>(node: T, modifiers: readonly ModifierLike[] | undefined): T;
+    /**
+     * Updates a node that contains a property name, replacing only the name of the node.
+     */
+    replacePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
 }
 
 /** @internal */
@@ -9477,6 +9538,7 @@ export interface PrinterOptions {
     /** @internal */ sourceMap?: boolean;
     /** @internal */ inlineSourceMap?: boolean;
     /** @internal */ inlineSources?: boolean;
+    /** @internal*/ omitBraceSourceMapPositions?: boolean;
     /** @internal */ extendedDiagnostics?: boolean;
     /** @internal */ onlyPrintJsDocStyle?: boolean;
     /** @internal */ neverAsciiEscape?: boolean;
@@ -9658,7 +9720,6 @@ export interface SymbolTracker {
     trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     reportNonSerializableProperty?(propertyName: string): void;
-    reportImportTypeNodeResolutionModeOverride?(): void;
 }
 
 export interface TextSpan {
@@ -9751,7 +9812,8 @@ export const enum ListFormat {
     ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,
     ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,
     ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces | NoSpaceIfEmpty,
-    ImportClauseEntries = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces | NoSpaceIfEmpty,
+    ImportAttributes = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces | NoSpaceIfEmpty,
+    /** @deprecated */ ImportClauseEntries = ImportAttributes,
     ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
     CommaListElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
     CallExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
@@ -9985,6 +10047,7 @@ export interface UserPreferences {
     readonly interactiveInlayHints?: boolean;
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
+    readonly preferTypeOnlyAutoImports?: boolean;
     readonly organizeImportsIgnoreCase?: "auto" | boolean;
     readonly organizeImportsCollation?: "ordinal" | "unicode";
     readonly organizeImportsLocale?: string;

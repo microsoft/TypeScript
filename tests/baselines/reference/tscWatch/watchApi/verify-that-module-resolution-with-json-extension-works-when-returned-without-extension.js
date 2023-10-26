@@ -17,10 +17,20 @@ interface Array<T> { length: number; [n: number]: T; }
 import settings from './settings.json';
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","resolveJsonModule":true},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "resolveJsonModule": true
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/settings.json]
-{"content":"Print this"}
+{
+  "content": "Print this"
+}
 
 
 /a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
@@ -34,7 +44,7 @@ Output::
 [7m [0m [91m       ~~~~~~~~[0m
 
   [96msettings.json[0m:[93m1[0m:[93m1[0m
-    [7m1[0m {"content":"Print this"}
+    [7m1[0m {
     [7m [0m [96m~[0m
     This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
 
@@ -42,8 +52,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/index.ts"]
-Program options: {"module":1,"resolveJsonModule":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "module": 1,
+  "resolveJsonModule": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

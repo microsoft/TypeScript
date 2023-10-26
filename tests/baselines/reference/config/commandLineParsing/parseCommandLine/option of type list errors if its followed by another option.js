@@ -1,7 +1,7 @@
 0.ts --strictNullChecks --rootDirs
 CompilerOptions::
 {
- "strictNullChecks": true
+  "strictNullChecks": true
 }
 WatchOptions::
 

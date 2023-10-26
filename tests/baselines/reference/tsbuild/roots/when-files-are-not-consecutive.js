@@ -27,7 +27,14 @@ export const y = "world";
 export const random = "world";
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"composite":true},"include":["file*.ts"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "file*.ts"
+  ]
+}
 
 
 

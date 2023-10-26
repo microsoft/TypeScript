@@ -1,14 +1,19 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     dedent,
 } from "../../_namespaces/Utils";
+import {
+    jsonToReadableText,
+} from "../helpers";
 import {
     commonFile1,
 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
     logInferredProjectsOrphanStatus,
@@ -278,7 +283,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         const inferredProject = projectService.inferredProjects[0];
         projectService.logger.log(`typeAcquisition : setting to undefined`);
         inferredProject.setTypeAcquisition(undefined);
-        projectService.logger.log(`typeAcquisition should be inferred for inferred projects: ${JSON.stringify(inferredProject.getTypeAcquisition(), undefined, " ")}`);
+        projectService.logger.log(`typeAcquisition should be inferred for inferred projects: ${jsonToReadableText(inferredProject.getTypeAcquisition())}`);
         baselineTsserverLogs("inferredProjects", "regression test - should infer typeAcquisition for inferred projects when set undefined", projectService);
     });
 
@@ -308,7 +313,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             "/user/username/projects/myproject/module2.d.ts": dedent`
                 export const y = 10;
             `,
-            "/user/username/projects/myproject/node_modules/module3/package.json": JSON.stringify({
+            "/user/username/projects/myproject/node_modules/module3/package.json": jsonToReadableText({
                 name: "module3",
                 version: "1.0.0",
             }),

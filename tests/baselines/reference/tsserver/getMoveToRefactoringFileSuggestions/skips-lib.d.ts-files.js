@@ -14,7 +14,14 @@ class C {}
 
 
 //// [/tsconfig.json]
-{"files":["./file1.d.ts","./a/lib.d.ts","./a/file3.d.ts","/a/lib.es6.d.ts"]}
+{
+  "files": [
+    "./file1.d.ts",
+    "./a/lib.d.ts",
+    "./a/file3.d.ts",
+    "/a/lib.es6.d.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
