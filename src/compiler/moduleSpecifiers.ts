@@ -315,6 +315,7 @@ export function getModuleSpecifiers(
         host,
         userPreferences,
         options,
+        /*forAutoImport*/ false,
     ).moduleSpecifiers;
 }
 
@@ -327,6 +328,7 @@ export function getModuleSpecifiersWithCacheInfo(
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
+    forAutoImport: boolean,
 ): { moduleSpecifiers: readonly string[]; computedWithoutCache: boolean; } {
     let computedWithoutCache = false;
     const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol, checker);
@@ -345,7 +347,15 @@ export function getModuleSpecifiersWithCacheInfo(
 
     computedWithoutCache = true;
     modulePaths ||= getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
-    const result = computeModuleSpecifiers(modulePaths, compilerOptions, importingSourceFile, host, userPreferences, options);
+    const result = computeModuleSpecifiers(
+        modulePaths,
+        compilerOptions,
+        importingSourceFile,
+        host,
+        userPreferences,
+        options,
+        forAutoImport,
+    );
     cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, options, modulePaths, result);
     return { moduleSpecifiers: result, computedWithoutCache };
 }
@@ -357,6 +367,7 @@ function computeModuleSpecifiers(
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
+    forAutoImport: boolean,
 ): readonly string[] {
     const info = getInfo(importingSourceFile.path, host);
     const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
@@ -421,7 +432,7 @@ function computeModuleSpecifiers(
             else if (pathIsBareSpecifier(local)) {
                 pathsSpecifiers = append(pathsSpecifiers, local);
             }
-            else if (!importedFileIsInNodeModules || modulePath.isInNodeModules) {
+            else if (forAutoImport || !importedFileIsInNodeModules || modulePath.isInNodeModules) {
                 // Why this extra conditional, not just an `else`? If some path to the file contained
                 // 'node_modules', but we can't create a non-relative specifier (e.g. "@foo/bar/path/to/file"),
                 // that means we had to go through a *sibling's* node_modules, not one we can access directly.

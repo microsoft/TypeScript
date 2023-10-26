@@ -1,7 +1,19 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/project/tsconfig.json]
-{"compilerOptions":{"types":[]},"files":["app.ts"],"references":[{"path":"./lib"}]}
+{
+  "compilerOptions": {
+    "types": []
+  },
+  "files": [
+    "app.ts"
+  ],
+  "references": [
+    {
+      "path": "./lib"
+    }
+  ]
+}
 
 //// [/user/username/projects/project/app.ts]
 import { one } from './lib';
@@ -9,10 +21,20 @@ console.log(one);
 
 
 //// [/user/username/projects/project/lib/tsconfig.json]
-{"extends":"./tsconfig.base.json","files":["index.ts"]}
+{
+  "extends": "./tsconfig.base.json",
+  "files": [
+    "index.ts"
+  ]
+}
 
 //// [/user/username/projects/project/lib/tsconfig.base.json]
-{"compilerOptions":{"composite":true,"types":[]}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "types": []
+  }
+}
 
 //// [/user/username/projects/project/lib/index.ts]
 export const one = 1;
@@ -60,8 +82,14 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/project/
 
 
 
-Program root files: ["/user/username/projects/project/app.ts"]
-Program options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/project/app.ts"
+]
+Program options: {
+  "types": [],
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -108,7 +136,15 @@ Change:: Modify lib tsconfig
 
 Input::
 //// [/user/username/projects/project/lib/tsconfig.json]
-{"extends":"./tsconfig.base.json","compilerOptions":{"typeRoots":[]},"files":["index.ts"]}
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "typeRoots": []
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -130,8 +166,14 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/user/username/projects/project/app.ts"]
-Program options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/project/app.ts"
+]
+Program options: {
+  "types": [],
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -149,7 +191,11 @@ Change:: Modify lib extends
 
 Input::
 //// [/user/username/projects/project/lib/tsconfig.base.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -171,8 +217,14 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/user/username/projects/project/app.ts"]
-Program options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/project/app.ts"
+]
+Program options: {
+  "types": [],
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

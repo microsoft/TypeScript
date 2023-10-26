@@ -21,7 +21,17 @@ declare class Promise<T> {}
 var x: Promise<string>;
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5"]}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "lib": [
+      "es5"
+    ]
+  }
+}
 
 
 /compiler/tsc.js -w -p /src/tsconfig.json
@@ -38,8 +48,21 @@ Output::
 
 
 
-Program root files: ["/src/app.ts"]
-Program options: {"module":1,"target":1,"noImplicitAny":true,"sourceMap":false,"lib":["lib.es5.d.ts"],"watch":true,"project":"/src/tsconfig.json","configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/app.ts"
+]
+Program options: {
+  "module": 1,
+  "target": 1,
+  "noImplicitAny": true,
+  "sourceMap": false,
+  "lib": [
+    "lib.es5.d.ts"
+  ],
+  "watch": true,
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /compiler/lib.es5.d.ts
@@ -76,7 +99,18 @@ Change:: Change the lib in config
 
 Input::
 //// [/src/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5","es2015.promise"]}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "lib": [
+      "es5",
+      "es2015.promise"
+    ]
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -90,8 +124,22 @@ Output::
 
 
 
-Program root files: ["/src/app.ts"]
-Program options: {"module":1,"target":1,"noImplicitAny":true,"sourceMap":false,"lib":["lib.es5.d.ts","lib.es2015.promise.d.ts"],"watch":true,"project":"/src/tsconfig.json","configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/app.ts"
+]
+Program options: {
+  "module": 1,
+  "target": 1,
+  "noImplicitAny": true,
+  "sourceMap": false,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.es2015.promise.d.ts"
+  ],
+  "watch": true,
+  "project": "/src/tsconfig.json",
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /compiler/lib.es5.d.ts

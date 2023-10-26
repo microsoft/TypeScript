@@ -14,7 +14,12 @@ let z = 1;
 let z = 1;
 
 //// [/a/b/tsconfig.json]
-{"files":["src/file1.ts","file3.ts"]}
+{
+  "files": [
+    "src/file1.ts",
+    "file3.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /a/b/src

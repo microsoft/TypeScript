@@ -8,7 +8,13 @@ declare const x: string;
 var y = 1;
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"experimentalDecorators":true,"emitDecoratorMetadata":true},"compileOnSave":true}
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "compileOnSave": true
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

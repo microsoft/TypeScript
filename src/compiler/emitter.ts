@@ -1182,6 +1182,7 @@ export const notImplementedResolver: EmitResolver = {
     isBindingCapturedByNode: notImplemented,
     getDeclarationStatementsForSourceFile: notImplemented,
     isImportRequiredByAugmentation: notImplemented,
+    tryFindAmbientModule: notImplemented,
 };
 
 /**

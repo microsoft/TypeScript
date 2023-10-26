@@ -20,29 +20,29 @@ export { };
 
 //// [/primary/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": [
-  {
-   "path": "../foo"
-  }
- ]
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": [
+    {
+      "path": "../foo"
+    }
+  ]
 }
 
 
 
 Output::
 /lib/tsc --p /primary/tsconfig.json
-[96mprimary/tsconfig.json[0m:[93m7[0m:[93m3[0m - [91merror[0m[90m TS6053: [0mFile '/foo' not found.
+[96mprimary/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/foo' not found.
 
-[7m7[0m   {
-[7m [0m [91m  ~[0m
-[7m8[0m    "path": "../foo"
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~[0m
-[7m9[0m   }
-[7m [0m [91m~~~[0m
+[7m7[0m     {
+[7m [0m [91m    ~[0m
+[7m8[0m       "path": "../foo"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m9[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error in primary/tsconfig.json[90m:7[0m

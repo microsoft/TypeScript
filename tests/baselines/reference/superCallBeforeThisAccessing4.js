@@ -38,8 +38,7 @@ var D = /** @class */ (function (_super) {
     function D() {
         var _this = this;
         _this._t;
-        _this = _super.call(this) || this;
-        return _this;
+        return _this = _super.call(this) || this;
     }
     return D;
 }(null));

@@ -17,7 +17,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/tsconfig.json]
-{"include":["app.ts"]}
+{
+  "include": [
+    "app.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p /A/B/tsconfig.json
@@ -29,8 +33,14 @@ Output::
 
 
 
-Program root files: ["/A/B/app.ts"]
-Program options: {"watch":true,"project":"/A/B/tsconfig.json","configFilePath":"/A/B/tsconfig.json"}
+Program root files: [
+  "/A/B/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/A/B/tsconfig.json",
+  "configFilePath": "/A/B/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

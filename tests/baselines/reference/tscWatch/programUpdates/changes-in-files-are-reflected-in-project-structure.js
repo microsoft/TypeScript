@@ -38,8 +38,13 @@ a/b/f1.ts
 
 
 
-Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"explainFiles":true}
+Program root files: [
+  "/a/b/f1.ts"
+]
+Program options: {
+  "watch": true,
+  "explainFiles": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -120,8 +125,13 @@ a/b/f1.ts
 
 
 
-Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"explainFiles":true}
+Program root files: [
+  "/a/b/f1.ts"
+]
+Program options: {
+  "watch": true,
+  "explainFiles": true
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

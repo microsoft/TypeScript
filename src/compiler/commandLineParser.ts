@@ -1249,7 +1249,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsDeclarationPath: true,
-        isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
+        isFilePath: false, // This is intentionally broken to support compatibility with existing tsconfig files
         // for correct behaviour, please use outFile
         category: Diagnostics.Backwards_Compatibility,
         paramType: Diagnostics.FILE,
@@ -2384,7 +2384,7 @@ export function convertToJson(
                 // Currently having element option declaration in the tsconfig with type "object"
                 // determines if it needs onSetValidOptionKeyValueInParent callback or not
                 // At moment there are only "compilerOptions", "typeAcquisition" and "typingOptions"
-                // that satifies it and need it to modify options set in them (for normalizing file paths)
+                // that satisfies it and need it to modify options set in them (for normalizing file paths)
                 // vs what we set in the json
                 // If need arises, we can modify this interface and callbacks as needed
                 return convertObjectLiteralExpressionToJson(objectLiteralExpression, option as TsConfigOnlyOption);

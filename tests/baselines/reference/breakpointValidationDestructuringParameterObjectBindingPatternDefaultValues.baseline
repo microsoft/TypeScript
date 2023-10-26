@@ -1,0 +1,165 @@
+// === breakpoints ===
+
+1  >interface Robot {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (0 to 17)  SpanInfo: undefined
+--------------------------------
+2  >    name?: string;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (18 to 36)  SpanInfo: undefined
+--------------------------------
+3  >    skill?: string;
+
+    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (37 to 56)  SpanInfo: undefined
+--------------------------------
+4  >}
+
+    ~~                                            => Pos: (57 to 58)  SpanInfo: undefined
+--------------------------------
+5  >declare var console: {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (59 to 81)  SpanInfo: undefined
+--------------------------------
+6  >    log(msg: string): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (82 to 109)  SpanInfo: undefined
+--------------------------------
+7  >}
+
+    ~~                                            => Pos: (110 to 111)  SpanInfo: undefined
+--------------------------------
+8  >var hello = "hello";
+
+    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (112 to 132)  SpanInfo: {"start":112,"length":19}
+    >var hello = "hello"
+    >:=> (line 8, col 0) to (line 8, col 19)
+--------------------------------
+9  >var robotA: Robot = { name: "mower", skill: "mowing" };
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (133 to 188)  SpanInfo: {"start":133,"length":54}
+    >var robotA: Robot = { name: "mower", skill: "mowing" }
+    >:=> (line 9, col 0) to (line 9, col 54)
+--------------------------------
+10 >function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (189 to 202)  SpanInfo: {"start":252,"length":18}
+    >console.log(nameA)
+    >:=> (line 11, col 4) to (line 11, col 22)
+10 >function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (203 to 244)  SpanInfo: {"start":205,"length":24}
+    >name: nameA = "<NoName>"
+    >:=> (line 10, col 16) to (line 10, col 40)
+10 >function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
+
+                                                            ~~~=> Pos: (245 to 247)  SpanInfo: {"start":252,"length":18}
+    >console.log(nameA)
+    >:=> (line 11, col 4) to (line 11, col 22)
+--------------------------------
+11 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (248 to 271)  SpanInfo: {"start":252,"length":18}
+    >console.log(nameA)
+    >:=> (line 11, col 4) to (line 11, col 22)
+--------------------------------
+12 >}
+
+    ~~                                            => Pos: (272 to 273)  SpanInfo: {"start":272,"length":1}
+    >}
+    >:=> (line 12, col 0) to (line 12, col 1)
+--------------------------------
+13 >function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (274 to 287)  SpanInfo: {"start":363,"length":18}
+    >console.log(nameB)
+    >:=> (line 14, col 4) to (line 14, col 22)
+13 >function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}) {
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (288 to 314)  SpanInfo: {"start":290,"length":24}
+    >name: nameB = "<NoName>"
+    >:=> (line 13, col 16) to (line 13, col 40)
+13 >function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}) {
+
+                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (315 to 355)  SpanInfo: {"start":316,"length":25}
+    >skill: skillB = "noSkill"
+    >:=> (line 13, col 42) to (line 13, col 67)
+13 >function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}) {
+
+                                                                                      ~~~=> Pos: (356 to 358)  SpanInfo: {"start":363,"length":18}
+    >console.log(nameB)
+    >:=> (line 14, col 4) to (line 14, col 22)
+--------------------------------
+14 >    console.log(nameB);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (359 to 382)  SpanInfo: {"start":363,"length":18}
+    >console.log(nameB)
+    >:=> (line 14, col 4) to (line 14, col 22)
+--------------------------------
+15 >}
+
+    ~~                                            => Pos: (383 to 384)  SpanInfo: {"start":383,"length":1}
+    >}
+    >:=> (line 15, col 0) to (line 15, col 1)
+--------------------------------
+16 >function foo3({ name = "<NoName>" }: Robot = {}) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (385 to 398)  SpanInfo: {"start":440,"length":17}
+    >console.log(name)
+    >:=> (line 17, col 4) to (line 17, col 21)
+16 >function foo3({ name = "<NoName>" }: Robot = {}) {
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (399 to 432)  SpanInfo: {"start":401,"length":17}
+    >name = "<NoName>"
+    >:=> (line 16, col 16) to (line 16, col 33)
+16 >function foo3({ name = "<NoName>" }: Robot = {}) {
+
+                                                    ~~~=> Pos: (433 to 435)  SpanInfo: {"start":440,"length":17}
+    >console.log(name)
+    >:=> (line 17, col 4) to (line 17, col 21)
+--------------------------------
+17 >    console.log(name);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (436 to 458)  SpanInfo: {"start":440,"length":17}
+    >console.log(name)
+    >:=> (line 17, col 4) to (line 17, col 21)
+--------------------------------
+18 >}
+
+    ~~                                            => Pos: (459 to 460)  SpanInfo: {"start":459,"length":1}
+    >}
+    >:=> (line 18, col 0) to (line 18, col 1)
+--------------------------------
+19 >foo1(robotA);
+
+    ~~~~~~~~~~~~~~                                => Pos: (461 to 474)  SpanInfo: {"start":461,"length":12}
+    >foo1(robotA)
+    >:=> (line 19, col 0) to (line 19, col 12)
+--------------------------------
+20 >foo1({ name: "Edger", skill: "cutting edges" });
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (475 to 523)  SpanInfo: {"start":475,"length":47}
+    >foo1({ name: "Edger", skill: "cutting edges" })
+    >:=> (line 20, col 0) to (line 20, col 47)
+--------------------------------
+21 >foo2(robotA);
+
+    ~~~~~~~~~~~~~~                                => Pos: (524 to 537)  SpanInfo: {"start":524,"length":12}
+    >foo2(robotA)
+    >:=> (line 21, col 0) to (line 21, col 12)
+--------------------------------
+22 >foo2({ name: "Edger", skill: "cutting edges" });
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (538 to 586)  SpanInfo: {"start":538,"length":47}
+    >foo2({ name: "Edger", skill: "cutting edges" })
+    >:=> (line 22, col 0) to (line 22, col 47)
+--------------------------------
+23 >foo3(robotA);
+
+    ~~~~~~~~~~~~~~                                => Pos: (587 to 600)  SpanInfo: {"start":587,"length":12}
+    >foo3(robotA)
+    >:=> (line 23, col 0) to (line 23, col 12)
+--------------------------------
+24 >foo3({ name: "Edger", skill: "cutting edges" });
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (601 to 648)  SpanInfo: {"start":601,"length":47}
+    >foo3({ name: "Edger", skill: "cutting edges" })
+    >:=> (line 24, col 0) to (line 24, col 47)

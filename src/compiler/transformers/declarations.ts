@@ -212,6 +212,7 @@ import {
     TransformationContext,
     transformNodes,
     tryCast,
+    tryGetModuleSpecifierFromDeclaration,
     TypeAliasDeclaration,
     TypeNode,
     TypeParameterDeclaration,
@@ -343,6 +344,18 @@ export function transformDeclarations(context: TransformationContext) {
         // Otherwise we should emit a path-based reference
         const container = getSourceFileOfNode(node);
         refs.set(getOriginalNodeId(container), container);
+    }
+
+    function trackReferencedAmbientModuleFromImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportTypeNode) {
+        const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(node);
+        const symbol = moduleSpecifier && resolver.tryFindAmbientModule(moduleSpecifier);
+        if (symbol?.declarations) {
+            for (const decl of symbol.declarations) {
+                if (isAmbientModule(decl) && getSourceFileOfNode(decl) !== currentSourceFile) {
+                    trackReferencedAmbientModule(decl, symbol);
+                }
+            }
+        }
     }
 
     function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -1312,6 +1325,7 @@ export function transformDeclarations(context: TransformationContext) {
                 }
                 case SyntaxKind.ImportType: {
                     if (!isLiteralImportTypeNode(input)) return cleanup(input);
+                    trackReferencedAmbientModuleFromImport(input);
                     return cleanup(factory.updateImportTypeNode(
                         input,
                         factory.updateLiteralTypeNode(input.argument, rewriteModuleSpecifier(input, input.argument.literal)),
@@ -1370,6 +1384,7 @@ export function transformDeclarations(context: TransformationContext) {
                 }
                 resultHasScopeMarker = true;
                 // Always visible if the parent node isn't dropped for being not visible
+                trackReferencedAmbientModuleFromImport(input);
                 // Rewrite external module names if necessary
                 return factory.updateExportDeclaration(
                     input,
@@ -1421,7 +1436,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
 
         const modifiers = factory.createModifiersFromModifierFlags(getEffectiveModifierFlags(statement) & (ModifierFlags.All ^ ModifierFlags.Export));
-        return factory.updateModifiers(statement, modifiers);
+        return factory.replaceModifiers(statement, modifiers);
     }
 
     function updateModuleDeclarationAndKeyword(
@@ -1456,10 +1471,18 @@ export function transformDeclarations(context: TransformationContext) {
         if (shouldStripInternal(input)) return;
         switch (input.kind) {
             case SyntaxKind.ImportEqualsDeclaration: {
-                return transformImportEqualsDeclaration(input);
+                const transformed = transformImportEqualsDeclaration(input);
+                if (transformed) {
+                    trackReferencedAmbientModuleFromImport(input);
+                }
+                return transformed;
             }
             case SyntaxKind.ImportDeclaration: {
-                return transformImportDeclaration(input);
+                const transformed = transformImportDeclaration(input);
+                if (transformed) {
+                    trackReferencedAmbientModuleFromImport(input);
+                }
+                return transformed;
             }
         }
         if (isDeclaration(input) && isDeclarationAndNotVisible(input)) return;
@@ -1543,7 +1566,7 @@ export function transformDeclarations(context: TransformationContext) {
                         return factory.createVariableStatement(isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)], factory.createVariableDeclarationList([varDecl]));
                     });
                     if (!exportMappings.length) {
-                        declarations = mapDefined(declarations, declaration => factory.updateModifiers(declaration, ModifierFlags.None));
+                        declarations = mapDefined(declarations, declaration => factory.replaceModifiers(declaration, ModifierFlags.None));
                     }
                     else {
                         declarations.push(factory.createExportDeclaration(

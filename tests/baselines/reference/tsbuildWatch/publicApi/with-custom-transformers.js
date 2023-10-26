@@ -14,10 +14,24 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"references":[{"path":"./shared/tsconfig.json"},{"path":"./webpack/tsconfig.json"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./shared/tsconfig.json"
+    },
+    {
+      "path": "./webpack/tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 //// [/user/username/projects/myproject/shared/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/user/username/projects/myproject/shared/index.ts]
 export function f1() { }
@@ -27,7 +41,16 @@ export enum e { }
 export function f2() { } // trailing
 
 //// [/user/username/projects/myproject/webpack/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../shared/tsconfig.json"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../shared/tsconfig.json"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/webpack/index.ts]
 export function f2() { }
@@ -56,8 +79,13 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/shared/index.ts"]
-Program options: {"composite":true,"configFilePath":"/user/username/projects/myproject/shared/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/shared/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/user/username/projects/myproject/shared/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -71,8 +99,13 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/shared/index.ts (used version)
 
-Program root files: ["/user/username/projects/myproject/webpack/index.ts"]
-Program options: {"composite":true,"configFilePath":"/user/username/projects/myproject/webpack/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/webpack/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/user/username/projects/myproject/webpack/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -313,8 +346,13 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/shared/index.ts"]
-Program options: {"composite":true,"configFilePath":"/user/username/projects/myproject/shared/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/shared/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/user/username/projects/myproject/shared/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -326,8 +364,13 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/shared/index.ts (computed .d.ts)
 
-Program root files: ["/user/username/projects/myproject/webpack/index.ts"]
-Program options: {"composite":true,"configFilePath":"/user/username/projects/myproject/webpack/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/webpack/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/user/username/projects/myproject/webpack/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

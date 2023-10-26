@@ -37,12 +37,9 @@ const fooExport = {
     ranges: exportFooRanges
 };
 
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['full0', 'full1', 'full2', 'foo0', 'foo1', 'foo2', 'foo3', 'foo4'] },
-    { type: "findRenameLocations", markerOrRange: fullRanges },
-    { type: "findRenameLocations", markerOrRange: foo0 },
-    { type: "findRenameLocations", markerOrRange: [foo1, foo4] },
-    { type: "findRenameLocations", markerOrRange: fooAppRanges },
-    { type: "findRenameLocations", markerOrRange: [foo2, foo3, foo4, foo0, foo1], options: { providePrefixAndSuffixTextForRename: false } },
-);
-
+verify.baselineFindAllReferences('full0', 'full1', 'full2', 'foo0', 'foo1', 'foo2', 'foo3', 'foo4');
+verify.baselineRename(fullRanges);
+verify.baselineRename(foo0);
+verify.baselineRename([foo1, foo4]);
+verify.baselineRename(fooAppRanges);
+verify.baselineRename([foo2, foo3, foo4, foo0, foo1], { providePrefixAndSuffixTextForRename: false });

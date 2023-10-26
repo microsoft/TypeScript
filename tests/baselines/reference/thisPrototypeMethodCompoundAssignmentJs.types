@@ -1,0 +1,46 @@
+//// [tests/cases/conformance/jsdoc/thisPrototypeMethodCompoundAssignmentJs.ts] ////
+
+=== index.js ===
+Element.prototype.remove ??= function () {
+>Element.prototype.remove ??= function () {  this.parentNode?.removeChild(this);} : () => void
+>Element.prototype.remove : () => void
+>Element.prototype : Element
+>Element : { new (): Element; prototype: Element; }
+>prototype : Element
+>remove : () => void
+>function () {  this.parentNode?.removeChild(this);} : () => void
+
+  this.parentNode?.removeChild(this);
+>this.parentNode?.removeChild(this) : Element | undefined
+>this.parentNode?.removeChild : (<T extends Node>(child: T) => T) | undefined
+>this.parentNode : ParentNode | null
+>this : Element
+>parentNode : ParentNode | null
+>removeChild : (<T extends Node>(child: T) => T) | undefined
+>this : Element
+
+};
+
+/**
+ * @this Node
+ */
+Element.prototype.remove ??= function () {
+>Element.prototype.remove ??= function () {  this.parentNode?.removeChild(this);} : () => void
+>Element.prototype.remove : () => void
+>Element.prototype : Element
+>Element : { new (): Element; prototype: Element; }
+>prototype : Element
+>remove : () => void
+>function () {  this.parentNode?.removeChild(this);} : (this: Node) => void
+
+  this.parentNode?.removeChild(this);
+>this.parentNode?.removeChild(this) : Node | undefined
+>this.parentNode?.removeChild : (<T extends Node>(child: T) => T) | undefined
+>this.parentNode : ParentNode | null
+>this : Node
+>parentNode : ParentNode | null
+>removeChild : (<T extends Node>(child: T) => T) | undefined
+>this : Node
+
+};
+

@@ -17,7 +17,7 @@ declare const console: { log(msg: any): void; };
 
 //// [/src/src/hello.json]
 {
- "hello": "world"
+  "hello": "world"
 }
 
 //// [/src/src/index.ts]
@@ -27,17 +27,17 @@ export default hello.hello
 
 //// [/src/tsconfig.json]
 {
- "compilerOptions": {
-  "moduleResolution": "node",
-  "module": "commonjs",
-  "resolveJsonModule": true,
-  "esModuleInterop": true,
-  "allowSyntheticDefaultImports": true,
-  "skipDefaultLibCheck": true
- },
- "include": [
-  "src/**/*"
- ]
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/**/*"
+  ]
 }
 
 
