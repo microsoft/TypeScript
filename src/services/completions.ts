@@ -3678,11 +3678,8 @@ function getCompletionData(
         }
 
         const computedPropertyNameExpression = computedPropertyName.expression;
-        const name = isEntityName(computedPropertyNameExpression)
-            ? computedPropertyNameExpression
-            : isPropertyAccessExpression(computedPropertyNameExpression)
-            ? computedPropertyNameExpression.name
-            : undefined;
+        const name = isEntityName(computedPropertyNameExpression) ? computedPropertyNameExpression :
+            isPropertyAccessExpression(computedPropertyNameExpression) ? computedPropertyNameExpression.name : undefined;
         const nameSymbol = name && typeChecker.getSymbolAtLocation(name);
         const nameSymbolId = nameSymbol && getSymbolId(nameSymbol);
         if (!nameSymbolId) { // Not a property access or entity name
