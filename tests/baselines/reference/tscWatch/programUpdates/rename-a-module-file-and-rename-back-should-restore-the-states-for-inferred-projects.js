@@ -29,8 +29,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/file1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -101,8 +105,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/file1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -155,8 +163,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/file1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

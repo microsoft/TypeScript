@@ -7,7 +7,11 @@ export const aNumber: number = "string"
 import { aNumber } from "./a.js";
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"checkJs":false}}
+{
+  "compilerOptions": {
+    "checkJs": false
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -51,8 +55,16 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/b.ts"]
-Program options: {"checkJs":false,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "checkJs": false,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -100,7 +112,11 @@ Change:: Change checkJs to true
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"checkJs":true}}
+{
+  "compilerOptions": {
+    "checkJs": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -127,8 +143,17 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 250 unde
 
 
 
-Program root files: ["/user/username/projects/myproject/a.js","/user/username/projects/myproject/b.ts"]
-Program options: {"checkJs":true,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.js",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "checkJs": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

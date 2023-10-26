@@ -8,7 +8,11 @@ Before request
 var hello = "hello";
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"allowJs":true}}
+{
+  "compilerOptions": {
+    "allowJs": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -156,7 +160,11 @@ Before request
 var hello = "hello";
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"allowJs":false}}
+{
+  "compilerOptions": {
+    "allowJs": false
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -443,7 +451,15 @@ Before request
 var hello = "hello";
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"allowJs":true},"files":["/a/b/f1.ts","/a/b/f2.html"]}
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "files": [
+    "/a/b/f1.ts",
+    "/a/b/f2.html"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -585,7 +601,14 @@ Before request
 var hello = "hello";
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"allowJs":true},"exclude":["/a/b/f2.html"]}
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "exclude": [
+    "/a/b/f2.html"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

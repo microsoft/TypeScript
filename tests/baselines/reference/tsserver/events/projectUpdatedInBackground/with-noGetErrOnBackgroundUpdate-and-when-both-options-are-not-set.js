@@ -5,7 +5,9 @@ Before request
 export let x = 1
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

@@ -229,7 +229,11 @@ Before running Timeout callback:: count: 2
 1: /a/jsconfig.json
 2: *ensureProjectForOpenFiles*
 //// [/a/jsconfig.json]
-{"exclude":["largefile.js"]}
+{
+  "exclude": [
+    "largefile.js"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /a/jsconfig.json
@@ -331,7 +335,7 @@ TI:: typing installer creation complete
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 

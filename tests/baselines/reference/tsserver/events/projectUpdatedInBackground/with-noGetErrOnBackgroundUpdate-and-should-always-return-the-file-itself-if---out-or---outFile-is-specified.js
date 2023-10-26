@@ -5,7 +5,12 @@ Before request
 import {Foo} from "./moduleFile1"; export var y = 10;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"module":"system","outFile":"/users/username/projects/project/out.js"}}
+{
+  "compilerOptions": {
+    "module": "system",
+    "outFile": "/users/username/projects/project/out.js"
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

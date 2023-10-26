@@ -22,7 +22,9 @@ typedefs: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
@@ -51,7 +53,9 @@ typedefs: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
@@ -63,7 +67,9 @@ File: /a.ts
 var x = 2
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
@@ -107,7 +113,9 @@ typedefs2: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 /a.ts(2,39): error TS2688: Cannot find type definition file for 'typedefs2'.
 

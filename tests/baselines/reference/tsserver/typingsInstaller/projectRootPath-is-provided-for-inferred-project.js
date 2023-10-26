@@ -5,19 +5,31 @@ Creating project service
 const aaaaaaav = 1;
 
 //// [/user/username/projects/anotherProject/package.json]
-{"devDependencies":{"pkgcurrentdirectory":""}}
+{
+  "devDependencies": {
+    "pkgcurrentdirectory": ""
+  }
+}
 
 //// [/user/username/projects/anotherProject/node_modules/pkgcurrentdirectory/package.json]
-{"name":"pkgcurrentdirectory","main":"index.js","typings":"index.d.ts"}
+{
+  "name": "pkgcurrentdirectory",
+  "main": "index.js",
+  "typings": "index.d.ts"
+}
 
 //// [/user/username/projects/anotherProject/node_modules/pkgcurrentdirectory/index.d.ts]
 export function foo() { }
 
 //// [/users/username/Library/Caches/typescript/2.7/package.json]
-{"devDependencies":{}}
+{
+  "devDependencies": {}
+}
 
 //// [/users/username/Library/Caches/typescript/2.7/package-lock.json]
-{"dependencies":{}}
+{
+  "dependencies": {}
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/san2
@@ -73,19 +85,19 @@ TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/users/username/Library/Caches/typescript/2.7/node_modules/types-registry/index.json]
 {
- "entries": {
-  "pkgcurrentdirectory": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
+  "entries": {
+    "pkgcurrentdirectory": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
   }
- }
 }
 
 

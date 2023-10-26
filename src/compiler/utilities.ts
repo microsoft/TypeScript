@@ -6928,11 +6928,14 @@ function getModifierFlagsWorker(node: Node, includeJSDoc: boolean, alwaysInclude
         node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
     }
 
-    if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && (alwaysIncludeJSDoc || isInJSFile(node)) && node.parent) {
-        node.modifierFlagsCache |= getJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
+    if (alwaysIncludeJSDoc || includeJSDoc && isInJSFile(node)) {
+        if (!(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
+            node.modifierFlagsCache |= getRawJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
+        }
+        return selectEffectiveModifierFlags(node.modifierFlagsCache);
     }
 
-    return node.modifierFlagsCache & ~(ModifierFlags.HasComputedFlags | ModifierFlags.HasComputedJSDocModifiers);
+    return selectSyntacticModifierFlags(node.modifierFlagsCache);
 }
 
 /**
@@ -6962,20 +6965,33 @@ export function getSyntacticModifierFlags(node: Node): ModifierFlags {
     return getModifierFlagsWorker(node, /*includeJSDoc*/ false);
 }
 
-function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
+function getRawJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = ModifierFlags.None;
     if (!!node.parent && !isParameter(node)) {
         if (isInJSFile(node)) {
-            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.Public;
-            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
-            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
-            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
-            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.Override;
+            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
+            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
+            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.JSDocProtected;
+            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
+            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
         }
         if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
     }
 
     return flags;
+}
+
+function selectSyntacticModifierFlags(flags: ModifierFlags) {
+    return flags & ModifierFlags.SyntacticModifiers;
+}
+
+function selectEffectiveModifierFlags(flags: ModifierFlags) {
+    return (flags & ModifierFlags.NonCacheOnlyModifiers) |
+        ((flags & ModifierFlags.JSDocCacheOnlyModifiers) >>> 23); // shift ModifierFlags.JSDoc* to match ModifierFlags.*
+}
+
+function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
+    return selectEffectiveModifierFlags(getRawJSDocModifierFlagsNoCache(node));
 }
 
 /**

@@ -5,7 +5,11 @@ Before request
 import {Foo} from "./moduleFile1"; export var y = 10;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"files":["/users/username/projects/project/file1Consumer1.ts"]}
+{
+  "files": [
+    "/users/username/projects/project/file1Consumer1.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

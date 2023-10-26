@@ -5,10 +5,22 @@ Creating project service
 
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":true}}
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "typeAcquisition": {
+    "enable": true
+  }
+}
 
 //// [/a/b/package.json]
-{"name":"test","dependencies":{"jquery":"^3.1.0"}}
+{
+  "name": "test",
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /a/b
@@ -67,19 +79,19 @@ TI:: typing installer creation complete
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {
-  "jquery": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
+  "entries": {
+    "jquery": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
   }
- }
 }
 
 
@@ -147,7 +159,9 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typingsInstallerVersion": "FakeVersion",
       "projectName": "/a/b/tsconfig.json"
     }
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]'.
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/jquery@tsFakeMajor.Minor"
+]'.
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -155,7 +169,9 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: true
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/jquery@tsFakeMajor.Minor"
+]':: true
 TI:: Before installWorker
 
 PolledWatches::

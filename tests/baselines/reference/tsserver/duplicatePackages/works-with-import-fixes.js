@@ -5,13 +5,19 @@ Before request
 export const foo: number;
 
 //// [/a/node_modules/foo/package.json]
-{"name":"foo","version":"1.2.3"}
+{
+  "name": "foo",
+  "version": "1.2.3"
+}
 
 //// [/b/node_modules/foo/index.d.ts]
 export const foo: number;
 
 //// [/b/node_modules/foo/package.json]
-{"name":"foo","version":"1.2.3"}
+{
+  "name": "foo",
+  "version": "1.2.3"
+}
 
 //// [/a/user.ts]
 import("foo");

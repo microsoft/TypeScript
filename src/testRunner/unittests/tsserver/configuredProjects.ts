@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     ensureErrorFreeBuild,
 } from "../helpers/solutionBuilder";
 import {
@@ -55,7 +58,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
         assert(configFileName, "should find config file");
-        assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
+        assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${jsonToReadableText(configFileErrors)}`);
 
         baselineTsserverLogs("configuredProjects", "create configured project without file list", projectService);
     });
@@ -87,7 +90,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
         assert(configFileName, "should find config file");
-        assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
+        assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${jsonToReadableText(configFileErrors)}`);
 
         baselineTsserverLogs("configuredProjects", "create configured project with the file list", projectService);
     });
@@ -366,7 +369,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const configFile = {
             path: `/user/username/projects/myproject/a/c/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] }),
+            content: jsonToReadableText({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] }),
         };
 
         const host = createServerHost([file1, file2, file3]);
@@ -393,7 +396,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const configFile = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: {} }),
+            content: jsonToReadableText({ compilerOptions: {} }),
         };
 
         const host = createServerHost([file1, configFile]);
@@ -419,7 +422,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const configFile = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts"] }),
+            content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts"] }),
         };
 
         const host = createServerHost([file1, file2, configFile]);
@@ -427,7 +430,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         projectService.openClientFile(file1.path);
 
-        host.writeFile(configFile.path, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }));
+        host.writeFile(configFile.path, jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }));
 
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("configuredProjects", "can correctly update configured project when set of root files has changed (new file in list of files)", projectService);
@@ -444,7 +447,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const configFile = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
+            content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
         };
 
         const host = createServerHost([file1, file2, configFile]);
@@ -452,7 +455,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         projectService.openClientFile(file1.path);
 
-        host.writeFile(configFile.path, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] }));
+        host.writeFile(configFile.path, jsonToReadableText({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] }));
         host.runQueuedTimeoutCallbacks();
 
         baselineTsserverLogs("configuredProjects", "can update configured project when set of root files was not changed", projectService);
@@ -477,7 +480,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const configFile = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ files: ["src/file1.ts", "file3.ts"] }),
+            content: jsonToReadableText({ files: ["src/file1.ts", "file3.ts"] }),
         };
 
         const files = [file1, file2, file3, file4];
@@ -540,7 +543,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const configFile = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ files: ["src/file1.ts", "file3.ts"] }),
+            content: jsonToReadableText({ files: ["src/file1.ts", "file3.ts"] }),
         };
 
         const files = [file1, file2, file3];
@@ -587,7 +590,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const config = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: { allowJs: true } }),
+            content: jsonToReadableText({ compilerOptions: { allowJs: true } }),
         };
         const host = createServerHost([f1, f2, f3, config]);
         const originalGetFileSize = host.getFileSize;
@@ -653,7 +656,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
     it("when multiple projects are open, detects correct default project", () => {
         const barConfig: File = {
             path: `/user/username/projects/myproject/bar/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 include: ["index.ts"],
                 compilerOptions: {
                     lib: ["dom", "es2017"],
@@ -669,7 +672,7 @@ export function bar() {
         };
         const fooConfig: File = {
             path: `/user/username/projects/myproject/foo/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 include: ["index.ts"],
                 compilerOptions: {
                     lib: ["es2017"],
@@ -735,7 +738,7 @@ declare var console: {
         };
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 include: ["./src"],
             }),
         };
@@ -752,7 +755,7 @@ declare var console: {
                 withExclude ?
                     {
                         path: config.path,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             include: ["./src"],
                             exclude: ["./src/sub"],
                         }),
@@ -852,7 +855,7 @@ foo();`,
         };
         const fooConfig: File = {
             path: `/user/username/projects/myproject/foo/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 include: ["index.ts"],
                 compilerOptions: {
                     declaration: true,
@@ -892,13 +895,13 @@ foo();`,
             };
             const bravoExtendedConfig: File = {
                 path: `/user/username/projects/myproject/extended/bravo.tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: "./alpha.tsconfig.json",
                 }),
             };
             const aConfig: File = {
                 path: `/user/username/projects/myproject/a/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: "../extended/alpha.tsconfig.json",
                     files: ["a.ts"],
                 }),
@@ -909,7 +912,7 @@ foo();`,
             };
             const bConfig: File = {
                 path: `/user/username/projects/myproject/b/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: "../extended/bravo.tsconfig.json",
                     files: ["b.ts"],
                 }),
@@ -932,7 +935,7 @@ foo();`,
 
             host.writeFile(
                 alphaExtendedConfig.path,
-                JSON.stringify({
+                jsonToReadableText({
                     compilerOptions: {
                         strict: true,
                     },
@@ -942,7 +945,7 @@ foo();`,
 
             host.writeFile(
                 bravoExtendedConfig.path,
-                JSON.stringify({
+                jsonToReadableText({
                     extends: "./alpha.tsconfig.json",
                     compilerOptions: {
                         strict: false,
@@ -953,7 +956,7 @@ foo();`,
 
             host.writeFile(
                 bConfig.path,
-                JSON.stringify({
+                jsonToReadableText({
                     extends: "../extended/alpha.tsconfig.json",
                 }),
             );
@@ -1021,7 +1024,7 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
         };
         const config = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compiler: {},
                 files: [],
             }),
@@ -1049,7 +1052,7 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
         };
         const config = {
             path: `/user/username/projects/myproject/src/server/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compiler: {
                     module: "commonjs",
                     outDir: "../../build",
@@ -1082,7 +1085,7 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
         };
         const configFile: File = {
             path: "/users/username/projects/project/tsconfig.json",
-            content: JSON.stringify({ files: [file1.path], compilerOptions: { module: "amd" } }),
+            content: jsonToReadableText({ files: [file1.path], compilerOptions: { module: "amd" } }),
         };
         const files = [file1, file2a, configFile, libFile];
         const host = createServerHost(files);
@@ -1119,7 +1122,7 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
         };
         const configFile: File = {
             path: "/a/b/src/tsconfig.json",
-            content: JSON.stringify({ files: ["file1.ts"] }),
+            content: jsonToReadableText({ files: ["file1.ts"] }),
         };
         const nonLibFiles = [file1, module1, module2, module3, configFile];
         nonLibFiles.forEach(f => f.path = root + f.path);

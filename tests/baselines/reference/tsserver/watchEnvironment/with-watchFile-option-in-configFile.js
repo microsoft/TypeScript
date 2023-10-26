@@ -18,7 +18,11 @@ interface Array<T> { length: number; [n: number]: T; }
 let y = 1
 
 //// [/a/b/tsconfig.json]
-{"watchOptions":{"watchFile":"UseFsEvents"}}
+{
+  "watchOptions": {
+    "watchFile": "UseFsEvents"
+  }
+}
 
 //// [/a/b/commonFile1.ts]
 let x = 1

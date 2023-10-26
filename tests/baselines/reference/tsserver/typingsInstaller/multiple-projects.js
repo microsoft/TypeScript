@@ -5,19 +5,43 @@ Before request
 
 
 //// [/user/username/projects/project/tsconfig.json]
-{"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":true}}
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "typeAcquisition": {
+    "enable": true
+  }
+}
 
 //// [/user/username/projects/project/package.json]
-{"name":"test","dependencies":{"jquery":"^3.1.0"}}
+{
+  "name": "test",
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
 
 //// [/user/username/projects/project2/app.js]
 
 
 //// [/user/username/projects/project2/tsconfig.json]
-{"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":true}}
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "typeAcquisition": {
+    "enable": true
+  }
+}
 
 //// [/user/username/projects/project2/package.json]
-{"name":"test","dependencies":{"commander":"^3.1.0"}}
+{
+  "name": "test",
+  "dependencies": {
+    "commander": "^3.1.0"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -109,30 +133,30 @@ TI:: typing installer creation complete
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {
-  "jquery": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
-  },
-  "commander": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
+  "entries": {
+    "jquery": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    },
+    "commander": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
   }
- }
 }
 
 
@@ -201,7 +225,9 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typingsInstallerVersion": "FakeVersion",
       "projectName": "/user/username/projects/project/tsconfig.json"
     }
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]'.
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/jquery@tsFakeMajor.Minor"
+]'.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -238,7 +264,9 @@ FsWatchesRecursive::
 /user/username/projects/project:
   {}
 
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor"]':: true
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/jquery@tsFakeMajor.Minor"
+]':: true
 TI:: Before installWorker
 
 TI:: After installWorker
@@ -542,7 +570,9 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typingsInstallerVersion": "FakeVersion",
       "projectName": "/user/username/projects/project2/tsconfig.json"
     }
-TI:: [hh:mm:ss:mss] #2 with arguments'["@types/commander@tsFakeMajor.Minor"]'.
+TI:: [hh:mm:ss:mss] #2 with arguments'[
+  "@types/commander@tsFakeMajor.Minor"
+]'.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project2/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)

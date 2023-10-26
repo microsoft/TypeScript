@@ -63,8 +63,106 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Could not find source file: '/c/f1.ts'.
-Info seq  [hh:mm:ss:mss] fileExists:: [{"key":"/c/d/f2.ts","count":1},{"key":"/c/d/f2.tsx","count":1},{"key":"/c/d/f2.d.ts","count":1},{"key":"/c/f2.ts","count":1},{"key":"/c/f2.tsx","count":1},{"key":"/c/f2.d.ts","count":1},{"key":"/f2.ts","count":1},{"key":"/f2.tsx","count":1},{"key":"/f2.d.ts","count":1},{"key":"/c/d/f2.js","count":1},{"key":"/c/d/f2.jsx","count":1},{"key":"/c/f2.js","count":1},{"key":"/c/f2.jsx","count":1},{"key":"/f2.js","count":1},{"key":"/f2.jsx","count":1}]
-Info seq  [hh:mm:ss:mss] directoryExists:: [{"key":"/c/d","count":2},{"key":"/c","count":2},{"key":"/","count":2},{"key":"/c/d/node_modules","count":1},{"key":"/c/node_modules","count":1},{"key":"/node_modules","count":1},{"key":"/c/d/node_modules/@types","count":1},{"key":"/c/node_modules/@types","count":1},{"key":"/node_modules/@types","count":1}]
+Info seq  [hh:mm:ss:mss] fileExists:: [
+  {
+    "key": "/c/d/f2.ts",
+    "count": 1
+  },
+  {
+    "key": "/c/d/f2.tsx",
+    "count": 1
+  },
+  {
+    "key": "/c/d/f2.d.ts",
+    "count": 1
+  },
+  {
+    "key": "/c/f2.ts",
+    "count": 1
+  },
+  {
+    "key": "/c/f2.tsx",
+    "count": 1
+  },
+  {
+    "key": "/c/f2.d.ts",
+    "count": 1
+  },
+  {
+    "key": "/f2.ts",
+    "count": 1
+  },
+  {
+    "key": "/f2.tsx",
+    "count": 1
+  },
+  {
+    "key": "/f2.d.ts",
+    "count": 1
+  },
+  {
+    "key": "/c/d/f2.js",
+    "count": 1
+  },
+  {
+    "key": "/c/d/f2.jsx",
+    "count": 1
+  },
+  {
+    "key": "/c/f2.js",
+    "count": 1
+  },
+  {
+    "key": "/c/f2.jsx",
+    "count": 1
+  },
+  {
+    "key": "/f2.js",
+    "count": 1
+  },
+  {
+    "key": "/f2.jsx",
+    "count": 1
+  }
+]
+Info seq  [hh:mm:ss:mss] directoryExists:: [
+  {
+    "key": "/c/d",
+    "count": 2
+  },
+  {
+    "key": "/c",
+    "count": 2
+  },
+  {
+    "key": "/",
+    "count": 2
+  },
+  {
+    "key": "/c/d/node_modules",
+    "count": 1
+  },
+  {
+    "key": "/c/node_modules",
+    "count": 1
+  },
+  {
+    "key": "/node_modules",
+    "count": 1
+  },
+  {
+    "key": "/c/d/node_modules/@types",
+    "count": 1
+  },
+  {
+    "key": "/c/node_modules/@types",
+    "count": 1
+  },
+  {
+    "key": "/node_modules/@types",
+    "count": 1
+  }
+]
 Info seq  [hh:mm:ss:mss] getDirectories:: []
 Info seq  [hh:mm:ss:mss] readFile:: []
 Info seq  [hh:mm:ss:mss] readDirectory:: []
@@ -85,8 +183,46 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /c/f1.ts:: 1
 Info seq  [hh:mm:ss:mss] ../f1.ts(1,1): error TS2304: Cannot find name 'foo'.
 
-Info seq  [hh:mm:ss:mss] fileExists:: [{"key":"/c/d/f1.ts","count":1},{"key":"/c/d/f1.tsx","count":1},{"key":"/c/d/f1.d.ts","count":1},{"key":"/c/f1.ts","count":1}]
-Info seq  [hh:mm:ss:mss] directoryExists:: [{"key":"/c/d","count":1},{"key":"/c","count":1},{"key":"/c/d/node_modules/@types","count":1},{"key":"/c/node_modules/@types","count":1},{"key":"/node_modules/@types","count":1}]
+Info seq  [hh:mm:ss:mss] fileExists:: [
+  {
+    "key": "/c/d/f1.ts",
+    "count": 1
+  },
+  {
+    "key": "/c/d/f1.tsx",
+    "count": 1
+  },
+  {
+    "key": "/c/d/f1.d.ts",
+    "count": 1
+  },
+  {
+    "key": "/c/f1.ts",
+    "count": 1
+  }
+]
+Info seq  [hh:mm:ss:mss] directoryExists:: [
+  {
+    "key": "/c/d",
+    "count": 1
+  },
+  {
+    "key": "/c",
+    "count": 1
+  },
+  {
+    "key": "/c/d/node_modules/@types",
+    "count": 1
+  },
+  {
+    "key": "/c/node_modules/@types",
+    "count": 1
+  },
+  {
+    "key": "/node_modules/@types",
+    "count": 1
+  }
+]
 Info seq  [hh:mm:ss:mss] getDirectories:: []
 Info seq  [hh:mm:ss:mss] readFile:: []
 Info seq  [hh:mm:ss:mss] readDirectory:: []
@@ -103,8 +239,46 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /c/f1.ts:: 1
 Info seq  [hh:mm:ss:mss] ../f1.ts(1,1): error TS2304: Cannot find name 'foo'.
 
-Info seq  [hh:mm:ss:mss] fileExists:: [{"key":"/c/d/f1.ts","count":1},{"key":"/c/d/f1.tsx","count":1},{"key":"/c/d/f1.d.ts","count":1},{"key":"/c/f1.ts","count":1}]
-Info seq  [hh:mm:ss:mss] directoryExists:: [{"key":"/c/d","count":1},{"key":"/c","count":1},{"key":"/c/d/node_modules/@types","count":1},{"key":"/c/node_modules/@types","count":1},{"key":"/node_modules/@types","count":1}]
+Info seq  [hh:mm:ss:mss] fileExists:: [
+  {
+    "key": "/c/d/f1.ts",
+    "count": 1
+  },
+  {
+    "key": "/c/d/f1.tsx",
+    "count": 1
+  },
+  {
+    "key": "/c/d/f1.d.ts",
+    "count": 1
+  },
+  {
+    "key": "/c/f1.ts",
+    "count": 1
+  }
+]
+Info seq  [hh:mm:ss:mss] directoryExists:: [
+  {
+    "key": "/c/d",
+    "count": 1
+  },
+  {
+    "key": "/c",
+    "count": 1
+  },
+  {
+    "key": "/c/d/node_modules/@types",
+    "count": 1
+  },
+  {
+    "key": "/c/node_modules/@types",
+    "count": 1
+  },
+  {
+    "key": "/node_modules/@types",
+    "count": 1
+  }
+]
 Info seq  [hh:mm:ss:mss] getDirectories:: []
 Info seq  [hh:mm:ss:mss] readFile:: []
 Info seq  [hh:mm:ss:mss] readDirectory:: []

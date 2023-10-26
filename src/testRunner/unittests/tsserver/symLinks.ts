@@ -6,6 +6,9 @@ import {
     dedent,
 } from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     closeFilesForSession,
     createSession,
@@ -30,7 +33,7 @@ describe("unittests:: tsserver:: symLinks", () => {
         };
         const aTsconfig: File = {
             path: `${folderA}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { module: "commonjs" } }),
+            content: jsonToReadableText({ compilerOptions: { module: "commonjs" } }),
         };
         const aC: SymLink = {
             path: `${folderA}/c`,
@@ -45,7 +48,7 @@ describe("unittests:: tsserver:: symLinks", () => {
         };
         const bTsconfig: File = {
             path: `${folderB}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { module: "commonjs" } }),
+            content: jsonToReadableText({ compilerOptions: { module: "commonjs" } }),
         };
         const bC: SymLink = {
             path: `${folderB}/c`,
@@ -94,13 +97,13 @@ new C();`,
         const recognizerDateTimeTsconfigPath = `${recognizersDateTime}/tsconfig.json`;
         const recognizerDateTimeTsconfigWithoutPathMapping: File = {
             path: recognizerDateTimeTsconfigPath,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 include: ["src"],
             }),
         };
         const recognizerDateTimeTsconfigWithPathMapping: File = {
             path: recognizerDateTimeTsconfigPath,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     rootDir: "src",
                     baseUrl: "./",
@@ -125,7 +128,7 @@ new C();`,
         };
         const recongnizerTextPackageJson: File = {
             path: `${recognizersText}/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 typings: "dist/types/recognizers-text.d.ts",
             }),
         };
@@ -161,7 +164,7 @@ new C();`,
                     const config = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
                     host.writeFile(
                         recognizerDateTimeTsconfigPath,
-                        JSON.stringify({
+                        jsonToReadableText({
                             ...config,
                             compilerOptions: { ...config.compilerOptions, resolveJsonModule: true },
                         }),
@@ -230,12 +233,12 @@ new C();`,
             "C:/temp/replay/axios-src/lib/core/settle.js": dedent`
                 export const b2 = 10;
             `,
-            "C:/temp/replay/axios-src/package.json": JSON.stringify({
+            "C:/temp/replay/axios-src/package.json": jsonToReadableText({
                 name: "axios",
                 version: "1.4.0",
                 dependencies: { "follow-redirects": "^1.15.0" },
             }),
-            "C:/temp/replay/axios-src/node_modules/follow-redirects/package.json": JSON.stringify({
+            "C:/temp/replay/axios-src/node_modules/follow-redirects/package.json": jsonToReadableText({
                 name: "follow-redirects",
                 version: "1.15.0",
             }),

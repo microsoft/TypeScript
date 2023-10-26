@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openFilesForSession,
@@ -73,7 +76,7 @@ describe("unittests:: tsserver:: completions", () => {
         const projectRoot = "e:/myproject";
         const appPackage: File = {
             path: `${projectRoot}/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 version: "0.1.0",
                 dependencies: {
@@ -94,7 +97,7 @@ import {
         const localAtTypes = `${localNodeModules}/@types`;
         const localReactPackage: File = {
             path: `${localAtTypes}/react/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "@types/react",
                 version: "16.9.14",
             }),
@@ -107,7 +110,7 @@ export class Component {}
         };
         const localReactRouterDomPackage: File = {
             path: `${localNodeModules}/react-router-dom/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "react-router-dom",
                 version: "5.1.2",
             }),
@@ -118,7 +121,7 @@ export class Component {}
         };
         const localPropTypesPackage: File = {
             path: `${localAtTypes}/prop-types/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "@types/prop-types",
                 version: "15.7.3",
             }),
@@ -138,7 +141,7 @@ export const PropTypes = {};
         const globalAtTypes = `${globalTypingsCacheLocation}/node_modules/@types`;
         const globalReactRouterDomPackage: File = {
             path: `${globalAtTypes}/react-router-dom/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "@types/react-router-dom",
                 version: "5.1.2",
             }),

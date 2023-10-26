@@ -10,7 +10,12 @@ export function fn2() { }
 export let x: string = 10;
 
 //// [/user/username/projects/myproject/dependency/tsconfig.json]
-{"compilerOptions":{"composite":true,"declarationDir":"../decls"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declarationDir": "../decls"
+  }
+}
 
 //// [/user/username/projects/myproject/usage/usage.ts]
 import {
@@ -24,7 +29,16 @@ fnErr();
 
 
 //// [/user/username/projects/myproject/usage/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../dependency"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../dependency"
+    }
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

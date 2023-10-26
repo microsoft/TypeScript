@@ -24,7 +24,9 @@ export class A { }
 export class B {}
 
 //// [/user/username/projects/b/tsconfig.json]
-{"extends":"../a/tsconfig.json"}
+{
+  "extends": "../a/tsconfig.json"
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

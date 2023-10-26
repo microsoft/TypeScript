@@ -15,10 +15,24 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsbase.json]
-{"compileOnSave":true,"compilerOptions":{"module":"none","composite":true}}
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  }
+}
 
 //// [/user/username/projects/myproject/buttonClass/tsconfig.json]
-{"extends":"../tsbase.json","compilerOptions":{"outFile":"Source.js"},"files":["Source.ts"]}
+{
+  "extends": "../tsbase.json",
+  "compilerOptions": {
+    "outFile": "Source.js"
+  },
+  "files": [
+    "Source.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/buttonClass/Source.ts]
 module Hmi {
@@ -29,7 +43,20 @@ module Hmi {
 }
 
 //// [/user/username/projects/myproject/SiblingClass/tsconfig.json]
-{"extends":"../tsbase.json","references":[{"path":"../buttonClass/"}],"compilerOptions":{"outFile":"Source.js"},"files":["Source.ts"]}
+{
+  "extends": "../tsbase.json",
+  "references": [
+    {
+      "path": "../buttonClass/"
+    }
+  ],
+  "compilerOptions": {
+    "outFile": "Source.js"
+  },
+  "files": [
+    "Source.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/SiblingClass/Source.ts]
 module Hmi {

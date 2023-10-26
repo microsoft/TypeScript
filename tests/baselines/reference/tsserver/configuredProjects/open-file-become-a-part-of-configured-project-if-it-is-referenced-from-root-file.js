@@ -100,7 +100,13 @@ Before running Timeout callback:: count: 2
 3: /user/username/projects/myproject/a/c/tsconfig.json
 4: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/a/c/tsconfig.json]
-{"compilerOptions":{},"files":["f2.ts","f3.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f2.ts",
+    "f3.ts"
+  ]
+}
 
 
 PolledWatches::

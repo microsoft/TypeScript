@@ -26,7 +26,17 @@ interface ka {
 
 
 //// [/tsconfig.json]
-{"files":["./file1.ts","./file2.tsx","./file3.mts","./file4.cts","./file5.js","./file6.d.ts","./file7.ts"]}
+{
+  "files": [
+    "./file1.ts",
+    "./file2.tsx",
+    "./file3.mts",
+    "./file4.cts",
+    "./file5.js",
+    "./file6.d.ts",
+    "./file7.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

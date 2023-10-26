@@ -28,7 +28,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [C:/project/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 
 C:/a/lib/tsc.js --w --p C://project --explainFiles
@@ -48,8 +52,17 @@ project/b.ts
 
 
 
-Program root files: ["C:/project/a.ts","C:/project/b.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"C:/project","explainFiles":true,"configFilePath":"C:/project/tsconfig.json"}
+Program root files: [
+  "C:/project/a.ts",
+  "C:/project/b.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "C:/project",
+  "explainFiles": true,
+  "configFilePath": "C:/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 C:/a/lib/lib.d.ts
@@ -134,8 +147,17 @@ project/b.ts
 
 
 
-Program root files: ["C:/project/a.ts","C:/project/b.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"C:/project","explainFiles":true,"configFilePath":"C:/project/tsconfig.json"}
+Program root files: [
+  "C:/project/a.ts",
+  "C:/project/b.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "C:/project",
+  "explainFiles": true,
+  "configFilePath": "C:/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 C:/a/lib/lib.d.ts

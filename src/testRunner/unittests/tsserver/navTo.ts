@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openFilesForSession,
@@ -84,7 +87,7 @@ export const ghijkl = a.abcdef;`,
     it("should de-duplicate symbols when searching all projects", () => {
         const solutionConfig: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 references: [{ path: "./a" }, { path: "./b" }],
                 files: [],
             }),

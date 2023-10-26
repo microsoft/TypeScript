@@ -82,7 +82,7 @@ TI:: typing installer creation complete
 
 //// [c:/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
@@ -259,7 +259,7 @@ TI:: typing installer creation complete
 
 //// [//vda1cs4850/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
@@ -444,7 +444,7 @@ TI:: typing installer creation complete
 
 //// [//vda1cs4850/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
@@ -637,7 +637,7 @@ TI:: typing installer creation complete
 
 //// [c:/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
@@ -830,7 +830,7 @@ TI:: typing installer creation complete
 
 //// [//vda1cs4850/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 

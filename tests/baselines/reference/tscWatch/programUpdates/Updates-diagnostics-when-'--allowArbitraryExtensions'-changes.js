@@ -20,7 +20,14 @@ import {} from './b.css'
 declare const style: string;
 
 //// [/tsconfig.json]
-{"compilerOptions":{"allowArbitraryExtensions":true},"files":["/a.ts"]}
+{
+  "compilerOptions": {
+    "allowArbitraryExtensions": true
+  },
+  "files": [
+    "/a.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p /tsconfig.json
@@ -37,8 +44,15 @@ Output::
 
 
 
-Program root files: ["/a.ts"]
-Program options: {"allowArbitraryExtensions":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts"
+]
+Program options: {
+  "allowArbitraryExtensions": true,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -77,7 +91,14 @@ Change:: Disable  allowArbitraryExtensions
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"allowArbitraryExtensions":false},"files":["/a.ts"]}
+{
+  "compilerOptions": {
+    "allowArbitraryExtensions": false
+  },
+  "files": [
+    "/a.ts"
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -96,8 +117,15 @@ Output::
 
 
 
-Program root files: ["/a.ts"]
-Program options: {"allowArbitraryExtensions":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts"
+]
+Program options: {
+  "allowArbitraryExtensions": false,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -129,7 +157,14 @@ Change:: Enable  allowArbitraryExtensions
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"allowArbitraryExtensions":true},"files":["/a.ts"]}
+{
+  "compilerOptions": {
+    "allowArbitraryExtensions": true
+  },
+  "files": [
+    "/a.ts"
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -148,8 +183,15 @@ Output::
 
 
 
-Program root files: ["/a.ts"]
-Program options: {"allowArbitraryExtensions":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts"
+]
+Program options: {
+  "allowArbitraryExtensions": true,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

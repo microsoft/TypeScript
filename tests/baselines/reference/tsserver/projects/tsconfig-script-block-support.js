@@ -8,7 +8,11 @@ Before request
 var hello = "hello";
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"allowJs":true}}
+{
+  "compilerOptions": {
+    "allowJs": true
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
