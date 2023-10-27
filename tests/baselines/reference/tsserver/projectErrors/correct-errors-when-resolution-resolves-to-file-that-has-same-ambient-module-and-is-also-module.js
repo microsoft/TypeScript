@@ -21,7 +21,11 @@ function foo() {
 }
 
 //// [/users/username/projects/myproject/tsconfig.json]
-{"include":["src"]}
+{
+  "include": [
+    "src"
+  ]
+}
 
 //// [/users/username/projects/myproject/node_modules/@custom/plugin/index.d.ts]
 import './proposed';

@@ -97,7 +97,7 @@ TI:: typing installer creation complete
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
@@ -268,5 +268,15 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /package.json 1:: WatchInf
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
 Edit package.json
 //// [/package.json]
-{"peerDependencies":{"react":"*"},"optionalDependencies":{"typescript":"*"},"devDependencies":{"webpack":"*"}}
+{
+  "peerDependencies": {
+    "react": "*"
+  },
+  "optionalDependencies": {
+    "typescript": "*"
+  },
+  "devDependencies": {
+    "webpack": "*"
+  }
+}
 

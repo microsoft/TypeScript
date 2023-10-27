@@ -5,7 +5,9 @@ Creating project service
 let x = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /a/b

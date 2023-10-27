@@ -21,14 +21,22 @@ interface Array<T> { length: number; [n: number]: T; }
 import {C} from "./c/fc"; console.log(C)
 
 //// [/users/username/projects/a/tsconfig.json]
-{"compilerOptions":{"module":"commonjs"}}
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
 
 //// [/users/username/projects/a/c] symlink(/users/username/projects/c)
 //// [/users/username/projects/b/b.ts]
 import {C} from "./c/fc"; console.log(C)
 
 //// [/users/username/projects/b/tsconfig.json]
-{"compilerOptions":{"module":"commonjs"}}
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
 
 //// [/users/username/projects/b/c] symlink(/users/username/projects/c)
 

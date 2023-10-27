@@ -1,7 +1,15 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"traceResolution":true,"extendedDiagnostics":true},"files":["main.ts"]}
+{
+  "compilerOptions": {
+    "traceResolution": true,
+    "extendedDiagnostics": true
+  },
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/main.ts]
 import { foo } from "./other";
@@ -52,8 +60,14 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -123,8 +137,14 @@ File '/user/username/projects/myproject/other.d.ts' exists - use it as a name re
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -169,8 +189,14 @@ File '/user/username/projects/myproject/other.d.ts' exists - use it as a name re
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -220,8 +246,14 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.ts 250 
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

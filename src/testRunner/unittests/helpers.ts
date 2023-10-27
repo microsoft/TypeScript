@@ -167,3 +167,7 @@ export function updateProgramText(files: readonly NamedSourceText[], fileName: s
     const file = ts.find(files, f => f.name === fileName)!;
     file.text = file.text.updateProgram(newProgramText);
 }
+
+export function jsonToReadableText(json: any) {
+    return JSON.stringify(json, undefined, 2);
+}

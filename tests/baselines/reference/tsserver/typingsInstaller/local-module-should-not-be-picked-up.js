@@ -8,7 +8,14 @@ const c = require('./config');
 export let x = 1
 
 //// [/a/jsconfig.json]
-{"compilerOptions":{"moduleResolution":"commonjs"},"typeAcquisition":{"enable":true}}
+{
+  "compilerOptions": {
+    "moduleResolution": "commonjs"
+  },
+  "typeAcquisition": {
+    "enable": true
+  }
+}
 
 //// [/cache/node_modules/@types/config/index.d.ts]
 export let y: number;
@@ -82,19 +89,19 @@ TI:: typing installer creation complete
 
 //// [/cache/node_modules/types-registry/index.json]
 {
- "entries": {
-  "config": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
+  "entries": {
+    "config": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
   }
- }
 }
 
 

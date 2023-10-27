@@ -1,19 +1,22 @@
+import {
+    createLoggerWithInMemoryLogs,
+    replaceAll,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
     openFilesForSession,
     patchHostTimeouts,
-    replaceAll,
     TestSessionRequest,
     toExternalFile,
 } from "../helpers/tsserver";
 import {
     createTypesRegistry,
     customTypesMap,
+    FileWithPackageName,
     loggerToTypingsInstallerLog,
     TestTypingsInstaller,
 } from "../helpers/typingsInstaller";
@@ -29,6 +32,9 @@ import NameValidationResult = ts.JsTyping.NameValidationResult;
 import {
     stringifyIndented,
 } from "../../_namespaces/ts.server";
+import {
+    jsonToReadableText,
+} from "../helpers";
 
 describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
     it("should not be picked up", () => {
@@ -47,7 +53,7 @@ describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
         };
         const config = {
             path: "/a/jsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: { moduleResolution: "commonjs" },
                 typeAcquisition: { enable: true },
             }),
@@ -78,7 +84,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const tsconfig = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     allowJs: true,
                 },
@@ -89,7 +95,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const packageJson = {
             path: "/a/b/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 dependencies: {
                     jquery: "^3.1.0",
@@ -132,7 +138,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const packageJson = {
             path: "/a/b/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 dependencies: {
                     jquery: "^3.1.0",
@@ -484,7 +490,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const packageJson = {
             path: "/a/b/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 dependencies: {
                     express: "^3.1.0",
@@ -558,7 +564,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const packageJson = {
             path: "/a/b/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 dependencies: {
                     express: "^3.1.0",
@@ -631,35 +637,35 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "",
         };
 
-        const commander = {
+        const commander: FileWithPackageName = {
             path: "/a/data/node_modules/@types/commander/index.d.ts",
             content: "declare const commander: { x: number }",
-            typings: ts.server.typingsInstaller.typingsName("commander"),
+            package: "commander",
         };
-        const jquery = {
+        const jquery: FileWithPackageName = {
             path: "/a/data/node_modules/@types/jquery/index.d.ts",
             content: "declare const jquery: { x: number }",
-            typings: ts.server.typingsInstaller.typingsName("jquery"),
+            package: "jquery",
         };
-        const lodash = {
+        const lodash: FileWithPackageName = {
             path: "/a/data/node_modules/@types/lodash/index.d.ts",
             content: "declare const lodash: { x: number }",
-            typings: ts.server.typingsInstaller.typingsName("lodash"),
+            package: "lodash",
         };
-        const cordova = {
+        const cordova: FileWithPackageName = {
             path: "/a/data/node_modules/@types/cordova/index.d.ts",
             content: "declare const cordova: { x: number }",
-            typings: ts.server.typingsInstaller.typingsName("cordova"),
+            package: "cordova",
         };
-        const grunt = {
+        const grunt: FileWithPackageName = {
             path: "/a/data/node_modules/@types/grunt/index.d.ts",
             content: "declare const grunt: { x: number }",
-            typings: ts.server.typingsInstaller.typingsName("grunt"),
+            package: "grunt",
         };
-        const gulp = {
+        const gulp: FileWithPackageName = {
             path: "/a/data/node_modules/@types/gulp/index.d.ts",
             content: "declare const gulp: { x: number }",
-            typings: ts.server.typingsInstaller.typingsName("gulp"),
+            package: "gulp",
         };
 
         const host = createServerHost([lodashJs, commanderJs, file3, customTypesMap]);
@@ -668,22 +674,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             {
-                installAction: (installer, requestId, packageNames, cb) => {
-                    let typingFiles: (File & { typings: string; })[] = [];
-                    if (packageNames.includes(ts.server.typingsInstaller.typingsName("commander"))) {
-                        typingFiles = [commander, jquery, lodash, cordova];
-                    }
-                    else {
-                        typingFiles = [grunt, gulp];
-                    }
-                    installer.executeInstallWithTypingFiles(
-                        requestId,
-                        packageNames,
-                        typingFiles.map(f => f.typings),
-                        typingFiles,
-                        cb,
-                    );
-                },
+                installAction: [[commander, jquery, lodash, cordova, grunt, gulp]],
                 throttleLimit: 1,
                 typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"],
             },
@@ -728,7 +719,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const pkgJson = {
             path: "/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 dependencies: {
                     "@zkat/cacache": "1.0.0",
                 },
@@ -736,7 +727,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const jsconfig = {
             path: "/jsconfig.json",
-            content: JSON.stringify({}),
+            content: jsonToReadableText({}),
         };
         // Should only accept direct dependencies.
         const commander = {
@@ -745,7 +736,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const commanderPackage = {
             path: "/node_modules/commander/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "commander",
             }),
         };
@@ -755,7 +746,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const cacachePackage = {
             path: "/node_modules/@zkat/cacache/package.json",
-            content: JSON.stringify({ name: "@zkat/cacache" }),
+            content: jsonToReadableText({ name: "@zkat/cacache" }),
         };
         const cacacheDTS = {
             path: "/tmp/node_modules/@types/zkat__cacache/index.d.ts",
@@ -796,7 +787,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             };
             const pkgJson = {
                 path: "/package.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     dependencies: {
                         jquery: "1.0.0",
                     },
@@ -804,7 +795,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             };
             const jsconfig = {
                 path: "/jsconfig.json",
-                content: JSON.stringify(jsconfigContent || {}),
+                content: jsonToReadableText(jsconfigContent || {}),
             };
             // Should only accept direct dependencies.
             const commander = {
@@ -813,7 +804,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             };
             const commanderPackage = {
                 path: "/node_modules/commander/package.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     name: "commander",
                 }),
             };
@@ -823,12 +814,12 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             };
             const jqueryPackage = {
                 path: "/node_modules/jquery/package.json",
-                content: JSON.stringify({ name: "jquery" }),
+                content: jsonToReadableText({ name: "jquery" }),
             };
             // Should not search deeply in node_modules.
             const nestedPackage = {
                 path: "/node_modules/jquery/nested/package.json",
-                content: JSON.stringify({ name: "nested" }),
+                content: jsonToReadableText({ name: "nested" }),
             };
             const jqueryDTS = {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
@@ -880,7 +871,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const jsconfig = {
             path: "/jsconfig.json",
-            content: JSON.stringify({}),
+            content: jsonToReadableText({}),
         };
         const jquery = {
             path: "/bower_components/jquery/index.js",
@@ -888,7 +879,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const jqueryPackage = {
             path: "/bower_components/jquery/bower.json",
-            content: JSON.stringify({ name: "jquery" }),
+            content: jsonToReadableText({ name: "jquery" }),
         };
         const jqueryDTS = {
             path: "/tmp/node_modules/@types/jquery/index.d.ts",
@@ -926,11 +917,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const jsconfig = {
             path: "/jsconfig.json",
-            content: JSON.stringify({}),
+            content: jsonToReadableText({}),
         };
         const bowerJson = {
             path: "/bower.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 dependencies: {
                     jquery: "^3.1.0",
                 },
@@ -1174,7 +1165,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const tsconfig = {
             path: "/user/username/projects/project/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     allowJs: true,
                 },
@@ -1185,7 +1176,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const packageJson = {
             path: "/user/username/projects/project/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 dependencies: {
                     jquery: "^3.1.0",
@@ -1198,7 +1189,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const tsconfig2 = {
             path: "/user/username/projects/project2/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     allowJs: true,
                 },
@@ -1209,7 +1200,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const packageJson2 = {
             path: "/user/username/projects/project2/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 dependencies: {
                     commander: "^3.1.0",
@@ -1217,15 +1208,15 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             }),
         };
 
-        const jquery = {
+        const jquery: FileWithPackageName = {
             path: "/a/data/node_modules/@types/jquery/index.d.ts",
             content: "declare const $: { x: number }",
-            typings: "jquery",
+            package: "jquery",
         };
-        const commander = {
+        const commander: FileWithPackageName = {
             path: "/a/data/node_modules/@types/commander/index.d.ts",
             content: "export let x: number",
-            typings: "commander",
+            package: "commander",
         };
         const host = createServerHost([file1, tsconfig, packageJson, file2, tsconfig2, packageJson2, libFile]);
         const logger = createLoggerWithInMemoryLogs(host);
@@ -1233,22 +1224,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             logger,
             {
-                installAction: (installer, requestId, packageNames, cb) => {
-                    let typingFiles: (File & { typings: string; })[] = [];
-                    if (packageNames.includes(ts.server.typingsInstaller.typingsName("commander"))) {
-                        typingFiles = [commander];
-                    }
-                    else {
-                        typingFiles = [jquery];
-                    }
-                    installer.executeInstallWithTypingFiles(
-                        requestId,
-                        packageNames,
-                        typingFiles.map(f => f.typings),
-                        typingFiles,
-                        cb,
-                    );
-                },
+                installAction: [[commander, jquery]],
                 typesRegistry: ["jquery", "commander"],
             },
         );
@@ -1275,7 +1251,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const packageJson = {
             path: "/a/b/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 dependencies: {
                     jquery: "^3.1.0",
@@ -1288,7 +1264,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const cacheConfig = {
             path: "/a/data/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 dependencies: {
                     "types-registry": "^0.1.317",
                 },
@@ -1299,7 +1275,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const cacheLockConfig = {
             path: "/a/data/package-lock.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 dependencies: {
                     "@types/jquery": {
                         version: "1.0.0",
@@ -1333,7 +1309,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const packageJson = {
             path: "/a/b/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 dependencies: {
                     jquery: "^3.1.0",
@@ -1342,7 +1318,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const cacheConfig = {
             path: "/a/data/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 dependencies: {
                     "types-registry": "^0.1.317",
                 },
@@ -1353,7 +1329,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const cacheLockConfig = {
             path: "/a/data/package-lock.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 dependencies: {
                     "@types/jquery": {
                         version: "1.3.0",
@@ -1439,7 +1415,7 @@ describe("unittests:: tsserver:: typingsInstaller:: Invalid package names", () =
         };
         const packageJson = {
             path: "/a/b/package.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 dependencies: {
                     "; say ‘Hello from TypeScript!’ #": "0.0.x",
                 },
@@ -1563,11 +1539,11 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         };
         const a = {
             path: "/node_modules/a/package.json",
-            content: JSON.stringify({ name: "a" }),
+            content: jsonToReadableText({ name: "a" }),
         };
         const b = {
             path: "/node_modules/a/b/package.json",
-            content: JSON.stringify({ name: "b" }),
+            content: jsonToReadableText({ name: "b" }),
         };
         const { discoverTypings, baseline } = setup([app, a, b]);
         const cache = new Map<string, ts.JsTyping.CachedTyping>();
@@ -1591,7 +1567,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         };
         const a = {
             path: "/node_modules/@a/b/package.json",
-            content: JSON.stringify({ name: "@a/b" }),
+            content: jsonToReadableText({ name: "@a/b" }),
         };
         const { discoverTypings, baseline } = setup([app, a]);
         const cache = new Map<string, ts.JsTyping.CachedTyping>();
@@ -1775,7 +1751,7 @@ describe("unittests:: tsserver:: typingsInstaller:: telemetry events", () => {
         };
         const packageFile = {
             path: "/a/package.json",
-            content: JSON.stringify({ dependencies: { commander: "1.0.0" } }),
+            content: jsonToReadableText({ dependencies: { commander: "1.0.0" } }),
         };
         const cachePath = "/a/cache/";
         const commander = {
@@ -1810,11 +1786,11 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
         };
         const packageFile = {
             path: "/a/package.json",
-            content: JSON.stringify({ dependencies: { commander: "1.0.0" } }),
+            content: jsonToReadableText({ dependencies: { commander: "1.0.0" } }),
         };
         const packageLockFile = {
             path: "/a/cache/package-lock.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 dependencies: {
                     "@types/commander": {
                         version: "1.0.0",
@@ -1853,7 +1829,7 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
         };
         const packageFile = {
             path: "/a/package.json",
-            content: JSON.stringify({ dependencies: { commander: "1.0.0" } }),
+            content: jsonToReadableText({ dependencies: { commander: "1.0.0" } }),
         };
         const cachePath = "/a/cache/";
         const host = createServerHost([f1, packageFile]);
@@ -2566,7 +2542,7 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
         const currentDirectory = `/user/username/projects/anotherProject`;
         const packageJsonInCurrentDirectory: File = {
             path: `${currentDirectory}/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 devDependencies: {
                     pkgcurrentdirectory: "",
                 },
@@ -2574,7 +2550,7 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
         };
         const packageJsonOfPkgcurrentdirectory: File = {
             path: `${currentDirectory}/node_modules/pkgcurrentdirectory/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "pkgcurrentdirectory",
                 main: "index.js",
                 typings: "index.d.ts",
@@ -2588,13 +2564,13 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
         const typingsCache = `/users/username/Library/Caches/typescript/2.7`;
         const typingsCachePackageJson: File = {
             path: `${typingsCache}/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 devDependencies: {},
             }),
         };
         const typingsCachePackageLockJson: File = {
             path: `${typingsCache}/package-lock.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 dependencies: {},
             }),
         };

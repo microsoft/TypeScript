@@ -1,3 +1,4 @@
+// === Inlay Hints ===
 y.foo(1, 2)
       ^
 {

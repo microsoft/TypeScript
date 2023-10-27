@@ -7,7 +7,11 @@ export class logger { }
 import { logger } from "./logger"; new logger();
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,8 +36,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/another.ts","/user/username/projects/myproject/logger.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/another.ts",
+  "/user/username/projects/myproject/logger.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -116,8 +128,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/Logger.ts","/user/username/projects/myproject/another.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/Logger.ts",
+  "/user/username/projects/myproject/another.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

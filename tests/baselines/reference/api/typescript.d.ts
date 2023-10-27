@@ -4752,32 +4752,32 @@ declare namespace ts {
     }
     enum ModifierFlags {
         None = 0,
-        Export = 1,
-        Ambient = 2,
-        Public = 4,
-        Private = 8,
-        Protected = 16,
-        Static = 32,
-        Readonly = 64,
-        Accessor = 128,
-        Abstract = 256,
-        Async = 512,
-        Default = 1024,
-        Const = 2048,
-        HasComputedJSDocModifiers = 4096,
-        Deprecated = 8192,
-        Override = 16384,
-        In = 32768,
-        Out = 65536,
-        Decorator = 131072,
+        Public = 1,
+        Private = 2,
+        Protected = 4,
+        Readonly = 8,
+        Override = 16,
+        Export = 32,
+        Abstract = 64,
+        Ambient = 128,
+        Static = 256,
+        Accessor = 512,
+        Async = 1024,
+        Default = 2048,
+        Const = 4096,
+        In = 8192,
+        Out = 16384,
+        Decorator = 32768,
+        Deprecated = 65536,
+        HasComputedJSDocModifiers = 268435456,
         HasComputedFlags = 536870912,
-        AccessibilityModifier = 28,
-        ParameterPropertyModifier = 16476,
-        NonPublicAccessibilityModifier = 24,
-        TypeScriptModifier = 117086,
-        ExportDefault = 1025,
-        All = 258047,
-        Modifier = 126975,
+        AccessibilityModifier = 7,
+        ParameterPropertyModifier = 31,
+        NonPublicAccessibilityModifier = 6,
+        TypeScriptModifier = 28895,
+        ExportDefault = 2080,
+        All = 131071,
+        Modifier = 98303,
     }
     enum JsxFlags {
         None = 0,
@@ -6778,6 +6778,7 @@ declare namespace ts {
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
+        getMergedSymbol(symbol: Symbol): Symbol;
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
         /** Follow all aliases to get the original symbol. */
@@ -8386,6 +8387,18 @@ declare namespace ts {
         createExportDefault(expression: Expression): ExportAssignment;
         createExternalModuleExport(exportName: Identifier): ExportDeclaration;
         restoreOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds?: OuterExpressionKinds): Expression;
+        /**
+         * Updates a node that may contain modifiers, replacing only the modifiers of the node.
+         */
+        replaceModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
+        /**
+         * Updates a node that may contain decorators or modifiers, replacing only the decorators and modifiers of the node.
+         */
+        replaceDecoratorsAndModifiers<T extends HasModifiers & HasDecorators>(node: T, modifiers: readonly ModifierLike[] | undefined): T;
+        /**
+         * Updates a node that contains a property name, replacing only the name of the node.
+         */
+        replacePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
     }
     interface CoreTransformationContext {
         readonly factory: NodeFactory;
@@ -8742,6 +8755,7 @@ declare namespace ts {
         readonly interactiveInlayHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        readonly preferTypeOnlyAutoImports?: boolean;
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
         readonly organizeImportsCollation?: "ordinal" | "unicode";
         readonly organizeImportsLocale?: string;

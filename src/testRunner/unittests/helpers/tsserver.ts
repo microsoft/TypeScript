@@ -1,6 +1,11 @@
 import {
     incrementalVerifier,
 } from "../../../harness/incrementalUtils";
+import {
+    createHasErrorMessageLogger,
+    createLoggerWithInMemoryLogs,
+    Logger,
+} from "../../../harness/tsserverLogger";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
@@ -20,133 +25,6 @@ import {
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch";
-
-export function replaceAll(source: string, searchValue: string, replaceValue: string): string {
-    let result: string | undefined = (source as string & { replaceAll: typeof source.replace; }).replaceAll?.(searchValue, replaceValue);
-
-    if (result !== undefined) {
-        return result;
-    }
-
-    result = "";
-    const searchLength = searchValue.length;
-    while (true) {
-        const index = source.indexOf(searchValue);
-        if (index < 0) {
-            break;
-        }
-        result += source.slice(0, index);
-        result += replaceValue;
-        source = source.slice(index + searchLength);
-    }
-    result += source;
-    return result;
-}
-
-export interface Logger extends ts.server.Logger {
-    logs?: string[];
-    log(s: string): void;
-    host?: TestServerHost;
-}
-
-export function nullLogger(): Logger {
-    return {
-        close: ts.noop,
-        hasLevel: ts.returnFalse,
-        loggingEnabled: ts.returnFalse,
-        perftrc: ts.noop,
-        info: ts.noop,
-        msg: ts.noop,
-        startGroup: ts.noop,
-        endGroup: ts.noop,
-        getLogFileName: ts.returnUndefined,
-        log: ts.noop,
-        isTestLogger: true,
-    };
-}
-
-export function createHasErrorMessageLogger(): Logger {
-    return {
-        ...nullLogger(),
-        msg: (s, type) => ts.Debug.fail(`Error: ${s}, type: ${type}`),
-    };
-}
-
-function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Logger {
-    let inGroup = false;
-    let firstInGroup = false;
-    logger.startGroup = () => {
-        inGroup = true;
-        firstInGroup = true;
-    };
-    logger.endGroup = () => inGroup = false;
-    logger.host = host;
-    const originalInfo = logger.info;
-    logger.info = s => msg(s, ts.server.Msg.Info, s => originalInfo.call(logger, s));
-    logger.log = s => originalInfo.call(logger, s);
-    return logger;
-
-    function msg(s: string, type = ts.server.Msg.Err, write: (s: string) => void) {
-        s = `[${nowString(logger.host!)}] ${s}`;
-        if (!inGroup || firstInGroup) s = padStringRight(type + " seq", "          ") + s;
-        if (ts.Debug.isDebugging) console.log(s);
-        write(s);
-    }
-
-    function padStringRight(str: string, padding: string) {
-        return (str + padding).slice(0, padding.length);
-    }
-}
-
-export function nowString(host: TestServerHost) {
-    // E.g. "12:34:56.789"
-    host.now(); // To increment the time but not print it to avoid the baseline updates
-    return `hh:mm:ss:mss`;
-}
-
-export function createLoggerWritingToConsole(host: TestServerHost): Logger {
-    return handleLoggerGroup({
-        ...nullLogger(),
-        hasLevel: ts.returnTrue,
-        loggingEnabled: ts.returnTrue,
-        perftrc: s => console.log(s),
-        info: s => console.log(s),
-        msg: (s, type) => console.log(`${type}:: ${s}`),
-    }, host);
-}
-
-export function sanitizeLog(s: string): string {
-    s = s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms");
-    s = s.replace(/"updateGraphDurationMs":\s*\d+(?:\.\d+)?/g, `"updateGraphDurationMs": *`);
-    s = s.replace(/"createAutoImportProviderProgramDurationMs":\s*\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs": *`);
-    s = replaceAll(s, ts.version, "FakeVersion");
-    s = s.replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`);
-    s = s.replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`);
-    s = s.replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`);
-    s = s.replace(/getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: isCompletionListBlocker: *`);
-    s = s.replace(/getCompletionData: Semantic work: \d+(?:\.\d+)?/g, `getCompletionData: Semantic work: *`);
-    s = s.replace(/getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`);
-    s = s.replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`);
-    s = s.replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`);
-    s = s.replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`);
-    s = s.replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`);
-    s = s.replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`);
-    s = s.replace(/"exportMapKey":\s*"\d+ \d+ /g, match => match.replace(/ \d+ /, ` * `));
-    return s;
-}
-
-export function createLoggerWithInMemoryLogs(host: TestServerHost): Logger {
-    const logger = createHasErrorMessageLogger();
-    const logs: string[] = [];
-    if (host) logs.push(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
-    return handleLoggerGroup({
-        ...logger,
-        logs,
-        hasLevel: ts.returnTrue,
-        loggingEnabled: ts.returnTrue,
-        info: s => logs.push(sanitizeLog(s)),
-    }, host);
-}
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: Logger; }) {
     ts.Debug.assert(sessionOrService.logger.logs?.length); // Ensure caller used in memory logger
@@ -269,11 +147,11 @@ export class TestSession extends ts.server.Session {
     public override executeCommand(request: ts.server.protocol.Request) {
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
             this.testhost.baselineHost("Before request");
-            this.logger.info(`request:${ts.server.indent(JSON.stringify(request, undefined, 2))}`);
+            this.logger.info(`request:${ts.server.stringifyIndented(request)}`);
         }
         const response = super.executeCommand(request);
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-            this.logger.info(`response:${ts.server.indent(JSON.stringify(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response, undefined, 2))}`);
+            this.logger.info(`response:${ts.server.stringifyIndented(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response)}`);
             this.testhost.baselineHost("After request");
         }
         return response;

@@ -74,7 +74,19 @@ Before request
 { "compilerOptions": { "module": "commonjs" } }
 
 //// [/package.json]
-{"package0":"*","package1":"*","package2":"*","package3":"*","package4":"*","package5":"*","package6":"*","package7":"*","package8":"*","package9":"*","package10":"*"}
+{
+  "package0": "*",
+  "package1": "*",
+  "package2": "*",
+  "package3": "*",
+  "package4": "*",
+  "package5": "*",
+  "package6": "*",
+  "package7": "*",
+  "package8": "*",
+  "package9": "*",
+  "package10": "*"
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

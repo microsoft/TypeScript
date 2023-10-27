@@ -17,7 +17,10 @@ export const y = 10;
 
 
 //// [/user/username/projects/myproject/node_modules/module3/package.json]
-{"name":"module3","version":"1.0.0"}
+{
+  "name": "module3",
+  "version": "1.0.0"
+}
 
 //// [/user/username/projects/myproject/node_modules/module3/index.d.ts]
 export const a = 10;
@@ -253,7 +256,7 @@ TI:: typing installer creation complete
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 

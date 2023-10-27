@@ -5,13 +5,31 @@ Creating project service
 
 
 //// [/a/b/package.json]
-{"name":"test","dependencies":{"jquery":"^3.1.0"}}
+{
+  "name": "test",
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
 
 //// [/a/data/package.json]
-{"dependencies":{"types-registry":"^0.1.317"},"devDependencies":{"@types/jquery":"^1.3.0"}}
+{
+  "dependencies": {
+    "types-registry": "^0.1.317"
+  },
+  "devDependencies": {
+    "@types/jquery": "^1.3.0"
+  }
+}
 
 //// [/a/data/package-lock.json]
-{"dependencies":{"@types/jquery":{"version":"1.3.0"}}}
+{
+  "dependencies": {
+    "@types/jquery": {
+      "version": "1.3.0"
+    }
+  }
+}
 
 //// [/a/data/node_modules/@types/jquery/index.d.ts]
 declare const $: { x: number }
@@ -66,19 +84,19 @@ TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {
-  "jquery": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
+  "entries": {
+    "jquery": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
   }
- }
 }
 
 

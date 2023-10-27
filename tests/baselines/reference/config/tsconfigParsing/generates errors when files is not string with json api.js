@@ -3,7 +3,16 @@ Fs::
 
 
 //// [/apath/tsconfig.json]
-{"files":[{"compilerOptions":{"experimentalDecorators":true,"allowJs":true}}]}
+{
+  "files": [
+    {
+      "compilerOptions": {
+        "experimentalDecorators": true,
+        "allowJs": true
+      }
+    }
+  ]
+}
 
 
 configFileName:: /apath/tsconfig.json

@@ -1,7 +1,12 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     toExternalFile,
 } from "../helpers/tsserver";
@@ -52,7 +57,7 @@ describe("unittests:: tsserver:: typeAquisition:: prefer typings to js", () => {
         };
         const config = {
             path: "/a/b/jsconfig.json",
-            content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: ["node_modules"] }),
+            content: jsonToReadableText({ compilerOptions: { allowJs: true }, exclude: ["node_modules"] }),
         };
         const host = createServerHost([f1, barjs, barTypings, config]);
         const logger = createLoggerWithInMemoryLogs(host);

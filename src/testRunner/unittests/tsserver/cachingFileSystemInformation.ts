@@ -1,14 +1,19 @@
 import {
     IncrementalVerifierCallbacks,
 } from "../../../harness/incrementalUtils";
+import {
+    createLoggerWithInMemoryLogs,
+    Logger,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
     logDiagnostics,
-    Logger,
     openFilesForSession,
     TestProjectService,
 } from "../helpers/tsserver";
@@ -76,7 +81,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
         function logCacheEntry(logger: Logger, callback: CalledMaps) {
             const result = Array.from<[string, (true | CalledWithFiveArgs)[]], { key: string; count: number; }>(calledMaps[callback].entries(), ([key, arr]) => ({ key, count: arr.length }));
-            logger.info(`${callback}:: ${JSON.stringify(result)}`);
+            logger.info(`${callback}:: ${jsonToReadableText(result)}`);
             calledMaps[callback].clear();
         }
 
@@ -212,7 +217,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         };
         const tsconfigFile: File = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     target: "es6",
                     module: "es6",
@@ -281,7 +286,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 const types = ["node", "jest"];
                 const tsconfigFile: File = {
                     path: `${frontendDir}/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             strict: true,
                             strictNullChecks: true,
@@ -346,7 +351,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             };
             const tsconfig: File = {
                 path: `${projectLocation}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     files: ["foo/boo/app.ts", "foo/boo/moo/app.ts"],
                     moduleResolution: resolution,
                 }),
@@ -601,7 +606,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         };
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     baseUrl: "client",
                     paths: { "*": ["*"] },
