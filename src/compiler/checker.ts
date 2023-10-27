@@ -11882,9 +11882,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         else if (symbol.flags & SymbolFlags.Alias) {
-            const symbolImport = symbol.declarations?.find(getAnyImportSyntax);
-            if (symbolImport) {
-                error(symbolImport, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
+            const node = getDeclarationOfAliasSymbol(symbol);
+            if (node) {
+                error(node, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
             }
         }
         // Circularities could also result from parameters in function expressions that end up
