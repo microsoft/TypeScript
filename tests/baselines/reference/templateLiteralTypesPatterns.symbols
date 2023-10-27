@@ -405,110 +405,125 @@ var aa: '0' & `${number}`;
 
 // Remove string literals from unions with matching template literals
 
-let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
->t1 : Symbol(t1, Decl(templateLiteralTypesPatterns.ts, 169, 3))
+declare let t1: `foo${string}` | 'foo1' | '1foo';
+>t1 : Symbol(t1, Decl(templateLiteralTypesPatterns.ts, 169, 11))
 
-let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
->t2 : Symbol(t2, Decl(templateLiteralTypesPatterns.ts, 170, 3))
+let c1 = true ? t1 : t1;  // `foo${string}` | '1foo'
+>c1 : Symbol(c1, Decl(templateLiteralTypesPatterns.ts, 170, 3))
+>t1 : Symbol(t1, Decl(templateLiteralTypesPatterns.ts, 169, 11))
+>t1 : Symbol(t1, Decl(templateLiteralTypesPatterns.ts, 169, 11))
 
-let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
->t3 : Symbol(t3, Decl(templateLiteralTypesPatterns.ts, 171, 3))
+declare let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';
+>t2 : Symbol(t2, Decl(templateLiteralTypesPatterns.ts, 171, 11))
+
+let c2 = true ? t2 : t2;  // `foo${string}` | '1foo' | 'xfoo'
+>c2 : Symbol(c2, Decl(templateLiteralTypesPatterns.ts, 172, 3))
+>t2 : Symbol(t2, Decl(templateLiteralTypesPatterns.ts, 171, 11))
+>t2 : Symbol(t2, Decl(templateLiteralTypesPatterns.ts, 171, 11))
+
+declare let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;
+>t3 : Symbol(t3, Decl(templateLiteralTypesPatterns.ts, 173, 11))
+
+let c3 = true ? t3 : t3;  // `foo${string}` | xfoo' | `${number}foo`
+>c3 : Symbol(c3, Decl(templateLiteralTypesPatterns.ts, 174, 3))
+>t3 : Symbol(t3, Decl(templateLiteralTypesPatterns.ts, 173, 11))
+>t3 : Symbol(t3, Decl(templateLiteralTypesPatterns.ts, 173, 11))
 
 var bb: `${number}`;
->bb : Symbol(bb, Decl(templateLiteralTypesPatterns.ts, 173, 3), Decl(templateLiteralTypesPatterns.ts, 174, 3))
+>bb : Symbol(bb, Decl(templateLiteralTypesPatterns.ts, 176, 3), Decl(templateLiteralTypesPatterns.ts, 177, 3))
 
 var bb: `${number}` | '0';
->bb : Symbol(bb, Decl(templateLiteralTypesPatterns.ts, 173, 3), Decl(templateLiteralTypesPatterns.ts, 174, 3))
+>bb : Symbol(bb, Decl(templateLiteralTypesPatterns.ts, 176, 3), Decl(templateLiteralTypesPatterns.ts, 177, 3))
 
 // Normalize `${string}` to just string
 
 type T2S<A extends string, B extends string> = `${A}${B}`;
->T2S : Symbol(T2S, Decl(templateLiteralTypesPatterns.ts, 174, 26))
->A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 178, 9))
->B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 178, 26))
->A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 178, 9))
->B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 178, 26))
+>T2S : Symbol(T2S, Decl(templateLiteralTypesPatterns.ts, 177, 26))
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 181, 9))
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 181, 26))
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 181, 9))
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 181, 26))
 
 type S10 = `${string}`;  // string
->S10 : Symbol(S10, Decl(templateLiteralTypesPatterns.ts, 178, 58))
+>S10 : Symbol(S10, Decl(templateLiteralTypesPatterns.ts, 181, 58))
 
 type S11 = `${string}${string}${string}`;  // string
->S11 : Symbol(S11, Decl(templateLiteralTypesPatterns.ts, 180, 23))
+>S11 : Symbol(S11, Decl(templateLiteralTypesPatterns.ts, 183, 23))
 
 type S12 = T2S<string, string>;  // string
->S12 : Symbol(S12, Decl(templateLiteralTypesPatterns.ts, 181, 41))
->T2S : Symbol(T2S, Decl(templateLiteralTypesPatterns.ts, 174, 26))
+>S12 : Symbol(S12, Decl(templateLiteralTypesPatterns.ts, 184, 41))
+>T2S : Symbol(T2S, Decl(templateLiteralTypesPatterns.ts, 177, 26))
 
 function ff1(x: `${string}-${string}`) {
->ff1 : Symbol(ff1, Decl(templateLiteralTypesPatterns.ts, 182, 31))
->x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 184, 13))
+>ff1 : Symbol(ff1, Decl(templateLiteralTypesPatterns.ts, 185, 31))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 187, 13))
 
     let s1 = x && 42;  // number
->s1 : Symbol(s1, Decl(templateLiteralTypesPatterns.ts, 185, 7))
->x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 184, 13))
+>s1 : Symbol(s1, Decl(templateLiteralTypesPatterns.ts, 188, 7))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 187, 13))
 
     let s2 = x || 42;  // `${string}-${string}`
->s2 : Symbol(s2, Decl(templateLiteralTypesPatterns.ts, 186, 7))
->x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 184, 13))
+>s2 : Symbol(s2, Decl(templateLiteralTypesPatterns.ts, 189, 7))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 187, 13))
 }
 
 // Repro from #41651
 
 export type Id<TA, TId extends string = string> = `${TId}-${TId}`;
->Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
->TA : Symbol(TA, Decl(templateLiteralTypesPatterns.ts, 191, 15))
->TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 191, 18))
->TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 191, 18))
->TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 191, 18))
+>Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 190, 1))
+>TA : Symbol(TA, Decl(templateLiteralTypesPatterns.ts, 194, 15))
+>TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 194, 18))
+>TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 194, 18))
+>TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 194, 18))
 
 export class AA {}
->AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+>AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 194, 66))
 
 export abstract class BB {
->BB : Symbol(BB, Decl(templateLiteralTypesPatterns.ts, 193, 18))
+>BB : Symbol(BB, Decl(templateLiteralTypesPatterns.ts, 196, 18))
 
     abstract get(id: Id<AA>): void;
->get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
->id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 196, 17))
->Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
->AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+>get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 198, 26))
+>id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 199, 17))
+>Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 190, 1))
+>AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 194, 66))
 
     update(id: Id<AA>): void {
->update : Symbol(BB.update, Decl(templateLiteralTypesPatterns.ts, 196, 35))
->id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 197, 11))
->Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
->AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+>update : Symbol(BB.update, Decl(templateLiteralTypesPatterns.ts, 199, 35))
+>id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 200, 11))
+>Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 190, 1))
+>AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 194, 66))
 
         this.get(id!);
->this.get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
->this : Symbol(BB, Decl(templateLiteralTypesPatterns.ts, 193, 18))
->get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
->id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 197, 11))
+>this.get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 198, 26))
+>this : Symbol(BB, Decl(templateLiteralTypesPatterns.ts, 196, 18))
+>get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 198, 26))
+>id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 200, 11))
     }
 }
 
 // repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
 function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
->conversionTest : Symbol(conversionTest, Decl(templateLiteralTypesPatterns.ts, 200, 1))
->groupName : Symbol(groupName, Decl(templateLiteralTypesPatterns.ts, 203, 24))
+>conversionTest : Symbol(conversionTest, Decl(templateLiteralTypesPatterns.ts, 203, 1))
+>groupName : Symbol(groupName, Decl(templateLiteralTypesPatterns.ts, 206, 24))
 
 conversionTest("testDowncast");
->conversionTest : Symbol(conversionTest, Decl(templateLiteralTypesPatterns.ts, 200, 1))
+>conversionTest : Symbol(conversionTest, Decl(templateLiteralTypesPatterns.ts, 203, 1))
 
 function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
->conversionTest2 : Symbol(conversionTest2, Decl(templateLiteralTypesPatterns.ts, 204, 31))
->groupName : Symbol(groupName, Decl(templateLiteralTypesPatterns.ts, 205, 25))
+>conversionTest2 : Symbol(conversionTest2, Decl(templateLiteralTypesPatterns.ts, 207, 31))
+>groupName : Symbol(groupName, Decl(templateLiteralTypesPatterns.ts, 208, 25))
 
 conversionTest2("testDowncast");
->conversionTest2 : Symbol(conversionTest2, Decl(templateLiteralTypesPatterns.ts, 204, 31))
+>conversionTest2 : Symbol(conversionTest2, Decl(templateLiteralTypesPatterns.ts, 207, 31))
 
 function foo(str: `${`a${string}` & `${string}a`}Test`) {}
->foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 206, 32))
->str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 208, 13))
+>foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 209, 32))
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 211, 13))
 
 foo("abaTest"); // ok
->foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 206, 32))
+>foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 209, 32))
 
 foo("abcTest"); // error
->foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 206, 32))
+>foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 209, 32))
 
