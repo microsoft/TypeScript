@@ -7,7 +7,11 @@ let x = 1
 let y = 1
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"outFile":"/a/out.js"}}
+{
+  "compilerOptions": {
+    "outFile": "/a/out.js"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,8 +36,17 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/a.ts
@@ -84,8 +97,17 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/a.ts
@@ -122,8 +144,17 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/a.ts

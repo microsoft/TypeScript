@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     TestServerCancellationToken,
@@ -66,7 +69,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         };
         const config = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {},
             }),
         };
@@ -163,7 +166,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         };
         const config = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {},
             }),
         };
@@ -223,7 +226,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 session.logger.log(`Exception is OperationCanceledException: ${e instanceof ts.OperationCanceledException}`);
                 operationCanceledExceptionThrown = true;
             }
-            if (!operationCanceledExceptionThrown) session.logger.log("Operation Canceled Exception not thrown for request: " + JSON.stringify(request));
+            if (!operationCanceledExceptionThrown) session.logger.log("Operation Canceled Exception not thrown for request: " + jsonToReadableText(request));
         }
     });
 });

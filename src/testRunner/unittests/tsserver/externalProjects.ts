@@ -4,6 +4,9 @@ import {
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createProjectService,
     createSession,
@@ -31,7 +34,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
             };
             const config = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     include: [],
                 }),
             };
@@ -209,7 +212,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
         };
         const config1 = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify(
+            content: jsonToReadableText(
                 {
                     compilerOptions: {},
                     files: ["f1.ts"],
@@ -222,7 +225,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
         };
         const config2 = {
             path: "/a/c/tsconfig.json",
-            content: JSON.stringify(
+            content: jsonToReadableText(
                 {
                     compilerOptions: {},
                     files: ["f2.ts"],
@@ -270,7 +273,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
         };
         const configFile = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: {} }),
+            content: jsonToReadableText({ compilerOptions: {} }),
         };
         const externalProjectName = "externalproject";
         const host = createServerHost([file1, configFile]);
@@ -302,7 +305,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
         };
         const configFile = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: {} }),
+            content: jsonToReadableText({ compilerOptions: {} }),
         };
         const externalProjectName = "externalproject";
         const host = createServerHost([file1, file2, libFile, configFile]);
@@ -600,7 +603,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
         };
         const config1 = {
             path: "/src/tsconfig.json",
-            content: JSON.stringify(
+            content: jsonToReadableText(
                 {
                     compilerOptions: {
                         module: "commonjs",
@@ -616,7 +619,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
         };
         const config2 = {
             path: config1.path,
-            content: JSON.stringify(
+            content: jsonToReadableText(
                 {
                     compilerOptions: {
                         module: "commonjs",
@@ -648,7 +651,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
         };
         const config = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {},
                 include: [
                     "src/**/*",
@@ -675,7 +678,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
         };
         const config = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({}),
+            content: jsonToReadableText({}),
         };
         const projectFileName = "/a/b/project.csproj";
         const host = createServerHost([f1, config]);

@@ -4,7 +4,13 @@ Input::
 let x = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"types":["node"]}}
+{
+  "compilerOptions": {
+    "types": [
+      "node"
+    ]
+  }
+}
 
 //// [/a/b/node_modules/@types/node/index.d.ts]
 declare var process: any
@@ -32,8 +38,17 @@ Output::
 
 
 
-Program root files: ["/a/b/app.ts"]
-Program options: {"types":["node"],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/app.ts"
+]
+Program options: {
+  "types": [
+    "node"
+  ],
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

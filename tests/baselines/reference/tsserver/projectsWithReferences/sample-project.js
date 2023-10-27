@@ -16,12 +16,12 @@ interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/sample1/core/tsconfig.json]
 {
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "declarationMap": true,
-        "skipDefaultLibCheck": true
-    }
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipDefaultLibCheck": true
+  }
 }
 
 //// [/user/username/projects/sample1/core/index.ts]
@@ -30,28 +30,27 @@ export function leftPad(s: string, n: number) { return s + n; }
 export function multiply(a: number, b: number) { return a * b; }
 
 
-//// [/user/username/projects/sample1/core/anotherModule.ts]
-export const World = "hello";
-
-
 //// [/user/username/projects/sample1/core/some_decl.d.ts]
 declare const dts: any;
 
+//// [/user/username/projects/sample1/core/anotherModule.ts]
+export const World = "hello";
 
 //// [/user/username/projects/sample1/logic/tsconfig.json]
 {
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "sourceMap": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipDefaultLibCheck": true
-    },
-    "references": [
-        { "path": "../core" }
-    ]
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
 }
-
 
 //// [/user/username/projects/sample1/logic/index.ts]
 import * as c from '../core/index';
@@ -64,17 +63,23 @@ export const m = mod;
 
 //// [/user/username/projects/sample1/tests/tsconfig.json]
 {
-    "references": [
-        { "path": "../core" },
-        { "path": "../logic" }
-    ],
-    "files": ["index.ts"],
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipDefaultLibCheck": true
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../logic"
     }
+  ],
+  "files": [
+    "index.ts"
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true
+  }
 }
 
 //// [/user/username/projects/sample1/tests/index.ts]
@@ -169,10 +174,10 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/pr
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/sample1/core/index.ts Text-1 "export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"
-	/user/username/projects/sample1/core/anotherModule.ts Text-1 "export const World = \"hello\";\r\n"
-	/user/username/projects/sample1/logic/index.ts Text-1 "import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"
-	/user/username/projects/sample1/tests/index.ts SVC-1-0 "import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"
+	/user/username/projects/sample1/core/index.ts Text-1 "export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n"
+	/user/username/projects/sample1/core/anotherModule.ts Text-1 "export const World = \"hello\";"
+	/user/username/projects/sample1/logic/index.ts Text-1 "import * as c from '../core/index';\nexport function getSecondsInDay() {\n    return c.multiply(10, 15);\n}\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\n"
+	/user/username/projects/sample1/tests/index.ts SVC-1-0 "import * as c from '../core/index';\nimport * as logic from '../logic/index';\n\nc.leftPad(\"\", 10);\nlogic.getSecondsInDay();\n\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\n"
 
 
 	../../../../../a/lib/lib.d.ts
@@ -251,10 +256,10 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/pr
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/sample1/core/index.ts Text-1 "export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"
-	/user/username/projects/sample1/core/anotherModule.ts Text-1 "export const World = \"hello\";\r\n"
-	/user/username/projects/sample1/logic/index.ts Text-2 "import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\nfunction foo() {}"
-	/user/username/projects/sample1/tests/index.ts SVC-1-0 "import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"
+	/user/username/projects/sample1/core/index.ts Text-1 "export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n"
+	/user/username/projects/sample1/core/anotherModule.ts Text-1 "export const World = \"hello\";"
+	/user/username/projects/sample1/logic/index.ts Text-2 "import * as c from '../core/index';\nexport function getSecondsInDay() {\n    return c.multiply(10, 15);\n}\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\nfunction foo() {}"
+	/user/username/projects/sample1/tests/index.ts SVC-1-0 "import * as c from '../core/index';\nimport * as logic from '../logic/index';\n\nc.leftPad(\"\", 10);\nlogic.getSecondsInDay();\n\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
@@ -299,10 +304,10 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/pr
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/sample1/core/index.ts Text-1 "export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"
-	/user/username/projects/sample1/core/anotherModule.ts Text-1 "export const World = \"hello\";\r\n"
-	/user/username/projects/sample1/logic/index.ts Text-3 "import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\nfunction foo() {}export function gfoo() {}"
-	/user/username/projects/sample1/tests/index.ts SVC-1-0 "import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"
+	/user/username/projects/sample1/core/index.ts Text-1 "export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n"
+	/user/username/projects/sample1/core/anotherModule.ts Text-1 "export const World = \"hello\";"
+	/user/username/projects/sample1/logic/index.ts Text-3 "import * as c from '../core/index';\nexport function getSecondsInDay() {\n    return c.multiply(10, 15);\n}\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\nfunction foo() {}export function gfoo() {}"
+	/user/username/projects/sample1/tests/index.ts SVC-1-0 "import * as c from '../core/index';\nimport * as logic from '../logic/index';\n\nc.leftPad(\"\", 10);\nlogic.getSecondsInDay();\n\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
@@ -332,7 +337,18 @@ Before running Timeout callback:: count: 2
 5: /user/username/projects/sample1/tests/tsconfig.json
 6: *ensureProjectForOpenFiles*
 //// [/user/username/projects/sample1/logic/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"declarationDir":"decls"},"references":[{"path":"../core"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationDir": "decls"
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/sample1/tests/tsconfig.json
@@ -358,10 +374,10 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/pr
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/sample1/core/index.ts Text-1 "export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"
-	/user/username/projects/sample1/core/anotherModule.ts Text-1 "export const World = \"hello\";\r\n"
-	/user/username/projects/sample1/logic/index.ts Text-3 "import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\nfunction foo() {}export function gfoo() {}"
-	/user/username/projects/sample1/tests/index.ts SVC-1-0 "import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"
+	/user/username/projects/sample1/core/index.ts Text-1 "export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n"
+	/user/username/projects/sample1/core/anotherModule.ts Text-1 "export const World = \"hello\";"
+	/user/username/projects/sample1/logic/index.ts Text-3 "import * as c from '../core/index';\nexport function getSecondsInDay() {\n    return c.multiply(10, 15);\n}\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\nfunction foo() {}export function gfoo() {}"
+	/user/username/projects/sample1/tests/index.ts SVC-1-0 "import * as c from '../core/index';\nimport * as logic from '../logic/index';\n\nc.leftPad(\"\", 10);\nlogic.getSecondsInDay();\n\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*

@@ -11,7 +11,15 @@ class c { prop = "hello"; foo() { const x = 0; } }
 class c { prop = "hello"; foo() { const x = 0; } }
 
 //// [/tsconfig.json]
-{"compilerOptions":{"plugins":[{"name":"myplugin"}]}}
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "myplugin"
+      }
+    ]
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

@@ -2,6 +2,9 @@ import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     TscCompileSystem,
 } from "./tsc";
 import {
@@ -54,8 +57,8 @@ export function baselinePrograms(baseline: string[], programs: readonly CommandL
 function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram, oldProgram: CommandLineProgram | undefined, baselineDependencies: boolean | undefined) {
     if (program !== oldProgram?.[0]) {
         const options = program.getCompilerOptions();
-        baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
-        baseline.push(`Program options: ${JSON.stringify(options)}`);
+        baseline.push(`Program root files: ${jsonToReadableText(program.getRootFileNames())}`);
+        baseline.push(`Program options: ${jsonToReadableText(options)}`);
         baseline.push(`Program structureReused: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
         baseline.push("Program files::");
         for (const file of program.getSourceFiles()) {
@@ -275,7 +278,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         size: ts.getBuildInfoText({ ...buildInfo, version }).length,
     };
     // For now its just JSON.stringify
-    sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
+    sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, jsonToReadableText(result));
 
     function toFileName(fileId: ts.ProgramBuildInfoFileId) {
         return buildInfo.program!.fileNames[fileId - 1];

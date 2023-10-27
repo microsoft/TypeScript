@@ -23,7 +23,13 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/c/tsconfig.json]
-{"compilerOptions":{},"files":["f2.ts","f3.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f2.ts",
+    "f3.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p /a/c/tsconfig.json
@@ -35,8 +41,15 @@ Output::
 
 
 
-Program root files: ["/a/c/f2.ts","/a/c/f3.ts"]
-Program options: {"watch":true,"project":"/a/c/tsconfig.json","configFilePath":"/a/c/tsconfig.json"}
+Program root files: [
+  "/a/c/f2.ts",
+  "/a/c/f3.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/c/tsconfig.json",
+  "configFilePath": "/a/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

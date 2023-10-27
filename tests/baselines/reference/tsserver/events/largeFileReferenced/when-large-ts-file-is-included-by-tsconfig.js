@@ -18,7 +18,16 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["src/file.ts","src/large.ts"],"compilerOptions":{"target":1,"allowJs":true}}
+{
+  "files": [
+    "src/file.ts",
+    "src/large.ts"
+  ],
+  "compilerOptions": {
+    "target": 1,
+    "allowJs": true
+  }
+}
 
 //// [/user/username/projects/myproject/src/large.ts]
 export var x = 10;
@@ -143,12 +152,12 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 1,
-              "offset": 69
+              "line": 7,
+              "offset": 15
             },
             "end": {
-              "line": 1,
-              "offset": 70
+              "line": 7,
+              "offset": 16
             },
             "text": "Compiler option 'target' requires a value of type string.",
             "code": 5024,

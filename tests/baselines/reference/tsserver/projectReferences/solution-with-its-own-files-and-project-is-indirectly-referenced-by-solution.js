@@ -282,10 +282,35 @@ Info seq  [hh:mm:ss:mss] getDefaultProject for /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
 Before request
 //// [/user/username/projects/myproject/tsconfig-src.json]
-{"compilerOptions":{"composite":true,"outDir":"./target/","baseUrl":"./src/"},"include":["./src/**/*"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./target/",
+    "baseUrl": "./src/"
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"outDir":"./target/","baseUrl":"./indirect1/"},"references":[{"path":"./tsconfig-indirect1.json"},{"path":"./tsconfig-indirect2.json"}],"files":["./own/main.ts"]}
+{
+  "compilerOptions": {
+    "outDir": "./target/",
+    "baseUrl": "./indirect1/"
+  },
+  "references": [
+    {
+      "path": "./tsconfig-indirect1.json"
+    },
+    {
+      "path": "./tsconfig-indirect2.json"
+    }
+  ],
+  "files": [
+    "./own/main.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/src/main.ts]
 import { foo } from 'helpers/functions';
@@ -316,17 +341,39 @@ export { foo };
 //# sourceMappingURL=main.d.ts.map
 
 //// [/user/username/projects/myproject/target/src/main.d.ts.map]
-{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"}
+{
+  "version": 3,
+  "file": "main.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../../src/main.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"
+}
 
 //// [/user/username/projects/myproject/target/src/helpers/functions.d.ts]
 export declare const foo = 1;
 //# sourceMappingURL=functions.d.ts.map
 
 //// [/user/username/projects/myproject/target/src/helpers/functions.d.ts.map]
-{"version":3,"file":"functions.d.ts","sourceRoot":"","sources":["../../../src/helpers/functions.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"}
+{
+  "version": 3,
+  "file": "functions.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../../../src/helpers/functions.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"
+}
 
 //// [/user/username/projects/myproject/indirect3/tsconfig.json]
-{"compilerOptions":{"baseUrl":"../target/src/"}}
+{
+  "compilerOptions": {
+    "baseUrl": "../target/src/"
+  }
+}
 
 //// [/user/username/projects/myproject/indirect3/main.ts]
 import { foo } from 'main';
@@ -334,7 +381,21 @@ foo;
 export function bar() {}
 
 //// [/user/username/projects/myproject/tsconfig-indirect1.json]
-{"compilerOptions":{"composite":true,"outDir":"./target/","baseUrl":"./src/"},"files":["./indirect1/main.ts"],"references":[{"path":"./tsconfig-src.json"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./target/",
+    "baseUrl": "./src/"
+  },
+  "files": [
+    "./indirect1/main.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig-src.json"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/indirect1/main.ts]
 import { foo } from 'main';
@@ -342,7 +403,21 @@ foo;
 export function bar() {}
 
 //// [/user/username/projects/myproject/tsconfig-indirect2.json]
-{"compilerOptions":{"composite":true,"outDir":"./target/","baseUrl":"./src/"},"files":["./indirect2/main.ts"],"references":[{"path":"./tsconfig-src.json"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./target/",
+    "baseUrl": "./src/"
+  },
+  "files": [
+    "./indirect2/main.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig-src.json"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/indirect2/main.ts]
 import { foo } from 'main';

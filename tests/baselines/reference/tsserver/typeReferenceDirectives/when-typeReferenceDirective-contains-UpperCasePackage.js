@@ -31,7 +31,15 @@ class TestClass1 {
 }
 
 //// [/user/username/projects/myproject/test/tsconfig.json]
-{"compilerOptions":{"module":"amd","typeRoots":["../lib/@types","../lib/@app"]}}
+{
+  "compilerOptions": {
+    "module": "amd",
+    "typeRoots": [
+      "../lib/@types",
+      "../lib/@app"
+    ]
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

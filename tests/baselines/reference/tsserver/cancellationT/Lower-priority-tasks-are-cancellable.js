@@ -5,7 +5,9 @@ Before request
 { let x = 1; } var foo = "foo"; var bar = "bar"; var fooBar = "fooBar";
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

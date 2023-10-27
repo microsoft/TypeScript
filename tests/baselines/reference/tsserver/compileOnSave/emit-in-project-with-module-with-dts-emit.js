@@ -20,7 +20,12 @@ const xy = 3;
 export const xyz = 4;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compileOnSave":true,"compilerOptions":{"declaration":true}}
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "declaration": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
