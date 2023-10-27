@@ -11881,8 +11881,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer, symbolToString(symbol));
             }
         }
-        else if ((symbol.flags & SymbolFlags.Alias) && symbol.declarations?.length) {
-            error(symbol.declarations[0], Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
+        else if (symbol.flags & SymbolFlags.Alias) {
+            const symbolImport = symbol.declarations?.find(getAnyImportSyntax);
+            if (symbolImport) {
+                error(symbolImport, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
+            }
         }
         // Circularities could also result from parameters in function expressions that end up
         // having themselves as contextual types following type argument inference. In those cases
