@@ -248,14 +248,12 @@ function rangeContainsSkipTrivia(r1: TextRange, node: TextRange, file: SourceFil
 
 function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeNode[], enclosingNode: Node, file: SourceFile): TypeParameterDeclaration[] | undefined {
     const result: TypeParameterDeclaration[] = [];
-    const selectionRange = isArray(selection) ? { pos: selection[0].pos, end: selection[selection.length - 1].end } : selection;
-    if (isArray(selection)) {
-        selection.forEach(t => {
-            if (!visitor(t)) return undefined;
-        });
-        return result;
+    const selectionArray = toArray(selection);
+    const selectionRange = { pos: selectionArray[0].pos, end: selectionArray[selectionArray.length - 1].end };
+    for (const t of selectionArray) {
+        if (visitor(t)) return undefined;
     }
-    return visitor(selection) ? undefined : result;
+    return result;
 
     function visitor(node: Node): true | undefined {
         if (isTypeReferenceNode(node)) {
