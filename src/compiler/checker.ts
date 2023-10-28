@@ -11832,9 +11832,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfAlias(symbol: Symbol): Type {
         const links = getSymbolLinks(symbol);
         if (!links.type) {
+            if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                return errorType;
+            }
             const targetSymbol = resolveAlias(symbol);
             const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontRecursivelyResolve*/ true);
             const declaredType = firstDefined(exportSymbol?.declarations, d => isExportAssignment(d) ? tryGetTypeFromEffectiveTypeNode(d) : undefined);
+
             // It only makes sense to get the type of a value symbol. If the result of resolving
             // the alias is not a value, then it has no type. To get the type associated with a
             // type symbol, call getDeclaredTypeOfSymbol.
@@ -11845,6 +11849,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : declaredType ? declaredType
                 : getSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                 : errorType;
+
+            if (!popTypeResolution()) {
+                reportCircularityError(exportSymbol ?? symbol);
+                return links.type = errorType;
+            }
         }
         return links.type;
     }
@@ -11860,15 +11869,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function reportCircularityError(symbol: Symbol) {
-        const declaration = symbol.valueDeclaration as VariableLikeDeclaration;
+        const declaration = symbol.valueDeclaration;
         // Check if variable has type annotation that circularly references the variable itself
-        if (getEffectiveTypeAnnotationNode(declaration)) {
-            error(symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
-            return errorType;
+        if (declaration) {
+            if (getEffectiveTypeAnnotationNode(declaration)) {
+                error(symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
+                return errorType;
+            }
+            // Check if variable has initializer that circularly references the variable itself
+            if (noImplicitAny && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
+                error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer, symbolToString(symbol));
+            }
         }
-        // Check if variable has initializer that circularly references the variable itself
-        if (noImplicitAny && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
-            error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer, symbolToString(symbol));
+        else if (symbol.flags & SymbolFlags.Alias) {
+            const node = getDeclarationOfAliasSymbol(symbol);
+            if (node) {
+                error(node, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
+            }
         }
         // Circularities could also result from parameters in function expressions that end up
         // having themselves as contextual types following type argument inference. In those cases
