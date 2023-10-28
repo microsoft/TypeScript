@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/keyRemappingKeyofResult2.ts] ////
+
+=== keyRemappingKeyofResult2.ts ===
+// https://github.com/microsoft/TypeScript/issues/56239
+
+type Values<T> = T[keyof T];
+>Values : Symbol(Values, Decl(keyRemappingKeyofResult2.ts, 0, 0))
+>T : Symbol(T, Decl(keyRemappingKeyofResult2.ts, 2, 12))
+>T : Symbol(T, Decl(keyRemappingKeyofResult2.ts, 2, 12))
+>T : Symbol(T, Decl(keyRemappingKeyofResult2.ts, 2, 12))
+
+type ProvidedActor = {
+>ProvidedActor : Symbol(ProvidedActor, Decl(keyRemappingKeyofResult2.ts, 2, 28))
+
+  src: string;
+>src : Symbol(src, Decl(keyRemappingKeyofResult2.ts, 4, 22))
+
+  logic: unknown;
+>logic : Symbol(logic, Decl(keyRemappingKeyofResult2.ts, 5, 14))
+
+};
+
+interface StateMachineConfig<TActors extends ProvidedActor> {
+>StateMachineConfig : Symbol(StateMachineConfig, Decl(keyRemappingKeyofResult2.ts, 7, 2))
+>TActors : Symbol(TActors, Decl(keyRemappingKeyofResult2.ts, 9, 29))
+>ProvidedActor : Symbol(ProvidedActor, Decl(keyRemappingKeyofResult2.ts, 2, 28))
+
+  invoke: {
+>invoke : Symbol(StateMachineConfig.invoke, Decl(keyRemappingKeyofResult2.ts, 9, 61))
+
+    src: TActors["src"];
+>src : Symbol(src, Decl(keyRemappingKeyofResult2.ts, 10, 11))
+>TActors : Symbol(TActors, Decl(keyRemappingKeyofResult2.ts, 9, 29))
+
+  };
+}
+
+declare function setup<TActors extends Record<string, unknown>>(_: {
+>setup : Symbol(setup, Decl(keyRemappingKeyofResult2.ts, 13, 1))
+>TActors : Symbol(TActors, Decl(keyRemappingKeyofResult2.ts, 15, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>_ : Symbol(_, Decl(keyRemappingKeyofResult2.ts, 15, 64))
+
+  actors: {
+>actors : Symbol(actors, Decl(keyRemappingKeyofResult2.ts, 15, 68))
+
+    [K in keyof TActors]: TActors[K];
+>K : Symbol(K, Decl(keyRemappingKeyofResult2.ts, 17, 5))
+>TActors : Symbol(TActors, Decl(keyRemappingKeyofResult2.ts, 15, 23))
+>TActors : Symbol(TActors, Decl(keyRemappingKeyofResult2.ts, 15, 23))
+>K : Symbol(K, Decl(keyRemappingKeyofResult2.ts, 17, 5))
+
+  };
+}): {
+  createMachine: (
+>createMachine : Symbol(createMachine, Decl(keyRemappingKeyofResult2.ts, 19, 5))
+
+    config: StateMachineConfig<
+>config : Symbol(config, Decl(keyRemappingKeyofResult2.ts, 20, 18))
+>StateMachineConfig : Symbol(StateMachineConfig, Decl(keyRemappingKeyofResult2.ts, 7, 2))
+
+      Values<{
+>Values : Symbol(Values, Decl(keyRemappingKeyofResult2.ts, 0, 0))
+
+        [K in keyof TActors as K & string]: {
+>K : Symbol(K, Decl(keyRemappingKeyofResult2.ts, 23, 9))
+>TActors : Symbol(TActors, Decl(keyRemappingKeyofResult2.ts, 15, 23))
+>K : Symbol(K, Decl(keyRemappingKeyofResult2.ts, 23, 9))
+
+          src: K;
+>src : Symbol(src, Decl(keyRemappingKeyofResult2.ts, 23, 45))
+>K : Symbol(K, Decl(keyRemappingKeyofResult2.ts, 23, 9))
+
+          logic: TActors[K];
+>logic : Symbol(logic, Decl(keyRemappingKeyofResult2.ts, 24, 17))
+>TActors : Symbol(TActors, Decl(keyRemappingKeyofResult2.ts, 15, 23))
+>K : Symbol(K, Decl(keyRemappingKeyofResult2.ts, 23, 9))
+
+        };
+      }>
+    >,
+  ) => void;
+};
+

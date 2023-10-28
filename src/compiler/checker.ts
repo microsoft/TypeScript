@@ -17449,7 +17449,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * reduction in the constraintType) when possible.
      * @param noIndexSignatures Indicates if _string_ index signatures should be elided. (other index signatures are always reported)
      */
-    function getIndexTypeForMappedType(type: MappedType, indexFlags: IndexFlags) {
+    function getIndexTypeForMappedType(type: MappedType, indexFlags: IndexFlags): Type {
         const typeParameter = getTypeParameterFromMappedType(type);
         const constraintType = getConstraintTypeFromMappedType(type);
         const nameType = getNameTypeFromMappedType(type.target as MappedType || type);
@@ -17467,6 +17467,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!isGenericIndexType(constraintType)) {
                 const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
                 forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, TypeFlags.StringOrNumberLiteralOrUnique, !!(indexFlags & IndexFlags.StringsOnly), addMemberForKeyType);
+            }
+            else if (isFilteringMappedType(type)) {
+                const modifiersIndex = getIndexType(getModifiersTypeFromMappedType(type), indexFlags, UnionReduction.None);
+                const mapper = makeUnaryTypeMapper(getTypeParameterFromMappedType(type), modifiersIndex);
+                const nameMapper = combineTypeMappers(type.mapper, mapper);
+                return instantiateType(nameType, nameMapper)!;
             }
             else {
                 // we have a generic index and a homomorphic mapping (but a distributive key remapping) - we need to defer the whole `keyof whatever` for later
@@ -17554,13 +17560,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(keyType.flags & include || keyType.flags & TypeFlags.Intersection && some((keyType as IntersectionType).types, t => isKeyTypeIncluded(t, include)));
     }
 
-    function getLiteralTypeFromProperties(type: Type, include: TypeFlags, includeOrigin: boolean) {
+    function getLiteralTypeFromProperties(type: Type, include: TypeFlags, includeOrigin: boolean, unionReduction = UnionReduction.Literal) {
         const origin = includeOrigin && (getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference) || type.aliasSymbol) ? createOriginIndexType(type) : undefined;
         const propertyTypes = map(getPropertiesOfType(type), prop => getLiteralTypeFromProperty(prop, include));
         const indexKeyTypes = map(getIndexInfosOfType(type), info =>
             info !== enumNumberIndexInfo && isKeyTypeIncluded(info.keyType, include) ?
                 info.keyType === stringType && include & TypeFlags.Number ? stringOrNumberType : info.keyType : neverType);
-        return getUnionType(concatenate(propertyTypes, indexKeyTypes), UnionReduction.Literal, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, origin);
+        return getUnionType(concatenate(propertyTypes, indexKeyTypes), unionReduction, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, origin);
     }
 
     function shouldDeferIndexType(type: Type, indexFlags = IndexFlags.None) {
@@ -17571,16 +17577,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable) && some((type as IntersectionType).types, isEmptyAnonymousObjectType));
     }
 
-    function getIndexType(type: Type, indexFlags = defaultIndexFlags): Type {
+    function getIndexType(type: Type, indexFlags = defaultIndexFlags, unionReduction?: UnionReduction): Type {
         type = getReducedType(type);
         return shouldDeferIndexType(type, indexFlags) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, indexFlags) :
             type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, indexFlags))) :
-            type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, indexFlags))) :
+            type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, indexFlags, unionReduction)), unionReduction) :
             getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, indexFlags) :
             type === wildcardType ? wildcardType :
             type.flags & TypeFlags.Unknown ? neverType :
             type.flags & (TypeFlags.Any | TypeFlags.Never) ? keyofConstraintType :
-            getLiteralTypeFromProperties(type, (indexFlags & IndexFlags.NoIndexSignatures ? TypeFlags.StringLiteral : TypeFlags.StringLike) | (indexFlags & IndexFlags.StringsOnly ? 0 : TypeFlags.NumberLike | TypeFlags.ESSymbolLike), indexFlags === defaultIndexFlags);
+            getLiteralTypeFromProperties(type, (indexFlags & IndexFlags.NoIndexSignatures ? TypeFlags.StringLiteral : TypeFlags.StringLike) | (indexFlags & IndexFlags.StringsOnly ? 0 : TypeFlags.NumberLike | TypeFlags.ESSymbolLike), indexFlags === defaultIndexFlags, unionReduction);
     }
 
     function getExtractStringType(type: Type) {

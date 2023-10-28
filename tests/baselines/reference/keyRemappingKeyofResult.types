@@ -156,19 +156,19 @@ function g<T>() {
     // no string index signature, right?
     
     type Oops = keyof Remapped;
->Oops : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+>Oops : unique symbol | "str" | (keyof T extends unknown ? {} extends Record<keyof T, any> ? never : keyof T : never)
 
     let x: Oops;
->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+>x : unique symbol | "str" | (keyof T extends unknown ? {} extends Record<keyof T, any> ? never : keyof T : never)
 
     x = sym;
 >x = sym : unique symbol
->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+>x : unique symbol | "str" | (keyof T extends unknown ? {} extends Record<keyof T, any> ? never : keyof T : never)
 >sym : unique symbol
 
     x = "str";
 >x = "str" : "str"
->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+>x : unique symbol | "str" | (keyof T extends unknown ? {} extends Record<keyof T, any> ? never : keyof T : never)
 >"str" : "str"
 }
 
