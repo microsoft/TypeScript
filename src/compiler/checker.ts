@@ -17468,11 +17468,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
                 forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, TypeFlags.StringOrNumberLiteralOrUnique, !!(indexFlags & IndexFlags.StringsOnly), addMemberForKeyType);
             }
-            else if (isFilteringMappedType(type)) {
+            else if (nameType) {
                 const modifiersIndex = getIndexType(getModifiersTypeFromMappedType(type), indexFlags, UnionReduction.None);
                 const mapper = makeUnaryTypeMapper(getTypeParameterFromMappedType(type), modifiersIndex);
                 const nameMapper = combineTypeMappers(type.mapper, mapper);
-                return instantiateType(nameType, nameMapper)!;
+                return instantiateType(nameType, nameMapper);
             }
             else {
                 // we have a generic index and a homomorphic mapping (but a distributive key remapping) - we need to defer the whole `keyof whatever` for later

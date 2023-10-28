@@ -274,7 +274,7 @@ type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
 >TS3 : Exclude<keyof T, "a" | "b" | "c">
 
 type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
->TS4 : keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string; }
+>TS4 : NameMap[keyof T & keyof NameMap]
 
 type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
 >TS5 : NameMap[keyof T & "a"] | NameMap[keyof T & "b"] | NameMap[keyof T & "c"]
