@@ -3886,7 +3886,8 @@ function getCompletionData(
         // If already typing an import statement, provide completions for it.
         if (importStatementCompletion) return true;
         // If current completion is for non-contextual Object literal shortahands, ignore auto-import symbols
-        if (isNonContextualObjectLiteral) return false;
+        // if current non-contextual Object literal is spread assignment, we may need auto-import symbols
+        if (isNonContextualObjectLiteral && !isSpreadAssignment(contextToken.parent)) return false;
         // If not already a module, must have modules enabled.
         if (!preferences.includeCompletionsForModuleExports) return false;
         // If already using ES modules, OK to continue using them.
