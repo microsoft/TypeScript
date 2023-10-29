@@ -267,7 +267,7 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
         /*emitOnlyDtsFiles*/ undefined,
         /*customTransformers*/ undefined,
         // @ts-expect-error We use forceDts emit documented flag
-        /*forceEmit*/ true,
+        /*forceEmit*/ false,
     );
     const postErrors = ts.getPreEmitDiagnostics(program);
     const longerErrors = lang.length(preErrors) > postErrors.length ? preErrors : postErrors;
