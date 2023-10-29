@@ -237,3 +237,91 @@ declare function getArrayResult(): [true, number] | [false, undefined];
     }
 }
 
+type Nested = {
+>Nested : Symbol(Nested, Decl(controlFlowAliasedDiscriminants.ts, 67, 1))
+
+    type: 'string';
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 69, 15))
+
+    resp: {
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19))
+
+        data: string
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11))
+    }
+} | {
+    type: 'number';
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 74, 5))
+
+    resp: {
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 75, 19))
+
+        data: number;
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 76, 11))
+    }
+}
+
+{
+    let resp!: Nested;
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 82, 7))
+>Nested : Symbol(Nested, Decl(controlFlowAliasedDiscriminants.ts, 67, 1))
+
+    const { resp: { data }, type } = resp;
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19), Decl(controlFlowAliasedDiscriminants.ts, 75, 19))
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 83, 19))
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 83, 27))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 82, 7))
+
+    if (type === 'string') {
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 83, 27))
+
+        data satisfies string;
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 83, 19))
+    }
+    if (resp.type === 'string') {
+>resp.type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 69, 15), Decl(controlFlowAliasedDiscriminants.ts, 74, 5))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 82, 7))
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 69, 15), Decl(controlFlowAliasedDiscriminants.ts, 74, 5))
+
+        resp.resp.data satisfies string;
+>resp.resp.data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11))
+>resp.resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 82, 7))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19))
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11))
+    }    
+}
+
+{
+   
+    let resp!: Nested;
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 94, 7))
+>Nested : Symbol(Nested, Decl(controlFlowAliasedDiscriminants.ts, 67, 1))
+
+    const { resp: { data: dataAlias }, type } = resp;
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19), Decl(controlFlowAliasedDiscriminants.ts, 75, 19))
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11), Decl(controlFlowAliasedDiscriminants.ts, 76, 11))
+>dataAlias : Symbol(dataAlias, Decl(controlFlowAliasedDiscriminants.ts, 95, 19))
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 95, 38))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 94, 7))
+
+    if (type === 'string') {
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 95, 38))
+
+        dataAlias satisfies string;
+>dataAlias : Symbol(dataAlias, Decl(controlFlowAliasedDiscriminants.ts, 95, 19))
+    }
+    if (resp.type === 'string') {
+>resp.type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 69, 15), Decl(controlFlowAliasedDiscriminants.ts, 74, 5))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 94, 7))
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 69, 15), Decl(controlFlowAliasedDiscriminants.ts, 74, 5))
+
+        resp.resp.data satisfies string;
+>resp.resp.data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11))
+>resp.resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 94, 7))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19))
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11))
+    }    
+}
+

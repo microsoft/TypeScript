@@ -278,3 +278,101 @@ declare function getArrayResult(): [true, number] | [false, undefined];
     }
 }
 
+type Nested = {
+>Nested : { type: 'string'; resp: {    data: string;}; } | { type: 'number'; resp: {    data: number;}; }
+
+    type: 'string';
+>type : "string"
+
+    resp: {
+>resp : { data: string; }
+
+        data: string
+>data : string
+    }
+} | {
+    type: 'number';
+>type : "number"
+
+    resp: {
+>resp : { data: number; }
+
+        data: number;
+>data : number
+    }
+}
+
+{
+    let resp!: Nested;
+>resp : Nested
+
+    const { resp: { data }, type } = resp;
+>resp : any
+>data : string | number
+>type : "string" | "number"
+>resp : Nested
+
+    if (type === 'string') {
+>type === 'string' : boolean
+>type : "string" | "number"
+>'string' : "string"
+
+        data satisfies string;
+>data satisfies string : string | number
+>data : string | number
+    }
+    if (resp.type === 'string') {
+>resp.type === 'string' : boolean
+>resp.type : "string" | "number"
+>resp : Nested
+>type : "string" | "number"
+>'string' : "string"
+
+        resp.resp.data satisfies string;
+>resp.resp.data satisfies string : string
+>resp.resp.data : string
+>resp.resp : { data: string; }
+>resp : { type: "string"; resp: { data: string; }; }
+>resp : { data: string; }
+>data : string
+    }    
+}
+
+{
+   
+    let resp!: Nested;
+>resp : Nested
+
+    const { resp: { data: dataAlias }, type } = resp;
+>resp : any
+>data : any
+>dataAlias : string | number
+>type : "string" | "number"
+>resp : Nested
+
+    if (type === 'string') {
+>type === 'string' : boolean
+>type : "string" | "number"
+>'string' : "string"
+
+        dataAlias satisfies string;
+>dataAlias satisfies string : string | number
+>dataAlias : string | number
+    }
+    if (resp.type === 'string') {
+>resp.type === 'string' : boolean
+>resp.type : "string" | "number"
+>resp : Nested
+>type : "string" | "number"
+>'string' : "string"
+
+        resp.resp.data satisfies string;
+>resp.resp.data satisfies string : string
+>resp.resp.data : string
+>resp.resp : { data: string; }
+>resp : { type: "string"; resp: { data: string; }; }
+>resp : { data: string; }
+>data : string
+    }    
+}
+

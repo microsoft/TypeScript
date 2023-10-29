@@ -69,3 +69,38 @@ declare function getArrayResult(): [true, number] | [false, undefined];
         bar3.toExponential();   // should error
     }
 }
+
+type Nested = {
+    type: 'string';
+    resp: {
+        data: string
+    }
+} | {
+    type: 'number';
+    resp: {
+        data: number;
+    }
+}
+
+{
+    let resp!: Nested;
+    const { resp: { data }, type } = resp;
+    if (type === 'string') {
+        data satisfies string;
+    }
+    if (resp.type === 'string') {
+        resp.resp.data satisfies string;
+    }    
+}
+
+{
+   
+    let resp!: Nested;
+    const { resp: { data: dataAlias }, type } = resp;
+    if (type === 'string') {
+        dataAlias satisfies string;
+    }
+    if (resp.type === 'string') {
+        resp.resp.data satisfies string;
+    }    
+}

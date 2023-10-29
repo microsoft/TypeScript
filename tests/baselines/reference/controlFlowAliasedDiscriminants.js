@@ -70,6 +70,41 @@ declare function getArrayResult(): [true, number] | [false, undefined];
     }
 }
 
+type Nested = {
+    type: 'string';
+    resp: {
+        data: string
+    }
+} | {
+    type: 'number';
+    resp: {
+        data: number;
+    }
+}
+
+{
+    let resp!: Nested;
+    const { resp: { data }, type } = resp;
+    if (type === 'string') {
+        data satisfies string;
+    }
+    if (resp.type === 'string') {
+        resp.resp.data satisfies string;
+    }    
+}
+
+{
+   
+    let resp!: Nested;
+    const { resp: { data: dataAlias }, type } = resp;
+    if (type === 'string') {
+        dataAlias satisfies string;
+    }
+    if (resp.type === 'string') {
+        resp.resp.data satisfies string;
+    }    
+}
+
 
 //// [controlFlowAliasedDiscriminants.js]
 function useQuery() {
@@ -123,5 +158,25 @@ if (areSuccess) {
         bar1.toExponential(); // should ok
         bar2.toExponential(); // should error
         bar3.toExponential(); // should error
+    }
+}
+{
+    var resp = void 0;
+    var data = resp.resp.data, type = resp.type;
+    if (type === 'string') {
+        data;
+    }
+    if (resp.type === 'string') {
+        resp.resp.data;
+    }
+}
+{
+    var resp = void 0;
+    var dataAlias = resp.resp.data, type = resp.type;
+    if (type === 'string') {
+        dataAlias;
+    }
+    if (resp.type === 'string') {
+        resp.resp.data;
     }
 }
