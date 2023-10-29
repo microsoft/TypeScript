@@ -20,16 +20,16 @@ const y = x;
 
 //// [/primary/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": [
-  {
-   "path": "../someProj",
-   "prepend": true
-  }
- ]
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": [
+    {
+      "path": "../someProj",
+      "prepend": true
+    }
+  ]
 }
 
 //// [/someProj/b.ts]
@@ -37,12 +37,12 @@ const x = 100;
 
 //// [/someProj/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin",
-  "outFile": "foo.js"
- },
- "references": []
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin",
+    "outFile": "foo.js"
+  },
+  "references": []
 }
 
 
@@ -53,27 +53,27 @@ Output::
   The file is in the program because:
     Output from referenced project '/someProj/tsconfig.json' included because '--module' is specified as 'none'
 
-  [96mprimary/tsconfig.json[0m:[93m7[0m:[93m3[0m
-    [7m 7[0m   {
-    [7m  [0m [96m  ~[0m
-    [7m 8[0m    "path": "../someProj",
-    [7m  [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-    [7m 9[0m    "prepend": true
-    [7m  [0m [96m~~~~~~~~~~~~~~~~~~[0m
-    [7m10[0m   }
-    [7m  [0m [96m~~~[0m
+  [96mprimary/tsconfig.json[0m:[93m7[0m:[93m5[0m
+    [7m 7[0m     {
+    [7m  [0m [96m    ~[0m
+    [7m 8[0m       "path": "../someProj",
+    [7m  [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m 9[0m       "prepend": true
+    [7m  [0m [96m~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m10[0m     }
+    [7m  [0m [96m~~~~~[0m
     File is output from referenced project specified here.
 
-[96mprimary/tsconfig.json[0m:[93m7[0m:[93m3[0m - [91merror[0m[90m TS6309: [0mOutput file '/someProj/foo.js' from project '/someProj' does not exist
+[96mprimary/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6309: [0mOutput file '/someProj/foo.js' from project '/someProj' does not exist
 
-[7m 7[0m   {
-[7m  [0m [91m  ~[0m
-[7m 8[0m    "path": "../someProj",
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m 9[0m    "prepend": true
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~[0m
-[7m10[0m   }
-[7m  [0m [91m~~~[0m
+[7m 7[0m     {
+[7m  [0m [91m    ~[0m
+[7m 8[0m       "path": "../someProj",
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m 9[0m       "prepend": true
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 2 errors in the same file, starting at: primary/tsconfig.json[90m:7[0m

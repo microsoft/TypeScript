@@ -12,13 +12,13 @@ bVue file
 
 //// [/user/username/projects/myproject/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true
- },
- "include": [
-  "*.ts",
-  "*.vue"
- ]
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "*.ts",
+    "*.vue"
+  ]
 }
 
 //// [/a/lib/lib.d.ts]

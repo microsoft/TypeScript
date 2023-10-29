@@ -5,7 +5,13 @@ Creating project service
 let x = 1;
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{},"include":["src/**/*","notexistingfolder/*"]}
+{
+  "compilerOptions": {},
+  "include": [
+    "src/**/*",
+    "notexistingfolder/*"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /a/src

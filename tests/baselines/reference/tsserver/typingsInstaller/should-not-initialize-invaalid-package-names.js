@@ -5,7 +5,11 @@ Creating project service
 let x = 1
 
 //// [/a/b/package.json]
-{"dependencies":{"; say ‘Hello from TypeScript!’ #":"0.0.x"}}
+{
+  "dependencies": {
+    "; say ‘Hello from TypeScript!’ #": "0.0.x"
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /a/b
@@ -43,7 +47,7 @@ TI:: typing installer creation complete
 
 //// [/tmp/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 

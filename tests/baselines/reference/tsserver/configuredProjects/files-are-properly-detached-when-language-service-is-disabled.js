@@ -11,7 +11,11 @@ var x = 1
 var x = 1
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"allowJs":true}}
+{
+  "compilerOptions": {
+    "allowJs": true
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /a

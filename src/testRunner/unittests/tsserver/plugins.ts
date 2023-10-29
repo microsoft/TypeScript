@@ -4,6 +4,9 @@ import {
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openFilesForSession,
@@ -28,7 +31,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
                         info.session?.addProtocolHandler(testProtocolCommand, request => {
-                            session.logger.log(`addProtocolHandler: ${JSON.stringify(request, undefined, " ")}`);
+                            session.logger.log(`addProtocolHandler: ${jsonToReadableText(request)}`);
                             return {
                                 response: testProtocolCommandResponse,
                             };
@@ -49,7 +52,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     plugins: [
                         ...[...expectedToLoad, ...notToLoad].map(name => ({ name })),
@@ -81,7 +84,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     plugins: [
                         { name: pluginName },
@@ -106,7 +109,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         const aTs: File = { path: `/user/username/projects/myproject/a.ts`, content: `export const x = 10;` };
         const tsconfig: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     plugins: [{ name: "some-plugin" }],
                 },
@@ -134,18 +137,18 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         };
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([aTs], session);
-        session.logger.log(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
+        session.logger.log(`ExternalFiles:: ${jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
         host.writeFile(
             tsconfig.path,
-            JSON.stringify({
+            jsonToReadableText({
                 compilerOptions: {
                     plugins: [{ name: "some-other-plugin" }],
                 },
             }),
         );
         host.runQueuedTimeoutCallbacks();
-        session.logger.log(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
+        session.logger.log(`ExternalFiles:: ${jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
         baselineTsserverLogs("plugins", "gets external files with config file reload", session);
     });
@@ -167,7 +170,7 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
         };
         const config: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: { plugins: [{ name: "myplugin" }] },
             }),
         };
@@ -237,14 +240,10 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
         };
         const config: File = {
             path: "/user/username/projects/myproject/tsconfig.json",
-            content: JSON.stringify(
-                {
-                    compilerOptions: { composite: true },
-                    include: ["*.ts", "*.vue"],
-                },
-                undefined,
-                " ",
-            ),
+            content: jsonToReadableText({
+                compilerOptions: { composite: true },
+                include: ["*.ts", "*.vue"],
+            }),
         };
         const host = createServerHost([aTs, dTs, bVue, config, libFile]);
         const externalFiles = new Map<ts.server.Project, string[]>();

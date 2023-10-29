@@ -15,10 +15,26 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/packages/emit-composite/tsconfig.json]
-{"compilerOptions":{"composite":true,"allowJs":true,"emitDeclarationOnly":true,"outDir":"lib","rootDir":"src"},"include":["src"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "allowJs": true,
+    "emitDeclarationOnly": true,
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/emit-composite/package.json]
-{"name":"emit-composite","version":"1.0.0","main":"src/index.js","typings":"lib/index.d.ts"}
+{
+  "name": "emit-composite",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "typings": "lib/index.d.ts"
+}
 
 //// [/user/username/projects/myproject/packages/emit-composite/src/index.js]
 const testModule = require('./testModule');
@@ -37,7 +53,16 @@ module.exports = {
 }
 
 //// [/user/username/projects/myproject/packages/consumer/tsconfig.json]
-{"include":["src"],"references":[{"path":"../emit-composite"}]}
+{
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../emit-composite"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/consumer/src/index.ts]
 import { testCompositeFunction } from 'emit-composite';

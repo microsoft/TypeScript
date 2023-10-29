@@ -1,6 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc";
@@ -26,7 +29,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg1/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { outDir: "build", ...optionsToExtend },
                     references: [{ path: "../pkg2" }],
                 }),
@@ -41,7 +44,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg2/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         outDir: "build",
@@ -52,7 +55,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg2/package.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     name: "pkg2",
                     version: "1.0.0",
                     main: "build/index.js",
@@ -86,13 +89,13 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         fs: () =>
             loadProjectFromFiles({
                 "/src/packages/pkg1_index.ts": `export const theNum: TheNum = "type1";`,
-                "/src/packages/pkg1.tsconfig.json": JSON.stringify({
+                "/src/packages/pkg1.tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, typeRoots: ["./typeroot1"] },
                     files: ["./pkg1_index.ts"],
                 }),
                 "/src/packages/typeroot1/sometype/index.d.ts": Utils.dedent`declare type TheNum = "type1";`,
                 "/src/packages/pkg2_index.ts": `export const theNum: TheNum2 = "type2";`,
-                "/src/packages/pkg2.tsconfig.json": JSON.stringify({
+                "/src/packages/pkg2.tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, typeRoots: ["./typeroot2"] },
                     files: ["./pkg2_index.ts"],
                 }),
@@ -109,22 +112,22 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
         fs: () =>
             loadProjectFromFiles({
                 "/src/projects/a/src/index.ts": "",
-                "/src/projects/a/tsconfig.json": JSON.stringify({
+                "/src/projects/a/tsconfig.json": jsonToReadableText({
                     compilerOptions: { strict: true },
                 }),
                 "/src/projects/b/src/index.ts": Utils.dedent`
                     import pg from "pg";
                     pg.foo();
                 `,
-                "/src/projects/b/tsconfig.json": JSON.stringify({
+                "/src/projects/b/tsconfig.json": jsonToReadableText({
                     compilerOptions: { strict: true, module: "node16" },
                 }),
-                "/src/projects/b/package.json": JSON.stringify({
+                "/src/projects/b/package.json": jsonToReadableText({
                     name: "b",
                     type: "module",
                 }),
                 "/src/projects/node_modules/@types/pg/index.d.ts": "export function foo(): void;",
-                "/src/projects/node_modules/@types/pg/package.json": JSON.stringify({
+                "/src/projects/node_modules/@types/pg/package.json": jsonToReadableText({
                     name: "@types/pg",
                     types: "index.d.ts",
                 }),

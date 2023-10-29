@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openFilesForSession,
@@ -34,7 +37,7 @@ const ambientDeclaration: File = {
 };
 const mobxPackageJson: File = {
     path: "/node_modules/mobx/package.json",
-    content: `{ "name": "mobx", "version": "1.0.0" }`,
+    content: jsonToReadableText({ name: "mobx", version: "1.0.0" }),
 };
 const mobxDts: File = {
     path: "/node_modules/mobx/index.d.ts",

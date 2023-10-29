@@ -8,7 +8,13 @@ import * as debug from "debug"
 import * as debug from "debug"
 
 //// [/users/username/projects/proj/tsconfig.json]
-{"files":["foo/boo/app.ts","foo/boo/moo/app.ts"],"moduleResolution":"Node"}
+{
+  "files": [
+    "foo/boo/app.ts",
+    "foo/boo/moo/app.ts"
+  ],
+  "moduleResolution": "Node"
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

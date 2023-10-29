@@ -20,7 +20,11 @@ import { x } from "./file2";
 export const x = 10;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"outDir":"dist"}}
+{
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}
 
 
 /a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
@@ -32,8 +36,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/src/file1.ts","/user/username/projects/myproject/src/file2.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/dist","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/file1.ts",
+  "/user/username/projects/myproject/src/file2.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/dist",
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -124,8 +136,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/src/file1.ts","/user/username/projects/myproject/src/file2.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/dist","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/file1.ts",
+  "/user/username/projects/myproject/src/file2.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/dist",
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -197,8 +217,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/src/file1.ts","/user/username/projects/myproject/src/renamed.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/dist","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/file1.ts",
+  "/user/username/projects/myproject/src/renamed.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/dist",
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

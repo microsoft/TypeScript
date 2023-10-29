@@ -5,7 +5,11 @@ Before request
 export let x = 1
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"outFile":"/a/out.js"}}
+{
+  "compilerOptions": {
+    "outFile": "/a/out.js"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

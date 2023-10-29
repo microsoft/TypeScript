@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openFilesForSession,
@@ -31,7 +34,7 @@ describe("unittests:: tsserver:: formatSettings", () => {
         });
 
         // get format options for file - should be equal to new global settings
-        session.logger.log(`FormatCodeOptions should be global:: ${f1.path}:: ${JSON.stringify(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)), undefined, " ")}`);
+        session.logger.log(`FormatCodeOptions should be global:: ${f1.path}:: ${jsonToReadableText(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)))}`);
 
         // set per file format options
         const newPerFileSettings = { ...defaultSettings, insertSpaceAfterCommaDelimiter: !defaultSettings.insertSpaceAfterCommaDelimiter };
@@ -41,7 +44,7 @@ describe("unittests:: tsserver:: formatSettings", () => {
         });
 
         // get format options for file - should be equal to new per-file settings
-        session.logger.log(`FormatCodeOptions should be per file:: ${f1.path}:: ${JSON.stringify(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)), undefined, " ")}`);
+        session.logger.log(`FormatCodeOptions should be per file:: ${f1.path}:: ${jsonToReadableText(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)))}`);
 
         // set new global settings - they should not affect ones that were set per-file
         const newGlobalSettings2 = { ...defaultSettings, insertSpaceAfterSemicolonInForStatements: !defaultSettings.insertSpaceAfterSemicolonInForStatements };
@@ -51,7 +54,7 @@ describe("unittests:: tsserver:: formatSettings", () => {
         });
 
         // get format options for file - should be equal to new per-file settings
-        session.logger.log(`FormatCodeOptions should be per file:: ${f1.path}:: ${JSON.stringify(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)), undefined, " ")}`);
+        session.logger.log(`FormatCodeOptions should be per file:: ${f1.path}:: ${jsonToReadableText(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)))}`);
         baselineTsserverLogs("formatSettings", "works when extends is specified with a case insensitive file system", session);
     });
 });

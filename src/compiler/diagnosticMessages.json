@@ -3619,7 +3619,7 @@
         "category": "Error",
         "code": 2839
     },
-    "An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes": {
+    "An interface cannot extend a primitive type like '{0}'. It can only extend other named object types.": {
         "category": "Error",
         "code": 2840
     },
@@ -3702,6 +3702,14 @@
     "Type '{0}' is generic and can only be indexed for reading.": {
         "category": "Error",
         "code": 2862
+    },
+    "A class cannot extend a primitive type like '{0}'. Classes can only extend constructable values.": {
+        "category": "Error",
+        "code": 2863
+    },
+    "A class cannot implement a primitive type like '{0}'. It can only implement other named object types.": {
+        "category": "Error",
+        "code": 2864
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

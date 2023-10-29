@@ -11,7 +11,11 @@ export function foo() {}
 export function bar() { }
 
 //// [/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json]
-{"include":["./src"]}
+{
+  "include": [
+    "./src"
+  ]
+}
 
 //// [/user/username/projects/myproject/playground/tsconfig-json/src/src.ts]
 export function foobar() { }

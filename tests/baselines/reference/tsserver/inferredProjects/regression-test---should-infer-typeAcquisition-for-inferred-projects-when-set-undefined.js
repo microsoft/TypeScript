@@ -28,7 +28,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/file1.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 typeAcquisition : setting to undefined
 typeAcquisition should be inferred for inferred projects: {
- "enable": true,
- "include": [],
- "exclude": []
+  "enable": true,
+  "include": [],
+  "exclude": []
 }

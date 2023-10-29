@@ -26,7 +26,14 @@ Before request
 
 
 //// [/tsconfig.json]
-{"compilerOptions":{"allowJs":true},"include":["src"]}
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "include": [
+    "src"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

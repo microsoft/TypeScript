@@ -2,7 +2,13 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/tsconfig.json]
-{"watchOptions":{"excludeDirectories":["node_modules"]}}
+{
+  "watchOptions": {
+    "excludeDirectories": [
+      "node_modules"
+    ]
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

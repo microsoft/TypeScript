@@ -2,7 +2,11 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"allowJs":true}}
+{
+  "compilerOptions": {
+    "allowJs": true
+  }
+}
 
 //// [/user/username/projects/myproject/mocks/cssMock.js]
 function foo() { }
@@ -11,7 +15,12 @@ function foo() { }
 function bar() { }
 
 //// [/user/username/projects/myproject/apps/editor/tsconfig.json]
-{"extends":"../../tsconfig.json","include":["./src"]}
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "./src"
+  ]
+}
 
 //// [/user/username/projects/myproject/apps/editor/src/src.js]
 function fooBar() { }
@@ -493,7 +502,7 @@ TI:: typing installer creation complete
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 

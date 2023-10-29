@@ -19,13 +19,19 @@ import {C} from "@microsoft/recognizers-text";
 new C();
 
 //// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json]
-{"include":["src"]}
+{
+  "include": [
+    "src"
+  ]
+}
 
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/src/recognizers-text.ts]
 export class C { method () { return 10; } }
 
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/package.json]
-{"typings":"dist/types/recognizers-text.d.ts"}
+{
+  "typings": "dist/types/recognizers-text.d.ts"
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -541,7 +547,14 @@ Before running Timeout callback:: count: 2
 10: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 11: *ensureProjectForOpenFiles*
 //// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json]
-{"include":["src"],"compilerOptions":{"resolveJsonModule":true}}
+{
+  "include": [
+    "src"
+  ],
+  "compilerOptions": {
+    "resolveJsonModule": true
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json

@@ -8,7 +8,12 @@ declare const x: string;
 var y = 1;
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"composite":true},"compileOnSave":true}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "compileOnSave": true
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

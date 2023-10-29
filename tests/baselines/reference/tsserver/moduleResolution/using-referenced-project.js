@@ -3,22 +3,43 @@ Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't 
 Before request
 //// [/home/src/projects/project/packages/package-a/package.json]
 {
- "name": "package-a",
- "version": "1.0.0",
- "type": "module",
- "main": "build/index.js",
- "exports": {
-  ".": "./build/index.js",
-  "./package.json": "./package.json",
-  "./*": [
-   "./build/*/index.js",
-   "./build/*.js"
-  ]
- }
+  "name": "package-a",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./package.json": "./package.json",
+    "./*": [
+      "./build/*/index.js",
+      "./build/*.js"
+    ]
+  }
 }
 
 //// [/home/src/projects/project/packages/package-a/tsconfig.json]
-{"compilerOptions":{"allowSyntheticDefaultImports":true,"baseUrl":"./","composite":true,"declarationMap":true,"esModuleInterop":true,"lib":["es2021"],"module":"esnext","moduleResolution":"bundler","outDir":"build","rootDir":"./src","target":"ES2021","traceResolution":true,"tsBuildInfoFile":"./build/tsconfig.tsbuildinfo"},"include":["./src/**/*.ts"]}
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "composite": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es2021"
+    ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "outDir": "build",
+    "rootDir": "./src",
+    "target": "ES2021",
+    "traceResolution": true,
+    "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo"
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
 
 //// [/home/src/projects/project/packages/package-a/src/index.ts]
 export * from "./subfolder";
@@ -28,22 +49,48 @@ export const FOO = "bar";
 
 //// [/home/src/projects/project/packages/package-b/package.json]
 {
- "name": "package-b",
- "version": "1.0.0",
- "type": "module",
- "main": "build/index.js",
- "exports": {
-  ".": "./build/index.js",
-  "./package.json": "./package.json",
-  "./*": [
-   "./build/*/index.js",
-   "./build/*.js"
-  ]
- }
+  "name": "package-b",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./package.json": "./package.json",
+    "./*": [
+      "./build/*/index.js",
+      "./build/*.js"
+    ]
+  }
 }
 
 //// [/home/src/projects/project/packages/package-b/tsconfig.json]
-{"compilerOptions":{"allowSyntheticDefaultImports":true,"baseUrl":"./","composite":true,"declarationMap":true,"esModuleInterop":true,"lib":["es2021"],"module":"esnext","moduleResolution":"bundler","outDir":"build","rootDir":"./src","target":"ES2021","traceResolution":true,"tsBuildInfoFile":"./build/tsconfig.tsbuildinfo"},"include":["./src/**/*.ts"],"references":[{"path":"../package-a"}]}
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "composite": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es2021"
+    ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "outDir": "build",
+    "rootDir": "./src",
+    "target": "ES2021",
+    "traceResolution": true,
+    "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo"
+  },
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "../package-a"
+    }
+  ]
+}
 
 //// [/home/src/projects/project/packages/package-b/src/index.ts]
 import { FOO } from "package-a";

@@ -1,10 +1,26 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"nodenext","outDir":"./dist","declaration":true,"declarationDir":"./types"}}
+{
+  "compilerOptions": {
+    "moduleResolution": "nodenext",
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationDir": "./types"
+  }
+}
 
 //// [/user/username/projects/myproject/package.json]
-{"name":"@this/package","type":"module","exports":{".":{"default":"./dist/index.js","types":"./types/index.d.ts"}}}
+{
+  "name": "@this/package",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./types/index.d.ts"
+    }
+  }
+}
 
 //// [/user/username/projects/myproject/index.ts]
 import * as me from "@this/package";
@@ -60,8 +76,19 @@ File '/package.json' does not exist.
 
 
 
-Program root files: ["/user/username/projects/myproject/index.ts","/user/username/projects/myproject/index2.ts"]
-Program options: {"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/index.ts",
+  "/user/username/projects/myproject/index2.ts"
+]
+Program options: {
+  "moduleResolution": 99,
+  "outDir": "/user/username/projects/myproject/dist",
+  "declaration": true,
+  "declarationDir": "/user/username/projects/myproject/types",
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -167,8 +194,19 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/user/username/projects/myproject/index.ts","/user/username/projects/myproject/index2.ts"]
-Program options: {"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/index.ts",
+  "/user/username/projects/myproject/index2.ts"
+]
+Program options: {
+  "moduleResolution": 99,
+  "outDir": "/user/username/projects/myproject/dist",
+  "declaration": true,
+  "declarationDir": "/user/username/projects/myproject/types",
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

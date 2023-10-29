@@ -4,6 +4,9 @@ import {
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     compilerOptionsToConfigJson,
 } from "../helpers/contents";
 import {
@@ -63,7 +66,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem watchin
         };
         const tsconfig = {
             path: "/users/username/projects/project/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {},
                 exclude: ["node_modules"],
             }),
@@ -347,7 +350,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
                 };
                 const config = {
                     path: "/a/b/tsconfig.json",
-                    content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
+                    content: jsonToReadableText({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
                 };
                 const node = {
                     path: "/a/b/node_modules/@types/node/index.d.ts",
@@ -370,7 +373,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module resolution caching", () => {
     const configFile: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
-        content: JSON.stringify({ compilerOptions: { traceResolution: true } }),
+        content: jsonToReadableText({ compilerOptions: { traceResolution: true } }),
     };
 
     function getModules(module1Path: string, module2Path: string) {
@@ -544,7 +547,7 @@ export const x = 10;`,
                 };
                 const configFile: File = {
                     path: `/user/username/projects/myproject/src/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             module: "amd",
                             moduleResolution: "classic",
@@ -570,7 +573,7 @@ export const x = 10;`,
     describe("ignores files/folder changes in node_modules that start with '.'", () => {
         const npmCacheFile: File = {
             path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
-            content: JSON.stringify({ something: 10 }),
+            content: jsonToReadableText({ something: 10 }),
         };
         const file1: File = {
             path: `/user/username/projects/myproject/test.ts`,
@@ -633,7 +636,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
     it("sharing across references", () => {
         const host = createServerHost({
             "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
-            "/users/username/projects/common/tsconfig.json": JSON.stringify({
+            "/users/username/projects/common/tsconfig.json": jsonToReadableText({
                 compilerOptions: compilerOptionsToConfigJson({
                     composite: true,
                     traceResolution: true,
@@ -644,7 +647,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 import { x } from "moduleX";
                 export const b = x;
             `,
-            "/users/username/projects/app/tsconfig.json": JSON.stringify({
+            "/users/username/projects/app/tsconfig.json": jsonToReadableText({
                 compilerOptions: compilerOptionsToConfigJson({
                     composite: true,
                     traceResolution: true,
@@ -668,7 +671,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
     it("not sharing across references", () => {
         const host = createServerHost({
             "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
-            "/users/username/projects/common/tsconfig.json": JSON.stringify({
+            "/users/username/projects/common/tsconfig.json": jsonToReadableText({
                 compilerOptions: { composite: true, traceResolution: true },
             }),
             "/users/username/projects/common/moduleA.ts": "export const a = 10;",
@@ -676,7 +679,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 import { x } from "moduleX";
                 export const b = x;
             `,
-            "/users/username/projects/app/tsconfig.json": JSON.stringify({
+            "/users/username/projects/app/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     traceResolution: true,

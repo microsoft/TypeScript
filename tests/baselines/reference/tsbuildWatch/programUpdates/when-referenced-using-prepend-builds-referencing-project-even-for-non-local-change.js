@@ -14,13 +14,32 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/sample1/core/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"outFile":"index.js"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "outFile": "index.js"
+  }
+}
 
 //// [/user/username/projects/sample1/core/index.ts]
 function foo() { return 10; }
 
 //// [/user/username/projects/sample1/logic/tsconfig.json]
-{"compilerOptions":{"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"index.js"},"references":[{"path":"../core","prepend":true}]}
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "composite": true,
+    "declaration": true,
+    "outFile": "index.js"
+  },
+  "references": [
+    {
+      "path": "../core",
+      "prepend": true
+    }
+  ]
+}
 
 //// [/user/username/projects/sample1/logic/index.ts]
 function bar() { return foo() + 1 };
@@ -35,8 +54,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/core/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/core/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -46,8 +73,17 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/logic/index.ts"
+]
+Program options: {
+  "ignoreDeprecations": "5.0",
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/logic/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -299,12 +335,20 @@ After running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
-[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
 
 
 
-Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/core/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/core/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -411,12 +455,21 @@ Before running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:28 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/logic/index.ts"
+]
+Program options: {
+  "ignoreDeprecations": "5.0",
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/logic/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -574,12 +627,20 @@ After running Timeout callback:: count: 1
 4: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
-[[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
 
 
 
-Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/sample1/core/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/core/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -681,7 +742,7 @@ Before running Timeout callback:: count: 1
 4: timerToBuildInvalidatedProject
 After running Timeout callback:: count: 0
 Output::
-[[90m12:02:00 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
