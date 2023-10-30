@@ -992,8 +992,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                 // use the actual directory name, so don't look at `packageJsonContent.name` here.
                 const nodeModulesDirectoryName = packageRootPath.substring(parts.topLevelPackageNameIndex + 1);
                 const packageName = getPackageNameFromTypesPackageName(nodeModulesDirectoryName);
-                const useImportCondition = importMode === ModuleKind.ESNext || (importMode !== undefined ? false : undefined);
-                const conditions = getConditions(options, useImportCondition);
+                const conditions = getConditions(options, importMode);
                 const fromExports = packageJsonContent.exports
                     ? tryGetModuleNameFromExports(options, path, packageRootPath, packageName, packageJsonContent.exports, conditions)
                     : undefined;
