@@ -1928,8 +1928,8 @@ export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAcc
 }
 
 /** @internal */
-export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | SignatureDeclaration {
-    return isCallLikeExpression(node) || isFunctionLike(node);
+export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | FunctionLikeDeclaration {
+    return isCallLikeExpression(node) || isFunctionLikeDeclaration(node);
 }
 
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {
