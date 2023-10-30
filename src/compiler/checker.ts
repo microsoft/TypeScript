@@ -1868,7 +1868,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const nodeLinks = getNodeLinks(node);
                 cachedResolvedSignatures.push([nodeLinks, nodeLinks.resolvedSignature] as const);
                 nodeLinks.resolvedSignature = undefined;
-                if (isFunctionLikeDeclaration(node)) {
+                if (isFunctionExpressionOrArrowFunction(node)) {
                     const symbolLinks = getSymbolLinks(getSymbolOfDeclaration(node));
                     const type = symbolLinks.type;
                     cachedTypes.push([symbolLinks, type] as const);
