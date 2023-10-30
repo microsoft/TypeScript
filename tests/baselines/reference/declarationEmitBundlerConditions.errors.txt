@@ -1,0 +1,35 @@
+/index.ts(2,14): error TS2742: The inferred type of 'c' cannot be named without a reference to './node_modules/pkg'. This is likely not portable. A type annotation is necessary.
+
+
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+      "name": "pkg",
+      "type": "module",
+      "exports": {
+        ".": {
+          "import": "./index.js",
+          "require": "./index.cjs"
+        }
+      }
+    }
+    
+==== /node_modules/pkg/index.d.ts (0 errors) ====
+    export declare class C {
+      private p;
+    }
+    
+==== /node_modules/pkg/index.d.cts (0 errors) ====
+    export {};
+    
+==== /makeC.ts (0 errors) ====
+    import { C } from "pkg";
+    export function makeC() {
+      return new C();
+    }
+    
+==== /index.ts (1 errors) ====
+    import { makeC } from "./makeC";
+    export const c = makeC();
+                 ~
+!!! error TS2742: The inferred type of 'c' cannot be named without a reference to './node_modules/pkg'. This is likely not portable. A type annotation is necessary.
+    

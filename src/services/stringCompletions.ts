@@ -952,7 +952,8 @@ function getCompletionEntriesForNonRelativeModules(
                             }
                             const keys = getOwnKeys(exports);
                             const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
-                            const conditions = getConditions(compilerOptions, mode === ModuleKind.ESNext);
+                            const useImportCondition = mode === ModuleKind.ESNext || (mode !== undefined ? false : undefined);
+                            const conditions = getConditions(compilerOptions, useImportCondition);
                             addCompletionEntriesFromPathsOrExports(
                                 result,
                                 fragmentSubpath,

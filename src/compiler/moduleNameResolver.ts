@@ -745,7 +745,7 @@ function getNodeResolutionFeatures(options: CompilerOptions) {
 }
 
 /**
- * @param overrideResolutionModeAttribute
+ * @param esmMode true: "import" / false: "require" / undefined: default based on settings
  * @internal
  */
 export function getConditions(options: CompilerOptions, esmMode?: boolean) {
