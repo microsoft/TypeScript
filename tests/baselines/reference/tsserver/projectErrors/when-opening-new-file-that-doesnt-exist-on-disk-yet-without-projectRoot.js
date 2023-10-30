@@ -104,13 +104,13 @@ Before running Timeout callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "untitled:Untitled-1",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "untitled:Untitled-1",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 0
 
@@ -119,40 +119,40 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "untitled:Untitled-1",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 1,
-         "offset": 22
-        },
-        "end": {
-         "line": 1,
-         "offset": 63
-        },
-        "text": "File '../../../../../../typings/@epic/Core.d.ts' not found.",
-        "code": 6053,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 2,
-         "offset": 22
-        },
-        "end": {
-         "line": 2,
-         "offset": 41
-        },
-        "text": "File 'src/somefile.d.ts' not found.",
-        "code": 6053,
-        "category": "error"
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "untitled:Untitled-1",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 22
+            },
+            "end": {
+              "line": 1,
+              "offset": 63
+            },
+            "text": "File '../../../../../../typings/@epic/Core.d.ts' not found.",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 22
+            },
+            "end": {
+              "line": 2,
+              "offset": 41
+            },
+            "text": "File 'src/somefile.d.ts' not found.",
+            "code": 6053,
+            "category": "error"
+          }
+        ]
+      }
     }
 After running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -162,21 +162,21 @@ Before running Immedidate callback:: count: 1
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "untitled:Untitled-1",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "untitled:Untitled-1",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 2
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 2
+      }
     }
 After running Immedidate callback:: count: 0

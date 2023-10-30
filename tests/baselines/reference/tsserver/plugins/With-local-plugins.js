@@ -5,7 +5,27 @@ Before request
 class c { prop = "hello"; foo() { return this.prop; } }
 
 //// [/tsconfig.json]
-{"compilerOptions":{"plugins":[{"name":"@myscoped/plugin"},{"name":"unscopedPlugin"},{"name":"../myPlugin"},{"name":"myPlugin/../malicious"},{"transform":"some-transform"}]}}
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@myscoped/plugin"
+      },
+      {
+        "name": "unscopedPlugin"
+      },
+      {
+        "name": "../myPlugin"
+      },
+      {
+        "name": "myPlugin/../malicious"
+      },
+      {
+        "transform": "some-transform"
+      }
+    ]
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

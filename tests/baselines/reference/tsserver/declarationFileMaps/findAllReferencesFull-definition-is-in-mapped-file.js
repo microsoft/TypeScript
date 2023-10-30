@@ -5,20 +5,41 @@ Before request
 function f() {}
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"declaration":true,"declarationMap":true,"outFile":"../bin/a.js"}}
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "outFile": "../bin/a.js"
+  }
+}
 
 //// [/b/b.ts]
 f();
 
 //// [/b/tsconfig.json]
-{"references":[{"path":"../a"}]}
+{
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 //// [/bin/a.d.ts]
 declare function f(): void;
 //# sourceMappingURL=a.d.ts.map
 
 //// [/bin/a.d.ts.map]
-{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a/a.ts"],"names":[],"mappings":"AAAA,iBAAS,CAAC,SAAK"}
+{
+  "version": 3,
+  "file": "a.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../a/a.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,iBAAS,CAAC,SAAK"
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -85,20 +106,20 @@ FsWatchesRecursive::
   {}
 
 ts.getFileEmitOutput: /a/a.ts: {
- "outputFiles": [
-  {
-   "name": "/bin/a.d.ts.map",
-   "writeByteOrderMark": false,
-   "text": "{\"version\":3,\"file\":\"a.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../a/a.ts\"],\"names\":[],\"mappings\":\"AAAA,iBAAS,CAAC,SAAK\"}"
-  },
-  {
-   "name": "/bin/a.d.ts",
-   "writeByteOrderMark": false,
-   "text": "declare function f(): void;\n//# sourceMappingURL=a.d.ts.map"
-  }
- ],
- "emitSkipped": false,
- "diagnostics": []
+  "outputFiles": [
+    {
+      "name": "/bin/a.d.ts.map",
+      "writeByteOrderMark": false,
+      "text": "{\"version\":3,\"file\":\"a.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../a/a.ts\"],\"names\":[],\"mappings\":\"AAAA,iBAAS,CAAC,SAAK\"}"
+    },
+    {
+      "name": "/bin/a.d.ts",
+      "writeByteOrderMark": false,
+      "text": "declare function f(): void;\n//# sourceMappingURL=a.d.ts.map"
+    }
+  ],
+  "emitSkipped": false,
+  "diagnostics": []
 }
 Before request
 

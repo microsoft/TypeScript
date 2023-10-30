@@ -1,7 +1,13 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/src/tsconfig.json]
-{"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out"}}
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "Node16",
+    "outDir": "../out"
+  }
+}
 
 //// [/user/username/projects/myproject/src/fileA.ts]
 import { foo } from "./fileB.mjs";
@@ -14,7 +20,11 @@ export function foo() {
 
 
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module"
+}
 
 //// [/a/lib/lib.es2016.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -83,8 +93,20 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 un
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -136,7 +158,10 @@ Change:: Modify package.json file to remove type module
 
 Input::
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
+{
+  "name": "app",
+  "version": "1.0.0"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -198,8 +223,20 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -253,7 +290,11 @@ Change:: Modify package json file to add type module
 
 Input::
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -310,8 +351,20 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -434,8 +487,20 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -491,7 +556,10 @@ Change:: Modify package json file to without type module
 
 Input::
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
+{
+  "name": "app",
+  "version": "1.0.0"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -538,8 +606,20 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -641,8 +721,20 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts

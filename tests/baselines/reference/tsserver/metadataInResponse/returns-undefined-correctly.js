@@ -5,7 +5,15 @@ Before request
 class c { prop = "hello"; foo() { const x = 0; } }
 
 //// [/tsconfig.json]
-{"compilerOptions":{"plugins":[{"name":"myplugin"}]}}
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "myplugin"
+      }
+    ]
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

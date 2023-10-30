@@ -77,9 +77,7 @@
 goTo.file("/index.ts");
 verify.getEmitOutput(["/dist/index.js", "/dist/index.d.ts.map", "/dist/index.d.ts"]);
 
-verify.baselineCommands(
-    { type: "goToImplementation", markerOrRange: "1" }, // getImplementationAtPosition
-    { type: "goToType", markerOrRange: "1" }, // getTypeDefinitionAtPosition
-    { type: "goToDefinition", markerOrRange: "1" }, // getDefinitionAndBoundSpan
-    { type: "getDefinitionAtPosition", markerOrRange: "1" }, // getDefinitionAtPosition
-);
+verify.baselineGoToImplementation("1");// getImplementationAtPosition
+verify.baselineGoToType("1");// getTypeDefinitionAtPosition
+verify.baselineGoToDefinition("1");// getDefinitionAndBoundSpan
+verify.baselineGetDefinitionAtPosition("1"); // getDefinitionAtPosition

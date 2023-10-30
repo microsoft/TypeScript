@@ -84,8 +84,16 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -240,8 +248,16 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -334,8 +350,16 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -439,8 +463,16 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node
 
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

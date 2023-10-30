@@ -17,7 +17,11 @@ interface Array<T> { length: number; [n: number]: T; }
 label: while (1) {}
 
 //// [/tsconfig.json]
-{"compilerOptions":{"allowUnusedLabels":true}}
+{
+  "compilerOptions": {
+    "allowUnusedLabels": true
+  }
+}
 
 
 /a/lib/tsc.js -w -p /tsconfig.json
@@ -29,8 +33,16 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "allowUnusedLabels": true,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a.ts
@@ -67,7 +79,11 @@ Change:: Disable  allowUnsusedLabels
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"allowUnusedLabels":false}}
+{
+  "compilerOptions": {
+    "allowUnusedLabels": false
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -86,8 +102,16 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "allowUnusedLabels": false,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a.ts
@@ -106,7 +130,11 @@ Change:: Enable  allowUnsusedLabels
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"allowUnusedLabels":true}}
+{
+  "compilerOptions": {
+    "allowUnusedLabels": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -120,8 +148,16 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "allowUnusedLabels": true,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a.ts

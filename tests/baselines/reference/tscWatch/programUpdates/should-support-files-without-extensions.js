@@ -26,8 +26,12 @@ Output::
 
 
 
-Program root files: ["/a/compile"]
-Program options: {"allowNonTsExtensions":true}
+Program root files: [
+  "/a/compile"
+]
+Program options: {
+  "allowNonTsExtensions": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

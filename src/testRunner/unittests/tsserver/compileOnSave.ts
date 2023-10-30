@@ -1,9 +1,14 @@
+import {
+    createLoggerWithInMemoryLogs,
+    Logger,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
-    Logger,
     openExternalProjectForSession,
     openFilesForSession,
     protocolTextSpanFromSubstring,
@@ -642,7 +647,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                 };
                 const config = {
                     path: "/a/tsconfig.json",
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: opts,
                         compileOnSave: true,
                     }),
@@ -712,7 +717,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                 };
                 const config = {
                     path: "/a/tsconfig.json",
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: opts,
                         compileOnSave: true,
                     }),
@@ -859,7 +864,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
         function verify(richResponse: boolean | undefined) {
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compileOnSave: true,
                     compilerOptions: {
                         outDir: "test",
@@ -917,7 +922,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
         function verifyGlobalSave(declaration: boolean, hasModule: boolean) {
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compileOnSave: true,
                     compilerOptions: {
                         declaration,
@@ -1039,7 +1044,7 @@ describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRe
             };
             const app1Config: File = {
                 path: `/user/username/projects/myproject/app1/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     files: ["app.ts", "../core/core.ts"],
                     compilerOptions: { outFile: "build/output.js" },
                     compileOnSave: true,
@@ -1047,7 +1052,7 @@ describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRe
             };
             const app2Config: File = {
                 path: `/user/username/projects/myproject/app2/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     files: ["app.ts", "../core/core.ts"],
                     compilerOptions: { outFile: "build/output.js" },
                     compileOnSave: true,

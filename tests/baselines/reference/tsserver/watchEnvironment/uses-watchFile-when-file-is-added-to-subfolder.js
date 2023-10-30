@@ -8,7 +8,11 @@ import {} from "./"
 
 
 //// [/a/username/project/tsconfig.json]
-{"watchOptions":{"synchronousWatchDirectory":true}}
+{
+  "watchOptions": {
+    "synchronousWatchDirectory": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

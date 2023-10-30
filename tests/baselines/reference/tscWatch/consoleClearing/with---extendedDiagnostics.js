@@ -32,8 +32,13 @@ FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 
 
 
-Program root files: ["/f.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true}
+Program root files: [
+  "/f.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -83,8 +88,13 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/f.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true}
+Program root files: [
+  "/f.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

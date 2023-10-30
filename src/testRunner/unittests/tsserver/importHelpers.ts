@@ -1,6 +1,8 @@
 import {
-    baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
+import {
+    baselineTsserverLogs,
     createSession,
     openExternalProjectForSession,
     toExternalFile,

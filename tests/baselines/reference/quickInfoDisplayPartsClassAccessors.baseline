@@ -1,3 +1,4 @@
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoDisplayPartsClassAccessors.ts ===
 // class c {
 //     public get publicProperty() { return ""; }

@@ -43,6 +43,7 @@ import {
     isFunctionTypeNode,
     isIdentifier,
     isJSDoc,
+    isJSDocOverloadTag,
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
     isJSDocTypeLiteral,
@@ -230,6 +231,11 @@ function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDo
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocTypedefTag:
             return [declaration as JSDocTypedefTag, (declaration as JSDocTypedefTag).parent];
+        case SyntaxKind.JSDocSignature:
+            if (isJSDocOverloadTag(declaration.parent)) {
+                return [declaration.parent.parent];
+            }
+            // falls through
         default:
             return getJSDocCommentsAndTags(declaration);
     }

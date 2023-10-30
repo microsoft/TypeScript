@@ -1,7 +1,12 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../../harness/tsserverLogger";
 import * as ts from "../../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
     openFilesForSession,
@@ -28,7 +33,7 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         };
         const configWithExclude = {
             path: config.path,
-            content: JSON.stringify({ exclude: ["largefile.js"] }),
+            content: jsonToReadableText({ exclude: ["largefile.js"] }),
         };
         const host = createServerHost([f1, f2, config]);
         const originalGetFileSize = host.getFileSize;
