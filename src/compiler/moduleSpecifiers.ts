@@ -875,7 +875,7 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
             currentDirectory,
         );
 
-        const outputFile = getOutputPath(targetFilePath, options, commonDir);
+        const outputFile = isImports && getOutputPath(targetFilePath, options, commonDir);
 
         const pathOrPattern = getNormalizedAbsolutePath(combinePaths(packageDirectory, exports), /*currentDirectory*/ undefined);
         const extensionSwappedTarget = hasTSFileExtension(targetFilePath) ? removeFileExtension(targetFilePath) + tryGetJSExtensionForFile(targetFilePath, options) : undefined;
