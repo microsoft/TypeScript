@@ -20,13 +20,25 @@ let x = 1
 let y = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "/a/b/commonFile1.ts",
+    "/a/b/commonFile2.ts"
+  ]
+}
 
 //// [/a/b/first.tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/a/b/second.tsconfig.json]
-{"extends":"./first.tsconfig.json"}
+{
+  "extends": "./first.tsconfig.json"
+}
 
 
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
@@ -38,8 +50,15 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -81,7 +100,14 @@ Change:: Change config to extend another config
 
 Input::
 //// [/a/b/tsconfig.json]
-{"extends":"./second.tsconfig.json","compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+{
+  "extends": "./second.tsconfig.json",
+  "compilerOptions": {},
+  "files": [
+    "/a/b/commonFile1.ts",
+    "/a/b/commonFile2.ts"
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -95,8 +121,16 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "strict": true,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -141,7 +175,11 @@ Change:: Change first extended config
 
 Input::
 //// [/a/b/first.tsconfig.json]
-{"compilerOptions":{"strict":false}}
+{
+  "compilerOptions": {
+    "strict": false
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -155,8 +193,16 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":false,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "strict": false,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -185,7 +231,12 @@ Change:: Change second extended config
 
 Input::
 //// [/a/b/second.tsconfig.json]
-{"extends":"./first.tsconfig.json","compilerOptions":{"strictNullChecks":true}}
+{
+  "extends": "./first.tsconfig.json",
+  "compilerOptions": {
+    "strictNullChecks": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -199,8 +250,17 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":false,"strictNullChecks":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "strict": false,
+  "strictNullChecks": true,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -221,7 +281,13 @@ Change:: Change config to stop extending another config
 
 Input::
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "/a/b/commonFile1.ts",
+    "/a/b/commonFile2.ts"
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -235,8 +301,15 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

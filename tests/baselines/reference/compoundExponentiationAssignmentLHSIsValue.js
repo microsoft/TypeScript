@@ -152,9 +152,8 @@ _a = Math.pow(['', ''], value), '' = _a[0], '' = _a[1];
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this = this;
         var _a;
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         (_a = _super.prototype). = Math.pow(_a., value);
         return _this;
     }

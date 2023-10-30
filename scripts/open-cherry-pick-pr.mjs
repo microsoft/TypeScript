@@ -1,9 +1,13 @@
-import { Octokit } from "@octokit/rest";
+import {
+    Octokit,
+} from "@octokit/rest";
 import fs from "fs";
 import path from "path";
 import url from "url";
 
-import { runSequence } from "./run-sequence.mjs";
+import {
+    runSequence,
+} from "./run-sequence.mjs";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
@@ -22,30 +26,30 @@ async function main() {
         throw new Error("Source issue not specified");
     }
     const currentSha = runSequence([
-        ["git", ["rev-parse", "HEAD"]]
+        ["git", ["rev-parse", "HEAD"]],
     ]);
     const currentAuthor = runSequence([
-        ["git", ["log", "-1", `--pretty="%aN <%aE>"`]]
+        ["git", ["log", "-1", `--pretty="%aN <%aE>"`]],
     ]);
 
     const gh = new Octokit({
-        auth: process.argv[2]
+        auth: process.argv[2],
     });
 
     const inputPR = (await gh.pulls.get({ pull_number: +process.env.SOURCE_ISSUE, owner: "microsoft", repo: "TypeScript" })).data;
     let remoteName = "origin";
     if (inputPR.base.repo.git_url !== `git:github.com/microsoft/TypeScript` && inputPR.base.repo.git_url !== `git://github.com/microsoft/TypeScript`) {
         runSequence([
-            ["git", ["remote", "add", "nonlocal", inputPR.base.repo.git_url.replace(/^git:(?:\/\/)?/, "https://")]]
+            ["git", ["remote", "add", "nonlocal", inputPR.base.repo.git_url.replace(/^git:(?:\/\/)?/, "https://")]],
         ]);
         remoteName = "nonlocal";
     }
     const baseBranchName = inputPR.base.ref;
     runSequence([
-        ["git", ["fetch", remoteName, baseBranchName]]
+        ["git", ["fetch", remoteName, baseBranchName]],
     ]);
     let logText = runSequence([
-        ["git", ["log", `${remoteName}/${baseBranchName}..${currentSha.trim()}`, `--pretty="%h %s%n%b"`, "--reverse"]]
+        ["git", ["log", `${remoteName}/${baseBranchName}..${currentSha.trim()}`, `--pretty="%h %s%n%b"`, "--reverse"]],
     ]);
     logText = `Cherry-pick PR #${process.env.SOURCE_ISSUE} into ${process.env.TARGET_BRANCH}
 
@@ -55,15 +59,15 @@ ${logText.trim()}`;
     const mergebase = runSequence([["git", ["merge-base", `${remoteName}/${baseBranchName}`, currentSha]]]).trim();
     runSequence([
         ["git", ["checkout", "-b", "temp-branch"]],
-        ["git", ["reset", mergebase, "--soft"]]
+        ["git", ["reset", mergebase, "--soft"]],
     ]);
     fs.writeFileSync(logpath, logText);
     runSequence([
-        ["git", ["commit", "-F", logpath, `--author="${currentAuthor.trim()}"`]]
+        ["git", ["commit", "-F", logpath, `--author="${currentAuthor.trim()}"`]],
     ]);
     fs.unlinkSync(logpath);
     const squashSha = runSequence([
-        ["git", ["rev-parse", "HEAD"]]
+        ["git", ["rev-parse", "HEAD"]],
     ]);
     runSequence([
         ["git", ["checkout", process.env.TARGET_BRANCH]], // checkout the target branch
@@ -74,12 +78,12 @@ ${logText.trim()}`;
         runSequence([
             ["node", ["./node_modules/hereby/dist/cli.js", "LKG"]],
             ["git", ["add", "lib"]],
-            ["git", ["commit", "-m", `"Update LKG"`]]
+            ["git", ["commit", "-m", `"Update LKG"`]],
         ]);
     }
     runSequence([
         ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
-        ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
+        ["git", ["push", "--set-upstream", "fork", branchName, "-f"]], // push the branch
     ]);
 
     const r = await gh.pulls.create({
@@ -89,8 +93,7 @@ ${logText.trim()}`;
         title: `🤖 Pick PR #${process.env.SOURCE_ISSUE} (${inputPR.title.substring(0, 35)}${inputPR.title.length > 35 ? "..." : ""}) into ${process.env.TARGET_BRANCH}`,
         head: `${userName}:${branchName}`,
         base: process.env.TARGET_BRANCH,
-        body:
-    `This cherry-pick was triggered by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE}
+        body: `This cherry-pick was triggered by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE}
 Please review the diff and merge if no changes are unexpected.${produceLKG ? ` An LKG update commit is included separately from the base change.` : ""}
 You can view the cherry-pick log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
 
@@ -103,7 +106,7 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
         issue_number: +process.env.SOURCE_ISSUE,
         owner: "Microsoft",
         repo: "TypeScript",
-        body: `Hey @${process.env.REQUESTING_USER}, I've opened #${num} for you.`
+        body: `Hey @${process.env.REQUESTING_USER}, I've opened #${num} for you.`,
     });
 }
 
@@ -112,13 +115,13 @@ main().catch(async e => {
     process.exitCode = 1;
     if (process.env.SOURCE_ISSUE) {
         const gh = new Octokit({
-            auth: process.argv[2]
+            auth: process.argv[2],
         });
         await gh.issues.createComment({
             issue_number: +process.env.SOURCE_ISSUE,
             owner: "Microsoft",
             repo: "TypeScript",
-            body: `Hey @${process.env.REQUESTING_USER}, I couldn't open a PR with the cherry-pick. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)). You may need to squash and pick this PR into ${process.env.TARGET_BRANCH} manually.`
+            body: `Hey @${process.env.REQUESTING_USER}, I couldn't open a PR with the cherry-pick. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)). You may need to squash and pick this PR into ${process.env.TARGET_BRANCH} manually.`,
         });
     }
 });

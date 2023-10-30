@@ -1,23 +1,32 @@
-import { dedent } from "../../_namespaces/Utils";
-import { FsContents } from "./contents";
-import { libFile } from "./virtualFileSystemWithWatch";
+import {
+    dedent,
+} from "../../_namespaces/Utils";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    FsContents,
+} from "./contents";
+import {
+    libFile,
+} from "./virtualFileSystemWithWatch";
 
 export function getFsConentsForNode10ResultAtTypesPackageJson(packageName: string, addTypesCondition: boolean) {
-    return JSON.stringify({
+    return jsonToReadableText({
         name: `@types/${packageName}`,
         version: "1.0.0",
         types: "index.d.ts",
         exports: {
             ".": {
                 ...(addTypesCondition ? { types: "./index.d.ts" } : {}),
-                require: "./index.d.ts"
-            }
-        }
-    }, undefined, " ");
+                require: "./index.d.ts",
+            },
+        },
+    });
 }
 
 export function getFsContentsForNode10ResultPackageJson(packageName: string, addTypes: boolean, addTypesCondition: boolean) {
-    return JSON.stringify({
+    return jsonToReadableText({
         name: packageName,
         version: "1.0.0",
         main: "index.js",
@@ -26,10 +35,10 @@ export function getFsContentsForNode10ResultPackageJson(packageName: string, add
             ".": {
                 ...(addTypesCondition ? { types: "./index.d.ts" } : {}),
                 import: "./index.mjs",
-                require: "./index.js"
-            }
-        }
-    }, undefined, " ");
+                require: "./index.js",
+            },
+        },
+    });
 }
 
 export function getFsContentsForNode10ResultDts(packageName: string) {
@@ -70,7 +79,7 @@ export function getFsContentsForNode10Result(): FsContents {
             import { foo2 } from "foo2";
             import { bar2 } from "bar2";
         `,
-        "/home/src/projects/project/tsconfig.json": JSON.stringify({
+        "/home/src/projects/project/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 moduleResolution: "node16",
                 traceResolution: true,
@@ -78,7 +87,7 @@ export function getFsContentsForNode10Result(): FsContents {
                 strict: true,
                 types: [],
             },
-            files: ["index.mts"]
+            files: ["index.mts"],
         }),
         [libFile.path]: libFile.content,
     };

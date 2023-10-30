@@ -1,7 +1,13 @@
 currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/web/package.json]
-{"name":"@this/package","type":"module","exports":{".":"./dist/index.js"}}
+{
+  "name": "@this/package",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}
 
 //// [/Users/name/projects/web/index.ts]
 import * as me from "@this/package";
@@ -10,7 +16,16 @@ export function thing(): void {}
 
 
 //// [/Users/name/projects/web/tsconfig.json]
-{"compilerOptions":{"module":"nodenext","outDir":"./dist","declarationDir":"./types","composite":true,"forceConsistentCasingInFileNames":true,"traceResolution":true}}
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "outDir": "./dist",
+    "declarationDir": "./types",
+    "composite": true,
+    "forceConsistentCasingInFileNames": true,
+    "traceResolution": true
+  }
+}
 
 //// [/a/lib/lib.esnext.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -53,8 +68,20 @@ index.ts
 
 
 
-Program root files: ["/Users/name/projects/web/index.ts"]
-Program options: {"module":199,"outDir":"/Users/name/projects/web/dist","declarationDir":"/Users/name/projects/web/types","composite":true,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/web/tsconfig.json"}
+Program root files: [
+  "/Users/name/projects/web/index.ts"
+]
+Program options: {
+  "module": 199,
+  "outDir": "/Users/name/projects/web/dist",
+  "declarationDir": "/Users/name/projects/web/types",
+  "composite": true,
+  "forceConsistentCasingInFileNames": true,
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "configFilePath": "/Users/name/projects/web/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.esnext.full.d.ts

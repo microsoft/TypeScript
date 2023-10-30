@@ -17,7 +17,16 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 //// [/a/b/project1.tsconfig.json]
-{"extends":"./alpha.tsconfig.json","compilerOptions":{"composite":true},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+{
+  "extends": "./alpha.tsconfig.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "/a/b/commonFile1.ts",
+    "/a/b/commonFile2.ts"
+  ]
+}
 
 //// [/a/b/commonFile1.ts]
 let x = 1
@@ -26,10 +35,20 @@ let x = 1
 let y = 1
 
 //// [/a/b/bravo.tsconfig.json]
-{"extends":"./alpha.tsconfig.json"}
+{
+  "extends": "./alpha.tsconfig.json"
+}
 
 //// [/a/b/project2.tsconfig.json]
-{"extends":"./bravo.tsconfig.json","compilerOptions":{"composite":true},"files":["/a/b/other.ts"]}
+{
+  "extends": "./bravo.tsconfig.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "/a/b/other.ts"
+  ]
+}
 
 //// [/a/b/other.ts]
 let z = 0;
@@ -38,16 +57,40 @@ let z = 0;
 let k = 0;
 
 //// [/a/b/extendsConfig1.tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/a/b/extendsConfig2.tsconfig.json]
-{"compilerOptions":{"strictNullChecks":false}}
+{
+  "compilerOptions": {
+    "strictNullChecks": false
+  }
+}
 
 //// [/a/b/extendsConfig3.tsconfig.json]
-{"compilerOptions":{"noImplicitAny":true}}
+{
+  "compilerOptions": {
+    "noImplicitAny": true
+  }
+}
 
 //// [/a/b/project3.tsconfig.json]
-{"extends":["./extendsConfig1.tsconfig.json","./extendsConfig2.tsconfig.json","./extendsConfig3.tsconfig.json"],"compilerOptions":{"composite":false},"files":["/a/b/other2.ts"]}
+{
+  "extends": [
+    "./extendsConfig1.tsconfig.json",
+    "./extendsConfig2.tsconfig.json",
+    "./extendsConfig3.tsconfig.json"
+  ],
+  "compilerOptions": {
+    "composite": false
+  },
+  "files": [
+    "/a/b/other2.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -b -w -v project1.tsconfig.json project2.tsconfig.json project3.tsconfig.json
@@ -76,8 +119,15 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project1.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -94,8 +144,14 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (computed .d.ts during emit)
 /a/b/commonfile2.ts (computed .d.ts during emit)
 
-Program root files: ["/a/b/other.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program root files: [
+  "/a/b/other.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project2.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -109,8 +165,16 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/other.ts (computed .d.ts during emit)
 
-Program root files: ["/a/b/other2.ts"]
-Program options: {"composite":false,"strictNullChecks":false,"noImplicitAny":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program root files: [
+  "/a/b/other2.ts"
+]
+Program options: {
+  "composite": false,
+  "strictNullChecks": false,
+  "noImplicitAny": true,
+  "watch": true,
+  "configFilePath": "/a/b/project3.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -305,7 +369,11 @@ Change:: Modify alpha config
 
 Input::
 //// [/a/b/alpha.tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -322,8 +390,16 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "strict": true,
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project1.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -435,8 +511,15 @@ Output::
 
 
 
-Program root files: ["/a/b/other.ts"]
-Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program root files: [
+  "/a/b/other.ts"
+]
+Program options: {
+  "strict": true,
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project2.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -513,7 +596,12 @@ Change:: change bravo config
 
 Input::
 //// [/a/b/bravo.tsconfig.json]
-{"extends":"./alpha.tsconfig.json","compilerOptions":{"strict":false}}
+{
+  "extends": "./alpha.tsconfig.json",
+  "compilerOptions": {
+    "strict": false
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -531,8 +619,15 @@ Output::
 
 
 
-Program root files: ["/a/b/other.ts"]
-Program options: {"strict":false,"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program root files: [
+  "/a/b/other.ts"
+]
+Program options: {
+  "strict": false,
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project2.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -608,7 +703,9 @@ Change:: project 2 extends alpha
 
 Input::
 //// [/a/b/project2.tsconfig.json]
-{"extends":"./alpha.tsconfig.json"}
+{
+  "extends": "./alpha.tsconfig.json"
+}
 
 
 Before running Timeout callback:: count: 1
@@ -626,8 +723,17 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts","/a/b/other.ts","/a/b/other2.ts"]
-Program options: {"strict":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts",
+  "/a/b/other.ts",
+  "/a/b/other2.ts"
+]
+Program options: {
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/a/b/project2.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -717,8 +823,15 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project1.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -827,8 +940,16 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts","/a/b/other.ts","/a/b/other2.ts"]
-Program options: {"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts",
+  "/a/b/other.ts",
+  "/a/b/other2.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/a/b/project2.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -863,7 +984,11 @@ Change:: Modify extendsConfigFile2
 
 Input::
 //// [/a/b/extendsConfig2.tsconfig.json]
-{"compilerOptions":{"strictNullChecks":true}}
+{
+  "compilerOptions": {
+    "strictNullChecks": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -883,8 +1008,16 @@ Output::
 
 
 
-Program root files: ["/a/b/other2.ts"]
-Program options: {"composite":false,"strictNullChecks":true,"noImplicitAny":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program root files: [
+  "/a/b/other2.ts"
+]
+Program options: {
+  "composite": false,
+  "strictNullChecks": true,
+  "noImplicitAny": true,
+  "watch": true,
+  "configFilePath": "/a/b/project3.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -904,7 +1037,18 @@ Change:: Modify project 3
 
 Input::
 //// [/a/b/project3.tsconfig.json]
-{"extends":["./extendsConfig1.tsconfig.json","./extendsConfig2.tsconfig.json"],"compilerOptions":{"composite":false},"files":["/a/b/other2.ts"]}
+{
+  "extends": [
+    "./extendsConfig1.tsconfig.json",
+    "./extendsConfig2.tsconfig.json"
+  ],
+  "compilerOptions": {
+    "composite": false
+  },
+  "files": [
+    "/a/b/other2.ts"
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -924,8 +1068,15 @@ Output::
 
 
 
-Program root files: ["/a/b/other2.ts"]
-Program options: {"composite":false,"strictNullChecks":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program root files: [
+  "/a/b/other2.ts"
+]
+Program options: {
+  "composite": false,
+  "strictNullChecks": true,
+  "watch": true,
+  "configFilePath": "/a/b/project3.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

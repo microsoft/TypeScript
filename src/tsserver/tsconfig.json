@@ -1,6 +1,6 @@
 {
     "extends": "../tsconfig-base",
- 
+
     "compilerOptions": {
         "types": [
             "node"
@@ -10,7 +10,7 @@
         { "path": "../compiler" },
         { "path": "../services" },
         { "path": "../jsTyping" },
-        { "path": "../server" },
+        { "path": "../server" }
     ],
     "include": ["**/*"]
 }

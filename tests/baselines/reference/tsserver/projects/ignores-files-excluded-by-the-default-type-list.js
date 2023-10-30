@@ -40,10 +40,10 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TypeAcquisition:: {
- "include": [
-  "kendo-ui",
-  "office"
- ],
- "exclude": [],
- "enable": true
+  "include": [
+    "kendo-ui",
+    "office"
+  ],
+  "exclude": [],
+  "enable": true
 }

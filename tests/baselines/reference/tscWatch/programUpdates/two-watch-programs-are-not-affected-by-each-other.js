@@ -34,8 +34,13 @@ Output::
 
 
 
-Program root files: ["/a/c/f2.ts","/a/d/f3.ts"]
-Program options: {"allowNonTsExtensions":true}
+Program root files: [
+  "/a/c/f2.ts",
+  "/a/d/f3.ts"
+]
+Program options: {
+  "allowNonTsExtensions": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -86,8 +91,12 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts"]
-Program options: {"allowNonTsExtensions":true}
+Program root files: [
+  "/a/b/f1.ts"
+]
+Program options: {
+  "allowNonTsExtensions": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

@@ -58,14 +58,24 @@ export function getAllRules(): RuleSpec[] {
     const keywords = tokenRangeFromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
     const binaryOperators = tokenRangeFromRange(SyntaxKind.FirstBinaryOperator, SyntaxKind.LastBinaryOperator);
     const binaryKeywordOperators = [
-        SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword,
-        SyntaxKind.OfKeyword, SyntaxKind.AsKeyword,
-        SyntaxKind.IsKeyword, SyntaxKind.SatisfiesKeyword,
+        SyntaxKind.InKeyword,
+        SyntaxKind.InstanceOfKeyword,
+        SyntaxKind.OfKeyword,
+        SyntaxKind.AsKeyword,
+        SyntaxKind.IsKeyword,
+        SyntaxKind.SatisfiesKeyword,
     ];
     const unaryPrefixOperators = [SyntaxKind.PlusPlusToken, SyntaxKind.MinusMinusToken, SyntaxKind.TildeToken, SyntaxKind.ExclamationToken];
     const unaryPrefixExpressions = [
-        SyntaxKind.NumericLiteral, SyntaxKind.BigIntLiteral, SyntaxKind.Identifier, SyntaxKind.OpenParenToken,
-        SyntaxKind.OpenBracketToken, SyntaxKind.OpenBraceToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
+        SyntaxKind.NumericLiteral,
+        SyntaxKind.BigIntLiteral,
+        SyntaxKind.Identifier,
+        SyntaxKind.OpenParenToken,
+        SyntaxKind.OpenBracketToken,
+        SyntaxKind.OpenBraceToken,
+        SyntaxKind.ThisKeyword,
+        SyntaxKind.NewKeyword,
+    ];
     const unaryPreincrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
     const unaryPostincrementExpressions = [SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword];
     const unaryPredecrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
@@ -90,13 +100,13 @@ export function getAllRules(): RuleSpec[] {
         rule("IgnoreAfterLineComment", SyntaxKind.SingleLineCommentTrivia, anyToken, anyContext, RuleAction.StopProcessingSpaceActions),
 
         rule("NotSpaceBeforeColon", anyToken, SyntaxKind.ColonToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNotTypeAnnotationContext], RuleAction.DeleteSpace),
-        rule("SpaceAfterColon", SyntaxKind.ColonToken, anyToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.InsertSpace),
+        rule("SpaceAfterColon", SyntaxKind.ColonToken, anyToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNextTokenParentNotJsxNamespacedName], RuleAction.InsertSpace),
         rule("NoSpaceBeforeQuestionMark", anyToken, SyntaxKind.QuestionToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNotTypeAnnotationContext], RuleAction.DeleteSpace),
         // insert space after '?' only when it is used in conditional operator
         rule("SpaceAfterQuestionMarkInConditionalOperator", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext, isConditionalOperatorContext], RuleAction.InsertSpace),
 
         // in other cases there should be no space between '?' and next token
-        rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext, isNonOptionalPropertyContext], RuleAction.DeleteSpace),
 
         rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext, isNotPropertyAccessOnIntegerLiteral], RuleAction.DeleteSpace),
         rule("NoSpaceAfterDot", [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
@@ -179,6 +189,8 @@ export function getAllRules(): RuleSpec[] {
         rule("NoSpaceBeforeGreaterThanTokenInJsxOpeningElement", SyntaxKind.SlashToken, SyntaxKind.GreaterThanToken, [isJsxSelfClosingElementContext, isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
         rule("NoSpaceBeforeEqualInJsxAttribute", anyToken, SyntaxKind.EqualsToken, [isJsxAttributeContext, isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
         rule("NoSpaceAfterEqualInJsxAttribute", SyntaxKind.EqualsToken, anyToken, [isJsxAttributeContext, isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule("NoSpaceBeforeJsxNamespaceColon", SyntaxKind.Identifier, SyntaxKind.ColonToken, [isNextTokenParentJsxNamespacedName], RuleAction.DeleteSpace),
+        rule("NoSpaceAfterJsxNamespaceColon", SyntaxKind.ColonToken, SyntaxKind.Identifier, [isNextTokenParentJsxNamespacedName], RuleAction.DeleteSpace),
 
         // TypeScript-specific rules
         // Use of module as a function call. e.g.: import m2 = module("m2");
@@ -214,13 +226,15 @@ export function getAllRules(): RuleSpec[] {
             ],
             anyToken,
             [isNonJsxSameLineTokenContext],
-            RuleAction.InsertSpace),
+            RuleAction.InsertSpace,
+        ),
         rule(
             "SpaceBeforeCertainTypeScriptKeywords",
             anyToken,
             [SyntaxKind.ExtendsKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.FromKeyword],
             [isNonJsxSameLineTokenContext],
-            RuleAction.InsertSpace),
+            RuleAction.InsertSpace,
+        ),
         // Treat string literals in module names as identifiers, and add a space between the literal and the opening Brace braces, e.g.: module "m2" {
         rule("SpaceAfterModuleName", SyntaxKind.StringLiteral, SyntaxKind.OpenBraceToken, [isModuleDeclContext], RuleAction.InsertSpace),
 
@@ -243,15 +257,16 @@ export function getAllRules(): RuleSpec[] {
         rule("NoSpaceAfterCloseAngularBracket", SyntaxKind.GreaterThanToken, [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken], [
             isNonJsxSameLineTokenContext,
             isTypeArgumentOrParameterOrAssertionContext,
-            isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/,
-            isNonTypeAssertionContext
+            isNotFunctionDeclContext, /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/
+            isNonTypeAssertionContext,
         ], RuleAction.DeleteSpace),
 
         // decorators
         rule("SpaceBeforeAt", [SyntaxKind.CloseParenToken, SyntaxKind.Identifier], SyntaxKind.AtToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
         rule("NoSpaceAfterAt", SyntaxKind.AtToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
         // Insert space after @ in decorator
-        rule("SpaceAfterDecorator",
+        rule(
+            "SpaceAfterDecorator",
             anyToken,
             [
                 SyntaxKind.AbstractKeyword,
@@ -269,7 +284,8 @@ export function getAllRules(): RuleSpec[] {
                 SyntaxKind.AsteriskToken,
             ],
             [isEndOfDecoratorContextOnSameLine],
-            RuleAction.InsertSpace),
+            RuleAction.InsertSpace,
+        ),
 
         rule("NoSpaceBeforeNonNullAssertionOperator", anyToken, SyntaxKind.ExclamationToken, [isNonJsxSameLineTokenContext, isNonNullAssertionContext], RuleAction.DeleteSpace),
         rule("NoSpaceAfterNewKeywordOnConstructorSignature", SyntaxKind.NewKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isConstructorSignatureContext], RuleAction.DeleteSpace),
@@ -389,7 +405,8 @@ export function getAllRules(): RuleSpec[] {
             [SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword],
             anyToken,
             [isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNotForContext],
-            RuleAction.InsertSpace),
+            RuleAction.InsertSpace,
+        ),
         // This low-pri rule takes care of "try {", "catch {" and "finally {" in case the rule SpaceBeforeOpenBraceInControl didn't execute on FormatOnEnter.
         rule("SpaceAfterTryCatchFinally", [SyntaxKind.TryKeyword, SyntaxKind.CatchKeyword, SyntaxKind.FinallyKeyword], SyntaxKind.OpenBraceToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
     ];
@@ -447,27 +464,27 @@ function tokenRangeFromRange(from: SyntaxKind, to: SyntaxKind, except: readonly 
 ///
 
 function optionEquals<K extends keyof FormatCodeSettings>(optionName: K, optionValue: FormatCodeSettings[K]): (context: FormattingContext) => boolean {
-    return (context) => context.options && context.options[optionName] === optionValue;
+    return context => context.options && context.options[optionName] === optionValue;
 }
 
 function isOptionEnabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return (context) => context.options && hasProperty(context.options, optionName) && !!context.options[optionName];
+    return context => context.options && hasProperty(context.options, optionName) && !!context.options[optionName];
 }
 
 function isOptionDisabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return (context) => context.options && hasProperty(context.options, optionName) && !context.options[optionName];
+    return context => context.options && hasProperty(context.options, optionName) && !context.options[optionName];
 }
 
 function isOptionDisabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return (context) => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName];
+    return context => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName];
 }
 
 function isOptionDisabledOrUndefinedOrTokensOnSameLine(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return (context) => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
+    return context => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
 }
 
 function isOptionEnabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return (context) => !context.options || !hasProperty(context.options, optionName) || !!context.options[optionName];
+    return context => !context.options || !hasProperty(context.options, optionName) || !!context.options[optionName];
 }
 
 function isForContext(context: FormattingContext): boolean {
@@ -544,9 +561,17 @@ function isTypeAnnotationContext(context: FormattingContext): boolean {
         isFunctionLikeKind(contextKind);
 }
 
+function isOptionalPropertyContext(context: FormattingContext) {
+    return isPropertyDeclaration(context.contextNode) && context.contextNode.questionToken;
+}
+
+function isNonOptionalPropertyContext(context: FormattingContext) {
+    return !isOptionalPropertyContext(context);
+}
+
 function isConditionalOperatorContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ConditionalExpression ||
-            context.contextNode.kind === SyntaxKind.ConditionalType;
+        context.contextNode.kind === SyntaxKind.ConditionalType;
 }
 
 function isSameLineTokenOrBeforeBlockContext(context: FormattingContext): boolean {
@@ -749,11 +774,21 @@ function isJsxExpressionContext(context: FormattingContext): boolean {
 }
 
 function isNextTokenParentJsxAttribute(context: FormattingContext): boolean {
-    return context.nextTokenParent.kind === SyntaxKind.JsxAttribute;
+    return context.nextTokenParent.kind === SyntaxKind.JsxAttribute || (
+        context.nextTokenParent.kind === SyntaxKind.JsxNamespacedName && context.nextTokenParent.parent.kind === SyntaxKind.JsxAttribute
+    );
 }
 
 function isJsxAttributeContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.JsxAttribute;
+}
+
+function isNextTokenParentNotJsxNamespacedName(context: FormattingContext): boolean {
+    return context.nextTokenParent.kind !== SyntaxKind.JsxNamespacedName;
+}
+
+function isNextTokenParentJsxNamespacedName(context: FormattingContext): boolean {
+    return context.nextTokenParent.kind === SyntaxKind.JsxNamespacedName;
 }
 
 function isJsxSelfClosingElementContext(context: FormattingContext): boolean {
@@ -823,7 +858,6 @@ function isTypeArgumentOrParameterOrAssertion(token: TextRangeWithKind, parent: 
             return true;
         default:
             return false;
-
     }
 }
 
@@ -879,7 +913,8 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
             ? findNextToken(
                 context.currentTokenParent,
                 findAncestor(context.currentTokenParent, a => !a.parent)!,
-                context.sourceFile)
+                context.sourceFile,
+            )
             : context.nextTokenParent.getFirstToken(context.sourceFile);
         if (!nextRealToken) {
             return true;
@@ -895,13 +930,15 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
             || nextTokenKind === SyntaxKind.EndOfFileToken;
     }
 
-    if (nextTokenKind === SyntaxKind.SemicolonClassElement ||
+    if (
+        nextTokenKind === SyntaxKind.SemicolonClassElement ||
         nextTokenKind === SyntaxKind.SemicolonToken
     ) {
         return false;
     }
 
-    if (context.contextNode.kind === SyntaxKind.InterfaceDeclaration ||
+    if (
+        context.contextNode.kind === SyntaxKind.InterfaceDeclaration ||
         context.contextNode.kind === SyntaxKind.TypeAliasDeclaration
     ) {
         // Can't remove semicolon after `foo`; it would parse as a method declaration:
@@ -942,5 +979,5 @@ function isSemicolonInsertionContext(context: FormattingContext): boolean {
 function isNotPropertyAccessOnIntegerLiteral(context: FormattingContext): boolean {
     return !isPropertyAccessExpression(context.contextNode)
         || !isNumericLiteral(context.contextNode.expression)
-        || context.contextNode.expression.getText().indexOf(".") !== -1;
+        || context.contextNode.expression.getText().includes(".");
 }

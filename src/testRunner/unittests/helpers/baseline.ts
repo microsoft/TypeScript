@@ -1,8 +1,15 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { TscCompileSystem } from "./tsc";
-import { TestServerHost } from "./virtualFileSystemWithWatch";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    TscCompileSystem,
+} from "./tsc";
+import {
+    TestServerHost,
+} from "./virtualFileSystemWithWatch";
 
 export type CommandLineProgram = [ts.Program, ts.BuilderProgram?];
 export interface CommandLineCallbacks {
@@ -23,9 +30,10 @@ export function commandLineCallbacks(
         cb: program => {
             if (isAnyProgram(program)) {
                 baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall);
-                (programs || (programs = [])).push(ts.isBuilderProgram(program) ?
-                    [program.getProgram(), program] :
-                    [program]
+                (programs || (programs = [])).push(
+                    ts.isBuilderProgram(program) ?
+                        [program.getProgram(), program] :
+                        [program],
                 );
             }
             else {
@@ -36,23 +44,21 @@ export function commandLineCallbacks(
             const result = programs || ts.emptyArray;
             programs = undefined;
             return result;
-        }
+        },
     };
 }
 
-export function baselinePrograms(baseline: string[], getPrograms: () => readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined) {
-    const programs = getPrograms();
+export function baselinePrograms(baseline: string[], programs: readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined) {
     for (let i = 0; i < programs.length; i++) {
         baselineProgram(baseline, programs[i], oldPrograms[i], baselineDependencies);
     }
-    return programs;
 }
 
 function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram, oldProgram: CommandLineProgram | undefined, baselineDependencies: boolean | undefined) {
     if (program !== oldProgram?.[0]) {
         const options = program.getCompilerOptions();
-        baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
-        baseline.push(`Program options: ${JSON.stringify(options)}`);
+        baseline.push(`Program root files: ${jsonToReadableText(program.getRootFileNames())}`);
+        baseline.push(`Program options: ${jsonToReadableText(options)}`);
         baseline.push(`Program structureReused: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
         baseline.push("Program files::");
         for (const file of program.getSourceFiles()) {
@@ -172,13 +178,9 @@ export type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo,
     original: T | undefined;
 };
 export type ReadableProgramBuildInfoRoot =
-    [original: ts.ProgramBuildInfoFileId, readable: string] |
-    [orginal: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
-export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo,
-    "fileIdsList" | "fileInfos" | "root" |
-    "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
-    "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
-> & {
+    | [original: ts.ProgramBuildInfoFileId, readable: string]
+    | [original: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
+export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
     fileNamesList: readonly (readonly string[])[] | undefined;
     fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
     root: readonly ReadableProgramBuildInfoRoot[];
@@ -221,7 +223,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
                 undefined :
                 [
                     toReadableBuilderFileEmit(ts.toProgramEmitPending(pendingEmit, buildInfo.program.options)),
-                    pendingEmit
+                    pendingEmit,
                 ],
         };
     }
@@ -276,7 +278,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         size: ts.getBuildInfoText({ ...buildInfo, version }).length,
     };
     // For now its just JSON.stringify
-    sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
+    sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, jsonToReadableText(result));
 
     function toFileName(fileId: ts.ProgramBuildInfoFileId) {
         return buildInfo.program!.fileNames[fileId - 1];

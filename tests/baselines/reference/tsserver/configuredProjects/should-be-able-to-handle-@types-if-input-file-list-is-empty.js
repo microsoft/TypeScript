@@ -5,7 +5,10 @@ Creating project service
 let x = 1
 
 //// [/a/tsconfig.json]
-{"compiler":{},"files":[]}
+{
+  "compiler": {},
+  "files": []
+}
 
 //// [/a/node_modules/@types/typings/index.d.ts]
 export * from "./lib"
