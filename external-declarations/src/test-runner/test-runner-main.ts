@@ -97,7 +97,7 @@ async function main() {
     const [start, end] = shard === undefined || shardCount === undefined || testsPerShared === undefined ?
         [0, allTests.length] :
         [shard * testsPerShared, (shard === shardCount - 1) ? allTests.length : (shard + 1) * testsPerShared];
-
+    const failedTests = [];
     for (let count = start; count < end; count++) {
         const testFile = normalizePath(allTests[count]);
         const testFileNoExtension = removeExtension(path.basename(testFile), path.extname(testFile));
@@ -114,10 +114,16 @@ async function main() {
             const varConfigDescription = getFileBasedTestConfigurationDescription(varConfig);
             if (testVersionFilter && varConfigDescription !== testVersionFilter) continue;
             const file = (prefix ?? pad(count, 5)) + "-" + changeExtension(path.basename(testFile), varConfigDescription + ".d.ts");
-
-            if (runType.tsc) runAndWrite(testName, path.join(outputPath, "tsc", file), varConfig, runTypeScript);
-
-            if (runType.dte) runAndWrite(testName, path.join(outputPath, "dte", file), varConfig, (t, s) => runDeclarationTransformEmitter(t, s));
+            let tsc, dte;
+            if (runType.tsc) {
+                tsc = runAndWrite(testName, path.join(outputPath, "tsc", file), varConfig, runTypeScript);
+            }
+            if (runType.dte) {
+                dte = runAndWrite(testName, path.join(outputPath, "dte", file), varConfig, (t, s) => runDeclarationTransformEmitter(t, s));
+            }
+            if (tsc && dte && tsc !== dte) {
+                failedTests.push(testName);
+            }
         }
         console.log(`    Ran: ${pad(count, 5)}/${allTests.length}`);
 
@@ -151,16 +157,16 @@ async function main() {
 // ` + data.code.split("\n").join(`
 // `);
 
-            if (results.diagnostics instanceof Error) {
-                file = path.join(
-                    path.dirname(file),
-                    "critical-errors",
-                    path.basename(file),
-                );
-            }
-            else {
-                let category = testCategories.get(testName);
-                if (!category) {
+            let category = testCategories.get(testName);
+
+            if (!category) {
+                if (results.diagnostics instanceof Error) {
+                    file = path.join(
+                        path.dirname(file),
+                        path.basename(file),
+                    );
+                }
+                else {
                     const error = firstDefined(results.diagnostics, d => {
                         const category = errorCategories.get(d.code);
                         return category ? { category, code: d.code } : undefined;
@@ -169,15 +175,16 @@ async function main() {
                         category = path.join(error.category, error.code.toString());
                     }
                 }
-                if (category) {
-                    file = path.join(
-                        path.dirname(file),
-                        category,
-                        path.basename(file),
-                    );
-                }
+            }
+            if (category) {
+                file = path.join(
+                    path.dirname(file),
+                    category,
+                    path.basename(file),
+                );
             }
             writeResults(file, resultText);
+            return resultText;
         }
 
         function safeRun(fn: (data: TestCaseContent) => TestCompilationResult): TestCompilationResult {
@@ -188,12 +195,11 @@ async function main() {
                 return {
                     diagnostics: e,
                     files: [{
-                        fileName: path.basename(testFile),
-                        content: `
-==== ERROR ====
-message: ${e.message},
-${e.stack},
-`,
+                        fileName: changeExtension(path.basename(testFile), ".d.ts"),
+                        // We compare the textual results between dte and tsc, it will show up
+                        // if it's different. as tsc prints empty results when it fails, it's 
+                        // reasonable to do the same in DTE.
+                        content: "",
                         declarationMap: undefined,
                     }],
                 };
@@ -210,5 +216,7 @@ ${e.stack},
         }
     }
     await flushQueue();
+    console.error(`Number of failedTests: ${failedTests.length}, list : ${failedTests.join(" ")}`)
+    process.exit(failedTests.length);
 }
 main();
