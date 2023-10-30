@@ -67,7 +67,7 @@ async function main() {
     let lastWrite = new Date().getTime();
     const startTime = new Date().getTime();
     const elapsedTime = (now: number) => `${((now - startTime) / 1000 / 60).toFixed(2)} minutes`;
-    const promisees = Array.from({ length: shardCount }).map(async (_, index) => {
+    const promises = Array.from({ length: shardCount }).map(async (_, index) => {
         await exec(commandLine + ` --shard=${index}`, "./", out => {
             runCount += (out.match(/Ran:/g) || []).length;
             if (new Date().getTime() - lastWrite > 2000) {
@@ -77,7 +77,7 @@ async function main() {
         });
         console.log(`Shard ${index} completed`);
     });
-    await Promise.all(promisees);
+    await Promise.all(promises);
     const endTime = new Date().getTime();
     console.log(`Took ${elapsedTime(endTime)} to complete ${runCount}`);
 }
