@@ -32,7 +32,14 @@ declare function Component(props: { children?: number }): any;
 </Component>)
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"strict":true,"jsx":"react","module":"esnext"}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "strict": true,
+    "jsx": "react",
+    "module": "esnext"
+  }
+}
 
 
 

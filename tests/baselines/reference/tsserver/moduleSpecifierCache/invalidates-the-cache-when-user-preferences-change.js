@@ -21,7 +21,10 @@ declare module 'ambient' {}
 { "dependencies": { "mobx": "*" } }
 
 //// [/node_modules/mobx/package.json]
-{ "name": "mobx", "version": "1.0.0" }
+{
+  "name": "mobx",
+  "version": "1.0.0"
+}
 
 //// [/node_modules/mobx/index.d.ts]
 export declare function observable(): unknown;
@@ -274,15 +277,15 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 4,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *,
-      "createAutoImportProviderProgramDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -737,7 +740,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/src/a",
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
@@ -748,7 +751,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) {
- "isBlockedByPackageJsonDependencies": false
+  "isBlockedByPackageJsonDependencies": false
 }
 Before request
 
@@ -765,15 +768,15 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 6,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *,
-      "createAutoImportProviderProgramDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 6,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -782,9 +785,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) {
- "isBlockedByPackageJsonDependencies": false
+  "isBlockedByPackageJsonDependencies": false
 }
-Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {"importModuleSpecifierPreference":"project-relative"} (/src/b.ts -> /src/a.ts) undefined
+Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {
+  "importModuleSpecifierPreference": "project-relative"
+} (/src/b.ts -> /src/a.ts) undefined
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1230,7 +1235,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/src/a",
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
@@ -1241,8 +1246,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) undefined
-Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {"importModuleSpecifierPreference":"project-relative"} (/src/b.ts -> /src/a.ts) {
- "isBlockedByPackageJsonDependencies": false
+Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {
+  "importModuleSpecifierPreference": "project-relative"
+} (/src/b.ts -> /src/a.ts) {
+  "isBlockedByPackageJsonDependencies": false
 }
 Before request
 
@@ -1259,15 +1266,15 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 8,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *,
-      "createAutoImportProviderProgramDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 8,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -1720,7 +1727,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/src/a",
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
@@ -1730,4 +1737,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {"importModuleSpecifierPreference":"project-relative"} (/src/b.ts -> /src/a.ts) undefined
+Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {
+  "importModuleSpecifierPreference": "project-relative"
+} (/src/b.ts -> /src/a.ts) undefined

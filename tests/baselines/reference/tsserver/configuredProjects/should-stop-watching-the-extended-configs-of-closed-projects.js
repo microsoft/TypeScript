@@ -5,16 +5,28 @@ Creating project service
 {}
 
 //// [/user/username/projects/myproject/a/tsconfig.json]
-{"extends":"../extended/alpha.tsconfig.json","files":["a.ts"]}
+{
+  "extends": "../extended/alpha.tsconfig.json",
+  "files": [
+    "a.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/a/a.ts]
 let a = 1;
 
 //// [/user/username/projects/myproject/extended/bravo.tsconfig.json]
-{"extends":"./alpha.tsconfig.json"}
+{
+  "extends": "./alpha.tsconfig.json"
+}
 
 //// [/user/username/projects/myproject/b/tsconfig.json]
-{"extends":"../extended/bravo.tsconfig.json","files":["b.ts"]}
+{
+  "extends": "../extended/bravo.tsconfig.json",
+  "files": [
+    "b.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/b/b.ts]
 let b = 1;

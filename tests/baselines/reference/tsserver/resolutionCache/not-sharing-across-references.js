@@ -5,7 +5,12 @@ Before request
 export const x = 10;
 
 //// [/users/username/projects/common/tsconfig.json]
-{"compilerOptions":{"composite":true,"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "traceResolution": true
+  }
+}
 
 //// [/users/username/projects/common/moduleA.ts]
 export const a = 10;
@@ -16,7 +21,18 @@ export const b = x;
 
 
 //// [/users/username/projects/app/tsconfig.json]
-{"compilerOptions":{"composite":true,"traceResolution":true,"typeRoots":[]},"references":[{"path":"../common"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "traceResolution": true,
+    "typeRoots": []
+  },
+  "references": [
+    {
+      "path": "../common"
+    }
+  ]
+}
 
 //// [/users/username/projects/app/appA.ts]
 import { x } from "moduleX";

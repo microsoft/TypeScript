@@ -5,7 +5,9 @@ declare function foo(): null | { hello: any };
 foo().hello
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -30,8 +32,13 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -74,7 +81,11 @@ Change:: Enable strict null checks
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"strictNullChecks":true}}
+{
+  "compilerOptions": {
+    "strictNullChecks": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -93,8 +104,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"strictNullChecks":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "strictNullChecks": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -113,7 +130,12 @@ Change:: Set always strict false
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"strict":true,"alwaysStrict":false}}
+{
+  "compilerOptions": {
+    "strict": true,
+    "alwaysStrict": false
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -132,8 +154,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"strict":true,"alwaysStrict":false,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "strict": true,
+  "alwaysStrict": false,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -152,7 +181,9 @@ Change:: Disable strict
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 
 Before running Timeout callback:: count: 1
@@ -166,8 +197,13 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

@@ -243,13 +243,13 @@ export namespace Compiler {
     export function createSourceFileAndAssertInvariants(
         fileName: string,
         sourceText: string,
-        languageVersion: ts.ScriptTarget,
+        languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions,
     ) {
         // We'll only assert invariants outside of light mode.
         const shouldAssertInvariants = !lightMode;
 
         // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
-        const result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ shouldAssertInvariants);
+        const result = ts.createSourceFile(fileName, sourceText, languageVersionOrOptions, /*setParentNodes:*/ shouldAssertInvariants);
 
         if (shouldAssertInvariants) {
             Utils.assertInvariants(result, /*parent:*/ undefined);
@@ -262,7 +262,7 @@ export namespace Compiler {
     export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
     // Cache of lib files from "built/local"
-    let libFileNameSourceFileMap: Map<string, ts.SourceFile> | undefined;
+    export let libFileNameSourceFileMap: Map<string, ts.SourceFile> | undefined;
 
     export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile | undefined {
         if (!isDefaultLibraryFile(fileName)) {

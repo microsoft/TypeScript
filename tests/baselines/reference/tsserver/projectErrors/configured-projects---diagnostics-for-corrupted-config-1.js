@@ -8,7 +8,12 @@ Before request
 
 
 //// [/a/b/tsconfig.json]
-"files":["app.ts","lib.ts"]}
+
+  "files": [
+    "app.ts",
+    "lib.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -126,12 +131,12 @@ Info seq  [hh:mm:ss:mss] response:
       "response": [
         {
           "start": {
-            "line": 1,
-            "offset": 1
+            "line": 2,
+            "offset": 3
           },
           "end": {
-            "line": 1,
-            "offset": 8
+            "line": 2,
+            "offset": 10
           },
           "text": "'{' expected.",
           "code": 1005,
@@ -148,7 +153,12 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Before request
 //// [/a/b/tsconfig.json]
-{"files":["app.ts","lib.ts"]}
+{
+  "files": [
+    "app.ts",
+    "lib.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

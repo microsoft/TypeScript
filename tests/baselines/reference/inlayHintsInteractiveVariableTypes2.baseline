@@ -1,0 +1,104 @@
+// === Inlay Hints ===
+const array = [1, 2]
+           ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    },
+    {
+      "text": "[]"
+    }
+  ],
+  "position": 45,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const a = object;
+       ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "{"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "foo"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "bar"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "}"
+    }
+  ],
+  "position": 62,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const b = array;
+       ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    },
+    {
+      "text": "[]"
+    }
+  ],
+  "position": 128,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const x = foo(1)
+       ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "1"
+    }
+  ],
+  "position": 244,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

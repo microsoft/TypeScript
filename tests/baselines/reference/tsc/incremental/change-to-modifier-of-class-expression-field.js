@@ -33,7 +33,11 @@ type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"declaration":false}}
+{
+  "compilerOptions": {
+    "declaration": false
+  }
+}
 
 
 

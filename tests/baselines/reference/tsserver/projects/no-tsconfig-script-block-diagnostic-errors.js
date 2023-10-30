@@ -8,7 +8,11 @@ Before request
 var hello = "hello";
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"allowJs":true}}
+{
+  "compilerOptions": {
+    "allowJs": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -47,11 +51,11 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] Host file extension mappings updated
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -156,7 +160,11 @@ Before request
 var hello = "hello";
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"allowJs":false}}
+{
+  "compilerOptions": {
+    "allowJs": false
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -195,11 +203,11 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] Host file extension mappings updated
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -339,11 +347,11 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] Host file extension mappings updated
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -443,7 +451,15 @@ Before request
 var hello = "hello";
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"allowJs":true},"files":["/a/b/f1.ts","/a/b/f2.html"]}
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "files": [
+    "/a/b/f1.ts",
+    "/a/b/f2.html"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -482,11 +498,11 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] Host file extension mappings updated
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -585,7 +601,14 @@ Before request
 var hello = "hello";
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"allowJs":true},"exclude":["/a/b/f2.html"]}
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "exclude": [
+    "/a/b/f2.html"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -624,11 +647,11 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] Host file extension mappings updated
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {

@@ -20,9 +20,11 @@ import {
     FileWatcherCallback,
     FileWatcherEventKind,
     find,
+    getAllowJSCompilerOption,
     getBaseFileName,
     getDirectoryPath,
     getNormalizedAbsolutePath,
+    getResolveJsonModule,
     hasExtension,
     identity,
     insertSorted,
@@ -44,6 +46,7 @@ import {
     removeIgnoredPath,
     returnNoopFileWatcher,
     returnTrue,
+    ScriptKind,
     setSysLog,
     SortedArray,
     SortedReadonlyArray,
@@ -362,12 +365,18 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     }
 }
 
-/** @internal */
-export enum ConfigFileProgramReloadLevel {
-    None,
-    /** Update the file name list from the disk */
-    Partial,
-    /** Reload completely by re-reading contents of config file from disk and updating program */
+export enum ProgramUpdateLevel {
+    /** Program is updated with same root file names and options */
+    Update,
+    /** Loads program after updating root file names from the disk */
+    RootNamesAndUpdate,
+    /**
+     * Loads program completely, including:
+     *  - re-reading contents of config file from disk
+     *  - calculating root file names for the program
+     *  - Updating the program
+     */
+
     Full,
 }
 
@@ -563,6 +572,7 @@ export interface IsIgnoredFileFromWildCardWatchingInput {
     useCaseSensitiveFileNames: boolean;
     writeLog: (s: string) => void;
     toPath: (fileName: string) => Path;
+    getScriptKind?: (fileName: string) => ScriptKind;
 }
 /** @internal */
 export function isIgnoredFileFromWildCardWatching({
@@ -577,6 +587,7 @@ export function isIgnoredFileFromWildCardWatching({
     useCaseSensitiveFileNames,
     writeLog,
     toPath,
+    getScriptKind,
 }: IsIgnoredFileFromWildCardWatchingInput): boolean {
     const newPath = removeIgnoredPath(fileOrDirectoryPath);
     if (!newPath) {
@@ -588,8 +599,12 @@ export function isIgnoredFileFromWildCardWatching({
     if (fileOrDirectoryPath === watchedDirPath) return false;
 
     // If the the added or created file or directory is not supported file name, ignore the file
-    // But when watched directory is added/removed, we need to reload the file list
-    if (hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, options, extraFileExtensions)) {
+    if (
+        hasExtension(fileOrDirectoryPath) && !(
+            isSupportedSourceFileName(fileOrDirectory, options, extraFileExtensions) ||
+            isSupportedScriptKind()
+        )
+    ) {
         writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
         return true;
     }
@@ -633,6 +648,25 @@ export function isIgnoredFileFromWildCardWatching({
             builderProgram ?
             builderProgram.getState().fileInfos.has(file) :
             !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
+    }
+
+    function isSupportedScriptKind() {
+        if (!getScriptKind) return false;
+        const scriptKind = getScriptKind(fileOrDirectory);
+        switch (scriptKind) {
+            case ScriptKind.TS:
+            case ScriptKind.TSX:
+            case ScriptKind.Deferred:
+            case ScriptKind.External:
+                return true;
+            case ScriptKind.JS:
+            case ScriptKind.JSX:
+                return getAllowJSCompilerOption(options);
+            case ScriptKind.JSON:
+                return getResolveJsonModule(options);
+            case ScriptKind.Unknown:
+                return false;
+        }
     }
 }
 

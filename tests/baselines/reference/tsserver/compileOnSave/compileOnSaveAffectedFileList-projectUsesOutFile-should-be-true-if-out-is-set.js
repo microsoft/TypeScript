@@ -8,7 +8,12 @@ let x = 1
 let y = 1
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"out":"/a/out.js"},"compileOnSave":true}
+{
+  "compilerOptions": {
+    "out": "/a/out.js"
+  },
+  "compileOnSave": true
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

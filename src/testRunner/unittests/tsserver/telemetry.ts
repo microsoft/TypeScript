@@ -1,8 +1,13 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
+import {
+    jsonToReadableText,
+} from "../helpers";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
     createSession,
     openExternalProjectForSession,
     openFilesForSession,
@@ -255,5 +260,5 @@ describe("unittests:: tsserver:: project telemetry", () => {
 });
 
 function makeFile(path: string, content: {} = ""): File {
-    return { path, content: ts.isString(content) ? content : JSON.stringify(content) };
+    return { path, content: ts.isString(content) ? content : jsonToReadableText(content) };
 }

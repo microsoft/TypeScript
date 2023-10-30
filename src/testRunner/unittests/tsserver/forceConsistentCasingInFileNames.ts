@@ -1,8 +1,13 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
+import {
+    jsonToReadableText,
+} from "../helpers";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     protocolTextSpanFromSubstring,
@@ -31,7 +36,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         };
         const tsconfigAll: File = {
             path: `${rootPath}/tsconfig.all.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     baseUrl: ".",
                     paths: { file2: ["./file2.js"] },
@@ -42,7 +47,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         };
         const tsconfig: File = {
             path: `${rootPath}/tsconfig.json`,
-            content: JSON.stringify({ extends: "./tsconfig.all.json" }),
+            content: jsonToReadableText({ extends: "./tsconfig.all.json" }),
         };
 
         const host = createServerHost([file1, file2, file2Dts, libFile, tsconfig, tsconfigAll], { useCaseSensitiveFileNames: false });
@@ -69,7 +74,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         };
         const tsconfig: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: { forceConsistentCasingInFileNames: true },
             }),
         };
@@ -118,7 +123,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         };
         const tsconfig: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: { forceConsistentCasingInFileNames: true },
             }),
         };

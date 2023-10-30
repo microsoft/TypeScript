@@ -8,7 +8,14 @@ import classc from "file2"
 export classc { method2a() { return 10; } }
 
 //// [/users/username/projects/project/tsconfig.json]
-{"files":["/users/username/projects/project/file1.ts"],"compilerOptions":{"module":"amd"}}
+{
+  "files": [
+    "/users/username/projects/project/file1.ts"
+  ],
+  "compilerOptions": {
+    "module": "amd"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

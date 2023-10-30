@@ -8,7 +8,9 @@ let x = 1;
 let y = 2;
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /a/b

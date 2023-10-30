@@ -75,8 +75,20 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "assumeChangesOnlyAffectDirectDependencies": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -411,8 +423,20 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "assumeChangesOnlyAffectDirectDependencies": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -657,8 +681,20 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "assumeChangesOnlyAffectDirectDependencies": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -903,8 +939,20 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "assumeChangesOnlyAffectDirectDependencies": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

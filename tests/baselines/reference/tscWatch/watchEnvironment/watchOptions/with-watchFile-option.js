@@ -20,7 +20,11 @@ let x = 1
 let y = 1
 
 //// [/a/b/tsconfig.json]
-{"watchOptions":{"watchFile":"UseFsEvents"}}
+{
+  "watchOptions": {
+    "watchFile": "UseFsEvents"
+  }
+}
 
 
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
@@ -32,8 +36,15 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

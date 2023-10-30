@@ -149,7 +149,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var foo = {
     type: "number",
     value: 10,
-    multipleOf: 5,
+    multipleOf: 5, // excess property
     format: "what?"
 };
 // This has excess error because variant three is the only applicable case.
