@@ -10249,6 +10249,15 @@ export interface NodeModulePathParts {
     readonly packageRootIndex: number;
     readonly fileNameIndex: number;
 }
+
+/** @internal */
+export interface PackagePathParts {
+    readonly topLevelNodeModulesIndex: undefined;
+    readonly topLevelPackageNameIndex: undefined;
+    readonly packageRootIndex: number;
+    readonly fileNameIndex: number;
+}
+
 /** @internal */
 export function getNodeModulePathParts(fullPath: string): NodeModulePathParts | undefined {
     // If fullPath can't be valid module file within node_modules, returns undefined.

@@ -378,6 +378,8 @@ export enum ProgramUpdateLevel {
      */
 
     Full,
+    /** Reload the resolutions */
+    Resolutions,
 }
 
 /** @internal */
