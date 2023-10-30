@@ -974,7 +974,7 @@ function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDi
     if (!imports) {
         return undefined;
     }
-    const conditions = getConditions(options, importMode === ModuleKind.ESNext);
+    const conditions = getConditions(options, importMode);
     return forEach(getOwnKeys(imports as MapLike<unknown>), k => {
         if (!startsWith(k, "#") || k === "#" || startsWith(k, "#/")) return undefined;
         const mode = endsWith(k, "/") ? MatchingMode.Directory
