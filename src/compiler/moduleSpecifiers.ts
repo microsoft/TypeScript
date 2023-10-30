@@ -848,9 +848,6 @@ const enum MatchingMode {
 }
 
 function getOutputPath(targetFilePath: string, options: CompilerOptions, commonDir: string) {
-    if (options.emitDeclarationOnly) {
-        return;
-    }
     return changeExtension(
         options.outDir ?
             resolvePath(
