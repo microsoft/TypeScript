@@ -31,9 +31,9 @@ Fs::
 configFileName:: tsconfig.json
 CompilerOptions::
 {
- "module": 99,
- "experimentalDecorators": true,
- "configFilePath": "tsconfig.json"
+  "module": 99,
+  "experimentalDecorators": true,
+  "configFilePath": "tsconfig.json"
 }
 Errors::
 [96mtsconfig.json[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS5092: [0mThe root value of a 'tsconfig.json' file must be an object.

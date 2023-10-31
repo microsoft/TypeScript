@@ -123,46 +123,46 @@ regularExpressionScanning.ts(23,19): error TS1516: Anything that would possibly 
 regularExpressionScanning.ts(23,31): error TS1516: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(23,47): error TS1516: Anything that would possibly match more than a single character is invalid inside a negated character class.
 regularExpressionScanning.ts(23,59): error TS1499: This regular expression flag is only available when targeting 'ES2024' or later.
-regularExpressionScanning.ts(25,17): error TS1496: '\C' is not a valid character escape.
-regularExpressionScanning.ts(25,23): error TS1496: '\C' is not a valid character escape.
+regularExpressionScanning.ts(25,17): error TS1533: '\C' is not a valid character escape.
+regularExpressionScanning.ts(25,23): error TS1533: '\C' is not a valid character escape.
 regularExpressionScanning.ts(26,3): error TS1510: '\c' must be followed by an ASCII letter.
 regularExpressionScanning.ts(26,6): error TS1510: '\c' must be followed by an ASCII letter.
 regularExpressionScanning.ts(26,15): error TS1510: '\c' must be followed by an ASCII letter.
-regularExpressionScanning.ts(26,17): error TS1496: '\C' is not a valid character escape.
+regularExpressionScanning.ts(26,17): error TS1533: '\C' is not a valid character escape.
 regularExpressionScanning.ts(26,20): error TS1510: '\c' must be followed by an ASCII letter.
-regularExpressionScanning.ts(26,23): error TS1496: '\C' is not a valid character escape.
+regularExpressionScanning.ts(26,23): error TS1533: '\C' is not a valid character escape.
 regularExpressionScanning.ts(26,26): error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
-regularExpressionScanning.ts(27,3): error TS1496: '\q' is not a valid character escape.
-regularExpressionScanning.ts(27,10): error TS1496: '\q' is not a valid character escape.
-regularExpressionScanning.ts(27,17): error TS1496: '\Q' is not a valid character escape.
-regularExpressionScanning.ts(27,21): error TS1496: '\Q' is not a valid character escape.
-regularExpressionScanning.ts(27,24): error TS1496: '\q' is not a valid character escape.
-regularExpressionScanning.ts(27,39): error TS1496: '\q' is not a valid character escape.
-regularExpressionScanning.ts(27,43): error TS1496: '\q' is not a valid character escape.
-regularExpressionScanning.ts(28,3): error TS1496: '\q' is not a valid character escape.
-regularExpressionScanning.ts(28,7): error TS1496: '\`' is not a valid character escape.
-regularExpressionScanning.ts(28,10): error TS1496: '\q' is not a valid character escape.
-regularExpressionScanning.ts(28,14): error TS1496: '\`' is not a valid character escape.
-regularExpressionScanning.ts(28,17): error TS1496: '\Q' is not a valid character escape.
-regularExpressionScanning.ts(28,21): error TS1496: '\Q' is not a valid character escape.
-regularExpressionScanning.ts(28,24): error TS1496: '\q' is not a valid character escape.
-regularExpressionScanning.ts(28,39): error TS1496: '\q' is not a valid character escape.
+regularExpressionScanning.ts(27,3): error TS1533: '\q' is not a valid character escape.
+regularExpressionScanning.ts(27,10): error TS1533: '\q' is not a valid character escape.
+regularExpressionScanning.ts(27,17): error TS1533: '\Q' is not a valid character escape.
+regularExpressionScanning.ts(27,21): error TS1533: '\Q' is not a valid character escape.
+regularExpressionScanning.ts(27,24): error TS1533: '\q' is not a valid character escape.
+regularExpressionScanning.ts(27,39): error TS1533: '\q' is not a valid character escape.
+regularExpressionScanning.ts(27,43): error TS1533: '\q' is not a valid character escape.
+regularExpressionScanning.ts(28,3): error TS1533: '\q' is not a valid character escape.
+regularExpressionScanning.ts(28,7): error TS1533: '\`' is not a valid character escape.
+regularExpressionScanning.ts(28,10): error TS1533: '\q' is not a valid character escape.
+regularExpressionScanning.ts(28,14): error TS1533: '\`' is not a valid character escape.
+regularExpressionScanning.ts(28,17): error TS1533: '\Q' is not a valid character escape.
+regularExpressionScanning.ts(28,21): error TS1533: '\Q' is not a valid character escape.
+regularExpressionScanning.ts(28,24): error TS1533: '\q' is not a valid character escape.
+regularExpressionScanning.ts(28,39): error TS1533: '\q' is not a valid character escape.
 regularExpressionScanning.ts(28,41): error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(28,42): error TS1506: Unexpected ']'. Did you mean to escape it with backslash?
-regularExpressionScanning.ts(28,43): error TS1496: '\q' is not a valid character escape.
+regularExpressionScanning.ts(28,43): error TS1533: '\q' is not a valid character escape.
 regularExpressionScanning.ts(28,45): error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(28,47): error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
 regularExpressionScanning.ts(29,3): error TS1509: '\q' is only available inside character class.
-regularExpressionScanning.ts(29,7): error TS1496: '\`' is not a valid character escape.
+regularExpressionScanning.ts(29,7): error TS1533: '\`' is not a valid character escape.
 regularExpressionScanning.ts(29,10): error TS1519: '\q' must be followed by string alternatives enclosed in braces.
-regularExpressionScanning.ts(29,17): error TS1496: '\Q' is not a valid character escape.
-regularExpressionScanning.ts(29,21): error TS1496: '\Q' is not a valid character escape.
+regularExpressionScanning.ts(29,17): error TS1533: '\Q' is not a valid character escape.
+regularExpressionScanning.ts(29,21): error TS1533: '\Q' is not a valid character escape.
 regularExpressionScanning.ts(29,23): error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(29,38): error TS1506: Unexpected ']'. Did you mean to escape it with backslash?
-regularExpressionScanning.ts(29,39): error TS1496: '\q' is not a valid character escape.
+regularExpressionScanning.ts(29,39): error TS1533: '\q' is not a valid character escape.
 regularExpressionScanning.ts(29,41): error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(29,42): error TS1506: Unexpected ']'. Did you mean to escape it with backslash?
-regularExpressionScanning.ts(29,43): error TS1496: '\q' is not a valid character escape.
+regularExpressionScanning.ts(29,43): error TS1533: '\q' is not a valid character escape.
 regularExpressionScanning.ts(29,45): error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(29,46): error TS1005: '}' expected.
 regularExpressionScanning.ts(29,47): error TS1499: This regular expression flag is only available when targeting 'ES2024' or later.
@@ -170,19 +170,19 @@ regularExpressionScanning.ts(31,4): error TS1515: Range out of order in characte
 regularExpressionScanning.ts(31,8): error TS1515: Range out of order in character class.
 regularExpressionScanning.ts(31,34): error TS1528: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
 regularExpressionScanning.ts(31,42): error TS1528: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
-regularExpressionScanning.ts(31,55): error TS1496: '\q' is not a valid character escape.
+regularExpressionScanning.ts(31,55): error TS1533: '\q' is not a valid character escape.
 regularExpressionScanning.ts(31,63): error TS1515: Range out of order in character class.
-regularExpressionScanning.ts(31,76): error TS1496: '\q' is not a valid character escape.
+regularExpressionScanning.ts(31,76): error TS1533: '\q' is not a valid character escape.
 regularExpressionScanning.ts(32,4): error TS1515: Range out of order in character class.
 regularExpressionScanning.ts(32,8): error TS1515: Range out of order in character class.
 regularExpressionScanning.ts(32,19): error TS1506: Unexpected ']'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(32,50): error TS1506: Unexpected ']'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(32,51): error TS1506: Unexpected ']'. Did you mean to escape it with backslash?
-regularExpressionScanning.ts(32,55): error TS1496: '\q' is not a valid character escape.
+regularExpressionScanning.ts(32,55): error TS1533: '\q' is not a valid character escape.
 regularExpressionScanning.ts(32,57): error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(32,61): error TS1506: Unexpected '}'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(32,63): error TS1515: Range out of order in character class.
-regularExpressionScanning.ts(32,76): error TS1496: '\q' is not a valid character escape.
+regularExpressionScanning.ts(32,76): error TS1533: '\q' is not a valid character escape.
 regularExpressionScanning.ts(32,87): error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
 regularExpressionScanning.ts(33,8): error TS1005: '--' expected.
 regularExpressionScanning.ts(33,9): error TS1518: Expected a class set oprand.
@@ -508,9 +508,9 @@ regularExpressionScanning.ts(42,101): error TS1499: This regular expression flag
     	// Character escapes
     	/\c[\c0\ca\cQ\c\C]\c1\C/,
     	               ~~
-!!! error TS1496: '\C' is not a valid character escape.
+!!! error TS1533: '\C' is not a valid character escape.
     	                     ~~
-!!! error TS1496: '\C' is not a valid character escape.
+!!! error TS1533: '\C' is not a valid character escape.
     	/\c[\c0\ca\cQ\c\C]\c1\C/u,
     	 ~~
 !!! error TS1510: '\c' must be followed by an ASCII letter.
@@ -519,51 +519,51 @@ regularExpressionScanning.ts(42,101): error TS1499: This regular expression flag
     	             ~~
 !!! error TS1510: '\c' must be followed by an ASCII letter.
     	               ~~
-!!! error TS1496: '\C' is not a valid character escape.
+!!! error TS1533: '\C' is not a valid character escape.
     	                  ~~
 !!! error TS1510: '\c' must be followed by an ASCII letter.
     	                     ~~
-!!! error TS1496: '\C' is not a valid character escape.
+!!! error TS1533: '\C' is not a valid character escape.
     	                        ~
 !!! error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
     	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/,
     	 ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	        ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	               ~~
-!!! error TS1496: '\Q' is not a valid character escape.
+!!! error TS1533: '\Q' is not a valid character escape.
     	                   ~~
-!!! error TS1496: '\Q' is not a valid character escape.
+!!! error TS1533: '\Q' is not a valid character escape.
     	                      ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	                                     ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	                                         ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/u,
     	 ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	     ~~
-!!! error TS1496: '\`' is not a valid character escape.
+!!! error TS1533: '\`' is not a valid character escape.
     	        ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	            ~~
-!!! error TS1496: '\`' is not a valid character escape.
+!!! error TS1533: '\`' is not a valid character escape.
     	               ~~
-!!! error TS1496: '\Q' is not a valid character escape.
+!!! error TS1533: '\Q' is not a valid character escape.
     	                   ~~
-!!! error TS1496: '\Q' is not a valid character escape.
+!!! error TS1533: '\Q' is not a valid character escape.
     	                      ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	                                     ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	                                       ~
 !!! error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
     	                                        ~
 !!! error TS1506: Unexpected ']'. Did you mean to escape it with backslash?
     	                                         ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	                                           ~
 !!! error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
     	                                             ~
@@ -572,25 +572,25 @@ regularExpressionScanning.ts(42,101): error TS1499: This regular expression flag
     	 ~~
 !!! error TS1509: '\q' is only available inside character class.
     	     ~~
-!!! error TS1496: '\`' is not a valid character escape.
+!!! error TS1533: '\`' is not a valid character escape.
     	        ~~
 !!! error TS1519: '\q' must be followed by string alternatives enclosed in braces.
     	               ~~
-!!! error TS1496: '\Q' is not a valid character escape.
+!!! error TS1533: '\Q' is not a valid character escape.
     	                   ~~
-!!! error TS1496: '\Q' is not a valid character escape.
+!!! error TS1533: '\Q' is not a valid character escape.
     	                     ~
 !!! error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
     	                                    ~
 !!! error TS1506: Unexpected ']'. Did you mean to escape it with backslash?
     	                                     ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	                                       ~
 !!! error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
     	                                        ~
 !!! error TS1506: Unexpected ']'. Did you mean to escape it with backslash?
     	                                         ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	                                           ~
 !!! error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
     	                                            
@@ -608,11 +608,11 @@ regularExpressionScanning.ts(42,101): error TS1499: This regular expression flag
     	                                        ~~~~~
 !!! error TS1528: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
     	                                                     ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	                                                             ~~~
 !!! error TS1515: Range out of order in character class.
     	                                                                          ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/u,
     	  ~~~
 !!! error TS1515: Range out of order in character class.
@@ -625,7 +625,7 @@ regularExpressionScanning.ts(42,101): error TS1499: This regular expression flag
     	                                                 ~
 !!! error TS1506: Unexpected ']'. Did you mean to escape it with backslash?
     	                                                     ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	                                                       ~
 !!! error TS1506: Unexpected '{'. Did you mean to escape it with backslash?
     	                                                           ~
@@ -633,7 +633,7 @@ regularExpressionScanning.ts(42,101): error TS1499: This regular expression flag
     	                                                             ~~~
 !!! error TS1515: Range out of order in character class.
     	                                                                          ~~
-!!! error TS1496: '\q' is not a valid character escape.
+!!! error TS1533: '\q' is not a valid character escape.
     	                                                                                     ~
 !!! error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
     	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/v,

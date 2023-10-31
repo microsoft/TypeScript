@@ -21,7 +21,10 @@ declare module 'ambient' {}
 { "dependencies": { "mobx": "*" } }
 
 //// [/node_modules/mobx/package.json]
-{ "name": "mobx", "version": "1.0.0" }
+{
+  "name": "mobx",
+  "version": "1.0.0"
+}
 
 //// [/node_modules/mobx/index.d.ts]
 export declare function observable(): unknown;
@@ -274,15 +277,15 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 4,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *,
-      "createAutoImportProviderProgramDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -737,7 +740,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/src/a",
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
@@ -806,7 +809,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "moduleSpecifier": "./a",
               "fileName": "/src/a.ts"
             }
@@ -839,7 +842,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "observable",
-              "exportMapKey": "observable|*|",
+              "exportMapKey": "10 * observable ",
               "moduleSpecifier": "mobx",
               "fileName": "/node_modules/mobx/index.d.ts",
               "isPackageJsonImport": true
@@ -858,15 +861,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] mobxCache: {
- "modulePaths": [
-  {
-   "path": "/node_modules/mobx/index.d.ts",
-   "isRedirect": false,
-   "isInNodeModules": true
-  }
- ],
- "moduleSpecifiers": [
-  "mobx"
- ],
- "isBlockedByPackageJsonDependencies": false
+  "modulePaths": [
+    {
+      "path": "/node_modules/mobx/index.d.ts",
+      "isRedirect": false,
+      "isInNodeModules": true
+    }
+  ],
+  "moduleSpecifiers": [
+    "mobx"
+  ],
+  "isBlockedByPackageJsonDependencies": false
 }

@@ -1,7 +1,12 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"composite":true,"noEmitOnError":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "noEmitOnError": true
+  }
+}
 
 //// [/user/username/projects/myproject/main.ts]
 export const x: string = 10;
@@ -37,8 +42,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.ts"]
-Program options: {"composite":true,"noEmitOnError":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.ts"
+]
+Program options: {
+  "composite": true,
+  "noEmitOnError": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -202,8 +214,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.ts"]
-Program options: {"composite":true,"noEmitOnError":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.ts"
+]
+Program options: {
+  "composite": true,
+  "noEmitOnError": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -361,8 +380,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.ts"]
-Program options: {"composite":true,"noEmitOnError":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.ts"
+]
+Program options: {
+  "composite": true,
+  "noEmitOnError": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

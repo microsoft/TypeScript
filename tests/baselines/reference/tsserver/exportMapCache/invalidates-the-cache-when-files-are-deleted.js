@@ -17,7 +17,10 @@ declare module 'ambient' {}
 { "dependencies": { "mobx": "*" } }
 
 //// [/node_modules/mobx/package.json]
-{ "name": "mobx", "version": "1.0.0" }
+{
+  "name": "mobx",
+  "version": "1.0.0"
+}
 
 //// [/node_modules/mobx/index.d.ts]
 export declare function observable(): unknown;
@@ -243,7 +246,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/a",
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "fileName": "/a.ts"
             }
           }

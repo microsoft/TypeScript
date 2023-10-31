@@ -17,7 +17,12 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/Project/tsconfig.json]
-{"include":[".","./**/*.json"]}
+{
+  "include": [
+    ".",
+    "./**/*.json"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p .
@@ -29,8 +34,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/Project/file1.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/Project/file1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject/Project",
+  "configFilePath": "/user/username/projects/myproject/Project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -92,8 +103,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/Project/file1.ts","/user/username/projects/myproject/Project/file2.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/Project/file1.ts",
+  "/user/username/projects/myproject/Project/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject/Project",
+  "configFilePath": "/user/username/projects/myproject/Project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

@@ -1,3 +1,4 @@
+// === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelpTypeArguments2.ts ===
 // /** some documentation
 //  * @template T some documentation 2

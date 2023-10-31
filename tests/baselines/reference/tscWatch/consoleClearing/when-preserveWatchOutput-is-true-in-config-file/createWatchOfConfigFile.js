@@ -4,7 +4,11 @@ Input::
 
 
 //// [/tsconfig.json]
-{"compilerOptions":{"preserveWatchOutput":true}}
+{
+  "compilerOptions": {
+    "preserveWatchOutput": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,8 +33,14 @@ Output::
 
 
 
-Program root files: ["/f.ts","/a/lib/lib.d.ts"]
-Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/f.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "preserveWatchOutput": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /f.ts
@@ -79,8 +89,14 @@ Output::
 
 
 
-Program root files: ["/f.ts","/a/lib/lib.d.ts"]
-Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/f.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "preserveWatchOutput": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /f.ts

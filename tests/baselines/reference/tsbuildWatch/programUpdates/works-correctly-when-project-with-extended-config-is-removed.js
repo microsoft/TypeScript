@@ -14,13 +14,36 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/tsconfig.json]
-{"references":[{"path":"./project1.tsconfig.json"},{"path":"./project2.tsconfig.json"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./project1.tsconfig.json"
+    },
+    {
+      "path": "./project2.tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 //// [/a/b/alpha.tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/a/b/project1.tsconfig.json]
-{"extends":"./alpha.tsconfig.json","compilerOptions":{"composite":true},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+{
+  "extends": "./alpha.tsconfig.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "/a/b/commonFile1.ts",
+    "/a/b/commonFile2.ts"
+  ]
+}
 
 //// [/a/b/commonFile1.ts]
 let x = 1
@@ -29,10 +52,22 @@ let x = 1
 let y = 1
 
 //// [/a/b/bravo.tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/a/b/project2.tsconfig.json]
-{"extends":"./bravo.tsconfig.json","compilerOptions":{"composite":true},"files":["/a/b/other.ts"]}
+{
+  "extends": "./bravo.tsconfig.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "/a/b/other.ts"
+  ]
+}
 
 //// [/a/b/other.ts]
 let z = 0;
@@ -60,8 +95,16 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "strict": true,
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project1.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -78,8 +121,15 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (computed .d.ts during emit)
 /a/b/commonfile2.ts (computed .d.ts during emit)
 
-Program root files: ["/a/b/other.ts"]
-Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program root files: [
+  "/a/b/other.ts"
+]
+Program options: {
+  "strict": true,
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project2.tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -267,7 +317,14 @@ Change:: Remove project2 from base config
 
 Input::
 //// [/a/b/tsconfig.json]
-{"references":[{"path":"./project1.tsconfig.json"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./project1.tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 
 Before running Timeout callback:: count: 1

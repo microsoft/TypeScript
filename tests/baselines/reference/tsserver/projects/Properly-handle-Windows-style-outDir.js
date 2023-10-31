@@ -5,7 +5,14 @@ Creating project service
 let x = 1;
 
 //// [C:/a/tsconfig.json]
-{"compilerOptions":{"outDir":"C:\\a\\b"},"include":["*.ts"]}
+{
+  "compilerOptions": {
+    "outDir": "C:\\a\\b"
+  },
+  "include": [
+    "*.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: C:/a

@@ -1,0 +1,4 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesNonStringImportAttributes.ts ===
+// import * as react from "react" with { cache: /*HIGHLIGHTS*/0 };
+// react.Children;

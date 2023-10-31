@@ -5,7 +5,11 @@ declare var React: any;
 const d = <div />;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"jsx":"preserve"}}
+{
+  "compilerOptions": {
+    "jsx": "preserve"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -30,8 +34,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/index.tsx"]
-Program options: {"jsx":1,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/index.tsx"
+]
+Program options: {
+  "jsx": 1,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -88,14 +98,22 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/index.tsx"]
-Program options: {"jsx":2,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/index.tsx"
+]
+Program options: {
+  "jsx": 2,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/index.tsx
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/index.tsx
 
 No shapes updated in the builder::
 

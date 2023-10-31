@@ -1,20 +1,26 @@
+import {
+    createLoggerWithInMemoryLogs,
+    Logger,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
+import {
+    jsonToReadableText,
+} from "../helpers";
 import {
     commonFile1,
     commonFile2,
 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    Logger,
     openExternalProjectForSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     setCompilerOptionsForInferredProjectsRequestForSession,
     TestSession,
     toExternalFiles,
+    verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -30,7 +36,7 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchD
             const projectSrcFolder = `${projectFolder}/src`;
             const configFile: File = {
                 path: `${projectFolder}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     watchOptions: {
                         synchronousWatchDirectory: true,
                     },
@@ -269,7 +275,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
     it("with watchFile option in configFile", () => {
         const configFile: File = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 watchOptions: {
                     watchFile: "UseFsEvents",
                 },
@@ -286,7 +292,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
     it("with watchDirectory option in configFile", () => {
         const configFile: File = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 watchOptions: {
                     watchDirectory: "UseFsEvents",
                 },
@@ -303,7 +309,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
     it("with fallbackPolling option in configFile", () => {
         const configFile: File = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 watchOptions: {
                     fallbackPolling: "PriorityInterval",
                 },
@@ -355,7 +361,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         function setup(configureHost?: boolean) {
             const configFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ include: ["src"], watchOptions: { excludeDirectories: ["node_modules"] } }),
+                content: jsonToReadableText({ include: ["src"], watchOptions: { excludeDirectories: ["node_modules"] } }),
             };
             const { main, bar, foo } = setupFiles();
             const files = [libFile, main, bar, foo, configFile];
@@ -413,7 +419,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             } as ts.server.protocol.ExternalProject);
             service.openClientFile(main.path);
             const project = service.externalProjects[0];
-            service.logger.info(JSON.stringify(project.getAllProjectErrors(), undefined, 2));
+            service.logger.info(jsonToReadableText(project.getAllProjectErrors()));
             baselineTsserverLogs("watchEnvironment", `external project watch options errors`, service);
         });
 
@@ -449,7 +455,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             service.setCompilerOptionsForInferredProjects({ excludeDirectories: ["**/../*"] }, "/user/username/projects/myproject");
             service.openClientFile(main.path, main.content, ts.ScriptKind.TS, "/user/username/projects/myproject");
             const project = service.inferredProjects[0];
-            service.logger.info(JSON.stringify(project.getAllProjectErrors(), undefined, 2));
+            service.logger.info(jsonToReadableText(project.getAllProjectErrors()));
             baselineTsserverLogs("watchEnvironment", `inferred project watch options errors`, service);
         });
     });
@@ -478,7 +484,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFile is single watcher 
     it("when watchFile is single watcher per file", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     resolveJsonModule: true,
@@ -493,5 +499,36 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFile is single watcher 
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([index], session);
         baselineTsserverLogs("watchEnvironment", "when watchFile is single watcher per file", session);
+    });
+});
+
+describe("unittests:: tsserver:: watchEnvironment:: watching at workspaces codespaces style", () => {
+    it("watching npm install in codespaces where workspaces folder is hosted at root", () => {
+        const config: File = {
+            path: "/workspaces/somerepo/src/tsconfig.json",
+            content: "{}",
+        };
+        const main: File = {
+            path: "/workspaces/somerepo/src/main.ts",
+            content: `import { randomSeed } from "random-seed";\nrandomSeed();`,
+        };
+        const randomSeed: File = {
+            path: "/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts",
+            content: `export function randomSeed(): string;`,
+        };
+        const host = createServerHost([config, main, randomSeed, libFile], { inodeWatching: true, runWithoutRecursiveWatches: true });
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host), canUseEvents: true, noGetErrOnBackgroundUpdate: true });
+        openFilesForSession([main], session);
+        verifyGetErrRequest({ session, files: [main] });
+        // npm ci
+        // clear part
+        host.deleteFolder("/workspaces/somerepo/node_modules", /*recursive*/ true);
+        verifyGetErrRequest({ session, files: [main], existingTimeouts: true });
+        host.runQueuedTimeoutCallbacks();
+        // Install part
+        host.ensureFileOrFolder(randomSeed);
+        verifyGetErrRequest({ session, files: [main], existingTimeouts: true });
+        host.runQueuedTimeoutCallbacks();
+        baselineTsserverLogs("watchEnvironment", "watching npm install in codespaces where workspaces folder is hosted at root", session);
     });
 });

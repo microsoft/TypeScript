@@ -1,3 +1,4 @@
+// === SignatureHelp ===
 === /tests/cases/fourslash/quickInfoJsDocTextFormatting1.ts ===
 // /**
 //  * @param {number} var1 **Highlighted text**

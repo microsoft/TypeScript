@@ -25,7 +25,12 @@ export {}; declare module "classnames" { interface Result { foo } }
 import classNames from "classnames"; classNames().foo;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","incremental":true}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "incremental": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -37,8 +42,16 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/src/index.ts","/users/username/projects/project/src/types/classnames.d.ts"]
-Program options: {"module":1,"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/src/index.ts",
+  "/users/username/projects/project/src/types/classnames.d.ts"
+]
+Program options: {
+  "module": 1,
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -226,8 +239,16 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/src/index.ts","/users/username/projects/project/src/types/classnames.d.ts"]
-Program options: {"module":1,"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/src/index.ts",
+  "/users/username/projects/project/src/types/classnames.d.ts"
+]
+Program options: {
+  "module": 1,
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

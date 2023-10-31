@@ -8,7 +8,17 @@ const x = 1;
 const y = 2;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compileOnSave":true,"compilerOptions":{"outDir":"test","noEmitOnError":true,"declaration":true},"exclude":["node_modules"]}
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "outDir": "test",
+    "noEmitOnError": true,
+    "declaration": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

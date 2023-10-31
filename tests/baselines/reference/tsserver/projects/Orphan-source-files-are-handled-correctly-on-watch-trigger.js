@@ -21,7 +21,12 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["src/file1.ts","src/file2.ts"]}
+{
+  "files": [
+    "src/file1.ts",
+    "src/file2.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
@@ -75,7 +80,11 @@ Before running Timeout callback:: count: 2
 1: /user/username/projects/myproject/tsconfig.json
 2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["src/file1.ts"]}
+{
+  "files": [
+    "src/file1.ts"
+  ]
+}
 
 
 PolledWatches::

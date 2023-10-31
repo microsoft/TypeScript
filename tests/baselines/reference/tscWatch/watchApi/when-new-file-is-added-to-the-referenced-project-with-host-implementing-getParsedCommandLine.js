@@ -1,7 +1,15 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "exclude": [
+    "temp"
+  ]
+}
 
 //// [/user/username/projects/myproject/projects/project1/class1.ts]
 class class1 {}
@@ -10,7 +18,17 @@ class class1 {}
 declare class class1 {}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../project1"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/projects/project2/class2.ts]
 class class2 {}
@@ -61,8 +79,15 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/projects/project2/class2.ts"
+]
+Program options: {
+  "module": 0,
+  "composite": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -212,8 +237,15 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 
 
-Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/projects/project2/class2.ts"
+]
+Program options: {
+  "module": 0,
+  "composite": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

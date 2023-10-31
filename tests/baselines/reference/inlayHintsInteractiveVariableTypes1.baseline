@@ -1,0 +1,26 @@
+// === Inlay Hints ===
+ const m = () => 123;
+        ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": " => "
+    },
+    {
+      "text": "number"
+    }
+  ],
+  "position": 331,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
