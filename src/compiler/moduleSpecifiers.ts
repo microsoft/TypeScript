@@ -884,23 +884,15 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
         switch (mode) {
             case MatchingMode.Exact:
                 if (
-                    outputFile && comparePaths(outputFile, pathOrPattern) === Comparison.EqualTo ||
-                    declarationFile && comparePaths(declarationFile, pathOrPattern) === Comparison.EqualTo ||
                     extensionSwappedTarget && comparePaths(extensionSwappedTarget, pathOrPattern) === Comparison.EqualTo ||
-                    comparePaths(targetFilePath, pathOrPattern) === Comparison.EqualTo
+                    comparePaths(targetFilePath, pathOrPattern) === Comparison.EqualTo ||
+                    outputFile && comparePaths(outputFile, pathOrPattern) === Comparison.EqualTo ||
+                    declarationFile && comparePaths(declarationFile, pathOrPattern) === Comparison.EqualTo
                 ) {
                     return { moduleFileToTry: packageName };
                 }
                 break;
             case MatchingMode.Directory:
-                if (outputFile && containsPath(pathOrPattern, outputFile)) {
-                    const fragment = getRelativePathFromDirectory(pathOrPattern, outputFile, /*ignoreCase*/ false);
-                    return { moduleFileToTry: combinePaths(packageName, fragment) };
-                }
-                if (declarationFile && containsPath(pathOrPattern, declarationFile)) {
-                    const fragment = getRelativePathFromDirectory(pathOrPattern, declarationFile, /*ignoreCase*/ false);
-                    return { moduleFileToTry: combinePaths(packageName, fragment) };
-                }
                 if (extensionSwappedTarget && containsPath(pathOrPattern, extensionSwappedTarget)) {
                     const fragment = getRelativePathFromDirectory(pathOrPattern, extensionSwappedTarget, /*ignoreCase*/ false);
                     return { moduleFileToTry: getNormalizedAbsolutePath(combinePaths(combinePaths(packageName, exports), fragment), /*currentDirectory*/ undefined) };
@@ -909,25 +901,33 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
                     const fragment = getRelativePathFromDirectory(pathOrPattern, targetFilePath, /*ignoreCase*/ false);
                     return { moduleFileToTry: getNormalizedAbsolutePath(combinePaths(combinePaths(packageName, exports), fragment), /*currentDirectory*/ undefined) };
                 }
+                if (outputFile && containsPath(pathOrPattern, outputFile)) {
+                    const fragment = getRelativePathFromDirectory(pathOrPattern, outputFile, /*ignoreCase*/ false);
+                    return { moduleFileToTry: combinePaths(packageName, fragment) };
+                }
+                if (declarationFile && containsPath(pathOrPattern, declarationFile)) {
+                    const fragment = getRelativePathFromDirectory(pathOrPattern, declarationFile, /*ignoreCase*/ false);
+                    return { moduleFileToTry: combinePaths(packageName, fragment) };
+                }
                 break;
             case MatchingMode.Pattern:
                 const starPos = pathOrPattern.indexOf("*");
                 const leadingSlice = pathOrPattern.slice(0, starPos);
                 const trailingSlice = pathOrPattern.slice(starPos + 1);
-                if (outputFile && startsWith(outputFile, leadingSlice) && endsWith(outputFile, trailingSlice)) {
-                    const starReplacement = outputFile.slice(leadingSlice.length, outputFile.length - trailingSlice.length);
-                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
-                }
-                if (declarationFile && startsWith(declarationFile, leadingSlice) && endsWith(declarationFile, trailingSlice)) {
-                    const starReplacement = declarationFile.slice(leadingSlice.length, declarationFile.length - trailingSlice.length);
-                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
-                }
                 if (extensionSwappedTarget && startsWith(extensionSwappedTarget, leadingSlice) && endsWith(extensionSwappedTarget, trailingSlice)) {
                     const starReplacement = extensionSwappedTarget.slice(leadingSlice.length, extensionSwappedTarget.length - trailingSlice.length);
                     return { moduleFileToTry: packageName.replace("*", starReplacement) };
                 }
                 if (startsWith(targetFilePath, leadingSlice) && endsWith(targetFilePath, trailingSlice)) {
                     const starReplacement = targetFilePath.slice(leadingSlice.length, targetFilePath.length - trailingSlice.length);
+                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
+                }
+                if (outputFile && startsWith(outputFile, leadingSlice) && endsWith(outputFile, trailingSlice)) {
+                    const starReplacement = outputFile.slice(leadingSlice.length, outputFile.length - trailingSlice.length);
+                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
+                }
+                if (declarationFile && startsWith(declarationFile, leadingSlice) && endsWith(declarationFile, trailingSlice)) {
+                    const starReplacement = declarationFile.slice(leadingSlice.length, declarationFile.length - trailingSlice.length);
                     return { moduleFileToTry: packageName.replace("*", starReplacement) };
                 }
                 break;
