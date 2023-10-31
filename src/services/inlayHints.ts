@@ -1,8 +1,11 @@
 import {
     __String,
+    ArrayBindingPattern,
     ArrayTypeNode,
     ArrowFunction,
+    BindingElement,
     CallExpression,
+    CallSignatureDeclaration,
     CharacterCodes,
     ConditionalTypeNode,
     ConstructorTypeNode,
@@ -70,11 +73,13 @@ import {
     LiteralTypeNode,
     MappedTypeNode,
     MethodDeclaration,
+    MethodSignature,
     NamedTupleMember,
     NewExpression,
     Node,
     NodeArray,
     NodeBuilderFlags,
+    ObjectBindingPattern,
     OptionalTypeNode,
     ParameterDeclaration,
     ParenthesizedTypeNode,
@@ -85,6 +90,7 @@ import {
     QuotePreference,
     RestTypeNode,
     Signature,
+    SignatureDeclarationBase,
     skipParentheses,
     some,
     Symbol,
@@ -556,14 +562,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 case SyntaxKind.ConstructorType:
                     const constructorType = node as ConstructorTypeNode;
                     parts.push({ text: "new " });
-                    if (constructorType.typeParameters) {
-                        parts.push({ text: "<" });
-                        visitDisplayPartList(constructorType.typeParameters, ", ");
-                        parts.push({ text: ">" });
-                    }
-                    parts.push({ text: "(" });
-                    visitDisplayPartList(constructorType.parameters, ", ");
-                    parts.push({ text: ")" });
+                    visitParametersAndTypeParameters(constructorType);
                     parts.push({ text: " => " });
                     visitForDisplayParts(constructorType.type);
                     break;
@@ -692,14 +691,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     break;
                 case SyntaxKind.FunctionType:
                     const functionType = node as FunctionTypeNode;
-                    if (functionType.typeParameters) {
-                        parts.push({ text: "<" });
-                        visitDisplayPartList(functionType.typeParameters, ", ");
-                        parts.push({ text: ">" });
-                    }
-                    parts.push({ text: "(" });
-                    visitDisplayPartList(functionType.parameters, ", ");
-                    parts.push({ text: ")" });
+                    visitParametersAndTypeParameters(functionType);
                     parts.push({ text: " => " });
                     visitForDisplayParts(functionType.type);
                     break;
@@ -730,6 +722,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     const propertySignature = node as PropertySignature;
                     if (propertySignature.modifiers) {
                         visitDisplayPartList(propertySignature.modifiers, " ");
+                        if (propertySignature.modifiers.length) {
+                            parts.push({ text: " " });
+                        }
                     }
                     visitForDisplayParts(propertySignature.name);
                     if (propertySignature.questionToken) {
@@ -740,9 +735,73 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         visitForDisplayParts(propertySignature.type);
                     }
                     break;
+                case SyntaxKind.MethodSignature:
+                    const methodSignature = node as MethodSignature;
+                    if (methodSignature.modifiers) {
+                        visitDisplayPartList(methodSignature.modifiers, " ");
+                        if (methodSignature.modifiers.length) {
+                            parts.push({ text: " " });
+                        }
+                    }
+                    visitForDisplayParts(methodSignature.name);
+                    if (methodSignature.questionToken) {
+                        parts.push({ text: "?" });
+                    }
+                    visitParametersAndTypeParameters(methodSignature);
+                    if (methodSignature.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(methodSignature.type);
+                    }
+                    break;
+                case SyntaxKind.CallSignature:
+                    const callSignature = node as CallSignatureDeclaration;
+                    visitParametersAndTypeParameters(callSignature);
+                    if (callSignature.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(callSignature.type);
+                    }
+                    break;
+                case SyntaxKind.ArrayBindingPattern:
+                    const arrayBindingPattern = node as ArrayBindingPattern;
+                    parts.push({ text: "[" });
+                    visitDisplayPartList(arrayBindingPattern.elements, ", ");
+                    parts.push({ text: "]" });
+                    break;
+                case SyntaxKind.ObjectBindingPattern:
+                    const objectBindingPattern = node as ObjectBindingPattern;
+                    parts.push({ text: "{" });
+                    visitDisplayPartList(objectBindingPattern.elements, ", ");
+                    parts.push({ text: "}" });
+                    break;
+                case SyntaxKind.BindingElement:
+                    const bindingElement = node as BindingElement;
+                    visitForDisplayParts(bindingElement.name);
+                    break;
+                case SyntaxKind.PrefixUnaryExpression:
+                    const prefixUnaryExpression = node as PrefixUnaryExpression;
+                    parts.push({ text: tokenToString(prefixUnaryExpression.operator) });
+                    visitForDisplayParts(prefixUnaryExpression.operand);
+                    break;
                 default:
                     Debug.failBadSyntaxKind(node);
             }
+        }
+
+        /**
+         * Visits the type parameters and parameters, returning something like:
+         *   <T1, T2>(p1: t1, p2: t2)
+         * which can be used for signature declaration nodes.
+         * @param signatureDeclaration Node to visit.
+         */
+        function visitParametersAndTypeParameters(signatureDeclaration: SignatureDeclarationBase) {
+            if (signatureDeclaration.typeParameters) {
+                parts.push({ text: "<" });
+                visitDisplayPartList(signatureDeclaration.typeParameters, ", ");
+                parts.push({ text: ">" });
+            }
+            parts.push({ text: "(" });
+            visitDisplayPartList(signatureDeclaration.parameters, ", ");
+            parts.push({ text: ")" });
         }
 
         function visitDisplayPartList<T extends Node>(nodes: NodeArray<T>, separator: string) {
