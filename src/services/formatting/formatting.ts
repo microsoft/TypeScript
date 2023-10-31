@@ -9,7 +9,7 @@ import {
     concatenate,
     createTextChangeFromStartLength,
     Debug,
-    Declaration,
+    DeclarationBase,
     Diagnostic,
     EditorSettings,
     find,
@@ -681,7 +681,7 @@ function formatSpanWorker(
 
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.Parameter:
-                const name = getNameOfDeclaration(node as Declaration);
+                const name = getNameOfDeclaration(node as DeclarationBase);
                 if (name) {
                     return name.kind;
                 }

@@ -22,7 +22,7 @@ import {
     createDiagnosticForNode,
     createFileDiagnostic,
     Debug,
-    Declaration,
+    DeclarationBase,
     Diagnostic,
     DiagnosticCategory,
     DiagnosticMessage,
@@ -116,7 +116,7 @@ import {
     Modifier,
     ModifierFlags,
     ModuleBlock,
-    NamedDeclaration,
+    NamedDeclarationBase,
     Node,
     NodeBuilderFlags,
     NodeFlags,
@@ -1561,7 +1561,7 @@ function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
     }
 }
 
-function getFirstDeclarationBeforePosition(type: Type, position: number): Declaration | undefined {
+function getFirstDeclarationBeforePosition(type: Type, position: number): DeclarationBase | undefined {
     let firstDeclaration;
 
     const symbol = type.symbol;
@@ -1577,8 +1577,8 @@ function getFirstDeclarationBeforePosition(type: Type, position: number): Declar
 }
 
 function compareTypesByDeclarationOrder(
-    { type: type1, declaration: declaration1 }: { type: Type; declaration?: Declaration; },
-    { type: type2, declaration: declaration2 }: { type: Type; declaration?: Declaration; },
+    { type: type1, declaration: declaration1 }: { type: Type; declaration?: DeclarationBase; },
+    { type: type2, declaration: declaration2 }: { type: Type; declaration?: DeclarationBase; },
 ) {
     return compareProperties(declaration1, declaration2, "pos", compareValues)
         || compareStringsCaseSensitive(
@@ -1827,10 +1827,10 @@ function collectReadsAndWrites(
     const substitutionsPerScope: Map<string, Node>[] = [];
     const functionErrorsPerScope: Diagnostic[][] = [];
     const constantErrorsPerScope: Diagnostic[][] = [];
-    const visibleDeclarationsInExtractedRange: NamedDeclaration[] = [];
+    const visibleDeclarationsInExtractedRange: NamedDeclarationBase[] = [];
     const exposedVariableSymbolSet = new Map<string, true>(); // Key is symbol ID
     const exposedVariableDeclarations: VariableDeclaration[] = [];
-    let firstExposedNonVariableDeclaration: NamedDeclaration | undefined;
+    let firstExposedNonVariableDeclaration: NamedDeclarationBase | undefined;
 
     const expression = !isReadonlyArray(targetRange.range)
         ? targetRange.range
@@ -1941,7 +1941,7 @@ function collectReadsAndWrites(
         }
 
         let hasWrite = false;
-        let readonlyClassPropertyWrite: Declaration | undefined;
+        let readonlyClassPropertyWrite: DeclarationBase | undefined;
         usagesPerScope[i].usages.forEach(value => {
             if (value.usage === Usage.Write) {
                 hasWrite = true;

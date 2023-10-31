@@ -81,6 +81,7 @@
             { "selector": "enumMember", "format": ["camelCase", "PascalCase"], "leadingUnderscore": "allow", "filter": { "regex": "^[A-Za-z]+_[A-Za-z]+$", "match": false } },
             { "selector": "property", "format": null }
         ],
+        "@typescript-eslint/no-unnecessary-type-assertion": "error",
 
         // Rules enabled in typescript-eslint configs that are not applicable here
         "@typescript-eslint/ban-ts-comment": "off",

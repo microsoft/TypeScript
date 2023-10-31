@@ -44,7 +44,7 @@ import {
     createTextSpanFromNode,
     createTextSpanFromRange,
     Debug,
-    Declaration,
+    DeclarationBase,
     Decorator,
     Diagnostics,
     diagnosticToString,
@@ -4321,7 +4321,7 @@ function getCompletionData(
         completionKind = CompletionKind.ObjectPropertyDeclaration;
 
         let typeMembers: Symbol[] | undefined;
-        let existingMembers: readonly Declaration[] | undefined;
+        let existingMembers: readonly DeclarationBase[] | undefined;
 
         if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
             const instantiatedType = tryGetObjectLiteralContextualType(objectLikeContainer, typeChecker);
@@ -4862,7 +4862,7 @@ function getCompletionData(
      * @returns Symbols to be suggested in an object binding pattern or object literal expression, barring those whose declarations
      *          do not occur at the current position and have not otherwise been typed.
      */
-    function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: readonly Declaration[]): Symbol[] {
+    function filterObjectMembersList(contextualMemberSymbols: Symbol[], existingMembers: readonly DeclarationBase[]): Symbol[] {
         if (existingMembers.length === 0) {
             return contextualMemberSymbols;
         }

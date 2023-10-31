@@ -353,8 +353,8 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         diagnostics,
     };
 
-    function transformRoot(node: T) {
-        return node && (!isSourceFile(node) || !node.isDeclarationFile) ? transformation(node) : node;
+    function transformRoot(node: Node): T {
+        return (node && (!isSourceFile(node) || !node.isDeclarationFile) ? (transformation(node as T)) : node) as T;
     }
 
     /**

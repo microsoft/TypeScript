@@ -44,7 +44,7 @@ import {
     createTextSpanFromNode,
     createTextSpanFromRange,
     Debug,
-    Declaration,
+    DeclarationBase,
     deduplicate,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
@@ -620,8 +620,8 @@ class TokenOrIdentifierObject implements Node {
 class SymbolObject implements Symbol {
     flags: SymbolFlags;
     escapedName: __String;
-    declarations!: Declaration[];
-    valueDeclaration!: Declaration;
+    declarations!: DeclarationBase[];
+    valueDeclaration!: DeclarationBase;
     id = 0;
     mergeId = 0;
     constEnumOnlyModule: boolean | undefined;
@@ -658,7 +658,7 @@ class SymbolObject implements Symbol {
         return this.name;
     }
 
-    getDeclarations(): Declaration[] | undefined {
+    getDeclarations(): DeclarationBase[] | undefined {
         return this.declarations;
     }
 
@@ -940,7 +940,7 @@ function hasJSDocInheritDocTag(node: Node) {
     return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc" || tag.tagName.text === "inheritdoc");
 }
 
-function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+function getJsDocTagsOfDeclarations(declarations: DeclarationBase[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
     if (!declarations) return emptyArray;
 
     let tags = JsDoc.getJsDocTagsFromDeclarations(declarations, checker);
@@ -964,7 +964,7 @@ function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, che
     return tags;
 }
 
-function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+function getDocumentationComment(declarations: readonly DeclarationBase[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
     if (!declarations) return emptyArray;
 
     let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations, checker);
@@ -987,7 +987,7 @@ function getDocumentationComment(declarations: readonly Declaration[] | undefine
     return doc;
 }
 
-function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
+function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: DeclarationBase, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
     const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
     if (!classOrInterfaceDeclaration) return;
 
@@ -1042,7 +1042,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public nameTable: Map<__String, number> | undefined;
     public imports!: readonly StringLiteralLike[];
     public moduleAugmentations!: StringLiteral[];
-    private namedDeclarations: Map<string, Declaration[]> | undefined;
+    private namedDeclarations: Map<string, DeclarationBase[]> | undefined;
     public ambientModuleNames!: string[];
     public checkJsDirective: CheckJsDirective | undefined;
     public errorExpectations: TextRange[] | undefined;
@@ -1088,7 +1088,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
         return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
     }
 
-    public getNamedDeclarations(): Map<string, Declaration[]> {
+    public getNamedDeclarations(): Map<string, DeclarationBase[]> {
         if (!this.namedDeclarations) {
             this.namedDeclarations = this.computeNamedDeclarations();
         }
@@ -1096,14 +1096,14 @@ class SourceFileObject extends NodeObject implements SourceFile {
         return this.namedDeclarations;
     }
 
-    private computeNamedDeclarations(): Map<string, Declaration[]> {
-        const result = createMultiMap<string, Declaration>();
+    private computeNamedDeclarations(): Map<string, DeclarationBase[]> {
+        const result = createMultiMap<string, DeclarationBase>();
 
         this.forEachChild(visit);
 
         return result;
 
-        function addDeclaration(declaration: Declaration) {
+        function addDeclaration(declaration: DeclarationBase) {
             const name = getDeclarationName(declaration);
             if (name) {
                 result.add(name, declaration);
@@ -1118,7 +1118,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
             return declarations;
         }
 
-        function getDeclarationName(declaration: Declaration) {
+        function getDeclarationName(declaration: DeclarationBase) {
             const name = getNonAssignedNameOfDeclaration(declaration);
             return name && (isComputedPropertyName(name) && isPropertyAccessExpression(name.expression) ? name.expression.name.text
                 : isPropertyName(name) ? getNameFromPropertyName(name) : undefined);
@@ -1166,7 +1166,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.TypeLiteral:
-                    addDeclaration(node as Declaration);
+                    addDeclaration(node as DeclarationBase);
                     forEachChild(node, visit);
                     break;
 
@@ -1192,7 +1192,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    addDeclaration(node as Declaration);
+                    addDeclaration(node as DeclarationBase);
                     break;
 
                 case SyntaxKind.ExportDeclaration:

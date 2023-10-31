@@ -27,7 +27,7 @@ import {
     createTokenRange,
     createUnparsedSourceFile,
     Debug,
-    Declaration,
+    DeclarationBase,
     Decorator,
     ElementAccessExpression,
     EmitFlags,
@@ -1060,7 +1060,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The declaration node.
      */
-    function getTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
+    function getTypeMetadata(node: DeclarationBase, container: ClassLikeDeclaration) {
         // Decorator metadata is not yet supported for ES decorators.
         if (!legacyDecorators) return undefined;
         return USE_NEW_TYPE_METADATA_FORMAT ?
@@ -1068,7 +1068,7 @@ export function transformTypeScript(context: TransformationContext) {
             getOldTypeMetadata(node, container);
     }
 
-    function getOldTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
+    function getOldTypeMetadata(node: DeclarationBase, container: ClassLikeDeclaration) {
         if (typeSerializer) {
             let decorators: Decorator[] | undefined;
             if (shouldAddTypeMetadata(node)) {
@@ -1087,7 +1087,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function getNewTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
+    function getNewTypeMetadata(node: DeclarationBase, container: ClassLikeDeclaration) {
         if (typeSerializer) {
             let properties: ObjectLiteralElementLike[] | undefined;
             if (shouldAddTypeMetadata(node)) {
@@ -1116,7 +1116,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to test.
      */
-    function shouldAddTypeMetadata(node: Declaration): node is MethodDeclaration | AccessorDeclaration | PropertyDeclaration {
+    function shouldAddTypeMetadata(node: DeclarationBase): node is MethodDeclaration | AccessorDeclaration | PropertyDeclaration {
         const kind = node.kind;
         return kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
@@ -1131,7 +1131,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to test.
      */
-    function shouldAddReturnTypeMetadata(node: Declaration): node is MethodDeclaration {
+    function shouldAddReturnTypeMetadata(node: DeclarationBase): node is MethodDeclaration {
         return node.kind === SyntaxKind.MethodDeclaration;
     }
 
@@ -1142,7 +1142,7 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to test.
      */
-    function shouldAddParamTypesMetadata(node: Declaration): node is ClassLikeDeclaration & { _hasConstructorBrand: never; } | MethodDeclaration | AccessorDeclaration {
+    function shouldAddParamTypesMetadata(node: DeclarationBase): node is ClassLikeDeclaration & { _hasConstructorBrand: never; } | MethodDeclaration | AccessorDeclaration {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:

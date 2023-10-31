@@ -5,7 +5,7 @@ import {
     ClassifiedSpan2020,
     createTextSpan,
     Debug,
-    Declaration,
+    DeclarationBase,
     EndOfLineState,
     forEachChild,
     getCombinedModifierFlags,
@@ -28,7 +28,7 @@ import {
     isSourceFile,
     isVariableDeclaration,
     ModifierFlags,
-    NamedDeclaration,
+    NamedDeclarationBase,
     Node,
     NodeFlags,
     ParameterDeclaration,
@@ -158,7 +158,7 @@ function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan,
                     let modifierSet = 0;
                     if (node.parent) {
                         const parentIsDeclaration = isBindingElement(node.parent) || tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx;
-                        if (parentIsDeclaration && (node.parent as NamedDeclaration).name === node) {
+                        if (parentIsDeclaration && (node.parent as NamedDeclarationBase).name === node) {
                             modifierSet = 1 << TokenModifier.declaration;
                         }
                     }
@@ -252,7 +252,7 @@ function reclassifyByType(typeChecker: TypeChecker, node: Node, typeIdx: TokenTy
     return typeIdx;
 }
 
-function isLocalDeclaration(decl: Declaration, sourceFile: SourceFile): boolean {
+function isLocalDeclaration(decl: DeclarationBase, sourceFile: SourceFile): boolean {
     if (isBindingElement(decl)) {
         decl = getDeclarationForBindingElement(decl);
     }

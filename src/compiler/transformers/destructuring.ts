@@ -69,10 +69,21 @@ interface FlattenContext {
     hoistTempVariables: boolean;
     hasTransformedPriorElement?: boolean; // indicates whether we've transformed a prior declaration
     emitExpression: (value: Expression) => void;
-    emitBindingOrAssignment: (target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node | undefined) => void;
-    createArrayBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ArrayBindingOrAssignmentPattern;
-    createObjectBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ObjectBindingOrAssignmentPattern;
-    createArrayBindingOrAssignmentElement: (node: Identifier) => BindingOrAssignmentElement;
+    emitBindingOrAssignment: (
+        target: BindingOrAssignmentElementTarget,
+        value: Expression,
+        location: TextRange,
+        original: Node | undefined,
+    ) => void;
+    createArrayBindingOrAssignmentPattern: (
+        elements: BindingOrAssignmentElement[],
+    ) => ArrayBindingOrAssignmentPattern;
+    createObjectBindingOrAssignmentPattern: (
+        elements: BindingOrAssignmentElement[],
+    ) => ObjectBindingOrAssignmentPattern;
+    createArrayBindingOrAssignmentElement: (
+        node: Identifier,
+    ) => BindingOrAssignmentElement;
     visitor: (node: Node) => VisitResult<Node | undefined>;
 }
 
@@ -101,19 +112,28 @@ export function flattenDestructuringAssignment(
     context: TransformationContext,
     level: FlattenLevel,
     needsValue?: boolean,
-    createAssignmentCallback?: (name: Identifier, value: Expression, location?: TextRange) => Expression,
+    createAssignmentCallback?: (
+        name: Identifier,
+        value: Expression,
+        location?: TextRange,
+    ) => Expression,
 ): Expression {
     let location: TextRange = node;
     let value: Expression | undefined;
     if (isDestructuringAssignment(node)) {
         value = node.right;
-        while (isEmptyArrayLiteral(node.left) || isEmptyObjectLiteral(node.left)) {
+        while (
+            isEmptyArrayLiteral(node.left) ||
+            isEmptyObjectLiteral(node.left)
+        ) {
             if (isDestructuringAssignment(value)) {
                 location = node = value;
                 value = node.right;
             }
             else {
-                return Debug.checkDefined(visitNode(value, visitor, isExpression));
+                return Debug.checkDefined(
+                    visitNode(value, visitor, isExpression),
+                );
             }
         }
     }
@@ -137,12 +157,21 @@ export function flattenDestructuringAssignment(
         Debug.assert(value);
 
         if (
-            isIdentifier(value) && bindingOrAssignmentElementAssignsToName(node, value.escapedText) ||
+            (isIdentifier(value) &&
+                bindingOrAssignmentElementAssignsToName(
+                    node,
+                    value.escapedText,
+                )) ||
             bindingOrAssignmentElementContainsNonLiteralComputedName(node)
         ) {
             // If the right-hand value of the assignment is also an assignment target then
             // we need to cache the right-hand value.
-            value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ false, location);
+            value = ensureIdentifier(
+                flattenContext,
+                value,
+                /*reuseIdentifierExpressions*/ false,
+                location,
+            );
         }
         else if (needsValue) {
             // If the right-hand value of the destructuring assignment needs to be preserved (as
@@ -151,7 +180,12 @@ export function flattenDestructuringAssignment(
             //
             // The source map location for the assignment should point to the entire binary
             // expression.
-            value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
+            value = ensureIdentifier(
+                flattenContext,
+                value,
+                /*reuseIdentifierExpressions*/ true,
+                location,
+            );
         }
         else if (nodeIsSynthesized(node)) {
             // Generally, the source map location for a destructuring assignment is the root
@@ -164,7 +198,13 @@ export function flattenDestructuringAssignment(
         }
     }
 
-    flattenBindingOrAssignmentElement(flattenContext, node, value, location, /*skipInitializer*/ isDestructuringAssignment(node));
+    flattenBindingOrAssignmentElement(
+        flattenContext,
+        node,
+        value,
+        location,
+        /*skipInitializer*/ isDestructuringAssignment(node),
+    );
 
     if (value && needsValue) {
         if (!some(expressions)) {
@@ -174,18 +214,34 @@ export function flattenDestructuringAssignment(
         expressions.push(value);
     }
 
-    return context.factory.inlineExpressions(expressions!) || context.factory.createOmittedExpression();
+    return (
+        context.factory.inlineExpressions(expressions!) ||
+        context.factory.createOmittedExpression()
+    );
 
     function emitExpression(expression: Expression) {
         expressions = append(expressions, expression);
     }
 
-    function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node | undefined) {
-        Debug.assertNode(target, createAssignmentCallback ? isIdentifier : isExpression);
+    function emitBindingOrAssignment(
+        target: BindingOrAssignmentElementTarget,
+        value: Expression,
+        location: TextRange,
+        original: Node | undefined,
+    ) {
+        Debug.assertNode(
+            target,
+            createAssignmentCallback ? isIdentifier : isExpression,
+        );
         const expression = createAssignmentCallback
             ? createAssignmentCallback(target as Identifier, value, location)
             : setTextRange(
-                context.factory.createAssignment(Debug.checkDefined(visitNode(target as Expression, visitor, isExpression)), value),
+                context.factory.createAssignment(
+                    Debug.checkDefined(
+                        visitNode(target as Expression, visitor, isExpression),
+                    ),
+                    value,
+                ),
                 location,
             );
         expression.original = original;
@@ -193,7 +249,10 @@ export function flattenDestructuringAssignment(
     }
 }
 
-function bindingOrAssignmentElementAssignsToName(element: BindingOrAssignmentElement, escapedName: __String): boolean {
+function bindingOrAssignmentElementAssignsToName(
+    element: BindingOrAssignmentElement,
+    escapedName: __String,
+): boolean {
     const target = getTargetOfBindingOrAssignmentElement(element)!; // TODO: GH#18217
     if (isBindingOrAssignmentPattern(target)) {
         return bindingOrAssignmentPatternAssignsToName(target, escapedName);
@@ -204,7 +263,10 @@ function bindingOrAssignmentElementAssignsToName(element: BindingOrAssignmentEle
     return false;
 }
 
-function bindingOrAssignmentPatternAssignsToName(pattern: BindingOrAssignmentPattern, escapedName: __String): boolean {
+function bindingOrAssignmentPatternAssignsToName(
+    pattern: BindingOrAssignmentPattern,
+    escapedName: __String,
+): boolean {
     const elements = getElementsOfBindingOrAssignmentPattern(pattern);
     for (const element of elements) {
         if (bindingOrAssignmentElementAssignsToName(element, escapedName)) {
@@ -214,17 +276,32 @@ function bindingOrAssignmentPatternAssignsToName(pattern: BindingOrAssignmentPat
     return false;
 }
 
-function bindingOrAssignmentElementContainsNonLiteralComputedName(element: BindingOrAssignmentElement): boolean {
+function bindingOrAssignmentElementContainsNonLiteralComputedName(
+    element: BindingOrAssignmentElement,
+): boolean {
     const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(element);
-    if (propertyName && isComputedPropertyName(propertyName) && !isLiteralExpression(propertyName.expression)) {
+    if (
+        propertyName &&
+        isComputedPropertyName(propertyName) &&
+        !isLiteralExpression(propertyName.expression)
+    ) {
         return true;
     }
     const target = getTargetOfBindingOrAssignmentElement(element);
-    return !!target && isBindingOrAssignmentPattern(target) && bindingOrAssignmentPatternContainsNonLiteralComputedName(target);
+    return (
+        !!target &&
+        isBindingOrAssignmentPattern(target) &&
+        bindingOrAssignmentPatternContainsNonLiteralComputedName(target)
+    );
 }
 
-function bindingOrAssignmentPatternContainsNonLiteralComputedName(pattern: BindingOrAssignmentPattern): boolean {
-    return !!forEach(getElementsOfBindingOrAssignmentPattern(pattern), bindingOrAssignmentElementContainsNonLiteralComputedName);
+function bindingOrAssignmentPatternContainsNonLiteralComputedName(
+    pattern: BindingOrAssignmentPattern,
+): boolean {
+    return !!forEach(
+        getElementsOfBindingOrAssignmentPattern(pattern),
+        bindingOrAssignmentElementContainsNonLiteralComputedName,
+    );
 }
 
 /**
@@ -250,7 +327,13 @@ export function flattenDestructuringBinding(
     skipInitializer?: boolean,
 ): VariableDeclaration[] {
     let pendingExpressions: Expression[] | undefined;
-    const pendingDeclarations: { pendingExpressions?: Expression[]; name: BindingName; value: Expression; location?: TextRange; original?: Node; }[] = [];
+    const pendingDeclarations: {
+        pendingExpressions?: Expression[];
+        name: BindingName;
+        value: Expression;
+        location?: TextRange;
+        original?: Node;
+    }[] = [];
     const declarations: VariableDeclaration[] = [];
     const flattenContext: FlattenContext = {
         context,
@@ -268,23 +351,54 @@ export function flattenDestructuringBinding(
     if (isVariableDeclaration(node)) {
         let initializer = getInitializerOfBindingOrAssignmentElement(node);
         if (
-            initializer && (isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText) ||
+            initializer &&
+            ((isIdentifier(initializer) &&
+                bindingOrAssignmentElementAssignsToName(
+                    node,
+                    initializer.escapedText,
+                )) ||
                 bindingOrAssignmentElementContainsNonLiteralComputedName(node))
         ) {
             // If the right-hand value of the assignment is also an assignment target then
             // we need to cache the right-hand value.
-            initializer = ensureIdentifier(flattenContext, Debug.checkDefined(visitNode(initializer, flattenContext.visitor, isExpression)), /*reuseIdentifierExpressions*/ false, initializer);
-            node = context.factory.updateVariableDeclaration(node, node.name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
+            initializer = ensureIdentifier(
+                flattenContext,
+                Debug.checkDefined(
+                    visitNode(initializer, flattenContext.visitor, isExpression),
+                ),
+                /*reuseIdentifierExpressions*/ false,
+                initializer,
+            );
+            node = context.factory.updateVariableDeclaration(
+                node,
+                node.name,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                initializer,
+            );
         }
     }
 
-    flattenBindingOrAssignmentElement(flattenContext, node, rval, node, skipInitializer);
+    flattenBindingOrAssignmentElement(
+        flattenContext,
+        node,
+        rval,
+        node,
+        skipInitializer,
+    );
     if (pendingExpressions) {
-        const temp = context.factory.createTempVariable(/*recordTempVariable*/ undefined);
+        const temp = context.factory.createTempVariable(
+            /*recordTempVariable*/ undefined,
+        );
         if (hoistTempVariables) {
             const value = context.factory.inlineExpressions(pendingExpressions);
             pendingExpressions = undefined;
-            emitBindingOrAssignment(temp, value, /*location*/ undefined, /*original*/ undefined);
+            emitBindingOrAssignment(
+                temp,
+                value,
+                /*location*/ undefined,
+                /*original*/ undefined,
+            );
         }
         else {
             context.hoistVariableDeclaration(temp);
@@ -297,12 +411,24 @@ export function flattenDestructuringBinding(
             pendingDeclaration.value = temp;
         }
     }
-    for (const { pendingExpressions, name, value, location, original } of pendingDeclarations) {
+    for (
+        const {
+            pendingExpressions,
+            name,
+            value,
+            location,
+            original,
+        } of pendingDeclarations
+    ) {
         const variable = context.factory.createVariableDeclaration(
             name,
             /*exclamationToken*/ undefined,
             /*type*/ undefined,
-            pendingExpressions ? context.factory.inlineExpressions(append(pendingExpressions, value)) : value,
+            pendingExpressions
+                ? context.factory.inlineExpressions(
+                    append(pendingExpressions, value),
+                )
+                : value,
         );
         variable.original = original;
         setTextRange(variable, location);
@@ -314,13 +440,26 @@ export function flattenDestructuringBinding(
         pendingExpressions = append(pendingExpressions, value);
     }
 
-    function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange | undefined, original: Node | undefined) {
+    function emitBindingOrAssignment(
+        target: BindingOrAssignmentElementTarget,
+        value: Expression,
+        location: TextRange | undefined,
+        original: Node | undefined,
+    ) {
         Debug.assertNode(target, isBindingName);
         if (pendingExpressions) {
-            value = context.factory.inlineExpressions(append(pendingExpressions, value));
+            value = context.factory.inlineExpressions(
+                append(pendingExpressions, value),
+            );
             pendingExpressions = undefined;
         }
-        pendingDeclarations.push({ pendingExpressions, name: target, value, location, original });
+        pendingDeclarations.push({
+            pendingExpressions,
+            name: target,
+            value,
+            location,
+            original,
+        });
     }
 }
 
@@ -343,14 +482,31 @@ function flattenBindingOrAssignmentElement(
 ) {
     const bindingTarget = getTargetOfBindingOrAssignmentElement(element)!; // TODO: GH#18217
     if (!skipInitializer) {
-        const initializer = visitNode(getInitializerOfBindingOrAssignmentElement(element), flattenContext.visitor, isExpression);
+        const initializer = visitNode(
+            getInitializerOfBindingOrAssignmentElement(element),
+            flattenContext.visitor,
+            isExpression,
+        );
         if (initializer) {
             // Combine value and initializer
             if (value) {
-                value = createDefaultValueCheck(flattenContext, value, initializer, location);
+                value = createDefaultValueCheck(
+                    flattenContext,
+                    value,
+                    initializer,
+                    location,
+                );
                 // If 'value' is not a simple expression, it could contain side-effecting code that should evaluate before an object or array binding pattern.
-                if (!isSimpleInlineableExpression(initializer) && isBindingOrAssignmentPattern(bindingTarget)) {
-                    value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
+                if (
+                    !isSimpleInlineableExpression(initializer) &&
+                    isBindingOrAssignmentPattern(bindingTarget)
+                ) {
+                    value = ensureIdentifier(
+                        flattenContext,
+                        value,
+                        /*reuseIdentifierExpressions*/ true,
+                        location,
+                    );
                 }
             }
             else {
@@ -363,13 +519,30 @@ function flattenBindingOrAssignmentElement(
         }
     }
     if (isObjectBindingOrAssignmentPattern(bindingTarget)) {
-        flattenObjectBindingOrAssignmentPattern(flattenContext, element, bindingTarget, value!, location);
+        flattenObjectBindingOrAssignmentPattern(
+            flattenContext,
+            element,
+            bindingTarget,
+            value!,
+            location,
+        );
     }
     else if (isArrayBindingOrAssignmentPattern(bindingTarget)) {
-        flattenArrayBindingOrAssignmentPattern(flattenContext, element, bindingTarget, value!, location);
+        flattenArrayBindingOrAssignmentPattern(
+            flattenContext,
+            element,
+            bindingTarget,
+            value!,
+            location,
+        );
     }
     else {
-        flattenContext.emitBindingOrAssignment(bindingTarget, value!, location, /*original*/ element); // TODO: GH#18217
+        flattenContext.emitBindingOrAssignment(
+            bindingTarget,
+            value!,
+            location,
+            /*original*/ element,
+        ); // TODO: GH#18217
     }
 }
 
@@ -382,7 +555,13 @@ function flattenBindingOrAssignmentElement(
  * @param value The current RHS value to assign to the element.
  * @param location The location to use for source maps and comments.
  */
-function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ObjectBindingOrAssignmentPattern, value: Expression, location: TextRange) {
+function flattenObjectBindingOrAssignmentPattern(
+    flattenContext: FlattenContext,
+    parent: BindingOrAssignmentElement,
+    pattern: ObjectBindingOrAssignmentPattern,
+    value: Expression,
+    location: TextRange,
+) {
     const elements = getElementsOfBindingOrAssignmentPattern(pattern);
     const numElements = elements.length;
     if (numElements !== 1) {
@@ -391,7 +570,12 @@ function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext,
         // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
         // so in that case, we'll intentionally create that temporary.
         const reuseIdentifierExpressions = !isDeclarationBindingElement(parent) || numElements !== 0;
-        value = ensureIdentifier(flattenContext, value, reuseIdentifierExpressions, location);
+        value = ensureIdentifier(
+            flattenContext,
+            value,
+            reuseIdentifierExpressions,
+            location,
+        );
     }
     let bindingElements: BindingOrAssignmentElement[] | undefined;
     let computedTempVariables: Expression[] | undefined;
@@ -400,36 +584,97 @@ function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext,
         if (!getRestIndicatorOfBindingOrAssignmentElement(element)) {
             const propertyName = getPropertyNameOfBindingOrAssignmentElement(element)!;
             if (
-                flattenContext.level >= FlattenLevel.ObjectRest
-                && !(element.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
-                && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
-                && !isComputedPropertyName(propertyName)
+                flattenContext.level >= FlattenLevel.ObjectRest &&
+                !(
+                    element.transformFlags &
+                    (TransformFlags.ContainsRestOrSpread |
+                        TransformFlags.ContainsObjectRestOrSpread)
+                ) &&
+                !(
+                    getTargetOfBindingOrAssignmentElement(element)!
+                        .transformFlags &
+                    (TransformFlags.ContainsRestOrSpread |
+                        TransformFlags.ContainsObjectRestOrSpread)
+                ) &&
+                !isComputedPropertyName(propertyName)
             ) {
-                bindingElements = append(bindingElements, visitNode(element, flattenContext.visitor, isBindingOrAssignmentElement));
+                bindingElements = append(
+                    bindingElements,
+                    visitNode(
+                        element,
+                        flattenContext.visitor,
+                        isBindingOrAssignmentElement,
+                    ),
+                );
             }
             else {
                 if (bindingElements) {
-                    flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+                    flattenContext.emitBindingOrAssignment(
+                        flattenContext.createObjectBindingOrAssignmentPattern(
+                            bindingElements,
+                        ),
+                        value,
+                        location,
+                        pattern,
+                    );
                     bindingElements = undefined;
                 }
-                const rhsValue = createDestructuringPropertyAccess(flattenContext, value, propertyName);
+                const rhsValue = createDestructuringPropertyAccess(
+                    flattenContext,
+                    value,
+                    propertyName,
+                );
                 if (isComputedPropertyName(propertyName)) {
-                    computedTempVariables = append<Expression>(computedTempVariables, (rhsValue as ElementAccessExpression).argumentExpression);
+                    computedTempVariables = append<Expression>(
+                        computedTempVariables,
+                        (rhsValue as ElementAccessExpression).argumentExpression,
+                    );
                 }
-                flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, /*location*/ element);
+                flattenBindingOrAssignmentElement(
+                    flattenContext,
+                    element,
+                    rhsValue,
+                    /*location*/ element,
+                );
             }
         }
         else if (i === numElements - 1) {
             if (bindingElements) {
-                flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+                flattenContext.emitBindingOrAssignment(
+                    flattenContext.createObjectBindingOrAssignmentPattern(
+                        bindingElements,
+                    ),
+                    value,
+                    location,
+                    pattern,
+                );
                 bindingElements = undefined;
             }
-            const rhsValue = flattenContext.context.getEmitHelperFactory().createRestHelper(value, elements, computedTempVariables, pattern);
-            flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, element);
+            const rhsValue = flattenContext.context
+                .getEmitHelperFactory()
+                .createRestHelper(
+                    value,
+                    elements,
+                    computedTempVariables,
+                    pattern,
+                );
+            flattenBindingOrAssignmentElement(
+                flattenContext,
+                element,
+                rhsValue,
+                element,
+            );
         }
     }
     if (bindingElements) {
-        flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+        flattenContext.emitBindingOrAssignment(
+            flattenContext.createObjectBindingOrAssignmentPattern(
+                bindingElements,
+            ),
+            value,
+            location,
+            pattern,
+        );
     }
 }
 
@@ -442,20 +687,34 @@ function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext,
  * @param value The current RHS value to assign to the element.
  * @param location The location to use for source maps and comments.
  */
-function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ArrayBindingOrAssignmentPattern, value: Expression, location: TextRange) {
+function flattenArrayBindingOrAssignmentPattern(
+    flattenContext: FlattenContext,
+    parent: BindingOrAssignmentElement,
+    pattern: ArrayBindingOrAssignmentPattern,
+    value: Expression,
+    location: TextRange,
+) {
     const elements = getElementsOfBindingOrAssignmentPattern(pattern);
     const numElements = elements.length;
-    if (flattenContext.level < FlattenLevel.ObjectRest && flattenContext.downlevelIteration) {
+    if (
+        flattenContext.level < FlattenLevel.ObjectRest &&
+        flattenContext.downlevelIteration
+    ) {
         // Read the elements of the iterable into an array
         value = ensureIdentifier(
             flattenContext,
             setTextRange(
-                flattenContext.context.getEmitHelperFactory().createReadHelper(
-                    value,
-                    numElements > 0 && getRestIndicatorOfBindingOrAssignmentElement(elements[numElements - 1])
-                        ? undefined
-                        : numElements,
-                ),
+                flattenContext.context
+                    .getEmitHelperFactory()
+                    .createReadHelper(
+                        value,
+                        numElements > 0 &&
+                            getRestIndicatorOfBindingOrAssignmentElement(
+                                elements[numElements - 1],
+                            )
+                            ? undefined
+                            : numElements,
+                    ),
                 location,
             ),
             /*reuseIdentifierExpressions*/ false,
@@ -463,8 +722,10 @@ function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, 
         );
     }
     else if (
-        numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)
-        || every(elements, isOmittedExpression)
+        (numElements !== 1 &&
+            (flattenContext.level < FlattenLevel.ObjectRest ||
+                numElements === 0)) ||
+        every(elements, isOmittedExpression)
     ) {
         // For anything other than a single-element destructuring we need to generate a temporary
         // to ensure value is evaluated exactly once. Additionally, if we have zero elements
@@ -473,24 +734,44 @@ function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, 
         // Or all the elements of the binding pattern are omitted expression such as "var [,] = [1,2]",
         // then we will create temporary variable.
         const reuseIdentifierExpressions = !isDeclarationBindingElement(parent) || numElements !== 0;
-        value = ensureIdentifier(flattenContext, value, reuseIdentifierExpressions, location);
+        value = ensureIdentifier(
+            flattenContext,
+            value,
+            reuseIdentifierExpressions,
+            location,
+        );
     }
     let bindingElements: BindingOrAssignmentElement[] | undefined;
-    let restContainingElements: [Identifier, BindingOrAssignmentElement][] | undefined;
+    let restContainingElements:
+        | [Identifier, BindingOrAssignmentElement][]
+        | undefined;
     for (let i = 0; i < numElements; i++) {
         const element = elements[i];
         if (flattenContext.level >= FlattenLevel.ObjectRest) {
             // If an array pattern contains an ObjectRest, we must cache the result so that we
             // can perform the ObjectRest destructuring in a different declaration
-            if (element.transformFlags & TransformFlags.ContainsObjectRestOrSpread || flattenContext.hasTransformedPriorElement && !isSimpleBindingOrAssignmentElement(element)) {
+            if (
+                element.transformFlags &
+                    TransformFlags.ContainsObjectRestOrSpread ||
+                (flattenContext.hasTransformedPriorElement &&
+                    !isSimpleBindingOrAssignmentElement(element))
+            ) {
                 flattenContext.hasTransformedPriorElement = true;
-                const temp = flattenContext.context.factory.createTempVariable(/*recordTempVariable*/ undefined);
+                const temp = flattenContext.context.factory.createTempVariable(
+                    /*recordTempVariable*/ undefined,
+                );
                 if (flattenContext.hoistTempVariables) {
                     flattenContext.context.hoistVariableDeclaration(temp);
                 }
 
-                restContainingElements = append(restContainingElements, [temp, element] as [Identifier, BindingOrAssignmentElement]);
-                bindingElements = append(bindingElements, flattenContext.createArrayBindingOrAssignmentElement(temp));
+                restContainingElements = append(restContainingElements, [
+                    temp,
+                    element,
+                ] as [Identifier, BindingOrAssignmentElement]);
+                bindingElements = append(
+                    bindingElements,
+                    flattenContext.createArrayBindingOrAssignmentElement(temp),
+                );
             }
             else {
                 bindingElements = append(bindingElements, element);
@@ -500,32 +781,64 @@ function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, 
             continue;
         }
         else if (!getRestIndicatorOfBindingOrAssignmentElement(element)) {
-            const rhsValue = flattenContext.context.factory.createElementAccessExpression(value, i);
-            flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, /*location*/ element);
+            const rhsValue = flattenContext.context.factory.createElementAccessExpression(
+                value,
+                i,
+            );
+            flattenBindingOrAssignmentElement(
+                flattenContext,
+                element,
+                rhsValue,
+                /*location*/ element,
+            );
         }
         else if (i === numElements - 1) {
             const rhsValue = flattenContext.context.factory.createArraySliceCall(value, i);
-            flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, /*location*/ element);
+            flattenBindingOrAssignmentElement(
+                flattenContext,
+                element,
+                rhsValue,
+                /*location*/ element,
+            );
         }
     }
     if (bindingElements) {
-        flattenContext.emitBindingOrAssignment(flattenContext.createArrayBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+        flattenContext.emitBindingOrAssignment(
+            flattenContext.createArrayBindingOrAssignmentPattern(
+                bindingElements,
+            ),
+            value,
+            location,
+            pattern,
+        );
     }
     if (restContainingElements) {
         for (const [id, element] of restContainingElements) {
-            flattenBindingOrAssignmentElement(flattenContext, element, id, element);
+            flattenBindingOrAssignmentElement(
+                flattenContext,
+                element,
+                id,
+                element,
+            );
         }
     }
 }
 
-function isSimpleBindingOrAssignmentElement(element: BindingOrAssignmentElement): boolean {
+function isSimpleBindingOrAssignmentElement(
+    element: BindingOrAssignmentElement,
+): boolean {
     const target = getTargetOfBindingOrAssignmentElement(element);
     if (!target || isOmittedExpression(target)) return true;
     const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(element);
     if (propertyName && !isPropertyNameLiteral(propertyName)) return false;
     const initializer = getInitializerOfBindingOrAssignmentElement(element);
     if (initializer && !isSimpleInlineableExpression(initializer)) return false;
-    if (isBindingOrAssignmentPattern(target)) return every(getElementsOfBindingOrAssignmentPattern(target), isSimpleBindingOrAssignmentElement);
+    if (isBindingOrAssignmentPattern(target)) {
+        return every(
+            getElementsOfBindingOrAssignmentPattern(target),
+            isSimpleBindingOrAssignmentElement,
+        );
+    }
     return isIdentifier(target);
 }
 
@@ -537,9 +850,25 @@ function isSimpleBindingOrAssignmentElement(element: BindingOrAssignmentElement)
  * @param defaultValue The default value to use if `value` is `undefined` at runtime.
  * @param location The location to use for source maps and comments.
  */
-function createDefaultValueCheck(flattenContext: FlattenContext, value: Expression, defaultValue: Expression, location: TextRange): Expression {
-    value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
-    return flattenContext.context.factory.createConditionalExpression(flattenContext.context.factory.createTypeCheck(value, "undefined"), /*questionToken*/ undefined, defaultValue, /*colonToken*/ undefined, value);
+function createDefaultValueCheck(
+    flattenContext: FlattenContext,
+    value: Expression,
+    defaultValue: Expression,
+    location: TextRange,
+): Expression {
+    value = ensureIdentifier(
+        flattenContext,
+        value,
+        /*reuseIdentifierExpressions*/ true,
+        location,
+    );
+    return flattenContext.context.factory.createConditionalExpression(
+        flattenContext.context.factory.createTypeCheck(value, "undefined"),
+        /*questionToken*/ undefined,
+        defaultValue,
+        /*colonToken*/ undefined,
+        value,
+    );
 }
 
 /**
@@ -552,19 +881,45 @@ function createDefaultValueCheck(flattenContext: FlattenContext, value: Expressi
  * @param value The RHS value that is the source of the property.
  * @param propertyName The destructuring property name.
  */
-function createDestructuringPropertyAccess(flattenContext: FlattenContext, value: Expression, propertyName: PropertyName): LeftHandSideExpression {
+function createDestructuringPropertyAccess(
+    flattenContext: FlattenContext,
+    value: Expression,
+    propertyName: PropertyName,
+): LeftHandSideExpression {
     const { factory } = flattenContext.context;
     if (isComputedPropertyName(propertyName)) {
-        const argumentExpression = ensureIdentifier(flattenContext, Debug.checkDefined(visitNode(propertyName.expression, flattenContext.visitor, isExpression)), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
-        return flattenContext.context.factory.createElementAccessExpression(value, argumentExpression);
+        const argumentExpression = ensureIdentifier(
+            flattenContext,
+            Debug.checkDefined(
+                visitNode(
+                    propertyName.expression,
+                    flattenContext.visitor,
+                    isExpression,
+                ),
+            ),
+            /*reuseIdentifierExpressions*/ false,
+            /*location*/ propertyName,
+        );
+        return flattenContext.context.factory.createElementAccessExpression(
+            value,
+            argumentExpression,
+        );
     }
     else if (isStringOrNumericLiteralLike(propertyName)) {
         const argumentExpression = factory.cloneNode(propertyName);
-        return flattenContext.context.factory.createElementAccessExpression(value, argumentExpression);
+        return flattenContext.context.factory.createElementAccessExpression(
+            value,
+            argumentExpression,
+        );
     }
     else {
-        const name = flattenContext.context.factory.createIdentifier(idText(propertyName));
-        return flattenContext.context.factory.createPropertyAccessExpression(value, name);
+        const name = flattenContext.context.factory.createIdentifier(
+            idText(propertyName),
+        );
+        return flattenContext.context.factory.createPropertyAccessExpression(
+            value,
+            name,
+        );
     }
 }
 
@@ -579,45 +934,85 @@ function createDestructuringPropertyAccess(flattenContext: FlattenContext, value
  * false if it is necessary to always emit an identifier.
  * @param location The location to use for source maps and comments.
  */
-function ensureIdentifier(flattenContext: FlattenContext, value: Expression, reuseIdentifierExpressions: boolean, location: TextRange) {
+function ensureIdentifier(
+    flattenContext: FlattenContext,
+    value: Expression,
+    reuseIdentifierExpressions: boolean,
+    location: TextRange,
+) {
     if (isIdentifier(value) && reuseIdentifierExpressions) {
         return value;
     }
     else {
-        const temp = flattenContext.context.factory.createTempVariable(/*recordTempVariable*/ undefined);
+        const temp = flattenContext.context.factory.createTempVariable(
+            /*recordTempVariable*/ undefined,
+        );
         if (flattenContext.hoistTempVariables) {
             flattenContext.context.hoistVariableDeclaration(temp);
-            flattenContext.emitExpression(setTextRange(flattenContext.context.factory.createAssignment(temp, value), location));
+            flattenContext.emitExpression(
+                setTextRange(
+                    flattenContext.context.factory.createAssignment(
+                        temp,
+                        value,
+                    ),
+                    location,
+                ),
+            );
         }
         else {
-            flattenContext.emitBindingOrAssignment(temp, value, location, /*original*/ undefined);
+            flattenContext.emitBindingOrAssignment(
+                temp,
+                value,
+                location,
+                /*original*/ undefined,
+            );
         }
         return temp;
     }
 }
 
-function makeArrayBindingPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
+function makeArrayBindingPattern(
+    factory: NodeFactory,
+    elements: BindingOrAssignmentElement[],
+) {
     Debug.assertEachNode(elements, isArrayBindingElement);
     return factory.createArrayBindingPattern(elements);
 }
 
-function makeArrayAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
+function makeArrayAssignmentPattern(
+    factory: NodeFactory,
+    elements: BindingOrAssignmentElement[],
+) {
     Debug.assertEachNode(elements, isArrayBindingOrAssignmentElement);
-    return factory.createArrayLiteralExpression(map(elements, factory.converters.convertToArrayAssignmentElement));
+    return factory.createArrayLiteralExpression(
+        map(elements, factory.converters.convertToArrayAssignmentElement),
+    );
 }
 
-function makeObjectBindingPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
+function makeObjectBindingPattern(
+    factory: NodeFactory,
+    elements: BindingOrAssignmentElement[],
+) {
     Debug.assertEachNode(elements, isBindingElement);
     return factory.createObjectBindingPattern(elements);
 }
 
-function makeObjectAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
+function makeObjectAssignmentPattern(
+    factory: NodeFactory,
+    elements: BindingOrAssignmentElement[],
+) {
     Debug.assertEachNode(elements, isObjectBindingOrAssignmentElement);
-    return factory.createObjectLiteralExpression(map(elements, factory.converters.convertToObjectAssignmentElement));
+    return factory.createObjectLiteralExpression(
+        map(elements, factory.converters.convertToObjectAssignmentElement),
+    );
 }
 
 function makeBindingElement(factory: NodeFactory, name: Identifier) {
-    return factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name);
+    return factory.createBindingElement(
+        /*dotDotDotToken*/ undefined,
+        /*propertyName*/ undefined,
+        name,
+    );
 }
 
 function makeAssignmentElement(name: Identifier) {

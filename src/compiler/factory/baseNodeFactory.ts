@@ -2,6 +2,8 @@ import {
     Node,
     objectAllocator,
     SyntaxKind,
+    Token,
+    TokenSyntaxKind,
 } from "../_namespaces/ts";
 
 /**
@@ -14,7 +16,7 @@ export interface BaseNodeFactory {
     createBaseSourceFileNode(kind: SyntaxKind.SourceFile): Node;
     createBaseIdentifierNode(kind: SyntaxKind.Identifier): Node;
     createBasePrivateIdentifierNode(kind: SyntaxKind.PrivateIdentifier): Node;
-    createBaseTokenNode(kind: SyntaxKind): Node;
+    createBaseTokenNode(kind: TokenSyntaxKind): Node;
     createBaseNode(kind: SyntaxKind): Node;
 }
 
@@ -25,7 +27,7 @@ export interface BaseNodeFactory {
  */
 export function createBaseNodeFactory(): BaseNodeFactory {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let TokenConstructor: new <TKind extends SyntaxKind>(kind: TKind, pos: number, end: number) => Token<TKind>;
     let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Node;
     let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => Node;
@@ -50,7 +52,7 @@ export function createBaseNodeFactory(): BaseNodeFactory {
         return new (PrivateIdentifierConstructor || (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
     }
 
-    function createBaseTokenNode(kind: SyntaxKind): Node {
+    function createBaseTokenNode(kind: TokenSyntaxKind): Node {
         return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
     }
 

@@ -7,7 +7,6 @@ import {
     CaseBlock,
     ClassLikeDeclaration,
     ConditionalExpression,
-    ConditionalTypeNode,
     Debug,
     EntityName,
     Expression,
@@ -48,7 +47,6 @@ import {
     NumericLiteral,
     ParameterDeclaration,
     parseNodeFactory,
-    PrefixUnaryExpression,
     PropertyAccessEntityNameExpression,
     PropertyDeclaration,
     QualifiedName,
@@ -61,11 +59,8 @@ import {
     SyntaxKind,
     TransformationContext,
     TypeNode,
-    TypeOperatorNode,
-    TypePredicateNode,
     TypeReferenceNode,
     TypeReferenceSerializationKind,
-    UnionOrIntersectionTypeNode,
     VoidExpression,
 } from "../_namespaces/ts";
 
@@ -290,7 +285,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return factory.createIdentifier("Array");
 
             case SyntaxKind.TypePredicate:
-                return (node as TypePredicateNode).assertsModifier ?
+                return node.assertsModifier ?
                     factory.createVoidZero() :
                     factory.createIdentifier("Boolean");
 
@@ -305,7 +300,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return factory.createIdentifier("Object");
 
             case SyntaxKind.LiteralType:
-                return serializeLiteralOfLiteralTypeNode((node as LiteralTypeNode).literal);
+                return serializeLiteralOfLiteralTypeNode(node.literal);
 
             case SyntaxKind.NumberKeyword:
                 return factory.createIdentifier("Number");
@@ -317,20 +312,20 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return getGlobalConstructor("Symbol", ScriptTarget.ES2015);
 
             case SyntaxKind.TypeReference:
-                return serializeTypeReferenceNode(node as TypeReferenceNode);
+                return serializeTypeReferenceNode(node);
 
             case SyntaxKind.IntersectionType:
-                return serializeUnionOrIntersectionConstituents((node as UnionOrIntersectionTypeNode).types, /*isIntersection*/ true);
+                return serializeUnionOrIntersectionConstituents(node.types, /*isIntersection*/ true);
 
             case SyntaxKind.UnionType:
-                return serializeUnionOrIntersectionConstituents((node as UnionOrIntersectionTypeNode).types, /*isIntersection*/ false);
+                return serializeUnionOrIntersectionConstituents(node.types, /*isIntersection*/ false);
 
             case SyntaxKind.ConditionalType:
-                return serializeUnionOrIntersectionConstituents([(node as ConditionalTypeNode).trueType, (node as ConditionalTypeNode).falseType], /*isIntersection*/ false);
+                return serializeUnionOrIntersectionConstituents([node.trueType, node.falseType], /*isIntersection*/ false);
 
             case SyntaxKind.TypeOperator:
-                if ((node as TypeOperatorNode).operator === SyntaxKind.ReadonlyKeyword) {
-                    return serializeTypeNode((node as TypeOperatorNode).type);
+                if (node.operator === SyntaxKind.ReadonlyKeyword) {
+                    return serializeTypeNode(node.type);
                 }
                 break;
 
@@ -371,7 +366,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return factory.createIdentifier("String");
 
             case SyntaxKind.PrefixUnaryExpression: {
-                const operand = (node as PrefixUnaryExpression).operand;
+                const operand = node.operand;
                 switch (operand.kind) {
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.BigIntLiteral:

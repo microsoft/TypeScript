@@ -24,8 +24,8 @@ import {
     createModuleSpecifierResolutionHost,
     createTextRangeFromSpan,
     Debug,
-    Declaration,
-    DeclarationStatement,
+    DeclarationBase,
+    DeclarationStatementBase,
     Diagnostics,
     emptyArray,
     EnumDeclaration,
@@ -724,7 +724,7 @@ function addEs6Export(d: TopLevelDeclarationStatement): TopLevelDeclarationState
             // Shouldn't try to add 'export' keyword to `exports.x = ...`
             return Debug.fail();
         default:
-            return Debug.assertNever(d, `Unexpected declaration kind ${(d as DeclarationStatement).kind}`);
+            return Debug.assertNever(d, `Unexpected declaration kind ${(d as DeclarationStatementBase).kind}`);
     }
 }
 function addCommonjsExport(decl: TopLevelDeclarationStatement): readonly Statement[] | undefined {
@@ -1109,7 +1109,7 @@ function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevel
     }
 }
 
-function isInImport(decl: Declaration) {
+function isInImport(decl: DeclarationBase) {
     switch (decl.kind) {
         case SyntaxKind.ImportEqualsDeclaration:
         case SyntaxKind.ImportSpecifier:

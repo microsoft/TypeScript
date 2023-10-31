@@ -10,7 +10,7 @@ import {
     Completions,
     ConstructorDeclaration,
     contains,
-    Declaration,
+    DeclarationBase,
     DocCommentTemplateOptions,
     emptyArray,
     Expression,
@@ -181,7 +181,7 @@ let jsDocTagNameCompletionEntries: CompletionEntry[];
 let jsDocTagCompletionEntries: CompletionEntry[];
 
 /** @internal */
-export function getJsDocCommentsFromDeclarations(declarations: readonly Declaration[], checker?: TypeChecker): SymbolDisplayPart[] {
+export function getJsDocCommentsFromDeclarations(declarations: readonly DeclarationBase[], checker?: TypeChecker): SymbolDisplayPart[] {
     // Only collect doc comments from duplicate declarations once:
     // In case of a union property there might be same declaration multiple times
     // which only varies in type parameter
@@ -222,7 +222,7 @@ function isIdenticalListOfDisplayParts(parts1: SymbolDisplayPart[], parts2: Symb
     return arraysEqual(parts1, parts2, (p1, p2) => p1.kind === p2.kind && p1.text === p2.text);
 }
 
-function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
+function getCommentHavingNodes(declaration: DeclarationBase): readonly (JSDoc | JSDocTag)[] {
     switch (declaration.kind) {
         case SyntaxKind.JSDocParameterTag:
         case SyntaxKind.JSDocPropertyTag:
@@ -236,7 +236,7 @@ function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDo
 }
 
 /** @internal */
-export function getJsDocTagsFromDeclarations(declarations?: Declaration[], checker?: TypeChecker): JSDocTagInfo[] {
+export function getJsDocTagsFromDeclarations(declarations?: DeclarationBase[], checker?: TypeChecker): JSDocTagInfo[] {
     // Only collect doc comments from duplicate declarations once.
     const infos: JSDocTagInfo[] = [];
     forEachUnique(declarations, declaration => {

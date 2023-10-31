@@ -19,7 +19,7 @@ import {
     createTextSpanFromNode,
     createTextSpanFromRange,
     Debug,
-    Declaration,
+    DeclarationBase,
     DeclarationName,
     declarationNameToString,
     EntityNameExpression,
@@ -308,7 +308,7 @@ function addNodeWithRecursiveInitializer(node: VariableDeclaration | PropertyAss
     }
 }
 
-function hasNavigationBarName(node: Declaration) {
+function hasNavigationBarName(node: DeclarationBase) {
     const name = getNameOfDeclaration(node);
     if (name === undefined) return false;
 
@@ -579,7 +579,7 @@ function addChildrenRecursively(node: Node | undefined): void {
 function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): void {
     const nameToItems = new Map<string, NavigationBarNode | NavigationBarNode[]>();
     filterMutate(children, (child, index) => {
-        const declName = child.name || getNameOfDeclaration(child.node as Declaration);
+        const declName = child.name || getNameOfDeclaration(child.node as DeclarationBase);
         const name = declName && nodeText(declName);
         if (!name) {
             // Anonymous items are never merged.
@@ -807,7 +807,7 @@ function tryGetName(node: Node): string | undefined {
         return getModuleName(node as ModuleDeclaration);
     }
 
-    const declName = getNameOfDeclaration(node as Declaration);
+    const declName = getNameOfDeclaration(node as DeclarationBase);
     if (declName && isPropertyName(declName)) {
         const propertyName = getPropertyNameForPropertyNameNode(declName);
         return propertyName && unescapeLeadingUnderscores(propertyName);

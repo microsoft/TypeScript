@@ -171,6 +171,7 @@ import {
     needsScopeMarker,
     Node,
     NodeArray,
+    NodeBase,
     NodeBuilderFlags,
     NodeFactory,
     NodeFlags,
@@ -194,7 +195,6 @@ import {
     setOriginalNode,
     setParent,
     setTextRange,
-    SignatureDeclaration,
     skipTrivia,
     some,
     SourceFile,
@@ -246,8 +246,8 @@ function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFil
 export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
     const parseTreeNode = getParseTreeNode(node);
     if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
-        const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
-        const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
+        const paramIdx = parseTreeNode.parent.parameters.indexOf(parseTreeNode);
+        const previousSibling = paramIdx > 0 ? parseTreeNode.parent.parameters[paramIdx - 1] : undefined;
         const text = currentSourceFile.text;
         const commentRanges = previousSibling
             ? concatenate(
@@ -837,8 +837,9 @@ export function transformDeclarations(context: TransformationContext) {
                 return !resolver.isDeclarationVisible(node);
             // The following should be doing their own visibility checks based on filtering their members
             case SyntaxKind.VariableDeclaration:
-                return !getBindingNameVisible(node as VariableDeclaration);
+                return !getBindingNameVisible(node);
             case SyntaxKind.ImportEqualsDeclaration:
+            // @ts-expect-error -- ?! Not in NamedDeclaration?
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
             case SyntaxKind.ExportAssignment:
@@ -940,7 +941,7 @@ export function transformDeclarations(context: TransformationContext) {
         return setCommentRange(updated, getCommentRange(original));
     }
 
-    function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T | undefined): T | StringLiteral {
+    function rewriteModuleSpecifier<T extends NodeBase>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T | undefined): T | StringLiteral {
         if (!input) return undefined!; // TODO: GH#18217
         resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportType);
         if (isStringLiteralLike(input)) {
@@ -1116,7 +1117,7 @@ export function transformDeclarations(context: TransformationContext) {
     function visitDeclarationSubtree(input: Node): VisitResult<Node | undefined> {
         if (shouldStripInternal(input)) return;
         if (isDeclaration(input)) {
-            if (isDeclarationAndNotVisible(input)) return;
+            if (isDeclarationAndNotVisible(input as NamedDeclaration)) return;
             if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
                 return;
             }

@@ -11,7 +11,7 @@ import {
     CodeFixContextBase,
     combine,
     Debug,
-    Declaration,
+    DeclarationBase,
     Diagnostics,
     emptyArray,
     EntityName,
@@ -357,7 +357,7 @@ export function addNewNodeForMemberSymbol(
         return getSynthesizedDeepClone(typeNode, /*includeTrivia*/ false);
     }
 
-    function createDeclarationName(symbol: Symbol, declaration: Declaration | undefined): PropertyName {
+    function createDeclarationName(symbol: Symbol, declaration: DeclarationBase | undefined): PropertyName {
         if (getCheckFlags(symbol) & CheckFlags.Mapped) {
             const nameType = (symbol as TransientSymbol).links.nameType;
             if (nameType && isTypeUsableAsPropertyName(nameType)) {

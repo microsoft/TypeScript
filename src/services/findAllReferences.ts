@@ -21,7 +21,7 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromRange,
     Debug,
-    Declaration,
+    DeclarationBase,
     displayPart,
     DocumentSpan,
     emptyArray,
@@ -192,7 +192,7 @@ import {
     ModifierFlags,
     ModuleDeclaration,
     MultiMap,
-    NamedDeclaration,
+    NamedDeclarationBase,
     Node,
     NodeFlags,
     nodeSeenTracker,
@@ -320,7 +320,7 @@ export interface SpanEntry {
 export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
     return {
         kind,
-        node: (node as NamedDeclaration).name || node,
+        node: (node as NamedDeclarationBase).name || node,
         context: getContextNodeForNodeEntry(node),
     };
 }
@@ -369,7 +369,7 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
                 const declOrStatement = findAncestor(validImport, node =>
                     isDeclaration(node) ||
                     isStatement(node) ||
-                    isJSDocTag(node))! as NamedDeclaration | Statement | JSDocTag;
+                    isJSDocTag(node))! as NamedDeclarationBase | Statement | JSDocTag;
                 return isDeclaration(declOrStatement) ?
                     getContextNode(declOrStatement) :
                     declOrStatement;
@@ -400,7 +400,7 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
 }
 
 /** @internal */
-export function getContextNode(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | undefined): ContextNode | undefined {
+export function getContextNode(node: NamedDeclarationBase | BinaryExpression | ForInOrOfStatement | undefined): ContextNode | undefined {
     if (!node) return undefined;
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
@@ -413,7 +413,7 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
                 node.parent;
 
         case SyntaxKind.BindingElement:
-            return getContextNode(node.parent.parent as NamedDeclaration);
+            return getContextNode(node.parent.parent as NamedDeclarationBase);
 
         case SyntaxKind.ImportSpecifier:
             return node.parent.parent.parent;
@@ -899,7 +899,7 @@ export function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): b
             : isLiteralComputedPropertyDeclarationName(node) ? node.parent.parent
             : node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent) ? node.parent.parent
             : undefined);
-    const commonjsSource = source && isBinaryExpression(source) ? source.left as unknown as Declaration : undefined;
+    const commonjsSource = source && isBinaryExpression(source) ? source.left as unknown as DeclarationBase : undefined;
     return !!(source && target.declarations?.some(d => d === source || d === commonjsSource));
 }
 
@@ -907,7 +907,7 @@ export function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): b
  * True if 'decl' provides a value, as in `function f() {}`;
  * false if 'decl' is just a location for a future write, as in 'let x;'
  */
-function declarationIsWriteAccess(decl: Declaration): boolean {
+function declarationIsWriteAccess(decl: DeclarationBase): boolean {
     // Consider anything in an ambient declaration to be a write access since it may be coming from JS.
     if (!!(decl.flags & NodeFlags.Ambient)) return true;
 

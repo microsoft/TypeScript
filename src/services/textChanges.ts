@@ -21,7 +21,7 @@ import {
     createTextSpanFromRange,
     createTextWriter,
     Debug,
-    DeclarationStatement,
+    DeclarationStatementBase,
     EmitHint,
     EmitTextWriter,
     endsWith,
@@ -1005,7 +1005,7 @@ export class ChangeTracker {
         }
     }
 
-    public insertExportModifier(sourceFile: SourceFile, node: DeclarationStatement | VariableStatement): void {
+    public insertExportModifier(sourceFile: SourceFile, node: DeclarationStatementBase | VariableStatement): void {
         this.insertText(sourceFile, node.getStart(sourceFile), "export ");
     }
 

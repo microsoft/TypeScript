@@ -10,7 +10,7 @@ import {
     createTextSpanFromNode,
     createTextSpanFromRange,
     Debug,
-    Declaration,
+    DeclarationBase,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
     emptyArray,
@@ -549,11 +549,11 @@ function shouldSkipAlias(node: Node, declaration: Node): boolean {
  * calling) covers our tests but feels like a hack, and it would be great if someone could come
  * up with a more precise definition of what counts as a definition.
  */
-function isExpandoDeclaration(node: Declaration): boolean {
+function isExpandoDeclaration(node: DeclarationBase): boolean {
     if (!isAssignmentDeclaration(node)) return false;
     const containingAssignment = findAncestor(node, p => {
         if (isAssignmentExpression(p)) return true;
-        if (!isAssignmentDeclaration(p as Declaration)) return "quit";
+        if (!isAssignmentDeclaration(p as DeclarationBase)) return "quit";
         return false;
     }) as AssignmentExpression<AssignmentOperatorToken> | undefined;
     return !!containingAssignment && getAssignmentDeclarationKind(containingAssignment) === AssignmentDeclarationKind.Property;
@@ -580,7 +580,7 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
             : undefined;
     }
 
-    function getSignatureDefinition(signatureDeclarations: readonly Declaration[] | undefined, selectConstructors: boolean): DefinitionInfo[] | undefined {
+    function getSignatureDefinition(signatureDeclarations: readonly DeclarationBase[] | undefined, selectConstructors: boolean): DefinitionInfo[] | undefined {
         if (!signatureDeclarations) {
             return undefined;
         }
@@ -601,7 +601,7 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
  *
  * @internal
  */
-export function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node, unverified?: boolean, failedAliasResolution?: boolean): DefinitionInfo {
+export function createDefinitionInfo(declaration: DeclarationBase, checker: TypeChecker, symbol: Symbol, node: Node, unverified?: boolean, failedAliasResolution?: boolean): DefinitionInfo {
     const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
     const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
     const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";
@@ -609,7 +609,7 @@ export function createDefinitionInfo(declaration: Declaration, checker: TypeChec
 }
 
 /** Creates a DefinitionInfo directly from the name of a declaration. */
-function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string, unverified?: boolean, failedAliasResolution?: boolean, textSpan?: TextSpan): DefinitionInfo {
+function createDefinitionInfoFromName(checker: TypeChecker, declaration: DeclarationBase, symbolKind: ScriptElementKind, symbolName: string, containerName: string, unverified?: boolean, failedAliasResolution?: boolean, textSpan?: TextSpan): DefinitionInfo {
     const sourceFile = declaration.getSourceFile();
     if (!textSpan) {
         const name = getNameOfDeclaration(declaration) || declaration;
@@ -634,12 +634,12 @@ function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declara
     };
 }
 
-function isDefinitionVisible(checker: TypeChecker, declaration: Declaration): boolean {
+function isDefinitionVisible(checker: TypeChecker, declaration: DeclarationBase): boolean {
     if (checker.isDeclarationVisible(declaration)) return true;
     if (!declaration.parent) return false;
 
     // Variable initializers are visible if variable is visible
-    if (hasInitializer(declaration.parent) && declaration.parent.initializer === declaration) return isDefinitionVisible(checker, declaration.parent as Declaration);
+    if (hasInitializer(declaration.parent) && declaration.parent.initializer === declaration) return isDefinitionVisible(checker, declaration.parent as DeclarationBase);
 
     // Handle some exceptions here like arrow function, members of class and object literal expression which are technically not visible but we want the definition to be determined by its parent
     switch (declaration.kind) {
@@ -659,7 +659,7 @@ function isDefinitionVisible(checker: TypeChecker, declaration: Declaration): bo
         case SyntaxKind.ClassExpression:
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.FunctionExpression:
-            return isDefinitionVisible(checker, declaration.parent as Declaration);
+            return isDefinitionVisible(checker, declaration.parent as DeclarationBase);
         default:
             return false;
     }

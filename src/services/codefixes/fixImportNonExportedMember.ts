@@ -1,7 +1,7 @@
 import {
     canHaveExportModifier,
     canHaveLocals,
-    Declaration,
+    DeclarationBase,
     Diagnostics,
     ExportDeclaration,
     factory,
@@ -105,7 +105,7 @@ interface ExportName {
 
 interface Info {
     exportName: ExportName;
-    node: Declaration | VariableStatement;
+    node: DeclarationBase | VariableStatement;
     moduleSourceFile: SourceFile;
     moduleSpecifier: string;
 }

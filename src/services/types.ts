@@ -45,7 +45,7 @@ import {
 
 declare module "../compiler/types" {
     // Module transform: converted from interface augmentation
-    export interface Node {
+    export interface NodeBase {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
@@ -94,7 +94,7 @@ declare module "../compiler/types" {
         getFlags(): SymbolFlags;
         getEscapedName(): __String;
         getName(): string;
-        getDeclarations(): Declaration[] | undefined;
+        getDeclarations(): DeclarationBase[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         /** @internal */
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[];
@@ -163,7 +163,7 @@ declare module "../compiler/types" {
         /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
         /** @internal */ nameTable: Map<__String, number> | undefined;
 
-        /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
+        /** @internal */ getNamedDeclarations(): Map<string, readonly DeclarationBase[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;

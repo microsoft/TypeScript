@@ -9,7 +9,7 @@ import {
     createMultiMap,
     createSymbolTable,
     Debug,
-    Declaration,
+    DeclarationBase,
     DiagnosticMessage,
     Diagnostics,
     ElementAccessExpression,
@@ -163,7 +163,7 @@ registerCodeFix({
         const { sourceFile, program, span: { start }, errorCode, cancellationToken, host, preferences } = context;
 
         const token = getTokenAtPosition(sourceFile, start);
-        let declaration: Declaration | undefined;
+        let declaration: DeclarationBase | undefined;
         const changes = textChanges.ChangeTracker.with(context, changes => {
             declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeen*/ returnTrue, host, preferences);
         });
@@ -219,7 +219,7 @@ function mapSuggestionDiagnostic(errorCode: number) {
     return errorCode;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, preferences: UserPreferences): Declaration | undefined {
+function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, preferences: UserPreferences): DeclarationBase | undefined {
     if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken && token.kind !== SyntaxKind.ThisKeyword) {
         return undefined;
     }
@@ -265,7 +265,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, to
         return undefined;
     }
 
-    let declaration: Declaration | undefined;
+    let declaration: DeclarationBase | undefined;
     switch (errorCode) {
         // Parameter declarations
         case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:

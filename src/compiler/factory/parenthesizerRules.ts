@@ -51,13 +51,19 @@ import {
 } from "../_namespaces/ts";
 
 /** @internal */
-export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRules {
+export function createParenthesizerRules(
+    factory: NodeFactory,
+): ParenthesizerRules {
     interface BinaryPlusExpression extends BinaryExpression {
         cachedLiteralKind: SyntaxKind;
     }
 
-    let binaryLeftOperandParenthesizerCache: Map<BinaryOperator, (node: Expression) => Expression> | undefined;
-    let binaryRightOperandParenthesizerCache: Map<BinaryOperator, (node: Expression) => Expression> | undefined;
+    let binaryLeftOperandParenthesizerCache:
+        | Map<BinaryOperator, (node: Expression) => Expression>
+        | undefined;
+    let binaryRightOperandParenthesizerCache:
+        | Map<BinaryOperator, (node: Expression) => Expression>
+        | undefined;
 
     return {
         getParenthesizeLeftSideOfBinaryForOperator,
@@ -92,22 +98,37 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         parenthesizeLeadingTypeArgument,
     };
 
-    function getParenthesizeLeftSideOfBinaryForOperator(operatorKind: BinaryOperator) {
+    function getParenthesizeLeftSideOfBinaryForOperator(
+        operatorKind: BinaryOperator,
+    ) {
         binaryLeftOperandParenthesizerCache ||= new Map();
         let parenthesizerRule = binaryLeftOperandParenthesizerCache.get(operatorKind);
         if (!parenthesizerRule) {
             parenthesizerRule = node => parenthesizeLeftSideOfBinary(operatorKind, node);
-            binaryLeftOperandParenthesizerCache.set(operatorKind, parenthesizerRule);
+            binaryLeftOperandParenthesizerCache.set(
+                operatorKind,
+                parenthesizerRule,
+            );
         }
         return parenthesizerRule;
     }
 
-    function getParenthesizeRightSideOfBinaryForOperator(operatorKind: BinaryOperator) {
+    function getParenthesizeRightSideOfBinaryForOperator(
+        operatorKind: BinaryOperator,
+    ) {
         binaryRightOperandParenthesizerCache ||= new Map();
         let parenthesizerRule = binaryRightOperandParenthesizerCache.get(operatorKind);
         if (!parenthesizerRule) {
-            parenthesizerRule = node => parenthesizeRightSideOfBinary(operatorKind, /*leftSide*/ undefined, node);
-            binaryRightOperandParenthesizerCache.set(operatorKind, parenthesizerRule);
+            parenthesizerRule = node =>
+                parenthesizeRightSideOfBinary(
+                    operatorKind,
+                    /*leftSide*/ undefined,
+                    node,
+                );
+            binaryRightOperandParenthesizerCache.set(
+                operatorKind,
+                parenthesizerRule,
+            );
         }
         return parenthesizerRule;
     }
@@ -120,7 +141,12 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
      * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
      *                           BinaryExpression.
      */
-    function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand: Expression | undefined) {
+    function binaryOperandNeedsParentheses(
+        binaryOperator: SyntaxKind,
+        operand: Expression,
+        isLeftSideOfBinary: boolean,
+        leftOperand: Expression | undefined,
+    ) {
         // If the operand has lower precedence, then it needs to be parenthesized to preserve the
         // intent of the expression. For example, if the operand is `a + b` and the operator is
         // `*`, then we need to parenthesize the operand to preserve the intended order of
@@ -138,10 +164,20 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         //
         // If `a ** d` is on the left of operator `**`, we need to parenthesize to preserve
         // the intended order of operations: `(a ** b) ** c`
-        const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
-        const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
+        const binaryOperatorPrecedence = getOperatorPrecedence(
+            SyntaxKind.BinaryExpression,
+            binaryOperator,
+        );
+        const binaryOperatorAssociativity = getOperatorAssociativity(
+            SyntaxKind.BinaryExpression,
+            binaryOperator,
+        );
         const emittedOperand = skipPartiallyEmittedExpressions(operand);
-        if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > OperatorPrecedence.Assignment) {
+        if (
+            !isLeftSideOfBinary &&
+            operand.kind === SyntaxKind.ArrowFunction &&
+            binaryOperatorPrecedence > OperatorPrecedence.Assignment
+        ) {
             // We need to parenthesize arrow functions on the right side to avoid it being
             // parsed as parenthesized expression: `a && (() => {})`
             return true;
@@ -152,9 +188,9 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
                 // If the operand is the right side of a right-associative binary operation
                 // and is a yield expression, then we do not need parentheses.
                 if (
-                    !isLeftSideOfBinary
-                    && binaryOperatorAssociativity === Associativity.Right
-                    && operand.kind === SyntaxKind.YieldExpression
+                    !isLeftSideOfBinary &&
+                    binaryOperatorAssociativity === Associativity.Right &&
+                    operand.kind === SyntaxKind.YieldExpression
                 ) {
                     return false;
                 }
@@ -179,8 +215,8 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
                 }
                 else {
                     if (
-                        isBinaryExpression(emittedOperand)
-                        && emittedOperand.operatorToken.kind === binaryOperator
+                        isBinaryExpression(emittedOperand) &&
+                        emittedOperand.operatorToken.kind === binaryOperator
                     ) {
                         // No need to parenthesize the right operand when the binary operator and
                         // operand are the same and one of the following:
@@ -199,8 +235,16 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
                         //  "a"+(1+2)       => "a"+(1+2)
                         //  "a"+("b"+"c")   => "a"+"b"+"c"
                         if (binaryOperator === SyntaxKind.PlusToken) {
-                            const leftKind = leftOperand ? getLiteralKindOfBinaryPlusOperand(leftOperand) : SyntaxKind.Unknown;
-                            if (isLiteralKind(leftKind) && leftKind === getLiteralKindOfBinaryPlusOperand(emittedOperand)) {
+                            const leftKind = leftOperand
+                                ? getLiteralKindOfBinaryPlusOperand(leftOperand)
+                                : SyntaxKind.Unknown;
+                            if (
+                                isLiteralKind(leftKind) &&
+                                leftKind ===
+                                    getLiteralKindOfBinaryPlusOperand(
+                                        emittedOperand,
+                                    )
+                            ) {
                                 return false;
                             }
                         }
@@ -236,11 +280,13 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         //
         // While addition is associative in mathematics, JavaScript's `+` is not
         // guaranteed to be associative as it is overloaded with string concatenation.
-        return binaryOperator === SyntaxKind.AsteriskToken
-            || binaryOperator === SyntaxKind.BarToken
-            || binaryOperator === SyntaxKind.AmpersandToken
-            || binaryOperator === SyntaxKind.CaretToken
-            || binaryOperator === SyntaxKind.CommaToken;
+        return (
+            binaryOperator === SyntaxKind.AsteriskToken ||
+            binaryOperator === SyntaxKind.BarToken ||
+            binaryOperator === SyntaxKind.AmpersandToken ||
+            binaryOperator === SyntaxKind.CaretToken ||
+            binaryOperator === SyntaxKind.CommaToken
+        );
     }
 
     /**
@@ -256,14 +302,25 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
             return node.kind;
         }
 
-        if (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken) {
-            if ((node as BinaryPlusExpression).cachedLiteralKind !== undefined) {
+        if (
+            node.kind === SyntaxKind.BinaryExpression &&
+            node.operatorToken.kind ===
+                SyntaxKind.PlusToken
+        ) {
+            if (
+                (node as BinaryPlusExpression).cachedLiteralKind !== undefined
+            ) {
                 return (node as BinaryPlusExpression).cachedLiteralKind;
             }
 
-            const leftKind = getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).left);
-            const literalKind = isLiteralKind(leftKind)
-                    && leftKind === getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).right)
+            const leftKind = getLiteralKindOfBinaryPlusOperand(
+                node.left,
+            );
+            const literalKind = isLiteralKind(leftKind) &&
+                    leftKind ===
+                        getLiteralKindOfBinaryPlusOperand(
+                            node.right,
+                        )
                 ? leftKind
                 : SyntaxKind.Unknown;
 
@@ -283,7 +340,12 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
      * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
      *                           BinaryExpression.
      */
-    function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand?: Expression) {
+    function parenthesizeBinaryOperand(
+        binaryOperator: SyntaxKind,
+        operand: Expression,
+        isLeftSideOfBinary: boolean,
+        leftOperand?: Expression,
+    ) {
         const skipped = skipPartiallyEmittedExpressions(operand);
 
         // If the resulting expression is already parenthesized, we do not need to do any further processing.
@@ -291,34 +353,69 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
             return operand;
         }
 
-        return binaryOperandNeedsParentheses(binaryOperator, operand, isLeftSideOfBinary, leftOperand)
+        return binaryOperandNeedsParentheses(
+                binaryOperator,
+                operand,
+                isLeftSideOfBinary,
+                leftOperand,
+            )
             ? factory.createParenthesizedExpression(operand)
             : operand;
     }
 
-    function parenthesizeLeftSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression): Expression {
-        return parenthesizeBinaryOperand(binaryOperator, leftSide, /*isLeftSideOfBinary*/ true);
+    function parenthesizeLeftSideOfBinary(
+        binaryOperator: SyntaxKind,
+        leftSide: Expression,
+    ): Expression {
+        return parenthesizeBinaryOperand(
+            binaryOperator,
+            leftSide,
+            /*isLeftSideOfBinary*/ true,
+        );
     }
 
-    function parenthesizeRightSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression | undefined, rightSide: Expression): Expression {
-        return parenthesizeBinaryOperand(binaryOperator, rightSide, /*isLeftSideOfBinary*/ false, leftSide);
+    function parenthesizeRightSideOfBinary(
+        binaryOperator: SyntaxKind,
+        leftSide: Expression | undefined,
+        rightSide: Expression,
+    ): Expression {
+        return parenthesizeBinaryOperand(
+            binaryOperator,
+            rightSide,
+            /*isLeftSideOfBinary*/ false,
+            leftSide,
+        );
     }
 
-    function parenthesizeExpressionOfComputedPropertyName(expression: Expression): Expression {
-        return isCommaSequence(expression) ? factory.createParenthesizedExpression(expression) : expression;
+    function parenthesizeExpressionOfComputedPropertyName(
+        expression: Expression,
+    ): Expression {
+        return isCommaSequence(expression)
+            ? factory.createParenthesizedExpression(expression)
+            : expression;
     }
 
-    function parenthesizeConditionOfConditionalExpression(condition: Expression): Expression {
-        const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
+    function parenthesizeConditionOfConditionalExpression(
+        condition: Expression,
+    ): Expression {
+        const conditionalPrecedence = getOperatorPrecedence(
+            SyntaxKind.ConditionalExpression,
+            SyntaxKind.QuestionToken,
+        );
         const emittedCondition = skipPartiallyEmittedExpressions(condition);
         const conditionPrecedence = getExpressionPrecedence(emittedCondition);
-        if (compareValues(conditionPrecedence, conditionalPrecedence) !== Comparison.GreaterThan) {
+        if (
+            compareValues(conditionPrecedence, conditionalPrecedence) !==
+                Comparison.GreaterThan
+        ) {
             return factory.createParenthesizedExpression(condition);
         }
         return condition;
     }
 
-    function parenthesizeBranchOfConditionalExpression(branch: Expression): Expression {
+    function parenthesizeBranchOfConditionalExpression(
+        branch: Expression,
+    ): Expression {
         // per ES grammar both 'whenTrue' and 'whenFalse' parts of conditional expression are assignment expressions
         // so in case when comma expression is introduced as a part of previous transformations
         // if should be wrapped in parens since comma operator has the lowest precedence
@@ -339,33 +436,45 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
      * - FunctionExpression
      * - ClassExpression
      */
-    function parenthesizeExpressionOfExportDefault(expression: Expression): Expression {
+    function parenthesizeExpressionOfExportDefault(
+        expression: Expression,
+    ): Expression {
         const check = skipPartiallyEmittedExpressions(expression);
         let needsParens = isCommaSequence(check);
         if (!needsParens) {
-            switch (getLeftmostExpression(check, /*stopAtCallExpressions*/ false).kind) {
+            switch (
+                getLeftmostExpression(check, /*stopAtCallExpressions*/ false)
+                    .kind
+            ) {
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.FunctionExpression:
                     needsParens = true;
             }
         }
-        return needsParens ? factory.createParenthesizedExpression(expression) : expression;
+        return needsParens
+            ? factory.createParenthesizedExpression(expression)
+            : expression;
     }
 
     /**
      * Wraps an expression in parentheses if it is needed in order to use the expression
      * as the expression of a `NewExpression` node.
      */
-    function parenthesizeExpressionOfNew(expression: Expression): LeftHandSideExpression {
-        const leftmostExpr = getLeftmostExpression(expression, /*stopAtCallExpressions*/ true);
+    function parenthesizeExpressionOfNew(
+        expression: Expression,
+    ): LeftHandSideExpression {
+        const leftmostExpr = getLeftmostExpression(
+            expression,
+            /*stopAtCallExpressions*/ true,
+        );
         switch (leftmostExpr.kind) {
             case SyntaxKind.CallExpression:
                 return factory.createParenthesizedExpression(expression);
 
             case SyntaxKind.NewExpression:
-                return !(leftmostExpr as NewExpression).arguments
+                return !leftmostExpr.arguments
                     ? factory.createParenthesizedExpression(expression)
-                    : expression as LeftHandSideExpression; // TODO(rbuckton): Verify this assertion holds
+                    : (expression as LeftHandSideExpression); // TODO(rbuckton): Verify this assertion holds
         }
 
         return parenthesizeLeftSideOfAccess(expression);
@@ -375,7 +484,10 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
      * Wraps an expression in parentheses if it is needed in order to use the expression for
      * property or element access.
      */
-    function parenthesizeLeftSideOfAccess(expression: Expression, optionalChain?: boolean): LeftHandSideExpression {
+    function parenthesizeLeftSideOfAccess(
+        expression: Expression,
+        optionalChain?: boolean,
+    ): LeftHandSideExpression {
         // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
         // to parenthesize the expression before a dot. The known exception is:
         //
@@ -384,73 +496,144 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         if (
-            isLeftHandSideExpression(emittedExpression)
-            && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression as NewExpression).arguments)
-            && (optionalChain || !isOptionalChain(emittedExpression))
+            isLeftHandSideExpression(emittedExpression) &&
+            (emittedExpression.kind !== SyntaxKind.NewExpression ||
+                emittedExpression.arguments) &&
+            (optionalChain || !isOptionalChain(emittedExpression))
         ) {
             // TODO(rbuckton): Verify whether this assertion holds.
             return expression as LeftHandSideExpression;
         }
 
         // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-        return setTextRange(factory.createParenthesizedExpression(expression), expression);
+        return setTextRange(
+            factory.createParenthesizedExpression(expression),
+            expression,
+        );
     }
 
-    function parenthesizeOperandOfPostfixUnary(operand: Expression): LeftHandSideExpression {
+    function parenthesizeOperandOfPostfixUnary(
+        operand: Expression,
+    ): LeftHandSideExpression {
         // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-        return isLeftHandSideExpression(operand) ? operand : setTextRange(factory.createParenthesizedExpression(operand), operand);
+        return isLeftHandSideExpression(operand)
+            ? operand
+            : setTextRange(
+                factory.createParenthesizedExpression(operand),
+                operand,
+            );
     }
 
-    function parenthesizeOperandOfPrefixUnary(operand: Expression): UnaryExpression {
+    function parenthesizeOperandOfPrefixUnary(
+        operand: Expression,
+    ): UnaryExpression {
         // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-        return isUnaryExpression(operand) ? operand : setTextRange(factory.createParenthesizedExpression(operand), operand);
+        return isUnaryExpression(operand)
+            ? operand
+            : setTextRange(
+                factory.createParenthesizedExpression(operand),
+                operand,
+            );
     }
 
-    function parenthesizeExpressionsOfCommaDelimitedList(elements: NodeArray<Expression>): NodeArray<Expression> {
-        const result = sameMap(elements, parenthesizeExpressionForDisallowedComma);
-        return setTextRange(factory.createNodeArray(result, elements.hasTrailingComma), elements);
+    function parenthesizeExpressionsOfCommaDelimitedList(
+        elements: NodeArray<Expression>,
+    ): NodeArray<Expression> {
+        const result = sameMap(
+            elements,
+            parenthesizeExpressionForDisallowedComma,
+        );
+        return setTextRange(
+            factory.createNodeArray(result, elements.hasTrailingComma),
+            elements,
+        );
     }
 
-    function parenthesizeExpressionForDisallowedComma(expression: Expression): Expression {
+    function parenthesizeExpressionForDisallowedComma(
+        expression: Expression,
+    ): Expression {
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         const expressionPrecedence = getExpressionPrecedence(emittedExpression);
-        const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
+        const commaPrecedence = getOperatorPrecedence(
+            SyntaxKind.BinaryExpression,
+            SyntaxKind.CommaToken,
+        );
         // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-        return expressionPrecedence > commaPrecedence ? expression : setTextRange(factory.createParenthesizedExpression(expression), expression);
+        return expressionPrecedence > commaPrecedence
+            ? expression
+            : setTextRange(
+                factory.createParenthesizedExpression(expression),
+                expression,
+            );
     }
 
-    function parenthesizeExpressionOfExpressionStatement(expression: Expression): Expression {
+    function parenthesizeExpressionOfExpressionStatement(
+        expression: Expression,
+    ): Expression {
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         if (isCallExpression(emittedExpression)) {
             const callee = emittedExpression.expression;
             const kind = skipPartiallyEmittedExpressions(callee).kind;
-            if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
+            if (
+                kind === SyntaxKind.FunctionExpression ||
+                kind === SyntaxKind.ArrowFunction
+            ) {
                 // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
                 const updated = factory.updateCallExpression(
                     emittedExpression,
-                    setTextRange(factory.createParenthesizedExpression(callee), callee),
+                    setTextRange(
+                        factory.createParenthesizedExpression(callee),
+                        callee,
+                    ),
                     emittedExpression.typeArguments,
                     emittedExpression.arguments,
                 );
-                return factory.restoreOuterExpressions(expression, updated, OuterExpressionKinds.PartiallyEmittedExpressions);
+                return factory.restoreOuterExpressions(
+                    expression,
+                    updated,
+                    OuterExpressionKinds.PartiallyEmittedExpressions,
+                );
             }
         }
 
-        const leftmostExpressionKind = getLeftmostExpression(emittedExpression, /*stopAtCallExpressions*/ false).kind;
-        if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
+        const leftmostExpressionKind = getLeftmostExpression(
+            emittedExpression,
+            /*stopAtCallExpressions*/ false,
+        ).kind;
+        if (
+            leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression ||
+            leftmostExpressionKind === SyntaxKind.FunctionExpression
+        ) {
             // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-            return setTextRange(factory.createParenthesizedExpression(expression), expression);
+            return setTextRange(
+                factory.createParenthesizedExpression(expression),
+                expression,
+            );
         }
 
         return expression;
     }
 
-    function parenthesizeConciseBodyOfArrowFunction(body: Expression): Expression;
-    function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
-    function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody {
-        if (!isBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
+    function parenthesizeConciseBodyOfArrowFunction(
+        body: Expression,
+    ): Expression;
+    function parenthesizeConciseBodyOfArrowFunction(
+        body: ConciseBody,
+    ): ConciseBody;
+    function parenthesizeConciseBodyOfArrowFunction(
+        body: ConciseBody,
+    ): ConciseBody {
+        if (
+            !isBlock(body) &&
+            (isCommaSequence(body) ||
+                getLeftmostExpression(body, /*stopAtCallExpressions*/ false)
+                        .kind === SyntaxKind.ObjectLiteralExpression)
+        ) {
             // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-            return setTextRange(factory.createParenthesizedExpression(body), body);
+            return setTextRange(
+                factory.createParenthesizedExpression(body),
+                body,
+            );
         }
 
         return body;
@@ -467,7 +650,9 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     // - The check type (the `UnionType`, above) does not allow function, constructor, or conditional types (they must be parenthesized)
     // - The extends type (the first `Type`, above) does not allow conditional types (they must be parenthesized). Function and constructor types are fine.
     // - The true and false branch types (the second and third `Type` non-terminals, above) allow any type
-    function parenthesizeCheckTypeOfConditionalType(checkType: TypeNode): TypeNode {
+    function parenthesizeCheckTypeOfConditionalType(
+        checkType: TypeNode,
+    ): TypeNode {
         switch (checkType.kind) {
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
@@ -477,7 +662,9 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         return checkType;
     }
 
-    function parenthesizeExtendsTypeOfConditionalType(extendsType: TypeNode): TypeNode {
+    function parenthesizeExtendsTypeOfConditionalType(
+        extendsType: TypeNode,
+    ): TypeNode {
         switch (extendsType.kind) {
             case SyntaxKind.ConditionalType:
                 return factory.createParenthesizedType(extendsType);
@@ -499,8 +686,12 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         return parenthesizeCheckTypeOfConditionalType(type);
     }
 
-    function parenthesizeConstituentTypesOfUnionType(members: readonly TypeNode[]): NodeArray<TypeNode> {
-        return factory.createNodeArray(sameMap(members, parenthesizeConstituentTypeOfUnionType));
+    function parenthesizeConstituentTypesOfUnionType(
+        members: readonly TypeNode[],
+    ): NodeArray<TypeNode> {
+        return factory.createNodeArray(
+            sameMap(members, parenthesizeConstituentTypeOfUnionType),
+        );
     }
 
     // IntersectionType[Extends] :
@@ -517,8 +708,12 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         return parenthesizeConstituentTypeOfUnionType(type);
     }
 
-    function parenthesizeConstituentTypesOfIntersectionType(members: readonly TypeNode[]): NodeArray<TypeNode> {
-        return factory.createNodeArray(sameMap(members, parenthesizeConstituentTypeOfIntersectionType));
+    function parenthesizeConstituentTypesOfIntersectionType(
+        members: readonly TypeNode[],
+    ): NodeArray<TypeNode> {
+        return factory.createNodeArray(
+            sameMap(members, parenthesizeConstituentTypeOfIntersectionType),
+        );
     }
 
     // TypeOperator[Extends] :
@@ -597,23 +792,40 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     // RestType :
     //     `...` Type[~Extends]
     //
-    function parenthesizeElementTypesOfTupleType(types: readonly (TypeNode | NamedTupleMember)[]): NodeArray<TypeNode> {
-        return factory.createNodeArray(sameMap(types, parenthesizeElementTypeOfTupleType));
+    function parenthesizeElementTypesOfTupleType(
+        types: readonly (TypeNode | NamedTupleMember)[],
+    ): NodeArray<TypeNode> {
+        return factory.createNodeArray(
+            sameMap(types, parenthesizeElementTypeOfTupleType),
+        );
     }
 
-    function parenthesizeElementTypeOfTupleType(type: TypeNode | NamedTupleMember): TypeNode {
+    function parenthesizeElementTypeOfTupleType(
+        type: TypeNode | NamedTupleMember,
+    ): TypeNode {
         if (hasJSDocPostfixQuestion(type)) return factory.createParenthesizedType(type);
         return type;
     }
 
-    function hasJSDocPostfixQuestion(type: TypeNode | NamedTupleMember): boolean {
+    function hasJSDocPostfixQuestion(
+        type: TypeNode | NamedTupleMember,
+    ): boolean {
         if (isJSDocNullableType(type)) return type.postfix;
         if (isNamedTupleMember(type)) return hasJSDocPostfixQuestion(type.type);
-        if (isFunctionTypeNode(type) || isConstructorTypeNode(type) || isTypeOperatorNode(type)) return hasJSDocPostfixQuestion(type.type);
+        if (
+            isFunctionTypeNode(type) ||
+            isConstructorTypeNode(type) ||
+            isTypeOperatorNode(type)
+        ) return hasJSDocPostfixQuestion(type.type);
         if (isConditionalTypeNode(type)) return hasJSDocPostfixQuestion(type.falseType);
         if (isUnionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.types));
         if (isIntersectionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.types));
-        if (isInferTypeNode(type)) return !!type.typeParameter.constraint && hasJSDocPostfixQuestion(type.typeParameter.constraint);
+        if (isInferTypeNode(type)) {
+            return (
+                !!type.typeParameter.constraint &&
+                hasJSDocPostfixQuestion(type.typeParameter.constraint)
+            );
+        }
         return false;
     }
 
@@ -644,16 +856,22 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     // }
 
     function parenthesizeLeadingTypeArgument(node: TypeNode) {
-        return isFunctionOrConstructorTypeNode(node) && node.typeParameters ? factory.createParenthesizedType(node) : node;
+        return isFunctionOrConstructorTypeNode(node) && node.typeParameters
+            ? factory.createParenthesizedType(node)
+            : node;
     }
 
     function parenthesizeOrdinalTypeArgument(node: TypeNode, i: number) {
         return i === 0 ? parenthesizeLeadingTypeArgument(node) : node;
     }
 
-    function parenthesizeTypeArguments(typeArguments: NodeArray<TypeNode> | undefined): NodeArray<TypeNode> | undefined {
+    function parenthesizeTypeArguments(
+        typeArguments: NodeArray<TypeNode> | undefined,
+    ): NodeArray<TypeNode> | undefined {
         if (some(typeArguments)) {
-            return factory.createNodeArray(sameMap(typeArguments, parenthesizeOrdinalTypeArgument));
+            return factory.createNodeArray(
+                sameMap(typeArguments, parenthesizeOrdinalTypeArgument),
+            );
         }
     }
 }

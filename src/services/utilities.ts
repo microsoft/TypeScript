@@ -36,7 +36,7 @@ import {
     createTextSpan,
     createTextSpanFromBounds,
     Debug,
-    Declaration,
+    DeclarationBase,
     Decorator,
     DefaultClause,
     defaultMaximumTruncationLength,
@@ -715,7 +715,7 @@ export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLite
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
         case SyntaxKind.ModuleDeclaration:
-            return getNameOfDeclaration(node.parent as Declaration) === node;
+            return getNameOfDeclaration(node.parent as DeclarationBase) === node;
         case SyntaxKind.ElementAccessExpression:
             return (node.parent as ElementAccessExpression).argumentExpression === node;
         case SyntaxKind.ComputedPropertyName:
@@ -734,7 +734,7 @@ export function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) 
 }
 
 /** @internal */
-export function getContainerNode(node: Node): Declaration | undefined {
+export function getContainerNode(node: Node): DeclarationBase | undefined {
     if (isJSDocTypeAlias(node)) {
         // This doesn't just apply to the node immediately under the comment, but to everything in its parent's scope.
         // node.parent = the JSDoc comment, node.parent.parent = the node having the comment.
@@ -759,7 +759,7 @@ export function getContainerNode(node: Node): Declaration | undefined {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.ModuleDeclaration:
-                return node as Declaration;
+                return node as DeclarationBase;
         }
     }
 }
@@ -2939,7 +2939,7 @@ export function linkTextPart(text: string) {
 }
 
 /** @internal */
-export function linkNamePart(text: string, target: Declaration): JSDocLinkDisplayPart {
+export function linkNamePart(text: string, target: DeclarationBase): JSDocLinkDisplayPart {
     return {
         text,
         kind: SymbolDisplayPartKind[SymbolDisplayPartKind.linkName],
@@ -4091,12 +4091,12 @@ export function startsWithUnderscore(name: string): boolean {
 }
 
 /** @internal */
-export function isGlobalDeclaration(declaration: Declaration) {
+export function isGlobalDeclaration(declaration: DeclarationBase) {
     return !isNonGlobalDeclaration(declaration);
 }
 
 /** @internal */
-export function isNonGlobalDeclaration(declaration: Declaration) {
+export function isNonGlobalDeclaration(declaration: DeclarationBase) {
     const sourceFile = declaration.getSourceFile();
     // If the file is not a module, the declaration is global
     if (!sourceFile.externalModuleIndicator && !sourceFile.commonJsModuleIndicator) {
@@ -4107,7 +4107,7 @@ export function isNonGlobalDeclaration(declaration: Declaration) {
 }
 
 /** @internal */
-export function isDeprecatedDeclaration(decl: Declaration) {
+export function isDeprecatedDeclaration(decl: DeclarationBase) {
     return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
 }
 

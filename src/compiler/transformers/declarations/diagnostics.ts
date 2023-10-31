@@ -49,7 +49,7 @@ import {
     MethodDeclaration,
     MethodSignature,
     ModifierFlags,
-    NamedDeclaration,
+    NamedDeclarationBase,
     Node,
     ParameterDeclaration,
     PropertyAccessExpression,
@@ -144,7 +144,7 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name,
+            typeName: (node as NamedDeclarationBase).name,
         } : undefined;
     }
 
@@ -175,7 +175,7 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name,
+            typeName: (node as NamedDeclarationBase).name,
         } : undefined;
     }
 
@@ -278,7 +278,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name,
+            typeName: (node as NamedDeclarationBase).name,
         } : undefined;
     }
 
@@ -316,8 +316,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         }
         return {
             diagnosticMessage,
-            errorNode: (node as NamedDeclaration).name!,
-            typeName: (node as NamedDeclaration).name,
+            errorNode: (node as NamedDeclarationBase).name!,
+            typeName: (node as NamedDeclarationBase).name,
         };
     }
 
@@ -383,7 +383,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
 
         return {
             diagnosticMessage,
-            errorNode: (node as NamedDeclaration).name || node,
+            errorNode: (node as NamedDeclarationBase).name || node,
         };
     }
 
@@ -392,7 +392,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name,
+            typeName: (node as NamedDeclarationBase).name,
         } : undefined;
     }
 
@@ -525,7 +525,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name,
+            typeName: (node as NamedDeclarationBase).name,
         };
     }
 
@@ -555,7 +555,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return {
             diagnosticMessage: Diagnostics.Import_declaration_0_is_using_private_name_1,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name,
+            typeName: (node as NamedDeclarationBase).name,
         };
     }
 

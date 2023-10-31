@@ -4,7 +4,7 @@ import {
     compareValues,
     createPatternMatcher,
     createTextSpanFromNode,
-    Declaration,
+    DeclarationBase,
     emptyArray,
     Expression,
     getContainerNode,
@@ -34,7 +34,7 @@ interface RawNavigateToItem {
     readonly fileName: string;
     readonly matchKind: PatternMatchKind;
     readonly isCaseSensitive: boolean;
-    readonly declaration: Declaration;
+    readonly declaration: DeclarationBase;
 }
 
 /** @internal */
@@ -75,7 +75,7 @@ function shouldExcludeFile(file: SourceFile, excludeLibFiles: boolean, singleCur
 function getItemsFromNamedDeclaration(
     patternMatcher: PatternMatcher,
     name: string,
-    declarations: readonly Declaration[],
+    declarations: readonly DeclarationBase[],
     checker: TypeChecker,
     fileName: string,
     excludeLibFiles: boolean,
@@ -106,7 +106,7 @@ function getItemsFromNamedDeclaration(
 }
 
 function shouldKeepItem(
-    declaration: Declaration,
+    declaration: DeclarationBase,
     checker: TypeChecker,
     excludeLibFiles: boolean,
     singleCurrentFile: SourceFile | undefined,
@@ -124,7 +124,7 @@ function shouldKeepItem(
     }
 }
 
-function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]): boolean {
+function tryAddSingleDeclarationName(declaration: DeclarationBase, containers: string[]): boolean {
     const name = getNameOfDeclaration(declaration);
     return !!name && (pushLiteral(name, containers) || name.kind === SyntaxKind.ComputedPropertyName && tryAddComputedPropertyName(name.expression, containers));
 }
@@ -141,7 +141,7 @@ function pushLiteral(node: Node, containers: string[]): boolean {
     return isPropertyNameLiteral(node) && (containers.push(getTextOfIdentifierOrLiteral(node)), true);
 }
 
-function getContainers(declaration: Declaration): readonly string[] {
+function getContainers(declaration: DeclarationBase): readonly string[] {
     const containers: string[] = [];
 
     // First, if we started with a computed property name, then add all but the last
