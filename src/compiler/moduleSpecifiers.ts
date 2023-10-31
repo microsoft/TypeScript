@@ -35,7 +35,6 @@ import {
     forEachAncestorDirectory,
     getBaseFileName,
     GetCanonicalFileName,
-    getCommonSourceDirectory,
     getConditions,
     getDirectoryPath,
     getEmitModuleResolutionKind,
@@ -500,7 +499,7 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
         return pathsOnly ? undefined : relativePath;
     }
 
-    const fromPackageJsonImports = pathsOnly ? undefined : tryGetModuleNameFromPackageJsonImports(moduleFileName, sourceDirectory, compilerOptions, host, getCanonicalFileName, importMode);
+    const fromPackageJsonImports = pathsOnly ? undefined : tryGetModuleNameFromPackageJsonImports(moduleFileName, sourceDirectory, compilerOptions, host, importMode);
 
     const fromPaths = pathsOnly || fromPackageJsonImports === undefined ? paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, host, compilerOptions) : undefined;
     if (pathsOnly) {
@@ -859,20 +858,9 @@ function getOutputPath(targetFilePath: string, options: CompilerOptions, commonD
     );
 }
 
-function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: ModuleSpecifierResolutionHost, getCanonicalFileName: GetCanonicalFileName, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[], mode: MatchingMode, isImports: boolean): { moduleFileToTry: string; } | undefined {
+function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: ModuleSpecifierResolutionHost, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[], mode: MatchingMode, isImports: boolean): { moduleFileToTry: string; } | undefined {
     if (typeof exports === "string") {
-        const currentDirectory = host.getCurrentDirectory();
-        const commonDir = getNormalizedAbsolutePath(
-            getCommonSourceDirectory(
-                options,
-                () => [],
-                currentDirectory,
-                getCanonicalFileName,
-            ),
-            currentDirectory,
-        );
-
-        const outputFile = isImports && getOutputPath(targetFilePath, options, commonDir);
+        const outputFile = isImports && getOutputPath(targetFilePath, options, host.getCommonSourceDirectory());
 
         const pathOrPattern = getNormalizedAbsolutePath(combinePaths(packageDirectory, exports), /*currentDirectory*/ undefined);
         const extensionSwappedTarget = hasTSFileExtension(targetFilePath) ? removeFileExtension(targetFilePath) + tryGetJSExtensionForFile(targetFilePath, options) : undefined;
@@ -917,14 +905,14 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
         }
     }
     else if (Array.isArray(exports)) {
-        return forEach(exports, e => tryGetModuleNameFromExportsOrImports(options, host, getCanonicalFileName, targetFilePath, packageDirectory, packageName, e, conditions, mode, isImports));
+        return forEach(exports, e => tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, e, conditions, mode, isImports));
     }
     else if (typeof exports === "object" && exports !== null) { // eslint-disable-line no-null/no-null
         // conditional mapping
         for (const key of getOwnKeys(exports as MapLike<unknown>)) {
             if (key === "default" || conditions.indexOf(key) >= 0 || isApplicableVersionedTypesKey(conditions, key)) {
                 const subTarget = (exports as MapLike<unknown>)[key];
-                const result = tryGetModuleNameFromExportsOrImports(options, host, getCanonicalFileName, targetFilePath, packageDirectory, packageName, subTarget, conditions, mode, isImports);
+                const result = tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, subTarget, conditions, mode, isImports);
                 if (result) {
                     return result;
                 }
@@ -934,7 +922,7 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
     return undefined;
 }
 
-function tryGetModuleNameFromExports(options: CompilerOptions, host: ModuleSpecifierResolutionHost, getCanonicalFileName: GetCanonicalFileName, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[]): { moduleFileToTry: string; } | undefined {
+function tryGetModuleNameFromExports(options: CompilerOptions, host: ModuleSpecifierResolutionHost, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[]): { moduleFileToTry: string; } | undefined {
     if (typeof exports === "object" && exports !== null && !Array.isArray(exports) && allKeysStartWithDot(exports as MapLike<unknown>)) { // eslint-disable-line no-null/no-null
         // sub-mappings
         // 3 cases:
@@ -946,13 +934,13 @@ function tryGetModuleNameFromExports(options: CompilerOptions, host: ModuleSpeci
             const mode = endsWith(k, "/") ? MatchingMode.Directory
                 : k.includes("*") ? MatchingMode.Pattern
                 : MatchingMode.Exact;
-            return tryGetModuleNameFromExportsOrImports(options, host, getCanonicalFileName, targetFilePath, packageDirectory, subPackageName, (exports as MapLike<unknown>)[k], conditions, mode, /*isImports*/ false);
+            return tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, subPackageName, (exports as MapLike<unknown>)[k], conditions, mode, /*isImports*/ false);
         });
     }
-    return tryGetModuleNameFromExportsOrImports(options, host, getCanonicalFileName, targetFilePath, packageDirectory, packageName, exports, conditions, MatchingMode.Exact, /*isImports*/ false);
+    return tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, exports, conditions, MatchingMode.Exact, /*isImports*/ false);
 }
 
-function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDirectory: Path, options: CompilerOptions, host: ModuleSpecifierResolutionHost, getCanonicalFileName: GetCanonicalFileName, importMode: ResolutionMode) {
+function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDirectory: Path, options: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode) {
     if (!host.readFile || !getResolvePackageJsonImports(options)) {
         return undefined;
     }
@@ -977,7 +965,7 @@ function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDi
         const mode = endsWith(k, "/") ? MatchingMode.Directory
             : k.includes("*") ? MatchingMode.Pattern
             : MatchingMode.Exact;
-        return tryGetModuleNameFromExportsOrImports(options, host, getCanonicalFileName, moduleFileName, ancestorDirectoryWithPackageJson, k, (imports as MapLike<unknown>)[k], conditions, mode, /*isImports*/ true);
+        return tryGetModuleNameFromExportsOrImports(options, host, moduleFileName, ancestorDirectoryWithPackageJson, k, (imports as MapLike<unknown>)[k], conditions, mode, /*isImports*/ true);
     })?.moduleFileToTry;
 }
 
@@ -1078,7 +1066,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                 const packageName = getPackageNameFromTypesPackageName(nodeModulesDirectoryName);
                 const conditions = getConditions(options, importMode);
                 const fromExports = packageJsonContent.exports
-                    ? tryGetModuleNameFromExports(options, host, getCanonicalFileName, path, packageRootPath, packageName, packageJsonContent.exports, conditions)
+                    ? tryGetModuleNameFromExports(options, host, path, packageRootPath, packageName, packageJsonContent.exports, conditions)
                     : undefined;
                 if (fromExports) {
                     return { ...fromExports, verbatimFromExports: true };

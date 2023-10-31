@@ -9671,6 +9671,7 @@ export interface ModuleSpecifierResolutionHost {
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+    getCommonSourceDirectory(): string;
 }
 
 /** @internal */

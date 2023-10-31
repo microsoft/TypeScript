@@ -30,6 +30,7 @@ import {
     ConditionalExpression,
     contains,
     ContextFlags,
+    createGetCanonicalFileName,
     createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createRange,
     createScanner,
@@ -88,6 +89,7 @@ import {
     FunctionLikeDeclaration,
     getAssignmentDeclarationKind,
     getCombinedNodeFlagsAlwaysIncludeJSDoc,
+    getCommonSourceDirectory,
     getDirectoryPath,
     getEmitModuleKind,
     getEmitScriptTarget,
@@ -102,6 +104,7 @@ import {
     getModuleInstanceState,
     getNameOfDeclaration,
     getNodeId,
+    getNormalizedAbsolutePath,
     getPackageNameFromTypesPackageName,
     getPathComponents,
     getRootDeclaration,
@@ -270,6 +273,7 @@ import {
     LiteralExpression,
     map,
     maybeBind,
+    memoize,
     Modifier,
     ModifierFlags,
     ModuleDeclaration,
@@ -2470,6 +2474,18 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
+        getCommonSourceDirectory: memoize(() => {
+            const currentDirectory = host.getCurrentDirectory();
+            return getNormalizedAbsolutePath(
+                getCommonSourceDirectory(
+                    program.getCompilerOptions(),
+                    () => [],
+                    currentDirectory,
+                    createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true),
+                ),
+                currentDirectory,
+            );
+        }),
     };
 }
 
