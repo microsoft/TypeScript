@@ -5445,19 +5445,6 @@ declare namespace ts {
     interface RegularExpressionLiteral extends LiteralExpression {
         readonly kind: SyntaxKind.RegularExpressionLiteral;
     }
-    enum RegularExpressionFlags {
-        None = 0,
-        HasIndices = 1,
-        Global = 2,
-        IgnoreCase = 4,
-        Multiline = 8,
-        DotAll = 16,
-        Unicode = 32,
-        UnicodeSets = 64,
-        Sticky = 128,
-        UnicodeMode = 96,
-        Modifiers = 28,
-    }
     interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
         readonly kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }

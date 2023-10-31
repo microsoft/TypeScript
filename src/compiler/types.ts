@@ -2730,6 +2730,7 @@ export interface RegularExpressionLiteral extends LiteralExpression {
 }
 
 // dprint-ignore
+/** @internal */
 export const enum RegularExpressionFlags {
     None        = 0,
     HasIndices  = 1 << 0, // d
