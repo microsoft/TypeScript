@@ -2,7 +2,9 @@
 
 
 //// [/root/src/libs/guid/package.json]
-{"typings":"dist/guid.d.ts"}
+{
+  "typings": "dist/guid.d.ts"
+}
 
 //// [/root/src/libs/guid/dist/guid.d.ts]
 
@@ -29,7 +31,9 @@ Resolution:: {
 
 
 //// [/root/src/libs/guid/package.json]
-{"typings":"dist/guid.d.ts"}
+{
+  "typings": "dist/guid.d.ts"
+}
 
 //// [/root/src/libs/guid/dist/guid.d.ts]
 

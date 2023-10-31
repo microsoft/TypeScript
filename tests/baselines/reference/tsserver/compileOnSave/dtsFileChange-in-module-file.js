@@ -8,7 +8,10 @@ export const x: string;
 import { x } from './runtime/a;
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{},"compileOnSave":true}
+{
+  "compilerOptions": {},
+  "compileOnSave": true
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

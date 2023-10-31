@@ -1,7 +1,12 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     textSpanFromSubstring,
@@ -66,7 +71,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         };
         const aTsconfig: File = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({ files: ["./old.ts", "./user.ts"] }),
+            content: jsonToReadableText({ files: ["./old.ts", "./user.ts"] }),
         };
         const bUserTs: File = {
             path: "/b/user.ts",
@@ -94,7 +99,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
     it("works with file moved to inferred project", () => {
         const aTs: File = { path: "/a.ts", content: 'import {} from "./b";' };
         const cTs: File = { path: "/c.ts", content: "export {};" };
-        const tsconfig: File = { path: "/tsconfig.json", content: JSON.stringify({ files: ["./a.ts", "./b.ts"] }) };
+        const tsconfig: File = { path: "/tsconfig.json", content: jsonToReadableText({ files: ["./a.ts", "./b.ts"] }) };
 
         const host = createServerHost([aTs, cTs, tsconfig]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });

@@ -4,7 +4,11 @@ Input::
 
 
 //// [/a/username/project/tsconfig.json]
-{"watchOptions":{"synchronousWatchDirectory":true}}
+{
+  "watchOptions": {
+    "synchronousWatchDirectory": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,8 +33,14 @@ Output::
 
 
 
-Program root files: ["/a/username/project/src/file1.ts"]
-Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
+Program root files: [
+  "/a/username/project/src/file1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/username/project/tsconfig.json",
+  "configFilePath": "/a/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -89,8 +99,14 @@ Output::
 
 
 
-Program root files: ["/a/username/project/src/file2.ts"]
-Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
+Program root files: [
+  "/a/username/project/src/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/username/project/tsconfig.json",
+  "configFilePath": "/a/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

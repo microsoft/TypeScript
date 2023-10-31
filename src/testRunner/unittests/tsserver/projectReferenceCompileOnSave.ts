@@ -1,10 +1,15 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
+import {
+    jsonToReadableText,
+} from "../helpers";
 import {
     ensureErrorFreeBuild,
 } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     protocolToLocation,
@@ -26,7 +31,7 @@ export function fn2() { }
     };
     const dependencyConfig: File = {
         path: `${dependecyLocation}/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             compilerOptions: { composite: true, declarationDir: "../decls" },
             compileOnSave: true,
         }),
@@ -43,7 +48,7 @@ fn2();
     };
     const usageConfig: File = {
         path: `${usageLocation}/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             compileOnSave: true,
             references: [{ path: "../dependency" }],
         }),
@@ -1679,7 +1684,7 @@ describe("unittests:: tsserver:: with project references and compile on save wit
     it("compile on save emits same output as project build", () => {
         const tsbaseJson: File = {
             path: `/user/username/projects/myproject/tsbase.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compileOnSave: true,
                 compilerOptions: {
                     module: "none",
@@ -1690,7 +1695,7 @@ describe("unittests:: tsserver:: with project references and compile on save wit
         const buttonClass = `/user/username/projects/myproject/buttonClass`;
         const buttonConfig: File = {
             path: `${buttonClass}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 extends: "../tsbase.json",
                 compilerOptions: {
                     outFile: "Source.js",
@@ -1711,7 +1716,7 @@ describe("unittests:: tsserver:: with project references and compile on save wit
         const siblingClass = `/user/username/projects/myproject/SiblingClass`;
         const siblingConfig: File = {
             path: `${siblingClass}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 extends: "../tsbase.json",
                 references: [{
                     path: "../buttonClass/",

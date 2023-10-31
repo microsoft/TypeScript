@@ -5,7 +5,13 @@ Creating project service
 let x = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"types":["node"]}}
+{
+  "compilerOptions": {
+    "types": [
+      "node"
+    ]
+  }
+}
 
 //// [/a/b/node_modules/@types/node/index.d.ts]
 declare var process: any

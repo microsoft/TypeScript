@@ -32,8 +32,15 @@ Output::
 
 
 
-Program root files: ["/src/project/main.ts"]
-Program options: {"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/main.ts"
+]
+Program options: {
+  "project": "/src/project",
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

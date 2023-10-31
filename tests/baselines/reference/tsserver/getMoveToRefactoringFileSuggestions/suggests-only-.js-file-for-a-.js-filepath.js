@@ -17,7 +17,15 @@ class C {}
 
 
 //// [/tsconfig.json]
-{"files":["./file1.js","./file2.js","./file3.mts","./file4.ts","./file5.js"]}
+{
+  "files": [
+    "./file1.js",
+    "./file2.js",
+    "./file3.mts",
+    "./file4.ts",
+    "./file5.js"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

@@ -11,9 +11,9 @@ declare var val: string; export default val;
 
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "resolveJsonModule": true
-    }
+  "compilerOptions": {
+    "resolveJsonModule": true
+  }
 }
 
 //// [/a/lib/lib.d.ts]
@@ -44,8 +44,17 @@ Output::
 
 
 
-Program root files: ["/src/project/data.d.json.ts","/src/project/main.ts"]
-Program options: {"resolveJsonModule":true,"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/data.d.json.ts",
+  "/src/project/main.ts"
+]
+Program options: {
+  "resolveJsonModule": true,
+  "project": "/src/project",
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -155,9 +164,9 @@ Change:: Change json setting
 Input::
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "resolveJsonModule": false
-    }
+  "compilerOptions": {
+    "resolveJsonModule": false
+  }
 }
 
 
@@ -177,8 +186,17 @@ Output::
 
 
 
-Program root files: ["/src/project/data.d.json.ts","/src/project/main.ts"]
-Program options: {"resolveJsonModule":false,"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/data.d.json.ts",
+  "/src/project/main.ts"
+]
+Program options: {
+  "resolveJsonModule": false,
+  "project": "/src/project",
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

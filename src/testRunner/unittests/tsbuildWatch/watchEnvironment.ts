@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
     runWatchBaseline,
@@ -101,7 +104,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 },
                 {
                     path: `${project}/pkg${index}/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         complerOptions: { composite: true },
                         include: [
                             "**/*.ts",
@@ -114,7 +117,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
         function writePkgReferences(system: TestServerHost) {
             system.writeFile(
                 configPath,
-                JSON.stringify({
+                jsonToReadableText({
                     files: [],
                     include: [],
                     references: pkgs(createPkgReference),

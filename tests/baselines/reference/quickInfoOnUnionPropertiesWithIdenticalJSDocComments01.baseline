@@ -1,3 +1,4 @@
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoOnUnionPropertiesWithIdenticalJSDocComments01.ts ===
 // export type DocumentFilter = {
 //     /** A language id, like `typescript`. */

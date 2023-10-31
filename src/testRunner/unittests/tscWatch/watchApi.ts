@@ -4,6 +4,9 @@ import {
     dedent,
 } from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     commandLineCallbacks,
 } from "../helpers/baseline";
 import {
@@ -36,11 +39,11 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
         };
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify(configFileJson),
+            content: jsonToReadableText(configFileJson),
         };
         const settingsJson: File = {
             path: `/user/username/projects/myproject/settings.json`,
-            content: JSON.stringify({ content: "Print this" }),
+            content: jsonToReadableText({ content: "Print this" }),
         };
         const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(
             [libFile, mainFile, config, settingsJson],
@@ -79,7 +82,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
         function verifyWatch(subScenario: string, implementHasInvalidatedResolution: boolean) {
             it(subScenario, () => {
                 const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem({
-                    [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
+                    [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({
                         compilerOptions: { traceResolution: true, extendedDiagnostics: true },
                         files: ["main.ts"],
                     }),
@@ -137,7 +140,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to wat
     it("verify that the error count is correctly passed down to the watch status reporter", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: { module: "commonjs" },
                 files: ["index.ts"],
             }),
@@ -381,7 +384,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
         let baseline: string[];
         let emitBaseline: string[];
         before(() => {
-            const configText = JSON.stringify({ compilerOptions: { composite: true } });
+            const configText = jsonToReadableText({ compilerOptions: { composite: true } });
             const mainText = "export const x = 10;";
             const result = createSystemForBuilderTest(configText, mainText);
             baseline = result.baseline;
@@ -425,7 +428,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
         let baseline: string[];
         let emitBaseline: string[];
         before(() => {
-            const configText = JSON.stringify({ compilerOptions: { composite: true, noEmitOnError: true } });
+            const configText = jsonToReadableText({ compilerOptions: { composite: true, noEmitOnError: true } });
             const mainText = "export const x: string = 10;";
             const result = createSystemForBuilderTest(configText, mainText);
             baseline = result.baseline;
@@ -459,7 +462,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
 
     it("SemanticDiagnosticsBuilderProgram emitDtsOnly does not update affected files pending emit", () => {
         // Initial
-        const { sys, baseline, config, mainFile } = createSystem(JSON.stringify({ compilerOptions: { composite: true, noEmitOnError: true } }), "export const x: string = 10;");
+        const { sys, baseline, config, mainFile } = createSystem(jsonToReadableText({ compilerOptions: { composite: true, noEmitOnError: true } }), "export const x: string = 10;");
         createWatch(baseline, config, sys, ts.createSemanticDiagnosticsBuilderProgram);
 
         // Fix error and emit
@@ -505,7 +508,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
     function setup(useSourceOfProjectReferenceRedirect?: () => boolean) {
         const config1: File = {
             path: `/user/username/projects/myproject/projects/project1/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     module: "none",
                     composite: true,
@@ -523,7 +526,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
         };
         const config2: File = {
             path: `/user/username/projects/myproject/projects/project2/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     module: "none",
                     composite: true,
@@ -641,7 +644,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
     function verify(subScenario: string, outFile?: string) {
         it(subScenario, () => {
             const system = createWatchedSystem({
-                [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
+                [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({
                     compilerOptions: { composite: true, noEmitOnError: true, module: "amd", outFile },
                     files: ["a.ts", "b.ts"],
                 }),
@@ -733,7 +736,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
 describe("unittests:: tsc-watch:: watchAPI:: when creating program with project references but not config file", () => {
     function setup(libExtends: boolean) {
         const system = createWatchedSystem({
-            "/user/username/projects/project/tsconfig.json": JSON.stringify({
+            "/user/username/projects/project/tsconfig.json": jsonToReadableText({
                 compilerOptions: { types: [] },
                 files: ["app.ts"],
                 references: [{ path: "./lib" }],
@@ -742,12 +745,12 @@ describe("unittests:: tsc-watch:: watchAPI:: when creating program with project 
                 import { one } from './lib';
                 console.log(one);
             `,
-            "/user/username/projects/project/lib/tsconfig.json": JSON.stringify({
+            "/user/username/projects/project/lib/tsconfig.json": jsonToReadableText({
                 extends: libExtends ? "./tsconfig.base.json" : undefined,
                 compilerOptions: libExtends ? undefined : { composite: true, types: [] },
                 files: ["index.ts"],
             }),
-            "/user/username/projects/project/lib/tsconfig.base.json": JSON.stringify({
+            "/user/username/projects/project/lib/tsconfig.base.json": jsonToReadableText({
                 compilerOptions: { composite: true, types: [] },
             }),
             "/user/username/projects/project/lib/index.ts": "export const one = 1;",
@@ -792,7 +795,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when creating program with project 
                     edit: sys =>
                         sys.writeFile(
                             `/user/username/projects/project/lib/tsconfig.json`,
-                            JSON.stringify({
+                            jsonToReadableText({
                                 compilerOptions: { composite: true },
                                 files: ["index.ts"],
                             }),
@@ -817,7 +820,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when creating program with project 
                     edit: sys =>
                         sys.writeFile(
                             `/user/username/projects/project/lib/tsconfig.json`,
-                            JSON.stringify({
+                            jsonToReadableText({
                                 extends: "./tsconfig.base.json",
                                 compilerOptions: { typeRoots: [] },
                                 files: ["index.ts"],
@@ -830,7 +833,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when creating program with project 
                     edit: sys =>
                         sys.writeFile(
                             `/user/username/projects/project/lib/tsconfig.base.json`,
-                            JSON.stringify({
+                            jsonToReadableText({
                                 compilerOptions: { composite: true },
                             }),
                         ),

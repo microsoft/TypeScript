@@ -1,9 +1,11 @@
 import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
+import {
     getSymlinkedExtendsSys,
 } from "../helpers/extends";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
 } from "../helpers/tsserver";

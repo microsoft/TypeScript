@@ -42,8 +42,12 @@ Output::
 
 
 
-Program root files: ["/a/b/c/app.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/a/b/c/app.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

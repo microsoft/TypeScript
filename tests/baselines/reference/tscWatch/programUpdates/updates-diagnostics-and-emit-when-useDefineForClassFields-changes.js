@@ -5,7 +5,11 @@ class C { get prop() { return 1; } }
 class D extends C { prop = 1; }
 
 //// [/tsconfig.json]
-{"compilerOptions":{"target":"es6"}}
+{
+  "compilerOptions": {
+    "target": "es6"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -35,8 +39,15 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"watch":true,"configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a.ts
@@ -81,7 +92,12 @@ Change:: Enable useDefineForClassFields
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","useDefineForClassFields":true}}
+{
+  "compilerOptions": {
+    "target": "es6",
+    "useDefineForClassFields": true
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -100,8 +116,16 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"useDefineForClassFields":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "useDefineForClassFields": true,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a.ts

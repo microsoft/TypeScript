@@ -24,10 +24,28 @@ let x = 10;
 let y = 10;
 
 //// [/user/username/projects/myproject/app1/tsconfig.json]
-{"files":["app.ts","../core/core.ts"],"compilerOptions":{"outFile":"build/output.js"},"compileOnSave":true}
+{
+  "files": [
+    "app.ts",
+    "../core/core.ts"
+  ],
+  "compilerOptions": {
+    "outFile": "build/output.js"
+  },
+  "compileOnSave": true
+}
 
 //// [/user/username/projects/myproject/app2/tsconfig.json]
-{"files":["app.ts","../core/core.ts"],"compilerOptions":{"outFile":"build/output.js"},"compileOnSave":true}
+{
+  "files": [
+    "app.ts",
+    "../core/core.ts"
+  ],
+  "compilerOptions": {
+    "outFile": "build/output.js"
+  },
+  "compileOnSave": true
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
