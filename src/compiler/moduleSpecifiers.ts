@@ -36,6 +36,7 @@ import {
     getBaseFileName,
     GetCanonicalFileName,
     getConditions,
+    getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     getEmitModuleResolutionKind,
     getModeForResolutionAtIndex,
@@ -846,34 +847,58 @@ const enum MatchingMode {
     Pattern,
 }
 
-function getOutputPath(targetFilePath: string, options: CompilerOptions, commonDir: string) {
+function getOutputPath(targetFilePath: string, options: CompilerOptions, commonSourceDirectory: string) {
     return changeExtension(
         options.outDir ?
             resolvePath(
                 options.outDir,
-                getRelativePathFromDirectory(commonDir, targetFilePath, /*ignoreCase*/ false),
+                getRelativePathFromDirectory(commonSourceDirectory, targetFilePath, /*ignoreCase*/ false),
             ) :
             targetFilePath,
         getOutputExtension(targetFilePath, options),
     );
 }
 
+function getOutputDeclarationPath(targetFilePath: string, options: CompilerOptions, commonSourceDirectory: string) {
+    const declarationDir = options.declarationDir || options.outDir;
+    return changeExtension(
+        declarationDir ?
+            resolvePath(
+                declarationDir,
+                getRelativePathFromDirectory(commonSourceDirectory, targetFilePath, /*ignoreCase*/ false),
+            ) :
+            targetFilePath,
+        getDeclarationEmitExtensionForPath(targetFilePath),
+    );
+}
+
 function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: ModuleSpecifierResolutionHost, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[], mode: MatchingMode, isImports: boolean): { moduleFileToTry: string; } | undefined {
     if (typeof exports === "string") {
-        const outputFile = isImports && getOutputPath(targetFilePath, options, host.getCommonSourceDirectory());
+        const commonSourceDirectory = host.getCommonSourceDirectory();
+        const outputFile = isImports && getOutputPath(targetFilePath, options, commonSourceDirectory);
+        const declarationFile = isImports && getOutputDeclarationPath(targetFilePath, options, commonSourceDirectory);
 
         const pathOrPattern = getNormalizedAbsolutePath(combinePaths(packageDirectory, exports), /*currentDirectory*/ undefined);
         const extensionSwappedTarget = hasTSFileExtension(targetFilePath) ? removeFileExtension(targetFilePath) + tryGetJSExtensionForFile(targetFilePath, options) : undefined;
 
         switch (mode) {
             case MatchingMode.Exact:
-                if (outputFile && comparePaths(outputFile, pathOrPattern) === Comparison.EqualTo || comparePaths(targetFilePath, pathOrPattern) === Comparison.EqualTo || (extensionSwappedTarget && comparePaths(extensionSwappedTarget, pathOrPattern) === Comparison.EqualTo)) {
+                if (
+                    outputFile && comparePaths(outputFile, pathOrPattern) === Comparison.EqualTo ||
+                    declarationFile && comparePaths(declarationFile, pathOrPattern) === Comparison.EqualTo ||
+                    extensionSwappedTarget && comparePaths(extensionSwappedTarget, pathOrPattern) === Comparison.EqualTo ||
+                    comparePaths(targetFilePath, pathOrPattern) === Comparison.EqualTo
+                ) {
                     return { moduleFileToTry: packageName };
                 }
                 break;
             case MatchingMode.Directory:
                 if (outputFile && containsPath(pathOrPattern, outputFile)) {
                     const fragment = getRelativePathFromDirectory(pathOrPattern, outputFile, /*ignoreCase*/ false);
+                    return { moduleFileToTry: combinePaths(packageName, fragment) };
+                }
+                if (declarationFile && containsPath(pathOrPattern, declarationFile)) {
+                    const fragment = getRelativePathFromDirectory(pathOrPattern, declarationFile, /*ignoreCase*/ false);
                     return { moduleFileToTry: combinePaths(packageName, fragment) };
                 }
                 if (extensionSwappedTarget && containsPath(pathOrPattern, extensionSwappedTarget)) {
@@ -891,6 +916,10 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
                 const trailingSlice = pathOrPattern.slice(starPos + 1);
                 if (outputFile && startsWith(outputFile, leadingSlice) && endsWith(outputFile, trailingSlice)) {
                     const starReplacement = outputFile.slice(leadingSlice.length, outputFile.length - trailingSlice.length);
+                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
+                }
+                if (declarationFile && startsWith(declarationFile, leadingSlice) && endsWith(declarationFile, trailingSlice)) {
+                    const starReplacement = declarationFile.slice(leadingSlice.length, declarationFile.length - trailingSlice.length);
                     return { moduleFileToTry: packageName.replace("*", starReplacement) };
                 }
                 if (extensionSwappedTarget && startsWith(extensionSwappedTarget, leadingSlice) && endsWith(extensionSwappedTarget, trailingSlice)) {
