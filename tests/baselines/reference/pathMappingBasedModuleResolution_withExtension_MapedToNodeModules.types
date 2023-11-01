@@ -1,6 +1,0 @@
-//// [tests/cases/compiler/pathMappingBasedModuleResolution_withExtension_MapedToNodeModules.ts] ////
-
-=== /a.ts ===
-import foobar from "foo/bar/foobar.js";
->foobar : any
-

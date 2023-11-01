@@ -1,9 +1,0 @@
-{
-    "scenario": "declarations_SimpleImport",
-    "projectRoot": "tests/cases/projects/declarations_SimpleImport",
-    "inputFiles": [
-        "useModule.ts"
-    ],
-    "declaration": true,
-    "baselineCheck": true
-}

@@ -1,4 +1,0 @@
-interface C {
-    foo;
-    new;
-}

@@ -1,5 +1,0 @@
-// === getFileReferences ===
-// fileName: /project/a.ts
-
-// === /project/b.ts ===
-// import [|"./a"|];

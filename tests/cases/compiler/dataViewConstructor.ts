@@ -1,1 +1,0 @@
-new DataView(new Uint8Array(32)); // should error

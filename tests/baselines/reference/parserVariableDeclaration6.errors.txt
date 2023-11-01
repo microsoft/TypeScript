@@ -1,7 +1,0 @@
-parserVariableDeclaration6.ts(1,4): error TS1123: Variable declaration list cannot be empty.
-
-
-==== parserVariableDeclaration6.ts (1 errors) ====
-    var
-       
-!!! error TS1123: Variable declaration list cannot be empty.

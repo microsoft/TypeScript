@@ -1,4 +1,0 @@
-var f: {
-    x: number;
-    <-
-};

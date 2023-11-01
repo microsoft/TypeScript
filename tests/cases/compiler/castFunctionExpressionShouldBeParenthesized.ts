@@ -1,1 +1,0 @@
-(function a() { } as any)().foo()

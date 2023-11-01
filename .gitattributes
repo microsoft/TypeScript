@@ -1,3 +1,0 @@
-*.js linguist-language=TypeScript
-**/*.json linguist-language=jsonc
-* -text

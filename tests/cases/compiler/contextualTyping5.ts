@@ -1,1 +1,0 @@
-class foo { public bar:{id:number;} = { }; }

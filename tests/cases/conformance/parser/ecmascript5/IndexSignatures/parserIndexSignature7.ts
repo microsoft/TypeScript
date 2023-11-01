@@ -1,3 +1,0 @@
-interface I {
-  [a:string]
-}

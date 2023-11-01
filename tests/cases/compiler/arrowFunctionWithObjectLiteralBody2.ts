@@ -1,1 +1,0 @@
-var v = a => <any><any>{}

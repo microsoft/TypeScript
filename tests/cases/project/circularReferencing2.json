@@ -1,8 +1,0 @@
-{
-    "scenario": "circular referencing - 2",
-    "projectRoot": "tests/cases/projects/CircularReferencing-2",
-    "inputFiles": [
-        "a.ts"
-    ],
-    "runTest": true
-}

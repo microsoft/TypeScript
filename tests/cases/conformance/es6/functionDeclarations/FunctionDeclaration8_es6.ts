@@ -1,1 +1,0 @@
-var v = { [yield]: foo }
