@@ -4,10 +4,13 @@
 class C {
    method() {
       function other() {}
-      var fn = async () => await other.apply(this, arguments);      
+      var fn = async () => await other.apply(this, arguments);
    }
 }
 
+function f() {
+   return async () => async () => arguments.length;
+}
 
 //// [asyncArrowFunctionCapturesArguments_es6.js]
 class C {
@@ -15,4 +18,7 @@ class C {
         function other() { }
         var fn = () => __awaiter(this, arguments, void 0, function* () { return yield other.apply(this, arguments); });
     }
+}
+function f() {
+    return () => __awaiter(this, arguments, void 0, function* () { return () => __awaiter(this, arguments, void 0, function* () { return arguments.length; }); });
 }
