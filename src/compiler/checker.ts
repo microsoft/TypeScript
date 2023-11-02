@@ -15349,7 +15349,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function getSignatureInstantiation(signature: Signature, typeArguments: Type[] | undefined, isJavascript: boolean, inferredTypeParameters?: readonly TypeParameter[]): Signature {
+    function getSignatureInstantiation(signature: Signature, typeArguments: readonly Type[] | undefined, isJavascript: boolean, inferredTypeParameters?: readonly TypeParameter[]): Signature {
         const instantiatedSignature = getSignatureInstantiationWithoutFillingInTypeArguments(signature, fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters), isJavascript));
         if (inferredTypeParameters) {
             const returnSignature = getSingleCallOrConstructSignature(getReturnTypeOfSignature(instantiatedSignature));
@@ -23041,10 +23041,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ) {
                 // We have instantiations of the same anonymous type (which typically will be the type of a
                 // method). Simply do a pairwise comparison of the signatures in the two signature lists instead
-                // of the much more expensive N * M comparison matrix we explore below. We erase type parameters
-                // as they are known to always be the same.
+                // of the much more expensive N * M comparison matrix we explore below. We instantiate the source
+                // signature with the type parameters of the target signature to unify the two.
                 for (let i = 0; i < targetSignatures.length; i++) {
-                    const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors, intersectionState, incompatibleReporter(sourceSignatures[i], targetSignatures[i]));
+                    const sourceSignature = sourceSignatures[i];
+                    const targetSignature = targetSignatures[i];
+                    const instantiatedSourceSignature = targetSignature.typeParameters ?
+                        getSignatureInstantiation(sourceSignature, targetSignature.typeParameters, isInJSFile(sourceSignature.declaration)) :
+                        sourceSignature;
+                    const related = signatureRelatedTo(instantiatedSourceSignature, targetSignature, /*erase*/ false, reportErrors, intersectionState, incompatibleReporter(instantiatedSourceSignature, targetSignature));
                     if (!related) {
                         return Ternary.False;
                     }
