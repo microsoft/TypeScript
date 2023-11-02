@@ -206,7 +206,7 @@ function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: str
     else {
         const targetSourceFile = Debug.checkDefined(program.getSourceFile(targetFile));
         const importAdder = codefix.createImportAdder(targetSourceFile, context.program, context.preferences, context.host);
-        getNewStatementsAndRemoveFromOldFile(oldFile, targetSourceFile, getUsageInfo(oldFile, toMove.all, checker, getExistingImports(targetSourceFile, checker)), changes, toMove, program, host, preferences, importAdder);
+        getNewStatementsAndRemoveFromOldFile(oldFile, targetSourceFile, getUsageInfo(oldFile, toMove.all, checker, getExistingLocals(targetSourceFile, toMove.all, checker)), changes, toMove, program, host, preferences, importAdder);
     }
 }
 
@@ -996,7 +996,7 @@ function isPureImport(node: Node): boolean {
 }
 
 /** @internal */
-export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker, existingTargetImports: ReadonlySet<Symbol> = new Set()): UsageInfo {
+export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker, existingTargetLocals: ReadonlySet<Symbol> = new Set()): UsageInfo {
     const movedSymbols = new Set<Symbol>();
     const oldImportsNeededByTargetFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
     const targetFileImportsFromOldFile = new Set<Symbol>();
@@ -1020,7 +1020,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             if (!symbol.declarations) {
                 return;
             }
-            if (existingTargetImports.has(skipAlias(symbol, checker))) {
+            if (existingTargetLocals.has(skipAlias(symbol, checker))) {
                 unusedImportsFromOldFile.add(symbol);
                 return;
             }
@@ -1243,8 +1243,8 @@ function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
     return undefined;
 }
 
-function getExistingImports(sourceFile: SourceFile, checker: TypeChecker) {
-    const imports = new Set<Symbol>();
+function getExistingLocals(sourceFile: SourceFile, statements: readonly Statement[], checker: TypeChecker) {
+    const existingLocals = new Set<Symbol>();
     for (const moduleSpecifier of sourceFile.imports) {
         const declaration = importFromModuleSpecifier(moduleSpecifier);
         if (
@@ -1254,7 +1254,7 @@ function getExistingImports(sourceFile: SourceFile, checker: TypeChecker) {
             for (const e of declaration.importClause.namedBindings.elements) {
                 const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);
                 if (symbol) {
-                    imports.add(skipAlias(symbol, checker));
+                    existingLocals.add(skipAlias(symbol, checker));
                 }
             }
         }
@@ -1262,10 +1262,19 @@ function getExistingImports(sourceFile: SourceFile, checker: TypeChecker) {
             for (const e of declaration.parent.name.elements) {
                 const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);
                 if (symbol) {
-                    imports.add(skipAlias(symbol, checker));
+                    existingLocals.add(skipAlias(symbol, checker));
                 }
             }
         }
     }
-    return imports;
+
+    for (const statement of statements) {
+        forEachReference(statement, checker, s => {
+            const symbol = skipAlias(s, checker);
+            if (symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration) === sourceFile) {
+                existingLocals.add(symbol);
+            }
+        });
+    }
+    return existingLocals;
 }
