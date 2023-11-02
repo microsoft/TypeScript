@@ -220,3 +220,37 @@ Found 1 error in src/project/index.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc -b /src/project --explainFiles --listEmittedFiles -v
+[[90m12:00:19 AM[0m] Projects in this build: 
+    * src/project/tsconfig.json
+
+[[90m12:00:20 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/project/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+
+[[90m12:00:21 AM[0m] Building project '/src/project/tsconfig.json'...
+
+[96msrc/project/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/node_modules/ky/distribution/index" but cannot be named.
+
+[7m2[0m export const api = ky.extend({});
+[7m [0m [91m             ~~~[0m
+
+lib/lib.esnext.full.d.ts
+  Default library for target 'esnext'
+src/project/node_modules/ky/distribution/index.d.ts
+  Imported via 'ky' from file 'src/project/index.ts'
+  File is ECMAScript module because 'src/project/node_modules/ky/package.json' has field "type" with value "module"
+src/project/index.ts
+  Matched by default include pattern '**/*'
+  File is ECMAScript module because 'src/project/package.json' has field "type" with value "module"
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+

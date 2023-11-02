@@ -265,6 +265,8 @@ export type SavedBuildProgramEmitState =
         | "outSignature"
         | "latestChangedDtsFile"
         | "hasChangedEmitSignature"
+        | "buildInfoEmitPending"
+        | "emitDiagnosticsPerFile"
     >
     & { changedFilesSet: BuilderProgramState["changedFilesSet"] | undefined; };
 
@@ -582,6 +584,8 @@ function backupBuilderProgramEmitState(state: Readonly<BuilderProgramState>): Sa
         latestChangedDtsFile: state.latestChangedDtsFile,
         hasChangedEmitSignature: state.hasChangedEmitSignature,
         changedFilesSet: outFilePath ? new Set(state.changedFilesSet) : undefined,
+        buildInfoEmitPending: state.buildInfoEmitPending,
+        emitDiagnosticsPerFile: state.emitDiagnosticsPerFile && new Map(state.emitDiagnosticsPerFile),
     };
 }
 
@@ -593,6 +597,8 @@ function restoreBuilderProgramEmitState(state: BuilderProgramState, savedEmitSta
     state.outSignature = savedEmitState.outSignature;
     state.latestChangedDtsFile = savedEmitState.latestChangedDtsFile;
     state.hasChangedEmitSignature = savedEmitState.hasChangedEmitSignature;
+    state.buildInfoEmitPending = savedEmitState.buildInfoEmitPending;
+    state.emitDiagnosticsPerFile = savedEmitState.emitDiagnosticsPerFile;
     if (savedEmitState.changedFilesSet) state.changedFilesSet = savedEmitState.changedFilesSet;
 }
 

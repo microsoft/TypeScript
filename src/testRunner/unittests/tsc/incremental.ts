@@ -999,6 +999,12 @@ console.log(a);`,
                 }),
                 "/lib/lib.esnext.full.d.ts": libContent,
             }),
-        edits: noChangeOnlyRuns,
+        edits: [
+            noChangeRun,
+            {
+                ...noChangeRun,
+                commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "-v"],
+            },
+        ],
     });
 });
