@@ -97,7 +97,7 @@ export const api = ky.extend({});
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.esnext.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"20726041391-type KyInstance = {\n     extend(options: Record<string,unknown>): KyInstance;\n }\n declare const ky: KyInstance;\n export default ky;\n","impliedFormat":99},{"version":"-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n","impliedFormat":99}],"root":[3],"options":{"composite":true,"module":199,"skipDefaultLibCheck":true,"skipLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"emitSignatures":[3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.esnext.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"20726041391-type KyInstance = {\n     extend(options: Record<string,unknown>): KyInstance;\n }\n declare const ky: KyInstance;\n export default ky;\n","impliedFormat":99},{"version":"-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n","impliedFormat":99}],"root":[3],"options":{"composite":true,"module":199,"skipDefaultLibCheck":true,"skipLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"affectedFilesPendingEmit":[[3]],"emitSignatures":[3]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -170,12 +170,20 @@ export const api = ky.extend({});
       "./index.ts",
       "./node_modules/ky/distribution/index.d.ts"
     ],
+    "affectedFilesPendingEmit": [
+      [
+        [
+          "./index.ts"
+        ],
+        "Dts"
+      ]
+    ],
     "emitSignatures": [
       "./index.ts"
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1170
+  "size": 1203
 }
 
 
@@ -186,6 +194,11 @@ Input::
 
 Output::
 /lib/tsc -p /src/project --explainFiles --listEmittedFiles
+[96msrc/project/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/node_modules/ky/distribution/index" but cannot be named.
+
+[7m2[0m export const api = ky.extend({});
+[7m [0m [91m             ~~~[0m
+
 lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 src/project/node_modules/ky/distribution/index.d.ts
@@ -194,6 +207,9 @@ src/project/node_modules/ky/distribution/index.d.ts
 src/project/index.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'src/project/package.json' has field "type" with value "module"
-exitCode:: ExitStatus.Success
+
+Found 1 error in src/project/index.ts[90m:2[0m
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 

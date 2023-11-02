@@ -1541,11 +1541,13 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
             const affectedSourceFile = affected as SourceFile;
             state.seenAffectedFiles!.add(affectedSourceFile.resolvedPath);
             if (state.affectedFilesIndex !== undefined) state.affectedFilesIndex++;
-            // Change in changeSet/affectedFilesPendingEmit, buildInfo needs to be emitted
-            state.buildInfoEmitPending = true;
             // Update the pendingEmit for the file
             const existing = state.seenEmittedFiles?.get(affectedSourceFile.resolvedPath) || BuilderFileEmit.None;
             (state.seenEmittedFiles ??= new Map()).set(affectedSourceFile.resolvedPath, emitKind | existing);
+            // If there are errors during emit, dts files are not emitted
+            if (result.diagnostics.length) emitKind = emitKind & BuilderFileEmit.Js;
+            // Change in changeSet/affectedFilesPendingEmit, buildInfo needs to be emitted
+            state.buildInfoEmitPending = !!emitKind; // If there is any emit done, then only mark as pending
             const existingPending = state.affectedFilesPendingEmit?.get(affectedSourceFile.resolvedPath) || programEmitKind;
             const pendingKind = getPendingEmitKind(existingPending, emitKind | existing);
             if (pendingKind) (state.affectedFilesPendingEmit ??= new Map()).set(affectedSourceFile.resolvedPath, pendingKind);
