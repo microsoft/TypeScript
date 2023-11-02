@@ -75,6 +75,7 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
+TSFILE: /src/project/index.js
 TSFILE: /src/project/tsconfig.tsbuildinfo
 lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
