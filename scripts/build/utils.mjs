@@ -52,6 +52,7 @@ export async function exec(cmd, args, options = {}) {
         }
         else {
             proc.unref();
+            resolve({ exitCode: undefined });
         }
     }));
 }
