@@ -22,7 +22,6 @@ import {
     EmitFlags,
     EmitHint,
     EmitResolver,
-    every,
     Expression,
     forEach,
     ForInitializer,
@@ -59,6 +58,7 @@ import {
     isNodeWithPossibleHoistedDeclaration,
     isOmittedExpression,
     isPropertyAccessExpression,
+    isSimpleParameterList,
     isStatement,
     isSuperProperty,
     isVariableDeclarationList,
@@ -696,14 +696,6 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         startOnNewLine(statement);
         addEmitFlags(statement, EmitFlags.CustomPrologue);
         return statement;
-    }
-
-    function isSimpleParameter(parameter: ParameterDeclaration) {
-        return !parameter.initializer && isIdentifier(parameter.name);
-    }
-
-    function isSimpleParameterList(parameters: NodeArray<ParameterDeclaration>) {
-        return every(parameters, isSimpleParameter);
     }
 
     function transformAsyncFunctionParameterList(node: FunctionLikeDeclaration) {
