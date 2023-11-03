@@ -25,6 +25,25 @@ For our nightly builds:
 npm install -D typescript@next
 ```
 
+## Examples
+
+We have basics [on the website](https://www.typescriptlang.org/docs/handbook/2/basic-types.html). Here is the first one to get you started:
+
+```typescript
+import { Greeter } from 'typescript-lib';
+
+function greet(name: string) {
+  return `Hello, ${name}! Welcome to TypeScript-Lib.`;
+}
+
+console.log(greet('Khalid'));
+```
+
+This example will print "Hello, Khalid! Welcome to TypeScript-Lib." to the console.
+
+The example above demonstrates how to use a simple function from typescript-lib to print a personalized greeting. It shows the ease of passing data and getting output, leveraging TypeScript's type safety.
+
+
 ## Contribute
 
 There are many ways to [contribute](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md) to TypeScript.
