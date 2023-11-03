@@ -37259,6 +37259,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         switch (node.operand.kind) {
             case SyntaxKind.NumericLiteral:
+                if (operandType === numberType) {
+                    return numberType;
+                }
                 switch (node.operator) {
                     case SyntaxKind.MinusToken:
                         return getFreshTypeOfLiteralType(getNumberLiteralType(-(node.operand as NumericLiteral).text));

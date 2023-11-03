@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/noInfinityNumberLiterals.ts] ////
+
+=== noInfinityNumberLiterals.ts ===
+type PositiveInfinity = 1e999;
+>PositiveInfinity : number
+
+type NegativeInfinity = -1e999;
+>NegativeInfinity : number
+>-1e999 : number
+>1e999 : number
+
+const positiveInfinity = 1e999;
+>positiveInfinity : number
+>1e999 : number
+
+const positiveInfinity2 = +1e999;
+>positiveInfinity2 : number
+>+1e999 : number
+>1e999 : number
+
+const NegativeInfinity = -1e999;
+>NegativeInfinity : number
+>-1e999 : number
+>1e999 : number
+
