@@ -20616,16 +20616,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const sourceValue = getEnumMemberValue(getDeclarationOfKind(sourceProperty, SyntaxKind.EnumMember)!);
                 const targetValue = getEnumMemberValue(getDeclarationOfKind(targetProperty, SyntaxKind.EnumMember)!);
-                // TODO: Handle both 'undefined'
-                if (sourceValue !== undefined && targetValue !== undefined && sourceValue !== targetValue) {
-                    if (errorReporter) {
+                if (sourceValue !== targetValue || sourceValue === undefined || targetValue === undefined) {
+                    if (!errorReporter) {
+                        enumRelation.set(id, RelationComparisonResult.Failed);
+                    }
+                    else if (sourceValue !== targetValue && sourceValue !== undefined && targetValue !== undefined) {
                         const escapedSource = typeof sourceValue === "string" ? `"${escapeString(sourceValue)}"` : sourceValue;
                         const escapedTarget = typeof targetValue === "string" ? `"${escapeString(targetValue)}"` : targetValue;
                         errorReporter(Diagnostics.Each_declaration_of_0_1_differs_in_its_value_where_2_was_expected_but_3_was_given, symbolName(targetSymbol), symbolName(targetProperty), escapedTarget, escapedSource);
                         enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                     }
                     else {
-                        enumRelation.set(id, RelationComparisonResult.Failed);
+                        errorReporter(Diagnostics.Values_of_0_1_are_not_sufficiently_known, symbolName(targetSymbol), symbolName(targetProperty));
+                        enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                     }
                     return false;
                 }

@@ -4136,6 +4136,10 @@
         "category": "Error",
         "code": 4125
     },
+    "Values of '{0}.{1}' are not sufficiently known.": {
+        "category": "Error",
+        "code": 4126
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
