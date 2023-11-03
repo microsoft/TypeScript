@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,6 +15,16 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "untitled:/Users/matb/projects/san/^newFile.ts",
+        "fileContent": "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"../../../../../../typings/@epic/Shell.d.ts\" />\nvar x = 10;"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: untitled:/Users/matb/projects/san
 Info seq  [hh:mm:ss:mss] For info: untitled:/Users/matb/projects/san/^newFile.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -41,4 +51,20 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: untitled:/Users/matb/projects/san/^newFile.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/typings/@epic/core.d.ts: *new*
+  {"pollingInterval":500}
+/typings/@epic/shell.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+
 /untitled:/users/matb/projects/san/^newfile.ts isDynamic:: true

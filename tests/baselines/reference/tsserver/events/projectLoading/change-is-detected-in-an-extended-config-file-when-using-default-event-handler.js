@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -243,7 +243,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/b/b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/projects/b/b.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/b/b.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -255,5 +255,4 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-3: checkOne
+After running Timeout callback:: count: 0

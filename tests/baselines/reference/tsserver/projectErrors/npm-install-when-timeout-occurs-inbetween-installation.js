@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/src/main.ts]
 import * as _a from '@angular/core';
@@ -365,7 +365,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/main.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/main.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -377,8 +377,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-11: checkOne
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -401,7 +400,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Before running Timeout callback:: count: 1
-12: checkOne
+11: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -539,7 +538,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Before running Timeout callback:: count: 1
-13: checkOne
+12: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -639,7 +638,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Before running Timeout callback:: count: 1
-14: checkOne
+13: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -765,9 +764,9 @@ Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.j
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 3
-15: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-16: /user/username/projects/myproject/tsconfig.json
-17: *ensureProjectForOpenFiles*
+14: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
+15: /user/username/projects/myproject/tsconfig.json
+16: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts] deleted
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts] deleted
 
@@ -775,12 +774,12 @@ Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.jso
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-18: /user/username/projects/myproject/tsconfig.json
-19: *ensureProjectForOpenFiles*
+17: /user/username/projects/myproject/tsconfig.json
+18: *ensureProjectForOpenFiles*
 
 Before running Timeout callback:: count: 2
-18: /user/username/projects/myproject/tsconfig.json
-19: *ensureProjectForOpenFiles*
+17: /user/username/projects/myproject/tsconfig.json
+18: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -821,7 +820,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/main.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/main.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -833,8 +832,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-20: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -881,7 +879,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Before running Timeout callback:: count: 1
-21: checkOne
+19: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {

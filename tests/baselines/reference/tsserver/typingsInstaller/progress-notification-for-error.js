@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/a/app.js]
 
 
@@ -12,6 +12,15 @@ Creating project service
 }
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/app.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /a
 Info seq  [hh:mm:ss:mss] For info: /a/app.js :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -130,9 +139,18 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typingsInstallerVersion": "FakeVersion",
       "projectName": "/dev/null/inferredProject1*"
     }
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "beginInstallTypes",
+      "body": {
+        "eventId": 1
+      }
+    }
+TI:: [hh:mm:ss:mss] #1 with cwd: /a/cache/ arguments: [
   "@types/commander@tsFakeMajor.Minor"
-]'.
+]
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -141,10 +159,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-TI:: [hh:mm:ss:mss] #1 with arguments'[
-  "@types/commander@tsFakeMajor.Minor"
-]':: false
-TI:: Before installWorker
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
 
 PolledWatches::
 /a/bower_components: *new*
@@ -157,6 +176,11 @@ PolledWatches::
 FsWatches::
 /a/package.json: *new*
   {}
+
+TI:: [hh:mm:ss:mss] #1 with arguments'[
+  "@types/commander@tsFakeMajor.Minor"
+]':: false
+TI:: Before installWorker
 
 TI:: After installWorker
 
@@ -171,4 +195,17 @@ TI:: [hh:mm:ss:mss] Sending response:
       ],
       "installSuccess": false,
       "typingsInstallerVersion": "FakeVersion"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "endInstallTypes",
+      "body": {
+        "eventId": 1,
+        "packages": [
+          "@types/commander@ts5.4"
+        ],
+        "success": false
+      }
     }

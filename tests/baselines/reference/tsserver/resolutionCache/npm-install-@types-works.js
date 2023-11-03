@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/projects/temp/a.ts]
 import f = require("pad"); f;
@@ -307,7 +307,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/temp/a.ts ProjectRootPath: /a/b/projects/temp
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /a/b/projects/temp/a.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/projects/temp/a.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -319,36 +319,12 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-16: checkOne
-
-Before running Timeout callback:: count: 1
-16: checkOne
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/a/b/projects/temp/a.ts",
-        "diagnostics": []
-      }
-    }
 After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 1
-3: semanticCheck
+Before running Timeout callback:: count: 0
 
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "semanticDiag",
-      "body": {
-        "file": "/a/b/projects/temp/a.ts",
-        "diagnostics": []
-      }
-    }
-After running Immedidate callback:: count: 1
-4: suggestionCheck
+After running Timeout callback:: count: 0
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0

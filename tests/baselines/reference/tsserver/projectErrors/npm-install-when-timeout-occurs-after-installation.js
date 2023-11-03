@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/src/main.ts]
 import * as _a from '@angular/core';
@@ -789,7 +789,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/main.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/main.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -801,8 +801,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-18: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -849,7 +848,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Before running Timeout callback:: count: 1
-19: checkOne
+18: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {

@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/a/b/projects/project/src/index.ts]
 let y = 10
 
@@ -18,6 +18,16 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/project/src/index.ts",
+        "projectRootPath": "/a/b/projects/proj"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/project/src
 Info seq  [hh:mm:ss:mss] For info: /a/b/projects/project/src/index.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -52,6 +62,32 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/a/b/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/project/src/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/project/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/project/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/project/src
 Info seq  [hh:mm:ss:mss] For info: /a/b/projects/project/src/index.ts :: Config file name: /a/b/projects/project/tsconfig.json
@@ -73,27 +109,41 @@ Before running Timeout callback:: count: 2
 
 
 PolledWatches::
-/a/b/projects/node_modules/@types: *new*
+/a/b/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/project/jsconfig.json: *new*
+/a/b/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/a/b/projects/project/node_modules/@types: *new*
+/a/b/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/project/src/jsconfig.json: *new*
+/a/b/projects/project/src/jsconfig.json:
   {"pollingInterval":2000}
-/a/b/projects/project/src/node_modules/@types: *new*
+/a/b/projects/project/src/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/project/src/tsconfig.json: *new*
+/a/b/projects/project/src/tsconfig.json:
+  {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/a/b/projects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
 /a/b/projects/project/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/lib/lib.d.ts:
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /a/b/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/a/b/projects/project/tsconfig.json",
+        "reason": "Change in config file detected"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /a/b/projects/project/tsconfig.json : {
  "rootNames": [
   "/a/b/projects/project/src/index.ts"
@@ -125,6 +175,67 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/a/b/projects/project/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "dc820134a28a9a8eb7dcb1d2ef1d3404511a6f70f3504a4f248857e2a0071661",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 10,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/a/b/projects/project/tsconfig.json",
+        "configFile": "/a/b/projects/project/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/tsconfig.json' (Configured)
@@ -146,19 +257,7 @@ Info seq  [hh:mm:ss:mss] 	Files (0)
 
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (0)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/project/tsconfig.json
-After running Timeout callback:: count: 0
+TI:: Creating typing installer
 
 PolledWatches::
 /a/b/projects/node_modules/@types:
@@ -186,6 +285,166 @@ FsWatchesRecursive::
 /a/b/projects/project: *new*
   {}
 
+TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Updating types-registry npm package...
+TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
+TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/types-registry/index.json]
+{
+  "entries": {}
+}
+
+
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/b/projects/project/src",
+      "cachePath": "/a/data",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/b/projects/project/src/bower_components",
+        "/a/b/projects/project/src/node_modules"
+      ]
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/a/b/projects/project/src/bower_components",
+        "/a/b/projects/project/src/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
+TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/projects/project/src/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/a/b/projects/project/src/index.ts"
+        ]
+      }
+    }
+After running Timeout callback:: count: 0
+
+PolledWatches::
+/a/b/projects/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/project/src/bower_components: *new*
+  {"pollingInterval":500}
+/a/b/projects/project/src/node_modules: *new*
+  {"pollingInterval":500}
+/a/b/projects/project/src/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/project/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/project:
+  {}
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 2:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/tsconfig.json' (Configured)
@@ -203,6 +462,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project 1 undefined Config: /a/b/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project 1 undefined Config: /a/b/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+TI:: [hh:mm:ss:mss] Closing file watchers for project '/a/b/projects/project/tsconfig.json'
+TI:: [hh:mm:ss:mss] No watchers are registered for project '/a/b/projects/project/tsconfig.json'
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Type roots
@@ -219,6 +480,10 @@ PolledWatches::
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
 /a/b/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/project/src/bower_components:
+  {"pollingInterval":500}
+/a/b/projects/project/src/node_modules:
   {"pollingInterval":500}
 /a/b/projects/project/src/node_modules/@types:
   {"pollingInterval":500}
@@ -271,6 +536,18 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/projects/project/src/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/a/b/projects/project/src/index.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
 
 PolledWatches::
@@ -280,8 +557,12 @@ PolledWatches::
   {"pollingInterval":2000}
 /a/b/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/a/b/projects/project/src/bower_components:
+  {"pollingInterval":500}
 /a/b/projects/project/src/jsconfig.json: *new*
   {"pollingInterval":2000}
+/a/b/projects/project/src/node_modules:
+  {"pollingInterval":500}
 /a/b/projects/project/src/node_modules/@types:
   {"pollingInterval":500}
 /a/b/projects/project/src/tsconfig.json: *new*

@@ -1,5 +1,5 @@
 currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/home/src/projects/project/packages/package-a/package.json]
 {

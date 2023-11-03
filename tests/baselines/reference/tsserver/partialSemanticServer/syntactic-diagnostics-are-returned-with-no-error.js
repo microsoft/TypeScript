@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/a.ts]
 if (a < (b + c) { }
@@ -130,6 +130,55 @@ After request
 Before running Timeout callback:: count: 1
 1: checkOne
 
-Info seq  [hh:mm:ss:mss] Session does not support events: ignored event: {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/a.ts","diagnostics":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":18},"text":"')' expected.","code":1005,"category":"error","relatedInformation":[{"span":{"start":{"line":1,"offset":4},"end":{"line":1,"offset":5},"file":"/user/username/projects/myproject/a.ts"},"message":"The parser expected to find a ')' to match the '(' token here.","category":"error","code":1007}]}]}}
-Info seq  [hh:mm:ss:mss] Session does not support events: ignored event: {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/user/username/projects/myproject/a.ts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 17
+            },
+            "end": {
+              "line": 1,
+              "offset": 18
+            },
+            "text": "')' expected.",
+            "code": 1005,
+            "category": "error",
+            "relatedInformation": [
+              {
+                "span": {
+                  "start": {
+                    "line": 1,
+                    "offset": 4
+                  },
+                  "end": {
+                    "line": 1,
+                    "offset": 5
+                  },
+                  "file": "/user/username/projects/myproject/a.ts"
+                },
+                "message": "The parser expected to find a ')' to match the '(' token here.",
+                "category": "error",
+                "code": 1007
+              }
+            ]
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 3
+      }
+    }
 After running Timeout callback:: count: 0

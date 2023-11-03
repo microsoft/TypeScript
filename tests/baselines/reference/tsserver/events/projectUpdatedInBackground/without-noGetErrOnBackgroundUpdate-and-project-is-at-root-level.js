@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/project/file1.ts]
 import a from "file2"
@@ -214,7 +214,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /a/b/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

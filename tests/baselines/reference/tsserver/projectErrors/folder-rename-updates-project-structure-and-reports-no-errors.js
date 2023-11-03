@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/projects/myproject/bar/app.ts]
 class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }
@@ -385,7 +385,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/myproject/bar/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /a/b/projects/myproject/bar/app.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/projects/myproject/bar/app.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -397,8 +397,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-12: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/projects/myproject/node_modules/@types:
@@ -418,19 +417,8 @@ FsWatchesRecursive::
 /a/b/projects/myproject:
   {}
 
-Before running Timeout callback:: count: 1
-12: checkOne
+Before running Timeout callback:: count: 0
 
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/a/b/projects/myproject/bar/app.ts",
-        "diagnostics": []
-      }
-    }
 After running Timeout callback:: count: 0
 
 Before request
@@ -454,7 +442,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Before running Timeout callback:: count: 1
-13: checkOne
+12: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -469,7 +457,7 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 Before running Immedidate callback:: count: 1
-4: semanticCheck
+3: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -482,10 +470,10 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-5: suggestionCheck
+4: suggestionCheck
 
 Before running Immedidate callback:: count: 1
-5: suggestionCheck
+4: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {

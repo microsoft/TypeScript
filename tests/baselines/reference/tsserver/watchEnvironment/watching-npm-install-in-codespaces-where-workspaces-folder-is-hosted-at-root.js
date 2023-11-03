@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/workspaces/somerepo/src/tsconfig.json] Inode:: 4
 {}
@@ -441,7 +441,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /workspaces/somerepo/src/main.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /workspaces/somerepo/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /workspaces/somerepo/src/main.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /workspaces/somerepo/src/main.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

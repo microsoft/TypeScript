@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -411,7 +411,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -423,8 +423,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-8: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /users/username/projects/myproject/javascript/node_modules/@types:
@@ -485,7 +484,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Before running Timeout callback:: count: 1
-9: checkOne
+8: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -544,8 +543,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascrip
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json 1:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
-10: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-11: *ensureProjectForOpenFiles*
+9: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+10: *ensureProjectForOpenFiles*
 //// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json]
 {
   "include": [
@@ -624,7 +623,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -636,20 +635,8 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-12: checkOne
+After running Timeout callback:: count: 0
 
-Before running Timeout callback:: count: 1
-12: checkOne
+Before running Timeout callback:: count: 0
 
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts",
-        "diagnostics": []
-      }
-    }
 After running Timeout callback:: count: 0

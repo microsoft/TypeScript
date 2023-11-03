@@ -1,14 +1,11 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -32,7 +29,7 @@ describe("unittests:: tsserver:: completions", () => {
         };
 
         const host = createServerHost([aTs, bTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
 
         const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
@@ -182,11 +179,7 @@ export interface BrowserRouterProps {
         ];
 
         const host = createServerHost(files, { windowsStyleRoot: "c:/" });
-        const logger = createLoggerWithInMemoryLogs(host);
-        const session = createSession(host, {
-            globalTypingsCacheLocation,
-            logger,
-        });
+        const session = new TestSession({ host, globalTypingsCacheLocation });
         openFilesForSession([appFile], session);
         session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
             command: ts.server.protocol.CommandTypes.CompletionInfo,

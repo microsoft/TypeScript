@@ -1,14 +1,7 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/main.ts]
-import { value, valueA, valueB, valueC, renamedD, valueE, valueF } from "./mod";
-
-//// [/mod.ts]
-export const value = 0;
-export const [valueA, valueB] = [0, 1];
-export const { valueC, valueD: renamedD } = { valueC: 0, valueD: 1 };
-export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };
+//// [/a/file1.ts]
 
 
 //// [/tsconfig.json]
@@ -19,13 +12,88 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/main.ts"
+        "file": "/a/file1.ts",
+        "projectRootPath": "/a"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /main.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] Search path: /a
+Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+	/a/file1.ts SVC-1-0 ""
+
+
+	file1.ts
+	  Root file specified for compilation
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/file1.ts ProjectRootPath: /a
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "close",
+      "arguments": {
+        "file": "/a/file1.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/file1.ts: *new*
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/file1.ts"
+      },
+      "seq": 3,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Search path: /a
+Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: Config file name: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -35,13 +103,12 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /main.ts to open"
+        "reason": "Creating possible configured project for /a/file1.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
-  "/main.ts",
-  "/mod.ts"
+  "/a/file1.ts"
  ],
  "options": {
   "configFilePath": "/tsconfig.json"
@@ -49,20 +116,15 @@ Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
 }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /mod.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/mod.ts Text-1 "export const value = 0;\nexport const [valueA, valueB] = [0, 1];\nexport const { valueC, valueD: renamedD } = { valueC: 0, valueD: 1 };\nexport const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };\n"
-	/main.ts SVC-1-0 "import { value, valueA, valueB, valueC, renamedD, valueE, valueF } from \"./mod\";"
+Info seq  [hh:mm:ss:mss] 	Files (1)
+	/a/file1.ts SVC-1-0 ""
 
 
-	mod.ts
-	  Imported via "./mod" from file 'main.ts'
-	  Matched by default include pattern '**/*'
-	main.ts
+	a/file1.ts
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -89,8 +151,8 @@ Info seq  [hh:mm:ss:mss] event:
             "jsSize": 0,
             "jsx": 0,
             "jsxSize": 0,
-            "ts": 2,
-            "tsSize": 290,
+            "ts": 1,
+            "tsSize": 0,
             "tsx": 0,
             "tsxSize": 0,
             "dts": 0,
@@ -122,7 +184,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/main.ts",
+        "triggerFile": "/a/file1.ts",
         "configFile": "/tsconfig.json",
         "diagnostics": [
           {
@@ -173,55 +235,23 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+Info seq  [hh:mm:ss:mss] `remove Project::
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+	/a/file1.ts
+
+
+	file1.ts
+	  Root file specified for compilation
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/mod.ts: *new*
-  {}
-/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/: *new*
-  {}
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/mod.ts"
-      },
-      "seq": 2,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /mod.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /mod.ts :: Config file name: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /mod.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /a/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -234,84 +264,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/tsconfig.json: *new*
   {}
 
 FsWatches *deleted*::
-/mod.ts:
+/a/file1.ts:
   {}
 
 FsWatchesRecursive::
-/:
+/: *new*
   {}
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "references",
-      "arguments": {
-        "file": "/mod.ts",
-        "line": 2,
-        "offset": 15
-      },
-      "seq": 3,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] Finding references to /mod.ts position 38 in project /tsconfig.json
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "response": {
-        "refs": [
-          {
-            "file": "/mod.ts",
-            "start": {
-              "line": 2,
-              "offset": 15
-            },
-            "end": {
-              "line": 2,
-              "offset": 21
-            },
-            "contextStart": {
-              "line": 2,
-              "offset": 1
-            },
-            "contextEnd": {
-              "line": 2,
-              "offset": 40
-            },
-            "lineText": "export const [valueA, valueB] = [0, 1];",
-            "isWriteAccess": true,
-            "isDefinition": true
-          },
-          {
-            "file": "/main.ts",
-            "start": {
-              "line": 1,
-              "offset": 17
-            },
-            "end": {
-              "line": 1,
-              "offset": 23
-            },
-            "contextStart": {
-              "line": 1,
-              "offset": 1
-            },
-            "contextEnd": {
-              "line": 1,
-              "offset": 81
-            },
-            "lineText": "import { value, valueA, valueB, valueC, renamedD, valueE, valueF } from \"./mod\";",
-            "isWriteAccess": true,
-            "isDefinition": false
-          }
-        ],
-        "symbolName": "valueA",
-        "symbolStartOffset": 15,
-        "symbolDisplayString": "const valueA: number"
-      },
-      "responseRequired": true
-    }
-After request

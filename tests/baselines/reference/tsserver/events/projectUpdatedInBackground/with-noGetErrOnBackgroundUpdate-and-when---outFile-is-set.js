@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/a.ts]
 export let x = 1
@@ -217,7 +217,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/a.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/a.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -287,7 +287,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/a.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/a.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

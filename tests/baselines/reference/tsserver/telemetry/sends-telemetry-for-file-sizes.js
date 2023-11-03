@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/jsconfig.json]
 {
@@ -223,6 +223,32 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typings": [],
       "unresolvedImports": [],
       "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/jsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "maxNodeModuleJsDepth": 2,
+          "allowSyntheticDefaultImports": true,
+          "skipLibCheck": true,
+          "noEmit": true,
+          "configFilePath": "/jsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] event:

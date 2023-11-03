@@ -50,12 +50,16 @@ export function nullLogger(): Logger {
 }
 
 export function createHasErrorMessageLogger(): Logger {
-    return {
-        ...nullLogger(),
-        msg: (s, type) => ts.Debug.fail(`Error: ${s}, type: ${type}`),
-    };
+    const logger = nullLogger();
+    logger.msg = (s, type) => ts.Debug.fail(`Error: ${s}, type: ${type}`);
+    return logger;
 }
-function handleLoggerGroup(logger: Logger): Logger {
+function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, logText: (s: string) => void, sanitizeLibs: true | undefined): Logger {
+    logger.hasLevel = ts.returnTrue;
+    logger.loggingEnabled = ts.returnTrue;
+    logger.host = host;
+    if (host) logText(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
+
     let inGroup = false;
     let firstInGroup = false;
     logger.startGroup = () => {
@@ -63,10 +67,13 @@ function handleLoggerGroup(logger: Logger): Logger {
         firstInGroup = true;
     };
     logger.endGroup = () => inGroup = false;
-    const originalInfo = logger.info;
-    logger.info = s => msg(s, ts.server.Msg.Info, s => originalInfo.call(logger, s));
-    logger.log = s => originalInfo.call(logger, s);
+    logger.info = s => msg(s, ts.server.Msg.Info, log);
+    logger.log = log;
     return logger;
+
+    function log(s: string) {
+        logText((sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s)));
+    }
 
     function msg(s: string, type = ts.server.Msg.Err, write: (s: string) => void) {
         s = `[${nowString(logger)}] ${s}`;
@@ -86,16 +93,13 @@ export function nowString(logger: Logger) {
     return `hh:mm:ss:mss`;
 }
 
-export function createLoggerWritingToConsole(host: ts.server.ServerHost) {
-    return handleLoggerGroup({
-        ...nullLogger(),
-        hasLevel: ts.returnTrue,
-        loggingEnabled: ts.returnTrue,
-        perftrc: s => console.log(s),
-        info: s => console.log(s),
-        msg: (s, type) => console.log(`${type}:: ${s}`),
+export function createLoggerWritingToConsole(host: ts.server.ServerHost, sanitizeLibs?: true) {
+    return handleLoggerGroup(
+        createHasErrorMessageLogger(),
         host,
-    });
+        s => console.log(s),
+        sanitizeLibs,
+    );
 }
 
 export function sanitizeLog(s: string): string {
@@ -137,14 +141,6 @@ export function sanitizeLibFileText(s: string): string {
 
 export function createLoggerWithInMemoryLogs(host: ts.server.ServerHost, sanitizeLibs?: true): Logger {
     const logger = createHasErrorMessageLogger();
-    const logs: string[] = [];
-    if (host) logs.push(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
-    return handleLoggerGroup({
-        ...logger,
-        logs,
-        hasLevel: ts.returnTrue,
-        loggingEnabled: ts.returnTrue,
-        info: s => logs.push((sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s))),
-        host,
-    });
+    logger.logs = [];
+    return handleLoggerGroup(logger, host, s => logger.logs!.push(s), sanitizeLibs);
 }
