@@ -37734,6 +37734,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function isTypeStrictEqualityComparableTo(source: Type, target: Type) {
+        return (target.flags & TypeFlags.Undefined) !== 0 || isTypeComparableTo(source, target);
+    }
+
     function isTypeEqualityComparableTo(source: Type, target: Type) {
         return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
     }
@@ -38088,7 +38092,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
                     }
                     checkNaNEquality(errorNode, operator, left, right);
-                    reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
+                    const checkFunction = (operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken) ? isTypeEqualityComparableTo : isTypeStrictEqualityComparableTo;
+                    reportOperatorErrorUnless((left, right) => checkFunction(left, right) || checkFunction(right, left));
                 }
                 return booleanType;
             case SyntaxKind.InstanceOfKeyword:
