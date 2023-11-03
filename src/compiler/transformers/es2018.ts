@@ -1182,7 +1182,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     /*typeParameters*/ undefined,
                     innerParameters ?? [],
                     /*type*/ undefined,
-                    asyncBody
+                    asyncBody,
                 ),
                 !!(hierarchyFacts & HierarchyFacts.HasLexicalThis),
             ),
