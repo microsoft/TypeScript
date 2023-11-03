@@ -399,6 +399,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     });
                     return Object.entries(inverted)
                         .map(([, synonyms]) => synonyms.join("/"))
+                        .filter(s => !(option.deprecatedKeys && option.deprecatedKeys.has(s)))
                         .join(", ");
             }
             return possibleValues;
