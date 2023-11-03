@@ -28739,17 +28739,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return errorType;
             }
 
-            const container = getContainingFunction(node)!;
-            if (languageVersion < ScriptTarget.ES2015) {
-                if (container.kind === SyntaxKind.ArrowFunction) {
-                    error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+            let container = getContainingFunction(node);
+            if (container) {
+                if (languageVersion < ScriptTarget.ES2015) {
+                    if (container.kind === SyntaxKind.ArrowFunction) {
+                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+                    }
+                    else if (hasSyntacticModifier(container, ModifierFlags.Async)) {
+                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_async_function_or_method_in_ES3_and_ES5_Consider_using_a_standard_function_or_method);
+                    }
                 }
-                else if (hasSyntacticModifier(container, ModifierFlags.Async)) {
-                    error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_async_function_or_method_in_ES3_and_ES5_Consider_using_a_standard_function_or_method);
+
+                getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
+                while (container && isArrowFunction(container)) {
+                    container = getContainingFunction(container);
+                    if (container) {
+                        getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
+                    }
                 }
             }
-
-            getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
             return getTypeOfSymbol(symbol);
         }
 
