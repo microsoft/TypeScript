@@ -3282,7 +3282,9 @@ export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementW
         // Bad discriminant -- do again without discriminating
         return mapDefined(contextualType.types, t => t.getProperty(name));
     }
-    return discriminatedPropertySymbols;
+    // by eliminating duplicates we might even end up with a single symbol
+    // that helps with displaying better quick infos on properties of union types
+    return deduplicate(discriminatedPropertySymbols, equateValues);
 }
 
 function isArgumentOfElementAccessExpression(node: Node) {
