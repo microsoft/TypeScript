@@ -4132,7 +4132,7 @@
         "category": "Error",
         "code": 4124
     },
-    "The values of '{0}.{1}' differ in their declarations, where '{2}' was expected but '{3}' was given.": {
+    "Each declaration of '{0}.{1}' differs in its value, where '{2}' was expected but '{3}' was given.": {
         "category": "Error",
         "code": 4125
     },

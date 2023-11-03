@@ -20621,7 +20621,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (errorReporter) {
                         const escapedSource = typeof sourceValue === "string" ? `"${escapeString(sourceValue)}"` : sourceValue;
                         const escapedTarget = typeof targetValue === "string" ? `"${escapeString(targetValue)}"` : targetValue;
-                        errorReporter(Diagnostics.The_values_of_0_1_differ_in_their_declarations_where_2_was_expected_but_3_was_given, symbolName(targetSymbol), symbolName(targetProperty), escapedTarget, escapedSource);
+                        errorReporter(Diagnostics.Each_declaration_of_0_1_differs_in_its_value_where_2_was_expected_but_3_was_given, symbolName(targetSymbol), symbolName(targetProperty), escapedTarget, escapedSource);
                         enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                     }
                     else {
