@@ -31,11 +31,11 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {

@@ -15,10 +15,35 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/solution/tsconfig.json]
-{"files":[],"include":[],"references":[{"path":"./a"},{"path":"./b"},{"path":"./c"},{"path":"./d"}]}
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./a"
+    },
+    {
+      "path": "./b"
+    },
+    {
+      "path": "./c"
+    },
+    {
+      "path": "./d"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/a/tsconfig.json]
-{"compilerOptions":{"composite":true,"module":"none"},"files":["./index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "none"
+  },
+  "files": [
+    "./index.ts"
+  ]
+}
 
 //// [/user/username/projects/solution/a/index.ts]
 
@@ -27,7 +52,19 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 //// [/user/username/projects/solution/b/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["./index.ts"],"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "./index.ts"
+  ],
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/b/index.ts]
 
@@ -38,7 +75,19 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 //// [/user/username/projects/solution/c/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["./index.ts"],"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "./index.ts"
+  ],
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/c/index.ts]
 
@@ -49,7 +98,19 @@ interface Array<T> { length: number; [n: number]: T; }
                 
 
 //// [/user/username/projects/solution/d/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["./index.ts"],"references":[{"path":"../c"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "./index.ts"
+  ],
+  "references": [
+    {
+      "path": "../c"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/d/index.ts]
 

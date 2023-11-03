@@ -30,8 +30,13 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/f.ts"]
-Program options: {"watch":true,"diagnostics":true}
+Program root files: [
+  "/f.ts"
+]
+Program options: {
+  "watch": true,
+  "diagnostics": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -81,8 +86,13 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/f.ts"]
-Program options: {"watch":true,"diagnostics":true}
+Program root files: [
+  "/f.ts"
+]
+Program options: {
+  "watch": true,
+  "diagnostics": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

@@ -8,7 +8,9 @@ import {C} from './a';
 export function f(p: C) { return p; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -33,8 +35,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -98,7 +106,11 @@ Change:: Set to "remove"
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"importsNotUsedAsValues":"remove"}}
+{
+  "compilerOptions": {
+    "importsNotUsedAsValues": "remove"
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -112,8 +124,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"importsNotUsedAsValues":0,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "importsNotUsedAsValues": 0,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -136,7 +155,11 @@ Change:: Set to "error"
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"importsNotUsedAsValues":"error"}}
+{
+  "compilerOptions": {
+    "importsNotUsedAsValues": "error"
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -146,18 +169,25 @@ Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
 
-[7m1[0m {"compilerOptions":{"importsNotUsedAsValues":"error"}}
-[7m [0m [91m                    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m3[0m     "importsNotUsedAsValues": "error"
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"importsNotUsedAsValues":2,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "importsNotUsedAsValues": 2,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -185,7 +215,11 @@ Change:: Set to "preserve"
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"importsNotUsedAsValues":"preserve"}}
+{
+  "compilerOptions": {
+    "importsNotUsedAsValues": "preserve"
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -195,18 +229,25 @@ Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
 
-[7m1[0m {"compilerOptions":{"importsNotUsedAsValues":"preserve"}}
-[7m [0m [91m                    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m3[0m     "importsNotUsedAsValues": "preserve"
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:01:01 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"importsNotUsedAsValues":1,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "importsNotUsedAsValues": 1,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

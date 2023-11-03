@@ -12,6 +12,7 @@ import {
     DiagnosticMessage,
     Diagnostics,
     identity,
+    JSDocParsingMode,
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
     KeywordSyntaxKind,
@@ -21,6 +22,7 @@ import {
     parsePseudoBigInt,
     positionIsSynthesized,
     PunctuationOrKeywordSyntaxKind,
+    ScriptKind,
     ScriptTarget,
     SourceFileLike,
     SyntaxKind,
@@ -95,6 +97,8 @@ export interface Scanner {
     setOnError(onError: ErrorCallback | undefined): void;
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
+    setScriptKind(scriptKind: ScriptKind): void;
+    setJSDocParsingMode(kind: JSDocParsingMode): void;
     /** @deprecated use {@link resetTokenState} */
     setTextPos(textPos: number): void;
     resetTokenState(pos: number): void;
@@ -114,8 +118,6 @@ export interface Scanner {
     // callback returns something truthy, then the scanner state is not rolled back.  The result
     // of invoking the callback is returned from this function.
     tryScan<T>(callback: () => T): T;
-    /** @internal */
-    setSkipNonSemanticJSDoc(skip: boolean): void;
 }
 
 /** @internal */
@@ -345,10 +347,7 @@ const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)
  */
 const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
 
-/**
- * Test for whether a comment contains a JSDoc tag needed by the checker when run in tsc.
- */
-const semanticJSDocTagRegEx = /@(?:see|link)/i;
+const jsDocSeeOrLink = /@(?:see|link)/i;
 
 function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
     // Bail out quickly if it couldn't possibly be in the map.
@@ -1008,7 +1007,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     var commentDirectives: CommentDirective[] | undefined;
     var inJSDocType = 0;
 
-    var skipNonSemanticJSDoc = false;
+    var scriptKind = ScriptKind.Unknown;
+    var jsDocParsingMode = JSDocParsingMode.ParseAll;
 
     setText(text, start, length);
 
@@ -1054,6 +1054,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         setText,
         setScriptTarget,
         setLanguageVariant,
+        setScriptKind,
+        setJSDocParsingMode,
         setOnError,
         resetTokenState,
         setTextPos: resetTokenState,
@@ -1061,7 +1063,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         tryScan,
         lookAhead,
         scanRange,
-        setSkipNonSemanticJSDoc,
     };
     /* eslint-enable no-var */
 
@@ -2003,7 +2004,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             }
                         }
 
-                        if (isJSDoc && (!skipNonSemanticJSDoc || semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos)))) {
+                        if (isJSDoc && shouldParseJSDoc()) {
                             tokenFlags |= TokenFlags.PrecedingJSDocComment;
                         }
 
@@ -2286,6 +2287,28 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     return token = SyntaxKind.Unknown;
             }
         }
+    }
+
+    function shouldParseJSDoc() {
+        switch (jsDocParsingMode) {
+            case JSDocParsingMode.ParseAll:
+                return true;
+            case JSDocParsingMode.ParseNone:
+                return false;
+        }
+
+        if (scriptKind !== ScriptKind.TS && scriptKind !== ScriptKind.TSX) {
+            // If outside of TS, we need JSDoc to get any type info.
+            return true;
+        }
+
+        if (jsDocParsingMode === JSDocParsingMode.ParseForTypeInfo) {
+            // If we're in TS, but we don't need to produce reliable errors,
+            // we don't need to parse to find @see or @link.
+            return false;
+        }
+
+        return jsDocSeeOrLink.test(text.slice(fullStartPos, pos));
     }
 
     function reScanInvalidIdentifier(): SyntaxKind {
@@ -2788,8 +2811,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         languageVariant = variant;
     }
 
-    function setSkipNonSemanticJSDoc(skip: boolean) {
-        skipNonSemanticJSDoc = skip;
+    function setScriptKind(kind: ScriptKind) {
+        scriptKind = kind;
+    }
+
+    function setJSDocParsingMode(kind: JSDocParsingMode) {
+        jsDocParsingMode = kind;
     }
 
     function resetTokenState(position: number) {

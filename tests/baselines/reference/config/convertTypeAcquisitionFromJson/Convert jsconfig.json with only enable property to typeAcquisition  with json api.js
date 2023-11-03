@@ -7,18 +7,18 @@ Fs::
 
 //// [/apath/jsconfig.json]
 {
- "typeAcquisition": {
-  "enable": false
- }
+  "typeAcquisition": {
+    "enable": false
+  }
 }
 
 
 configFileName:: jsconfig.json
 TypeAcquisition::
 {
- "enable": false,
- "include": [],
- "exclude": []
+  "enable": false,
+  "include": [],
+  "exclude": []
 }
 Errors::
 

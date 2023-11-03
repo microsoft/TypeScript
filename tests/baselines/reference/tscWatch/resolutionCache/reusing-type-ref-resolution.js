@@ -1,7 +1,13 @@
 currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"composite":true,"traceResolution":true,"outDir":"outDir"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "traceResolution": true,
+    "outDir": "outDir"
+  }
+}
 
 //// [/users/username/projects/project/fileWithImports.ts]
 import type { Import0 } from "pkg0";
@@ -153,8 +159,19 @@ DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefin
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
 
 
-Program root files: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/fileWithImports.ts",
+  "/users/username/projects/project/fileWithTypeRefs.ts"
+]
+Program options: {
+  "composite": true,
+  "traceResolution": true,
+  "outDir": "/users/username/projects/project/outDir",
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -428,8 +445,19 @@ fileWithTypeRefs.ts
 
 
 
-Program root files: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/fileWithImports.ts",
+  "/users/username/projects/project/fileWithTypeRefs.ts"
+]
+Program options: {
+  "composite": true,
+  "traceResolution": true,
+  "outDir": "/users/username/projects/project/outDir",
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -675,8 +703,19 @@ fileWithTypeRefs.ts
 
 
 
-Program root files: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/fileWithImports.ts",
+  "/users/username/projects/project/fileWithTypeRefs.ts"
+]
+Program options: {
+  "composite": true,
+  "traceResolution": true,
+  "outDir": "/users/username/projects/project/outDir",
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

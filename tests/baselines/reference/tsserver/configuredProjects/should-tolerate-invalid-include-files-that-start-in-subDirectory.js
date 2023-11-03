@@ -5,7 +5,15 @@ Creating project service
 let x = 1
 
 //// [/user/username/projects/myproject/src/server/tsconfig.json]
-{"compiler":{"module":"commonjs","outDir":"../../build"},"include":["../src/**/*.ts"]}
+{
+  "compiler": {
+    "module": "commonjs",
+    "outDir": "../../build"
+  },
+  "include": [
+    "../src/**/*.ts"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

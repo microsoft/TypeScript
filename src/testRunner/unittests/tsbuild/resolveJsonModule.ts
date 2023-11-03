@@ -5,6 +5,9 @@ import {
     dedent,
 } from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     noChangeOnlyRuns,
     verifyTsc,
     VerifyTscWithEditsInput,
@@ -17,35 +20,27 @@ import {
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
     function getProjFs(tsconfigFiles: object, additionalCompilerOptions?: CompilerOptions) {
         return loadProjectFromFiles({
-            "/src/src/hello.json": JSON.stringify(
-                {
-                    hello: "world",
-                },
-                undefined,
-                " ",
-            ),
+            "/src/src/hello.json": jsonToReadableText({
+                hello: "world",
+            }),
             "/src/src/index.ts": dedent`
                 import hello from "./hello.json"
                 export default hello.hello
             `,
-            "/src/tsconfig.json": JSON.stringify(
-                {
-                    compilerOptions: {
-                        composite: true,
-                        moduleResolution: "node",
-                        module: "commonjs",
-                        resolveJsonModule: true,
-                        esModuleInterop: true,
-                        allowSyntheticDefaultImports: true,
-                        outDir: "dist",
-                        skipDefaultLibCheck: true,
-                        ...additionalCompilerOptions,
-                    },
-                    ...tsconfigFiles,
+            "/src/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    moduleResolution: "node",
+                    module: "commonjs",
+                    resolveJsonModule: true,
+                    esModuleInterop: true,
+                    allowSyntheticDefaultImports: true,
+                    outDir: "dist",
+                    skipDefaultLibCheck: true,
+                    ...additionalCompilerOptions,
                 },
-                undefined,
-                " ",
-            ),
+                ...tsconfigFiles,
+            }),
         });
     }
 
@@ -169,59 +164,43 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project importJ
         subScenario: "importing json module from project reference",
         fs: () =>
             loadProjectFromFiles({
-                "/src/strings/foo.json": JSON.stringify(
-                    {
-                        foo: "bar baz",
-                    },
-                    undefined,
-                    " ",
-                ),
-                "/src/strings/tsconfig.json": JSON.stringify(
-                    {
-                        extends: "../tsconfig.json",
-                        include: ["foo.json"],
-                        references: [],
-                    },
-                    undefined,
-                    " ",
-                ),
+                "/src/strings/foo.json": jsonToReadableText({
+                    foo: "bar baz",
+                }),
+                "/src/strings/tsconfig.json": jsonToReadableText({
+                    extends: "../tsconfig.json",
+                    include: ["foo.json"],
+                    references: [],
+                }),
                 "/src/main/index.ts": dedent`
                 import { foo } from '../strings/foo.json';
                 console.log(foo);
             `,
-                "/src/main/tsconfig.json": JSON.stringify(
-                    {
-                        extends: "../tsconfig.json",
-                        include: [
-                            "./**/*.ts",
-                        ],
-                        references: [{
-                            path: "../strings/tsconfig.json",
-                        }],
+                "/src/main/tsconfig.json": jsonToReadableText({
+                    extends: "../tsconfig.json",
+                    include: [
+                        "./**/*.ts",
+                    ],
+                    references: [{
+                        path: "../strings/tsconfig.json",
+                    }],
+                }),
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        target: "es5",
+                        module: "commonjs",
+                        rootDir: "./",
+                        composite: true,
+                        resolveJsonModule: true,
+                        strict: true,
+                        esModuleInterop: true,
                     },
-                    undefined,
-                    " ",
-                ),
-                "/src/tsconfig.json": JSON.stringify(
-                    {
-                        compilerOptions: {
-                            target: "es5",
-                            module: "commonjs",
-                            rootDir: "./",
-                            composite: true,
-                            resolveJsonModule: true,
-                            strict: true,
-                            esModuleInterop: true,
-                        },
-                        references: [
-                            { path: "./strings/tsconfig.json" },
-                            { path: "./main/tsconfig.json" },
-                        ],
-                        files: [],
-                    },
-                    undefined,
-                    " ",
-                ),
+                    references: [
+                        { path: "./strings/tsconfig.json" },
+                        { path: "./main/tsconfig.json" },
+                    ],
+                    files: [],
+                }),
             }),
         commandLineArgs: ["--b", "src/tsconfig.json", "--verbose", "--explainFiles"],
         edits: noChangeOnlyRuns,

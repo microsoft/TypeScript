@@ -5,7 +5,12 @@ Before request
 
 
 //// [/a/b/tsconfig.json]
-{"files":["app.ts","applib.ts"]}
+{
+  "files": [
+    "app.ts",
+    "applib.ts"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -104,12 +109,12 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "span": {
                 "start": {
-                  "line": 1,
-                  "offset": 20
+                  "line": 4,
+                  "offset": 5
                 },
                 "end": {
-                  "line": 1,
-                  "offset": 31
+                  "line": 4,
+                  "offset": 16
                 },
                 "file": "/a/b/tsconfig.json"
               },

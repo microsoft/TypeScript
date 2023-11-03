@@ -29,6 +29,7 @@ import {
     InstallTypingHost,
     InvalidateCachedTypings,
     SetTypings,
+    stringifyIndented,
     WatchTypingLocations,
 } from "./_namespaces/ts.server";
 
@@ -153,7 +154,7 @@ export abstract class TypingsInstaller {
 
     install(req: DiscoverTypings) {
         if (this.log.isEnabled()) {
-            this.log.writeLine(`Got install request ${JSON.stringify(req)}`);
+            this.log.writeLine(`Got install request${stringifyIndented(req)}`);
         }
 
         // load existing typing information from the cache
@@ -179,10 +180,6 @@ export abstract class TypingsInstaller {
             this.typesRegistry,
             req.compilerOptions,
         );
-
-        if (this.log.isEnabled()) {
-            this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);
-        }
 
         // start watching files
         this.watchFiles(req.projectName, discoverTypingsResult.filesToWatch);
@@ -232,8 +229,8 @@ export abstract class TypingsInstaller {
             const npmConfig = JSON.parse(this.installTypingHost.readFile(packageJson)!) as NpmConfig; // TODO: GH#18217
             const npmLock = JSON.parse(this.installTypingHost.readFile(packageLockJson)!) as NpmLock; // TODO: GH#18217
             if (this.log.isEnabled()) {
-                this.log.writeLine(`Loaded content of '${packageJson}': ${JSON.stringify(npmConfig)}`);
-                this.log.writeLine(`Loaded content of '${packageLockJson}'`);
+                this.log.writeLine(`Loaded content of '${packageJson}':${stringifyIndented(npmConfig)}`);
+                this.log.writeLine(`Loaded content of '${packageLockJson}':${stringifyIndented(npmLock)}`);
             }
             if (npmConfig.devDependencies && npmLock.dependencies) {
                 for (const key in npmConfig.devDependencies) {

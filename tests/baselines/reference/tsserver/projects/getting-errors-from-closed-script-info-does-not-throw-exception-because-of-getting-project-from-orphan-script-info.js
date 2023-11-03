@@ -18,7 +18,9 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

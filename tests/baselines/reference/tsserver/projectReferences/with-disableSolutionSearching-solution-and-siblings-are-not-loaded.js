@@ -15,10 +15,31 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/solution/tsconfig.json]
-{"files":[],"include":[],"references":[{"path":"./compiler"},{"path":"./services"}]}
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./compiler"
+    },
+    {
+      "path": "./services"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/compiler/tsconfig.json]
-{"compilerOptions":{"composite":true,"module":"none","disableSolutionSearching":true},"files":["./types.ts","./program.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "none",
+    "disableSolutionSearching": true
+  },
+  "files": [
+    "./types.ts",
+    "./program.ts"
+  ]
+}
 
 //// [/user/username/projects/solution/compiler/types.ts]
 
@@ -38,7 +59,19 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 //// [/user/username/projects/solution/services/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["./services.ts"],"references":[{"path":"../compiler"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "./services.ts"
+  ],
+  "references": [
+    {
+      "path": "../compiler"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/services/services.ts]
 

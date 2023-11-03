@@ -45,8 +45,15 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -161,8 +168,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -199,8 +214,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -297,8 +320,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -316,7 +347,16 @@ Change:: builds after fixing config file errors
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true},"files":["a.ts","b.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  },
+  "files": [
+    "a.ts",
+    "b.ts"
+  ]
+}
 
 
 Before running Timeout callback:: count: 1
@@ -330,8 +370,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

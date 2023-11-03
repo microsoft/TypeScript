@@ -3,9 +3,9 @@ CompilerOptions::
 {}
 WatchOptions::
 {
- "excludeDirectories": [
-  "**/temp"
- ]
+  "excludeDirectories": [
+    "**/temp"
+  ]
 }
 FileNames::
 0.ts

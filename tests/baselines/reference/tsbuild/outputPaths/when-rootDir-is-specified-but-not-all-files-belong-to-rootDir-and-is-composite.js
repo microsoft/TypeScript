@@ -19,7 +19,13 @@ declare const console: { log(msg: any): void; };
 export const x = 10;
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"outDir":"dist","rootDir":"src","composite":true}}
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "composite": true
+  }
+}
 
 //// [/src/types/type.ts]
 export type t = string;

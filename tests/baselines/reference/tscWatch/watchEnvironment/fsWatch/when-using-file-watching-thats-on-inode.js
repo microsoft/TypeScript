@@ -20,7 +20,15 @@ import { foo } from "./foo"; foo();
 export function foo(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json] Inode:: 10
-{"watchOptions":{"watchFile":"useFsEvents"},"files":["foo.d.ts","main.ts"]}
+{
+  "watchOptions": {
+    "watchFile": "useFsEvents"
+  },
+  "files": [
+    "foo.d.ts",
+    "main.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -w --extendedDiagnostics
@@ -48,8 +56,15 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 
-Program root files: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/foo.d.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -166,8 +181,15 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/foo.d.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -248,8 +270,15 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/foo.d.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

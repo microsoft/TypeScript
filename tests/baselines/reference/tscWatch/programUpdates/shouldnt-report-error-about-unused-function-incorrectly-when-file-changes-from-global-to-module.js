@@ -31,8 +31,13 @@ Output::
 
 
 
-Program root files: ["/a/b/file.ts"]
-Program options: {"watch":true,"noUnusedLocals":true}
+Program root files: [
+  "/a/b/file.ts"
+]
+Program options: {
+  "watch": true,
+  "noUnusedLocals": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -87,8 +92,13 @@ Output::
 
 
 
-Program root files: ["/a/b/file.ts"]
-Program options: {"watch":true,"noUnusedLocals":true}
+Program root files: [
+  "/a/b/file.ts"
+]
+Program options: {
+  "watch": true,
+  "noUnusedLocals": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

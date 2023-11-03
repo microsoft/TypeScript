@@ -12,7 +12,6 @@ import {
     CompilerHost,
     CompilerOptions,
     ConfigFileDiagnosticsReporter,
-    ConfigFileProgramReloadLevel,
     createBuilderProgramUsingProgramBuildInfo,
     createCachedDirectoryStructureHost,
     createCompilerDiagnostic,
@@ -53,6 +52,7 @@ import {
     isArray,
     isIgnoredFileFromWildCardWatching,
     isProgramUptoDate,
+    JSDocParsingMode,
     MapLike,
     maybeBind,
     ModuleResolutionCache,
@@ -63,7 +63,9 @@ import {
     Path,
     perfLogger,
     PollingInterval,
+    ProgramUpdateLevel,
     ProjectReference,
+    ResolutionCache,
     ResolutionCacheHost,
     ResolutionMode,
     ResolvedModule,
@@ -118,11 +120,8 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-export function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
-/** @internal */
-export function createIncrementalCompilerHost(options: CompilerOptions, system?: System, skipNonSemanticJSDocParsing?: boolean): CompilerHost;
-export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, skipNonSemanticJSDocParsing?: boolean): CompilerHost {
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, skipNonSemanticJSDocParsing, system);
+export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
     host.createHash = maybeBind(system, system.createHash);
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);
@@ -258,12 +257,7 @@ export interface ProgramHost<T extends BuilderProgram> {
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 
-    /**
-     * True if it's safe for the parser to skip parsing non-semantic JSDoc tags.
-     *
-     * @internal
-     */
-    skipNonSemanticJSDocParsing?: boolean;
+    jsDocParsingMode?: JSDocParsingMode;
 }
 /**
  * Internal interface used to wire emit through same host
@@ -348,6 +342,8 @@ export interface Watch<T> {
     getCurrentProgram(): T;
     /** Closes the watch */
     close(): void;
+    /** @internal */
+    getResolutionCache(): ResolutionCache;
 }
 
 /**
@@ -403,8 +399,8 @@ interface ParsedConfig {
     watcher?: FileWatcher;
     /** Wild card directories watched from this config file */
     watchedDirectories?: Map<string, WildcardDirectoryWatcher>;
-    /** Reload to be done for this config file */
-    reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
+    /** Level of program update to be done for this config file */
+    updateLevel?: ProgramUpdateLevel.RootNamesAndUpdate | ProgramUpdateLevel.Full;
 }
 
 // All of one and partial of the other, or vice versa.
@@ -435,7 +431,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     type HostFileInfo = FilePresentOnHost | FileMissingOnHost | FilePresenceUnknownOnHost;
 
     let builderProgram: T;
-    let reloadLevel: ConfigFileProgramReloadLevel; // level to indicate if the program needs to be reloaded from config file/just filenames etc
+    let updateLevel: ProgramUpdateLevel; // level to indicate if the program needs to be reloaded from config file/just filenames etc
     let missingFilesMap: Map<Path, FileWatcher>; // Map of file watchers for the missing files
     let watchedWildcardDirectories: Map<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
     let timerToUpdateProgram: any; // timer callback to recompile the program
@@ -559,8 +555,8 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     if (configFileName) updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
 
     return configFileName ?
-        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
-        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
+        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close, getResolutionCache } :
+        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close, getResolutionCache };
 
     function close() {
         clearInvalidateResolutionsOfFailedLookupLocations();
@@ -598,6 +594,10 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             });
             parsedConfigs = undefined;
         }
+    }
+
+    function getResolutionCache() {
+        return resolutionCache;
     }
 
     function getCurrentBuilderProgram() {
@@ -872,7 +872,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
     function scheduleProgramReload() {
         Debug.assert(!!configFileName);
-        reloadLevel = ConfigFileProgramReloadLevel.Full;
+        updateLevel = ProgramUpdateLevel.Full;
         scheduleProgramUpdate();
     }
 
@@ -883,12 +883,12 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     function updateProgram() {
-        switch (reloadLevel) {
-            case ConfigFileProgramReloadLevel.Partial:
+        switch (updateLevel) {
+            case ProgramUpdateLevel.RootNamesAndUpdate:
                 perfLogger?.logStartUpdateProgram("PartialConfigReload");
                 reloadFileNamesFromConfigFile();
                 break;
-            case ConfigFileProgramReloadLevel.Full:
+            case ProgramUpdateLevel.Full:
                 perfLogger?.logStartUpdateProgram("FullConfigReload");
                 reloadConfigFile();
                 break;
@@ -907,7 +907,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         Debug.assert(compilerOptions);
         Debug.assert(configFileName);
 
-        reloadLevel = ConfigFileProgramReloadLevel.None;
+        updateLevel = ProgramUpdateLevel.Update;
         rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
         if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
             hasChangedConfigFileParsingErrors = true;
@@ -920,7 +920,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     function reloadConfigFile() {
         Debug.assert(configFileName);
         writeLog(`Reloading config file: ${configFileName}`);
-        reloadLevel = ConfigFileProgramReloadLevel.None;
+        updateLevel = ProgramUpdateLevel.Update;
 
         if (cachedDirectoryStructureHost) {
             cachedDirectoryStructureHost.clearCache();
@@ -965,9 +965,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         const configPath = toPath(configFileName);
         let config = parsedConfigs?.get(configPath);
         if (config) {
-            if (!config.reloadLevel) return config.parsedCommandLine;
+            if (!config.updateLevel) return config.parsedCommandLine;
             // With host implementing getParsedCommandLine we cant just update file names
-            if (config.parsedCommandLine && config.reloadLevel === ConfigFileProgramReloadLevel.Partial && !host.getParsedCommandLine) {
+            if (config.parsedCommandLine && config.updateLevel === ProgramUpdateLevel.RootNamesAndUpdate && !host.getParsedCommandLine) {
                 writeLog("Reloading new file names and options");
                 Debug.assert(compilerOptions);
                 const fileNames = getFileNamesFromConfigSpecs(
@@ -977,7 +977,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
                     parseConfigFileHost,
                 );
                 config.parsedCommandLine = { ...config.parsedCommandLine, fileNames };
-                config.reloadLevel = undefined;
+                config.updateLevel = undefined;
                 return config.parsedCommandLine;
             }
         }
@@ -988,7 +988,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             getParsedCommandLineFromConfigFileHost(configFileName);
         if (config) {
             config.parsedCommandLine = parsedCommandLine;
-            config.reloadLevel = undefined;
+            config.updateLevel = undefined;
         }
         else {
             (parsedConfigs ||= new Map()).set(configPath, config = { parsedCommandLine });
@@ -1120,8 +1120,8 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
                 ) return;
 
                 // Reload is pending, do the reload
-                if (reloadLevel !== ConfigFileProgramReloadLevel.Full) {
-                    reloadLevel = ConfigFileProgramReloadLevel.Partial;
+                if (updateLevel !== ProgramUpdateLevel.Full) {
+                    updateLevel = ProgramUpdateLevel.RootNamesAndUpdate;
 
                     // Schedule Update the program
                     scheduleProgramUpdate();
@@ -1152,12 +1152,12 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
                         projects.forEach(projectPath => {
                             if (configFileName && toPath(configFileName) === projectPath) {
                                 // If this is the config file of the project, reload completely
-                                reloadLevel = ConfigFileProgramReloadLevel.Full;
+                                updateLevel = ProgramUpdateLevel.Full;
                             }
                             else {
                                 // Reload config for the referenced projects and remove the resolutions from referenced projects since the config file changed
                                 const config = parsedConfigs?.get(projectPath);
-                                if (config) config.reloadLevel = ConfigFileProgramReloadLevel.Full;
+                                if (config) config.updateLevel = ProgramUpdateLevel.Full;
                                 resolutionCache.removeResolutionsFromProjectReferenceRedirects(projectPath);
                             }
                             scheduleProgramUpdate();
@@ -1178,7 +1178,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             (_fileName, eventKind) => {
                 updateCachedSystemWithFile(configFileName, configPath, eventKind);
                 const config = parsedConfigs?.get(configPath);
-                if (config) config.reloadLevel = ConfigFileProgramReloadLevel.Full;
+                if (config) config.updateLevel = ProgramUpdateLevel.Full;
                 resolutionCache.removeResolutionsFromProjectReferenceRedirects(configPath);
                 scheduleProgramUpdate();
             },
@@ -1220,8 +1220,8 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
                             ) return;
 
                             // Reload is pending, do the reload
-                            if (config.reloadLevel !== ConfigFileProgramReloadLevel.Full) {
-                                config.reloadLevel = ConfigFileProgramReloadLevel.Partial;
+                            if (config.updateLevel !== ProgramUpdateLevel.Full) {
+                                config.updateLevel = ProgramUpdateLevel.RootNamesAndUpdate;
 
                                 // Schedule Update the program
                                 scheduleProgramUpdate();

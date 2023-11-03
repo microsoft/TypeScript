@@ -17,7 +17,11 @@ interface Array<T> { length: number; [n: number]: T; }
 const x = 10;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true}}
+{
+  "compilerOptions": {
+    "incremental": true
+  }
+}
 
 //// [/users/username/projects/project/file2.ts]
 const y: string = 20;
@@ -37,8 +41,15 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -200,8 +211,15 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

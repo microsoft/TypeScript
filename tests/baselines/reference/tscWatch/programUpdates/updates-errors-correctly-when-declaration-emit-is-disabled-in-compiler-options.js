@@ -24,7 +24,13 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","noEmit":true,"strict":true}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noEmit": true,
+    "strict": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -36,8 +42,17 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"module":1,"noEmit":true,"strict":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "module": 1,
+  "noEmit": true,
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -103,8 +118,17 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"module":1,"noEmit":true,"strict":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "module": 1,
+  "noEmit": true,
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -143,8 +167,17 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"module":1,"noEmit":true,"strict":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "module": 1,
+  "noEmit": true,
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -193,8 +226,17 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"module":1,"noEmit":true,"strict":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "module": 1,
+  "noEmit": true,
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -233,8 +275,17 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"module":1,"noEmit":true,"strict":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "module": 1,
+  "noEmit": true,
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
