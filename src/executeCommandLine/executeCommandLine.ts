@@ -395,7 +395,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     // Group synonyms: es6/es2015
                     const inverted: { [value: string]: string[]; } = {};
                     option.type.forEach((value, name) => {
-                        if (!(option.deprecatedKeys && option.deprecatedKeys.has(name))) {
+                        if (!option.deprecatedKeys?.has(name)) {
                             (inverted[value] ||= []).push(name);
                         }
                     });
