@@ -30282,7 +30282,42 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
-    function getContextualTypeFromParent(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
+    /**
+     * Whoa! Do you really want to use this function?
+     *
+     * Unless you're trying to get the *non-apparent* type for a
+     * value-literal type or you're authoring relevant portions of this algorithm,
+     * you probably meant to use 'getApparentTypeOfContextualType'.
+     * Otherwise this may not be very useful.
+     *
+     * In cases where you *are* working on this function, you should understand
+     * when it is appropriate to use 'getContextualType' and 'getApparentTypeOfContextualType'.
+     *
+     *   - Use 'getContextualType' when you are simply going to propagate the result to the expression.
+     *   - Use 'getApparentTypeOfContextualType' when you're going to need the members of the type.
+     *
+     * @param node the expression whose contextual type will be returned.
+     * @returns the contextual type of an expression.
+     */
+    function getContextualType(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
+        if (node.flags & NodeFlags.InWithStatement) {
+            // We cannot answer semantic questions within a with block, do not proceed any further
+            return undefined;
+        }
+        // Cached contextual types are obtained with no ContextFlags, so we can only consult them for
+        // requests with no ContextFlags.
+        const index = findContextualNode(node, /*includeCaches*/ !contextFlags);
+        if (index >= 0) {
+            return contextualTypes[index];
+        }
+        const contextualType = getContextualTypeWorker(node, contextFlags);
+        if (!contextualType) {
+            return undefined;
+        }
+        return filterContextualTypeForLiteralExpressionOfObject(node, contextualType);
+    }
+
+    function getContextualTypeWorker(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
         const { parent } = node;
         switch (parent.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -30354,41 +30389,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getContextualJsxElementAttributesType(parent as JsxOpeningLikeElement, contextFlags);
         }
         return undefined;
-    }
-
-    /**
-     * Whoa! Do you really want to use this function?
-     *
-     * Unless you're trying to get the *non-apparent* type for a
-     * value-literal type or you're authoring relevant portions of this algorithm,
-     * you probably meant to use 'getApparentTypeOfContextualType'.
-     * Otherwise this may not be very useful.
-     *
-     * In cases where you *are* working on this function, you should understand
-     * when it is appropriate to use 'getContextualType' and 'getApparentTypeOfContextualType'.
-     *
-     *   - Use 'getContextualType' when you are simply going to propagate the result to the expression.
-     *   - Use 'getApparentTypeOfContextualType' when you're going to need the members of the type.
-     *
-     * @param node the expression whose contextual type will be returned.
-     * @returns the contextual type of an expression.
-     */
-    function getContextualType(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
-        if (node.flags & NodeFlags.InWithStatement) {
-            // We cannot answer semantic questions within a with block, do not proceed any further
-            return undefined;
-        }
-        // Cached contextual types are obtained with no ContextFlags, so we can only consult them for
-        // requests with no ContextFlags.
-        const index = findContextualNode(node, /*includeCaches*/ !contextFlags);
-        if (index >= 0) {
-            return contextualTypes[index];
-        }
-        const contextualType = getContextualTypeFromParent(node, contextFlags);
-        if (!contextualType) {
-            return undefined;
-        }
-        return filterContextualTypeForLiteralExpressionOfObject(node, contextualType);
     }
 
     function pushCachedContextualType(node: Expression) {
