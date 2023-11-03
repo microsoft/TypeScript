@@ -1,7 +1,16 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/rootFolder/project/tsconfig.json]
-{"compilerOptions":{"module":"none","allowJs":true,"outDir":"Static/scripts/"},"include":["Scripts/**/*"]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "allowJs": true,
+    "outDir": "Static/scripts/"
+  },
+  "include": [
+    "Scripts/**/*"
+  ]
+}
 
 //// [/a/rootFolder/project/Scripts/TypeScript.ts]
 var z = 10;
@@ -32,8 +41,18 @@ Output::
 
 
 
-Program root files: ["/a/rootFolder/project/Scripts/Javascript.js","/a/rootFolder/project/Scripts/TypeScript.ts"]
-Program options: {"module":0,"allowJs":true,"outDir":"/a/rootFolder/project/Static/scripts","watch":true,"project":"/a/rootFolder/project/tsconfig.json","configFilePath":"/a/rootFolder/project/tsconfig.json"}
+Program root files: [
+  "/a/rootFolder/project/Scripts/Javascript.js",
+  "/a/rootFolder/project/Scripts/TypeScript.ts"
+]
+Program options: {
+  "module": 0,
+  "allowJs": true,
+  "outDir": "/a/rootFolder/project/Static/scripts",
+  "watch": true,
+  "project": "/a/rootFolder/project/tsconfig.json",
+  "configFilePath": "/a/rootFolder/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -97,8 +116,18 @@ Output::
 
 
 
-Program root files: ["/a/rootFolder/project/Scripts/Javascript.js","/a/rootFolder/project/Scripts/TypeScript.ts"]
-Program options: {"module":0,"allowJs":true,"outDir":"/a/rootFolder/project/Static/scripts","watch":true,"project":"/a/rootFolder/project/tsconfig.json","configFilePath":"/a/rootFolder/project/tsconfig.json"}
+Program root files: [
+  "/a/rootFolder/project/Scripts/Javascript.js",
+  "/a/rootFolder/project/Scripts/TypeScript.ts"
+]
+Program options: {
+  "module": 0,
+  "allowJs": true,
+  "outDir": "/a/rootFolder/project/Static/scripts",
+  "watch": true,
+  "project": "/a/rootFolder/project/tsconfig.json",
+  "configFilePath": "/a/rootFolder/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

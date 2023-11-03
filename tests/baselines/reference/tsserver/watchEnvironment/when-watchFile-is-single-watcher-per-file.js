@@ -2,7 +2,12 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"composite":true,"resolveJsonModule":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "resolveJsonModule": true
+  }
+}
 
 //// [/user/username/projects/myproject/index.ts]
 import * as tsconfig from "./tsconfig.json";
@@ -61,7 +66,7 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/pr
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/tsconfig.json Text-1 "{\"compilerOptions\":{\"composite\":true,\"resolveJsonModule\":true}}"
+	/user/username/projects/myproject/tsconfig.json Text-1 "{\n  \"compilerOptions\": {\n    \"composite\": true,\n    \"resolveJsonModule\": true\n  }\n}"
 	/user/username/projects/myproject/index.ts SVC-1-0 "import * as tsconfig from \"./tsconfig.json\";"
 
 

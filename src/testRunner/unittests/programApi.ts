@@ -3,6 +3,9 @@ import * as fakes from "../_namespaces/fakes";
 import * as Harness from "../_namespaces/Harness";
 import * as ts from "../_namespaces/ts";
 import * as vfs from "../_namespaces/vfs";
+import {
+    jsonToReadableText,
+} from "./helpers";
 
 function verifyMissingFilePaths(missingPaths: readonly ts.Path[], expected: readonly string[]) {
     assert.isDefined(missingPaths);
@@ -145,7 +148,7 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
         // In this example '/node_modules/foo/index.d.ts' will redirect to '/node_modules/bar/node_modules/foo/index.d.ts'.
         const a = new documents.TextDocument("/a.ts", 'import * as bar from "bar"; import * as foo from "foo";');
         const bar = new documents.TextDocument("/node_modules/bar/index.d.ts", 'import * as foo from "foo";');
-        const fooPackageJsonText = '{ "name": "foo", "version": "1.2.3" }';
+        const fooPackageJsonText = jsonToReadableText({ name: "foo", version: "1.2.3" });
         const fooIndexText = "export const x: number;";
         const barFooPackage = new documents.TextDocument("/node_modules/bar/node_modules/foo/package.json", fooPackageJsonText);
         const barFooIndex = new documents.TextDocument("/node_modules/bar/node_modules/foo/index.d.ts", fooIndexText);
@@ -177,7 +180,7 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
 describe("unittests:: Program.getNodeCount / Program.getIdentifierCount", () => {
     it("works on projects that have .json files", () => {
         const main = new documents.TextDocument("/main.ts", 'export { version } from "./package.json";');
-        const pkg = new documents.TextDocument("/package.json", '{"version": "1.0.0"}');
+        const pkg = new documents.TextDocument("/package.json", jsonToReadableText({ version: "1.0.0" }));
 
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, pkg], cwd: "/" });
         const program = ts.createProgram(["/main.ts"], { resolveJsonModule: true }, new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }));

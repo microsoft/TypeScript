@@ -1,9 +1,9 @@
 --lib es5, es7 0.ts
 CompilerOptions::
 {
- "lib": [
-  "lib.es5.d.ts"
- ]
+  "lib": [
+    "lib.es5.d.ts"
+  ]
 }
 WatchOptions::
 

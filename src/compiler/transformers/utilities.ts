@@ -16,6 +16,7 @@ import {
     CoreTransformationContext,
     createExternalHelpersImportDeclarationIfNeeded,
     Decorator,
+    every,
     ExportAssignment,
     ExportDeclaration,
     ExportSpecifier,
@@ -71,6 +72,7 @@ import {
     NamespaceExport,
     Node,
     NodeArray,
+    ParameterDeclaration,
     parameterIsThisKeyword,
     PrivateIdentifier,
     PrivateIdentifierAccessorDeclaration,
@@ -830,4 +832,14 @@ export function accessPrivateIdentifier<
     name: PrivateIdentifier,
 ) {
     return walkUpLexicalEnvironments(env, env => getPrivateIdentifier(env.privateEnv, name));
+}
+
+/** @internal */
+export function isSimpleParameter(node: ParameterDeclaration) {
+    return !node.initializer && isIdentifier(node.name);
+}
+
+/** @internal */
+export function isSimpleParameterList(nodes: NodeArray<ParameterDeclaration>) {
+    return every(nodes, isSimpleParameter);
 }

@@ -1,7 +1,12 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../../harness/tsserverLogger";
 import * as ts from "../../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     createSessionWithCustomEventHandler,
     openFilesForSession,
@@ -50,7 +55,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 it(subScenario, () => {
                     const config: File = {
                         path: "/users/username/projects/project/tsconfig.json",
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions,
                         }),
                     };
@@ -123,7 +128,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 const additionalFiles = getAdditionalFileOrFolder ? getAdditionalFileOrFolder() : [];
                 const configFile = {
                     path: configFilePath,
-                    content: JSON.stringify(configObj || { compilerOptions: {} }),
+                    content: jsonToReadableText(configObj || { compilerOptions: {} }),
                 };
 
                 const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, libFile, configFile];
@@ -376,7 +381,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     };
                     const configFile: File = {
                         path: rootFolder + "a/b/project/tsconfig.json",
-                        content: JSON.stringify({ compilerOptions: { typeRoots: [] } }),
+                        content: jsonToReadableText({ compilerOptions: { typeRoots: [] } }),
                     };
 
                     const host = createServerHost([file1, file3, libFile, configFile]);

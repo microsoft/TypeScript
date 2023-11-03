@@ -1,3 +1,4 @@
+// === EmitOutput ===
 EmitSkipped: false
 
 FileName : sample/outDir/inputFile1.js.map

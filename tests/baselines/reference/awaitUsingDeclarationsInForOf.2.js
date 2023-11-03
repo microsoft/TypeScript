@@ -9,6 +9,6 @@ async function main() {
 
 //// [awaitUsingDeclarationsInForOf.2.js]
 async function main() {
-    for (await using of of[]) {
+    for (await using of of []) {
     }
 }

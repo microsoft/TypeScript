@@ -14,6 +14,14 @@ import * as vpath from "./_namespaces/vpath";
 import {
     incrementalVerifier,
 } from "./incrementalUtils";
+import {
+    createLoggerWithInMemoryLogs,
+    HarnessLSCouldNotResolveModule,
+    Logger,
+} from "./tsserverLogger";
+import {
+    createWatchUtils,
+} from "./watchUtils";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
@@ -122,6 +130,7 @@ export interface LanguageServiceAdapter {
     getLanguageService(): ts.LanguageService;
     getClassifier(): ts.Classifier;
     getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo;
+    getLogger(): Logger | undefined;
 }
 
 export abstract class LanguageServiceAdapterHost {
@@ -326,6 +335,7 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
 
 export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     private host: NativeLanguageServiceHost;
+    getLogger = ts.returnUndefined;
     constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
         this.host = new NativeLanguageServiceHost(cancellationToken, options);
     }
@@ -370,10 +380,18 @@ class SessionClientHost extends NativeLanguageServiceHost implements ts.server.S
     }
 }
 
-class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
+interface ServerHostFileWatcher {
+    cb: ts.FileWatcherCallback;
+    pollingInterval: ts.PollingInterval;
+}
+interface ServerHostDirectoryWatcher {
+    cb: ts.DirectoryWatcherCallback;
+}
+class SessionServerHost implements ts.server.ServerHost {
     args: string[] = [];
     newLine: string;
     useCaseSensitiveFileNames = false;
+    watchUtils = createWatchUtils<ServerHostFileWatcher, ServerHostDirectoryWatcher>("watchedFiles", "watchedDirectories");
 
     constructor(private host: NativeLanguageServiceHost) {
         this.newLine = this.host.getNewLine();
@@ -440,61 +458,28 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
         return this.host.readDirectory(path, extensions, exclude, include, depth);
     }
 
-    watchFile(): ts.FileWatcher {
-        return { close: ts.noop };
+    watchFile(file: string, cb: ts.FileWatcherCallback, pollingInterval: ts.PollingInterval) {
+        return this.watchUtils.pollingWatch(file, { cb, pollingInterval });
     }
 
-    watchDirectory(): ts.FileWatcher {
-        return { close: ts.noop };
+    watchDirectory(dir: string, cb: ts.DirectoryWatcherCallback, recursive: boolean): ts.FileWatcher {
+        return this.watchUtils.fsWatch(dir, recursive, { cb });
     }
 
-    close = ts.noop;
-
-    info(message: string): void {
-        this.host.log(message);
+    setTimeout(_callback: (...args: any[]) => void, _ms: number, ..._args: any[]): any {
+        // Currently none of the tests use this and we would want something thats deterministic like unittests where we tell which callbacks to invoke
     }
 
-    msg(message: string): void {
-        this.host.log(message);
+    clearTimeout(_timeoutId: any): void {
+        // Currently none of the tests use this and we would want something thats deterministic like unittests where we tell which callbacks to invoke
     }
 
-    loggingEnabled() {
-        return true;
+    setImmediate(_callback: (...args: any[]) => void, ..._args: any[]): any {
+        // Currently none of the tests use this and we would want something thats deterministic like unittests where we tell which callbacks to invoke
     }
 
-    getLogFileName(): string | undefined {
-        return undefined;
-    }
-
-    hasLevel() {
-        return false;
-    }
-
-    startGroup() {
-        throw ts.notImplemented();
-    }
-    endGroup() {
-        throw ts.notImplemented();
-    }
-
-    perftrc(message: string): void {
-        return this.host.log(message);
-    }
-
-    setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
-        return setTimeout(callback, ms, ...args);
-    }
-
-    clearTimeout(timeoutId: any): void {
-        clearTimeout(timeoutId);
-    }
-
-    setImmediate(callback: (...args: any[]) => void, _ms: number, ...args: any[]): any {
-        return setImmediate(callback, args);
-    }
-
-    clearImmediate(timeoutId: any): void {
-        clearImmediate(timeoutId);
+    clearImmediate(_timeoutId: any): void {
+        // Currently none of the tests use this and we would want something thats deterministic like unittests where we tell which callbacks to invoke
     }
 
     createHash(s: string) {
@@ -597,15 +582,28 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
             default:
                 return {
                     module: undefined,
-                    error: new Error("Could not resolve module"),
+                    error: new Error(HarnessLSCouldNotResolveModule),
                 };
         }
     }
 }
 
 class FourslashSession extends ts.server.Session {
+    constructor(opts: ts.server.SessionOptions, readonly baselineHost: (when: string) => void) {
+        super(opts);
+    }
     getText(fileName: string) {
         return ts.getSnapshotText(this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!);
+    }
+
+    protected override toStringMessage(message: string): string {
+        return JSON.stringify(JSON.parse(message), undefined, 2);
+    }
+
+    public override onMessage(message: string): void {
+        this.baselineHost("Before Request");
+        super.onMessage(message);
+        this.baselineHost("After Request");
     }
 }
 
@@ -613,6 +611,7 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
     private host: SessionClientHost;
     private client: ts.server.SessionClient;
     private server: FourslashSession;
+    private logger: Logger;
     constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
         // This is the main host that tests use to direct tests
         const clientHost = new SessionClientHost(cancellationToken, options);
@@ -621,6 +620,7 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         // This host is just a proxy for the clientHost, it uses the client
         // host to answer server queries about files on disk
         const serverHost = new SessionServerHost(clientHost);
+        this.logger = createLoggerWithInMemoryLogs(serverHost, /*sanitizeLibs*/ true);
         const opts: ts.server.SessionOptions = {
             host: serverHost,
             cancellationToken: ts.server.nullCancellationToken,
@@ -629,11 +629,17 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
-            logger: serverHost,
+            logger: this.logger,
             canUseEvents: true,
             incrementalVerifier,
         };
-        this.server = new FourslashSession(opts);
+        this.server = new FourslashSession(opts, when => {
+            const baseline = serverHost.watchUtils.serializeWatches();
+            if (baseline.length) {
+                this.logger.log(when);
+                baseline.forEach(s => this.logger.log(s));
+            }
+        });
 
         // Fake the connection between the client and the server
         serverHost.writeMessage = client.onMessage.bind(client);
@@ -646,6 +652,9 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         // Set the properties
         this.client = client;
         this.host = clientHost;
+    }
+    getLogger() {
+        return this.logger;
     }
     getHost() {
         return this.host;

@@ -2,6 +2,9 @@ import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineBuildInfo,
     CommandLineProgram,
 } from "../helpers/baseline";
@@ -50,7 +53,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { incremental: true, declaration: true } }),
+                content: jsonToReadableText({ compilerOptions: { incremental: true, declaration: true } }),
             };
             const { sys, baseline, oldSnap: originalSnap } = createBaseline(createWatchedSystem(
                 [aFile, bFile, cFile, dFile, config, libFile],

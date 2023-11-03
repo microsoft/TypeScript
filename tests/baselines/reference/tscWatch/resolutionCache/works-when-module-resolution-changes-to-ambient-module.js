@@ -31,8 +31,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -128,8 +132,12 @@ sysLog:: /users/username/projects/project/node_modules/@types:: Changing watcher
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"watch":true}
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

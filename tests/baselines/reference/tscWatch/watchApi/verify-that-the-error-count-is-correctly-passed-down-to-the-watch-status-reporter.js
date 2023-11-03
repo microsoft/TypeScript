@@ -17,7 +17,14 @@ interface Array<T> { length: number; [n: number]: T; }
 let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"module":"commonjs"},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 
 /a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
@@ -44,8 +51,13 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/index.ts"]
-Program options: {"module":1,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "module": 1,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

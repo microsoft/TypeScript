@@ -1,6 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     libContent,
 } from "../helpers/contents";
 import {
@@ -334,7 +337,7 @@ declare module "fs" {
             };
             const configFile: File = {
                 path: configDir + "tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         allowJs: true,
                         rootDir: ".",
@@ -406,7 +409,7 @@ declare module "fs" {
                         edit: sys =>
                             sys.ensureFileOrFolder({
                                 path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
-                                content: JSON.stringify({ something: 10 }),
+                                content: jsonToReadableText({ something: 10 }),
                             }),
                         timeouts: sys => sys.logTimeoutQueueLength(),
                     },
@@ -428,7 +431,7 @@ declare module "fs" {
             };
             const tsconfig: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         types: ["@myapp/ts-types"],
@@ -443,7 +446,7 @@ declare module "fs" {
                 edit: sys => {
                     sys.ensureFileOrFolder({
                         path: `/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             version: "1.65.1",
                             types: "types/somefile.define.d.ts",
                         }),
@@ -487,7 +490,7 @@ declare namespace myapp {
             };
             const config: File = {
                 path: `${mainPackageRoot}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { module: "commonjs", moduleResolution: "node", baseUrl: ".", rootDir: "." },
                     files: ["index.ts"],
                 }),
@@ -498,7 +501,7 @@ declare namespace myapp {
             };
             const linkedPackageJson: File = {
                 path: `${linkedPackageRoot}/package.json`,
-                content: JSON.stringify({ name: "@scoped/linked-package", version: "0.0.1", types: "dist/index.d.ts", main: "dist/index.js" }),
+                content: jsonToReadableText({ name: "@scoped/linked-package", version: "0.0.1", types: "dist/index.d.ts", main: "dist/index.js" }),
             };
             const linkedPackageIndex: File = {
                 path: `${linkedPackageRoot}/dist/index.d.ts`,
@@ -598,7 +601,7 @@ declare namespace NodeJS {
         subScenario: "reusing type ref resolution",
         sys: () =>
             createWatchedSystem({
-                "/users/username/projects/project/tsconfig.json": JSON.stringify({
+                "/users/username/projects/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         traceResolution: true,

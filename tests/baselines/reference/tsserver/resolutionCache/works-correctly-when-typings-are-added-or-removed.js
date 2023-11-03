@@ -8,7 +8,12 @@ let x = 1;
 export let a: number
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{},"exclude":["node_modules"]}
+{
+  "compilerOptions": {},
+  "exclude": [
+    "node_modules"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/project
