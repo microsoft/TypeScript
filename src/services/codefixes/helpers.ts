@@ -912,7 +912,7 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
             const typeArguments = visitNodes(node.typeArguments, visit, isTypeNode);
             return factory.createTypeReferenceNode(qualifier, typeArguments);
         }
-        return visitEachChild(node, visit);
+        return visitEachChild(node, visit, /*context*/ undefined);
     }
 }
 
