@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/reverseMappedDefaultInferenceToConstraint.ts] ////
+
+=== reverseMappedDefaultInferenceToConstraint.ts ===
+// https://github.com/microsoft/TypeScript/issues/56241
+
+interface ParameterizedObject {
+>ParameterizedObject : Symbol(ParameterizedObject, Decl(reverseMappedDefaultInferenceToConstraint.ts, 0, 0))
+
+  type: string;
+>type : Symbol(ParameterizedObject.type, Decl(reverseMappedDefaultInferenceToConstraint.ts, 2, 31))
+
+  params?: Record<string, unknown>;
+>params : Symbol(ParameterizedObject.params, Decl(reverseMappedDefaultInferenceToConstraint.ts, 3, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+}
+
+declare function setup<
+>setup : Symbol(setup, Decl(reverseMappedDefaultInferenceToConstraint.ts, 5, 1))
+
+  TContext,
+>TContext : Symbol(TContext, Decl(reverseMappedDefaultInferenceToConstraint.ts, 7, 23))
+
+  TGuards extends Record<string, ParameterizedObject["params"] | undefined>,
+>TGuards : Symbol(TGuards, Decl(reverseMappedDefaultInferenceToConstraint.ts, 8, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ParameterizedObject : Symbol(ParameterizedObject, Decl(reverseMappedDefaultInferenceToConstraint.ts, 0, 0))
+
+>(_: {
+>_ : Symbol(_, Decl(reverseMappedDefaultInferenceToConstraint.ts, 10, 2))
+
+  types: {
+>types : Symbol(types, Decl(reverseMappedDefaultInferenceToConstraint.ts, 10, 6))
+
+    context: TContext;
+>context : Symbol(context, Decl(reverseMappedDefaultInferenceToConstraint.ts, 11, 10))
+>TContext : Symbol(TContext, Decl(reverseMappedDefaultInferenceToConstraint.ts, 7, 23))
+
+  };
+  guards: {
+>guards : Symbol(guards, Decl(reverseMappedDefaultInferenceToConstraint.ts, 13, 4))
+
+    [K in keyof TGuards]: (context: TContext, params: TGuards[K]) => void;
+>K : Symbol(K, Decl(reverseMappedDefaultInferenceToConstraint.ts, 15, 5))
+>TGuards : Symbol(TGuards, Decl(reverseMappedDefaultInferenceToConstraint.ts, 8, 11))
+>context : Symbol(context, Decl(reverseMappedDefaultInferenceToConstraint.ts, 15, 27))
+>TContext : Symbol(TContext, Decl(reverseMappedDefaultInferenceToConstraint.ts, 7, 23))
+>params : Symbol(params, Decl(reverseMappedDefaultInferenceToConstraint.ts, 15, 45))
+>TGuards : Symbol(TGuards, Decl(reverseMappedDefaultInferenceToConstraint.ts, 8, 11))
+>K : Symbol(K, Decl(reverseMappedDefaultInferenceToConstraint.ts, 15, 5))
+
+  };
+}): TGuards;
+>TGuards : Symbol(TGuards, Decl(reverseMappedDefaultInferenceToConstraint.ts, 8, 11))
+
+const result = setup({
+>result : Symbol(result, Decl(reverseMappedDefaultInferenceToConstraint.ts, 19, 5))
+>setup : Symbol(setup, Decl(reverseMappedDefaultInferenceToConstraint.ts, 5, 1))
+
+  types: {
+>types : Symbol(types, Decl(reverseMappedDefaultInferenceToConstraint.ts, 19, 22))
+
+    context: {
+>context : Symbol(context, Decl(reverseMappedDefaultInferenceToConstraint.ts, 20, 10))
+
+      count: 100,
+>count : Symbol(count, Decl(reverseMappedDefaultInferenceToConstraint.ts, 21, 14))
+
+    },
+  },
+  guards: {
+>guards : Symbol(guards, Decl(reverseMappedDefaultInferenceToConstraint.ts, 24, 4))
+
+    checkFoo: (_, { foo }: { foo: string }) => foo === "foo",
+>checkFoo : Symbol(checkFoo, Decl(reverseMappedDefaultInferenceToConstraint.ts, 25, 11))
+>_ : Symbol(_, Decl(reverseMappedDefaultInferenceToConstraint.ts, 26, 15))
+>foo : Symbol(foo, Decl(reverseMappedDefaultInferenceToConstraint.ts, 26, 19))
+>foo : Symbol(foo, Decl(reverseMappedDefaultInferenceToConstraint.ts, 26, 28))
+>foo : Symbol(foo, Decl(reverseMappedDefaultInferenceToConstraint.ts, 26, 19))
+
+    alwaysTrue: (_) => true,
+>alwaysTrue : Symbol(alwaysTrue, Decl(reverseMappedDefaultInferenceToConstraint.ts, 26, 61))
+>_ : Symbol(_, Decl(reverseMappedDefaultInferenceToConstraint.ts, 27, 17))
+
+  },
+});
+

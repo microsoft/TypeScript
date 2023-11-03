@@ -24853,7 +24853,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
         inferTypes([inference], sourceType, templateType);
-        return getTypeFromInference(inference) || unknownType;
+        return getTypeFromInference(inference) || getBaseConstraintOfType(typeParameter) || unknownType;
     }
 
     function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol> {

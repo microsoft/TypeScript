@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/reverseMappedDefaultInferenceToConstraint.ts] ////
+
+=== reverseMappedDefaultInferenceToConstraint.ts ===
+// https://github.com/microsoft/TypeScript/issues/56241
+
+interface ParameterizedObject {
+  type: string;
+>type : string
+
+  params?: Record<string, unknown>;
+>params : Record<string, unknown> | undefined
+}
+
+declare function setup<
+>setup : <TContext, TGuards extends Record<string, Record<string, unknown> | undefined>>(_: { types: {    context: TContext;}; guards: { [K in keyof TGuards]: (context: TContext, params: TGuards[K]) => void; }; }) => TGuards
+
+  TContext,
+  TGuards extends Record<string, ParameterizedObject["params"] | undefined>,
+>(_: {
+>_ : { types: {    context: TContext;}; guards: { [K in keyof TGuards]: (context: TContext, params: TGuards[K]) => void; }; }
+
+  types: {
+>types : { context: TContext; }
+
+    context: TContext;
+>context : TContext
+
+  };
+  guards: {
+>guards : { [K in keyof TGuards]: (context: TContext, params: TGuards[K]) => void; }
+
+    [K in keyof TGuards]: (context: TContext, params: TGuards[K]) => void;
+>context : TContext
+>params : TGuards[K]
+
+  };
+}): TGuards;
+
+const result = setup({
+>result : { checkFoo: { foo: string; }; alwaysTrue: Record<string, unknown> | undefined; }
+>setup({  types: {    context: {      count: 100,    },  },  guards: {    checkFoo: (_, { foo }: { foo: string }) => foo === "foo",    alwaysTrue: (_) => true,  },}) : { checkFoo: { foo: string; }; alwaysTrue: Record<string, unknown> | undefined; }
+>setup : <TContext, TGuards extends Record<string, Record<string, unknown> | undefined>>(_: { types: { context: TContext; }; guards: { [K in keyof TGuards]: (context: TContext, params: TGuards[K]) => void; }; }) => TGuards
+>{  types: {    context: {      count: 100,    },  },  guards: {    checkFoo: (_, { foo }: { foo: string }) => foo === "foo",    alwaysTrue: (_) => true,  },} : { types: { context: { count: number; }; }; guards: { checkFoo: (_: { count: number; }, { foo }: { foo: string; }) => boolean; alwaysTrue: (_: { count: number; }) => boolean; }; }
+
+  types: {
+>types : { context: { count: number; }; }
+>{    context: {      count: 100,    },  } : { context: { count: number; }; }
+
+    context: {
+>context : { count: number; }
+>{      count: 100,    } : { count: number; }
+
+      count: 100,
+>count : number
+>100 : 100
+
+    },
+  },
+  guards: {
+>guards : { checkFoo: (_: { count: number; }, { foo }: { foo: string; }) => boolean; alwaysTrue: (_: { count: number; }) => boolean; }
+>{    checkFoo: (_, { foo }: { foo: string }) => foo === "foo",    alwaysTrue: (_) => true,  } : { checkFoo: (_: { count: number; }, { foo }: { foo: string; }) => boolean; alwaysTrue: (_: { count: number; }) => boolean; }
+
+    checkFoo: (_, { foo }: { foo: string }) => foo === "foo",
+>checkFoo : (_: { count: number; }, { foo }: { foo: string; }) => boolean
+>(_, { foo }: { foo: string }) => foo === "foo" : (_: { count: number; }, { foo }: { foo: string; }) => boolean
+>_ : { count: number; }
+>foo : string
+>foo : string
+>foo === "foo" : boolean
+>foo : string
+>"foo" : "foo"
+
+    alwaysTrue: (_) => true,
+>alwaysTrue : (_: { count: number; }) => boolean
+>(_) => true : (_: { count: number; }) => boolean
+>_ : { count: number; }
+>true : true
+
+  },
+});
+
