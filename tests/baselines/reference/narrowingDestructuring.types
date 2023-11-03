@@ -41,7 +41,7 @@ function func<T extends X>(value: T) {
 }
 
 type Z = { kind: "f", f: { a: number, b: string, c: number } }
->Z : { kind: "f"; f: {    a: number;    b: string;    c: number;}; } | { kind: "g"; g: {    a: string;    b: number;    c: string;}; }
+>Z : { kind: "f"; f: { a: number; b: string; c: number; }; } | { kind: "g"; g: { a: string; b: number; c: string; }; }
 >kind : "f"
 >f : { a: number; b: string; c: number; }
 >a : number

@@ -16,7 +16,7 @@ let x1 = value;  // regular "1"
 >value : "1"
 
 declare function f2<T extends "1" | "2" | "3">(x: { value: T }): { value: T };
->f2 : <T extends "1" | "2" | "3">(x: {    value: T;}) => {    value: T;}
+>f2 : <T extends "1" | "2" | "3">(x: { value: T; }) => { value: T; }
 >x : { value: T; }
 >value : T
 >value : T

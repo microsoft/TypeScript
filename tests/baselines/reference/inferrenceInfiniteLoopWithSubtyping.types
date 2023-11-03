@@ -29,7 +29,7 @@ export class ObjectTypeComposer<TSource, TContext> {
 >fields : Readonly<{ [key: string]: Readonly<Resolver>; }>
 
   public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
->addResolver : <TResolverSource>(opts: {    type?: Thunk<ComposeOutputTypeDefinition>;}) => this
+>addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => this
 >opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
 >type : Thunk<ComposeOutputTypeDefinition>
 }

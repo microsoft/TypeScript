@@ -92,7 +92,7 @@ type Union = A & B;
 >Union : never
 
 function func(): { value: Union[] } {
->func : () => {    value: Union[];}
+>func : () => { value: Union[]; }
 >value : never[]
 
     return {

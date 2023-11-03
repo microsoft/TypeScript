@@ -2,7 +2,7 @@
 
 === inferStringLiteralUnionForBindingElement.ts ===
 declare function func<T extends string>(arg: { keys: T[] }): { readonly keys: T[]; readonly firstKey: T; };
->func : <T extends string>(arg: {    keys: T[];}) => {    readonly keys: T[];    readonly firstKey: T;}
+>func : <T extends string>(arg: { keys: T[]; }) => { readonly keys: T[]; readonly firstKey: T; }
 >arg : { keys: T[]; }
 >keys : T[]
 >keys : T[]

@@ -59,7 +59,7 @@ declare function isA(obj: unknown): obj is { a: false } | { b: 0 };
 >b : 0
 
 function fx4(obj: { b: number }) {
->fx4 : (obj: {    b: number;}) => void
+>fx4 : (obj: { b: number; }) => void
 >obj : { b: number; }
 >b : number
 

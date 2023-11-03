@@ -20,7 +20,7 @@ type ActionFunction<TEvent extends { type: string }> = (event: TEvent) => void;
 >event : TEvent
 
 declare function createMachine<
->createMachine : <TTypesMeta extends TypegenDisabled | TypegenEnabled = TypegenDisabled>(config: {    types?: TTypesMeta;}, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{    type: "test";}> : ActionFunction<{    type: string;}>) => void
+>createMachine : <TTypesMeta extends TypegenDisabled | TypegenEnabled = TypegenDisabled>(config: { types?: TTypesMeta; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void
 
   TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled
 >(

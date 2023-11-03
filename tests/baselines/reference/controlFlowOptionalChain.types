@@ -321,8 +321,8 @@ o4.x.y;
 >y : boolean
 
 declare const o5: { x?: { y: { z?: { w: boolean } } } };
->o5 : { x?: { y: {    z?: {        w: boolean;    };}; } | undefined; }
->x : { y: {    z?: {        w: boolean;    };}; } | undefined
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>x : { y: { z?: { w: boolean; }; }; } | undefined
 >y : { z?: { w: boolean; } | undefined; }
 >z : { w: boolean; } | undefined
 >w : boolean

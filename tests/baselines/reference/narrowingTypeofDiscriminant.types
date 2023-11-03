@@ -2,7 +2,7 @@
 
 === narrowingTypeofDiscriminant.ts ===
 function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
->f1 : (obj: {    kind: 'a';    data: string;} | {    kind: 1;    data: number;}) => void
+>f1 : (obj: { kind: 'a'; data: string; } | { kind: 1; data: number; }) => void
 >obj : { kind: 'a'; data: string; } | { kind: 1; data: number; }
 >kind : "a"
 >data : string
@@ -27,7 +27,7 @@ function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
 }
 
 function f2(obj: { kind: 'a', data: string } | { kind: 1, data: number } | undefined) {
->f2 : (obj: {    kind: 'a';    data: string;} | {    kind: 1;    data: number;} | undefined) => void
+>f2 : (obj: { kind: 'a'; data: string; } | { kind: 1; data: number; } | undefined) => void
 >obj : { kind: 'a'; data: string; } | { kind: 1; data: number; } | undefined
 >kind : "a"
 >data : string

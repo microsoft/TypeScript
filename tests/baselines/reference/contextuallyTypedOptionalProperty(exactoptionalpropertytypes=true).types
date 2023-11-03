@@ -9,7 +9,7 @@ declare function match<T>(cb: (value: T) => boolean): T;
 >value : T
 
 declare function foo(pos: { x?: number; y?: number }): boolean;
->foo : (pos: {    x?: number;    y?: number;}) => boolean
+>foo : (pos: { x?: number; y?: number; }) => boolean
 >pos : { x?: number; y?: number; }
 >x : number | undefined
 >y : number | undefined

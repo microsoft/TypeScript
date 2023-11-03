@@ -344,7 +344,7 @@ type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
 >MappingComponent : MappingComponent<I, O>
 
     setup(): { inputs: I; outputs: O };
->setup : () => {    inputs: I;    outputs: O;}
+>setup : () => { inputs: I; outputs: O; }
 >inputs : I
 >outputs : O
 

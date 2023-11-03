@@ -179,8 +179,8 @@ declare let b3: InfBox<string>;
 >b3 : InfBox<string>
 
 declare let b4: { value: { value: { value: typeof b4 }}};
->b4 : { value: {    value: {        value: typeof b4;    };}; }
->value : { value: {    value: typeof b4;}; }
+>b4 : { value: { value: { value: typeof b4; }; }; }
+>value : { value: { value: typeof b4; }; }
 >value : { value: typeof b4; }
 >value : { value: { value: { value: typeof b4; }; }; }
 >b4 : { value: { value: { value: any; }; }; }

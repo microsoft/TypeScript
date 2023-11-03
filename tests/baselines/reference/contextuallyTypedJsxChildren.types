@@ -17,7 +17,7 @@ declare namespace DropdownMenu {
   }
   interface PropsWithChildren extends BaseProps {
     children(props: { onClose: () => void }): JSX.Element;
->children : (props: {    onClose: () => void;}) => JSX.Element
+>children : (props: { onClose: () => void; }) => JSX.Element
 >props : { onClose: () => void; }
 >onClose : () => void
 >JSX : any

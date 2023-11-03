@@ -3,7 +3,7 @@
 === index.tsx ===
 interface MiddlewareArray<T> extends Array<T> {}
 declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
->configureStore : (options: {    middleware: MiddlewareArray<any>;}) => void
+>configureStore : (options: { middleware: MiddlewareArray<any>; }) => void
 >options : { middleware: MiddlewareArray<any>; }
 >middleware : MiddlewareArray<any>
 

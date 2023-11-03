@@ -2,7 +2,7 @@
 
 === destructuringTypeGuardFlow.ts ===
 type foo = {
->foo : { bar: number | null; baz: string; nested: {    a: number;    b: string | null;}; }
+>foo : { bar: number | null; baz: string; nested: { a: number; b: string | null; }; }
 
   bar: number | null;
 >bar : number | null

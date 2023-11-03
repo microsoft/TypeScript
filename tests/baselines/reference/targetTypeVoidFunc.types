@@ -2,7 +2,7 @@
 
 === targetTypeVoidFunc.ts ===
 function f1(): { new (): number; } {
->f1 : () => {    new (): number;}
+>f1 : () => { new (): number; }
 
     return function () { return; }
 >function () { return; } : () => void

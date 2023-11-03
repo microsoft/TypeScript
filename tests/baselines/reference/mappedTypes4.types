@@ -112,7 +112,7 @@ type DeepReadonly<T> = {
 };
 
 type Foo = {
->Foo : { x: number; y: {    a: string;    b: number;}; z: boolean; }
+>Foo : { x: number; y: { a: string; b: number; }; z: boolean; }
 
     x: number;
 >x : number
@@ -128,7 +128,7 @@ type Foo = {
 };
 
 type DeepReadonlyFoo = {
->DeepReadonlyFoo : { readonly x: number; readonly y: {    readonly a: string;    readonly b: number;}; readonly z: boolean; }
+>DeepReadonlyFoo : { readonly x: number; readonly y: { readonly a: string; readonly b: number; }; readonly z: boolean; }
 
     readonly x: number;
 >x : number

@@ -2254,7 +2254,7 @@ module Harness {
 >[] : undefined[]
 
         var timeFunction: (
->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: {    (): void;}) => void) => void
+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
 
             benchmark: Benchmark,
 >benchmark : Benchmark
@@ -2266,7 +2266,7 @@ module Harness {
 >name : string
 
             f?: (bench?: { (): void; }) => void
->f : (bench?: {    (): void;}) => void
+>f : (bench?: { (): void; }) => void
 >bench : () => void
 
         ) => void;
@@ -2721,7 +2721,7 @@ module Harness {
 >{} : {}
 
             public toArray(): { filename: string; file: WriterAggregator; }[] {
->toArray : () => {    filename: string;    file: WriterAggregator;}[]
+>toArray : () => { filename: string; file: WriterAggregator; }[]
 >filename : string
 >file : WriterAggregator
 
@@ -5866,7 +5866,7 @@ module Harness {
 
         /** Given a test file containing // @Filename directives, return an array of named units of code to be added to an existing compiler instance */
         export function makeUnitsFromTest(code: string, filename: string): { settings: CompilerSetting[]; testUnitData: TestUnitData[]; } {
->makeUnitsFromTest : (code: string, filename: string) => {    settings: CompilerSetting[];    testUnitData: TestUnitData[];}
+>makeUnitsFromTest : (code: string, filename: string) => { settings: CompilerSetting[]; testUnitData: TestUnitData[]; }
 >code : string
 >filename : string
 >settings : CompilerSetting[]
@@ -7324,7 +7324,7 @@ module Harness {
 >[] : undefined[]
 
             function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
->mapEdits : (edits: Services.TextEdit[]) => {    edit: Services.TextEdit;    index: number;}[]
+>mapEdits : (edits: Services.TextEdit[]) => { edit: Services.TextEdit; index: number; }[]
 >edits : Services.TextEdit[]
 >Services : any
 >edit : Services.TextEdit

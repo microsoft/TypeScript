@@ -49,7 +49,7 @@ function f1(obj: { a?: string, b?: string | undefined }) {
 }
 
 function f2(obj: { a?: string, b?: string | undefined }) {
->f2 : (obj: {    a?: string;    b?: string | undefined;}) => void
+>f2 : (obj: { a?: string; b?: string | undefined; }) => void
 >obj : { a?: string; b?: string | undefined; }
 >a : string | undefined
 >b : string | undefined
@@ -543,7 +543,7 @@ declare let tx4: [(string | undefined)?];
 >tx4 : [(string | undefined)?]
 
 declare function f11<T>(x: { p?: T }): T;
->f11 : <T>(x: {    p?: T;}) => T
+>f11 : <T>(x: { p?: T; }) => T
 >x : { p?: T; }
 >p : T | undefined
 

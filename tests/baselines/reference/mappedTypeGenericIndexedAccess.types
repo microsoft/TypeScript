@@ -4,7 +4,7 @@
 // Repro from #49242
 
 type Types = {
->Types : { first: {    a1: true;}; second: {    a2: true;}; third: {    a3: true;}; }
+>Types : { first: { a1: true; }; second: { a2: true; }; third: { a3: true; }; }
 
     first: { a1: true };
 >first : { a1: true; }
@@ -75,7 +75,7 @@ class Test {
 // Repro from #49338
 
 type TypesMap = {
->TypesMap : { 0: {    foo: 'bar';}; 1: {    a: 'b';}; }
+>TypesMap : { 0: { foo: 'bar'; }; 1: { a: 'b'; }; }
 
     [0]: { foo: 'bar'; };
 >[0] : { foo: 'bar'; }

@@ -279,7 +279,7 @@ function checkD(f: FnTypes) {
 // Type of x = y is y with freshness preserved
 
 function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
->fx10 : (obj1: {    x?: number;}, obj2: {    x?: number;    y?: number;}) => void
+>fx10 : (obj1: { x?: number; }, obj2: { x?: number; y?: number; }) => void
 >obj1 : { x?: number | undefined; }
 >x : number | undefined
 >obj2 : { x?: number | undefined; y?: number | undefined; }
@@ -310,7 +310,7 @@ function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
 }
 
 function fx11(): { x?: number } {
->fx11 : () => {    x?: number;}
+>fx11 : () => { x?: number; }
 >x : number | undefined
 
     let obj: { x?: number, y?: number };
@@ -450,7 +450,7 @@ declare function doesValueAtDeepPathSatisfy<
 
 
 type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
->Foo : { value: {    type: 'A';}; a?: number | undefined; } | { value: {    type: 'B';}; b?: number | undefined; }
+>Foo : { value: { type: 'A'; }; a?: number | undefined; } | { value: { type: 'B'; }; b?: number | undefined; }
 >value : { type: 'A'; }
 >type : "A"
 >a : number | undefined
@@ -471,7 +471,7 @@ declare function assert(condition: boolean): asserts condition;
 >condition : boolean
 
 function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
->test1 : (foo: Foo) => {    value: {        type: 'A';    };    a?: number;}
+>test1 : (foo: Foo) => { value: { type: 'A'; }; a?: number; }
 >foo : Foo
 >value : { type: 'A'; }
 >type : "A"
@@ -493,7 +493,7 @@ function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
 }
 
 function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
->test2 : (foo: Foo) => {    value: {        type: 'A';    };    a?: number;}
+>test2 : (foo: Foo) => { value: { type: 'A'; }; a?: number; }
 >foo : Foo
 >value : { type: 'A'; }
 >type : "A"

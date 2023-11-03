@@ -153,7 +153,7 @@ export interface GatewayEvents {
 }
 
 function assertMessage(event: { a: 1 }) { }
->assertMessage : (event: {    a: 1;}) => void
+>assertMessage : (event: { a: 1; }) => void
 >event : { a: 1; }
 >a : 1
 

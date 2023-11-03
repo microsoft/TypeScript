@@ -179,7 +179,7 @@ Object.defineProperty(x, "zipStr", {
  * @param {{name: string}} named
  */
 function takeName(named) { return named.name; }
->takeName : (named: {    name: string;}) => string
+>takeName : (named: { name: string; }) => string
 >named : { name: string; }
 >named.name : string
 >named : { name: string; }

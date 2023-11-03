@@ -5,8 +5,8 @@ class Test {
 >Test : Test
 
   set #value(v: { foo: { bar: number } }) {}
->#value : { foo: {    bar: number;}; }
->v : { foo: {    bar: number;}; }
+>#value : { foo: { bar: number; }; }
+>v : { foo: { bar: number; }; }
 >foo : { bar: number; }
 >bar : number
 

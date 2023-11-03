@@ -37,7 +37,7 @@ import * as React from "react";
 >React : typeof React
 
 export function MyComponent(props: { foo: string }) {
->MyComponent : (props: {    foo: string;}) => JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
 >props : { foo: string; }
 >foo : string
 

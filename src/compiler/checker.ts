@@ -6623,8 +6623,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (
                     context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
-                    type.flags & TypeFlags.TypeParameter &&
-                    !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)
+                    type.flags & TypeFlags.TypeParameter
                 ) {
                     const name = typeParameterToName(type, context);
                     context.approximateLength += idText(name).length;
@@ -7527,7 +7526,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 && signature.declaration
                 && signature.declaration !== context.enclosingDeclaration
                 && !isInJSFile(signature.declaration)
-                && some(expandedParams)
+                && (some(expandedParams) || some(signature.typeParameters))
             ) {
                 // As a performance optimization, reuse the same fake scope within this chain.
                 // This is especially needed when we are working on an excessively deep type;
@@ -7551,7 +7550,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const locals = existingFakeScope?.locals ?? createSymbolTable();
 
                 let newLocals: __String[] | undefined;
-                for (const param of expandedParams) {
+                for (const param of concatenate(expandedParams, map(signature.typeParameters, p => p.symbol))) {
                     if (!locals.has(param.escapedName)) {
                         newLocals = append(newLocals, param.escapedName);
                         locals.set(param.escapedName, param);
@@ -8166,7 +8165,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // `i` we've used thus far, to save work later
                 (context.typeParameterNamesByTextNextNameCount ||= new Map()).set(rawtext, i);
                 (context.typeParameterNames ||= new Map()).set(getTypeId(type), result);
-                (context.typeParameterNamesByText ||= new Set()).add(rawtext);
+                (context.typeParameterNamesByText ||= new Set()).add(text);
             }
             return result;
         }
@@ -8424,8 +8423,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     includePrivateSymbol?.(sym);
                 }
                 if (isIdentifier(node)) {
-                    const type = getDeclaredTypeOfSymbol(sym);
-                    const name = sym.flags & SymbolFlags.TypeParameter && !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration) ? typeParameterToName(type, context) : factory.cloneNode(node);
+                    const name = sym.flags & SymbolFlags.TypeParameter && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams ? typeParameterToName(getDeclaredTypeOfSymbol(sym), context) : factory.cloneNode(node);
                     name.symbol = sym; // for quickinfo, which uses identifier symbol information
                     return { introducesError, node: setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping) };
                 }
@@ -8567,6 +8565,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 if (file && isTupleTypeNode(node) && (getLineAndCharacterOfPosition(file, node.pos).line === getLineAndCharacterOfPosition(file, node.end).line)) {
                     setEmitFlags(node, EmitFlags.SingleLine);
+                }
+
+                if (isTypeLiteralNode(node) && !(context.flags & NodeBuilderFlags.MultilineObjectLiterals)) {
+                    // always clone to add node builder format flags
+                    let visited = visitEachChild(node, visitExistingNodeTreeSymbols, nullTransformationContext);
+                    visited = visited === node ? factory.cloneNode(visited) : visited;
+                    setEmitFlags(visited, EmitFlags.SingleLine);
+                    return visited;
                 }
 
                 return visitEachChild(node, visitExistingNodeTreeSymbols, nullTransformationContext);

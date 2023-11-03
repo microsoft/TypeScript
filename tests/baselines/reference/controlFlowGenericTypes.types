@@ -2,7 +2,7 @@
 
 === controlFlowGenericTypes.ts ===
 function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
->f1 : <T extends string | undefined>(x: T, y: {    a: T;}, z: [T]) => string
+>f1 : <T extends string | undefined>(x: T, y: { a: T; }, z: [T]) => string
 >x : T
 >y : { a: T; }
 >a : T

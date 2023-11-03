@@ -35,7 +35,7 @@ module B {
 
 === test.ts ===
 var fn: () => { x: number; y: number };
->fn : () => {    x: number;    y: number;}
+>fn : () => { x: number; y: number; }
 >x : number
 >y : number
 

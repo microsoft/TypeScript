@@ -13,7 +13,7 @@ type TranslationEntry = {
 >args : [] | [unknown]
 }
 type Translations = {
->Translations : { a: {    args: [string];}; b: {    args: [];}; }
+>Translations : { a: { args: [string]; }; b: { args: []; }; }
 
     a: { args: [string] },
 >a : { args: [string]; }

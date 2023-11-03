@@ -9,7 +9,7 @@ declare module "./index" {
 
     interface LoDashStatic {
       pick: <T extends object, U extends keyof T>(
->pick : <T extends object, U extends keyof T>(object: T, ...props: U[]) => Pick<T, U>
+>pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
 
         object: T,
 >object : T

@@ -9,7 +9,7 @@ const sym = Symbol();
 >Symbol : SymbolConstructor
 
 function gg3(x: { [key: string]: string }, y: { [key: symbol]: string }, z: { [sym]: number }) {
->gg3 : (x: { [key: string]: string; }, y: { [key: symbol]: string; }, z: {    [sym]: number;}) => void
+>gg3 : (x: { [key: string]: string; }, y: { [key: symbol]: string; }, z: { [sym]: number; }) => void
 >x : { [key: string]: string; }
 >key : string
 >y : { [key: symbol]: string; }

@@ -6,7 +6,7 @@ import * as React from "react";
 >React : typeof React
 
 function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.IntrinsicElements[T]): JSX.Element {
->SomeComponent : <T extends "a" | "button">(props: {    element?: T;} & JSX.IntrinsicElements[T]) => JSX.Element
+>SomeComponent : <T extends "a" | "button">(props: { element?: T; } & JSX.IntrinsicElements[T]) => JSX.Element
 >props : { element?: T | undefined; } & JSX.IntrinsicElements[T]
 >element : T | undefined
 >JSX : any
