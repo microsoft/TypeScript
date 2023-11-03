@@ -45,7 +45,7 @@ export enum DiagnosticCategory {
 
 export let x: DiagnosticCategory;
 
-{
+(() => {
     enum DiagnosticCategory {
         Warning = "Warning",
         Error = "Error",
@@ -56,4 +56,4 @@ export let x: DiagnosticCategory;
         x = y;
         y = x;
     }
-}
+})()
