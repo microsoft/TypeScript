@@ -364,6 +364,26 @@ function verifyTscEditDiscrepancies({
                         expectedIndex++;
                     });
                 }
+                if (incrementalReadableBuildInfo?.program?.emitDiagnosticsPerFile) {
+                    incrementalReadableBuildInfo.program.emitDiagnosticsPerFile.forEach(([actualFileOrArray]) => {
+                        const actualFile = ts.isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
+                        if (
+                            !ts.find(
+                                (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile,
+                                ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                            ) && !ts.find(
+                                (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit,
+                                ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                            )
+                        ) {
+                            addBaseline(
+                                `Incremental build contains ${actualFile} file has errors, clean build does not have errors or does not mark is as pending emit: ${outputFile}::`,
+                                `Incremental buildInfoText:: ${incrementalBuildText}`,
+                                `Clean buildInfoText:: ${cleanBuildText}`,
+                            );
+                        }
+                    });
+                }
             }
         }
     }
@@ -453,6 +473,7 @@ function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
                 options: { ...readableBuildInfo.program.options, noEmit: undefined },
                 exportedModulesMap: undefined,
                 affectedFilesPendingEmit: undefined,
+                emitDiagnosticsPerFile: undefined,
                 latestChangedDtsFile: readableBuildInfo.program.latestChangedDtsFile ? "FakeFileName" : undefined,
             },
             size: undefined, // Size doesnt need to be equal

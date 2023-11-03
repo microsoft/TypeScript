@@ -37,6 +37,8 @@ body:
           required: true
         - label: This isn't a runtime feature (e.g. library functionality, non-ECMAScript syntax with JavaScript output, new syntax sugar for JS, etc.)
           required: true
+        - label: "This isn't a request to add a new utility type: https://github.com/microsoft/TypeScript/wiki/No-New-Utility-Types"
+          required: true
         - label: 'This feature would agree with the rest of our Design Goals: https://github.com/Microsoft/TypeScript/wiki/TypeScript-Design-Goals'
           required: true
   - type: textarea

@@ -22,6 +22,10 @@
 
 //// const m = () => 123;
 //// const n;
+//// const o = () => -1 as const;
+
+//// const p = ([a]: Foo[]) => a;
+//// const q = ({ a }: { a: Foo }) => a;
 
 verify.baselineInlayHints(undefined, {
     includeInlayVariableTypeHints: true,

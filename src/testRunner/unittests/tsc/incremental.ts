@@ -618,14 +618,17 @@ console.log(a);`,
                     type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`,
                 ),
             edits: [
+                noChangeRun,
                 {
                     caption: "modify public to protected",
                     edit: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "public", "protected"),
                 },
+                noChangeRun,
                 {
                     caption: "modify protected to public",
                     edit: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "protected", "public"),
                 },
+                noChangeRun,
             ],
         });
     }
@@ -958,5 +961,50 @@ console.log(a);`,
             caption: "modify js file",
             edit: fs => appendText(fs, "/src/project/src/bug.js", `export const something = 1;`),
         }],
+    });
+
+    verifyTsc({
+        scenario: "incremental",
+        subScenario: "reports dts generation errors",
+        commandLineArgs: ["-p", `/src/project`, "--explainFiles", "--listEmittedFiles"],
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        module: "NodeNext",
+                        moduleResolution: "NodeNext",
+                        composite: true,
+                        skipLibCheck: true,
+                        skipDefaultLibCheck: true,
+                    },
+                }),
+                "/src/project/index.ts": Utils.dedent`
+                    import ky from 'ky';
+                    export const api = ky.extend({});
+                `,
+                "/src/project/package.json": jsonToReadableText({
+                    type: "module",
+                }),
+                "/src/project/node_modules/ky/distribution/index.d.ts": Utils.dedent`
+                   type KyInstance = {
+                        extend(options: Record<string,unknown>): KyInstance;
+                    }
+                    declare const ky: KyInstance;
+                    export default ky;
+                `,
+                "/src/project/node_modules/ky/package.json": jsonToReadableText({
+                    name: "ky",
+                    type: "module",
+                    main: "./distribution/index.js",
+                }),
+                "/lib/lib.esnext.full.d.ts": libContent,
+            }),
+        edits: [
+            noChangeRun,
+            {
+                ...noChangeRun,
+                commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "-v"],
+            },
+        ],
     });
 });
