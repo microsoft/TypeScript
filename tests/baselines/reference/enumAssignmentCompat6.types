@@ -118,7 +118,11 @@ export enum DiagnosticCategory {
 export let x: DiagnosticCategory;
 >x : DiagnosticCategory
 
-{
+(() => {
+>(() => {    enum DiagnosticCategory {        Warning = "Warning",        Error = "Error",        Suggestion = "Suggestion",        Message = "Message",    }    function f(y: DiagnosticCategory) {        x = y;        y = x;    }})() : void
+>(() => {    enum DiagnosticCategory {        Warning = "Warning",        Error = "Error",        Suggestion = "Suggestion",        Message = "Message",    }    function f(y: DiagnosticCategory) {        x = y;        y = x;    }}) : () => void
+>() => {    enum DiagnosticCategory {        Warning = "Warning",        Error = "Error",        Suggestion = "Suggestion",        Message = "Message",    }    function f(y: DiagnosticCategory) {        x = y;        y = x;    }} : () => void
+
     enum DiagnosticCategory {
 >DiagnosticCategory : DiagnosticCategory
 
@@ -152,4 +156,4 @@ export let x: DiagnosticCategory;
 >y : DiagnosticCategory
 >x : import("f").DiagnosticCategory
     }
-}
+})()

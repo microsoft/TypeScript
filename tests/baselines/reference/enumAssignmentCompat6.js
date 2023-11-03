@@ -47,7 +47,7 @@ export enum DiagnosticCategory {
 
 export let x: DiagnosticCategory;
 
-{
+(() => {
     enum DiagnosticCategory {
         Warning = "Warning",
         Error = "Error",
@@ -58,7 +58,7 @@ export let x: DiagnosticCategory;
         x = y;
         y = x;
     }
-}
+})()
 
 //// [f.js]
 "use strict";
@@ -107,16 +107,16 @@ var DiagnosticCategory;
     DiagnosticCategory[DiagnosticCategory["Suggestion"] = 2] = "Suggestion";
     DiagnosticCategory[DiagnosticCategory["Message"] = 3] = "Message";
 })(DiagnosticCategory || (exports.DiagnosticCategory = DiagnosticCategory = {}));
-{
-    var DiagnosticCategory_1;
+(function () {
+    var DiagnosticCategory;
     (function (DiagnosticCategory) {
         DiagnosticCategory["Warning"] = "Warning";
         DiagnosticCategory["Error"] = "Error";
         DiagnosticCategory["Suggestion"] = "Suggestion";
         DiagnosticCategory["Message"] = "Message";
-    })(DiagnosticCategory_1 || (DiagnosticCategory_1 = {}));
+    })(DiagnosticCategory || (DiagnosticCategory = {}));
     function f(y) {
         exports.x = y;
         y = exports.x;
     }
-}
+})();

@@ -115,9 +115,9 @@ export let x: DiagnosticCategory;
 >x : Symbol(x, Decl(f.ts, 44, 10))
 >DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 34, 1))
 
-{
+(() => {
     enum DiagnosticCategory {
->DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 46, 1))
+>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 46, 8))
 
         Warning = "Warning",
 >Warning : Symbol(DiagnosticCategory.Warning, Decl(f.ts, 47, 29))
@@ -134,7 +134,7 @@ export let x: DiagnosticCategory;
     function f(y: DiagnosticCategory) {
 >f : Symbol(f, Decl(f.ts, 52, 5))
 >y : Symbol(y, Decl(f.ts, 53, 15))
->DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 46, 1))
+>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 46, 8))
 
         x = y;
 >x : Symbol(x, Decl(f.ts, 44, 10))
@@ -144,4 +144,4 @@ export let x: DiagnosticCategory;
 >y : Symbol(y, Decl(f.ts, 53, 15))
 >x : Symbol(x, Decl(f.ts, 44, 10))
     }
-}
+})()
