@@ -122,3 +122,29 @@ async function test3() {
 >p1 : number
 }
 
+function test4([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
+>test4 : ([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) => void
+>p1 : number | undefined
+>p1Error : Error | undefined
+
+  if (Math.random()) {
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+    p1 = undefined;
+>p1 = undefined : undefined
+>p1 : number | undefined
+>undefined : undefined
+  }
+  if (p1Error) {
+>p1Error : Error | undefined
+
+    return;
+  }
+
+  p1;
+>p1 : number | undefined
+}
+

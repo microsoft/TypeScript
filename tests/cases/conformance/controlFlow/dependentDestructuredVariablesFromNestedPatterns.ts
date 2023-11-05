@@ -40,3 +40,14 @@ async function test3() {
 
   p1;
 }
+
+function test4([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
+  if (Math.random()) {
+    p1 = undefined;
+  }
+  if (p1Error) {
+    return;
+  }
+
+  p1;
+}

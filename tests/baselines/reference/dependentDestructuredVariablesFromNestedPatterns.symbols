@@ -111,3 +111,28 @@ async function test3() {
 >p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 29, 10))
 }
 
+function test4([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
+>test4 : Symbol(test4, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 36, 1))
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 17))
+>p1Error : Symbol(p1Error, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 20))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+  if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    p1 = undefined;
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 17))
+>undefined : Symbol(undefined)
+  }
+  if (p1Error) {
+>p1Error : Symbol(p1Error, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 20))
+
+    return;
+  }
+
+  p1;
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 17))
+}
+
