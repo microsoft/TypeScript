@@ -28472,32 +28472,42 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!symbol.valueDeclaration) {
             return false;
         }
-        const parent = getRootDeclaration(symbol.valueDeclaration).parent;
-        const links = getNodeLinks(parent);
-        if (!(links.flags & NodeCheckFlags.AssignmentsMarked)) {
-            links.flags |= NodeCheckFlags.AssignmentsMarked;
-            if (!hasParentWithAssignmentsMarked(parent)) {
-                markNodeAssignments(parent);
-            }
-        }
+        markNodeAssignments(getRootDeclaration(symbol.valueDeclaration));
         return symbol.isAssigned || false;
+    }
+
+    function isSomeSymbolAssigned(rootDeclaration: Node) {
+        markNodeAssignments(rootDeclaration);
+        return getNodeLinks(rootDeclaration).someSymbolAssigned;
     }
 
     function hasParentWithAssignmentsMarked(node: Node) {
         return !!findAncestor(node.parent, node => (isFunctionLike(node) || isCatchClause(node)) && !!(getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked));
     }
 
-    function markNodeAssignments(node: Node) {
+    function markNodeAssignments(rootDeclaration: Node) {
+        const parent = rootDeclaration.parent;
+        const links = getNodeLinks(parent);
+        if (!(links.flags & NodeCheckFlags.AssignmentsMarked)) {
+            links.flags |= NodeCheckFlags.AssignmentsMarked;
+            if (!hasParentWithAssignmentsMarked(parent)) {
+                markNodeAssignmentsWorker(parent);
+            }
+        }
+    }
+
+    function markNodeAssignmentsWorker(node: Node) {
         if (node.kind === SyntaxKind.Identifier) {
             if (isAssignmentTarget(node)) {
                 const symbol = getResolvedSymbol(node as Identifier);
                 if (isParameterOrCatchClauseVariable(symbol)) {
+                    getNodeLinks(getRootDeclaration(symbol.valueDeclaration!)).someSymbolAssigned = true;
                     symbol.isAssigned = true;
                 }
             }
         }
         else {
-            forEachChild(node, markNodeAssignments);
+            forEachChild(node, markNodeAssignmentsWorker);
         }
     }
 
@@ -28665,7 +28675,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
                         const parentTypeConstraint = parentType && mapType(parentType, getBaseConstraintOrType);
                         links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                        if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
+                        if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSomeSymbolAssigned(parent))) {
                             const pattern = declaration.parent;
                             const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
                             if (narrowedType.flags & TypeFlags.Never) {

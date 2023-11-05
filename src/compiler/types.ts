@@ -6049,6 +6049,7 @@ export interface NodeLinks {
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
+    someSymbolAssigned?: boolean;       // True if any symbol declared in a parameter or catch clause is being assigned to
 }
 
 /** @internal */
