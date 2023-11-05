@@ -27162,7 +27162,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return isConstantReference((node as AccessExpression).expression) && isReadonlySymbol(getNodeLinks(node).resolvedSymbol || unknownSymbol);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
-                return isBindingElement(node.parent) ? isConstantReference(node.parent.parent) : isVariableDeclaration(node.parent) && isVarConstLike(node.parent);
+                const rootDeclaration = getRootDeclaration(node.parent);
+                return isVariableDeclaration(rootDeclaration) && isVarConstLike(rootDeclaration);
         }
         return false;
     }
