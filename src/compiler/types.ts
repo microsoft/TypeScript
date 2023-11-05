@@ -858,7 +858,7 @@ export const enum ModifierFlags {
     Protected =          1 << 2,  // Property/Method
     Readonly =           1 << 3,  // Property/Method
     Override =           1 << 4,  // Override method.
-    
+
     // Syntactic-only modifiers
     Export =             1 << 5,  // Declarations
     Abstract =           1 << 6,  // Class/Method/ConstructSignature
@@ -5811,7 +5811,6 @@ export interface Symbol {
     /** @internal */ constEnumOnlyModule: boolean | undefined; // True if module contains only const enums or other modules with only const enums
     /** @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
     /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
-    /** @internal */ isAssigned?: boolean;  // True if the symbol is a parameter with assignments
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
 }
 
