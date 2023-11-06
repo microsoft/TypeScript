@@ -31,8 +31,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"module":2}
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -88,8 +92,12 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"module":2}
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

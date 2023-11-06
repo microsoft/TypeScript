@@ -4,7 +4,11 @@ Input::
 const fn = (a: string, b: string) => b;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"noUnusedParameters":true}}
+{
+  "compilerOptions": {
+    "noUnusedParameters": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -34,8 +38,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/index.ts"]
-Program options: {"noUnusedParameters":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "noUnusedParameters": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -66,7 +76,11 @@ Change:: Change tsconfig to set noUnusedParameters to false
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"noUnusedParameters":false}}
+{
+  "compilerOptions": {
+    "noUnusedParameters": false
+  }
+}
 
 
 Before running Timeout callback:: count: 1
@@ -80,8 +94,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/index.ts"]
-Program options: {"noUnusedParameters":false,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "noUnusedParameters": false,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     commonFile1,
     commonFile2,
 } from "../helpers/tscWatch";
@@ -143,7 +146,7 @@ describe("unittests:: tsserver:: projects::", () => {
             };
             const config1 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify(
+                content: jsonToReadableText(
                     {
                         compilerOptions: {},
                         files: ["f1.ts"],
@@ -170,7 +173,7 @@ describe("unittests:: tsserver:: projects::", () => {
             };
             const config1 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify(
+                content: jsonToReadableText(
                     {
                         compilerOptions: {},
                         files: ["f1.ts"],
@@ -191,7 +194,7 @@ describe("unittests:: tsserver:: projects::", () => {
             };
             const config1 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify(
+                content: jsonToReadableText(
                     {
                         compilerOptions: {},
                         files: ["f1.ts"],
@@ -328,7 +331,7 @@ describe("unittests:: tsserver:: projects::", () => {
         const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         try {
             projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, office.path]) });
-            projectService.logger.log(`TypeAcquisition:: ${JSON.stringify(projectService.externalProjects[0].getTypeAcquisition(), undefined, " ")}`);
+            projectService.logger.log(`TypeAcquisition:: ${jsonToReadableText(projectService.externalProjects[0].getTypeAcquisition())}`);
         }
         finally {
             projectService.resetSafeList();
@@ -357,7 +360,7 @@ describe("unittests:: tsserver:: projects::", () => {
             installPackage: ts.notImplemented,
             enqueueInstallTypingsRequest: (proj, typeAcquisition, unresolvedImports) => {
                 assert.isUndefined(request);
-                request = JSON.stringify(ts.server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || ts.server.emptyArray, cachePath));
+                request = jsonToReadableText(ts.server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || ts.server.emptyArray, cachePath));
             },
             attach: ts.noop,
             onProjectClosed: ts.noop,
@@ -369,7 +372,7 @@ describe("unittests:: tsserver:: projects::", () => {
         projectService.openExternalProject({ projectFileName: projectName, options: {}, rootFiles: toExternalFiles([file1.path, constructorFile.path, bliss.path]) });
         assert.equal(
             request,
-            JSON.stringify({
+            jsonToReadableText({
                 projectName,
                 fileNames: [libFile.path, file1.path, constructorFile.path, bliss.path],
                 compilerOptions: { allowNonTsExtensions: true, noEmitForJsFiles: true },
@@ -430,7 +433,7 @@ describe("unittests:: tsserver:: projects::", () => {
         const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         try {
             projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles(files.map(f => f.path)) });
-            projectService.logger.log(`TypeAcquisition:: ${JSON.stringify(projectService.externalProjects[0].getTypeAcquisition(), undefined, " ")}`);
+            projectService.logger.log(`TypeAcquisition:: ${jsonToReadableText(projectService.externalProjects[0].getTypeAcquisition())}`);
         }
         finally {
             projectService.resetSafeList();
@@ -550,7 +553,7 @@ describe("unittests:: tsserver:: projects::", () => {
         };
         const config = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: {} }),
+            content: jsonToReadableText({ compilerOptions: {} }),
         };
         const host = createServerHost([file1, file2, config]);
         const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -579,7 +582,7 @@ describe("unittests:: tsserver:: projects::", () => {
         };
         const config = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: { allowJs: true },
             }),
         };
@@ -614,7 +617,7 @@ describe("unittests:: tsserver:: projects::", () => {
         };
         const config = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: { allowJs: true } }),
+            content: jsonToReadableText({ compilerOptions: { allowJs: true } }),
         };
         const host = createServerHost([file1, file2, config]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -684,7 +687,7 @@ describe("unittests:: tsserver:: projects::", () => {
         };
         const config1 = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: { allowJs: true } }),
+            content: jsonToReadableText({ compilerOptions: { allowJs: true } }),
         };
 
         const logger = createLoggerWithInMemoryLogs(/*host*/ undefined!); // Special
@@ -696,14 +699,14 @@ describe("unittests:: tsserver:: projects::", () => {
         //  #2. Ensure no errors when allowJs is false
         const config2 = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: { allowJs: false } }),
+            content: jsonToReadableText({ compilerOptions: { allowJs: false } }),
         };
         verfiy(config2, createServerHost([file1, file2, config2, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
 
         //  #3. Ensure no errors when compiler options aren't specified
         const config3 = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({}),
+            content: jsonToReadableText({}),
         };
 
         verfiy(config3, createServerHost([file1, file2, config3, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
@@ -711,7 +714,7 @@ describe("unittests:: tsserver:: projects::", () => {
         //  #4. Ensure no errors when files are explicitly specified in tsconfig
         const config4 = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: { allowJs: true }, files: [file1.path, file2.path] }),
+            content: jsonToReadableText({ compilerOptions: { allowJs: true }, files: [file1.path, file2.path] }),
         };
 
         verfiy(config4, createServerHost([file1, file2, config4, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
@@ -719,7 +722,7 @@ describe("unittests:: tsserver:: projects::", () => {
         //  #4. Ensure no errors when files are explicitly excluded in tsconfig
         const config5 = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: [file2.path] }),
+            content: jsonToReadableText({ compilerOptions: { allowJs: true }, exclude: [file2.path] }),
         };
 
         const session = verfiy(config5, createServerHost([file1, file2, config5, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
@@ -889,7 +892,7 @@ describe("unittests:: tsserver:: projects::", () => {
         };
         const config = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: {} }),
+            content: jsonToReadableText({ compilerOptions: {} }),
         };
         const host = createServerHost([f1, libFile, config]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -918,7 +921,7 @@ describe("unittests:: tsserver:: projects::", () => {
     it("Properly handle Windows-style outDir", () => {
         const configFile: File = {
             path: "C:\\a\\tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     outDir: `C:\\a\\b`,
                 },
@@ -1112,7 +1115,7 @@ describe("unittests:: tsserver:: projects::", () => {
             path: `/user/username/projects/myproject/src/file2.ts`,
             content: "export let y = 10;",
         };
-        const configContent1 = JSON.stringify({
+        const configContent1 = jsonToReadableText({
             files: ["src/file1.ts", "src/file2.ts"],
         });
         const config: File = {
@@ -1124,7 +1127,7 @@ describe("unittests:: tsserver:: projects::", () => {
         const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         service.openClientFile(file1.path);
 
-        const configContent2 = JSON.stringify({
+        const configContent2 = jsonToReadableText({
             files: ["src/file1.ts"],
         });
         config.content = configContent2;
@@ -1281,7 +1284,7 @@ describe("unittests:: tsserver:: projects::", () => {
         };
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({ extends: "./tsconfig_base.json" }),
+            content: jsonToReadableText({ extends: "./tsconfig_base.json" }),
         };
         const host = createServerHost([file, config, libFile]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -1300,7 +1303,7 @@ describe("unittests:: tsserver:: projects::", () => {
         };
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({ extends: "./tsconfig_base.json" }),
+            content: jsonToReadableText({ extends: "./tsconfig_base.json" }),
         };
         const host = createServerHost([file, config, libFile]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -1440,7 +1443,7 @@ describe("unittests:: tsserver:: projects::", () => {
                 };
                 const innerConfig: File = {
                     path: `/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         include: ["./src"],
                     }),
                 };
@@ -1476,7 +1479,7 @@ describe("unittests:: tsserver:: projects::", () => {
         it("js file opened is in configured project that will be removed", () => {
             const rootConfig: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { allowJs: true } }),
+                content: jsonToReadableText({ compilerOptions: { allowJs: true } }),
             };
             const mocksFile: File = {
                 path: `/user/username/projects/myproject/mocks/cssMock.js`,
@@ -1488,7 +1491,7 @@ describe("unittests:: tsserver:: projects::", () => {
             };
             const innerConfig: File = {
                 path: `/user/username/projects/myproject/apps/editor/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: "../../tsconfig.json",
                     include: ["./src"],
                 }),

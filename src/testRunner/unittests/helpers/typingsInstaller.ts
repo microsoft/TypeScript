@@ -10,6 +10,9 @@ import {
     stringifyIndented,
 } from "../../_namespaces/ts.server";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     patchHostTimeouts,
     TestSessionAndServiceHost,
 } from "./tsserver";
@@ -93,16 +96,13 @@ function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): strin
     return ts.combinePaths(ts.normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
 }
 
+export interface FileWithPackageName extends File {
+    package: string;
+}
 export type InstallActionThrowingError = string;
 export type InstallActionWithTypingFiles = [installedTypings: string[] | string, typingFiles: File[]];
-export type CustomInstallAction = (
-    installer: TestTypingsInstallerWorker,
-    requestId: number,
-    packageNames: string[],
-    cb: ts.server.typingsInstaller.RequestCompletedAction,
-) => void;
-
-export type InstallAction = InstallActionThrowingError | InstallActionWithTypingFiles | CustomInstallAction;
+export type InstallActionWithFilteredTypings = [typingFiles: FileWithPackageName[]];
+export type InstallAction = InstallActionThrowingError | InstallActionWithTypingFiles | InstallActionWithFilteredTypings;
 export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.TypingsInstaller {
     readonly typesRegistry: Map<string, ts.MapLike<string>>;
     protected projectService!: ts.server.ProjectService;
@@ -139,17 +139,13 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         }
         installTypingHost.ensureFileOrFolder({
             path: getTypesRegistryFileLocation(globalTypingsCacheLocation),
-            content: JSON.stringify(
-                createTypesRegistryFileContent(
-                    typesRegistry ?
-                        ts.isString(typesRegistry) ?
-                            [typesRegistry] :
-                            typesRegistry :
-                        ts.emptyArray,
-                ),
-                undefined,
-                " ",
-            ),
+            content: jsonToReadableText(createTypesRegistryFileContent(
+                typesRegistry ?
+                    ts.isString(typesRegistry) ?
+                        [typesRegistry] :
+                        typesRegistry :
+                    ts.emptyArray,
+            )),
         });
         if (this.log.isEnabled()) {
             this.log.writeLine(`TI:: Updated ${typesRegistryPackageName} npm package`);
@@ -167,7 +163,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         this.postExecActions = [];
         for (const action of actionsToRun) {
             if (this.log.isEnabled()) {
-                this.log.writeLine(`#${action.requestId} with arguments'${JSON.stringify(action.packageNames)}':: ${action.success}`);
+                this.log.writeLine(`#${action.requestId} with arguments'${jsonToReadableText(action.packageNames)}':: ${action.success}`);
             }
             action.callback(action.success);
         }
@@ -183,7 +179,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
 
     installWorker(requestId: number, packageNames: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
         if (this.log.isEnabled()) {
-            this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
+            this.log.writeLine(`#${requestId} with arguments'${jsonToReadableText(packageNames)}'.`);
         }
         if (!this.installAction) {
             this.addPostExecAction("success", requestId, packageNames, cb);
@@ -191,7 +187,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         else if (ts.isString(this.installAction)) {
             assert(false, this.installAction);
         }
-        else if (ts.isArray(this.installAction)) {
+        else if (this.installAction.length === 2) {
             this.executeInstallWithTypingFiles(
                 requestId,
                 packageNames,
@@ -201,7 +197,14 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
             );
         }
         else {
-            this.installAction(this, requestId, packageNames, cb);
+            const typingFiles = this.installAction[0].filter(f => packageNames.includes(ts.server.typingsInstaller.typingsName(f.package)));
+            this.executeInstallWithTypingFiles(
+                requestId,
+                packageNames,
+                typingFiles.map(f => f.package),
+                typingFiles,
+                cb,
+            );
         }
     }
 
@@ -305,7 +308,7 @@ function createNpmPackageJsonString(installedTypings: string[]): string {
     for (const typing of installedTypings) {
         dependencies[typing] = "1.0.0";
     }
-    return JSON.stringify({ dependencies });
+    return jsonToReadableText({ dependencies });
 }
 function createTypesRegistryFileContent(list: readonly string[]): TypesRegistryFile {
     const versionMap = {

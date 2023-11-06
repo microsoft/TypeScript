@@ -5,7 +5,9 @@ Before request
 let x = 1
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

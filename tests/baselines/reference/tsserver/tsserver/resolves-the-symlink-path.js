@@ -2,10 +2,19 @@ currentDirectory:: /users/user/projects/myproject useCaseSensitiveFileNames: fal
 Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Before request
 //// [/users/user/projects/myconfigs/node_modules/@something/tsconfig-node/tsconfig.json]
-{"extends":"@something/tsconfig-base/tsconfig.json","compilerOptions":{"removeComments":true}}
+{
+  "extends": "@something/tsconfig-base/tsconfig.json",
+  "compilerOptions": {
+    "removeComments": true
+  }
+}
 
 //// [/users/user/projects/myconfigs/node_modules/@something/tsconfig-base/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/users/user/projects/myproject/src/index.ts]
 // some comment
@@ -13,7 +22,9 @@ export const x = 10;
 
 
 //// [/users/user/projects/myproject/src/tsconfig.json]
-{"extends":"@something/tsconfig-node/tsconfig.json"}
+{
+  "extends": "@something/tsconfig-node/tsconfig.json"
+}
 
 //// [/users/user/projects/myproject/node_modules/@something/tsconfig-node] symlink(/users/user/projects/myconfigs/node_modules/@something/tsconfig-node)
 //// [/a/lib/lib.d.ts]

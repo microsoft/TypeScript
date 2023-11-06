@@ -1809,7 +1809,8 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             if (
                 (buildInfo.program as ProgramMultiFileEmitBuildInfo).changeFileSet?.length ||
                 (!project.options.noEmit ?
-                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length :
+                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
+                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile?.length :
                     some((buildInfo.program as ProgramMultiFileEmitBuildInfo).semanticDiagnosticsPerFile, isArray))
             ) {
                 return {

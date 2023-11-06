@@ -7,7 +7,18 @@ import { foo } from "file";
 export const foo = 10;
 
 //// [/user/username/projects/myproject/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"types":["foo","bar"]},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "types": [
+      "foo",
+      "bar"
+    ]
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/project2/index.ts]
 import { foo } from "file";
@@ -16,7 +27,18 @@ import { foo } from "file";
 export const foo = 10;
 
 //// [/user/username/projects/myproject/project2/tsconfig.json]
-{"compilerOptions":{"composite":true,"types":["foo"],"moduleResolution":"classic"},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "types": [
+      "foo"
+    ],
+    "moduleResolution": "classic"
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/node_modules/@types/foo/index.d.ts]
 export const foo = 10;
@@ -25,7 +47,17 @@ export const foo = 10;
 export const bar = 10;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":[],"references":[{"path":"./project1"},{"path":"./project2"}]}
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./project1"
+    },
+    {
+      "path": "./project2"
+    }
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -63,8 +95,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/project1/index.ts"]
-Program options: {"composite":true,"types":["foo","bar"],"watch":true,"configFilePath":"/user/username/projects/myproject/project1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/project1/index.ts"
+]
+Program options: {
+  "composite": true,
+  "types": [
+    "foo",
+    "bar"
+  ],
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/project1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -87,8 +129,18 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
 /user/username/projects/myproject/node_modules/@types/bar/index.d.ts (used version)
 
-Program root files: ["/user/username/projects/myproject/project2/index.ts"]
-Program options: {"composite":true,"types":["foo"],"moduleResolution":1,"watch":true,"configFilePath":"/user/username/projects/myproject/project2/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/project2/index.ts"
+]
+Program options: {
+  "composite": true,
+  "types": [
+    "foo"
+  ],
+  "moduleResolution": 1,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/project2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -319,8 +371,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/project1/index.ts"]
-Program options: {"composite":true,"types":["foo","bar"],"watch":true,"configFilePath":"/user/username/projects/myproject/project1/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/project1/index.ts"
+]
+Program options: {
+  "composite": true,
+  "types": [
+    "foo",
+    "bar"
+  ],
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/project1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

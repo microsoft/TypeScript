@@ -68,11 +68,11 @@ t = { f: () => 1 };
 >1 : 1
 
 t = { f: <T>(x:T) => 1 };
->t = { f: <T>(x:T) => 1 } : { f: <T>(x: T) => number; }
+>t = { f: <T>(x:T) => 1 } : { f: <T_1>(x: T_1) => number; }
 >t : T
->{ f: <T>(x:T) => 1 } : { f: <T>(x: T) => number; }
->f : <T>(x: T) => number
-><T>(x:T) => 1 : <T>(x: T) => number
+>{ f: <T>(x:T) => 1 } : { f: <T_1>(x: T_1) => number; }
+>f : <T_1>(x: T_1) => number
+><T>(x:T) => 1 : <T_1>(x: T_1) => number
 >x : T
 >1 : 1
 
@@ -102,11 +102,11 @@ a = { f: () => 1 }
 >1 : 1
 
 a = { f: <T>(x: T) => 1 };
->a = { f: <T>(x: T) => 1 } : { f: <T>(x: T) => number; }
+>a = { f: <T>(x: T) => 1 } : { f: <T_1>(x: T_1) => number; }
 >a : { f(x: number): void; }
->{ f: <T>(x: T) => 1 } : { f: <T>(x: T) => number; }
->f : <T>(x: T) => number
-><T>(x: T) => 1 : <T>(x: T) => number
+>{ f: <T>(x: T) => 1 } : { f: <T_1>(x: T_1) => number; }
+>f : <T_1>(x: T_1) => number
+><T>(x: T) => 1 : <T_1>(x: T_1) => number
 >x : T
 >1 : 1
 

@@ -1,7 +1,6 @@
 import {
     createWatchUtils,
 } from "../../../harness/watchUtils";
-import * as Harness from "../../_namespaces/Harness";
 import {
     clear,
     clone,
@@ -1109,15 +1108,4 @@ export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
         host.writtenFiles.set(path, (host.writtenFiles.get(path) || 0) + 1);
     };
     return host;
-}
-
-export function getTsBuildProjectFilePath(project: string, file: string) {
-    return `/user/username/projects/${project}/${file}`;
-}
-
-export function getTsBuildProjectFile(project: string, file: string): File {
-    return {
-        path: getTsBuildProjectFilePath(project, file),
-        content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!,
-    };
 }

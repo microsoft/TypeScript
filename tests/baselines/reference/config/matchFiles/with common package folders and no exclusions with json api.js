@@ -1,12 +1,12 @@
 config:
 {
- "include": [
-  "a.ts",
-  "b.ts",
-  "node_modules/a.ts",
-  "bower_components/a.ts",
-  "jspm_packages/a.ts"
- ]
+  "include": [
+    "a.ts",
+    "b.ts",
+    "node_modules/a.ts",
+    "bower_components/a.ts",
+    "jspm_packages/a.ts"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -37,33 +37,33 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/a.ts",
-  "c:/dev/b.ts",
-  "c:/dev/node_modules/a.ts",
-  "c:/dev/bower_components/a.ts",
-  "c:/dev/jspm_packages/a.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "a.ts",
-   "b.ts",
-   "node_modules/a.ts",
-   "bower_components/a.ts",
-   "jspm_packages/a.ts"
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/dev/a.ts",
+    "c:/dev/b.ts",
+    "c:/dev/node_modules/a.ts",
+    "c:/dev/bower_components/a.ts",
+    "c:/dev/jspm_packages/a.ts"
   ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "a.ts",
+      "b.ts",
+      "node_modules/a.ts",
+      "bower_components/a.ts",
+      "jspm_packages/a.ts"
+    ],
+    "compileOnSave": false
+  },
+  "wildcardDirectories": {},
   "compileOnSave": false
- },
- "wildcardDirectories": {},
- "compileOnSave": false
 }
 Errors::
 

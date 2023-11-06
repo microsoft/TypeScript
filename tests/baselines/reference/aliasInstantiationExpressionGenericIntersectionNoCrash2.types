@@ -18,7 +18,7 @@ type ClassAlias<T> = typeof Class<T>;
 
 type FnAlias<T> = typeof fn<T>;
 >FnAlias : () => T
->fn : <T>() => T
+>fn : <T_1>() => T_1
 
 type Wat<T> = ClassAlias<T> & FnAlias<T>;
 >Wat : Wat<T>

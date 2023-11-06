@@ -27,13 +27,28 @@ export declare class A {
 
 
 //// [/user/username/projects/a/a.d.ts.map]
-{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}
+{
+  "version": 3,
+  "file": "a.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "./a.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,qBAAa,CAAC;CAAI"
+}
 
 //// [/user/username/projects/b/b.ts]
 import {A} from "../a/a"; new A();
 
 //// [/user/username/projects/b/tsconfig.json]
-{"references":[{"path":"../a"}]}
+{
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -170,12 +185,12 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 1,
-              "offset": 16
+              "line": 3,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 31
+              "line": 5,
+              "offset": 6
             },
             "text": "Referenced project '/user/username/projects/a' must have setting \"composite\": true.",
             "code": 6306,

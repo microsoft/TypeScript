@@ -24,7 +24,13 @@ import { foo } from "module1";
 export function bar(){}
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"watchOptions":{"excludeDirectories":["node_modules"]}}
+{
+  "watchOptions": {
+    "excludeDirectories": [
+      "node_modules"
+    ]
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

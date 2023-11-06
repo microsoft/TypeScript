@@ -24,7 +24,15 @@ export interface IThings {
 }
 
 //// [/src/packages/pkg1/tsconfig.json]
-{"extends":"../../tsconfig","compilerOptions":{"outDir":"lib"},"include":["src"]}
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outDir": "lib"
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/src/packages/pkg2/src/index.ts]
 import { IThings } from '@fluentui/pkg1';
@@ -34,10 +42,33 @@ export function fn4() {
 }
 
 //// [/src/packages/pkg2/tsconfig.json]
-{"extends":"../../tsconfig","compilerOptions":{"outDir":"lib"},"include":["src"],"references":[{"path":"../pkg1"}]}
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outDir": "lib"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../pkg1"
+    }
+  ]
+}
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":".","paths":{"@fluentui/*":["packages/*/src"]}}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@fluentui/*": [
+        "packages/*/src"
+      ]
+    }
+  }
+}
 
 
 

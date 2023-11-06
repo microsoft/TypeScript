@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openExternalProjectForSession,
@@ -20,7 +23,7 @@ import {
 describe("unittests:: tsserver:: reloadProjects", () => {
     const configFile: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             watchOptions: { excludeDirectories: ["node_modules"] },
         }),
     };

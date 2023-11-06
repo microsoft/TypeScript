@@ -18,73 +18,186 @@ interface Array<T> { length: number; [n: number]: T; }
 export const mainConst = 10;
 
 //// [/user/username/projects/myproject/main/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../core"},{"path":"../indirect"},{"path":"../noCoreRef1"},{"path":"../indirectDisabledChildLoad1"},{"path":"../indirectDisabledChildLoad2"},{"path":"../refToCoreRef3"},{"path":"../indirectNoCoreRef"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../indirect"
+    },
+    {
+      "path": "../noCoreRef1"
+    },
+    {
+      "path": "../indirectDisabledChildLoad1"
+    },
+    {
+      "path": "../indirectDisabledChildLoad2"
+    },
+    {
+      "path": "../refToCoreRef3"
+    },
+    {
+      "path": "../indirectNoCoreRef"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/core/src/file1.ts]
 export const coreConst = 10;
 
 //// [/user/username/projects/myproject/core/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/user/username/projects/myproject/noCoreRef1/src/file1.ts]
 export const noCoreRef1Const = 10;
 
 //// [/user/username/projects/myproject/noCoreRef1/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/user/username/projects/myproject/indirect/src/file1.ts]
 export const indirectConst = 10;
 
 //// [/user/username/projects/myproject/indirect/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../coreRef1"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../coreRef1"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/coreRef1/src/file1.ts]
 export const coreRef1Const = 10;
 
 //// [/user/username/projects/myproject/coreRef1/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../core"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts]
 export const indirectDisabledChildLoad1Const = 10;
 
 //// [/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json]
-{"compilerOptions":{"composite":true,"disableReferencedProjectLoad":true},"references":[{"path":"../coreRef2"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "disableReferencedProjectLoad": true
+  },
+  "references": [
+    {
+      "path": "../coreRef2"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/coreRef2/src/file1.ts]
 export const coreRef2Const = 10;
 
 //// [/user/username/projects/myproject/coreRef2/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../core"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts]
 export const indirectDisabledChildLoad2Const = 10;
 
 //// [/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json]
-{"compilerOptions":{"composite":true,"disableReferencedProjectLoad":true},"references":[{"path":"../coreRef3"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "disableReferencedProjectLoad": true
+  },
+  "references": [
+    {
+      "path": "../coreRef3"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/coreRef3/src/file1.ts]
 export const coreRef3Const = 10;
 
 //// [/user/username/projects/myproject/coreRef3/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../core"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/refToCoreRef3/src/file1.ts]
 export const refToCoreRef3Const = 10;
 
 //// [/user/username/projects/myproject/refToCoreRef3/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../coreRef3"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../coreRef3"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/indirectNoCoreRef/src/file1.ts]
 export const indirectNoCoreRefConst = 10;
 
 //// [/user/username/projects/myproject/indirectNoCoreRef/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../noCoreRef2"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../noCoreRef2"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/noCoreRef2/src/file1.ts]
 export const noCoreRef2Const = 10;
 
 //// [/user/username/projects/myproject/noCoreRef2/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

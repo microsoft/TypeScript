@@ -3,6 +3,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     createSession,
     openFilesForSession,
@@ -63,7 +66,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const file5: File = { path: "/file5.js", content: "" };
         const file6: File = { path: "/file6.d.ts", content: "" };
         const file7: File = { path: "/file7.ts", content: "" };
-        const tsconfig: File = { path: "/tsconfig.json", content: JSON.stringify({ files: ["./file1.ts", "./file2.tsx", "./file3.mts", "./file4.cts", "./file5.js", "./file6.d.ts", "./file7.ts"] }) };
+        const tsconfig: File = { path: "/tsconfig.json", content: jsonToReadableText({ files: ["./file1.ts", "./file2.tsx", "./file3.mts", "./file4.cts", "./file5.js", "./file6.d.ts", "./file7.ts"] }) };
 
         const host = createServerHost([file1, file2, file3, file4, file5, file6, file7, tsconfig]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -84,7 +87,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const file3: File = { path: "/file3.mts", content: "" };
         const file4: File = { path: "/file4.ts", content: "" };
         const file5: File = { path: "/file5.js", content: "" };
-        const tsconfig: File = { path: "/tsconfig.json", content: JSON.stringify({ files: ["./file1.js", "./file2.js", "./file3.mts", "./file4.ts", "./file5.js"] }) };
+        const tsconfig: File = { path: "/tsconfig.json", content: jsonToReadableText({ files: ["./file1.js", "./file2.js", "./file3.mts", "./file4.ts", "./file5.js"] }) };
 
         const host = createServerHost([file1, file2, file3, file4, file5, tsconfig]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -104,7 +107,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const file2: File = { path: "/a/lib.d.ts", content: "" };
         const file3: File = { path: "/a/file3.d.ts", content: "" };
         const file4: File = { path: "/a/lib.es6.d.ts", content: "" };
-        const tsconfig: File = { path: "/tsconfig.json", content: JSON.stringify({ files: ["./file1.d.ts", "./a/lib.d.ts", "./a/file3.d.ts", "/a/lib.es6.d.ts"] }) };
+        const tsconfig: File = { path: "/tsconfig.json", content: jsonToReadableText({ files: ["./file1.d.ts", "./a/lib.d.ts", "./a/file3.d.ts", "/a/lib.es6.d.ts"] }) };
 
         const host = createServerHost([file1, file2, file3, file4, tsconfig]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });

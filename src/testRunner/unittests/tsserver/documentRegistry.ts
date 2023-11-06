@@ -6,6 +6,9 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     closeFilesForSession,
     createProjectService,
@@ -31,7 +34,7 @@ describe("unittests:: tsserver:: documentRegistry:: document registry in project
     };
     const configFile: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
-        content: JSON.stringify({ files: ["index.ts"] }),
+        content: jsonToReadableText({ files: ["index.ts"] }),
     };
 
     function getProject(service: TestProjectService) {
