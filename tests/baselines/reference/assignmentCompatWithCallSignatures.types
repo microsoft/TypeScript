@@ -56,9 +56,9 @@ a = a2;
 >a2 : (x: number) => string
 
 t = <T>(x: T) => 1;
->t = <T>(x: T) => 1 : <T>(x: T) => number
+>t = <T>(x: T) => 1 : <T_1>(x: T_1) => number
 >t : T
-><T>(x: T) => 1 : <T>(x: T) => number
+><T>(x: T) => 1 : <T_1>(x: T_1) => number
 >x : T
 >1 : 1
 
@@ -76,9 +76,9 @@ t = function (x: number) { return ''; }
 >'' : ""
 
 a = <T>(x: T) => 1;
->a = <T>(x: T) => 1 : <T>(x: T) => number
+>a = <T>(x: T) => 1 : <T_1>(x: T_1) => number
 >a : (x: number) => void
-><T>(x: T) => 1 : <T>(x: T) => number
+><T>(x: T) => 1 : <T_1>(x: T_1) => number
 >x : T
 >1 : 1
 

@@ -203,9 +203,9 @@ async function copyExtensions(
     await Promise.all(
 >await Promise.all(      fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)])    ) : [ILocalExtension, Metadata][]
 >Promise.all(      fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)])    ) : Promise<[ILocalExtension, Metadata][]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 
       fromExtensions
 >fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)]) : Promise<[ILocalExtension, Metadata]>[]
