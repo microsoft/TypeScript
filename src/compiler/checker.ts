@@ -14501,6 +14501,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 clone.parent = singleProp.valueDeclaration?.symbol?.parent;
                 clone.links.containingType = containingType;
                 clone.links.mapper = links?.mapper;
+                clone.links.writeType = getWriteTypeOfSymbol(singleProp);
                 return clone;
             }
             else {
