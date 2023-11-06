@@ -15,7 +15,6 @@ export const testRunnerCLIConfiguration = parserConfiguration({
     },
     shard: ArgType.Number(),
     shardCount: ArgType.Number(),
-    libPath: ArgType.String(),
     outputPath: ArgType.String(),
     rootPaths: ArgType.StringArray(),
     configFile: ArgType.String(),

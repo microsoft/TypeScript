@@ -1,0 +1,20 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxConstEnumUsage.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,10 +1,10 @@
+ 
+ 
+ //// [/.src/bar.d.ts]
+ export declare enum Bar {
+-    a = 1,
+-    c = 3,
++    a,
++    c,
+     e = 5
+ }
+ 
+ //// [/.src/foo.d.ts]

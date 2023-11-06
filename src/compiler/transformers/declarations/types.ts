@@ -65,4 +65,5 @@ export interface IsolatedEmitResolver {
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
+    tryFindAmbientModule(moduleReferenceExpression: Expression): Symbol | undefined;
 }

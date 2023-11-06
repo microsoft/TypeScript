@@ -262,14 +262,7 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
 
     const emitResult = program.emit(
         /*targetSourceFile*/ undefined,
-        (fileName, text, writeByteOrderMark) => {
-            // If there are errors TS will ot emit declaration files. We want then regardless of errors.
-            if (!vpath.isAbsolute(fileName)) {
-                fileName = vpath.resolve(host.vfs.cwd(), fileName);
-            }
-            if (host.outputs.some(d => d.file === fileName)) return;
-            host.writeFile(fileName, text, writeByteOrderMark);
-        },
+        /*writeFile*/ undefined,
         /*cancellationToken*/ undefined,
         /*emitOnlyDtsFiles*/ undefined,
         /*customTransformers*/ undefined,

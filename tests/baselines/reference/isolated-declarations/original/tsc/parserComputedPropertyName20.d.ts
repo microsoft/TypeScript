@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName20.ts] ////
+
+//// [parserComputedPropertyName20.ts]
+interface I {
+    [e](): number 
+}
+
+/// [Declarations] ////
+
+
+
+//// [/.src/parserComputedPropertyName20.d.ts]
+interface I {
+}
+/// [Errors] ////
+
+parserComputedPropertyName20.ts(2,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+parserComputedPropertyName20.ts(2,6): error TS2304: Cannot find name 'e'.
+
+
+==== parserComputedPropertyName20.ts (2 errors) ====
+    interface I {
+        [e](): number 
+        ~~~
+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~
+!!! error TS2304: Cannot find name 'e'.
+    }

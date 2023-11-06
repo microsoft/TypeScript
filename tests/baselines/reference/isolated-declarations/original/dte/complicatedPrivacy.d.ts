@@ -1,0 +1,311 @@
+//// [tests/cases/compiler/complicatedPrivacy.ts] ////
+
+//// [complicatedPrivacy.ts]
+module m1 {
+    export module m2 {
+
+
+        export function f1(c1: C1) {
+        }
+        export function f2(c2: C2) {
+        }
+
+        export class C2 implements m3.i3 {
+            public get p1(arg) {
+                return new C1();
+            }
+
+            public set p1(arg1: C1) {
+            }
+
+            public f55() {
+                return "Hello world";
+            }
+        }
+    }
+
+    export function f2(arg1: { x?: C1, y: number }) {
+    }
+
+    export function f3(): {
+        (a: number) : C1;
+    } {
+        return null;
+    }
+
+    export function f4(arg1: 
+    {
+    [number]: C1; // Used to be indexer, now it is a computed property
+    }) {
+    }
+
+
+    export function f5(arg2: {
+        new (arg1: C1) : C1
+    }) {
+    }
+    module m3 {
+        function f2(f1: C1) {
+        }
+
+        export interface i3 {
+            f55(): string;
+        }
+    }
+
+    class C1 {
+    }
+
+    interface i {
+        x: number;
+    }
+
+    export class C5 implements i {
+        public x: number;
+    }
+
+    export var v2: C1[];
+}
+
+class C2 {
+}
+
+module m2 {
+    export module m3 {
+
+        export class c_pr  implements mglo5.i5, mglo5.i6 {
+            f1() {
+                return "Hello";
+            }
+        }
+        
+        module m4 {
+            class C {
+            }
+            module m5 {
+                
+                export module m6 {
+                    function f1() {
+                        return new C();
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+module mglo5 {
+    export interface i5 {
+        f1(): string;
+    }
+
+    interface i6 {
+        f6(): number;
+    }
+}
+
+
+/// [Declarations] ////
+
+
+
+//// [/.src/complicatedPrivacy.d.ts]
+declare namespace m1 {
+    export namespace m2 {
+        function f1(c1: C1): invalid;
+        function f2(c2: C2): invalid;
+        class C2 implements m3.i3 {
+            get p1(): invalid;
+            set p1(arg1: C1);
+            f55(): invalid;
+        }
+    }
+    export function f2(arg1: {
+        x?: C1;
+        y: number;
+    }): invalid;
+    export function f3(): {
+        (a: number): C1;
+    };
+    export function f4(arg1: {
+        [number]: C1;
+    }): invalid;
+    export function f5(arg2: {
+        new (arg1: C1): C1;
+    }): invalid;
+    namespace m3 {
+        interface i3 {
+            f55(): string;
+        }
+    }
+    class C1 {
+    }
+    interface i {
+        x: number;
+    }
+    export class C5 implements i {
+        x: number;
+    }
+    export var v2: C1[];
+    export {};
+}
+declare class C2 {
+}
+declare namespace m2 {
+    namespace m3 {
+        class c_pr implements mglo5.i5, mglo5.i6 {
+            f1(): invalid;
+        }
+    }
+}
+declare namespace mglo5 {
+    interface i5 {
+        f1(): string;
+    }
+}
+/// [Errors] ////
+
+complicatedPrivacy.ts(5,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+complicatedPrivacy.ts(7,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+complicatedPrivacy.ts(11,24): error TS1054: A 'get' accessor cannot have parameters.
+complicatedPrivacy.ts(11,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+complicatedPrivacy.ts(18,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+complicatedPrivacy.ts(24,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+complicatedPrivacy.ts(33,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+complicatedPrivacy.ts(35,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+complicatedPrivacy.ts(35,6): error TS2693: 'number' only refers to a type, but is being used as a value here.
+complicatedPrivacy.ts(40,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+complicatedPrivacy.ts(73,55): error TS2694: Namespace 'mglo5' has no exported member 'i6'.
+complicatedPrivacy.ts(74,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+
+
+==== complicatedPrivacy.ts (12 errors) ====
+    module m1 {
+        export module m2 {
+    
+    
+            export function f1(c1: C1) {
+                            ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            }
+            export function f2(c2: C2) {
+                            ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            }
+    
+            export class C2 implements m3.i3 {
+                public get p1(arg) {
+                           ~~
+!!! error TS1054: A 'get' accessor cannot have parameters.
+                           ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                    return new C1();
+                }
+    
+                public set p1(arg1: C1) {
+                }
+    
+                public f55() {
+                       ~~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                    return "Hello world";
+                }
+            }
+        }
+    
+        export function f2(arg1: { x?: C1, y: number }) {
+                        ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+        }
+    
+        export function f3(): {
+            (a: number) : C1;
+        } {
+            return null;
+        }
+    
+        export function f4(arg1: 
+                        ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+        {
+        [number]: C1; // Used to be indexer, now it is a computed property
+        ~~~~~~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+         ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+        }) {
+        }
+    
+    
+        export function f5(arg2: {
+                        ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+            new (arg1: C1) : C1
+        }) {
+        }
+        module m3 {
+            function f2(f1: C1) {
+            }
+    
+            export interface i3 {
+                f55(): string;
+            }
+        }
+    
+        class C1 {
+        }
+    
+        interface i {
+            x: number;
+        }
+    
+        export class C5 implements i {
+            public x: number;
+        }
+    
+        export var v2: C1[];
+    }
+    
+    class C2 {
+    }
+    
+    module m2 {
+        export module m3 {
+    
+            export class c_pr  implements mglo5.i5, mglo5.i6 {
+                                                          ~~
+!!! error TS2694: Namespace 'mglo5' has no exported member 'i6'.
+                f1() {
+                ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                    return "Hello";
+                }
+            }
+            
+            module m4 {
+                class C {
+                }
+                module m5 {
+                    
+                    export module m6 {
+                        function f1() {
+                            return new C();
+                        }
+                    }
+                }
+            }
+    
+        }
+    }
+    
+    module mglo5 {
+        export interface i5 {
+            f1(): string;
+        }
+    
+        interface i6 {
+            f6(): number;
+        }
+    }
+    

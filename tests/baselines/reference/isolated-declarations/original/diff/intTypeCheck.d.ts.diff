@@ -1,0 +1,27 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/intTypeCheck.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -30,8 +30,9 @@
+     new (p4: string, p5?: string): any;
+     new (p6: string, ...p7: any[]): any;
+ }
+ interface i4 {
++    [p]: any;
+     [p1: string]: any;
+     [p2: string, p3: number]: any;
+ }
+ interface i5 extends i1 {
+@@ -62,8 +63,9 @@
+     new (p2?: string): any;
+     new (...p3: any[]): any;
+     new (p4: string, p5?: string): any;
+     new (p6: string, ...p7: any[]): any;
++    [p]: any;
+     [p1: string]: any;
+     [p2: string, p3: number]: any;
+     p: any;
+     p1?: any;

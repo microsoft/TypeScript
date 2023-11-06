@@ -1,3 +1,4 @@
+import * as collections from "./_namespaces/collections";
 import * as compiler from "./_namespaces/compiler";
 import * as documents from "./_namespaces/documents";
 import * as fakes from "./_namespaces/fakes";
@@ -7,6 +8,9 @@ import {
     TypeWriterWalker,
 } from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
+import {
+    mapDefined,
+} from "./_namespaces/ts";
 import * as Utils from "./_namespaces/Utils";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
@@ -305,12 +309,13 @@ export namespace Compiler {
         return fileName;
     }
 
-    interface HarnessOptions {
+    export interface HarnessOptions {
         useCaseSensitiveFileNames?: boolean;
         includeBuiltFile?: string;
         baselineFile?: string;
         libFiles?: string;
         noTypesAndSymbols?: boolean;
+        forceDtsEmit?: boolean;
     }
 
     // Additional options not already in ts.optionDeclarations
@@ -330,6 +335,7 @@ export namespace Compiler {
         { name: "noTypesAndSymbols", type: "boolean", defaultValueDescription: false },
         // Emitted js baseline will print full paths for every output file
         { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
+        { name: "forceDtsEmit", type: "boolean", defaultValueDescription: false },
     ];
 
     let optionsIndex: Map<string, ts.CommandLineOption>;
@@ -351,7 +357,7 @@ export namespace Compiler {
                 if (value === undefined) {
                     throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
                 }
-                if (name === "typeScriptVersion") {
+                if (name === "typeScriptVersion" || name === "isolatedDeclarationDiffReason") {
                     continue;
                 }
                 const option = getCommandLineOption(name);
@@ -397,7 +403,7 @@ export namespace Compiler {
         fileOptions?: any;
     }
 
-    export function compileFiles(
+    export function prepareEnvironment(
         inputFiles: TestFile[],
         otherFiles: TestFile[],
         harnessSettings: TestCaseParser.CompilerSettings | undefined,
@@ -405,7 +411,7 @@ export namespace Compiler {
         // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
         currentDirectory: string | undefined,
         symlinks?: vfs.FileSet,
-    ): compiler.CompilationResult {
+    ): HarnessCompilerEnvironment {
         const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
         options.target = ts.getEmitScriptTarget(options);
         options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
@@ -452,8 +458,39 @@ export namespace Compiler {
         }
 
         ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
-        const host = new fakes.CompilerHost(fs, options);
-        const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
+
+        return {
+            fileSystem: fs,
+            compilerOptions: options,
+            programFileNames,
+            symlinks,
+            typeScriptVersion,
+        };
+    }
+    export function compileFiles(
+        inputFiles: TestFile[],
+        otherFiles: TestFile[],
+        harnessSettings: TestCaseParser.CompilerSettings | undefined,
+        compilerOptions: ts.CompilerOptions | undefined,
+        // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
+        currentDirectory: string | undefined,
+        symlinks?: vfs.FileSet,
+    ): compiler.CompilationResult {
+        const config = prepareEnvironment(inputFiles, otherFiles, harnessSettings, compilerOptions, currentDirectory, symlinks);
+        return compileFilesWithEnvironment(config);
+    }
+    export interface HarnessCompilerEnvironment {
+        fileSystem: vfs.FileSystem;
+        compilerOptions: ts.CompilerOptions & HarnessOptions;
+        programFileNames: string[];
+        typeScriptVersion?: string;
+        symlinks: vfs.FileSet | undefined;
+    }
+    export function compileFilesWithEnvironment(
+        { fileSystem, compilerOptions, programFileNames, symlinks, typeScriptVersion }: HarnessCompilerEnvironment,
+    ): compiler.CompilationResult {
+        const host = new fakes.CompilerHost(fileSystem, compilerOptions);
+        const result = compiler.compileFiles(host, programFileNames, compilerOptions, typeScriptVersion, compilerOptions.forceDtsEmit);
         result.symlinks = symlinks;
         return result;
     }
@@ -539,6 +576,100 @@ export namespace Compiler {
         function findUnit(fileName: string, units: TestFile[]) {
             return ts.forEach(units, unit => unit.unitName === fileName ? unit : undefined);
         }
+    }
+
+    export function compileDeclarationFilesWithIsolatedEmitter(
+        toBeCompiled: TestFile[],
+        _otherFiles: TestFile[],
+        tscHost: fakes.CompilerHost,
+        options: ts.CompilerOptions,
+        currentDirectory: string,
+    ) {
+        if (typeof currentDirectory === "undefined") {
+            currentDirectory = vfs.srcFolder;
+        }
+
+        options = ts.cloneCompilerOptions(options);
+        options.isolatedDeclarations = true;
+
+        const programFileNames = mapDefined(toBeCompiled, file => {
+            const fileName = ts.getNormalizedAbsolutePath(file.unitName, currentDirectory);
+            if (!vpath.isTypeScript(fileName) || vpath.isDeclaration(fileName)) {
+                return;
+            }
+            return ts.getNormalizedAbsolutePath(file.unitName, currentDirectory);
+        });
+
+        function addFile({ resolvedFileName, originalPath }: { originalPath?: string; resolvedFileName?: string; } = {}) {
+            if (!resolvedFileName) return;
+
+            if (
+                !(!options.jsx && ts.fileExtensionIs(resolvedFileName, ts.Extension.Tsx))
+                && vpath.isTypeScript(resolvedFileName)
+                && !ts.isInsideNodeModules(resolvedFileName)
+                && !(originalPath && ts.isInsideNodeModules(originalPath))
+            ) {
+                ts.pushIfUnique(programFileNames, resolvedFileName);
+            }
+        }
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < programFileNames.length; i++) {
+            const fileName = programFileNames[i];
+            const source = tscHost.getSourceFile(fileName, options.target ?? ts.ScriptTarget.ES5);
+
+            source?.referencedFiles
+                ?.forEach(r => {
+                    const localPath = r.fileName;
+                    const resolvedFileName = ts.resolveTripleslashReference(localPath, fileName);
+                    if (!ts.hasExtension(resolvedFileName)) {
+                        ts.forEach(
+                            ts.supportedTSExtensionsFlat,
+                            extension => {
+                                const resolvedFileNameWithExt = resolvedFileName + extension;
+                                if (tscHost.vfs.existsSync(resolvedFileNameWithExt)) {
+                                    addFile({ resolvedFileName: resolvedFileNameWithExt });
+                                    return true;
+                                }
+                            },
+                        );
+                    }
+                    else {
+                        addFile({ resolvedFileName });
+                    }
+                });
+            source?.imports
+                ?.forEach(i => {
+                    const localPath = i.text;
+                    const resolution = ts.resolveModuleName(localPath, fileName, options, tscHost);
+                    addFile(resolution.resolvedModule);
+                });
+        }
+
+        const fs = tscHost.vfs.shadowRoot ? tscHost.vfs.shadowRoot.shadow() : tscHost.vfs;
+        const host = new fakes.CompilerHost(fs, options, /*setParentNodes*/ false);
+        const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
+        let commonSourceDirectory = ts.getCommonSourceDirectory(
+            options,
+            () => programFileNames.filter(f => !vpath.isDeclaration(f)),
+            currentDirectory,
+            getCanonicalFileName,
+        );
+
+        if (commonSourceDirectory.length === 0) {
+            commonSourceDirectory = currentDirectory;
+        }
+        const diagnostics: ts.Diagnostic[] = [];
+        const transformer = ts.createIsolatedDeclarationsEmitter(commonSourceDirectory, options);
+        programFileNames.forEach(fileName => {
+            if (vpath.isDeclaration(fileName)) {
+                return;
+            }
+            const { diagnostics: fileDiagnostics = [] } = transformer(fileName, host);
+            diagnostics.push(...fileDiagnostics);
+        });
+        const dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: host.vfs.stringComparer, sort: "insertion" });
+        host.outputs.forEach(d => dts.set(d.file, new documents.TextDocument(d.file, d.text)));
+        return { dts, diagnostics };
     }
 
     export function compileDeclarationFiles(context: DeclarationCompilationContext | undefined, symlinks: vfs.FileSet | undefined) {
@@ -900,6 +1031,60 @@ export namespace Compiler {
 
         const hash = "#base64," + ts.map([outputJSFile.text, sourcemap].concat(sourceTDs.map(td => td!.text)), s => ts.convertToBase64(decodeURIComponent(encodeURIComponent(s)))).join(",");
         return "\n//// https://sokra.github.io/source-map-visualization" + hash + "\n";
+    }
+
+    export function doDeclarationDiffBaseline(
+        baselinePath: string,
+        type: string,
+        header: string,
+        dteDeclarationFiles: readonly TestFile[],
+        dteDiagnostics: readonly ts.Diagnostic[],
+        tscDeclarationFiles: readonly TestFile[],
+        tscDiagnostics: readonly ts.Diagnostic[],
+        tsSources: readonly TestFile[],
+        prettyErrors: boolean | undefined,
+        reason: string | undefined,
+    ) {
+        const Diff = require("diff");
+        const dteContent = declarationContent(dteDeclarationFiles, tsSources, dteDiagnostics, prettyErrors);
+        const tscContent = declarationContent(tscDeclarationFiles, tsSources, tscDiagnostics, prettyErrors);
+
+        let fullDiff = "// [[Reason: " + reason + "]] ////\r\n\r\n";
+        fullDiff += "//// [" + header + "] ////\r\n\r\n";
+        fullDiff += Diff.createTwoFilesPatch("TSC", "DTE", tscContent, dteContent, "declarations", "declarations");
+
+        Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts.diff`), fullDiff);
+    }
+    function declarationContent(declarationFiles: readonly TestFile[], tsSources: readonly TestFile[], errors: readonly ts.Diagnostic[], prettyErrors?: boolean) {
+        let dtsCode = "";
+        if (declarationFiles.length > 0) {
+            dtsCode += "\r\n\r\n";
+            for (let i = 0; i < declarationFiles.length; i++) {
+                const declFile = declarationFiles[i];
+                dtsCode += "//// [" + declFile.unitName + "]\r\n";
+                dtsCode += declFile.content + (i < (declarationFiles.length - 1) ? "\r\n" : "");
+            }
+        }
+        if (errors.length > 0) {
+            dtsCode += "/// [Errors] ////\r\n\r\n";
+            dtsCode += getErrorBaseline(tsSources, errors, prettyErrors);
+        }
+        return dtsCode;
+    }
+    export function doDeclarationBaseline(baselinePath: string, type: string, header: string, declarationFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], tsSources: readonly TestFile[], prettyErrors?: boolean) {
+        let tsCode = "";
+        tsCode += "//// [" + header + "] ////\r\n\r\n";
+
+        for (let i = 0; i < tsSources.length; i++) {
+            tsCode += "//// [" + tsSources[i].unitName + "]\r\n";
+            tsCode += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
+        }
+
+        let dtsCode = "/// [Declarations] ////\r\n\r\n";
+        dtsCode += declarationContent(declarationFiles, tsSources, errors, prettyErrors);
+
+        // eslint-disable-next-line no-null/no-null
+        Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts`), tsCode.length > 0 ? tsCode + "\r\n\r\n" + dtsCode : null);
     }
 
     export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {

@@ -1,0 +1,17 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,8 +1,9 @@
+ 
+ 
+ //// [/.src/parserIndexSignature11.d.ts]
+ interface I {
++    [p]: any;
+     [p1: string]: any;
+     [p2: string, p3: number]: any;
+ }
+ /// [Errors] ////

@@ -1,0 +1,18 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/constEnums/constEnum2.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -5,9 +5,9 @@
+ declare const enum D {
+     d = 10,
+     e,
+     f,
+-    g = 0
++    g
+ }
+ /// [Errors] ////
+ 
+ constEnum2.ts(7,15): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
