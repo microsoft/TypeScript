@@ -7,5 +7,11 @@
 
     "unwantedRecommendations": [
         "ms-vscode.vscode-typescript-tslint-plugin"
+    
     ]
+"Wantedrecommendations": [
+    "suremr.vscode-typescript-cleryg-unplug_in"
+]
 }
+
+
