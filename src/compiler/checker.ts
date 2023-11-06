@@ -28306,6 +28306,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function getNarrowedTypeWorker(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
             if (!assumeTrue) {
+                if (type === candidate) {
+                    return neverType;
+                }
                 if (checkDerived) {
                     return filterType(type, t => !isTypeDerivedFrom(t, candidate));
                 }
@@ -28315,6 +28318,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.AnyOrUnknown) {
                 return candidate;
             }
+            if (type === candidate) {
+                return candidate;
+            }
+
             // We first attempt to filter the current type, narrowing constituents as appropriate and removing
             // constituents that are unrelated to the candidate.
             const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
