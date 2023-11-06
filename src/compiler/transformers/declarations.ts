@@ -1934,17 +1934,14 @@ export function transformDeclarations(context: TransformationContext) {
                     input.name,
                     factory.createNodeArray(mapDefined(input.members, m => {
                         if (shouldStripInternal(m)) return;
-                        if (isolatedDeclarations) {
-                            if (
-                                m.initializer && !resolver.isLiteralConstDeclaration(m) &&
-                                // This will be its own compiler error instead, so don't report.
-                                !isComputedPropertyName(m.name)
-                            ) {
-                                reportIsolatedDeclarationError(m);
-                            }
-                        }
                         // Rewrite enum values to their constants, if available
                         const constValue = resolver.getConstantValue(m);
+                        if (isolatedDeclarations && m.initializer && constValue === undefined &&
+                            // This will be its own compiler error instead, so don't report.
+                            !isComputedPropertyName(m.name) 
+                        ) {
+                            reportIsolatedDeclarationError(m);
+                        }
                         const newInitializer = constValue === undefined
                             ? undefined
                             : typeof constValue === "string"

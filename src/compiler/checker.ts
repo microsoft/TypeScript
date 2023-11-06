@@ -44752,44 +44752,63 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return +(expr as NumericLiteral).text;
             case SyntaxKind.ParenthesizedExpression:
                 return evaluate((expr as ParenthesizedExpression).expression, location);
-            case SyntaxKind.Identifier: {
-                const identifier = expr as Identifier;
-                if (isInfinityOrNaNString(identifier.escapedText) && (resolveEntityName(identifier, SymbolFlags.Value, /*ignoreErrors*/ true) === getGlobalSymbol(identifier.escapedText, SymbolFlags.Value, /*diagnostic*/ undefined))) {
-                    return +(identifier.escapedText);
-                }
-                // falls through
-            }
+            case SyntaxKind.Identifier:
             case SyntaxKind.PropertyAccessExpression:
-                if (isEntityNameExpression(expr)) {
-                    const symbol = resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true);
-                    if (symbol) {
-                        if (symbol.flags & SymbolFlags.EnumMember) {
-                            return location ? evaluateEnumMember(expr, symbol, location) : getEnumMemberValue(symbol.valueDeclaration as EnumMember);
-                        }
-                        if (isConstantVariable(symbol)) {
-                            const declaration = symbol.valueDeclaration;
-                            if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
-                                return evaluate(declaration.initializer, declaration);
-                            }
-                        }
-                    }
-                }
-                break;
+                return evaluateEntityNameExpression(expr as EntityNameExpression, location);
             case SyntaxKind.ElementAccessExpression:
-                const root = (expr as ElementAccessExpression).expression;
-                if (isEntityNameExpression(root) && isStringLiteralLike((expr as ElementAccessExpression).argumentExpression)) {
-                    const rootSymbol = resolveEntityName(root, SymbolFlags.Value, /*ignoreErrors*/ true);
-                    if (rootSymbol && rootSymbol.flags & SymbolFlags.Enum) {
-                        const name = escapeLeadingUnderscores(((expr as ElementAccessExpression).argumentExpression as StringLiteralLike).text);
-                        const member = rootSymbol.exports!.get(name);
-                        if (member) {
-                            return location ? evaluateEnumMember(expr, member, location) : getEnumMemberValue(member.valueDeclaration as EnumMember);
-                        }
-                    }
-                }
-                break;
+                return evaluateElementAccessExpression(expr as ElementAccessExpression, location);
         }
         return undefined;
+    }
+
+    function evaluateEntityNameExpression(expr: EntityNameExpression, location?: Declaration) {
+        if (isIdentifier(expr) && isInfinityOrNaNString(expr.escapedText) && 
+            (resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true) === getGlobalSymbol(expr.escapedText, SymbolFlags.Value, /*diagnostic*/ undefined))) {
+            return +(expr.escapedText);
+        }
+        if (isEntityNameExpression(expr)) {
+            const symbol = resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true);
+            if (!symbol) return undefined;
+            if (symbol.flags & SymbolFlags.EnumMember) {
+                if (!symbol.valueDeclaration) return undefined;
+                const enumMember = symbol.valueDeclaration as EnumMember;
+                if (location) {
+                    if (compilerOptions.isolatedDeclarations && location.parent !== enumMember.parent) {
+                        return undefined;
+                    }
+                    return evaluateEnumMember(expr, symbol, location);
+                }
+                return getEnumMemberValue(enumMember);
+            }
+            if (compilerOptions.isolatedDeclarations && isConstantVariable(symbol)) {
+                const declaration = symbol.valueDeclaration;
+                if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
+                    return evaluate(declaration.initializer, declaration);
+                }
+            }
+        }
+        return undefined;
+    }
+
+    function evaluateElementAccessExpression(expr: ElementAccessExpression, location?: Declaration) {        
+        const root = expr.expression;
+        if (isEntityNameExpression(root) && isStringLiteralLike(expr.argumentExpression)) {
+            const rootSymbol = resolveEntityName(root, SymbolFlags.Value, /*ignoreErrors*/ true);
+            if (rootSymbol && rootSymbol.flags & SymbolFlags.Enum) {
+                const name = escapeLeadingUnderscores(expr.argumentExpression.text);
+                const member = rootSymbol.exports!.get(name);
+                if (member) {
+                    const enumMember = member.valueDeclaration as EnumMember;
+                    if (location) {                        
+                        if (compilerOptions.isolatedDeclarations && location.parent !== enumMember.parent) {
+                            return undefined;
+                        }
+                        return evaluateEnumMember(expr, member, location);
+                    }
+                    return getEnumMemberValue(enumMember);
+                }
+            }
+        }
     }
 
     function evaluateEnumMember(expr: Expression, symbol: Symbol, location: Declaration) {
