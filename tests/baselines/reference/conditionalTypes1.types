@@ -789,8 +789,8 @@ type Baz<T> = Foo<T>;
 >Baz : Baz<T>
 
 const convert2 = <T>(value: Foo<T>): Baz<T> => value;
->convert2 : <T>(value: Foo<T>) => Foo<T>
-><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Foo<T>
+>convert2 : <T>(value: Foo<T>) => Baz<T>
+><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Baz<T>
 >value : Foo<T>
 >value : Foo<T>
 

@@ -11,6 +11,6 @@ interface I {
 >p : string
 
     then<U, T>(p: string): Date;
->then : { (p: string): string; <U_1>(p: string): string; <U_2, T>(p: string): Date; }
+>then : { (p: string): string; <U_1>(p: string): string; <U, T>(p: string): Date; }
 >p : string
 }

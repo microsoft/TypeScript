@@ -7,7 +7,7 @@ interface C {
 >f : { <T>(): string; <T_1, U>(): string; }
 
    f<T, U>(): string; 
->f : { <T_1>(): string; <T_2, U>(): string; }
+>f : { <T_1>(): string; <T, U>(): string; }
  
    <T>(): string;
    <T, U>(): string; 

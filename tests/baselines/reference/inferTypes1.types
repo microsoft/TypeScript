@@ -480,7 +480,7 @@ const result = invoker('test', true)({ test: (a: boolean) => 123 })
 >result : number
 >invoker('test', true)({ test: (a: boolean) => 123 }) : number
 >invoker('test', true) : <T extends Record<"test", (args_0: boolean) => any>>(obj: T) => ReturnType<T["test"]>
->invoker : <K extends string | number | symbol, A_1 extends any[]>(key: K, ...args: A_1) => <T extends Record<K, (...args: A_1) => any>>(obj: T) => ReturnType<T[K]>
+>invoker : <K extends string | number | symbol, A extends any[]>(key: K, ...args: A) => <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>
 >'test' : "test"
 >true : true
 >{ test: (a: boolean) => 123 } : { test: (a: boolean) => number; }

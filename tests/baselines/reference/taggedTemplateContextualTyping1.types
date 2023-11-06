@@ -14,7 +14,7 @@ function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T;
 >x : T
 
 function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T;
->tempTag1 : { <T_1>(templateStrs: TemplateStringsArray, f: FuncType, x: T_1): T_1; <T_2>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
+>tempTag1 : { <T_1>(templateStrs: TemplateStringsArray, f: FuncType, x: T_1): T_1; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
 >templateStrs : TemplateStringsArray
 >f : FuncType
 >h : FuncType

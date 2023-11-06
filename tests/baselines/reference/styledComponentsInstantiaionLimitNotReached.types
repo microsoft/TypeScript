@@ -344,7 +344,7 @@ export interface StyledComponentBase<
         A | StyledComponentInnerAttrs<WithC>
     >;
     withComponent<WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
->withComponent : { <WithC_1 extends AnyStyledComponent>(component: WithC_1): StyledComponent<StyledComponentInnerComponent<WithC_1>, T, O & StyledComponentInnerOtherProps<WithC_1>, A | StyledComponentInnerAttrs<WithC_1>>; <WithC_2 extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
+>withComponent : { <WithC_1 extends AnyStyledComponent>(component: WithC_1): StyledComponent<StyledComponentInnerComponent<WithC_1>, T, O & StyledComponentInnerOtherProps<WithC_1>, A | StyledComponentInnerAttrs<WithC_1>>; <WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
 >JSX : any
 >React : any
 

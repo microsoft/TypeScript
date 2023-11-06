@@ -224,7 +224,7 @@ module Errors {
 >a12 : (x: Base[], y: Derived2[]) => Derived[]
 
         var b15: <T>(x: { a: T; b: T }) => T; 
->b15 : <T>(x: { a: T; b: T; }) => T
+>b15 : <T>(x: {    a: T;    b: T;}) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -240,7 +240,7 @@ module Errors {
 >a15 : (x: { a: string; b: number; }) => number
 
         var b15a: <T extends Base>(x: { a: T; b: T }) => number; 
->b15a : <T extends Base>(x: { a: T; b: T; }) => number
+>b15a : <T extends Base>(x: {    a: T;    b: T;}) => number
 >x : { a: T; b: T; }
 >a : T
 >b : T

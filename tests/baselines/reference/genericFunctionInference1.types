@@ -8,7 +8,7 @@ declare function pipe<A extends any[], B>(ab: (...args: A) => B): (...args: A) =
 >args : A
 
 declare function pipe<A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C;
->pipe : { <A_1 extends any[], B_1>(ab: (...args: A_1) => B_1): (...args: A_1) => B_1; <A_2 extends any[], B_2, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A_3 extends any[], B_3, C_1, D>(ab: (...args: A_3) => B_3, bc: (b: B_3) => C_1, cd: (c: C_1) => D): (...args: A_3) => D; }
+>pipe : { <A_1 extends any[], B_1>(ab: (...args: A_1) => B_1): (...args: A_1) => B_1; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A_2 extends any[], B_2, C_1, D>(ab: (...args: A_2) => B_2, bc: (b: B_2) => C_1, cd: (c: C_1) => D): (...args: A_2) => D; }
 >ab : (...args: A) => B
 >args : A
 >bc : (b: B) => C
@@ -16,7 +16,7 @@ declare function pipe<A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) =
 >args : A
 
 declare function pipe<A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D;
->pipe : { <A_1 extends any[], B_1>(ab: (...args: A_1) => B_1): (...args: A_1) => B_1; <A_2 extends any[], B_2, C_1>(ab: (...args: A_2) => B_2, bc: (b: B_2) => C_1): (...args: A_2) => C_1; <A_3 extends any[], B_3, C_2, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
+>pipe : { <A_1 extends any[], B_1>(ab: (...args: A_1) => B_1): (...args: A_1) => B_1; <A_2 extends any[], B_2, C_1>(ab: (...args: A_2) => B_2, bc: (b: B_2) => C_1): (...args: A_2) => C_1; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >ab : (...args: A) => B
 >args : A
 >bc : (b: B) => C
@@ -167,7 +167,7 @@ const g00: <T>(x: T) => T[] = pipe(list);
 >list : <T>(a: T) => T[]
 
 const g01: <T>(x: T) => { value: T[] } = pipe(list, box);
->g01 : <T>(x: T) => { value: T[]; }
+>g01 : <T>(x: T) => {    value: T[];}
 >x : T
 >value : T[]
 >pipe(list, box) : (a: T) => { value: T[]; }
@@ -176,7 +176,7 @@ const g01: <T>(x: T) => { value: T[] } = pipe(list, box);
 >box : <V>(x: V) => { value: V; }
 
 const g02: <T>(x: T) => { value: T }[] = pipe(box, list);
->g02 : <T>(x: T) => { value: T; }[]
+>g02 : <T>(x: T) => {    value: T;}[]
 >x : T
 >value : T
 >pipe(box, list) : (x: T) => { value: T; }[]
@@ -185,7 +185,7 @@ const g02: <T>(x: T) => { value: T }[] = pipe(box, list);
 >list : <T>(a: T) => T[]
 
 const g03: <T>(x: T) => { value: T[] } = pipe(x => list(x), box);
->g03 : <T>(x: T) => { value: T[]; }
+>g03 : <T>(x: T) => {    value: T[];}
 >x : T
 >value : T[]
 >pipe(x => list(x), box) : (x: T) => { value: T[]; }
@@ -198,7 +198,7 @@ const g03: <T>(x: T) => { value: T[] } = pipe(x => list(x), box);
 >box : <V>(x: V) => { value: V; }
 
 const g04: <T>(x: T) => { value: T[] } = pipe(list, x => box(x));
->g04 : <T>(x: T) => { value: T[]; }
+>g04 : <T>(x: T) => {    value: T[];}
 >x : T
 >value : T[]
 >pipe(list, x => box(x)) : (a: T) => { value: T[]; }
@@ -211,7 +211,7 @@ const g04: <T>(x: T) => { value: T[] } = pipe(list, x => box(x));
 >x : T[]
 
 const g05: <T>(x: T) => { value: T[] } = pipe(x => list(x), x => box(x))
->g05 : <T>(x: T) => { value: T[]; }
+>g05 : <T>(x: T) => {    value: T[];}
 >x : T
 >value : T[]
 >pipe(x => list(x), x => box(x)) : (x: T) => { value: T[]; }
@@ -228,7 +228,7 @@ const g05: <T>(x: T) => { value: T[] } = pipe(x => list(x), x => box(x))
 >x : T[]
 
 const g06: <T>(x: T) => { value: T[] } = pipe(list, pipe(box));
->g06 : <T>(x: T) => { value: T[]; }
+>g06 : <T>(x: T) => {    value: T[];}
 >x : T
 >value : T[]
 >pipe(list, pipe(box)) : (a: T) => { value: T[]; }
@@ -239,7 +239,7 @@ const g06: <T>(x: T) => { value: T[] } = pipe(list, pipe(box));
 >box : <V>(x: V) => { value: V; }
 
 const g07: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(box));
->g07 : <T>(x: T) => { value: T[]; }
+>g07 : <T>(x: T) => {    value: T[];}
 >x : T
 >value : T[]
 >pipe(x => list(x), pipe(box)) : (x: T) => { value: T[]; }
@@ -254,7 +254,7 @@ const g07: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(box));
 >box : <V>(x: V) => { value: V; }
 
 const g08: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(x => box(x)));
->g08 : <T>(x: T) => { value: T[]; }
+>g08 : <T>(x: T) => {    value: T[];}
 >x : T
 >value : T[]
 >pipe(x => list(x), pipe(x => box(x))) : (x: T) => { value: T[]; }

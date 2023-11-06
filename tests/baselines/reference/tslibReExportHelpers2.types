@@ -19,7 +19,7 @@ export declare function __classPrivateFieldGet<T extends object, V>(
 
 ): V;
 export declare function __classPrivateFieldGet<T extends new (...args: any[]) => unknown, V>(
->__classPrivateFieldGet : { <T_1 extends object, V_1>(receiver: T_1, state: { has(o: T_1): boolean; get(o: T_1): V_1; }, kind?: "f"): V_1; <T_2 extends new (...args: any[]) => unknown, V_2>(receiver: T, state: T, kind: "f", f: {    value: V;}): V; }
+>__classPrivateFieldGet : { <T_1 extends object, V_1>(receiver: T_1, state: { has(o: T_1): boolean; get(o: T_1): V_1; }, kind?: "f"): V_1; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: {    value: V;}): V; }
 >args : any[]
 
   receiver: T,

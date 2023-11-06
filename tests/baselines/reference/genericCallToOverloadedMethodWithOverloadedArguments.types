@@ -71,7 +71,7 @@ module m3 {
 >x : T
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
->then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U_2>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
+>then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 >error : (error: any) => Promise<U>
@@ -106,7 +106,7 @@ module m4 {
 >x : T
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
->then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U_2>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
+>then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 >error : (error: any) => Promise<U>
@@ -145,14 +145,14 @@ module m5 {
 >x : T
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
->then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U_2>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U_3>(cb: (x: T) => Promise<U_3>, error?: (error: any) => U_3, progress?: (preservation: any) => void): Promise<U_3>; }
+>then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U_2>(cb: (x: T) => Promise<U_2>, error?: (error: any) => U_2, progress?: (preservation: any) => void): Promise<U_2>; }
 >cb : (x: T) => Promise<U>
 >x : T
 >error : (error: any) => Promise<U>
 >error : any
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>;
->then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U_2>(cb: (x: T) => Promise<U_2>, error?: (error: any) => Promise<U_2>): Promise<U_2>; <U_3>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
+>then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U_2>(cb: (x: T) => Promise<U_2>, error?: (error: any) => Promise<U_2>): Promise<U_2>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 >error : (error: any) => U
@@ -193,7 +193,7 @@ module m6 {
 >x : T
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
->then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U_2>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
+>then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 >error : (error: any) => Promise<U>

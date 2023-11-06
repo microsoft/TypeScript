@@ -19,7 +19,7 @@ function fun<T>(f: FuncType, x: T): T;
 >x : T
 
 function fun<T>(f: FuncType, g: FuncType, x: T): T;
->fun : { <T_1>(f: FuncType, x: T_1): T_1; <T_2>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T_1>(f: FuncType, x: T_1): T_1; <T>(f: FuncType, g: FuncType, x: T): T; }
 >f : FuncType
 >g : FuncType
 >x : T
