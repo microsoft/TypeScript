@@ -5665,12 +5665,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (getSymbolIfSameReference(exported, symbol)) {
                 return exported;
             }
-            if (symbol.flags & SymbolFlags.TypeAlias && exported.declarations?.find(isTypeAlias)) {
-                const aliasSymbol = getDeclaredTypeOfTypeAlias(exported).aliasSymbol;
-                if (aliasSymbol && getSymbolIfSameReference(aliasSymbol, symbol)) {
-                    return exported;
-                }
-            }
         });
     }
 
@@ -5678,6 +5672,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Checks if two symbols, through aliasing and/or merging, refer to the same thing
      */
     function getSymbolIfSameReference(s1: Symbol, s2: Symbol) {
+        if (s1.flags & SymbolFlags.TypeAlias && s2.declarations?.find(isTypeAlias)) {
+            s2 = getDeclaredTypeOfTypeAlias(s2).aliasSymbol || s2;
+        }
+        if (s2.flags & SymbolFlags.TypeAlias && s1.declarations?.find(isTypeAlias)) {
+            s1 = getDeclaredTypeOfTypeAlias(s1).aliasSymbol || s1;
+        }
         if (getMergedSymbol(resolveSymbol(getMergedSymbol(s1))) === getMergedSymbol(resolveSymbol(getMergedSymbol(s2)))) {
             return s1;
         }
