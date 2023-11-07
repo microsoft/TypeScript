@@ -6838,6 +6838,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const typeId = type.id;
                 const symbol = type.symbol;
                 if (symbol) {
+                    const isInstantiationExpressionType = !!(getObjectFlags(type) & ObjectFlags.InstantiationExpressionType);
+                    if (isInstantiationExpressionType) {
+                        const instantiationExpressionType = type as InstantiationExpressionType;
+                        const existing = instantiationExpressionType.node;
+                        if (isTypeQueryNode(existing) && getTypeFromTypeNode(existing) === type) {
+                            const typeNode = serializeExistingTypeNode(context, existing);
+                            if (typeNode) {
+                                return typeNode;
+                            }
+                        }
+                        if (context.visitedTypes?.has(typeId)) {
+                            return createElidedInformationPlaceholder(context);
+                        }
+                        return visitAndTransformType(type, createTypeNodeFromObjectType);
+                    }
                     const isInstanceType = isClassInstanceSide(type) ? SymbolFlags.Type : SymbolFlags.Value;
                     if (isJSConstructor(symbol.valueDeclaration)) {
                         // Instance and static types share the same symbol; only add 'typeof' for the static side.
