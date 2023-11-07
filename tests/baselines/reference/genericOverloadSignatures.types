@@ -14,7 +14,7 @@ function f<T>(a: T);
 >a : T
 
 function f<T>(a: T);
->f : { <T_1>(a: T_1): any; <T_2>(a: T): any; }
+>f : { <T_1>(a: T_1): any; <T>(a: T): any; }
 >a : T
 
 function f(a) { }
@@ -27,7 +27,7 @@ interface I2 {
 >x : T
 
     f<T>(x: T): string;
->f : { <T_1>(x: T_1): number; <T_2>(x: T): string; }
+>f : { <T_1>(x: T_1): number; <T>(x: T): string; }
 >x : T
 }
 

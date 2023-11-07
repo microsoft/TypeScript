@@ -14,7 +14,7 @@ interface Promise<T> {
 >progress : any
 
     then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U_1>(success?: (value: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U_3>(success?: (value: T) => U_3, error?: (error: any) => Promise<U_3>, progress?: (progress: any) => void): Promise<U_3>; <U_4>(success?: (value: T) => U_4, error?: (error: any) => U_4, progress?: (progress: any) => void): Promise<U_4>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U_1>(success?: (value: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>, progress?: (progress: any) => void): Promise<U_1>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U_2>(success?: (value: T) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: T) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >success : (value: T) => Promise<U>
 >value : T
 >error : (error: any) => U
@@ -23,7 +23,7 @@ interface Promise<T> {
 >progress : any
 
     then<U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U_1>(success?: (value: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: T) => Promise<U_2>, error?: (error: any) => U_2, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_4>(success?: (value: T) => U_4, error?: (error: any) => U_4, progress?: (progress: any) => void): Promise<U_4>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U_1>(success?: (value: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: T) => Promise<U_2>, error?: (error: any) => U_2, progress?: (progress: any) => void): Promise<U_2>; <U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_3>(success?: (value: T) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >success : (value: T) => U
 >value : T
 >error : (error: any) => Promise<U>
@@ -32,7 +32,7 @@ interface Promise<T> {
 >progress : any
 
     then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U_1>(success?: (value: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: T) => Promise<U_2>, error?: (error: any) => U_2, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: T) => U_3, error?: (error: any) => Promise<U_3>, progress?: (progress: any) => void): Promise<U_3>; <U_4>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U_1>(success?: (value: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: T) => Promise<U_2>, error?: (error: any) => U_2, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: T) => U_3, error?: (error: any) => Promise<U_3>, progress?: (progress: any) => void): Promise<U_3>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >success : (value: T) => U
 >value : T
 >error : (error: any) => U
@@ -191,7 +191,7 @@ declare function testFunction12<T>(x: T): IPromise<T>;
 >x : T
 
 declare function testFunction12<T>(x: T, y: T): IPromise<T>;
->testFunction12 : { <T_1>(x: T_1): IPromise<T_1>; <T_2>(x: T, y: T): IPromise<T>; }
+>testFunction12 : { <T_1>(x: T_1): IPromise<T_1>; <T>(x: T, y: T): IPromise<T>; }
 >x : T
 >y : T
 
@@ -200,7 +200,7 @@ declare function testFunction12P<T>(x: T): IPromise<T>;
 >x : T
 
 declare function testFunction12P<T>(x: T, y: T): Promise<T>;
->testFunction12P : { <T_1>(x: T_1): IPromise<T_1>; <T_2>(x: T, y: T): Promise<T>; }
+>testFunction12P : { <T_1>(x: T_1): IPromise<T_1>; <T>(x: T, y: T): Promise<T>; }
 >x : T
 >y : T
 

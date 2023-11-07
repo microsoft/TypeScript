@@ -6,12 +6,12 @@ declare function fx<T>(x: T): T;
 >x : T
 
 declare function fx<T>(x: T, n: number): T;
->fx : { <T_1>(x: T_1): T_1; <T_2>(x: T, n: number): T; <T_3, U>(t: [T_3, U]): [T_3, U]; }
+>fx : { <T_1>(x: T_1): T_1; <T>(x: T, n: number): T; <T_2, U>(t: [T_2, U]): [T_2, U]; }
 >x : T
 >n : number
 
 declare function fx<T, U>(t: [T, U]): [T, U];
->fx : { <T_1>(x: T_1): T_1; <T_2>(x: T_2, n: number): T_2; <T_3, U>(t: [T, U]): [T, U]; }
+>fx : { <T_1>(x: T_1): T_1; <T_2>(x: T_2, n: number): T_2; <T, U>(t: [T, U]): [T, U]; }
 >t : [T, U]
 
 function f1() {
@@ -419,16 +419,16 @@ function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])) {
 }
 
 function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) {
->f38 : <T extends (<A_1>(x: A_1) => A_1) | (<B>(x: B) => B[]), U>(f: T | U | (<C_1>(x: C_1) => C_1[][])) => void
+>f38 : <T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) => void
 >x : A
 >x : B
->f : T | U | (<C_1>(x: C_1) => C_1[][])
+>f : T | U | (<C>(x: C) => C[][])
 >x : C
 
     let fs = f<string>;  // U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
 >fs : U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
 >f<string> : U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
->f : T | U | (<C_1>(x: C_1) => C_1[][])
+>f : T | U | (<C>(x: C) => C[][])
 }
 
 function makeBox<T>(value: T) {
@@ -459,7 +459,7 @@ type A<U> = InstanceType<typeof Array<U>>;  // U[]
 >Array : ArrayConstructor
 
 declare const g1: {
->g1 : { <T>(a: T): { a: T; }; new <U>(b: U): { b: U; }; }
+>g1 : { <T>(a: T): {    a: T;}; new <U>(b: U): {    b: U;}; }
 
     <T>(a: T): { a: T };
 >a : T

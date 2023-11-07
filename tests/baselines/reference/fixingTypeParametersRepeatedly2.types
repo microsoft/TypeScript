@@ -40,7 +40,7 @@ declare function bar<T>(x: T, func: (p: T) => T): T;
 >p : T
 
 declare function bar<T>(x: T, func: (p: T) => T): T;
->bar : { <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; <T_2>(x: T, func: (p: T) => T): T; }
+>bar : { <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; <T>(x: T, func: (p: T) => T): T; }
 >x : T
 >func : (p: T) => T
 >p : T

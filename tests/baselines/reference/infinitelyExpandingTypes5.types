@@ -19,7 +19,7 @@ function from<T>(array: T[]): Query<T>;
 >array : T[]
 
 function from<T>(enumerator: Enumerator<T>): Query<T>;
->from : { <T_1>(array: T_1[]): Query<T_1>; <T_2>(enumerator: Enumerator<T>): Query<T>; }
+>from : { <T_1>(array: T_1[]): Query<T_1>; <T>(enumerator: Enumerator<T>): Query<T>; }
 >enumerator : Enumerator<T>
 
 function from(arg: any): any {

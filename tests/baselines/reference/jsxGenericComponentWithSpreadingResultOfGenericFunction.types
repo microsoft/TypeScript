@@ -11,7 +11,7 @@ declare function omit<T, K extends string>(names: readonly K[], obj: T): Omit<T,
 >obj : T
 
 declare function omit<K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>;
->omit : { <T, K_1 extends string>(names: readonly K_1[], obj: T): Omit<T, K_1>; <K_2 extends string>(names: readonly K[]): <T_1>(obj: T_1) => Omit<T_1, K>; }
+>omit : { <T, K_1 extends string>(names: readonly K_1[], obj: T): Omit<T, K_1>; <K extends string>(names: readonly K[]): <T_1>(obj: T_1) => Omit<T_1, K>; }
 >names : readonly K[]
 >obj : T
 

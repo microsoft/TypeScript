@@ -14,7 +14,7 @@ function foo2<T extends { x: number }>(x: T): T { return null; }
 
 //function foo3<T extends T[]>(x: T): T { return null; }
 function foo4<T extends <T>(x: T) => void>(x: T): T { return null; }
->foo4 : <T_2 extends <T_1>(x: T_1) => void>(x: T) => T
+>foo4 : <T extends <T_1>(x: T_1) => void>(x: T) => T
 >x : T
 >x : T
 

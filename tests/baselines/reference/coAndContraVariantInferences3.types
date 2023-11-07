@@ -180,14 +180,14 @@ declare function every<T, U extends T>(array: readonly T[], callback: (element: 
 >index : number
 
 declare function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
->every : { <T_1, U_1 extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[]; <T_2, U_2 extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T_3>(array: readonly T_3[] | undefined, callback: (element: T_3, index: number) => boolean): boolean; }
+>every : { <T_1, U_1 extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T_2>(array: readonly T_2[] | undefined, callback: (element: T_2, index: number) => boolean): boolean; }
 >array : readonly T[] | undefined
 >callback : (element: T, index: number) => element is U
 >element : T
 >index : number
 
 declare function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
->every : { <T_1, U extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U): array is readonly U[]; <T_2, U_1 extends T_2>(array: readonly T_2[] | undefined, callback: (element: T_2, index: number) => element is U_1): array is readonly U_1[] | undefined; <T_3>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
+>every : { <T_1, U extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U): array is readonly U[]; <T_2, U_1 extends T_2>(array: readonly T_2[] | undefined, callback: (element: T_2, index: number) => element is U_1): array is readonly U_1[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
 >array : readonly T[] | undefined
 >callback : (element: T, index: number) => boolean
 >element : T
