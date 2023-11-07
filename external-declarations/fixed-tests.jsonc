@@ -15,7 +15,7 @@
     "test-categories": {
         "to-investigate": [
             "declarationEmitObjectLiteralAccessors1",
-            "declarationsWithRecursiveInternalTypesProduceUniqueTypeParams",
+            "declarationsWithRecursiveInternalTypesProduceUniqueTypeParams"
         ],
         "new-issue": [
             "emitMethodCalledNew",
@@ -31,7 +31,7 @@
             "objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterNames",
             "objectTypesIdentityWithGenericConstructSignaturesOptionalParams",
             "objectTypesIdentityWithGenericConstructSignaturesOptionalParams2",
-            "objectTypesIdentityWithGenericConstructSignaturesOptionalParams3",
+            "objectTypesIdentityWithGenericConstructSignaturesOptionalParams3"
         ],
         "enum-issues": [
             "ambientConstLiterals",

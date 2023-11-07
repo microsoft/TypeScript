@@ -67,7 +67,7 @@ const rootCasePaths = parsedArgs.rootPaths ?? ["./tests/source"];
 const filter = parsedArgs.default ? new RegExp(parsedArgs.default) : /.*\.ts/;
 const runType = parsedArgs.type === "all" ? { tsc: true, dte: true } :
     parsedArgs.type === "tsc" ? { tsc: true, dte: false } :
-        { tsc: false, dte: true };
+    { tsc: false, dte: true };
 
 const allTests = rootCasePaths
     .map(r => readAllFiles(r, filter))
@@ -197,7 +197,7 @@ async function main() {
                     files: [{
                         fileName: changeExtension(path.basename(testFile), ".d.ts"),
                         // We compare the textual results between dte and tsc, it will show up
-                        // if it's different. as tsc prints empty results when it fails, it's 
+                        // if it's different. as tsc prints empty results when it fails, it's
                         // reasonable to do the same in DTE.
                         content: "",
                         declarationMap: undefined,
@@ -216,7 +216,7 @@ async function main() {
         }
     }
     await flushQueue();
-    console.error(`Number of failedTests: ${failedTests.length}, list : ${failedTests.join(" ")}`)
+    console.error(`Number of failedTests: ${failedTests.length}, list : ${failedTests.join(" ")}`);
     process.exit(failedTests.length);
 }
 main();

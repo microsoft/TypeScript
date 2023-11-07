@@ -67,7 +67,7 @@ export function createIsolatedDeclarationsEmitter(rootDir: string, options: Comp
 
         if (!source) return {};
 
-        const { code, diagnostics, declarationMap, declarationMapPath} = emitDeclarationsForFile(source, options);
+        const { code, diagnostics, declarationMap, declarationMapPath } = emitDeclarationsForFile(source, options);
         const extension = getDeclarationEmitExtensionForPath(file);
         const relativeToRoot = getRelativePathFromDirectory(rootDir, file, !host.useCaseSensitiveFileNames());
         const declarationPath = !declarationDir ? file : getNormalizedAbsolutePath(combinePaths(declarationDir, relativeToRoot), host.getCurrentDirectory());
@@ -166,7 +166,7 @@ export function emitDeclarationsForFile(sourceFile: SourceFile, options: Compile
             mapRoot: options.mapRoot,
             extendedDiagnostics: options.extendedDiagnostics,
             // Explicitly do not passthru either `inline` option
-        }
+        };
 
         const sourceRoot = normalizeSlashes(options.sourceRoot || "");
         const { declarationMapPath, declarationFilePath } = getOutputPathsFor(sourceFile, emitHost as unknown as EmitHost, /*forceDtsPaths*/ false);

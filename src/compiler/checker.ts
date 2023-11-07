@@ -44762,8 +44762,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function evaluateEntityNameExpression(expr: EntityNameExpression, location?: Declaration) {
-        if (isIdentifier(expr) && isInfinityOrNaNString(expr.escapedText) && 
-            (resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true) === getGlobalSymbol(expr.escapedText, SymbolFlags.Value, /*diagnostic*/ undefined))) {
+        if (
+            isIdentifier(expr) && isInfinityOrNaNString(expr.escapedText) &&
+            (resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true) === getGlobalSymbol(expr.escapedText, SymbolFlags.Value, /*diagnostic*/ undefined))
+        ) {
             return +(expr.escapedText);
         }
         if (isEntityNameExpression(expr)) {
@@ -44790,7 +44792,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function evaluateElementAccessExpression(expr: ElementAccessExpression, location?: Declaration) {        
+    function evaluateElementAccessExpression(expr: ElementAccessExpression, location?: Declaration) {
         const root = expr.expression;
         if (isEntityNameExpression(root) && isStringLiteralLike(expr.argumentExpression)) {
             const rootSymbol = resolveEntityName(root, SymbolFlags.Value, /*ignoreErrors*/ true);
@@ -44799,7 +44801,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const member = rootSymbol.exports!.get(name);
                 if (member) {
                     const enumMember = member.valueDeclaration as EnumMember;
-                    if (location) {                        
+                    if (location) {
                         if (compilerOptions.isolatedDeclarations && location.parent !== enumMember.parent) {
                             return undefined;
                         }

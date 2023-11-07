@@ -1936,9 +1936,10 @@ export function transformDeclarations(context: TransformationContext) {
                         if (shouldStripInternal(m)) return;
                         // Rewrite enum values to their constants, if available
                         const constValue = resolver.getConstantValue(m);
-                        if (isolatedDeclarations && m.initializer && constValue === undefined &&
+                        if (
+                            isolatedDeclarations && m.initializer && constValue === undefined &&
                             // This will be its own compiler error instead, so don't report.
-                            !isComputedPropertyName(m.name) 
+                            !isComputedPropertyName(m.name)
                         ) {
                             reportIsolatedDeclarationError(m);
                         }

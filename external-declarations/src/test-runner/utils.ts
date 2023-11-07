@@ -24,7 +24,7 @@ export interface TestCompilationResult {
 export interface FileContent {
     readonly content: string;
     readonly fileName: string;
-    readonly declarationMap: string|undefined;
+    readonly declarationMap: string | undefined;
 }
 
 export interface TestCaseWithBOM extends Awaited<ReturnType<typeof loadTestCase>> {
@@ -61,11 +61,11 @@ export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings
             const declarationFile = changeExtension(file.name, getDeclarationExtension(file.name));
             const resolvedDeclarationFile = vpath.resolve(result.vfs.cwd(), declarationFile);
             const declaration = result.dts.get(resolvedDeclarationFile);
-            const declarationMap = result.maps.get(resolvedDeclarationFile + '.map');
+            const declarationMap = result.maps.get(resolvedDeclarationFile + ".map");
             return [{
                 content: declaration?.text ?? "",
                 fileName: declarationFile,
-                declarationMap: declarationMap?.text ?? ""
+                declarationMap: declarationMap?.text ?? "",
             }];
         });
     return {
@@ -94,7 +94,7 @@ export function runDeclarationTransformEmitter(caseData: TestCaseParser.TestCase
                 /*setParentNodes*/ true,
                 file.name.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
             );
-            const {code, diagnostics, declarationMap} = ts.emitDeclarationsForFile(sourceFile, settings);
+            const { code, diagnostics, declarationMap } = ts.emitDeclarationsForFile(sourceFile, settings);
             diagnostics.push(...diagnostics);
             return {
                 content: settings.emitBOM ? Utils.addUTF8ByteOrderMark(code) : code,

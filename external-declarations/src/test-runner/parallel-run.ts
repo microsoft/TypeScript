@@ -81,7 +81,7 @@ async function main() {
     const results = await Promise.all(promises);
     const endTime = new Date().getTime();
     console.log(`Took ${elapsedTime(endTime)} to complete ${runCount}`);
-    process.exit(results.filter(error => error).length)
+    process.exit(results.filter(error => error).length);
 }
 
 main();
