@@ -18407,8 +18407,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // We instantiate a distributive checkType with the narrow mapper information
             const checkTypeVariable = getActualTypeVariable(root.checkType);
-            const checkType = root.isDistributive ?
-                instantiateType(checkTypeVariable, combineTypeMappers(mapper, narrowMapper)) :
+            const narrowableCheckTypeVariable = getNarrowableCheckTypeVariable(root, mapper);
+            const checkType = narrowableCheckTypeVariable ?
+                // instantiateType(checkTypeVariable, combineTypeMappers(mapper, narrowMapper)) :
+                getMappedType(narrowableCheckTypeVariable, narrowMapper) :
                 instantiateType(checkTypeVariable, mapper);
             const extendsType = instantiateType(root.extendsType, mapper);
             if (checkType === errorType || extendsType === errorType) {
@@ -18422,7 +18424,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // types can be written `[X] extends [Y] ? ...` and be deferred similarly to `X extends Y ? ...`.
             const checkTuples = isSimpleTupleType(root.node.checkType) && isSimpleTupleType(root.node.extendsType) &&
                 length((root.node.checkType as TupleTypeNode).elements) === length((root.node.extendsType as TupleTypeNode).elements);
-            const forceEagerNarrowing = root.isDistributive && getMappedType(getActualTypeVariable(root.checkType), narrowMapper) !== root.checkType;
+            const forceEagerNarrowing = narrowableCheckTypeVariable && getMappedType(narrowableCheckTypeVariable, narrowMapper) !== root.checkType; // >> TODO: can probably optimize this
             const checkTypeDeferred = isDeferredType(checkType, checkTuples) && !forceEagerNarrowing;
             let combinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
@@ -18545,8 +18547,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const typeParamMapper = newMapper ? combineTypeMappers((newType as ConditionalType).mapper, newMapper) : (newType as ConditionalType).mapper;
                     const typeArguments = typeParamMapper ? map(newRoot.outerTypeParameters, t => getMappedType(t, typeParamMapper)) : newRoot.outerTypeParameters;
                     const newRootMapper = createTypeMapper(newRoot.outerTypeParameters, typeArguments);
-                    const newCheckType = newRoot.isDistributive ?
-                        instantiateType(getActualTypeVariable(root.checkType), combineTypeMappers(mapper, narrowMapper)) :
+                    const newCheckTypeVariable = getNarrowableCheckTypeVariable(root, newRootMapper);
+                    // const newCheckType = newRoot.isDistributive ?
+                    //     instantiateType(getActualTypeVariable(root.checkType), combineTypeMappers(newRootMapper, narrowMapper)) :
+                    //     undefined;
+                    const newCheckType = newCheckTypeVariable ?
+                        instantiateType(newCheckTypeVariable, narrowMapper) :
                         undefined;
                     if (!newCheckType || newCheckType === newRoot.checkType || !(newCheckType.flags & (TypeFlags.Union | TypeFlags.Never))) {
                         root = newRoot;
@@ -19729,8 +19735,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         aliasTypeArguments: readonly Type[] | undefined,
         // noTopLevel: boolean): Type {
         ): Type {
-        type = instantiateType(type, mapper);
-        mapper = undefined;
+        // type = instantiateType(type, mapper);
+        // mapper = undefined;
         const flags = type.flags;
         // if (flags & TypeFlags.TypeParameter) {
         //     // We don't want to narrowly instantiate a return type that is just a type parameter.
@@ -19750,7 +19756,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 indexType = getMappedType(indexType, narrowMapper);
                 accessFlags |= AccessFlags.Writing; // Get the writing type
             }
-            // >> NOTE: this possibly recurses forever; how do we break this recursion? is the below enough?
+            // >> NOTE: this possibly recurs forever; how do we break this recursion? is the below enough?
             if (indexType === (type as IndexedAccessType).indexType && objectType === (type as IndexedAccessType).objectType) {
                 return type; // No type reduction or narrowing happened; so don't do anything else to avoid infinite recursion
             }
@@ -19773,8 +19779,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 aliasTypeArguments);
         }
 
-        return type;
-        // return instantiateType(type, mapper);
+        // return type;
+        return instantiateType(type, mapper);
+    }
+
+    function getNarrowableCheckTypeVariable(root: ConditionalRoot, mapper: TypeMapper | undefined): TypeParameter | undefined {
+        if (!root.isDistributive) {
+            return;
+        }
+        const checkType = mapper ? getMappedType(root.checkType, mapper) : root.checkType;
+        const variable = getActualTypeVariable(checkType);
+        if (variable.flags & TypeFlags.TypeParameter) {
+            return variable as TypeParameter;
+        }
     }
 
     function getNarrowConditionalTypeInstantiation(
@@ -19793,7 +19810,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let result;
             const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
             const checkType = root.checkType;
-            const distributionType = root.isDistributive ? getMappedType(checkType, combineTypeMappers(newMapper, narrowMapper)) : undefined;
+            const checkTypeVariable = getNarrowableCheckTypeVariable(root, newMapper);
+            const distributionType = checkTypeVariable ? getMappedType(checkTypeVariable, narrowMapper) : undefined;
             // Distributive conditional types are distributed over union types. For example, when the
             // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
             // result is (A extends U ? X : Y) | (B extends U ? X : Y).

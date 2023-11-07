@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dependentReturnType1.ts ===
+//// [tests/cases/compiler/dependentReturnType1.ts] ////
+
+=== dependentReturnType1.ts ===
 interface A {
     1: number;
 >1 : number
@@ -16,11 +18,11 @@ function f1<T extends 1 | 2>(x: T): A[T] {
 >x : T
 >1 : 1
 
-        return 0;
+        return 0; // Ok
 >0 : 0
     }
     else {
-        return 1;
+        return 1; // Error
 >1 : 1
     }
 }
@@ -45,7 +47,7 @@ function f2<T extends 1 | 2 | 3>(x: T): C[T] {
 >x : T
 >1 : 1
 
-        return 0;
+        return 0; // Ok
 >0 : 0
     }
     else {
@@ -63,7 +65,7 @@ function f3<T extends 1 | 2 | 3>(x: T): T extends 1 ? number : T extends 2 ? str
 >x : T
 >1 : 1
 
-        return 0;
+        return 0; // Ok
 >0 : 0
     }
     else {
@@ -141,15 +143,29 @@ function f10<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? T
 >x : T
 >2 : 2
 
-        // return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" };
-        return { a: "a" };
+        return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" }; // Ok
+>{ a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" } : { a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; }
+>a : "a"
+>"a" : "a"
+>b : "b"
+>"b" : "b"
+>c : "c"
+>"c" : "c"
+>d : "d"
+>"d" : "d"
+>e : "e"
+>"e" : "e"
+>f : "f"
+>"f" : "f"
+
+        return { a: "a" }; // Error
 >{ a: "a" } : { a: "a"; }
 >a : "a"
 >"a" : "a"
     }
     // Excess property becomes a problem with the change,
     // because we now check assignability to a narrower type...
-    return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" };
+    return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" }; // Error
 >{ a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" } : { a: "a"; b: string; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }
 >a : "a"
 >"a" : "a"
@@ -196,20 +212,13 @@ function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends 
 >cond : (arg: LeftIn | RightIn) => arg is LeftIn
 >arg : Arg
 
-        return produceLeftOut(arg);
+        return produceLeftOut(arg); // Ok
 >produceLeftOut(arg) : LeftOut
 >produceLeftOut : (arg: LeftIn) => LeftOut
 >arg : Arg & LeftIn
 
     } else {
-        return produceRightOut(arg as RightIn); // Doesn't work because we don't narrow `arg` to `Arg & RightIn` here
->produceRightOut(arg as RightIn) : RightOut
->produceRightOut : (arg: RightIn) => RightOut
->arg as RightIn : RightIn
->arg : Arg
-
-        return produceRightOut(arg as RightIn) as OK;
->produceRightOut(arg as RightIn) as OK : Arg extends LeftIn ? LeftOut : RightOut
+        return produceRightOut(arg as RightIn); // Error: Doesn't work because we don't narrow `arg` to `Arg & RightIn` here
 >produceRightOut(arg as RightIn) : RightOut
 >produceRightOut : (arg: RightIn) => RightOut
 >arg as RightIn : RightIn
@@ -227,6 +236,7 @@ interface Dog extends Animal {
 >bark : () => string
 }
 
+// This is unsafe
 declare function isDog(x: Animal): x is Dog;
 >isDog : (x: Animal) => x is Dog
 >x : Animal
@@ -244,12 +254,12 @@ function f12<T extends Animal>(x: T): T extends Dog ? number : string {
 >isDog : (x: Animal) => x is Dog
 >x : T
 
-        return doggy(x); // Should work
+        return doggy(x); // Ok
 >doggy(x) : number
 >doggy : (x: Dog) => number
 >x : T & Dog
     }
-    return ""; // Should not work because we can't express "not a Dog" in the type system
+    return ""; // Error: Should not work because we can't express "not a Dog" in the type system
 >"" : ""
 }
 
@@ -330,6 +340,7 @@ class Unnamed {
 >root : { name: string; }
 >name : string
 
+    // Error because parameter is optional
     name<T extends string>(name?: T): T extends string ? this : string {
 >name : <T extends string>(name?: T) => T extends string ? this : string
 >name : T | undefined
@@ -350,17 +361,17 @@ class Unnamed {
         return this;
 >this : this
     }
-
+    // Error because parameter is optional?
     nameWithError<T extends string>(name?: T): T extends string ? this : string {
 >nameWithError : <T extends string>(name?: T) => T extends string ? this : string
 >name : T | undefined
 
-        return this; // Investigate error message
+        return this; // Error: Investigate error message
 >this : this
     }
 }
 
-interface A {
+interface Aa {
     1: number;
 >1 : number
 
@@ -371,8 +382,8 @@ interface A {
 >3 : string
 }
 
-function trivialConditional<T extends 1 | 2 | 3>(x: T): A[T] {
->trivialConditional : <T extends 1 | 2 | 3>(x: T) => A[T]
+function trivialConditional<T extends 1 | 2 | 3>(x: T): Aa[T] {
+>trivialConditional : <T extends 1 | 2 | 3>(x: T) => Aa[T]
 >x : T
 
     if (x !== 1) {
@@ -401,7 +412,7 @@ function conditional<T extends boolean>(x: T): T extends true ? 1 : 2 {
 >x : T
 >true : true
 
-    return x ? 1 : 2;
+    return x ? 1 : 2; // Ok
 >x ? 1 : 2 : 1 | 2
 >x : T
 >1 : 1
@@ -412,7 +423,7 @@ function contextualConditional<T extends "a" | "b">(x: T): T extends "a" ? "a" :
 >contextualConditional : <T extends "a" | "b">(x: T) => T extends "a" ? "a" : number
 >x : T
 
-    return x === "a" ? x : parseInt(x);
+    return x === "a" ? x : parseInt(x); // Ok
 >x === "a" ? x : parseInt(x) : number | "a"
 >x === "a" : boolean
 >x : T
@@ -427,7 +438,7 @@ function conditionalWithError<T extends "a" | "b">(x: T): T extends "a" ? number
 >conditionalWithError : <T extends "a" | "b">(x: T) => T extends "a" ? number : string
 >x : T
 
-    return x === "a" ? x : parseInt(x);
+    return x === "a" ? x : parseInt(x); // Error
 >x === "a" ? x : parseInt(x) : number | "a"
 >x === "a" : boolean
 >x : T
@@ -471,7 +482,7 @@ function reduction<T extends keyof BB, U extends "c" | "d">(x: T, y: U): AA<T>[U
 
         // AA<T>[U='c'] -> BB[T]
         // BB[T='a'] -> number
-        return 0;
+        return 0; // Ok
 >0 : 0
     }
 
@@ -480,7 +491,7 @@ function reduction<T extends keyof BB, U extends "c" | "d">(x: T, y: U): AA<T>[U
 >undefined : undefined
 }
 
-// Conditional with substitution types should also be narrowed
+// Substitution types are not narrowed?
 function subsCond<T extends 1 | 2 | 3>(x: T): T extends 1 | 2 ? (T extends 1 ? string : boolean) : number {
 >subsCond : <T extends 1 | 2 | 3>(x: T) => T extends 1 | 2 ? (T extends 1 ? string : boolean) : number
 >x : T
@@ -495,4 +506,114 @@ function subsCond<T extends 1 | 2 | 3>(x: T): T extends 1 | 2 ? (T extends 1 ? s
     }
 }
 
-// TODO: test non-tail recursive and tail recursive conditionals
+// Unsafe: supertype problem
+declare function q(x: object): x is { b: number };
+>q : (x: object) => x is { b: number; }
+>x : object
+>b : number
+
+function foo<T extends { a: string } | { b: number }>(x: T): T extends { a: string } ? number : (string | number) {
+>foo : <T extends { a: string; } | { b: number; }>(x: T) => T extends {    a: string;} ? number : (string | number)
+>a : string
+>b : number
+>x : T
+>a : string
+
+    if (q(x)) {
+>q(x) : boolean
+>q : (x: object) => x is { b: number; }
+>x : { a: string; } | { b: number; }
+
+        x.b;
+>x.b : number
+>x : { b: number; }
+>b : number
+
+        return "";
+>"" : ""
+    }
+}
+
+let y = { a: "", b: 1 }
+>y : { a: string; b: number; }
+>{ a: "", b: 1 } : { a: string; b: number; }
+>a : string
+>"" : ""
+>b : number
+>1 : 1
+
+const r = foo<{ a: string }>(y); // number
+>r : number
+>foo<{ a: string }>(y) : number
+>foo : <T extends { a: string; } | { b: number; }>(x: T) => T extends { a: string; } ? number : string | number
+>a : string
+>y : { a: string; b: number; }
+
+type HelperCond<T, A, R1, B, R2> = T extends A ? R1 : T extends B ? R2 : R1 | R2;
+>HelperCond : HelperCond<T, A, R1, B, R2>
+
+function foo2<U extends string | number, V extends boolean>(x: U, y: V):
+>foo2 : <U extends string | number, V extends boolean>(x: U, y: V) => HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>
+>x : U
+>y : V
+
+    HelperCond<{ x: U, y: V },
+>x : U
+>y : V
+
+        { x: string, y: true }, 1,
+>x : string
+>y : true
+>true : true
+
+        { x: number, y: false }, 2> {
+>x : number
+>y : false
+>false : false
+
+    if (typeof x === "string" && y === true) {
+>typeof x === "string" && y === true : boolean
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : U
+>"string" : "string"
+>y === true : boolean
+>y : V
+>true : true
+
+        return 1;
+>1 : 1
+    }
+    if (typeof x === "number" && y === false) {
+>typeof x === "number" && y === false : boolean
+>typeof x === "number" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : U
+>"number" : "number"
+>y === false : boolean
+>y : V
+>false : false
+
+        return 2;
+>2 : 2
+    }
+    return 0;
+>0 : 0
+}
+
+// >> TODO: test non-tail recursive and tail recursive conditionals
+
+// >> TODO: fix this
+function voidRet<T extends { a: string } | undefined>(x: T): T extends {} ? void : number {
+>voidRet : <T extends { a: string; } | undefined>(x: T) => T extends {} ? void : number
+>a : string
+>x : T
+
+    if (x) {
+>x : T
+
+        return;
+    }
+    return 1;
+>1 : 1
+}
