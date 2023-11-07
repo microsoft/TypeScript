@@ -4132,7 +4132,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.3";
+    const versionMajorMinor = "5.4";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -6887,6 +6887,7 @@ declare namespace ts {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
+        GenerateNamesForShadowedTypeParams = 4,
         UseStructuralFallback = 8,
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,
@@ -6906,7 +6907,7 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        NodeBuilderFlagsMask = 848330091,
+        NodeBuilderFlagsMask = 848330095,
     }
     enum SymbolFormatFlags {
         None = 0,

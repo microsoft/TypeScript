@@ -5357,7 +5357,7 @@ export const enum TypeFormatFlags {
     None                                    = 0,
     NoTruncation                            = 1 << 0,  // Don't truncate typeToString result
     WriteArrayAsGenericType                 = 1 << 1,  // Write Array<T> instead T[]
-    // hole because there's a hole in node builder flags
+    GenerateNamesForShadowedTypeParams      = 1 << 2,   // When a type parameter T is shadowing another T, generate a name for it so it can still be referenced
     UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
     // hole because there's a hole in node builder flags
     WriteTypeArgumentsOfSignature           = 1 << 5,  // Write the type arguments instead of type parameters of the signature
@@ -5388,7 +5388,7 @@ export const enum TypeFormatFlags {
     InFirstTypeArgument                     = 1 << 22, // Writing first type argument of the instantiated type
     InTypeAlias                             = 1 << 23, // Writing type in type alias declaration
 
-    NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
+    NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | GenerateNamesForShadowedTypeParams | UseStructuralFallback | WriteTypeArgumentsOfSignature |
         UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
         UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
         UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter,
@@ -6047,7 +6047,7 @@ export interface NodeLinks {
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
     spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
-    fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
+    fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
 }
 
