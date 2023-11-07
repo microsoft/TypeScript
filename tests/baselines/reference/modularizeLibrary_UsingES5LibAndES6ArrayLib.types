@@ -10,9 +10,9 @@ function f(x: number, y: number, z: number) {
 
     return Array.from(arguments);
 >Array.from(arguments) : any[]
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; }
 >arguments : IArguments
 }
 

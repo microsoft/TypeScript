@@ -13,7 +13,7 @@ export function bar<T>(obj: T) {
 
     return foo(obj);
 >foo(obj) : T extends () => infer P ? P : never
->foo : <T>(obj: T) => T extends () => infer P ? P : never
+>foo : <T_1>(obj: T_1) => T_1 extends () => infer P ? P : never
 >obj : T
 }
 
@@ -31,7 +31,7 @@ export function bar2<T>(obj: T) {
 
     return foo2(obj);
 >foo2(obj) : T extends { x: infer P extends number ? infer P : string; } ? P : never
->foo2 : <T>(obj: T) => T extends { x: infer P extends number ? infer P : string; } ? P : never
+>foo2 : <T_1>(obj: T_1) => T_1 extends { x: infer P extends number ? infer P : string; } ? P : never
 >obj : T
 }
 

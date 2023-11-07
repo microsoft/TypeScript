@@ -225,6 +225,7 @@ function createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
     affectingLocations: string[],
     diagnostics: Diagnostic[],
     state: ModuleResolutionState,
+    cache: ModuleResolutionCache | NonRelativeModuleNameResolutionCache | undefined,
     legacyResult?: string,
 ): ResolvedModuleWithFailedLookupLocations {
     // If this is from node_modules for non relative name, always respect preserveSymlinks
@@ -246,6 +247,7 @@ function createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
         affectingLocations,
         diagnostics,
         state.resultFromCache,
+        cache,
         legacyResult,
     );
 }
@@ -257,13 +259,24 @@ function createResolvedModuleWithFailedLookupLocations(
     affectingLocations: string[],
     diagnostics: Diagnostic[],
     resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined,
+    cache: ModuleResolutionCache | NonRelativeModuleNameResolutionCache | undefined,
     legacyResult?: string,
 ): ResolvedModuleWithFailedLookupLocations {
     if (resultFromCache) {
-        resultFromCache.failedLookupLocations = updateResolutionField(resultFromCache.failedLookupLocations, failedLookupLocations);
-        resultFromCache.affectingLocations = updateResolutionField(resultFromCache.affectingLocations, affectingLocations);
-        resultFromCache.resolutionDiagnostics = updateResolutionField(resultFromCache.resolutionDiagnostics, diagnostics);
-        return resultFromCache;
+        if (!cache?.isReadonly) {
+            resultFromCache.failedLookupLocations = updateResolutionField(resultFromCache.failedLookupLocations, failedLookupLocations);
+            resultFromCache.affectingLocations = updateResolutionField(resultFromCache.affectingLocations, affectingLocations);
+            resultFromCache.resolutionDiagnostics = updateResolutionField(resultFromCache.resolutionDiagnostics, diagnostics);
+            return resultFromCache;
+        }
+        else {
+            return {
+                ...resultFromCache,
+                failedLookupLocations: initializeResolutionFieldForReadonlyCache(resultFromCache.failedLookupLocations, failedLookupLocations),
+                affectingLocations: initializeResolutionFieldForReadonlyCache(resultFromCache.affectingLocations, affectingLocations),
+                resolutionDiagnostics: initializeResolutionFieldForReadonlyCache(resultFromCache.resolutionDiagnostics, diagnostics),
+            };
+        }
     }
     return {
         resolvedModule: resolved && {
@@ -289,6 +302,12 @@ export function updateResolutionField<T>(to: T[] | undefined, value: T[] | undef
     if (!to?.length) return value;
     to.push(...value);
     return to;
+}
+
+function initializeResolutionFieldForReadonlyCache<T>(fromCache: T[] | undefined, value: T[]): T[] | undefined {
+    if (!fromCache?.length) return initializeResolutionField(value);
+    if (!value.length) return fromCache.slice();
+    return [...fromCache, ...value];
 }
 
 /** @internal */
@@ -566,10 +585,8 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
     if (resolutionMode === ModuleKind.ESNext && (ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext)) {
         features |= NodeResolutionFeatures.EsmMode;
     }
-    // true: "import" / false: "require" / undefined: default based on settings
-    const useImportCondition = resolutionMode === ModuleKind.ESNext || (resolutionMode !== undefined ? false : undefined);
     const conditions = (features & NodeResolutionFeatures.Exports)
-        ? getConditions(options, useImportCondition)
+        ? getConditions(options, resolutionMode)
         : [];
     const diagnostics: Diagnostic[] = [];
     const moduleResolutionState: ModuleResolutionState = {
@@ -612,10 +629,10 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         affectingLocations: initializeResolutionField(affectingLocations),
         resolutionDiagnostics: initializeResolutionField(diagnostics),
     };
-    if (containingDirectory) {
-        cache?.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
+    if (containingDirectory && cache && !cache.isReadonly) {
+        cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
         if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
-            cache?.getOrCreateCacheForNonRelativeName(typeReferenceDirectiveName, resolutionMode, redirectedReference).set(containingDirectory, result);
+            cache.getOrCreateCacheForNonRelativeName(typeReferenceDirectiveName, resolutionMode, redirectedReference).set(containingDirectory, result);
         }
     }
     if (traceEnabled) traceResult(result);
@@ -725,16 +742,13 @@ function getNodeResolutionFeatures(options: CompilerOptions) {
     return features;
 }
 
-/**
- * @param overrideResolutionModeAttribute
- * @internal
- */
-export function getConditions(options: CompilerOptions, esmMode?: boolean) {
+/** @internal */
+export function getConditions(options: CompilerOptions, resolutionMode?: ResolutionMode) {
     const moduleResolution = getEmitModuleResolutionKind(options);
-    if (esmMode === undefined) {
+    if (resolutionMode === undefined) {
         if (moduleResolution === ModuleResolutionKind.Bundler) {
             // bundler always uses `import` unless explicitly overridden
-            esmMode ??= moduleResolution === ModuleResolutionKind.Bundler;
+            resolutionMode = ModuleKind.ESNext;
         }
         else if (moduleResolution === ModuleResolutionKind.Node10) {
             // node10 does not support package.json imports/exports without
@@ -745,7 +759,7 @@ export function getConditions(options: CompilerOptions, esmMode?: boolean) {
     }
     // conditions are only used by the node16/nodenext/bundler resolvers - there's no priority order in the list,
     // it's essentially a set (priority is determined by object insertion order in the object we look at).
-    const conditions = esmMode
+    const conditions = resolutionMode === ModuleKind.ESNext
         ? ["import"]
         : ["require"];
     if (!options.noDtsResolution) {
@@ -850,6 +864,8 @@ export interface PerDirectoryResolutionCache<T> {
      *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
      */
     update(options: CompilerOptions): void;
+    /** @internal */ directoryToModuleNameMap: CacheWithRedirects<Path, ModeAwareCache<T>>;
+    /** @internal */ isReadonly?: boolean;
 }
 
 export interface NonRelativeNameResolutionCache<T> {
@@ -861,11 +877,13 @@ export interface NonRelativeNameResolutionCache<T> {
      *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
      */
     update(options: CompilerOptions): void;
+    /** @internal */ isReadonly?: boolean;
 }
 
 export interface PerNonRelativeNameCache<T> {
     get(directory: string): T | undefined;
     set(directory: string, result: T): void;
+    /** @internal */ isReadonly?: boolean;
 }
 
 export interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
@@ -889,6 +907,7 @@ export interface PackageJsonInfoCache {
     /** @internal */ entries(): [Path, PackageJsonInfo | boolean][];
     /** @internal */ getInternalMap(): Map<Path, PackageJsonInfo | boolean> | undefined;
     clear(): void;
+    /** @internal */ isReadonly?: boolean;
 }
 
 export type PerModuleNameCache = PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>;
@@ -920,6 +939,7 @@ export interface CacheWithRedirects<K, V> {
     getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V>;
     update(newOptions: CompilerOptions): void;
     clear(): void;
+    getOwnMap(): Map<K, V>;
 }
 
 /** @internal */
@@ -936,6 +956,7 @@ export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | und
         getOrCreateMapOfCacheRedirects,
         update,
         clear,
+        getOwnMap: () => ownMap,
     };
 
     function getMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> | undefined {
@@ -1042,6 +1063,7 @@ function createPerDirectoryResolutionCache<T>(
         getOrCreateCacheForDirectory,
         clear,
         update,
+        directoryToModuleNameMap,
     };
 
     function clear() {
@@ -1412,13 +1434,13 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
                 result = nodeNextModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
                 break;
             case ModuleResolutionKind.Node10:
-                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode ? getConditions(compilerOptions, resolutionMode === ModuleKind.ESNext) : undefined);
+                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode ? getConditions(compilerOptions, resolutionMode) : undefined);
                 break;
             case ModuleResolutionKind.Classic:
                 result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                 break;
             case ModuleResolutionKind.Bundler:
-                result = bundlerModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode ? getConditions(compilerOptions, resolutionMode === ModuleKind.ESNext) : undefined);
+                result = bundlerModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode ? getConditions(compilerOptions, resolutionMode) : undefined);
                 break;
             default:
                 return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
@@ -1426,10 +1448,12 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
         if (result && result.resolvedModule) perfLogger?.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
         perfLogger?.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
 
-        cache?.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(moduleName, resolutionMode, result);
-        if (!isExternalModuleNameRelative(moduleName)) {
-            // put result in per-module name cache
-            cache?.getOrCreateCacheForNonRelativeName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
+        if (cache && !cache.isReadonly) {
+            cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(moduleName, resolutionMode, result);
+            if (!isExternalModuleNameRelative(moduleName)) {
+                // put result in per-module name cache
+                cache.getOrCreateCacheForNonRelativeName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
+            }
         }
     }
 
@@ -1784,7 +1808,7 @@ function nodeModuleNameResolverWorker(
         compilerOptions,
         moduleResolution === ModuleResolutionKind.Bundler || moduleResolution === ModuleResolutionKind.Node10
             ? undefined
-            : !!(features & NodeResolutionFeatures.EsmMode),
+            : (features & NodeResolutionFeatures.EsmMode) ? ModuleKind.ESNext : ModuleKind.CommonJS,
     );
 
     const diagnostics: Diagnostic[] = [];
@@ -1850,6 +1874,7 @@ function nodeModuleNameResolverWorker(
         affectingLocations,
         diagnostics,
         state,
+        cache,
         legacyResult,
     );
 
@@ -2195,7 +2220,7 @@ export function getEntrypointsFromPackageJsonInfo(
 
     if (features & NodeResolutionFeatures.Exports && packageJsonInfo.contents.packageJsonContent.exports) {
         const conditionSets = deduplicate(
-            [getConditions(options, /*esmMode*/ true), getConditions(options, /*esmMode*/ false)],
+            [getConditions(options, ModuleKind.ESNext), getConditions(options, ModuleKind.CommonJS)],
             arrayIsEqualTo,
         );
         for (const conditions of conditionSets) {
@@ -2386,7 +2411,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
             trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
         }
         const result: PackageJsonInfo = { packageDirectory, contents: { packageJsonContent, versionPaths: undefined, resolvedEntrypoints: undefined } };
-        state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
+        if (state.packageJsonInfoCache && !state.packageJsonInfoCache.isReadonly) state.packageJsonInfoCache.setPackageJsonInfo(packageJsonPath, result);
         state.affectingLocations?.push(packageJsonPath);
         return result;
     }
@@ -2394,7 +2419,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
         if (directoryExists && traceEnabled) {
             trace(host, Diagnostics.File_0_does_not_exist, packageJsonPath);
         }
-        state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, directoryExists);
+        if (state.packageJsonInfoCache && !state.packageJsonInfoCache.isReadonly) state.packageJsonInfoCache.setPackageJsonInfo(packageJsonPath, directoryExists);
         // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
         state.failedLookupLocations?.push(packageJsonPath);
     }
@@ -3178,6 +3203,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
         affectingLocations,
         diagnostics,
         state,
+        cache,
     );
 
     function tryResolve(extensions: Extensions): SearchResult<Resolved> {
@@ -3273,6 +3299,7 @@ export function loadModuleFromGlobalCache(moduleName: string, projectName: strin
         affectingLocations,
         diagnostics,
         state.resultFromCache,
+        /*cache*/ undefined,
     );
 }
 

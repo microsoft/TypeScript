@@ -17,10 +17,35 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.json]
-{"compilerOptions":{"outDir":"lib","rootDir":"src","composite":true,"preserveSymlinks":true},"include":["src"],"references":[{"path":"../B"}]}
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "composite": true,
+    "preserveSymlinks": true
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../B"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/B/tsconfig.json]
-{"compilerOptions":{"outDir":"lib","rootDir":"src","composite":true,"preserveSymlinks":true},"include":["src"]}
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "composite": true,
+    "preserveSymlinks": true
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/A/src/test.ts]
 import { foo } from 'b/lib/foo';
@@ -46,8 +71,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/A/src/test.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/A/lib","rootDir":"/user/username/projects/myproject/packages/A/src","composite":true,"preserveSymlinks":true,"configFilePath":"/user/username/projects/myproject/packages/A/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/packages/A/src/test.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/A/lib",
+  "rootDir": "/user/username/projects/myproject/packages/A/src",
+  "composite": true,
+  "preserveSymlinks": true,
+  "configFilePath": "/user/username/projects/myproject/packages/A/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

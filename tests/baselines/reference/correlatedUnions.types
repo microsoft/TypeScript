@@ -354,9 +354,9 @@ function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
 
         document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
 >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
->document.addEventListener : { <K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
 >document : Document
->addEventListener : { <K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
 >event.name : K
 >event : Ev<K>
 >name : K
@@ -797,8 +797,8 @@ type MappedFromOriginal = SameKeys<Original>;
 >MappedFromOriginal : SameKeys<Original>
 
 const getStringAndNumberFromOriginalAndMapped = <
->getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
-><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
+>getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
+><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
 
   K extends KeyOfOriginal,
   N extends NestedKeyOfOriginalFor<K>

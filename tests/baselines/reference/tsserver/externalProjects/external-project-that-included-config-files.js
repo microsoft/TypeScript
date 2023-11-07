@@ -11,10 +11,20 @@ let y =1;
 let z =1;
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["f1.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f1.ts"
+  ]
+}
 
 //// [/a/c/tsconfig.json]
-{"compilerOptions":{},"files":["f2.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f2.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json

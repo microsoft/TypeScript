@@ -1,7 +1,11 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node16"}}
+{
+  "compilerOptions": {
+    "moduleResolution": "node16"
+  }
+}
 
 //// [/user/username/projects/myproject/index.ts]
 import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
@@ -14,7 +18,14 @@ export const x = 10;
 
 
 //// [/user/username/projects/myproject/node_modules/pkg/package.json]
-{"name":"pkg","version":"0.0.1","exports":{"import":"./import.js","require":"./require.js"}}
+{
+  "name": "pkg",
+  "version": "0.0.1",
+  "exports": {
+    "import": "./import.js",
+    "require": "./require.js"
+  }
+}
 
 //// [/user/username/projects/myproject/node_modules/pkg/import.d.ts]
 export interface ImportInterface {}
@@ -23,7 +34,14 @@ export interface ImportInterface {}
 export interface RequireInterface {}
 
 //// [/user/username/projects/myproject/node_modules/pkg1/package.json]
-{"name":"pkg1","version":"0.0.1","exports":{"import":"./import.js","require":"./require.js"}}
+{
+  "name": "pkg1",
+  "version": "0.0.1",
+  "exports": {
+    "import": "./import.js",
+    "require": "./require.js"
+  }
+}
 
 //// [/user/username/projects/myproject/node_modules/pkg1/import.d.ts]
 export interface ImportInterface {}
@@ -137,8 +155,16 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/index.ts"]
-Program options: {"moduleResolution":3,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -281,8 +307,16 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/index.ts"]
-Program options: {"moduleResolution":3,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

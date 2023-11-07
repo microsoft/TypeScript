@@ -28,7 +28,11 @@ import { a } from "./a";export const c = a;
 import { b } from "./b";export const d = b;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"incremental":true}}
+{
+  "compilerOptions": {
+    "incremental": true
+  }
+}
 
 
 
@@ -42,8 +46,16 @@ Output::
 [[90m12:00:14 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -205,8 +217,17 @@ Output::
 [[90m12:00:24 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"sourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "sourceMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -373,8 +394,16 @@ Output::
 [[90m12:00:38 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -526,8 +555,17 @@ Output::
 [[90m12:00:48 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -675,8 +713,18 @@ Output::
 [[90m12:00:58 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -856,8 +904,16 @@ Output::
 [[90m12:01:15 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -996,8 +1052,18 @@ Output::
 [[90m12:01:22 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1154,8 +1220,17 @@ Output::
 [[90m12:01:38 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"inlineSourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "inlineSourceMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1319,8 +1394,17 @@ Output::
 [[90m12:01:48 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"sourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "sourceMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1490,8 +1574,16 @@ Output::
 [[90m12:02:02 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1652,8 +1744,18 @@ Output::
 [[90m12:02:12 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

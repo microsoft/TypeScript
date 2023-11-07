@@ -1,7 +1,18 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"composite":true,"noEmitOnError":true,"module":"amd","outFile":"outFile.js"},"files":["a.ts","b.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "noEmitOnError": true,
+    "module": "amd",
+    "outFile": "outFile.js"
+  },
+  "files": [
+    "a.ts",
+    "b.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/a.ts]
 export const x = 10;
@@ -49,8 +60,18 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"composite":true,"noEmitOnError":true,"module":2,"outFile":"/user/username/projects/myproject/outFile.js","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "composite": true,
+  "noEmitOnError": true,
+  "module": 2,
+  "outFile": "/user/username/projects/myproject/outFile.js",
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -102,8 +123,18 @@ CreatingProgramWith::
   options: {"composite":true,"noEmitOnError":true,"module":2,"outFile":"/user/username/projects/myproject/outFile.js","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"composite":true,"noEmitOnError":true,"module":2,"outFile":"/user/username/projects/myproject/outFile.js","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "composite": true,
+  "noEmitOnError": true,
+  "module": 2,
+  "outFile": "/user/username/projects/myproject/outFile.js",
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

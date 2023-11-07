@@ -1,7 +1,12 @@
+import {
+    createLoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
 } from "../helpers/tsserver";
@@ -30,7 +35,7 @@ const packageJsonContent = {
 };
 const packageJson: File = {
     path: "/package.json",
-    content: JSON.stringify(packageJsonContent, undefined, 2),
+    content: jsonToReadableText(packageJsonContent),
 };
 
 describe("unittests:: tsserver:: packageJsonInfo::", () => {
@@ -52,7 +57,7 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
         // Edit package.json
         host.writeFile(
             packageJson.path,
-            JSON.stringify({
+            jsonToReadableText({
                 ...packageJsonContent,
                 dependencies: undefined,
             }),

@@ -21,7 +21,42 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/Users/someuser/work/applications/frontend/tsconfig.json]
-{"compilerOptions":{"strict":true,"strictNullChecks":true,"target":"es2016","module":"commonjs","moduleResolution":"node","sourceMap":true,"noEmitOnError":true,"experimentalDecorators":true,"emitDecoratorMetadata":true,"types":["node","jest"],"noUnusedLocals":true,"outDir":"./compiled","typeRoots":["types","node_modules/@types"],"baseUrl":".","paths":{"*":["types/*"]}},"include":["src/**/*"],"exclude":["node_modules","compiled"]}
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "es2016",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": [
+      "node",
+      "jest"
+    ],
+    "noUnusedLocals": true,
+    "outDir": "./compiled",
+    "typeRoots": [
+      "types",
+      "node_modules/@types"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "types/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "compiled"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] Search path: /Users/someuser/work/applications/frontend/src/app/utils
@@ -185,10 +220,29 @@ FsWatchesRecursive::
 /users/someuser/work/applications/frontend/src:
   {}
 
-Info seq  [hh:mm:ss:mss] fileExists:: [{"key":"/users/someuser/work/applications/frontend/src/app/utils/cookie.ts","count":1},{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
-Info seq  [hh:mm:ss:mss] directoryExists:: [{"key":"/users/someuser/work/applications/frontend/src/app/utils/cookie.ts","count":1}]
+Info seq  [hh:mm:ss:mss] fileExists:: [
+  {
+    "key": "/users/someuser/work/applications/frontend/src/app/utils/cookie.ts",
+    "count": 1
+  },
+  {
+    "key": "/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts",
+    "count": 1
+  }
+]
+Info seq  [hh:mm:ss:mss] directoryExists:: [
+  {
+    "key": "/users/someuser/work/applications/frontend/src/app/utils/cookie.ts",
+    "count": 1
+  }
+]
 Info seq  [hh:mm:ss:mss] getDirectories:: []
-Info seq  [hh:mm:ss:mss] readFile:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
+Info seq  [hh:mm:ss:mss] readFile:: [
+  {
+    "key": "/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts",
+    "count": 1
+  }
+]
 Info seq  [hh:mm:ss:mss] readDirectory:: []
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Search path: /Users/someuser/work/applications/frontend/src/app/utils

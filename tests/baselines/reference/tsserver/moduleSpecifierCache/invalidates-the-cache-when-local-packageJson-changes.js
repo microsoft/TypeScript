@@ -21,7 +21,10 @@ declare module 'ambient' {}
 { "dependencies": { "mobx": "*" } }
 
 //// [/node_modules/mobx/package.json]
-{ "name": "mobx", "version": "1.0.0" }
+{
+  "name": "mobx",
+  "version": "1.0.0"
+}
 
 //// [/node_modules/mobx/index.d.ts]
 export declare function observable(): unknown;
@@ -274,15 +277,15 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 4,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *,
-      "createAutoImportProviderProgramDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {

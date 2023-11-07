@@ -45,8 +45,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"isolatedModules":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -219,8 +229,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"isolatedModules":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -362,8 +382,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"isolatedModules":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -498,8 +528,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"isolatedModules":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

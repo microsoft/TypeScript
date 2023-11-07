@@ -173,6 +173,7 @@ import {
     isJSDocEnumTag,
     isJSDocTemplateTag,
     isJSDocTypeAlias,
+    isJSDocTypeAssertion,
     isJsonSourceFile,
     isJsxNamespacedName,
     isLeftHandSideExpression,
@@ -1223,6 +1224,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.CallExpression:
                 return hasNarrowableArgument(expr as CallExpression);
             case SyntaxKind.ParenthesizedExpression:
+                if (isJSDocTypeAssertion(expr)) {
+                    return false;
+                }
+                // fallthrough
             case SyntaxKind.NonNullExpression:
                 return isNarrowingExpression((expr as ParenthesizedExpression | NonNullExpression).expression);
             case SyntaxKind.BinaryExpression:
