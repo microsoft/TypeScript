@@ -26206,7 +26206,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node)) {
             const initializer = getEffectiveInitializer(declaration);
             if (initializer) {
-                return tryGetNameFromType(getTypeOfExpression(initializer));
+                const initializerType = isBindingPattern(declaration.parent) ? getTypeForBindingElement(declaration as BindingElement) : getTypeOfExpression(initializer);
+                return initializerType && tryGetNameFromType(initializerType);
             }
             if (isEnumMember(declaration)) {
                 return getTextOfPropertyName(declaration.name);
