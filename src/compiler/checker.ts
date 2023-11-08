@@ -27244,6 +27244,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ElementAccessExpression:
                 // The resolvedSymbol property is initialized by checkPropertyAccess or checkElementAccess before we get here.
                 return isConstantReference((node as AccessExpression).expression) && isReadonlySymbol(getNodeLinks(node).resolvedSymbol || unknownSymbol);
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ArrayBindingPattern:
+                const rootDeclaration = getRootDeclaration(node.parent);
+                return isVariableDeclaration(rootDeclaration) && isVarConstLike(rootDeclaration);
         }
         return false;
     }
