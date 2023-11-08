@@ -341,6 +341,10 @@ export const m = mod;
 function foo() {}
 
 
+Timeout callback:: count: 2
+1: /user/username/projects/sample1/tests/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/sample1/tests/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -400,6 +404,10 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 function foo() {}export function gfoo() {}
 
+
+Timeout callback:: count: 2
+3: /user/username/projects/sample1/tests/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/sample1/tests/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
@@ -465,6 +473,10 @@ Before running Timeout callback:: count: 2
   ]
 }
 
+
+Timeout callback:: count: 2
+5: /user/username/projects/sample1/tests/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/sample1/tests/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json

@@ -186,6 +186,10 @@ describe("Test Suite 1", () => {
 });
 
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/unitTest1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -460,6 +464,10 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 2
+3: /user/username/projects/myproject/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
 Before running Timeout callback:: count: 2
 3: /user/username/projects/myproject/tsconfig.json
 4: *ensureProjectForOpenFiles*
@@ -555,6 +563,10 @@ export function Test2() {
     assert.ok(false, "This should fail");
 };
 
+
+Timeout callback:: count: 2
+5: /user/username/projects/myproject/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/unitTest1.ts 500 undefined WatchType: Closed Script info

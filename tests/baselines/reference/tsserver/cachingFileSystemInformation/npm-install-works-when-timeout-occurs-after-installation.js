@@ -325,11 +325,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib/index.js :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib/index.js
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/symbol-observable-24bcbbff/lib/index.js :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Timeout callback:: count: 3
-5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
-6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-7: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+After partial npm install
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/symbol-observable-24bcbbff/package.json]
 {
   "name": "symbol-observable",
@@ -709,6 +705,11 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/node_modules: *new*
   {}
 
+Timeout callback:: count: 3
+5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation *new*
+6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/lib :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/lib :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/lib :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
@@ -739,11 +740,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Timeout callback:: count: 3
-5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
-6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-7: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+After partial npm install
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/package.json]
 {
     "name": "@types/lodash",
@@ -799,11 +796,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Timeout callback:: count: 3
-5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
-6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-7: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+After partial npm install
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594] deleted
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/bundles :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -841,11 +834,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Timeout callback:: count: 3
-5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
-6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-7: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+After partial npm install
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts]
 
 // Stub for lodash
@@ -887,11 +876,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041 :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Timeout callback:: count: 3
-5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
-6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-7: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+After partial npm install
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041]
 {
   "_args": [
@@ -1191,11 +1176,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.bin :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json Detected ignored path: /user/username/rootfolder/otherfolder/a/b/node_modules/.bin
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.bin :: WatchInfo: /user/username/rootfolder/otherfolder/a/b 1 undefined Config: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Wild card directory
-Timeout callback:: count: 3
-32: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
-33: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-34: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+After partial npm install
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041] deleted
 
 PolledWatches::
@@ -1229,6 +1210,14 @@ FsWatchesRecursive::
   {}
 /user/username/rootfolder/otherfolder/a/b/node_modules/@types: *new*
   {}
+
+Timeout callback:: count: 3
+5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation *deleted*
+6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *deleted*
+7: *ensureProjectForOpenFiles* *deleted*
+32: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation *new*
+33: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *new*
+34: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -1986,12 +1975,24 @@ declare namespace _ {
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/lodash-b0733faa/index.js] deleted
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts] deleted
 
+Timeout callback:: count: 3
+32: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation *deleted*
+33: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *deleted*
+34: *ensureProjectForOpenFiles* *deleted*
+100: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation *new*
+101: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *new*
+102: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-103: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-104: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+101: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *deleted*
+102: *ensureProjectForOpenFiles* *deleted*
+103: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *new*
+104: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 103: /user/username/rootfolder/otherfolder/a/b/tsconfig.json

@@ -388,6 +388,10 @@ Before running Timeout callback:: count: 2
 export const foo = 0;
 
 
+Timeout callback:: count: 2
+3: /tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/a2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json

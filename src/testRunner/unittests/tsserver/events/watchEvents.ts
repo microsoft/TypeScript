@@ -1,6 +1,6 @@
 import {
     createLoggerWithInMemoryLogs,
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "../../../../harness/tsserverLogger";
 import {
     createWatchUtils,
@@ -31,7 +31,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
     }
 
     function createTestServerHostWithCustomWatch(
-        logger: Logger,
+        logger: LoggerWithInMemoryLogs,
     ) {
         const idToClose = new Map<number, () => void>();
         const host = logger.host as TestServerHostWithCustomWatch;

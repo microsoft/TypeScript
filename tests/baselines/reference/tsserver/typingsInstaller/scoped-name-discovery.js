@@ -123,7 +123,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/nod
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /jsconfig.json Detected file add/remove of non supported extension: tmp/node_modules/types-registry/index.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/tmp/package.json]
 { "private": true }
@@ -181,6 +181,10 @@ FsWatches::
 FsWatchesRecursive::
 /:
   {}
+
+Timeout callback:: count: 2
+5: /jsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -432,10 +436,15 @@ FsWatchesRecursive::
 /node_modules: *new*
   {}
 
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/zkat__cacache@ts5.4"
+] *new*
+
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
   "@types/zkat__cacache@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+]
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/node_modules/@types :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
@@ -449,10 +458,18 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/node_modules/@typ
 Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types/zkat__cacache/index.d.ts :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-TI:: After installWorker
+TI:: Installation #1 with arguments:: [
+  "@types/zkat__cacache@tsFakeMajor.Minor"
+] complete with success::true
 //// [/tmp/node_modules/@types/zkat__cacache/index.d.ts]
 
 
+
+Timeout callback:: count: 2
+5: /jsconfig.json *deleted*
+6: *ensureProjectForOpenFiles* *deleted*
+11: /jsconfig.json *new*
+12: *ensureProjectForOpenFiles* *new*
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/zkat__cacache@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/tmp/node_modules/@types/zkat__cacache/index.d.ts"]
@@ -528,11 +545,19 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/zkat__cacache@ts5.4"
+          "@types/zkat__cacache@tsFakeMajor.Minor"
         ],
         "success": true
       }
     }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+11: /jsconfig.json *deleted*
+12: *ensureProjectForOpenFiles* *deleted*
+13: /jsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
+
 Before running Timeout callback:: count: 2
 13: /jsconfig.json
 14: *ensureProjectForOpenFiles*
@@ -660,5 +685,8 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 2
-15: /jsconfig.json
-16: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+14: *ensureProjectForOpenFiles* *deleted*
+15: /jsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*

@@ -289,7 +289,6 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             allowJs: true,
             target: ts.server.protocol.ScriptTarget.ES2015,
         }, session);
-        session.host.logTimeoutQueueLength();
         baselineTsserverLogs("inferredProjects", "Setting compiler options for inferred projects when there are no open files should not schedule any refresh", session);
     });
 

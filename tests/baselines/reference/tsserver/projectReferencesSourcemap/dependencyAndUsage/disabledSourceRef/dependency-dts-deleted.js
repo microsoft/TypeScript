@@ -991,6 +991,12 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Timeout callback:: count: 4
+1: /user/username/projects/myproject/main/tsconfig.json *new*
+3: /user/username/projects/myproject/dependency/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+5: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definitionAndBoundSpan",
@@ -1054,6 +1060,12 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 3
+5: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+1: /user/username/projects/myproject/main/tsconfig.json
+3: /user/username/projects/myproject/dependency/tsconfig.json
+4: *ensureProjectForOpenFiles*
 
 Before request
 

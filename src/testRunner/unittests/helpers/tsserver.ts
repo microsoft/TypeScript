@@ -3,7 +3,7 @@ import {
 } from "../../../harness/incrementalUtils";
 import {
     createLoggerWithInMemoryLogs,
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
@@ -21,12 +21,13 @@ import {
     File,
     FileOrFolderOrSymLink,
     libFile,
+    SerializeOutputOrder,
+    StateLogger,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch";
 
-export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: Logger; }) {
-    ts.Debug.assert(sessionOrService.logger.logs?.length); // Ensure caller used in memory logger
+export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
     Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
 }
 
@@ -48,29 +49,24 @@ export function toExternalFiles(fileNames: string[]) {
 export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
     patched: boolean;
     baselineHost(title: string): void;
-    logTimeoutQueueLength(): void;
 };
 export function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
-    logger: Logger,
+    logger: LoggerWithInMemoryLogs,
 ) {
     const host = inputHost as TestSessionAndServiceHost;
     if (host.patched) return host;
     host.patched = true;
     if (!logger.hasLevel(ts.server.LogLevel.verbose)) {
-        host.logTimeoutQueueLength = ts.notImplemented;
         host.baselineHost = ts.notImplemented;
         return host;
     }
 
-    const originalRunQueuedTimeoutCallbacks = host.runQueuedTimeoutCallbacks;
-    const originalRunQueuedImmediateCallbacks = host.runQueuedImmediateCallbacks;
     const originalSetTime = host.setTime;
-    let hostDiff: ReturnType<TestServerHost["snap"]> | undefined;
 
-    host.runQueuedTimeoutCallbacks = runQueuedTimeoutCallbacks;
-    host.runQueuedImmediateCallbacks = runQueuedImmediateCallbacks;
-    host.logTimeoutQueueLength = logTimeoutQueueLength;
+    host.timeoutCallbacks.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
+    host.immediateCallbacks.switchToBaseliningInvoke(logger as StateLogger, SerializeOutputOrder.None);
+    host.pendingInstalls.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
     host.setTime = setTime;
     host.baselineHost = baselineHost;
     host.patched = true;
@@ -81,37 +77,15 @@ export function patchHostTimeouts(
         return originalSetTime.call(host, time);
     }
 
-    function logTimeoutQueueLength() {
-        logger.log(host.timeoutCallbacks.log());
-        host.baselineHost(host.immediateCallbacks.log());
-    }
-
-    function runQueuedTimeoutCallbacks(timeoutId?: number) {
-        host.baselineHost(`Before running ${host.timeoutCallbacks.log()}`);
-        if (timeoutId !== undefined) logger.log(`Invoking ${host.timeoutCallbacks.callbackType} callback:: timeoutId:: ${timeoutId}:: ${host.timeoutCallbacks.map[timeoutId].args[0]}`);
-        originalRunQueuedTimeoutCallbacks.call(host, timeoutId);
-        host.baselineHost(`After running ${host.timeoutCallbacks.log()}`);
-    }
-
-    function runQueuedImmediateCallbacks() {
-        host.baselineHost(`Before running ${host.immediateCallbacks.log()}`);
-        originalRunQueuedImmediateCallbacks.call(host);
-        host.baselineHost(`After running ${host.immediateCallbacks.log()}`);
-    }
-
     function baselineHost(title: string) {
         logger.log(title);
-        ts.Debug.assertIsDefined(logger.logs);
-        host.diff(logger.logs, hostDiff);
-        host.serializeWatches(logger.logs);
-        hostDiff = host.snap();
-        host.writtenFiles.clear();
+        host.serializeState(logger.logs, SerializeOutputOrder.None);
     }
 }
 
 export interface TestSessionOptions extends ts.server.SessionOptions, TestTypingsInstallerOptions {
     host: TestServerHost;
-    logger: Logger;
+    logger: LoggerWithInMemoryLogs;
     disableAutomaticTypingAcquisition?: boolean;
     useCancellationToken?: boolean | number;
 }
@@ -128,7 +102,7 @@ function getTestSessionPartialOptionsAndHost(optsOrHost: TestSessionConstructorO
 export class TestSession extends ts.server.Session {
     private seq = 0;
     public override host!: TestSessionAndServiceHost;
-    public override logger!: Logger;
+    public override logger!: LoggerWithInMemoryLogs;
     public override readonly typingsInstaller!: TestTypingsInstaller;
     public serverCancellationToken: TestServerCancellationToken;
 
@@ -290,7 +264,7 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     private requestToCancel = -1;
     private isCancellationRequestedCount = 0;
 
-    constructor(private logger: Logger, private cancelAfterRequest = 0) {
+    constructor(private logger: LoggerWithInMemoryLogs, private cancelAfterRequest = 0) {
     }
 
     setRequest(requestId: number) {
@@ -418,7 +392,6 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
     skip?: readonly (SkipErrors | undefined)[];
 }
 function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
-    ts.Debug.assert(session.logger.logs?.length);
     for (let i = 0; i < files.length; i++) {
         session.host.runQueuedTimeoutCallbacks(existingTimeouts ? session.host.getNextTimeoutId() - 1 : undefined);
         if (!skip?.[i]?.semantic) session.host.runQueuedImmediateCallbacks();

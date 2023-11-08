@@ -69,6 +69,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -136,6 +139,9 @@ Info seq  [hh:mm:ss:mss] event:
 TestServerCancellationToken:: resetRequest:: 2 is as expected
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+1: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
@@ -152,7 +158,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TestServerCancellationToken:: resetRequest:: 2 is as expected
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck

@@ -61,7 +61,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /tmp/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/tmp/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/tmp/package.json]
 { "private": true }
@@ -186,12 +186,19 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
-TI:: [hh:mm:ss:mss] #1 with arguments'[
-  "@types/node@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/node@ts5.4"
+] *new*
 
-TI:: After installWorker
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/node@tsFakeMajor.Minor"
+]
+
+TI:: Installation #1 with arguments:: [
+  "@types/node@tsFakeMajor.Minor"
+] complete with success::true
 //// [/tmp/node_modules/node/index.d.ts]
 
 declare module "net" {
@@ -280,11 +287,17 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/node@ts5.4"
+          "@types/node@tsFakeMajor.Minor"
         ],
         "success": true
       }
     }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*
@@ -403,8 +416,11 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 2
-3: /dev/null/inferredProject1*
-4: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+2: *ensureProjectForOpenFiles* *deleted*
+3: /dev/null/inferredProject1* *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Before request
 
@@ -590,9 +606,6 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -738,5 +751,4 @@ Info seq  [hh:mm:ss:mss] event:
         "kind": "action::set"
       }
     }
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
+After program update

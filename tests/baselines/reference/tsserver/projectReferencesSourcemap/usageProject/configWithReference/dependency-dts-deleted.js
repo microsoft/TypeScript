@@ -642,6 +642,9 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Before request
 //// [/user/username/projects/myproject/decls/FnS.d.ts] deleted
 
+Timeout callback:: count: 1
+1: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definitionAndBoundSpan",
@@ -691,6 +694,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 0
+1: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
 
 Before request
 

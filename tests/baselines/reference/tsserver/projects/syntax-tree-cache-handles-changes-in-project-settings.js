@@ -133,6 +133,10 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:

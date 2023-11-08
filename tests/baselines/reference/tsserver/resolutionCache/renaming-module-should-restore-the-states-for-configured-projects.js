@@ -263,6 +263,10 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 2
+5: /users/username/projects/project/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -420,12 +424,21 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 3
+12: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+13: /users/username/projects/project/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-15: /users/username/projects/project/tsconfig.json
-16: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+13: /users/username/projects/project/tsconfig.json *deleted*
+14: *ensureProjectForOpenFiles* *deleted*
+15: /users/username/projects/project/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
 
 Before request
 

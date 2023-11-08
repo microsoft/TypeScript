@@ -95,7 +95,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -331,6 +331,14 @@ FsWatches::
 /a/b/file3.d.ts:
   {}
 
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@ts5.4",
+  "@types/cordova@ts5.4",
+  "@types/lodash@ts5.4",
+  "@types/commander@ts5.4"
+] *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -489,15 +497,20 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
   "@types/jquery@tsFakeMajor.Minor",
   "@types/cordova@tsFakeMajor.Minor",
   "@types/lodash@tsFakeMajor.Minor",
   "@types/commander@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+]
 
-TI:: After installWorker
+TI:: Installation #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor",
+  "@types/cordova@tsFakeMajor.Minor",
+  "@types/lodash@tsFakeMajor.Minor",
+  "@types/commander@tsFakeMajor.Minor"
+] complete with success::true
 //// [/a/data/node_modules/@types/commander/index.d.ts]
 declare const commander: { x: number }
 
@@ -597,10 +610,10 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/jquery@ts5.4",
-          "@types/cordova@ts5.4",
-          "@types/lodash@ts5.4",
-          "@types/commander@ts5.4"
+          "@types/jquery@tsFakeMajor.Minor",
+          "@types/cordova@tsFakeMajor.Minor",
+          "@types/lodash@tsFakeMajor.Minor",
+          "@types/commander@tsFakeMajor.Minor"
         ],
         "success": true
       }
@@ -609,13 +622,27 @@ TI:: [hh:mm:ss:mss] #2 with cwd: /a/data arguments: [
   "@types/grunt@tsFakeMajor.Minor",
   "@types/gulp@tsFakeMajor.Minor"
 ]
-TI:: [hh:mm:ss:mss] #2 with arguments'[
+After running PendingInstalls callback:: count: 1
+
+Timeout callback:: count: 1
+1: /a/app/test1.csproj *new*
+
+PendingInstalls callback:: count: 1
+2: #2 with arguments:: [
+  "@types/grunt@ts5.4",
+  "@types/gulp@ts5.4"
+] *new*
+
+Before running PendingInstalls callback:: count: 1
+2: #2 with arguments:: [
   "@types/grunt@tsFakeMajor.Minor",
   "@types/gulp@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+]
 
-TI:: After installWorker
+TI:: Installation #2 with arguments:: [
+  "@types/grunt@tsFakeMajor.Minor",
+  "@types/gulp@tsFakeMajor.Minor"
+] complete with success::true
 //// [/a/data/node_modules/@types/grunt/index.d.ts]
 declare const grunt: { x: number }
 
@@ -699,12 +726,18 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 2,
         "packages": [
-          "@types/grunt@ts5.4",
-          "@types/gulp@ts5.4"
+          "@types/grunt@tsFakeMajor.Minor",
+          "@types/gulp@tsFakeMajor.Minor"
         ],
         "success": true
       }
     }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+1: /a/app/test1.csproj
+2: /a/app/test2.csproj *new*
+
 Before running Timeout callback:: count: 2
 1: /a/app/test1.csproj
 2: /a/app/test2.csproj

@@ -228,6 +228,11 @@ Before running Timeout callback:: count: 3
 
 
 
+Timeout callback:: count: 3
+1: /a/username/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+3: /a/username/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/project/src/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/username/project/tsconfig.json
@@ -299,6 +304,9 @@ FsWatches::
   {}
 /a/username/project/tsconfig.json:
   {}
+
+Timeout callback:: count: 0
+3: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*
 
 Before request
 

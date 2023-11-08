@@ -80,6 +80,9 @@ Info seq  [hh:mm:ss:mss] event:
 Before running Timeout callback:: count: 1
 1: /dev/null/inferredProject1*
 
+Timeout callback:: count: 1
+1: /dev/null/inferredProject1* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms

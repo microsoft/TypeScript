@@ -271,6 +271,10 @@ declare const x = 1;
 
 
 
+Timeout callback:: count: 2
+3: /user/username/projects/myproject/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:

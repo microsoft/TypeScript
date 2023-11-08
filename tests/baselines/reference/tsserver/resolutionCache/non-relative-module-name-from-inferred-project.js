@@ -302,6 +302,10 @@ import { module1 } from "module1";import { module2 } from "module2";import { mod
 import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
 
 
+Timeout callback:: count: 2
+5: /dev/null/inferredProject1* *new*
+6: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './feature/file2' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/src/feature/file2.ts'.

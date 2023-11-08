@@ -124,6 +124,10 @@ FsWatches *deleted*::
 /a/b/f2.ts:
   {}
 
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/f2 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations

@@ -276,6 +276,10 @@ Before request
 export let y = 10;export let z = 10;
 
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "getApplicableRefactors",

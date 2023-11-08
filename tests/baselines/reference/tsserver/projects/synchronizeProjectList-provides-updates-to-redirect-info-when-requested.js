@@ -559,6 +559,11 @@ Before request
 }
 
 
+Timeout callback:: count: 3
+1: /users/username/projects/project/A/tsconfig.json *new*
+2: /users/username/projects/project/B/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "synchronizeProjectList",

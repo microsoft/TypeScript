@@ -136,7 +136,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -352,12 +352,19 @@ FsWatchesRecursive::
 /user/username/projects/project:
   {}
 
-TI:: [hh:mm:ss:mss] #1 with arguments'[
-  "@types/jquery@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@ts5.4"
+] *new*
 
-TI:: After installWorker
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor"
+]
+
+TI:: Installation #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor"
+] complete with success::true
 //// [/a/data/node_modules/@types/jquery/index.d.ts]
 declare const $: { x: number }
 
@@ -428,11 +435,17 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/jquery@ts5.4"
+          "@types/jquery@tsFakeMajor.Minor"
         ],
         "success": true
       }
     }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+1: /user/username/projects/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Before running Timeout callback:: count: 2
 1: /user/username/projects/project/tsconfig.json
 2: *ensureProjectForOpenFiles*
@@ -914,3 +927,8 @@ FsWatchesRecursive::
 FsWatchesRecursive *deleted*::
 /user/username/projects/project:
   {}
+
+PendingInstalls callback:: count: 1
+2: #2 with arguments:: [
+  "@types/commander@ts5.4"
+] *new*

@@ -89,7 +89,7 @@ TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/node_modules/types-registry/index.json]
 {
@@ -253,3 +253,11 @@ FsWatches::
 FsWatchesRecursive::
 /a: *new*
   {}
+
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
+Before running PendingInstalls callback:: count: 0
+
+After running PendingInstalls callback:: count: 0

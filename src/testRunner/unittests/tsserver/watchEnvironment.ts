@@ -1,6 +1,6 @@
 import {
     createLoggerWithInMemoryLogs,
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
@@ -176,7 +176,7 @@ it(`unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem recursive wa
         emacsIgnoredFileFromIgnoreDirectory,
     ].forEach(ignoredEntity => {
         host.ensureFileOrFolder(ignoredEntity);
-        session.host.logTimeoutQueueLength();
+        session.host.baselineHost("After writing ignored file or folder");
     });
 
     baselineTsserverLogs("watchEnvironment", `recursive directory does not watch files starting with dot in node_modules`, session);
@@ -191,7 +191,7 @@ it("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watching fil
     verifyFilePathStyle("//vda1cs4850/c$/users/username/myprojects/project/x.js", logger);
     baselineTsserverLogs("watchEnvironment", `watching files with network style paths`, { logger });
 
-    function verifyFilePathStyle(path: string, logger: Logger) {
+    function verifyFilePathStyle(path: string, logger: LoggerWithInMemoryLogs) {
         const windowsStyleRoot = path.substring(0, ts.getRootLength(path));
         const file: File = { path, content: "const x = 10" };
         const host = createServerHost(

@@ -435,6 +435,11 @@ Before running Timeout callback:: count: 3
 }
 
 
+Timeout callback:: count: 3
+1: /user/username/projects/myproject/a/tsconfig.json *new*
+2: /user/username/projects/myproject/b/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -703,6 +708,10 @@ Before running Timeout callback:: count: 2
 }
 
 
+Timeout callback:: count: 2
+4: /user/username/projects/myproject/b/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -853,6 +862,10 @@ Before running Timeout callback:: count: 2
   "extends": "../extended/alpha.tsconfig.json"
 }
 
+
+Timeout callback:: count: 2
+6: /user/username/projects/myproject/b/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/b/tsconfig.json
@@ -1045,6 +1058,11 @@ Before running Timeout callback:: count: 3
 //// [/user/username/projects/myproject/extended/alpha.tsconfig.json]
 {}
 
+
+Timeout callback:: count: 3
+8: /user/username/projects/myproject/a/tsconfig.json *new*
+9: /user/username/projects/myproject/b/tsconfig.json *new*
+10: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/a/tsconfig.json

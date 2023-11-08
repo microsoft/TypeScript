@@ -482,12 +482,17 @@ Before running Timeout callback:: count: 1
 interface DOMInterface { }
 
 
+Timeout callback:: count: 1
+2: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-3: /home/src/projects/project1/tsconfig.json
-4: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+3: /home/src/projects/project1/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 3: /home/src/projects/project1/tsconfig.json
@@ -597,6 +602,10 @@ Before running Timeout callback:: count: 2
 export const file = 10;export const xyz = 10;
 
 
+Timeout callback:: count: 2
+5: /home/src/projects/project1/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
@@ -699,6 +708,10 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1:
   {}
 
+Timeout callback:: count: 2
+9: /home/src/projects/project1/tsconfig.json *new*
+10: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
@@ -787,6 +800,11 @@ Before running Timeout callback:: count: 3
 12: /home/src/projects/project1/tsconfig.json
 13: *ensureProjectForOpenFiles*
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
+
+Timeout callback:: count: 3
+11: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+12: /home/src/projects/project1/tsconfig.json *new*
+13: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
@@ -918,6 +936,10 @@ Before running Timeout callback:: count: 2
   }
 }
 
+
+Timeout callback:: count: 2
+14: /home/src/projects/project1/tsconfig.json *new*
+15: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project1/tsconfig.json
@@ -1096,6 +1118,11 @@ Before running Timeout callback:: count: 3
 interface DOMInterface { }
 
 
+Timeout callback:: count: 3
+16: /home/src/projects/project1/tsconfig.json *new*
+17: *ensureProjectForOpenFiles* *new*
+18: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project1/tsconfig.json
@@ -1217,7 +1244,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-19: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /home/src/projects/project1/node_modules:
@@ -1255,6 +1281,11 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1:
   {}
 
+Timeout callback:: count: 1
+17: *ensureProjectForOpenFiles* *deleted*
+18: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *deleted*
+19: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -1271,6 +1302,10 @@ Before running Timeout callback:: count: 2
 //// [/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts]
 interface WebWorkerInterface { }
 
+
+Timeout callback:: count: 2
+19: *ensureProjectForOpenFiles*
+21: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
@@ -1305,8 +1340,10 @@ Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFaile
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-22: /home/src/projects/project1/tsconfig.json
-23: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+22: /home/src/projects/project1/tsconfig.json *new*
+23: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 22: /home/src/projects/project1/tsconfig.json
@@ -1412,6 +1449,11 @@ Before running Timeout callback:: count: 3
 25: /home/src/projects/project1/tsconfig.json
 26: *ensureProjectForOpenFiles*
 //// [/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts] deleted
+
+Timeout callback:: count: 3
+24: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+25: /home/src/projects/project1/tsconfig.json *new*
+26: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json

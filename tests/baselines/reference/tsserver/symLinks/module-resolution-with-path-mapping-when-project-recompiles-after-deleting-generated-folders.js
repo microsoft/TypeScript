@@ -247,6 +247,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -262,6 +265,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+1: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
@@ -276,7 +282,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -341,6 +349,10 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
   {}
+
+Timeout callback:: count: 2
+2: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
@@ -464,6 +476,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+4: checkOne *new*
+
 Before running Timeout callback:: count: 1
 4: checkOne
 
@@ -478,6 +493,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+3: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -507,7 +525,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-4: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 4: suggestionCheck
@@ -548,12 +568,17 @@ Before running Timeout callback:: count: 1
 export class C { method(): number; }
 
 
+Timeout callback:: count: 1
+7: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-8: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-9: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+8: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json *new*
+9: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 8: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
@@ -687,6 +712,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+10: checkOne *new*
+
 Before running Timeout callback:: count: 1
 10: checkOne
 
@@ -702,6 +730,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+5: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 5: semanticCheck
 
@@ -716,7 +747,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-6: suggestionCheck
+
+Immedidate callback:: count: 1
+6: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 6: suggestionCheck

@@ -636,6 +636,9 @@ export declare function fn5(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
 
+Timeout callback:: count: 1
+1: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definitionAndBoundSpan",
@@ -742,6 +745,10 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/random:
   {}
+
+Timeout callback:: count: 1
+1: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+2: *ensureProjectForOpenFiles* *new*
 
 Before request
 

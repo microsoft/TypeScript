@@ -327,6 +327,10 @@ import { module1 } from "module1";import { module2 } from "module2";import { mod
 import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
 
 
+Timeout callback:: count: 2
+5: /user/username/projects/myproject/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.

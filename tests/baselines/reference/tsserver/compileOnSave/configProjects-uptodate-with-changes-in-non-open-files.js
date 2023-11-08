@@ -235,6 +235,10 @@ Before request
 let y = 10;
 
 
+Timeout callback:: count: 2
+1: /a/b/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "change",

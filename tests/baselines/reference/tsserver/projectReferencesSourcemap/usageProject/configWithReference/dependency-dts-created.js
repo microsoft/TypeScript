@@ -641,6 +641,9 @@ export declare function fn5(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
 
+Timeout callback:: count: 1
+1: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definitionAndBoundSpan",
@@ -690,6 +693,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 0
+1: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
 
 Before request
 

@@ -174,6 +174,10 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
 
+Timeout callback:: count: 2
+3: /user/username/projects/myproject/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -310,7 +314,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -494,6 +498,9 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Before running Timeout callback:: count: 1
 5: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/tsconfig.json] deleted
+
+Timeout callback:: count: 1
+5: *ensureProjectForOpenFiles* *new*
 
 Host is moving to new time
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*

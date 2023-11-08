@@ -2,7 +2,7 @@ import {
     IncrementalVerifierCallbacks,
 } from "../../../harness/incrementalUtils";
 import {
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
@@ -77,13 +77,13 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             return calledMap;
         }
 
-        function logCacheEntry(logger: Logger, callback: CalledMaps) {
+        function logCacheEntry(logger: LoggerWithInMemoryLogs, callback: CalledMaps) {
             const result = Array.from<[string, (true | CalledWithFiveArgs)[]], { key: string; count: number; }>(calledMaps[callback].entries(), ([key, arr]) => ({ key, count: arr.length }));
             logger.info(`${callback}:: ${jsonToReadableText(result)}`);
             calledMaps[callback].clear();
         }
 
-        function logCacheAndClear(logger: Logger) {
+        function logCacheAndClear(logger: LoggerWithInMemoryLogs) {
             forEachHostProperty(prop => logCacheEntry(logger, prop));
         }
 
@@ -553,7 +553,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                     host.runQueuedTimeoutCallbacks(); // Actual update
                 }
                 else {
-                    session.host.logTimeoutQueueLength();
+                    session.host.baselineHost("After partial npm install");
                 }
             }
         }

@@ -49,7 +49,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/cache/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/cache/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/cache/package.json]
 { "private": true }
@@ -177,12 +177,19 @@ FsWatches::
 /a/package.json: *new*
   {}
 
-TI:: [hh:mm:ss:mss] #1 with arguments'[
-  "@types/commander@tsFakeMajor.Minor"
-]':: false
-TI:: Before installWorker
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/commander@ts5.4"
+] *new*
 
-TI:: After installWorker
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/commander@tsFakeMajor.Minor"
+]
+
+TI:: Installation #1 with arguments:: [
+  "@types/commander@tsFakeMajor.Minor"
+] complete with success::false
 
 TI:: [hh:mm:ss:mss] install request failed, marking packages as missing to prevent repeated requests: ["commander"]
 TI:: [hh:mm:ss:mss] Sending response:
@@ -204,8 +211,9 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/commander@ts5.4"
+          "@types/commander@tsFakeMajor.Minor"
         ],
         "success": false
       }
     }
+After running PendingInstalls callback:: count: 0

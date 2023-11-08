@@ -220,13 +220,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
+Before request
 //// [/user/username/projects/myproject/node_modules/module1/index.d.ts]
 export function foo(): string;
 
-
-Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -364,13 +361,12 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 0
-Immedidate callback:: count: 0
+
+Before request
 //// [/user/username/projects/myproject/file2.ts]
 export function bar(){}
             bar();
 
-
-Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -504,10 +500,9 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 0
-Immedidate callback:: count: 0
-//// [/user/username/projects/myproject/file2.ts] deleted
 
 Before request
+//// [/user/username/projects/myproject/file2.ts] deleted
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -643,3 +638,5 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/node_modules:
   {}
+
+Timeout callback:: count: 0

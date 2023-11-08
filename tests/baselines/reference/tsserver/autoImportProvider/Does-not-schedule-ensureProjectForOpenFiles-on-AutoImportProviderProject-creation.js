@@ -198,6 +198,9 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Before running Timeout callback:: count: 1
 1: *ensureProjectForOpenFiles*
 
+Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles* *new*
+
 Host is moving to new time
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:

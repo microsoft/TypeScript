@@ -199,6 +199,10 @@ Before running Timeout callback:: count: 2
 { "compilerOptions": { "allowUnusedLabels": false } }
 
 
+Timeout callback:: count: 2
+1: /tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /tsconfig.json
 Info seq  [hh:mm:ss:mss] event:

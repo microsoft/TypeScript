@@ -204,7 +204,6 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             arguments: { file: file.path, fileContent: file.content },
         });
 
-        session.host.logTimeoutQueueLength();
         session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
             command: ts.server.protocol.CommandTypes.Geterr,
             arguments: {
@@ -213,7 +212,6 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             },
         });
 
-        session.host.logTimeoutQueueLength();
         session.executeCommandSeq<ts.server.protocol.GeterrForProjectRequest>({
             command: ts.server.protocol.CommandTypes.GeterrForProject,
             arguments: {
@@ -222,7 +220,6 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             },
         });
 
-        session.host.logTimeoutQueueLength();
         baselineTsserverLogs("resolutionCache", "suppressed diagnostic events", session);
     });
 });
@@ -581,10 +578,9 @@ export const x = 10;`,
             const host = createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
-            session.host.logTimeoutQueueLength();
 
             host.ensureFileOrFolder(npmCacheFile);
-            session.host.logTimeoutQueueLength();
+            session.host.baselineHost("After npm cache update");
             baselineTsserverLogs("resolutionCache", "when watching node_modules in inferred project for failed lookup/closed script infos", session);
         });
         it("when watching node_modules as part of wild card directories in config project", () => {
@@ -596,10 +592,9 @@ export const x = 10;`,
             const host = createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
-            session.host.logTimeoutQueueLength();
 
             host.ensureFileOrFolder(npmCacheFile);
-            session.host.logTimeoutQueueLength();
+            session.host.baselineHost("After npm cache update");
             baselineTsserverLogs("resolutionCache", "when watching node_modules as part of wild card directories in config project", session);
         });
     });

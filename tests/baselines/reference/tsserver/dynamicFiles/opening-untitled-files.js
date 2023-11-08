@@ -70,7 +70,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -205,13 +205,10 @@ FsWatches::
   {}
 
 /user/username/projects/myproject/untitled:^Untitled-1 isDynamic:: true
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
+Before request
 //// [/user/username/projects/myproject/Untitled-1.ts]
 const x = 10;
 
-
-Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {

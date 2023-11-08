@@ -801,9 +801,6 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
                 host.runQueuedTimeoutCallbacks(); // Invalidation of failed lookups
                 host.runQueuedTimeoutCallbacks(); // Actual update
             }
-            else {
-                session.host.logTimeoutQueueLength();
-            }
             verifyGetErrRequest({ session, files: [main], existingTimeouts: !npmInstallComplete && !timeoutDuringPartialInstallation });
         }
     }

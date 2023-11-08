@@ -282,17 +282,17 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     caption: "Start npm install",
                     // npm install
                     edit: sys => sys.createDirectory(`/user/username/projects/myproject/node_modules`),
-                    timeouts: sys => sys.logTimeoutQueueLength(), // To update folder structure
+                    timeouts: ts.noop, // To update folder structure
                 },
                 {
                     caption: "npm install folder creation of file2",
                     edit: sys => sys.createDirectory(`/user/username/projects/myproject/node_modules/file2`),
-                    timeouts: sys => sys.logTimeoutQueueLength(), // To update folder structure
+                    timeouts: ts.noop, // To update folder structure
                 },
                 {
                     caption: "npm install index file in file2",
                     edit: sys => sys.writeFile(`/user/username/projects/myproject/node_modules/file2/index.d.ts`, `export const x = 10;`),
-                    timeouts: sys => sys.logTimeoutQueueLength(), // To update folder structure
+                    timeouts: ts.noop, // To update folder structure
                 },
                 {
                     caption: "Updates the program",
@@ -503,7 +503,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         {
                             caption: "Change foo",
                             edit: sys => sys.replaceFileText(`/user/username/projects/myproject/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
-                            timeouts: sys => sys.logTimeoutQueueLength(),
+                            timeouts: ts.noop,
                         },
                     ],
                 });
@@ -517,7 +517,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         {
                             caption: "delete fooBar",
                             edit: sys => sys.deleteFile(`/user/username/projects/myproject/node_modules/bar/fooBar.d.ts`),
-                            timeouts: sys => sys.logTimeoutQueueLength(),
+                            timeouts: ts.noop,
                         },
                     ],
                 });
@@ -536,7 +536,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         {
                             caption: "add new folder to temp",
                             edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
-                            timeouts: sys => sys.logTimeoutQueueLength(),
+                            timeouts: ts.noop,
                         },
                     ],
                 });

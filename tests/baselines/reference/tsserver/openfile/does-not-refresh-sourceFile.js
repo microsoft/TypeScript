@@ -297,6 +297,10 @@ Before running Timeout callback:: count: 2
 export const b = 10;export const x = 10;
 
 
+Timeout callback:: count: 2
+1: /project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms

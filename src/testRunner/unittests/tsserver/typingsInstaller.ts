@@ -66,7 +66,7 @@ describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
             globalTypingsCacheLocation: typesCache,
         });
         openFilesForSession([f1], session);
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         baselineTsserverLogs("typingsInstaller", "local module should not be picked up", session);
     });
 });
@@ -106,7 +106,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
-            installAction: [["@types/jquery"], [jquery]],
+            installAction: [jquery],
             typesRegistry: "jquery",
         });
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
@@ -115,7 +115,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         });
         openFilesForSession([file1], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "configured projects", session);
     });
@@ -143,12 +143,12 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
-            installAction: [["@types/jquery"], [jquery]],
+            installAction: [jquery],
             typesRegistry: "jquery",
         });
         openFilesForSession([file1], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
 
         baselineTsserverLogs("typingsInstaller", "inferred projects", session);
@@ -165,7 +165,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const host = createServerHost([jqueryJs]);
         const session = new TestSession({
             host,
-            installAction: [[], []],
+            installAction: true,
             typesRegistry: "jquery",
         });
         setCompilerOptionsForInferredProjectsRequestForSession({
@@ -175,8 +175,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         }, session);
         openFilesForSession([jqueryJs], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
-        session.host.logTimeoutQueueLength();
+        host.runPendingInstalls();
         // files should not be removed from project if ATA is skipped
 
         baselineTsserverLogs("typingsInstaller", "inferred projects with disableFilenameBasedTypeAcquisition", session);
@@ -261,7 +260,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectFileName = "/a/app/test.csproj";
         const session = new TestSession({
             host,
-            installAction: [["@types/node"], [jquery]],
+            installAction: [jquery],
             typesRegistry: "jquery",
         });
         openExternalProjectForSession({
@@ -271,7 +270,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             typeAcquisition: { enable: true, include: ["jquery"] },
         }, session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
 
         // auto is set in type acquisition - use it even if project contains only .ts files
 
@@ -308,7 +307,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectFileName = "/a/app/test.csproj";
         const session = new TestSession({
             host,
-            installAction: [["@types/lodash", "@types/react"], [lodashDts, reactDts]],
+            installAction: [lodashDts, reactDts],
             typesRegistry: ["lodash", "react"],
         });
         openExternalProjectForSession({
@@ -318,7 +317,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             typeAcquisition: {},
         }, session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
 
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "external projects no type acquisition", session);
@@ -336,7 +335,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectFileName = "/a/app/test.csproj";
         const session = new TestSession({
             host,
-            installAction: [[], []],
+            installAction: true,
             typesRegistry: "jquery",
         });
         openExternalProjectForSession({
@@ -361,7 +360,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectFileName = "/a/app/test.csproj";
         const session = new TestSession({
             host,
-            installAction: [[], []],
+            installAction: true,
             typesRegistry: "jquery",
         });
         openExternalProjectForSession({
@@ -371,7 +370,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             typeAcquisition: { enable: true, disableFilenameBasedTypeAcquisition: true },
         }, session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         // files should not be removed from project if ATA is skipped
         baselineTsserverLogs("typingsInstaller", "external projects type acquisition with disableFilenameBasedTypeAcquisition", session);
     });
@@ -392,7 +391,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectFileName = "/a/app/test.csproj";
         const session = new TestSession({
             host,
-            installAction: [[], []],
+            installAction: true,
             typesRegistry: "jquery",
         });
         openExternalProjectForSession({
@@ -453,10 +452,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectFileName = "/a/app/test.csproj";
         const session = new TestSession({
             host,
-            installAction: [
-                ["@types/commander", "@types/express", "@types/jquery", "@types/moment"],
-                [commander, express, jquery, moment],
-            ],
+            installAction: [commander, express, jquery, moment],
             typesRegistry: ["jquery", "commander", "moment", "express"],
         });
         openExternalProjectForSession({
@@ -466,7 +462,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             typeAcquisition: { enable: true, include: ["jquery", "moment"], exclude: ["lodash"] },
         }, session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
 
         host.runQueuedTimeoutCallbacks();
         // Commander: Existed as a JS file
@@ -521,15 +517,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "declare const lodash: { x: number }",
         };
 
-        const typingFiles = [commander, express, jquery, moment, lodash];
         const host = createServerHost([lodashJs, commanderJs, file3, packageJson, customTypesMap]);
         const projectFileName = "/a/app/test.csproj";
         const session = new TestSession({
             host,
-            installAction: [
-                ["@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash"],
-                typingFiles,
-            ],
+            installAction: [commander, express, jquery, moment, lodash],
             throttleLimit: 3,
             typesRegistry: ["commander", "express", "jquery", "moment", "lodash"],
         });
@@ -540,7 +532,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             typeAcquisition: { include: ["jquery", "moment"] },
         }, session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "throttle delayed typings to install", session);
     });
@@ -594,7 +586,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         // Create project #1 with 4 typings
         const session = new TestSession({
             host,
-            installAction: [[commander, jquery, lodash, cordova, grunt, gulp]],
+            installAction: [commander, jquery, lodash, cordova, grunt, gulp],
             throttleLimit: 1,
             typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"],
         });
@@ -618,12 +610,12 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         }, session);
         assert.equal(session.typingsInstaller.installer.pendingRunRequests.length, 1, "expect one throttled request");
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
 
         // expected one install request from the second project
         assert.equal(session.typingsInstaller.installer.pendingRunRequests.length, 0, "expected no throttled requests");
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks(); // for 2 projects
         baselineTsserverLogs("typingsInstaller", "throttle delayed run install requests", session);
     });
@@ -672,13 +664,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
-            installAction: [["@types/zkat__cacache"], [cacacheDTS]],
+            installAction: [cacacheDTS],
             globalTypingsCacheLocation: "/tmp",
             typesRegistry: ["zkat__cacache", "nested", "commander"],
         });
         openFilesForSession([app], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
 
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "scoped name discovery", session);
@@ -740,13 +732,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             const session = new TestSession({
                 host,
                 useSingleInferredProject: true,
-                installAction: [["@types/jquery"], [jqueryDTS]],
+                installAction: [jqueryDTS],
                 globalTypingsCacheLocation: "/tmp",
                 typesRegistry: ["jquery", "nested", "commander"],
             });
             openFilesForSession([app], session);
 
-            session.typingsInstaller.installer.executePendingCommands();
+            host.runPendingInstalls();
             host.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("typingsInstaller", subScenario, session);
         });
@@ -795,13 +787,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
-            installAction: [["@types/jquery"], [jqueryDTS]],
+            installAction: [jqueryDTS],
             globalTypingsCacheLocation: "/tmp",
             typesRegistry: "jquery",
         });
         openFilesForSession([app], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
 
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "configured projects discover from bower_components", session);
@@ -832,13 +824,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
-            installAction: [["@types/jquery"], [jqueryDTS]],
+            installAction: [jqueryDTS],
             globalTypingsCacheLocation: "/tmp",
             typesRegistry: "jquery",
         });
         openFilesForSession([app], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
 
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "discover from bower", session);
@@ -865,16 +857,15 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const host = createServerHost([f, brokenPackageJson]);
         const session = new TestSession({
             host,
-            installAction: [["@types/commander"], [commander]],
+            installAction: [commander],
             globalTypingsCacheLocation: cachePath,
             typesRegistry: "commander",
         });
         openFilesForSession([f], session);
 
         host.writeFile(fixedPackageJson.path, fixedPackageJson.content);
-        session.host.logTimeoutQueueLength();
         // expected install request
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "malformed packagejson", session);
     });
@@ -904,16 +895,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const host = createServerHost([file]);
         const session = new TestSession({
             host,
-            installAction: [
-                ["@types/node", "@types/commander", `@types/${emberComponentDirectory}`],
-                [node, commander, emberComponent],
-            ],
+            installAction: [node, commander, emberComponent],
             globalTypingsCacheLocation: cachePath,
             typesRegistry: ["node", "commander"],
         });
         openFilesForSession([file], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
 
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "install typings for unresolved imports", session);
@@ -931,21 +919,19 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: "module.exports = 0",
         };
 
-        const typeNames: readonly string[] = ["commander"];
-        const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
         const host = createServerHost([file, commanderJS]);
         const session = new TestSession({
             host,
-            installAction: [
-                typeNames.map(name => `@types/${name}`),
-                typeNames.map((name): File => ({ path: typePath(name), content: "" })),
-            ],
+            installAction: [{
+                path: `${cachePath}/node_modules/@types/commander/index.d.ts`,
+                content: "",
+            }],
             globalTypingsCacheLocation: cachePath,
-            typesRegistry: typeNames,
+            typesRegistry: "commander",
         });
         openFilesForSession([file], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "redo resolutions pointing to js on typing install", session);
     });
@@ -967,7 +953,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const host = createServerHost([f1]);
         const session = new TestSession({
             host,
-            installAction: [["foo"], []],
+            installAction: true,
             globalTypingsCacheLocation: "/tmp",
             typesRegistry: "foo",
         });
@@ -981,7 +967,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             ["foo", "foo", "foo", "@bar/router", "@bar/common", "@bar/common"],
         );
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         baselineTsserverLogs("typingsInstaller", "pick typing names from nonrelative unresolved imports", session);
     });
 
@@ -1020,7 +1006,6 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             },
         };
         session.executeCommandSeq(changeRequest);
-        session.host.logTimeoutQueueLength();
         proj.updateGraph();
         const version2 = proj.lastCachedUnresolvedImportsList;
         assert.strictEqual(version1, version2, "set of unresolved imports should change");
@@ -1091,13 +1076,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
-            installAction: [[commander, jquery]],
+            installAction: [commander, jquery],
             typesRegistry: ["jquery", "commander"],
         });
         // projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
         openFilesForSession([file1], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
         closeFilesForSession([file1], session);
         openFilesForSession([file2], session);
@@ -1147,11 +1132,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
-            installAction: [["@types/jquery"], [jquery]],
+            installAction: [jquery],
             typesRegistry: "jquery",
         });
         openFilesForSession([file1], session);
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "expired cache entry", session);
     });
@@ -1199,11 +1184,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
-            installAction: [[], []],
+            installAction: true,
             typesRegistry: "jquery",
         });
         openFilesForSession([file1], session);
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         baselineTsserverLogs("typingsInstaller", "non expired cache entry", session);
     });
 });
@@ -1605,13 +1590,13 @@ describe("unittests:: tsserver:: typingsInstaller:: telemetry events", () => {
 
         const session = new TestSession({
             host,
-            installAction: [["@types/commander"], [commander]],
+            installAction: [commander],
             globalTypingsCacheLocation: cachePath,
             typesRegistry: "commander",
         });
         openFilesForSession([f1], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "telemetry events", session);
     });
@@ -1646,13 +1631,13 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
 
         const session = new TestSession({
             host,
-            installAction: [["@types/commander"], [commander]],
+            installAction: [commander],
             globalTypingsCacheLocation: cachePath,
             typesRegistry: "commander",
         });
         openFilesForSession([f1], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("typingsInstaller", "progress notification", session);
     });
@@ -1670,13 +1655,13 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
         const host = createServerHost([f1, packageFile]);
         const session = new TestSession({
             host,
-            installAction: ["", []],
+            installAction: false,
             globalTypingsCacheLocation: cachePath,
             typesRegistry: "commander",
         });
         openFilesForSession([f1], session);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
 
         baselineTsserverLogs("typingsInstaller", "progress notification for error", session);
     });
@@ -2208,7 +2193,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         return foooResolution;
     }
 
-    function verifyUnresolvedImportResolutions(scenario: string, appContents: string, typingNames: string[], typingFiles: File[]) {
+    function verifyUnresolvedImportResolutions(scenario: string, appContents: string, typingFiles: File[]) {
         const app: File = {
             path: appPath,
             content: `${appContents}import * as x from "fooo";`,
@@ -2221,7 +2206,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         const host = createServerHost([app, fooo]);
         const session = new TestSession({
             host,
-            installAction: [typingNames, typingFiles],
+            installAction: typingFiles,
             globalTypingsCacheLocation,
             typesRegistry: "foo",
         });
@@ -2230,7 +2215,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         const proj = session.getProjectService().inferredProjects[0];
         const foooResolution1 = verifyResolvedModuleOfFooo(proj);
 
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
         const foooResolution2 = verifyResolvedModuleOfFooo(proj);
         assert.strictEqual(foooResolution1, foooResolution2);
@@ -2248,13 +2233,12 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         });
         host.runQueuedTimeoutCallbacks(); // Update the graph
         // Update the typing
-        session.host.logTimeoutQueueLength();
         assert.isFalse(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(app.path as ts.Path));
         baselineTsserverLogs("typingsInstaller", scenario, session);
     }
 
     it("correctly invalidate the resolutions with typing names", () => {
-        verifyUnresolvedImportResolutions("invalidate the resolutions", 'import * as a from "foo";', ["foo"], [{
+        verifyUnresolvedImportResolutions("invalidate the resolutions", 'import * as a from "foo";', [{
             path: `${globalTypingsCacheLocation}/node_modules/foo/index.d.ts`,
             content: "export function a(): void;",
         }]);
@@ -2284,7 +2268,6 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
                     import * as b from "foo/a/b";
                     import * as c from "foo/a/c";
             `,
-            ["foo"],
             [fooIndex, fooAA, fooAB, fooAC],
         );
     });
@@ -2311,14 +2294,14 @@ declare module "stream" {
         const host = createServerHost([file, libFile]);
         const session = new TestSession({
             host,
-            installAction: [["node"], [nodeTyping]],
+            installAction: [nodeTyping],
             globalTypingsCacheLocation,
             typesRegistry: "node",
         });
         openFilesForSession([file], session);
 
         const proj = session.getProjectService().inferredProjects[0];
-        session.typingsInstaller.installer.executePendingCommands();
+        host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
         session.executeCommandSeq<ts.server.protocol.ApplyChangedToOpenFilesRequest>({
             command: ts.server.protocol.CommandTypes.ApplyChangedToOpenFiles,
@@ -2340,7 +2323,6 @@ declare module "stream" {
         host.runQueuedTimeoutCallbacks();
 
         // Here, since typings dont change, there is no timeout scheduled
-        session.host.logTimeoutQueueLength();
         session.executeCommandSeq<ts.server.protocol.ApplyChangedToOpenFilesRequest>({
             command: ts.server.protocol.CommandTypes.ApplyChangedToOpenFiles,
             arguments: {
@@ -2355,7 +2337,7 @@ declare module "stream" {
         });
         proj.updateGraph(); // Update the graph
         // Update the typing
-        session.host.logTimeoutQueueLength();
+        session.host.baselineHost("After program update");
         assert.isFalse(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(file.path as ts.Path));
         baselineTsserverLogs("typingsInstaller", "should handle node core modules", session);
     });

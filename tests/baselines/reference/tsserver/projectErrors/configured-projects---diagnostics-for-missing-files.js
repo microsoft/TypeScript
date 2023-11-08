@@ -244,6 +244,10 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+Timeout callback:: count: 2
+1: /a/b/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "compilerOptionsDiagnostics-full",

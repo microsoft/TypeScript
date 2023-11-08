@@ -117,6 +117,10 @@ FsWatches *deleted*::
 /users/username/projects/project/modulefile.ts:
   {}
 
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/moduleFile 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
@@ -227,12 +231,17 @@ export function bar() { };
 
 //// [/users/username/projects/project/moduleFile1.ts] deleted
 
+Timeout callback:: count: 1
+4: /dev/null/inferredProject1*FailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*FailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-5: /dev/null/inferredProject1*
-6: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+5: /dev/null/inferredProject1* *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Before request
 

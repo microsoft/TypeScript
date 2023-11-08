@@ -187,6 +187,10 @@ Before running Timeout callback:: count: 2
 export class c { }export class d {}
 
 
+Timeout callback:: count: 2
+1: /a/b/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/project/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -228,7 +232,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-3: checkOne
+
+Timeout callback:: count: 1
+3: checkOne *new*
 
 Before running Timeout callback:: count: 1
 3: checkOne
@@ -247,6 +253,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Timeout callback:: count: 0
 

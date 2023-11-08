@@ -45,7 +45,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/cache/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/cache/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/cache/package.json]
 { "private": true }
@@ -183,13 +183,22 @@ PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
 
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/commander@ts5.4",
+  "@types/node@ts5.4"
+] *new*
+
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
   "@types/commander@tsFakeMajor.Minor",
   "@types/node@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+]
 
-TI:: After installWorker
+TI:: Installation #1 with arguments:: [
+  "@types/commander@tsFakeMajor.Minor",
+  "@types/node@tsFakeMajor.Minor"
+] complete with success::true
 //// [/a/cache/node_modules/@types/node/index.d.ts]
 export let x: number
 
@@ -283,12 +292,18 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/commander@ts5.4",
-          "@types/node@ts5.4"
+          "@types/commander@tsFakeMajor.Minor",
+          "@types/node@tsFakeMajor.Minor"
         ],
         "success": true
       }
     }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*
@@ -410,5 +425,8 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 2
-3: /dev/null/inferredProject1*
-4: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+2: *ensureProjectForOpenFiles* *deleted*
+3: /dev/null/inferredProject1* *new*
+4: *ensureProjectForOpenFiles* *new*

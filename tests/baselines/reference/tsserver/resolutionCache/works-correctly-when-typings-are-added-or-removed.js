@@ -233,6 +233,11 @@ Before running Timeout callback:: count: 3
 6: *ensureProjectForOpenFiles*
 //// [/users/username/projects/project/node_modules/@types/lib1/index.d.ts] deleted
 
+Timeout callback:: count: 3
+4: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+5: /users/username/projects/project/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -329,6 +334,11 @@ Before running Timeout callback:: count: 3
 export let b: number
 
 
+Timeout callback:: count: 3
+11: /users/username/projects/project/tsconfig.json *new*
+12: *ensureProjectForOpenFiles* *new*
+14: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -376,3 +386,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Timeout callback:: count: 0
+14: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *deleted*

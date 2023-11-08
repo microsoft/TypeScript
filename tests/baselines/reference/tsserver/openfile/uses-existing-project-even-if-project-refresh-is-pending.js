@@ -173,6 +173,10 @@ Before request
 export {}; declare module "./a" {  export const y: number; }
 
 
+Timeout callback:: count: 2
+1: /user/someuser/projects/myproject/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",

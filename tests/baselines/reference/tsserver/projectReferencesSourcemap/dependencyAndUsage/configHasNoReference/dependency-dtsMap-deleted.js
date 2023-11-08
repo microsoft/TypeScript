@@ -972,6 +972,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Timeout callback:: count: 3
+1: /user/username/projects/myproject/dependency/tsconfig.json *new*
+3: /user/username/projects/myproject/main/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definitionAndBoundSpan",

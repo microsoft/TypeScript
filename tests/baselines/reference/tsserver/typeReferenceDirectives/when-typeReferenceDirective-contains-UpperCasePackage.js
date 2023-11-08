@@ -239,6 +239,10 @@ declare class TestLib {
 }
 
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/test/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms

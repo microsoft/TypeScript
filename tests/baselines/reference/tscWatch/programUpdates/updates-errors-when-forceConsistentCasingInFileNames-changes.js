@@ -36,6 +36,38 @@ Output::
 
 
 
+//// [/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+exports.C = C;
+
+
+//// [/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/b.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
 Program root files: [
   "/a.ts",
   "/b.ts",
@@ -62,39 +94,7 @@ Shape signatures in builder refreshed for::
 /b.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-FsWatches::
-/a.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-/b.ts: *new*
-  {}
-/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.C = C;
-
-
-//// [/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: Enable forceConsistentCasingInFileNames
 
@@ -107,8 +107,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -129,6 +133,8 @@ Output::
     File is included via import here.
 
 [[90m12:00:25 AM[0m] Found 1 error. Watching for file changes.
+
+
 
 
 
@@ -153,4 +159,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

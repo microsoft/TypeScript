@@ -238,6 +238,10 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 2
+1: /users/username/projects/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "change",
@@ -309,7 +313,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-3: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -328,6 +331,9 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project:
   {}
+
+Timeout callback:: count: 1
+3: checkOne *new*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /users/username/projects/project/modulefile2.ts 0:: WatchInfo: /users/username/projects/project/modulefile2.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/modulefile2.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
@@ -365,6 +371,11 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project:
   {}
+
+Timeout callback:: count: 3
+3: checkOne
+6: /users/username/projects/project/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/modulefile2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -427,7 +438,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-8: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -446,3 +456,8 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project:
   {}
+
+Timeout callback:: count: 1
+8: checkOne *new*
+
+Immedidate callback:: count: 0

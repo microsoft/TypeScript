@@ -95,7 +95,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -283,13 +283,22 @@ FsWatches::
 /a/b/file3.d.ts:
   {}
 
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/lodash@ts5.4",
+  "@types/react@ts5.4"
+] *new*
+
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
   "@types/lodash@tsFakeMajor.Minor",
   "@types/react@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+]
 
-TI:: After installWorker
+TI:: Installation #1 with arguments:: [
+  "@types/lodash@tsFakeMajor.Minor",
+  "@types/react@tsFakeMajor.Minor"
+] complete with success::true
 //// [/a/data/node_modules/@types/lodash/index.d.ts]
 declare const lodash: { x: number }
 
@@ -371,12 +380,17 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/lodash@ts5.4",
-          "@types/react@ts5.4"
+          "@types/lodash@tsFakeMajor.Minor",
+          "@types/react@tsFakeMajor.Minor"
         ],
         "success": true
       }
     }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 1
+1: /a/app/test.csproj *new*
+
 Before running Timeout callback:: count: 1
 1: /a/app/test.csproj
 

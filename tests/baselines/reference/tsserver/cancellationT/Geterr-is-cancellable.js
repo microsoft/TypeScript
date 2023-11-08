@@ -211,6 +211,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -248,6 +251,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 1
+2: checkOne *new*
 
 Before request
 
@@ -313,6 +319,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+3: checkOne *new*
+
 Before running Timeout callback:: count: 1
 3: checkOne
 
@@ -329,6 +338,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 TestServerCancellationToken:: Setting request to cancel:: 5
 Before running Immedidate callback:: count: 1
@@ -370,6 +382,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+4: checkOne *new*
+
 Before running Timeout callback:: count: 1
 4: checkOne
 
@@ -387,6 +402,9 @@ Info seq  [hh:mm:ss:mss] event:
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+2: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 2: semanticCheck
 
@@ -403,7 +421,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
 After running Immedidate callback:: count: 1
-3: suggestionCheck
+
+Immedidate callback:: count: 1
+3: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 3: suggestionCheck
@@ -453,6 +473,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+5: checkOne *new*
+
 Before running Timeout callback:: count: 1
 5: checkOne
 
@@ -469,6 +492,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TestServerCancellationToken:: resetRequest:: 7 is as expected
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+4: semanticCheck *new*
 
 Before request
 
@@ -500,3 +526,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 1
+6: checkOne *new*
+
+Immedidate callback:: count: 0
+4: semanticCheck *deleted*

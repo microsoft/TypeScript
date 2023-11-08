@@ -222,6 +222,9 @@ FsWatchesRecursive *deleted*::
 /a/b/projects/project/src:
   {}
 
+Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles* *new*
+
 Host is moving to new time
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:

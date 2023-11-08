@@ -387,7 +387,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/data
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/data/node_modules/types-registry/index.json :: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /a/tsconfig.json Detected file add/remove of non supported extension: /a/data/node_modules/types-registry/index.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/data/node_modules/types-registry/index.json :: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -413,6 +413,10 @@ FsWatches::
 FsWatchesRecursive::
 /a:
   {}
+
+Timeout callback:: count: 2
+5: /a/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 TI:: [hh:mm:ss:mss] Got install request
     {

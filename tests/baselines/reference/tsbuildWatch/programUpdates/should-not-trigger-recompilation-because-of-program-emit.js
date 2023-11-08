@@ -109,54 +109,6 @@ Output::
 
 
 
-Program root files: [
-  "/user/username/projects/sample1/core/anotherModule.ts",
-  "/user/username/projects/sample1/core/index.ts",
-  "/user/username/projects/sample1/core/some_decl.d.ts"
-]
-Program options: {
-  "composite": true,
-  "declaration": true,
-  "declarationMap": true,
-  "skipDefaultLibCheck": true,
-  "watch": true,
-  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-/user/username/projects/sample1/core/some_decl.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-/user/username/projects/sample1/core/some_decl.d.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/sample1/core/anothermodule.ts (computed .d.ts during emit)
-/user/username/projects/sample1/core/index.ts (computed .d.ts during emit)
-/user/username/projects/sample1/core/some_decl.d.ts (used version)
-
-FsWatches::
-/user/username/projects/sample1/core/anothermodule.ts: *new*
-  {}
-/user/username/projects/sample1/core/index.ts: *new*
-  {}
-/user/username/projects/sample1/core/some_decl.d.ts: *new*
-  {}
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -273,42 +225,22 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
-Change:: No change
+FsWatches::
+/user/username/projects/sample1/core/anothermodule.ts: *new*
+  {}
+/user/username/projects/sample1/core/index.ts: *new*
+  {}
+/user/username/projects/sample1/core/some_decl.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/tsconfig.json: *new*
+  {}
 
-Input::
-
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
-
-exitCode:: ExitStatus.undefined
-
-
-Change:: Add new file
-
-Input::
-//// [/user/username/projects/sample1/core/file3.ts]
-export const y = 10;
-
-
-Before running Timeout callback:: count: 1
-1: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:01:03 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:04 AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/tsconfig.tsbuildinfo' is older than input 'core/file3.ts'
-
-[[90m12:01:05 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
-
-[[90m12:01:19 AM[0m] Found 0 errors. Watching for file changes.
-
-
+FsWatchesRecursive::
+/user/username/projects/sample1/core: *new*
+  {}
 
 Program root files: [
   "/user/username/projects/sample1/core/anotherModule.ts",
-  "/user/username/projects/sample1/core/file3.ts",
   "/user/username/projects/sample1/core/index.ts",
   "/user/username/projects/sample1/core/some_decl.d.ts"
 ]
@@ -324,33 +256,55 @@ Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/file3.ts
 /user/username/projects/sample1/core/index.ts
 /user/username/projects/sample1/core/some_decl.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/sample1/core/file3.ts
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/some_decl.d.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/sample1/core/file3.ts (computed .d.ts)
-
-FsWatches::
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/file3.ts: *new*
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/core/some_decl.d.ts:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.ts (computed .d.ts during emit)
+/user/username/projects/sample1/core/index.ts (computed .d.ts during emit)
+/user/username/projects/sample1/core/some_decl.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
+
+Change:: No change
+
+Input::
+
+
+exitCode:: ExitStatus.undefined
+
+Change:: Add new file
+
+Input::
+//// [/user/username/projects/sample1/core/file3.ts]
+export const y = 10;
+
+
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:01:03 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:04 AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/tsconfig.tsbuildinfo' is older than input 'core/file3.ts'
+
+[[90m12:01:05 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+
+[[90m12:01:19 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./file3.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n"},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,5]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./file3.d.ts"},"version":"FakeTSVersion"}
@@ -459,13 +413,56 @@ export declare const y = 10;
 //# sourceMappingURL=file3.d.ts.map
 
 
+FsWatches::
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/file3.ts: *new*
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/core/some_decl.d.ts:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {}
+
+
+Program root files: [
+  "/user/username/projects/sample1/core/anotherModule.ts",
+  "/user/username/projects/sample1/core/file3.ts",
+  "/user/username/projects/sample1/core/index.ts",
+  "/user/username/projects/sample1/core/some_decl.d.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "declarationMap": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/file3.ts
+/user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/some_decl.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/sample1/core/file3.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/core/file3.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: No change
 
 Input::
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-

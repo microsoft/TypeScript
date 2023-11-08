@@ -94,12 +94,18 @@ export function nowString(logger: Logger) {
 }
 
 export function createLoggerWritingToConsole(host: ts.server.ServerHost, sanitizeLibs?: true) {
+    const logger = createHasErrorMessageLogger();
+    logger.logs = [];
+    logger.logs.push = (...args) => {
+        args.forEach(s => console.log(s));
+        return 0;
+    };
     return handleLoggerGroup(
-        createHasErrorMessageLogger(),
+        logger,
         host,
         s => console.log(s),
         sanitizeLibs,
-    );
+    ) as LoggerWithInMemoryLogs;
 }
 
 export function sanitizeLog(s: string): string {
@@ -121,6 +127,7 @@ export function sanitizeLog(s: string): string {
     s = s.replace(/"exportMapKey":\s*"\d+ \d+ /g, match => match.replace(/ \d+ /, ` * `));
     s = s.replace(/getIndentationAtPosition: getCurrentSourceFile: \d+(?:\.\d+)?/, `getIndentationAtPosition: getCurrentSourceFile: *`);
     s = s.replace(/getIndentationAtPosition: computeIndentation\s*: \d+(?:\.\d+)?/, `getIndentationAtPosition: computeIndentation: *`);
+    s = replaceAll(s, `@ts${ts.versionMajorMinor}`, `@tsFakeMajor.Minor`);
     s = sanitizeHarnessLSException(s);
     return s;
 }
@@ -139,8 +146,12 @@ export function sanitizeLibFileText(s: string): string {
     return s;
 }
 
-export function createLoggerWithInMemoryLogs(host: ts.server.ServerHost, sanitizeLibs?: true): Logger {
+export interface LoggerWithInMemoryLogs extends Logger {
+    logs: string[];
+}
+
+export function createLoggerWithInMemoryLogs(host: ts.server.ServerHost, sanitizeLibs?: true): LoggerWithInMemoryLogs {
     const logger = createHasErrorMessageLogger();
     logger.logs = [];
-    return handleLoggerGroup(logger, host, s => logger.logs!.push(s), sanitizeLibs);
+    return handleLoggerGroup(logger, host, s => logger.logs!.push(s), sanitizeLibs) as LoggerWithInMemoryLogs;
 }

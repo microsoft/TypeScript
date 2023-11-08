@@ -248,6 +248,10 @@ Before running Timeout callback:: count: 2
 class class3 {}
 
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/projects/project2/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
@@ -362,6 +366,10 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/projects/project2:
   {}
+
+Timeout callback:: count: 2
+3: /user/username/projects/myproject/projects/project2/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -500,6 +508,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project2:
   {}
 
+Timeout callback:: count: 2
+5: /user/username/projects/myproject/projects/project2/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
@@ -622,6 +634,10 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/projects/project2:
   {}
+
+Timeout callback:: count: 2
+7: /user/username/projects/myproject/projects/project2/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json

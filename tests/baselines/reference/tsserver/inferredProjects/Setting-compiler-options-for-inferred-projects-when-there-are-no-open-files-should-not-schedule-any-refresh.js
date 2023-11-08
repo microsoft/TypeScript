@@ -36,6 +36,3 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
-
-Timeout callback:: count: 0
-Immedidate callback:: count: 0

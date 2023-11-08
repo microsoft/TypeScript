@@ -44,14 +44,12 @@ describe("unittests:: tsserver:: reloadProjects", () => {
         const updatedText = `${file2.content}
             bar();`;
         host.writeFile(file2.path, updatedText);
-        session.host.logTimeoutQueueLength();
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects,
         });
 
         // delete file
         host.deleteFile(file2.path);
-        session.host.logTimeoutQueueLength();
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects,
         });
@@ -68,7 +66,6 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        session.host.logTimeoutQueueLength();
 
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects,
@@ -95,7 +92,6 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        session.host.logTimeoutQueueLength();
 
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects,
@@ -121,7 +117,6 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        session.host.logTimeoutQueueLength();
 
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects,
@@ -147,7 +142,6 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        session.host.logTimeoutQueueLength();
 
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.ReloadProjects,

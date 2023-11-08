@@ -399,7 +399,6 @@ describe("unittests:: tsserver:: projects::", () => {
             rootFiles: toExternalFiles([file1.path, constructorFile.path, bliss.path]),
         }, session);
 
-        session.host.logTimeoutQueueLength();
         baselineTsserverLogs("projects", "file with name constructor.js doesnt cause issue with typeAcquisition when safe type list", session);
     });
 
@@ -1216,7 +1215,7 @@ describe("unittests:: tsserver:: projects::", () => {
         openFilesForSession([file1], session);
 
         host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
-        session.host.logTimeoutQueueLength();
+        session.host.baselineHost("After modifying file");
         baselineTsserverLogs("projects", "no project structure update on directory watch invoke on open file save", session);
     });
 
@@ -1402,11 +1401,9 @@ describe("unittests:: tsserver:: projects::", () => {
         host.deleteFile(fileSubA.path);
         host.deleteFolder(ts.getDirectoryPath(fileSubA.path));
         host.writeFile(fileA.path, fileA.content);
-        session.host.logTimeoutQueueLength();
 
         closeFilesForSession([fileSubA], session);
         // This should cancel existing updates and schedule new ones
-        session.host.logTimeoutQueueLength();
 
         // Open the fileA (as if rename)
         // config project is updated to check if fileA is present in it
@@ -1419,7 +1416,6 @@ describe("unittests:: tsserver:: projects::", () => {
         const originalFileExists = host.fileExists;
         host.fileExists = s => s === fileA.path ? false : originalFileExists.call(host, s);
         closeFilesForSession([fileA], session);
-        session.host.logTimeoutQueueLength(); // Update configured project and projects for open file
 
         // This should create inferred project since fileSubA not on the disk
         openFile(fileSubA);
@@ -1430,7 +1426,6 @@ describe("unittests:: tsserver:: projects::", () => {
         // Actually trigger the file move
         host.deleteFile(fileA.path);
         host.ensureFileOrFolder(fileSubA);
-        session.host.logTimeoutQueueLength();
 
         verifyGetErrRequest({ session, files: [fileB, fileSubA], existingTimeouts: true });
         baselineTsserverLogs("projects", "handles delayed directory watch invoke on file creation", session);

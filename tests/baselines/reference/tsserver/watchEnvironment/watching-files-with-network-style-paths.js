@@ -75,7 +75,7 @@ TI:: [hh:mm:ss:mss] Npm config file: c:/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: 'c:/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [c:/a/data/package.json]
 { "private": true }
@@ -277,7 +277,7 @@ TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [//vda1cs4850/a/data/package.json]
 { "private": true }
@@ -487,7 +487,7 @@ TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [//vda1cs4850/a/data/package.json]
 { "private": true }
@@ -705,7 +705,7 @@ TI:: [hh:mm:ss:mss] Npm config file: c:/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: 'c:/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [c:/a/data/package.json]
 { "private": true }
@@ -923,7 +923,7 @@ TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [//vda1cs4850/a/data/package.json]
 { "private": true }

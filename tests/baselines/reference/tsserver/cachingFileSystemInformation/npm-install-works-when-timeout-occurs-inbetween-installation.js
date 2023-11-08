@@ -708,12 +708,21 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/node_modules: *new*
   {}
 
+Timeout callback:: count: 3
+5: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation *new*
+6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-8: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-9: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+6: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *deleted*
+7: *ensureProjectForOpenFiles* *deleted*
+8: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *new*
+9: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 8: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
@@ -1287,12 +1296,21 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/node_modules/@types: *new*
   {}
 
+Timeout callback:: count: 3
+34: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation *new*
+35: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *new*
+36: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-37: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-38: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+35: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *deleted*
+36: *ensureProjectForOpenFiles* *deleted*
+37: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *new*
+38: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 37: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
@@ -2094,12 +2112,21 @@ declare namespace _ {
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/lodash-b0733faa/index.js] deleted
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts] deleted
 
+Timeout callback:: count: 3
+104: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation *new*
+105: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *new*
+106: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-107: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
-108: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+105: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *deleted*
+106: *ensureProjectForOpenFiles* *deleted*
+107: /user/username/rootfolder/otherfolder/a/b/tsconfig.json *new*
+108: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 107: /user/username/rootfolder/otherfolder/a/b/tsconfig.json

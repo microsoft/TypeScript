@@ -523,6 +523,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/usage:
   {}
 
+Timeout callback:: count: 1
+3: /user/username/projects/myproject/usage/tsconfig.jsonFailedLookupInvalidation *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:

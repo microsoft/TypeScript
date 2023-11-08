@@ -532,6 +532,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -546,6 +549,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
@@ -588,7 +594,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -680,12 +688,17 @@ Before running Timeout callback:: count: 1
 2: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] deleted
 
+Timeout callback:: count: 1
+2: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-3: /home/src/projects/project/tsconfig.json
-4: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+3: /home/src/projects/project/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -710,6 +723,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+3: /home/src/projects/project/tsconfig.json
+4: *ensureProjectForOpenFiles*
+5: checkOne *new*
 
 Before running Timeout callback:: count: 3
 3: /home/src/projects/project/tsconfig.json
@@ -861,6 +879,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+3: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 3: semanticCheck
 
@@ -902,7 +923,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-4: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 4: suggestionCheck
@@ -994,12 +1017,17 @@ Before running Timeout callback:: count: 1
 6: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/foo/index.d.ts] deleted
 
+Timeout callback:: count: 1
+6: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-7: /home/src/projects/project/tsconfig.json
-8: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+7: /home/src/projects/project/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -1024,6 +1052,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+7: /home/src/projects/project/tsconfig.json
+8: *ensureProjectForOpenFiles*
+9: checkOne *new*
 
 Before running Timeout callback:: count: 3
 7: /home/src/projects/project/tsconfig.json
@@ -1156,6 +1189,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+5: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 5: semanticCheck
 
@@ -1197,7 +1233,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-6: suggestionCheck
+
+Immedidate callback:: count: 1
+6: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 6: suggestionCheck
@@ -1291,12 +1329,17 @@ Before running Timeout callback:: count: 1
 export declare const bar: number;
 
 
+Timeout callback:: count: 1
+10: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-11: /home/src/projects/project/tsconfig.json
-12: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+11: /home/src/projects/project/tsconfig.json *new*
+12: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -1321,6 +1364,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+11: /home/src/projects/project/tsconfig.json
+12: *ensureProjectForOpenFiles*
+13: checkOne *new*
 
 Before running Timeout callback:: count: 3
 11: /home/src/projects/project/tsconfig.json
@@ -1459,6 +1507,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+7: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 7: semanticCheck
 
@@ -1500,7 +1551,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-8: suggestionCheck
+
+Immedidate callback:: count: 1
+8: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 8: suggestionCheck
@@ -1594,12 +1647,17 @@ Before running Timeout callback:: count: 1
 export declare const foo: number;
 
 
+Timeout callback:: count: 1
+14: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-15: /home/src/projects/project/tsconfig.json
-16: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+15: /home/src/projects/project/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -1624,6 +1682,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+15: /home/src/projects/project/tsconfig.json
+16: *ensureProjectForOpenFiles*
+17: checkOne *new*
 
 Before running Timeout callback:: count: 3
 15: /home/src/projects/project/tsconfig.json
@@ -1743,6 +1806,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+9: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 9: semanticCheck
 
@@ -1784,7 +1850,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-10: suggestionCheck
+
+Immedidate callback:: count: 1
+10: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 10: suggestionCheck
@@ -1886,12 +1954,17 @@ Before running Timeout callback:: count: 1
 }
 
 
+Timeout callback:: count: 1
+18: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-19: /home/src/projects/project/tsconfig.json
-20: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+19: /home/src/projects/project/tsconfig.json *new*
+20: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -1916,6 +1989,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+19: /home/src/projects/project/tsconfig.json
+20: *ensureProjectForOpenFiles*
+21: checkOne *new*
 
 Before running Timeout callback:: count: 3
 19: /home/src/projects/project/tsconfig.json
@@ -2033,6 +2111,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+11: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 11: semanticCheck
 
@@ -2061,7 +2142,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-12: suggestionCheck
+
+Immedidate callback:: count: 1
+12: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 12: suggestionCheck
@@ -2165,12 +2248,17 @@ Before running Timeout callback:: count: 1
 }
 
 
+Timeout callback:: count: 1
+22: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-23: /home/src/projects/project/tsconfig.json
-24: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+23: /home/src/projects/project/tsconfig.json *new*
+24: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -2195,6 +2283,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+23: /home/src/projects/project/tsconfig.json
+24: *ensureProjectForOpenFiles*
+25: checkOne *new*
 
 Before running Timeout callback:: count: 3
 23: /home/src/projects/project/tsconfig.json
@@ -2340,6 +2433,9 @@ FsWatchesRecursive::
 /home/src/projects/project/node_modules:
   {}
 
+Immedidate callback:: count: 1
+13: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 13: semanticCheck
 
@@ -2354,7 +2450,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-14: suggestionCheck
+
+Immedidate callback:: count: 1
+14: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 14: suggestionCheck
@@ -2455,12 +2553,17 @@ Before running Timeout callback:: count: 1
 }
 
 
+Timeout callback:: count: 1
+26: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-27: /home/src/projects/project/tsconfig.json
-28: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+27: /home/src/projects/project/tsconfig.json *new*
+28: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -2485,6 +2588,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+27: /home/src/projects/project/tsconfig.json
+28: *ensureProjectForOpenFiles*
+29: checkOne *new*
 
 Before running Timeout callback:: count: 3
 27: /home/src/projects/project/tsconfig.json
@@ -2675,6 +2783,9 @@ FsWatchesRecursive::
 /home/src/projects/project/node_modules:
   {}
 
+Immedidate callback:: count: 1
+15: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 15: semanticCheck
 
@@ -2703,7 +2814,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-16: suggestionCheck
+
+Immedidate callback:: count: 1
+16: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 16: suggestionCheck
@@ -2806,12 +2919,17 @@ Before running Timeout callback:: count: 1
 }
 
 
+Timeout callback:: count: 1
+30: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-31: /home/src/projects/project/tsconfig.json
-32: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+31: /home/src/projects/project/tsconfig.json *new*
+32: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -2836,6 +2954,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+31: /home/src/projects/project/tsconfig.json
+32: *ensureProjectForOpenFiles*
+33: checkOne *new*
 
 Before running Timeout callback:: count: 3
 31: /home/src/projects/project/tsconfig.json
@@ -2968,6 +3091,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+17: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 17: semanticCheck
 
@@ -3009,7 +3135,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-18: suggestionCheck
+
+Immedidate callback:: count: 1
+18: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 18: suggestionCheck
@@ -3101,12 +3229,17 @@ Before running Timeout callback:: count: 1
 34: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] deleted
 
+Timeout callback:: count: 1
+34: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-35: /home/src/projects/project/tsconfig.json
-36: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+35: /home/src/projects/project/tsconfig.json *new*
+36: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -3131,6 +3264,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+35: /home/src/projects/project/tsconfig.json
+36: *ensureProjectForOpenFiles*
+37: checkOne *new*
 
 Before running Timeout callback:: count: 3
 35: /home/src/projects/project/tsconfig.json
@@ -3282,6 +3420,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+19: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 19: semanticCheck
 
@@ -3323,7 +3464,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-20: suggestionCheck
+
+Immedidate callback:: count: 1
+20: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 20: suggestionCheck
@@ -3415,12 +3558,17 @@ Before running Timeout callback:: count: 1
 38: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts] deleted
 
+Timeout callback:: count: 1
+38: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-39: /home/src/projects/project/tsconfig.json
-40: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+39: /home/src/projects/project/tsconfig.json *new*
+40: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -3445,6 +3593,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+39: /home/src/projects/project/tsconfig.json
+40: *ensureProjectForOpenFiles*
+41: checkOne *new*
 
 Before running Timeout callback:: count: 3
 39: /home/src/projects/project/tsconfig.json
@@ -3577,6 +3730,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+21: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 21: semanticCheck
 
@@ -3618,7 +3774,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-22: suggestionCheck
+
+Immedidate callback:: count: 1
+22: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 22: suggestionCheck
@@ -3712,12 +3870,17 @@ Before running Timeout callback:: count: 1
 export declare const bar2: number;
 
 
+Timeout callback:: count: 1
+42: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-43: /home/src/projects/project/tsconfig.json
-44: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+43: /home/src/projects/project/tsconfig.json *new*
+44: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -3742,6 +3905,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+43: /home/src/projects/project/tsconfig.json
+44: *ensureProjectForOpenFiles*
+45: checkOne *new*
 
 Before running Timeout callback:: count: 3
 43: /home/src/projects/project/tsconfig.json
@@ -3880,6 +4048,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+23: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 23: semanticCheck
 
@@ -3921,7 +4092,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-24: suggestionCheck
+
+Immedidate callback:: count: 1
+24: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 24: suggestionCheck
@@ -4015,12 +4188,17 @@ Before running Timeout callback:: count: 1
 export declare const foo2: number;
 
 
+Timeout callback:: count: 1
+46: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-47: /home/src/projects/project/tsconfig.json
-48: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+47: /home/src/projects/project/tsconfig.json *new*
+48: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -4045,6 +4223,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+47: /home/src/projects/project/tsconfig.json
+48: *ensureProjectForOpenFiles*
+49: checkOne *new*
 
 Before running Timeout callback:: count: 3
 47: /home/src/projects/project/tsconfig.json
@@ -4164,6 +4347,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+25: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 25: semanticCheck
 
@@ -4205,7 +4391,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-26: suggestionCheck
+
+Immedidate callback:: count: 1
+26: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 26: suggestionCheck

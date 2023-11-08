@@ -955,6 +955,11 @@ export declare function fn6(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
 
+Timeout callback:: count: 3
+1: /user/username/projects/myproject/main/tsconfig.json *new*
+2: /user/username/projects/myproject/dependency/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definitionAndBoundSpan",

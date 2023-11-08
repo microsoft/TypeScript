@@ -253,6 +253,10 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 2
+7: /users/username/projects/project/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
@@ -301,7 +305,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-9: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -320,3 +323,6 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project:
   {}
+
+Timeout callback:: count: 1
+9: checkOne *new*

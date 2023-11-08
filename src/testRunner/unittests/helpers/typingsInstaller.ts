@@ -1,8 +1,6 @@
 import {
-    Logger,
+    LoggerWithInMemoryLogs,
     nowString,
-    replaceAll,
-    sanitizeLog,
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
@@ -49,29 +47,11 @@ export const customTypesMap = {
         }`,
 };
 
-export interface PostExecAction {
-    readonly success: boolean;
-    requestId: number;
-    readonly packageNames: readonly string[];
-    readonly callback: ts.server.typingsInstaller.RequestCompletedAction;
-}
-export function loggerToTypingsInstallerLog(logger: Logger): ts.server.typingsInstaller.Log {
+export function loggerToTypingsInstallerLog(logger: LoggerWithInMemoryLogs): ts.server.typingsInstaller.Log {
     ts.Debug.assert(logger.loggingEnabled());
     return {
         isEnabled: ts.returnTrue,
-        writeLine: s => {
-            // This is a VERY VERY NAIVE sanitization strategy.
-            // If a substring containing the exact TypeScript version is found,
-            // even if it's unrelated to TypeScript itself, then it will be replaced,
-            // leaving us with two options:
-            //
-            //  1. Deal with flip-flopping baselines.
-            //  2. Change the TypeScript version until no matching substring is found.
-            //
-            const initialLog = sanitizeLog(s);
-            const pseudoSanitizedLog = replaceAll(initialLog, `@ts${ts.versionMajorMinor}`, `@tsFakeMajor.Minor`);
-            return logger.log(`TI:: [${nowString(logger)}] ${pseudoSanitizedLog}`);
-        },
+        writeLine: s => logger.log(`TI:: [${nowString(logger)}] ${s}`),
     };
 }
 interface TypesRegistryFile {
@@ -97,12 +77,18 @@ function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): strin
 }
 
 export interface FileWithPackageName extends File {
-    package: string;
+    package?: string;
 }
 export type InstallActionThrowingError = string;
-export type InstallActionWithTypingFiles = [installedTypings: string[] | string, typingFiles: File[]];
-export type InstallActionWithFilteredTypings = [typingFiles: FileWithPackageName[]];
-export type InstallAction = InstallActionThrowingError | InstallActionWithTypingFiles | InstallActionWithFilteredTypings;
+export type InstallActionWithSuccess = boolean;
+export type InstallActionWithTypingFiles = readonly FileWithPackageName[];
+export type InstallAction = InstallActionThrowingError | InstallActionWithSuccess | InstallActionWithTypingFiles;
+export type PendingInstallCallback = (
+    pendingInstallInfo: string,
+    installedTypingsOrSuccess: string[] | string | boolean,
+    typingFiles: readonly File[],
+    onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction,
+) => void;
 export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.TypingsInstaller {
     readonly typesRegistry: Map<string, ts.MapLike<string>>;
     constructor(readonly testTypingInstaller: TestTypingsInstaller) {
@@ -132,7 +118,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
                     ts.emptyArray,
             )),
         });
-        this.log.writeLine(`TI:: Updated ${typesRegistryPackageName} npm package`);
+        this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
 
         this.typesRegistry = loadTypesRegistryFile(
             getTypesRegistryFileLocation(testTypingInstaller.globalTypingsCacheLocation),
@@ -142,62 +128,49 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         testTypingInstaller.session.host.baselineHost("TI:: typing installer creation complete");
     }
 
-    protected postExecActions: PostExecAction[] = [];
-
-    executePendingCommands() {
-        const actionsToRun = this.postExecActions;
-        this.postExecActions = [];
-        for (const action of actionsToRun) {
-            this.log.writeLine(`#${action.requestId} with arguments'${jsonToReadableText(action.packageNames)}':: ${action.success}`);
-            action.callback(action.success);
-        }
-    }
-
-    installWorker(requestId: number, packageNames: string[], cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
+    installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction): void {
         this.log.writeLine(`#${requestId} with cwd: ${cwd} arguments: ${jsonToReadableText(packageNames)}`);
-        if (!this.testTypingInstaller.installAction) {
-            this.addPostExecAction("success", requestId, packageNames, cb);
+        if (typeof this.testTypingInstaller.installAction === "boolean") {
+            this.scheduleInstall(
+                requestId,
+                packageNames,
+                this.testTypingInstaller.installAction,
+                ts.emptyArray,
+                onRequestCompleted,
+            );
         }
         else if (ts.isString(this.testTypingInstaller.installAction)) {
             assert(false, this.testTypingInstaller.installAction);
         }
-        else if (this.testTypingInstaller.installAction.length === 2) {
-            this.executeInstallWithTypingFiles(
-                requestId,
-                packageNames,
-                this.testTypingInstaller.installAction[0],
-                this.testTypingInstaller.installAction[1],
-                cb,
-            );
-        }
         else {
-            const typingFiles = this.testTypingInstaller.installAction[0].filter(f => packageNames.includes(ts.server.typingsInstaller.typingsName(f.package)));
-            this.executeInstallWithTypingFiles(
+            const typingFiles = this.testTypingInstaller.installAction.filter(f => !f.package || packageNames.includes(ts.server.typingsInstaller.typingsName(f.package)));
+            this.scheduleInstall(
                 requestId,
                 packageNames,
-                typingFiles.map(f => f.package),
+                /*success*/ true,
                 typingFiles,
-                cb,
+                onRequestCompleted,
             );
         }
     }
 
-    private executeInstallWithTypingFiles(
+    private scheduleInstall(
         requestId: number,
         packageNames: string[],
-        installedTypings: string[] | string,
-        typingFiles: File[],
-        cb: ts.server.typingsInstaller.RequestCompletedAction,
+        success: boolean,
+        typingFiles: readonly File[],
+        onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction,
     ): void {
-        this.addPostExecAction(installedTypings, requestId, packageNames, success => {
-            const host = this.testTypingInstaller.session.host;
-            host.baselineHost("TI:: Before installWorker");
-            for (const file of typingFiles) {
-                host.ensureFileOrFolder(file);
-            }
-            host.baselineHost("TI:: After installWorker");
-            cb(success);
-        });
+        this.testTypingInstaller.session.host.scheduleInstall(
+            pendingInstallInfo => {
+                for (const file of typingFiles) {
+                    this.testTypingInstaller.session.host.ensureFileOrFolder(file);
+                }
+                this.testTypingInstaller.session.host.baselineHost(`TI:: Installation ${pendingInstallInfo} complete with success::${!!success}`);
+                onRequestCompleted(!!success);
+            },
+            `#${requestId} with arguments:: ${jsonToReadableText(packageNames)}`,
+        );
     }
 
     sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes | ts.server.WatchTypingLocations | ts.server.PackageInstalledResponse) {
@@ -214,22 +187,11 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         );
         this.install(request);
     }
-
-    private addPostExecAction(stdout: string | string[], requestId: number, packageNames: string[], cb: ts.server.typingsInstaller.RequestCompletedAction) {
-        const out = ts.isString(stdout) ? stdout : createNpmPackageJsonString(stdout);
-        const action: PostExecAction = {
-            success: !!out,
-            requestId,
-            packageNames,
-            callback: cb,
-        };
-        this.postExecActions.push(action);
-    }
 }
 
 export interface TestTypingsInstallerOptions {
     host: TestServerHost;
-    logger?: Logger;
+    logger?: LoggerWithInMemoryLogs;
     globalTypingsCacheLocation?: string;
     throttleLimit?: number;
     installAction?: InstallAction;
@@ -245,13 +207,13 @@ export class TestTypingsInstaller implements ts.server.ITypingsInstaller {
     // Options
     readonly globalTypingsCacheLocation: string;
     readonly throttleLimit: number;
-    readonly installAction: InstallAction | undefined;
+    readonly installAction: InstallAction;
     readonly typesRegistry: string | readonly string[] | undefined;
 
     constructor(options: TestTypingsInstallerOptions) {
         this.globalTypingsCacheLocation = options.globalTypingsCacheLocation || options.host.getHostSpecificPath("/a/data");
         this.throttleLimit = options.throttleLimit || 5;
-        this.installAction = options.installAction;
+        this.installAction = options.installAction !== undefined ? options.installAction : true;
         this.typesRegistry = options.typesRegistry;
     }
 
@@ -341,13 +303,6 @@ export class TestTypingsInstaller implements ts.server.ITypingsInstaller {
                 ts.assertType<never>(response);
         }
     }
-}
-function createNpmPackageJsonString(installedTypings: string[]): string {
-    const dependencies: ts.MapLike<any> = {};
-    for (const typing of installedTypings) {
-        dependencies[typing] = "1.0.0";
-    }
-    return jsonToReadableText({ dependencies });
 }
 function createTypesRegistryFileContent(list: readonly string[]): TypesRegistryFile {
     const versionMap = {

@@ -228,6 +228,10 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Timeout callback:: count: 2
+3: /a/b/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "compileOnSaveAffectedFileList",

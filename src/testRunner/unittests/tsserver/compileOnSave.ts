@@ -1,6 +1,6 @@
 import {
     createLoggerWithInMemoryLogs,
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
@@ -744,7 +744,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
         test("\r\n", logger);
         baselineTsserverLogs("compileOnSave", "line endings", { logger });
 
-        function test(newLine: string, logger: Logger) {
+        function test(newLine: string, logger: LoggerWithInMemoryLogs) {
             const lines = ["var x = 1;", "var y = 2;"];
             const path = "/a/app";
             const f = {

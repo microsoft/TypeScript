@@ -54,7 +54,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /tmp/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/tmp/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/tmp/package.json]
 { "private": true }
@@ -183,15 +183,22 @@ PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
 
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/foo@ts5.4"
+] *new*
+
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
   "@types/foo@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+]
 
-TI:: After installWorker
+TI:: Installation #1 with arguments:: [
+  "@types/foo@tsFakeMajor.Minor"
+] complete with success::true
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/foo@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files []
@@ -267,8 +274,9 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/foo@ts5.4"
+          "@types/foo@tsFakeMajor.Minor"
         ],
         "success": true
       }
     }
+After running PendingInstalls callback:: count: 0

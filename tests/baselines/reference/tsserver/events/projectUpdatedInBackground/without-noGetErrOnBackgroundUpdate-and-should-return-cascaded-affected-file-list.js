@@ -296,12 +296,21 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 3
+13: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+16: /users/username/projects/project/tsconfig.json *new*
+17: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-18: /users/username/projects/project/tsconfig.json
-19: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+16: /users/username/projects/project/tsconfig.json *deleted*
+17: *ensureProjectForOpenFiles* *deleted*
+18: /users/username/projects/project/tsconfig.json *new*
+19: *ensureProjectForOpenFiles* *new*
 
 Before request
 
@@ -403,7 +412,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-20: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -439,6 +447,9 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 1
+20: checkOne *new*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /users/username/projects/project/moduleFile1.ts 1:: WatchInfo: /users/username/projects/project/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -450,6 +461,11 @@ Before running Timeout callback:: count: 3
 //// [/users/username/projects/project/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
+
+Timeout callback:: count: 3
+20: checkOne
+21: /users/username/projects/project/tsconfig.json *new*
+22: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -506,7 +522,11 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-23: checkOne
+
+Timeout callback:: count: 1
+23: checkOne *new*
+
+Immedidate callback:: count: 0
 
 Before request
 
@@ -541,6 +561,11 @@ Before running Timeout callback:: count: 3
 //// [/users/username/projects/project/moduleFile1.ts]
 export var T2: number;export function Foo() { };
 
+
+Timeout callback:: count: 3
+23: checkOne
+24: /users/username/projects/project/tsconfig.json *new*
+25: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -587,4 +612,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-26: checkOne
+
+Timeout callback:: count: 1
+26: checkOne *new*

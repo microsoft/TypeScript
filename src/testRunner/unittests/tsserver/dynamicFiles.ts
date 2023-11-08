@@ -84,7 +84,6 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             content: "const x = 10;",
         };
         host.writeFile(untitled.path, untitled.content);
-        session.host.logTimeoutQueueLength();
         openFilesForSession([{
             file: untitled.path,
             content: untitled.content,

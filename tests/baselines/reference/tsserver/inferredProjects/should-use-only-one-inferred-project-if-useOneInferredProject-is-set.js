@@ -289,6 +289,10 @@ FsWatches::
 /user/username/projects/myproject/a/b/tsconfig.json: *new*
   {}
 
+Timeout callback:: count: 2
+3: /user/username/projects/myproject/a/b/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/myproject/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:

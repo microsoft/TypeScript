@@ -264,12 +264,21 @@ FsWatches::
 /users/username/projects/project/tsconfig.json:
   {}
 
+Timeout callback:: count: 3
+4: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+5: /users/username/projects/project/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-7: /users/username/projects/project/tsconfig.json
-8: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+5: /users/username/projects/project/tsconfig.json *deleted*
+6: *ensureProjectForOpenFiles* *deleted*
+7: /users/username/projects/project/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 7: /users/username/projects/project/tsconfig.json
@@ -333,7 +342,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-9: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -357,6 +365,9 @@ FsWatches *deleted*::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 1
+9: checkOne *new*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /users/username/projects/project/moduleFile1.ts 1:: WatchInfo: /users/username/projects/project/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -368,6 +379,11 @@ Before running Timeout callback:: count: 3
 //// [/users/username/projects/project/moduleFile1.ts]
 export function Foo() { };var T1: number;
 
+
+Timeout callback:: count: 3
+9: checkOne
+10: /users/username/projects/project/tsconfig.json *new*
+11: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -420,4 +436,8 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-12: checkOne
+
+Timeout callback:: count: 1
+12: checkOne *new*
+
+Immedidate callback:: count: 0

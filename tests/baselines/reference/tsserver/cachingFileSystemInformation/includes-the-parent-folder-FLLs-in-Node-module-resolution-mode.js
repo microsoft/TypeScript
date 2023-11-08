@@ -252,12 +252,17 @@ FsWatchesRecursive::
 /users/username/projects/proj/node_modules: *new*
   {}
 
+Timeout callback:: count: 1
+4: /users/username/projects/proj/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/proj/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/proj/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-5: /users/username/projects/proj/tsconfig.json
-6: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+5: /users/username/projects/proj/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 5: /users/username/projects/proj/tsconfig.json

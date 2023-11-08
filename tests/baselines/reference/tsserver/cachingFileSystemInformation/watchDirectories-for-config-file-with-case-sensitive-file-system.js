@@ -314,6 +314,10 @@ Before running Timeout callback:: count: 2
 export class Cookie { }
 
 
+Timeout callback:: count: 2
+1: /Users/someuser/work/applications/frontend/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json

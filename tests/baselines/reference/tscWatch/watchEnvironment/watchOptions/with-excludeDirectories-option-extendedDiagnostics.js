@@ -69,6 +69,36 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excl
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Wild card directory
 
 
+//// [/user/username/projects/myproject/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var bar_1 = require("bar");
+(0, bar_1.foo)();
+
+
+
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
+  {}
+/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/src/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/src/main.ts"
 ]
@@ -96,46 +126,12 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
 /user/username/projects/myproject/src/main.ts (used version)
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
-  {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
-  {}
-/user/username/projects/myproject/src/main.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-/user/username/projects/myproject/src: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var bar_1 = require("bar");
-(0, bar_1.foo)();
-
-
 
 Change:: delete fooBar
 
 Input::
 //// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] deleted
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-

@@ -172,6 +172,10 @@ Before running Timeout callback:: count: 2
 2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/a/tsconfig.json] file written with same contents
 
+Timeout callback:: count: 2
+1: /user/username/projects/a/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:

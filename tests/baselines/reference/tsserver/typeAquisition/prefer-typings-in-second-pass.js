@@ -96,7 +96,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/typings/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/typings/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/typings/package.json]
 { "private": true }

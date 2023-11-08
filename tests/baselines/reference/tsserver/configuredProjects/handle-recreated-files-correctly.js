@@ -225,6 +225,10 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Timeout callback:: count: 2
+3: /a/b/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -278,6 +282,10 @@ Before running Timeout callback:: count: 2
 //// [/a/b/commonFile2.ts]
 let y = 1
 
+
+Timeout callback:: count: 2
+5: /a/b/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info

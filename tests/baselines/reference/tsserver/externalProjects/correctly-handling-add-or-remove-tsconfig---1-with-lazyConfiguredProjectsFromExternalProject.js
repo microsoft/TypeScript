@@ -180,6 +180,10 @@ FsWatches *deleted*::
 /a/b/lib.ts:
   {}
 
+Timeout callback:: count: 2
+1: /a/b/proj1 *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
@@ -411,6 +415,11 @@ Before request
 FsWatches *deleted*::
 /a/b/tsconfig.json:
   {}
+
+Timeout callback:: count: 2
+2: *ensureProjectForOpenFiles* *deleted*
+1: /a/b/proj1
+3: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {

@@ -101,7 +101,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /cache/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/cache/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/cache/package.json]
 { "private": true }
@@ -383,3 +383,7 @@ FsWatches::
 FsWatchesRecursive::
 /a:
   {}
+
+Before running PendingInstalls callback:: count: 0
+
+After running PendingInstalls callback:: count: 0

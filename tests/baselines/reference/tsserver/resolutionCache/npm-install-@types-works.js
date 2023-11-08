@@ -108,6 +108,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -122,6 +125,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
@@ -151,7 +157,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -238,6 +246,11 @@ FsWatchesRecursive::
 /a/b/projects/temp/node_modules/@types: *new*
   {}
 
+Timeout callback:: count: 3
+11: /dev/null/inferredProject1* *new*
+12: *ensureProjectForOpenFiles* *new*
+14: /dev/null/inferredProject1*FailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -263,7 +276,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 After running Timeout callback:: count: 1
-15: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /a/b/projects/node_modules/@types:
@@ -286,6 +298,11 @@ FsWatchesRecursive::
   {}
 /a/b/projects/temp/node_modules/@types:
   {}
+
+Timeout callback:: count: 1
+12: *ensureProjectForOpenFiles* *deleted*
+14: /dev/null/inferredProject1*FailedLookupInvalidation *deleted*
+15: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 1
 15: *ensureProjectForOpenFiles*

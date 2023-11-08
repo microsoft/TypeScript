@@ -210,6 +210,10 @@ Before running Timeout callback:: count: 2
 cVue file
 
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 getExternalFiles:: Getting new list of .vue files
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c.vue 500 undefined WatchType: Closed Script info
@@ -298,6 +302,10 @@ Before running Timeout callback:: count: 2
 //// [/user/username/projects/myproject/d.ts]
 export const d = 10;export const x = 10;
 
+
+Timeout callback:: count: 2
+3: /user/username/projects/myproject/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json

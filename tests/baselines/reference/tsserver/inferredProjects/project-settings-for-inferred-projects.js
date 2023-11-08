@@ -115,6 +115,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 3
+1: /dev/null/inferredProject1* *new*
+2: /dev/null/inferredProject2* *new*
+3: *ensureProjectForOpenFiles* *new*
+
 Before running Timeout callback:: count: 3
 1: /dev/null/inferredProject1*
 2: /dev/null/inferredProject2*
@@ -177,7 +182,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }

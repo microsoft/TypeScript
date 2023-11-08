@@ -170,6 +170,10 @@ Before running Timeout callback:: count: 2
             }
 
 
+Timeout callback:: count: 2
+1: /a/b/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -276,6 +280,10 @@ Before running Timeout callback:: count: 2
                 "compilerOptions": {}
             }
 
+
+Timeout callback:: count: 2
+3: /a/b/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /a/b/tsconfig.json

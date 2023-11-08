@@ -623,6 +623,9 @@ FsWatchesRecursive::
 /b:
   {}
 
+Timeout callback:: count: 1
+2: /b/tsconfig.json *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",

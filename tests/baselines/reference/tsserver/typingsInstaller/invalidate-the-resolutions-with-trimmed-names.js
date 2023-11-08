@@ -58,7 +58,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /tmp/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/tmp/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/tmp/package.json]
 { "private": true }
@@ -183,18 +183,25 @@ FsWatchesRecursive::
 /a/b/node_modules:
   {}
 
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/foo@ts5.4"
+] *new*
+
 Info seq  [hh:mm:ss:mss] Resolution from : /a/b/app.js for "fooo" goes to: {
   "resolvedFileName": "/a/b/node_modules/fooo/index.d.ts",
   "extension": ".d.ts",
   "isExternalLibraryImport": true,
   "resolvedUsingTsExtension": false
 }
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
   "@types/foo@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+]
 
-TI:: After installWorker
+TI:: Installation #1 with arguments:: [
+  "@types/foo@tsFakeMajor.Minor"
+] complete with success::true
 //// [/tmp/node_modules/foo/index.d.ts]
 export function aa(): void;
 
@@ -284,11 +291,17 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/foo@ts5.4"
+          "@types/foo@tsFakeMajor.Minor"
         ],
         "success": true
       }
     }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*
@@ -415,8 +428,11 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 2
-3: /dev/null/inferredProject1*
-4: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+2: *ensureProjectForOpenFiles* *deleted*
+3: /dev/null/inferredProject1* *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -716,6 +732,3 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
-
-Timeout callback:: count: 0
-Immedidate callback:: count: 0

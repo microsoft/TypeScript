@@ -468,6 +468,11 @@ Before running Timeout callback:: count: 3
 3: *ensureProjectForOpenFiles*
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
 
+Timeout callback:: count: 3
+1: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+2: /home/src/projects/project1/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
@@ -618,6 +623,10 @@ Before running Timeout callback:: count: 2
 export const file = 10;export const xyz = 10;
 
 
+Timeout callback:: count: 2
+4: /home/src/projects/project1/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
@@ -714,6 +723,10 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1:
   {}
 
+Timeout callback:: count: 2
+8: /home/src/projects/project1/tsconfig.json *new*
+9: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
@@ -799,12 +812,17 @@ Before running Timeout callback:: count: 1
 interface DOMInterface { }
 
 
+Timeout callback:: count: 1
+10: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-11: /home/src/projects/project1/tsconfig.json
-12: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+11: /home/src/projects/project1/tsconfig.json *new*
+12: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 11: /home/src/projects/project1/tsconfig.json
@@ -921,6 +939,10 @@ Before running Timeout callback:: count: 2
   }
 }
 
+
+Timeout callback:: count: 2
+13: /home/src/projects/project1/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project1/tsconfig.json
@@ -1094,6 +1116,11 @@ Before running Timeout callback:: count: 3
 }
 
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
+
+Timeout callback:: count: 3
+17: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+18: /home/src/projects/project1/tsconfig.json *new*
+19: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
@@ -1305,6 +1332,11 @@ Before running Timeout callback:: count: 3
 22: *ensureProjectForOpenFiles*
 //// [/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts] deleted
 
+Timeout callback:: count: 3
+20: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+21: /home/src/projects/project1/tsconfig.json *new*
+22: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
@@ -1452,12 +1484,17 @@ Before running Timeout callback:: count: 1
 interface WebWorkerInterface { }
 
 
+Timeout callback:: count: 1
+23: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-24: /home/src/projects/project1/tsconfig.json
-25: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+24: /home/src/projects/project1/tsconfig.json *new*
+25: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 24: /home/src/projects/project1/tsconfig.json

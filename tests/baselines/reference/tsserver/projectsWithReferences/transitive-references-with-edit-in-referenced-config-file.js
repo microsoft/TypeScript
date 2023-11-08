@@ -349,6 +349,11 @@ export class X {}
 export class A {}
 
 
+Timeout callback:: count: 3
+1: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *new*
+2: /user/username/projects/myproject/c/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
@@ -500,6 +505,10 @@ Before running Timeout callback:: count: 2
   ]
 }
 
+
+Timeout callback:: count: 2
+4: /user/username/projects/myproject/c/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json

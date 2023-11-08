@@ -107,7 +107,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -330,15 +330,28 @@ FsWatches::
 /a/b/package.json: *new*
   {}
 
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@ts5.4",
+  "@types/moment@ts5.4",
+  "@types/commander@ts5.4",
+  "@types/express@ts5.4"
+] *new*
+
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
   "@types/jquery@tsFakeMajor.Minor",
   "@types/moment@tsFakeMajor.Minor",
   "@types/commander@tsFakeMajor.Minor",
   "@types/express@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+]
 
-TI:: After installWorker
+TI:: Installation #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor",
+  "@types/moment@tsFakeMajor.Minor",
+  "@types/commander@tsFakeMajor.Minor",
+  "@types/express@tsFakeMajor.Minor"
+] complete with success::true
 //// [/a/data/node_modules/@types/commander/index.d.ts]
 declare const commander: { x: number }
 
@@ -442,14 +455,19 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/jquery@ts5.4",
-          "@types/moment@ts5.4",
-          "@types/commander@ts5.4",
-          "@types/express@ts5.4"
+          "@types/jquery@tsFakeMajor.Minor",
+          "@types/moment@tsFakeMajor.Minor",
+          "@types/commander@tsFakeMajor.Minor",
+          "@types/express@tsFakeMajor.Minor"
         ],
         "success": true
       }
     }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 1
+1: /a/app/test.csproj *new*
+
 Before running Timeout callback:: count: 1
 1: /a/app/test.csproj
 

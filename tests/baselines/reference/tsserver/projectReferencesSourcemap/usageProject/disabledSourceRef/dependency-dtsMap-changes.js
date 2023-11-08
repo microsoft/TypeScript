@@ -695,6 +695,10 @@ Before request
 }
 
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/main/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definitionAndBoundSpan",

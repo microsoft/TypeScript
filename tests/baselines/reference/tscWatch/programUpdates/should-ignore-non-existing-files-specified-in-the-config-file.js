@@ -47,6 +47,23 @@ Output::
 
 
 
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+
+PolledWatches::
+/a/b/commonfile3.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/commonfile1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
 Program root files: [
   "/a/b/commonFile1.ts",
   "/a/b/commonFile3.ts"
@@ -67,21 +84,4 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/commonfile1.ts (used version)
 
-PolledWatches::
-/a/b/commonfile3.ts: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/commonfile1.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-var x = 1;
-
-

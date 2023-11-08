@@ -157,6 +157,9 @@ FsWatches *deleted*::
 /a/b/app.ts:
   {}
 
+Timeout callback:: count: 1
+2: /a/b/test.csproj *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "compilerOptionsDiagnostics-full",
@@ -223,6 +226,10 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
+
+Timeout callback:: count: 1
+2: /a/b/test.csproj *deleted*
+3: /a/b/test.csproj *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {

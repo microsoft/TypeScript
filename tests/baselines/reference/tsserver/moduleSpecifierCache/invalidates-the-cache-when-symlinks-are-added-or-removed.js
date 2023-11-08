@@ -907,6 +907,10 @@ FsWatchesRecursive::
 /src:
   {}
 
+Timeout callback:: count: 2
+5: /tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms

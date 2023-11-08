@@ -50,7 +50,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -187,10 +187,15 @@ FsWatchesRecursive::
 /a: *new*
   {}
 
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@ts5.4"
+] *new*
+
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
   "@types/jquery@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+]
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/data/node_modules/@types :: WatchInfo: /a 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Ignoring files that are not *.json
@@ -201,7 +206,9 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/data
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/data/node_modules/@types/jquery/index.d.ts :: WatchInfo: /a 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Ignoring files that are not *.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/data/node_modules/@types/jquery/index.d.ts :: WatchInfo: /a 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-TI:: After installWorker
+TI:: Installation #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor"
+] complete with success::true
 //// [/a/data/node_modules/@types/jquery/index.d.ts]
 declare const $: { x: number }
 
@@ -278,11 +285,17 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "eventId": 1,
         "packages": [
-          "@types/jquery@ts5.4"
+          "@types/jquery@tsFakeMajor.Minor"
         ],
         "success": true
       }
     }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*

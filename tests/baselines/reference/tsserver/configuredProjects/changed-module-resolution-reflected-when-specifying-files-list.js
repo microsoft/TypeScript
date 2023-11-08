@@ -189,12 +189,17 @@ Before running Timeout callback:: count: 1
 export classc { method2() { return 10; } }
 
 
+Timeout callback:: count: 1
+1: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-2: /users/username/projects/project/tsconfig.json
-3: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+2: /users/username/projects/project/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 2: /users/username/projects/project/tsconfig.json
