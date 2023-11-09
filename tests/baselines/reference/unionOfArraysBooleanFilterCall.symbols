@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/unionOfArraysBooleanFilterCall.ts] ////
+
+=== unionOfArraysBooleanFilterCall.ts ===
+interface Fizz {
+>Fizz : Symbol(Fizz, Decl(unionOfArraysBooleanFilterCall.ts, 0, 0))
+
+    id: number;
+>id : Symbol(Fizz.id, Decl(unionOfArraysBooleanFilterCall.ts, 0, 16))
+
+    member: number;
+>member : Symbol(Fizz.member, Decl(unionOfArraysBooleanFilterCall.ts, 1, 15))
+}
+interface Buzz {
+>Buzz : Symbol(Buzz, Decl(unionOfArraysBooleanFilterCall.ts, 3, 1))
+
+    id: number;
+>id : Symbol(Buzz.id, Decl(unionOfArraysBooleanFilterCall.ts, 4, 16))
+
+    member: string;
+>member : Symbol(Buzz.member, Decl(unionOfArraysBooleanFilterCall.ts, 5, 15))
+}
+type Falsey = "" | 0 | false | null | undefined;
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+
+
+([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(Boolean); // expect type (Fizz|Buzz)[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Fizz : Symbol(Fizz, Decl(unionOfArraysBooleanFilterCall.ts, 0, 0))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysBooleanFilterCall.ts, 3, 1))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+([] as (Fizz|Falsey)[] | readonly (Buzz|Falsey)[]).filter(Boolean); // expect type (Fizz|Buzz)[]
+>([] as (Fizz|Falsey)[] | readonly (Buzz|Falsey)[]).filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Fizz : Symbol(Fizz, Decl(unionOfArraysBooleanFilterCall.ts, 0, 0))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysBooleanFilterCall.ts, 3, 1))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+([] as [Fizz|Falsey] | readonly [(Buzz|Falsey)?]).filter(Boolean); // expect type (Fizz|Buzz)[]
+>([] as [Fizz|Falsey] | readonly [(Buzz|Falsey)?]).filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Fizz : Symbol(Fizz, Decl(unionOfArraysBooleanFilterCall.ts, 0, 0))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysBooleanFilterCall.ts, 3, 1))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// confirm that the other filter signatures are still available and working
+
+declare function isFizz(x: unknown): x is Fizz;
+>isFizz : Symbol(isFizz, Decl(unionOfArraysBooleanFilterCall.ts, 15, 66))
+>x : Symbol(x, Decl(unionOfArraysBooleanFilterCall.ts, 19, 24))
+>x : Symbol(x, Decl(unionOfArraysBooleanFilterCall.ts, 19, 24))
+>Fizz : Symbol(Fizz, Decl(unionOfArraysBooleanFilterCall.ts, 0, 0))
+
+([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(isFizz); // expect type Fizz[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Fizz : Symbol(Fizz, Decl(unionOfArraysBooleanFilterCall.ts, 0, 0))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysBooleanFilterCall.ts, 3, 1))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isFizz : Symbol(isFizz, Decl(unionOfArraysBooleanFilterCall.ts, 15, 66))
+
+declare function isBuzz(x: unknown): x is Buzz;
+>isBuzz : Symbol(isBuzz, Decl(unionOfArraysBooleanFilterCall.ts, 20, 57))
+>x : Symbol(x, Decl(unionOfArraysBooleanFilterCall.ts, 22, 24))
+>x : Symbol(x, Decl(unionOfArraysBooleanFilterCall.ts, 22, 24))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysBooleanFilterCall.ts, 3, 1))
+
+([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(isBuzz); // expect type Buzz[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Fizz : Symbol(Fizz, Decl(unionOfArraysBooleanFilterCall.ts, 0, 0))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysBooleanFilterCall.ts, 3, 1))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isBuzz : Symbol(isBuzz, Decl(unionOfArraysBooleanFilterCall.ts, 20, 57))
+
+([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(x => x && typeof x.member === "number"); // expect type (Fizz|Buzz|Falsey)[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Fizz : Symbol(Fizz, Decl(unionOfArraysBooleanFilterCall.ts, 0, 0))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>Buzz : Symbol(Buzz, Decl(unionOfArraysBooleanFilterCall.ts, 3, 1))
+>Falsey : Symbol(Falsey, Decl(unionOfArraysBooleanFilterCall.ts, 7, 1))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(unionOfArraysBooleanFilterCall.ts, 25, 49))
+>x : Symbol(x, Decl(unionOfArraysBooleanFilterCall.ts, 25, 49))
+>x.member : Symbol(member, Decl(unionOfArraysBooleanFilterCall.ts, 1, 15), Decl(unionOfArraysBooleanFilterCall.ts, 5, 15))
+>x : Symbol(x, Decl(unionOfArraysBooleanFilterCall.ts, 25, 49))
+>member : Symbol(member, Decl(unionOfArraysBooleanFilterCall.ts, 1, 15), Decl(unionOfArraysBooleanFilterCall.ts, 5, 15))
+

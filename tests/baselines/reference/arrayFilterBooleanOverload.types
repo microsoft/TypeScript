@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/arrayFilterBooleanOverload.ts] ////
+
+=== arrayFilterBooleanOverload.ts ===
+const nullableValues = ['a', 'b', null]; // expect (string | null)[]
+>nullableValues : (string | null)[]
+>['a', 'b', null] : (string | null)[]
+>'a' : "a"
+>'b' : "b"
+
+const values1 = nullableValues.filter(Boolean); // expect string[]
+>values1 : (string | null)[]
+>nullableValues.filter(Boolean) : (string | null)[]
+>nullableValues.filter : { <S extends string | null>(predicate: (value: string | null, index: number, array: (string | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | null, index: number, array: (string | null)[]) => unknown, thisArg?: any): (string | null)[]; }
+>nullableValues : (string | null)[]
+>filter : { <S extends string | null>(predicate: (value: string | null, index: number, array: (string | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | null, index: number, array: (string | null)[]) => unknown, thisArg?: any): (string | null)[]; }
+>Boolean : BooleanConstructor
+
+// @ts-expect-error
+const values2 = nullableValues.filter(new Boolean);
+>values2 : (string | null)[]
+>nullableValues.filter(new Boolean) : (string | null)[]
+>nullableValues.filter : { <S extends string | null>(predicate: (value: string | null, index: number, array: (string | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | null, index: number, array: (string | null)[]) => unknown, thisArg?: any): (string | null)[]; }
+>nullableValues : (string | null)[]
+>filter : { <S extends string | null>(predicate: (value: string | null, index: number, array: (string | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | null, index: number, array: (string | null)[]) => unknown, thisArg?: any): (string | null)[]; }
+>new Boolean : Boolean
+>Boolean : BooleanConstructor
+
+const arr = [0, 1, "", "foo", null] as const;
+>arr : readonly [0, 1, "", "foo", null]
+>[0, 1, "", "foo", null] as const : readonly [0, 1, "", "foo", null]
+>[0, 1, "", "foo", null] : readonly [0, 1, "", "foo", null]
+>0 : 0
+>1 : 1
+>"" : ""
+>"foo" : "foo"
+
+const arr2 = arr.filter(Boolean); // expect ("foo" | 1)[]
+>arr2 : ("" | 0 | 1 | "foo" | null)[]
+>arr.filter(Boolean) : ("" | 0 | 1 | "foo" | null)[]
+>arr.filter : { <S extends "" | 0 | 1 | "foo" | null>(predicate: (value: "" | 0 | 1 | "foo" | null, index: number, array: readonly ("" | 0 | 1 | "foo" | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "" | 0 | 1 | "foo" | null, index: number, array: readonly ("" | 0 | 1 | "foo" | null)[]) => unknown, thisArg?: any): ("" | 0 | 1 | "foo" | null)[]; }
+>arr : readonly [0, 1, "", "foo", null]
+>filter : { <S extends "" | 0 | 1 | "foo" | null>(predicate: (value: "" | 0 | 1 | "foo" | null, index: number, array: readonly ("" | 0 | 1 | "foo" | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "" | 0 | 1 | "foo" | null, index: number, array: readonly ("" | 0 | 1 | "foo" | null)[]) => unknown, thisArg?: any): ("" | 0 | 1 | "foo" | null)[]; }
+>Boolean : BooleanConstructor
+
+

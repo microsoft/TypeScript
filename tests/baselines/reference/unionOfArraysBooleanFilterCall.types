@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/unionOfArraysBooleanFilterCall.ts] ////
+
+=== unionOfArraysBooleanFilterCall.ts ===
+interface Fizz {
+    id: number;
+>id : number
+
+    member: number;
+>member : number
+}
+interface Buzz {
+    id: number;
+>id : number
+
+    member: string;
+>member : string
+}
+type Falsey = "" | 0 | false | null | undefined;
+>Falsey : false | "" | 0
+>false : false
+
+
+([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(Boolean); // expect type (Fizz|Buzz)[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(Boolean) : (Fizz | Buzz | Falsey)[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]) : (Fizz | Falsey)[] | (Buzz | Falsey)[]
+>[] as (Fizz|Falsey)[] | (Buzz|Falsey)[] : (Fizz | Falsey)[] | (Buzz | Falsey)[]
+>[] : undefined[]
+>filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>Boolean : BooleanConstructor
+
+([] as (Fizz|Falsey)[] | readonly (Buzz|Falsey)[]).filter(Boolean); // expect type (Fizz|Buzz)[]
+>([] as (Fizz|Falsey)[] | readonly (Buzz|Falsey)[]).filter(Boolean) : (Fizz | Buzz | Falsey)[]
+>([] as (Fizz|Falsey)[] | readonly (Buzz|Falsey)[]).filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: readonly (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: readonly (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>([] as (Fizz|Falsey)[] | readonly (Buzz|Falsey)[]) : (Fizz | Falsey)[] | readonly (Buzz | Falsey)[]
+>[] as (Fizz|Falsey)[] | readonly (Buzz|Falsey)[] : (Fizz | Falsey)[] | readonly (Buzz | Falsey)[]
+>[] : undefined[]
+>filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: readonly (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: readonly (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>Boolean : BooleanConstructor
+
+([] as [Fizz|Falsey] | readonly [(Buzz|Falsey)?]).filter(Boolean); // expect type (Fizz|Buzz)[]
+>([] as [Fizz|Falsey] | readonly [(Buzz|Falsey)?]).filter(Boolean) : (Fizz | Buzz | Falsey)[]
+>([] as [Fizz|Falsey] | readonly [(Buzz|Falsey)?]).filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: readonly (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: readonly (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>([] as [Fizz|Falsey] | readonly [(Buzz|Falsey)?]) : [Fizz | Falsey] | readonly [(Buzz | Falsey)?]
+>[] as [Fizz|Falsey] | readonly [(Buzz|Falsey)?] : [Fizz | Falsey] | readonly [(Buzz | Falsey)?]
+>[] : []
+>filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: readonly (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: readonly (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>Boolean : BooleanConstructor
+
+// confirm that the other filter signatures are still available and working
+
+declare function isFizz(x: unknown): x is Fizz;
+>isFizz : (x: unknown) => x is Fizz
+>x : unknown
+
+([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(isFizz); // expect type Fizz[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(isFizz) : Fizz[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]) : (Fizz | Falsey)[] | (Buzz | Falsey)[]
+>[] as (Fizz|Falsey)[] | (Buzz|Falsey)[] : (Fizz | Falsey)[] | (Buzz | Falsey)[]
+>[] : undefined[]
+>filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>isFizz : (x: unknown) => x is Fizz
+
+declare function isBuzz(x: unknown): x is Buzz;
+>isBuzz : (x: unknown) => x is Buzz
+>x : unknown
+
+([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(isBuzz); // expect type Buzz[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(isBuzz) : Buzz[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]) : (Fizz | Falsey)[] | (Buzz | Falsey)[]
+>[] as (Fizz|Falsey)[] | (Buzz|Falsey)[] : (Fizz | Falsey)[] | (Buzz | Falsey)[]
+>[] : undefined[]
+>filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>isBuzz : (x: unknown) => x is Buzz
+
+([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(x => x && typeof x.member === "number"); // expect type (Fizz|Buzz|Falsey)[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter(x => x && typeof x.member === "number") : (Fizz | Buzz | Falsey)[]
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]).filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>([] as (Fizz|Falsey)[] | (Buzz|Falsey)[]) : (Fizz | Falsey)[] | (Buzz | Falsey)[]
+>[] as (Fizz|Falsey)[] | (Buzz|Falsey)[] : (Fizz | Falsey)[] | (Buzz | Falsey)[]
+>[] : undefined[]
+>filter : { <S extends Fizz | Falsey>(predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz | Falsey, index: number, array: (Fizz | Falsey)[]) => unknown, thisArg?: any): (Fizz | Falsey)[]; } | { <S extends Buzz | Falsey>(predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz | Falsey, index: number, array: (Buzz | Falsey)[]) => unknown, thisArg?: any): (Buzz | Falsey)[]; }
+>x => x && typeof x.member === "number" : (x: Fizz | Buzz | Falsey) => boolean
+>x : Fizz | Buzz | Falsey
+>x && typeof x.member === "number" : boolean
+>x : Fizz | Buzz | Falsey
+>typeof x.member === "number" : boolean
+>typeof x.member : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x.member : string | number
+>x : Fizz | Buzz
+>member : string | number
+>"number" : "number"
+

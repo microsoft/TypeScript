@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/arrayFilterBooleanOverload.ts] ////
+
+=== arrayFilterBooleanOverload.ts ===
+const nullableValues = ['a', 'b', null]; // expect (string | null)[]
+>nullableValues : Symbol(nullableValues, Decl(arrayFilterBooleanOverload.ts, 0, 5))
+
+const values1 = nullableValues.filter(Boolean); // expect string[]
+>values1 : Symbol(values1, Decl(arrayFilterBooleanOverload.ts, 2, 5))
+>nullableValues.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>nullableValues : Symbol(nullableValues, Decl(arrayFilterBooleanOverload.ts, 0, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// @ts-expect-error
+const values2 = nullableValues.filter(new Boolean);
+>values2 : Symbol(values2, Decl(arrayFilterBooleanOverload.ts, 5, 5))
+>nullableValues.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>nullableValues : Symbol(nullableValues, Decl(arrayFilterBooleanOverload.ts, 0, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const arr = [0, 1, "", "foo", null] as const;
+>arr : Symbol(arr, Decl(arrayFilterBooleanOverload.ts, 7, 5))
+>const : Symbol(const)
+
+const arr2 = arr.filter(Boolean); // expect ("foo" | 1)[]
+>arr2 : Symbol(arr2, Decl(arrayFilterBooleanOverload.ts, 9, 5))
+>arr.filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(arrayFilterBooleanOverload.ts, 7, 5))
+>filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+
