@@ -121,10 +121,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/tslibs/ts/lib/lib.es2020.full.d.ts:: []
-Info seq  [hh:mm:ss:mss] extractUnresolvedImportsFromSourceFile:: /home/src/vscode/projects/bin/^/aichat-code-block-anysphere/ocjahtkquh:: ["worker_threads"]
-Info seq  [hh:mm:ss:mss] getUnresolvedImports:: Files:: 2 Done: ["worker_threads"]
 TI:: Creating typing installer
 //// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 14
 
