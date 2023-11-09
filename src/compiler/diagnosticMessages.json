@@ -3716,7 +3716,7 @@
         "code": 2865
     },
 
-    "Import declaration '{0}' is using private name '{1}'. ": {
+    "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
     },
