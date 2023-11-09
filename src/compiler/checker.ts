@@ -9707,7 +9707,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // does not use localName because the symbol name in this case refers to the name in the exports table,
                         // which we must exactly preserve
                         const specifier = (node.parent.parent as ExportDeclaration).moduleSpecifier;
-                        if (specifier && target?.flags & SymbolFlags.ValueModule && (node as ExportSpecifier).propertyName?.escapedText === InternalSymbolName.Default) {
+                        if (specifier && (node as ExportSpecifier).propertyName?.escapedText === InternalSymbolName.Default) {
                             verbatimTargetName = InternalSymbolName.Default;
                         }
                         // targetName is only used when the target is local, as otherwise the target is an alias that points at
