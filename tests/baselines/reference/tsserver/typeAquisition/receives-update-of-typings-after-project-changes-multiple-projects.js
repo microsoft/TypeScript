@@ -1875,14 +1875,12 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/users/user/projects/project2",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Searching for typing names in /users/user/projects/project2/node_modules; all files: []
 TI:: [hh:mm:ss:mss]     Found package names: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -1916,7 +1914,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "allowNonTsExtensions": true
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /users/user/projects/project2/jsconfig.json
@@ -1944,7 +1941,6 @@ Info seq  [hh:mm:ss:mss] event:
           "allowNonTsExtensions": true
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -2327,14 +2323,12 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/users/user/projects/project1",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Searching for typing names in /users/user/projects/project1/node_modules; all files: []
 TI:: [hh:mm:ss:mss]     Found package names: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -2376,7 +2370,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "allowNonTsExtensions": true
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -2402,7 +2395,6 @@ Info seq  [hh:mm:ss:mss] event:
           "allowNonTsExtensions": true
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }

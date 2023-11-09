@@ -362,9 +362,9 @@ function compilerOptionsChanged(opt1: CompilerOptions, opt2: CompilerOptions): b
 }
 
 function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefined, imports2: SortedReadonlyArray<string> | undefined): boolean {
-    if (imports1 === imports2) {
-        return false;
-    }
+    if (imports1 === imports2) return false;
+    // undefined and 0 length array are same
+    if (!imports1?.length === !imports2?.length) return false;
     return !arrayIsEqualTo(imports1, imports2);
 }
 const disabledTypeAcquisition: TypeAcquisition = {};
@@ -1518,10 +1518,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.typingsCache = {
                 compilerOptions: this.getCompilationSettings(),
                 typeAcquisition,
-                unresolvedImports: this.lastCachedUnresolvedImportsList,
+                unresolvedImports: this.lastCachedUnresolvedImportsList?.length ? this.lastCachedUnresolvedImportsList : undefined,
             };
             // something has been changed, issue a request to update typings
-            this.projectService.typingsInstaller.enqueueInstallTypingsRequest(this, typeAcquisition, this.lastCachedUnresolvedImportsList);
+            this.projectService.typingsInstaller.enqueueInstallTypingsRequest(
+                this,
+                typeAcquisition,
+                this.typingsCache.unresolvedImports,
+            );
         }
     }
 
