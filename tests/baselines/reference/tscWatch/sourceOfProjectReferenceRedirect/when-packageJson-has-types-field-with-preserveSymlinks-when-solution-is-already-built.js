@@ -252,73 +252,6 @@ Output::
 
 
 
-Program root files: [
-  "/user/username/projects/myproject/packages/A/src/index.ts"
-]
-Program options: {
-  "outDir": "/user/username/projects/myproject/packages/A/lib",
-  "rootDir": "/user/username/projects/myproject/packages/A/src",
-  "composite": true,
-  "preserveSymlinks": true,
-  "configFilePath": "/user/username/projects/myproject/packages/A/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/packages/B/src/index.ts
-/user/username/projects/myproject/packages/B/src/bar.ts
-/user/username/projects/myproject/packages/A/src/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/packages/B/src/index.ts
-/user/username/projects/myproject/packages/B/src/bar.ts
-/user/username/projects/myproject/packages/A/src/index.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/packages/b/src/index.ts (used version)
-/user/username/projects/myproject/packages/a/src/index.ts (computed .d.ts)
-/user/username/projects/myproject/packages/b/src/bar.ts (used version)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/packages/a/src/index.ts: *new*
-  {}
-/user/username/projects/myproject/packages/a/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/b/package.json: *new*
-  {}
-/user/username/projects/myproject/packages/b/src/bar.ts: *new*
-  {}
-/user/username/projects/myproject/packages/b/src/index.ts: *new*
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules: *new*
-  {}
-/user/username/projects/myproject/packages/a/src: *new*
-  {}
-/user/username/projects/myproject/packages/b/src: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/packages/A/lib/index.js] file written with same contents
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/index.ts","../b/src/bar.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"3563314629-import { foo } from 'b';\nimport { bar } from 'b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2],"latestChangedDtsFile":"./lib/index.d.ts"},"version":"FakeTSVersion"}
@@ -395,3 +328,70 @@ exitCode:: ExitStatus.undefined
   "size": 1001
 }
 
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/a/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/packages/a/src/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/a/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/packages/b/package.json: *new*
+  {}
+/user/username/projects/myproject/packages/b/src/bar.ts: *new*
+  {}
+/user/username/projects/myproject/packages/b/src/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/b/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/node_modules: *new*
+  {}
+/user/username/projects/myproject/packages/a/src: *new*
+  {}
+/user/username/projects/myproject/packages/b/src: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/packages/A/src/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/A/lib",
+  "rootDir": "/user/username/projects/myproject/packages/A/src",
+  "composite": true,
+  "preserveSymlinks": true,
+  "configFilePath": "/user/username/projects/myproject/packages/A/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/packages/B/src/index.ts
+/user/username/projects/myproject/packages/B/src/bar.ts
+/user/username/projects/myproject/packages/A/src/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/packages/B/src/index.ts
+/user/username/projects/myproject/packages/B/src/bar.ts
+/user/username/projects/myproject/packages/A/src/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/packages/b/src/index.ts (used version)
+/user/username/projects/myproject/packages/a/src/index.ts (computed .d.ts)
+/user/username/projects/myproject/packages/b/src/bar.ts (used version)
+
+exitCode:: ExitStatus.undefined

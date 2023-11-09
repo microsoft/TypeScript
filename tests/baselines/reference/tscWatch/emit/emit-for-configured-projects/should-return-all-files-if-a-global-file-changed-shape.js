@@ -41,6 +41,59 @@ Output::
 
 
 
+//// [/a/b/moduleFile1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+exports.y = 10;
+
+
+//// [/a/b/file1Consumer2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var z = 10;
+
+
+//// [/a/b/globalFile3.js]
+
+
+//// [/a/b/moduleFile2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo4 = void 0;
+exports.Foo4 = 10;
+
+
+
+FsWatches::
+/a/b/file1consumer1.ts: *new*
+  {}
+/a/b/file1consumer2.ts: *new*
+  {}
+/a/b/globalfile3.ts: *new*
+  {}
+/a/b/modulefile1.ts: *new*
+  {}
+/a/b/modulefile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
 Program root files: [
   "/a/b/file1Consumer1.ts",
   "/a/b/file1Consumer2.ts",
@@ -78,60 +131,7 @@ Shape signatures in builder refreshed for::
 /a/b/globalfile3.ts (used version)
 /a/b/modulefile2.ts (used version)
 
-FsWatches::
-/a/b/file1consumer1.ts: *new*
-  {}
-/a/b/file1consumer2.ts: *new*
-  {}
-/a/b/globalfile3.ts: *new*
-  {}
-/a/b/modulefile1.ts: *new*
-  {}
-/a/b/modulefile2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
-
-
-//// [/a/b/file1Consumer1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
-
-
-//// [/a/b/file1Consumer2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var z = 10;
-
-
-//// [/a/b/globalFile3.js]
-
-
-//// [/a/b/moduleFile2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo4 = void 0;
-exports.Foo4 = 10;
-
-
 
 Change:: change shape of global file
 
@@ -140,8 +140,12 @@ Input::
 interface GlobalFoo { age: number }var T2: string;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -149,6 +153,16 @@ Output::
 
 [[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/a/b/moduleFile1.js] file written with same contents
+//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/file1Consumer2.js] file written with same contents
+//// [/a/b/globalFile3.js]
+var T2;
+
+
+//// [/a/b/moduleFile2.js] file written with same contents
 
 
 Program root files: [
@@ -188,12 +202,3 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/moduleFile1.js] file written with same contents
-//// [/a/b/file1Consumer1.js] file written with same contents
-//// [/a/b/file1Consumer2.js] file written with same contents
-//// [/a/b/globalFile3.js]
-var T2;
-
-
-//// [/a/b/moduleFile2.js] file written with same contents

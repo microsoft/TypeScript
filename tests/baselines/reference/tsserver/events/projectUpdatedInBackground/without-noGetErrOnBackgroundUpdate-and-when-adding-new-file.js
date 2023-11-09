@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/file1.ts]
 export var x = 10;
@@ -174,6 +174,10 @@ Before running Timeout callback:: count: 2
 export var y = 10;
 
 
+Timeout callback:: count: 2
+1: /users/username/projects/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -210,7 +214,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/file1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/file1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /users/username/projects/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -223,7 +228,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-3: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -243,6 +247,9 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 1
+3: checkOne *new*
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/file3.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -254,6 +261,11 @@ Before running Timeout callback:: count: 3
 //// [/users/username/projects/project/file3.ts]
 export var z = 10;
 
+
+Timeout callback:: count: 3
+3: checkOne
+4: /users/username/projects/project/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/file3.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -304,7 +316,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/file1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/file1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /users/username/projects/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -317,7 +330,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-6: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -338,3 +350,8 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project:
   {}
+
+Timeout callback:: count: 1
+6: checkOne *new*
+
+Immedidate callback:: count: 0

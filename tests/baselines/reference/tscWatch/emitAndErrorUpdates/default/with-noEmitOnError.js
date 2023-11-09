@@ -56,6 +56,29 @@ Output::
 
 
 
+
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/noemitonerror/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts: *new*
+  {}
+/user/username/projects/noemitonerror/src/main.ts: *new*
+  {}
+/user/username/projects/noemitonerror/src/other.ts: *new*
+  {}
+/user/username/projects/noemitonerror/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/noemitonerror: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -86,43 +109,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (used version)
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/noemitonerror/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts: *new*
-  {}
-/user/username/projects/noemitonerror/src/main.ts: *new*
-  {}
-/user/username/projects/noemitonerror/src/other.ts: *new*
-  {}
-/user/username/projects/noemitonerror/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
-Output::
+
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Fix Syntax error
 
@@ -134,8 +137,12 @@ const a = {
 };
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -144,32 +151,6 @@ Output::
 [[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
-  "watch": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/noEmitOnError/src/main.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
 "use strict";
@@ -191,6 +172,33 @@ console.log("hi");
 
 
 
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "noEmitOnError": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/noEmitOnError/src/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Semantic Error
 
 Input::
@@ -199,8 +207,12 @@ import { A } from "../shared/types/db";
 const a: string = 10;
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -215,6 +227,8 @@ Output::
 
 
 
+
+
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
   "/user/username/projects/noEmitOnError/src/main.ts",
@@ -241,19 +255,21 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
-Output::
+
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Fix Semantic Error
 
@@ -263,14 +279,26 @@ import { A } from "../shared/types/db";
 const a: string = "hello";
 
 
+Timeout callback:: count: 1
+5: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 5: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:01:13 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var a = "hello";
+
 
 
 
@@ -300,22 +328,18 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var a = "hello";
-
-
-
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Timeout callback:: count: 1
+6: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 6: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
-Output::
+
 
 exitCode:: ExitStatus.undefined
-

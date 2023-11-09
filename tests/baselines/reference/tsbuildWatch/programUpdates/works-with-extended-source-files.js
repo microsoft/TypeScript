@@ -119,103 +119,6 @@ Output::
 
 
 
-Program root files: [
-  "/a/b/commonFile1.ts",
-  "/a/b/commonFile2.ts"
-]
-Program options: {
-  "composite": true,
-  "watch": true,
-  "configFilePath": "/a/b/project1.tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/commonfile1.ts (computed .d.ts during emit)
-/a/b/commonfile2.ts (computed .d.ts during emit)
-
-Program root files: [
-  "/a/b/other.ts"
-]
-Program options: {
-  "composite": true,
-  "watch": true,
-  "configFilePath": "/a/b/project2.tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/other.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/other.ts (computed .d.ts during emit)
-
-Program root files: [
-  "/a/b/other2.ts"
-]
-Program options: {
-  "composite": false,
-  "strictNullChecks": false,
-  "noImplicitAny": true,
-  "watch": true,
-  "configFilePath": "/a/b/project3.tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/other2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/other2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/other2.ts (used version)
-
-FsWatches::
-/a/b/alpha.tsconfig.json: *new*
-  {}
-/a/b/bravo.tsconfig.json: *new*
-  {}
-/a/b/commonfile1.ts: *new*
-  {}
-/a/b/commonfile2.ts: *new*
-  {}
-/a/b/extendsconfig1.tsconfig.json: *new*
-  {}
-/a/b/extendsconfig2.tsconfig.json: *new*
-  {}
-/a/b/extendsconfig3.tsconfig.json: *new*
-  {}
-/a/b/other.ts: *new*
-  {}
-/a/b/other2.ts: *new*
-  {}
-/a/b/project1.tsconfig.json: *new*
-  {}
-/a/b/project2.tsconfig.json: *new*
-  {}
-/a/b/project3.tsconfig.json: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/a/b/commonFile1.js]
 var x = 1;
 
@@ -365,37 +268,37 @@ var k = 0;
 
 
 
-Change:: Modify alpha config
-
-Input::
-//// [/a/b/alpha.tsconfig.json]
-{
-  "compilerOptions": {
-    "strict": true
-  }
-}
-
-
-Before running Timeout callback:: count: 1
-2: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 1
-3: timerToBuildInvalidatedProject
-Output::
->> Screen clear
-[[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:13 AM[0m] Project 'project1.tsconfig.json' is out of date because output 'project1.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
-
-[[90m12:01:14 AM[0m] Building project '/a/b/project1.tsconfig.json'...
-
-
+FsWatches::
+/a/b/alpha.tsconfig.json: *new*
+  {}
+/a/b/bravo.tsconfig.json: *new*
+  {}
+/a/b/commonfile1.ts: *new*
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
+/a/b/extendsconfig1.tsconfig.json: *new*
+  {}
+/a/b/extendsconfig2.tsconfig.json: *new*
+  {}
+/a/b/extendsconfig3.tsconfig.json: *new*
+  {}
+/a/b/other.ts: *new*
+  {}
+/a/b/other2.ts: *new*
+  {}
+/a/b/project1.tsconfig.json: *new*
+  {}
+/a/b/project2.tsconfig.json: *new*
+  {}
+/a/b/project3.tsconfig.json: *new*
+  {}
 
 Program root files: [
   "/a/b/commonFile1.ts",
   "/a/b/commonFile2.ts"
 ]
 Program options: {
-  "strict": true,
   "composite": true,
   "watch": true,
   "configFilePath": "/a/b/project1.tsconfig.json"
@@ -411,9 +314,84 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/commonfile1.ts (computed .d.ts during emit)
+/a/b/commonfile2.ts (computed .d.ts during emit)
+
+Program root files: [
+  "/a/b/other.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project2.tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/other.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/other.ts (computed .d.ts during emit)
+
+Program root files: [
+  "/a/b/other2.ts"
+]
+Program options: {
+  "composite": false,
+  "strictNullChecks": false,
+  "noImplicitAny": true,
+  "watch": true,
+  "configFilePath": "/a/b/project3.tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/other2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/other2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/other2.ts (used version)
 
 exitCode:: ExitStatus.undefined
+
+Change:: Modify alpha config
+
+Input::
+//// [/a/b/alpha.tsconfig.json]
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
+
+
+Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 1
+Output::
+>> Screen clear
+[[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:13 AM[0m] Project 'project1.tsconfig.json' is out of date because output 'project1.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
+
+[[90m12:01:14 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+
+
 
 //// [/a/b/commonFile1.js]
 "use strict";
@@ -495,12 +473,42 @@ var y = 1;
 }
 
 
+Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject *new*
+
+
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "strict": true,
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project1.tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
 Change:: Build project 2
 
 Input::
 
 Before running Timeout callback:: count: 1
 3: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 [[90m12:01:28 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
@@ -510,28 +518,6 @@ Output::
 [[90m12:01:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: [
-  "/a/b/other.ts"
-]
-Program options: {
-  "strict": true,
-  "composite": true,
-  "watch": true,
-  "configFilePath": "/a/b/project2.tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/other.ts
-
-No shapes updated in the builder::
-
-exitCode:: ExitStatus.undefined
 
 //// [/a/b/other.js]
 "use strict";
@@ -592,38 +578,12 @@ var z = 0;
 }
 
 
-Change:: change bravo config
-
-Input::
-//// [/a/b/bravo.tsconfig.json]
-{
-  "extends": "./alpha.tsconfig.json",
-  "compilerOptions": {
-    "strict": false
-  }
-}
-
-
-Before running Timeout callback:: count: 1
-4: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:45 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'bravo.tsconfig.json'
-
-[[90m12:01:46 AM[0m] Building project '/a/b/project2.tsconfig.json'...
-
-[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
-
-
 
 Program root files: [
   "/a/b/other.ts"
 ]
 Program options: {
-  "strict": false,
+  "strict": true,
   "composite": true,
   "watch": true,
   "configFilePath": "/a/b/project2.tsconfig.json"
@@ -640,6 +600,37 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
+
+Change:: change bravo config
+
+Input::
+//// [/a/b/bravo.tsconfig.json]
+{
+  "extends": "./alpha.tsconfig.json",
+  "compilerOptions": {
+    "strict": false
+  }
+}
+
+
+Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:45 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'bravo.tsconfig.json'
+
+[[90m12:01:46 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+
+[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 //// [/a/b/other.js]
 var z = 0;
@@ -699,6 +690,29 @@ var z = 0;
 }
 
 
+
+Program root files: [
+  "/a/b/other.ts"
+]
+Program options: {
+  "strict": false,
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project2.tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/other.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
 Change:: project 2 extends alpha
 
 Input::
@@ -708,8 +722,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 5: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -721,6 +739,52 @@ Output::
 
 [[90m12:02:17 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/a/b/commonFile1.js] file written with same contents
+//// [/a/b/commonFile2.js] file written with same contents
+//// [/a/b/other.js]
+"use strict";
+var z = 0;
+
+
+//// [/a/b/other2.js]
+"use strict";
+var k = 0;
+
+
+
+FsWatches::
+/a/b/alpha.tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/b/extendsconfig1.tsconfig.json:
+  {}
+/a/b/extendsconfig2.tsconfig.json:
+  {}
+/a/b/extendsconfig3.tsconfig.json:
+  {}
+/a/b/other.ts:
+  {}
+/a/b/other2.ts:
+  {}
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/project3.tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/a/b/bravo.tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
 
 
 Program root files: [
@@ -755,52 +819,7 @@ Shape signatures in builder refreshed for::
 /a/b/other.ts (computed .d.ts)
 /a/b/other2.ts (computed .d.ts)
 
-FsWatches::
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/extendsconfig1.tsconfig.json:
-  {}
-/a/b/extendsconfig2.tsconfig.json:
-  {}
-/a/b/extendsconfig3.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/other2.ts:
-  {}
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/project3.tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/a/b/bravo.tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js] file written with same contents
-//// [/a/b/commonFile2.js] file written with same contents
-//// [/a/b/other.js]
-"use strict";
-var z = 0;
-
-
-//// [/a/b/other2.js]
-"use strict";
-var k = 0;
-
-
 
 Change:: update aplha config
 
@@ -809,10 +828,13 @@ Input::
 {}
 
 
+Timeout callback:: count: 1
+7: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 7: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 1
-8: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:02:22 AM[0m] File change detected. Starting incremental compilation...
@@ -822,30 +844,6 @@ Output::
 [[90m12:02:24 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
 
-
-Program root files: [
-  "/a/b/commonFile1.ts",
-  "/a/b/commonFile2.ts"
-]
-Program options: {
-  "composite": true,
-  "watch": true,
-  "configFilePath": "/a/b/project1.tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
-
-No shapes updated in the builder::
-
-exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js]
 var x = 1;
@@ -924,12 +922,41 @@ var y = 1;
 }
 
 
+Timeout callback:: count: 1
+8: timerToBuildInvalidatedProject *new*
+
+
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project1.tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
 Change:: Build project 2
 
 Input::
 
 Before running Timeout callback:: count: 1
 8: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 [[90m12:02:38 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'alpha.tsconfig.json'
@@ -937,6 +964,18 @@ Output::
 [[90m12:02:39 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
 [[90m12:02:53 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/a/b/commonFile1.js] file written with same contents
+//// [/a/b/commonFile2.js] file written with same contents
+//// [/a/b/other.js]
+var z = 0;
+
+
+//// [/a/b/other2.js]
+var k = 0;
+
 
 
 
@@ -969,17 +1008,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/commonFile1.js] file written with same contents
-//// [/a/b/commonFile2.js] file written with same contents
-//// [/a/b/other.js]
-var z = 0;
-
-
-//// [/a/b/other2.js]
-var k = 0;
-
-
-
 Change:: Modify extendsConfigFile2
 
 Input::
@@ -991,8 +1019,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 9: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1006,6 +1038,9 @@ Output::
 
 [[90m12:03:02 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/a/b/other2.js] file changed its modified time
 
 
 Program root files: [
@@ -1031,8 +1066,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/other2.js] file changed its modified time
-
 Change:: Modify project 3
 
 Input::
@@ -1051,8 +1084,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 10: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1068,25 +1105,7 @@ Output::
 
 
 
-Program root files: [
-  "/a/b/other2.ts"
-]
-Program options: {
-  "composite": false,
-  "strictNullChecks": true,
-  "watch": true,
-  "configFilePath": "/a/b/project3.tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/other2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/other2.ts
-
-No shapes updated in the builder::
+//// [/a/b/other2.js] file changed its modified time
 
 FsWatches::
 /a/b/alpha.tsconfig.json:
@@ -1118,17 +1137,40 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-exitCode:: ExitStatus.undefined
 
-//// [/a/b/other2.js] file changed its modified time
+Program root files: [
+  "/a/b/other2.ts"
+]
+Program options: {
+  "composite": false,
+  "strictNullChecks": true,
+  "watch": true,
+  "configFilePath": "/a/b/project3.tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/other2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/other2.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
 
 Change:: Delete extendedConfigFile2 and report error
 
 Input::
 //// [/a/b/extendsConfig2.tsconfig.json] deleted
 
+Timeout callback:: count: 1
+11: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 11: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1142,5 +1184,6 @@ Output::
 
 
 
-exitCode:: ExitStatus.undefined
 
+
+exitCode:: ExitStatus.undefined

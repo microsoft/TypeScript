@@ -2,6 +2,7 @@ import {
     createWatchUtils,
 } from "../../../harness/watchUtils";
 import {
+    arrayFrom,
     clear,
     clone,
     combinePaths,
@@ -42,6 +43,9 @@ import {
     sys,
     toPath,
 } from "../../_namespaces/ts";
+import {
+    typingsInstaller,
+} from "../../_namespaces/ts.server";
 import {
     timeIncrements,
 } from "../../_namespaces/vfs";
@@ -161,6 +165,12 @@ function invokeWatcherCallbacks<T>(callbacks: readonly T[] | undefined, invokeCa
     }
 }
 
+export interface StateLogger {
+    log(s: string): void;
+    logs: string[];
+}
+
+const exitMessage = "System Exit";
 interface CallbackData {
     cb: TimeOutCallback;
     args: any[];
@@ -168,10 +178,13 @@ interface CallbackData {
     time: number;
 }
 class Callbacks {
-    readonly map: CallbackData[] = [];
+    readonly map = new Map<number, CallbackData>();
     private nextId = 1;
+    invoke: (invokeKey?: number) => void = invokeKey => this.invokeWorker(invokeKey);
+    private hasChanges = false;
+    private serializedKeys = new Map<number, any>();
 
-    constructor(private host: TestServerHost, readonly callbackType: string) {
+    constructor(private host: TestServerHost, readonly callbackType: string, private readonly swallowExitException?: boolean) {
     }
 
     getNextId() {
@@ -181,27 +194,42 @@ class Callbacks {
     register(cb: TimeOutCallback, args: any[], ms?: number) {
         const timeoutId = this.nextId;
         this.nextId++;
-        this.map[timeoutId] = { cb, args, ms, time: this.host.getTime() };
+        this.map.set(timeoutId, { cb, args, ms, time: this.host.getTime() });
+        this.hasChanges = true;
         return timeoutId;
     }
 
     unregister(id: any) {
         if (typeof id === "number") {
-            delete this.map[id];
+            this.hasChanges = this.map.delete(id) || this.hasChanges;
         }
     }
 
-    log() {
+    log(logChanges?: boolean) {
         const details: string[] = [];
-        for (const timeoutId in this.map) {
-            const { args } = this.map[Number(timeoutId)];
-            details.push(`${timeoutId}: ${args[0]}`);
+        this.map.forEach(({ args }, timeoutId) => {
+            details.push(`${timeoutId}: ${args[0]}${!logChanges || this.serializedKeys.has(timeoutId) ? "" : " *new*"}`);
+            if (logChanges) this.serializedKeys.set(timeoutId, args[0]);
+        });
+        const deleted: string[] = [];
+        if (logChanges && this.serializedKeys.size !== this.map.size) {
+            this.serializedKeys.forEach((value, key) => {
+                if (this.map.has(key)) return;
+                deleted.push(`${key}: ${value} *deleted*`);
+                this.serializedKeys.delete(key);
+            });
         }
-        return `${this.callbackType} callback:: count: ${details.length}` + (details.length ? "\r\n" + details.join("\r\n") : "");
+        return `${this.callbackType} callback:: count: ${this.map.size}` +
+            (deleted.length ? "\r\n" + deleted.join("\r\n") : "") +
+            (details.length ? "\r\n" + details.join("\r\n") : "");
     }
 
     private invokeCallback(timeoutId: number) {
-        const { cb, args, ms, time } = this.map[timeoutId];
+        const data = this.map.get(timeoutId);
+        if (!data) return;
+        const { cb, args, ms, time } = data;
+        this.map.delete(timeoutId);
+        this.serializedKeys.delete(timeoutId);
         if (ms !== undefined) {
             const newTime = ms + time;
             if (this.host.getTime() < newTime) {
@@ -209,17 +237,43 @@ class Callbacks {
             }
         }
         cb(...args);
-        delete this.map[timeoutId];
     }
 
-    invoke(invokeKey?: number) {
-        if (invokeKey) return this.invokeCallback(invokeKey);
+    invokeWorker(invokeKey?: number) {
+        try {
+            if (invokeKey) return this.invokeCallback(invokeKey);
 
-        // Note: invoking a callback may result in new callbacks been queued,
-        // so do not clear the entire callback list regardless. Only remove the
-        // ones we have invoked.
-        for (const key in this.map) {
-            this.invokeCallback(Number(key));
+            // Note: invoking a callback may result in new callbacks been queued,
+            // so do not clear the entire callback list regardless. Only remove the
+            // ones we have invoked.
+            const keys = arrayFrom(this.map.keys());
+            for (const key of keys) {
+                this.invokeCallback(key);
+            }
+        }
+        catch (e) {
+            if (this.swallowExitException && e.message === exitMessage) {
+                return;
+            }
+            throw e;
+        }
+    }
+
+    switchToBaseliningInvoke(logger: StateLogger, serializeOutputOrder: SerializeOutputOrder) {
+        this.invoke = invokeKey => {
+            logger.log(`Before running ${this.log()}`);
+            this.host.serializeState(logger.logs, serializeOutputOrder);
+            if (invokeKey !== undefined) logger.log(`Invoking ${this.callbackType} callback:: timeoutId:: ${invokeKey}:: ${this.map.get(invokeKey)!.args[0]}`);
+            this.invokeWorker(invokeKey);
+            logger.log(`After running ${this.callbackType} callback:: count: ${this.map.size}`);
+            this.host.serializeState(logger.logs, serializeOutputOrder);
+        };
+    }
+
+    serialize(baseline: string[]) {
+        if (this.hasChanges) {
+            baseline.push(this.log(/*logChanges*/ true), "");
+            this.hasChanges = false;
         }
     }
 }
@@ -270,6 +324,18 @@ export interface TestServerHostOptions {
     environmentVariables?: Map<string, string>;
 }
 
+export type PendingInstallCallback = (
+    pendingInstallInfo: string,
+    installedTypingsOrSuccess: string[] | string | boolean,
+    typingFiles: readonly File[],
+    onRequestCompleted: typingsInstaller.RequestCompletedAction,
+) => void;
+
+export enum SerializeOutputOrder {
+    None,
+    BeforeDiff,
+    AfterDiff,
+}
 export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
     args: string[] = [];
 
@@ -279,8 +345,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     private time = timeIncrements;
     getCanonicalFileName: (s: string) => string;
     toPath: (f: string) => Path;
-    readonly timeoutCallbacks = new Callbacks(this, "Timeout");
+    readonly timeoutCallbacks = new Callbacks(this, "Timeout", /*swallowExitException*/ true);
     readonly immediateCallbacks = new Callbacks(this, "Immedidate");
+    readonly pendingInstalls = new Callbacks(this, "PendingInstalls");
     readonly screenClears: number[] = [];
 
     readonly watchUtils = createWatchUtils<TestFileWatcher, TestFsWatcher, Path>("PolledWatches", "FsWatches");
@@ -861,15 +928,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     runQueuedTimeoutCallbacks(timeoutId?: number) {
-        try {
-            this.timeoutCallbacks.invoke(timeoutId);
-        }
-        catch (e) {
-            if (e.message === this.exitMessage) {
-                return;
-            }
-            throw e;
-        }
+        this.timeoutCallbacks.invoke(timeoutId);
     }
 
     runQueuedImmediateCallbacks() {
@@ -882,6 +941,14 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     clearImmediate(timeoutId: any): void {
         this.immediateCallbacks.unregister(timeoutId);
+    }
+
+    scheduleInstall(cb: TimeOutCallback, ...args: any[]) {
+        this.pendingInstalls.register(cb, args);
+    }
+
+    runPendingInstalls() {
+        this.pendingInstalls.invoke();
     }
 
     createDirectory(directoryName: string): void {
@@ -945,6 +1012,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     serializeOutput(baseline: string[]) {
         const output = this.getOutput();
+        if (!this.output.length && !this.screenClears.length) return;
         let start = 0;
         baseline.push("Output::");
         for (const screenClear of this.screenClears) {
@@ -957,31 +1025,42 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.clearOutput();
     }
 
-    snap(): Map<Path, FSEntry> {
-        const result = new Map<Path, FSEntry>();
+    private snap() {
+        this.serializedDiff = new Map<Path, FSEntry>();
         this.fs.forEach((value, key) => {
             const cloneValue = clone(value);
             if (isFsFolder(cloneValue)) {
                 cloneValue.entries = cloneValue.entries.map(clone) as SortedArray<FSEntry>;
             }
-            result.set(key, cloneValue);
+            this.serializedDiff.set(key, cloneValue);
         });
+    }
 
-        return result;
+    serializeState(baseline: string[], serializeOutput: SerializeOutputOrder) {
+        if (serializeOutput === SerializeOutputOrder.BeforeDiff) this.serializeOutput(baseline);
+        this.diff(baseline);
+        if (serializeOutput === SerializeOutputOrder.AfterDiff) this.serializeOutput(baseline);
+        this.serializeWatches(baseline);
+        this.timeoutCallbacks.serialize(baseline);
+        this.immediateCallbacks.serialize(baseline);
+        this.pendingInstalls.serialize(baseline);
     }
 
     writtenFiles?: Map<Path, number>;
-    diff(baseline: string[], base = new Map<Path, FSEntry>()) {
+    private serializedDiff = new Map<Path, FSEntry>();
+    diff(baseline: string[]) {
         this.fs.forEach((newFsEntry, path) => {
-            diffFsEntry(baseline, base.get(path), newFsEntry, this.inodes?.get(path), this.writtenFiles);
+            diffFsEntry(baseline, this.serializedDiff.get(path), newFsEntry, this.inodes?.get(path), this.writtenFiles);
         });
-        base.forEach((oldFsEntry, path) => {
+        this.serializedDiff.forEach((oldFsEntry, path) => {
             const newFsEntry = this.fs.get(path);
             if (!newFsEntry) {
                 diffFsEntry(baseline, oldFsEntry, newFsEntry, this.inodes?.get(path), this.writtenFiles);
             }
         });
         baseline.push("");
+        this.snap();
+        this.writtenFiles?.clear();
     }
 
     serializeWatches(baseline?: string[]) {
@@ -1006,14 +1085,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return fsEntry?.fullPath || realFullPath;
     }
 
-    readonly exitMessage = "System Exit";
     exitCode: number | undefined;
     readonly resolvePath = (s: string) => s;
     readonly getExecutingFilePath = () => this.executingFilePath;
     readonly getCurrentDirectory = () => this.currentDirectory;
     exit(exitCode?: number) {
         this.exitCode = exitCode;
-        throw new Error(this.exitMessage);
+        throw new Error(exitMessage);
     }
     getEnvironmentVariable(name: string) {
         return this.environmentVariables && this.environmentVariables.get(name) || "";

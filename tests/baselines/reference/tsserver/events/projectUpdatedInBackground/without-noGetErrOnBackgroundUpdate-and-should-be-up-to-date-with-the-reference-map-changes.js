@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;
@@ -286,12 +286,21 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 3
+10: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+13: /users/username/projects/project/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-15: /users/username/projects/project/tsconfig.json
-16: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+13: /users/username/projects/project/tsconfig.json *deleted*
+14: *ensureProjectForOpenFiles* *deleted*
+15: /users/username/projects/project/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
 
 Before request
 
@@ -369,7 +378,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/file1Consumer1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/file1Consumer1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/file1Consumer1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /users/username/projects/project/file1Consumer1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -382,7 +392,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-17: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -412,6 +421,9 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 1
+17: checkOne *new*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /users/username/projects/project/moduleFile1.ts 1:: WatchInfo: /users/username/projects/project/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -423,6 +435,11 @@ Before running Timeout callback:: count: 3
 //// [/users/username/projects/project/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
+
+Timeout callback:: count: 3
+17: checkOne
+18: /users/username/projects/project/tsconfig.json *new*
+19: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -464,7 +481,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/file1Consumer1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/file1Consumer1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/file1Consumer1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /users/username/projects/project/file1Consumer1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -477,7 +495,11 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-20: checkOne
+
+Timeout callback:: count: 1
+20: checkOne *new*
+
+Immedidate callback:: count: 0
 
 Before request
 
@@ -517,6 +539,10 @@ Before running Timeout callback:: count: 2
 export var T: number;export var T2: string;export function Foo() { };
 
 
+Timeout callback:: count: 2
+21: /users/username/projects/project/tsconfig.json *new*
+22: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/username/projects/project/moduleFile1 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -551,7 +577,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/file1Consumer1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/file1Consumer1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/file1Consumer1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /users/username/projects/project/file1Consumer1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -564,7 +591,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-23: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -597,6 +623,9 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /users/username/projects/project:
   {}
+
+Timeout callback:: count: 1
+23: checkOne *new*
 
 Before request
 
@@ -632,6 +661,11 @@ Before running Timeout callback:: count: 3
 export var T: number;export function Foo() { };
 
 
+Timeout callback:: count: 3
+23: checkOne
+24: /users/username/projects/project/tsconfig.json *new*
+25: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -662,7 +696,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/file1Consumer1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/file1Consumer1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/file1Consumer1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /users/username/projects/project/file1Consumer1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -675,4 +710,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-26: checkOne
+
+Timeout callback:: count: 1
+26: checkOne *new*

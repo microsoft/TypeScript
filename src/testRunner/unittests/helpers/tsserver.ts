@@ -2,9 +2,8 @@ import {
     incrementalVerifier,
 } from "../../../harness/incrementalUtils";
 import {
-    createHasErrorMessageLogger,
     createLoggerWithInMemoryLogs,
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
@@ -22,12 +21,13 @@ import {
     File,
     FileOrFolderOrSymLink,
     libFile,
+    SerializeOutputOrder,
+    StateLogger,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch";
 
-export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: Logger; }) {
-    ts.Debug.assert(sessionOrService.logger.logs?.length); // Ensure caller used in memory logger
+export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
     Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
 }
 
@@ -49,29 +49,24 @@ export function toExternalFiles(fileNames: string[]) {
 export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
     patched: boolean;
     baselineHost(title: string): void;
-    logTimeoutQueueLength(): void;
 };
 export function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
-    logger: Logger,
+    logger: LoggerWithInMemoryLogs,
 ) {
     const host = inputHost as TestSessionAndServiceHost;
     if (host.patched) return host;
     host.patched = true;
     if (!logger.hasLevel(ts.server.LogLevel.verbose)) {
-        host.logTimeoutQueueLength = ts.notImplemented;
         host.baselineHost = ts.notImplemented;
         return host;
     }
 
-    const originalRunQueuedTimeoutCallbacks = host.runQueuedTimeoutCallbacks;
-    const originalRunQueuedImmediateCallbacks = host.runQueuedImmediateCallbacks;
     const originalSetTime = host.setTime;
-    let hostDiff: ReturnType<TestServerHost["snap"]> | undefined;
 
-    host.runQueuedTimeoutCallbacks = runQueuedTimeoutCallbacks;
-    host.runQueuedImmediateCallbacks = runQueuedImmediateCallbacks;
-    host.logTimeoutQueueLength = logTimeoutQueueLength;
+    host.timeoutCallbacks.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
+    host.immediateCallbacks.switchToBaseliningInvoke(logger as StateLogger, SerializeOutputOrder.None);
+    host.pendingInstalls.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
     host.setTime = setTime;
     host.baselineHost = baselineHost;
     host.patched = true;
@@ -82,52 +77,63 @@ export function patchHostTimeouts(
         return originalSetTime.call(host, time);
     }
 
-    function logTimeoutQueueLength() {
-        logger.log(host.timeoutCallbacks.log());
-        host.baselineHost(host.immediateCallbacks.log());
-    }
-
-    function runQueuedTimeoutCallbacks(timeoutId?: number) {
-        host.baselineHost(`Before running ${host.timeoutCallbacks.log()}`);
-        if (timeoutId !== undefined) logger.log(`Invoking ${host.timeoutCallbacks.callbackType} callback:: timeoutId:: ${timeoutId}:: ${host.timeoutCallbacks.map[timeoutId].args[0]}`);
-        originalRunQueuedTimeoutCallbacks.call(host, timeoutId);
-        host.baselineHost(`After running ${host.timeoutCallbacks.log()}`);
-    }
-
-    function runQueuedImmediateCallbacks() {
-        host.baselineHost(`Before running ${host.immediateCallbacks.log()}`);
-        originalRunQueuedImmediateCallbacks.call(host);
-        host.baselineHost(`After running ${host.immediateCallbacks.log()}`);
-    }
-
     function baselineHost(title: string) {
         logger.log(title);
-        ts.Debug.assertIsDefined(logger.logs);
-        host.diff(logger.logs, hostDiff);
-        host.serializeWatches(logger.logs);
-        hostDiff = host.snap();
-        host.writtenFiles.clear();
+        host.serializeState(logger.logs, SerializeOutputOrder.None);
     }
 }
 
 export interface TestSessionOptions extends ts.server.SessionOptions, TestTypingsInstallerOptions {
-    logger: Logger;
-    allowNonBaseliningLogger?: boolean;
+    host: TestServerHost;
+    logger: LoggerWithInMemoryLogs;
     disableAutomaticTypingAcquisition?: boolean;
+    useCancellationToken?: boolean | number;
 }
-
+export type TestSessionPartialOptionsAndHost = Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">> & Pick<TestSessionOptions, "host">;
+export type TestSessionConstructorOptions = TestServerHost | TestSessionPartialOptionsAndHost;
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
+
+function getTestSessionPartialOptionsAndHost(optsOrHost: TestSessionConstructorOptions): TestSessionPartialOptionsAndHost {
+    // eslint-disable-next-line local/no-in-operator
+    return "host" in optsOrHost ?
+        optsOrHost :
+        { host: optsOrHost };
+}
 export class TestSession extends ts.server.Session {
     private seq = 0;
-    public testhost: TestSessionAndServiceHost;
-    public override logger: Logger;
+    public override host!: TestSessionAndServiceHost;
+    public override logger!: LoggerWithInMemoryLogs;
+    public override readonly typingsInstaller!: TestTypingsInstaller;
+    public serverCancellationToken: TestServerCancellationToken;
 
-    constructor(opts: TestSessionOptions) {
-        super(opts);
-        this.logger = opts.logger;
-        ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");
-        this.testhost = patchHostTimeouts(
-            changeToHostTrackingWrittenFiles(this.host as TestServerHost),
+    constructor(optsOrHost: TestSessionConstructorOptions) {
+        const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
+        opts.logger = opts.logger || createLoggerWithInMemoryLogs(opts.host);
+        const typingsInstaller = !opts.disableAutomaticTypingAcquisition ? new TestTypingsInstaller(opts) : undefined;
+        const cancellationToken = opts.useCancellationToken ?
+            new TestServerCancellationToken(
+                opts.logger,
+                ts.isNumber(opts.useCancellationToken) ? opts.useCancellationToken : undefined,
+            ) :
+            ts.server.nullCancellationToken;
+        super({
+            cancellationToken,
+            useSingleInferredProject: false,
+            useInferredProjectPerProjectRoot: false,
+            noGetErrOnBackgroundUpdate: true,
+            byteLength: Buffer.byteLength,
+            hrtime: process.hrtime,
+            logger: opts.logger,
+            canUseEvents: true,
+            incrementalVerifier,
+            typesMapLocation: customTypesMap.path,
+            typingsInstaller,
+            ...opts,
+        });
+        if (typingsInstaller) typingsInstaller.session = this;
+        this.serverCancellationToken = cancellationToken as TestServerCancellationToken;
+        patchHostTimeouts(
+            changeToHostTrackingWrittenFiles(this.host),
             this.logger,
         );
     }
@@ -146,13 +152,13 @@ export class TestSession extends ts.server.Session {
 
     public override executeCommand(request: ts.server.protocol.Request) {
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-            this.testhost.baselineHost("Before request");
+            this.host.baselineHost("Before request");
             this.logger.info(`request:${ts.server.stringifyIndented(request)}`);
         }
         const response = super.executeCommand(request);
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
             this.logger.info(`response:${ts.server.stringifyIndented(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response)}`);
-            this.testhost.baselineHost("After request");
+            this.host.baselineHost("After request");
         }
         return response;
     }
@@ -166,37 +172,13 @@ export class TestSession extends ts.server.Session {
     }
 }
 
-export function createSession(host: TestServerHost, opts: Partial<TestSessionOptions> = {}) {
-    const logger = opts.logger || createHasErrorMessageLogger();
-    if (!opts.disableAutomaticTypingAcquisition && opts.typingsInstaller === undefined) {
-        opts.typingsInstaller = new TestTypingsInstaller(
-            host,
-            logger,
-            opts,
-        );
-    }
-
-    if (opts.eventHandler !== undefined) {
-        opts.canUseEvents = true;
-    }
-
-    const sessionOptions: TestSessionOptions = {
-        host,
-        cancellationToken: ts.server.nullCancellationToken,
-        useSingleInferredProject: false,
-        useInferredProjectPerProjectRoot: false,
-        byteLength: Buffer.byteLength,
-        hrtime: process.hrtime,
-        logger,
-        canUseEvents: false,
-        incrementalVerifier,
-    };
-
-    return new TestSession({ ...sessionOptions, ...opts });
-}
-
-export function createSessionWithCustomEventHandler(host: TestServerHost, opts?: Partial<TestSessionOptions>, customAction?: (event: ts.server.ProjectServiceEvent) => void) {
-    const session = createSession(host, { eventHandler, logger: createLoggerWithInMemoryLogs(host), ...opts });
+export function createSessionWithCustomEventHandler(
+    optsOrHost: TestSessionConstructorOptions,
+    customAction?: (event: ts.server.ProjectServiceEvent) => void,
+) {
+    const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
+    opts.eventHandler = eventHandler;
+    const session = new TestSession(opts);
     return session;
     function eventHandler(event: ts.server.ProjectServiceEvent) {
         let data = event.data as any;
@@ -226,42 +208,6 @@ export function createSessionWithCustomEventHandler(host: TestServerHost, opts?:
         session.event(data, `CustomHandler::${event.eventName}`);
         customAction?.(event);
     }
-}
-
-export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptions {
-    logger: Logger;
-    allowNonBaseliningLogger?: boolean;
-}
-
-export class TestProjectService extends ts.server.ProjectService {
-    public testhost: TestSessionAndServiceHost;
-    constructor(host: TestServerHost, public override logger: Logger, cancellationToken: ts.HostCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ts.server.ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
-        super({
-            host,
-            logger,
-            session: undefined,
-            cancellationToken,
-            useSingleInferredProject,
-            useInferredProjectPerProjectRoot: false,
-            typingsInstaller,
-            typesMapLocation: customTypesMap.path,
-            incrementalVerifier,
-            ...opts,
-        });
-        ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");
-        this.testhost = patchHostTimeouts(
-            changeToHostTrackingWrittenFiles(this.host as TestServerHost),
-            this.logger,
-        );
-        if (logger.hasLevel(ts.server.LogLevel.verbose)) this.testhost.baselineHost("Creating project service");
-    }
-}
-
-export function createProjectService(host: TestServerHost, options?: Partial<TestProjectServiceOptions>) {
-    const cancellationToken = options?.cancellationToken || ts.server.nullCancellationToken;
-    const logger = options?.logger || createHasErrorMessageLogger();
-    const useSingleInferredProject = options?.useSingleInferredProject !== undefined ? options.useSingleInferredProject : false;
-    return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || ts.server.nullTypingsInstaller, options);
 }
 
 export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.Location {
@@ -318,11 +264,12 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     private requestToCancel = -1;
     private isCancellationRequestedCount = 0;
 
-    constructor(private logger: Logger, private cancelAfterRequest = 0) {
+    constructor(private logger: LoggerWithInMemoryLogs, private cancelAfterRequest = 0) {
     }
 
     setRequest(requestId: number) {
         this.currentId = requestId;
+        this.logger.log(`TestServerCancellationToken:: Cancellation Request id:: ${requestId}`);
     }
 
     setRequestToCancel(requestId: number) {
@@ -415,7 +362,7 @@ export function setCompilerOptionsForInferredProjectsRequestForSession(
     });
 }
 
-export function logDiagnostics(sessionOrService: TestSession | TestProjectService, diagnosticsType: string, project: ts.server.Project, diagnostics: readonly ts.Diagnostic[]) {
+export function logDiagnostics(sessionOrService: TestSession, diagnosticsType: string, project: ts.server.Project, diagnostics: readonly ts.Diagnostic[]) {
     sessionOrService.logger.info(`${diagnosticsType}:: ${diagnostics.length}`);
     diagnostics.forEach(d => sessionOrService.logger.info(ts.formatDiagnostic(d, project)));
 }
@@ -445,11 +392,10 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
     skip?: readonly (SkipErrors | undefined)[];
 }
 function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
-    ts.Debug.assert(session.logger.logs?.length);
     for (let i = 0; i < files.length; i++) {
-        session.testhost.runQueuedTimeoutCallbacks(existingTimeouts ? session.testhost.getNextTimeoutId() - 1 : undefined);
-        if (!skip?.[i]?.semantic) session.testhost.runQueuedImmediateCallbacks();
-        if (!skip?.[i]?.suggestion) session.testhost.runQueuedImmediateCallbacks();
+        session.host.runQueuedTimeoutCallbacks(existingTimeouts ? session.host.getNextTimeoutId() - 1 : undefined);
+        if (!skip?.[i]?.semantic) session.host.runQueuedImmediateCallbacks();
+        if (!skip?.[i]?.suggestion) session.host.runQueuedImmediateCallbacks();
     }
 }
 
@@ -460,7 +406,7 @@ function filePath(file: string | File) {
 function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, getErrRequest }: VerifyGetErrScenario) {
     it("verifies the errors in open file", () => {
         const host = createServerHost([...allFiles(), libFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
 
         verifyGetErrRequest({ session, files: getErrRequest() });
@@ -471,7 +417,7 @@ function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, g
 function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario) {
     it("verifies the errors in projects", () => {
         const host = createServerHost([...allFiles(), libFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
 
         for (const expected of getErrForProjectRequest()) {
@@ -488,7 +434,7 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
 function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario) {
     it("verifies the errors using sync commands", () => {
         const host = createServerHost([...allFiles(), libFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
         for (const { file, project } of syncDiagnostics()) {
             const reqArgs = { file: filePath(file), projectFileName: project && filePath(project) };
@@ -533,8 +479,8 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
     verifyErrorsUsingSyncMethods(scenario);
 }
 
-export function verifyDynamic(service: ts.server.ProjectService, path: string) {
-    (service.logger as Logger).log(`${path} isDynamic:: ${service.filenameToScriptInfo.get(path)!.isDynamic}`);
+export function verifyDynamic(session: TestSession, path: string) {
+    session.logger.log(`${path} isDynamic:: ${session.getProjectService().filenameToScriptInfo.get(path)!.isDynamic}`);
 }
 
 export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
@@ -544,10 +490,10 @@ export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLin
     return host;
 }
 
-export function logInferredProjectsOrphanStatus(projectService: ts.server.ProjectService) {
-    projectService.inferredProjects.forEach(inferredProject => (projectService.logger as Logger).log(`Inferred project: ${inferredProject.projectName} isOrphan:: ${inferredProject.isOrphan()} isClosed: ${inferredProject.isClosed()}`));
+export function logInferredProjectsOrphanStatus(session: TestSession) {
+    session.getProjectService().inferredProjects.forEach(inferredProject => session.logger.log(`Inferred project: ${inferredProject.projectName} isOrphan:: ${inferredProject.isOrphan()} isClosed: ${inferredProject.isClosed()}`));
 }
 
-export function logConfiguredProjectsHasOpenRefStatus(projectService: ts.server.ProjectService) {
-    projectService.configuredProjects.forEach(configuredProject => (projectService.logger as Logger).log(`Configured project: ${configuredProject.projectName} hasOpenRef:: ${configuredProject.hasOpenRef()} isClosed: ${configuredProject.isClosed()}`));
+export function logConfiguredProjectsHasOpenRefStatus(session: TestSession) {
+    session.getProjectService().configuredProjects.forEach(configuredProject => session.logger.log(`Configured project: ${configuredProject.projectName} hasOpenRef:: ${configuredProject.hasOpenRef()} isClosed: ${configuredProject.isClosed()}`));
 }

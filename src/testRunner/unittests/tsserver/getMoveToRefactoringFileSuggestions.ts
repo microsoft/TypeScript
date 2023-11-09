@@ -1,14 +1,11 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -44,7 +41,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
             content: "{}",
         };
         const host = createServerHost([file1, file2, file3, file3, file4, nodeModulesFile1, nodeModulesFile2, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({
             command: ts.server.protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
@@ -69,7 +66,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const tsconfig: File = { path: "/tsconfig.json", content: jsonToReadableText({ files: ["./file1.ts", "./file2.tsx", "./file3.mts", "./file4.cts", "./file5.js", "./file6.d.ts", "./file7.ts"] }) };
 
         const host = createServerHost([file1, file2, file3, file4, file5, file6, file7, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1], session);
 
         session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({
@@ -90,7 +87,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const tsconfig: File = { path: "/tsconfig.json", content: jsonToReadableText({ files: ["./file1.js", "./file2.js", "./file3.mts", "./file4.ts", "./file5.js"] }) };
 
         const host = createServerHost([file1, file2, file3, file4, file5, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1], session);
 
         session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({
@@ -110,7 +107,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const tsconfig: File = { path: "/tsconfig.json", content: jsonToReadableText({ files: ["./file1.d.ts", "./a/lib.d.ts", "./a/file3.d.ts", "/a/lib.es6.d.ts"] }) };
 
         const host = createServerHost([file1, file2, file3, file4, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1], session);
 
         session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({

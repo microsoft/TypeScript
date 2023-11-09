@@ -165,6 +165,7 @@ Output::
 
 
 
+
 FsWatches::
 /user/username/projects/demo/animals/animal.ts: *new*
   {}
@@ -197,7 +198,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: Fix error
 
 Input::
@@ -211,13 +211,13 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 1
-2: timerToBuildInvalidatedProject
-Before running Timeout callback:: count: 1
-2: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
@@ -226,132 +226,7 @@ Output::
 
 [[90m12:00:54 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
-[[90m12:01:09 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:10 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
-
-[[90m12:01:31 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/tsconfig.tsbuildinfo' does not exist
-
-[[90m12:01:32 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
-
-[[90m12:01:45 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: [
-  "/user/username/projects/demo/core/utilities.ts"
-]
-Program options: {
-  "declaration": true,
-  "target": 1,
-  "module": 1,
-  "strict": true,
-  "noUnusedLocals": true,
-  "noUnusedParameters": true,
-  "noImplicitReturns": true,
-  "noFallthroughCasesInSwitch": true,
-  "composite": true,
-  "outDir": "/user/username/projects/demo/lib/core",
-  "rootDir": "/user/username/projects/demo/core",
-  "watch": true,
-  "configFilePath": "/user/username/projects/demo/core/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/demo/core/utilities.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/demo/core/utilities.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/demo/core/utilities.ts (computed .d.ts during emit)
-
-Program root files: [
-  "/user/username/projects/demo/animals/animal.ts",
-  "/user/username/projects/demo/animals/dog.ts",
-  "/user/username/projects/demo/animals/index.ts"
-]
-Program options: {
-  "declaration": true,
-  "target": 1,
-  "module": 1,
-  "strict": true,
-  "noUnusedLocals": true,
-  "noUnusedParameters": true,
-  "noImplicitReturns": true,
-  "noFallthroughCasesInSwitch": true,
-  "composite": true,
-  "outDir": "/user/username/projects/demo/lib/animals",
-  "rootDir": "/user/username/projects/demo/animals",
-  "watch": true,
-  "configFilePath": "/user/username/projects/demo/animals/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/demo/animals/animal.ts
-/user/username/projects/demo/animals/index.ts
-/user/username/projects/demo/lib/core/utilities.d.ts
-/user/username/projects/demo/animals/dog.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/demo/animals/animal.ts
-/user/username/projects/demo/animals/index.ts
-/user/username/projects/demo/lib/core/utilities.d.ts
-/user/username/projects/demo/animals/dog.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/demo/animals/animal.ts (used version)
-/user/username/projects/demo/animals/index.ts (computed .d.ts during emit)
-/user/username/projects/demo/lib/core/utilities.d.ts (used version)
-/user/username/projects/demo/animals/dog.ts (computed .d.ts during emit)
-
-Program root files: [
-  "/user/username/projects/demo/zoo/zoo.ts"
-]
-Program options: {
-  "declaration": true,
-  "target": 1,
-  "module": 1,
-  "strict": true,
-  "noUnusedLocals": true,
-  "noUnusedParameters": true,
-  "noImplicitReturns": true,
-  "noFallthroughCasesInSwitch": true,
-  "composite": true,
-  "outDir": "/user/username/projects/demo/lib/zoo",
-  "rootDir": "/user/username/projects/demo/zoo",
-  "watch": true,
-  "configFilePath": "/user/username/projects/demo/zoo/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/demo/lib/animals/animal.d.ts
-/user/username/projects/demo/lib/animals/dog.d.ts
-/user/username/projects/demo/lib/animals/index.d.ts
-/user/username/projects/demo/zoo/zoo.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/demo/lib/animals/animal.d.ts
-/user/username/projects/demo/lib/animals/dog.d.ts
-/user/username/projects/demo/lib/animals/index.d.ts
-/user/username/projects/demo/zoo/zoo.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/demo/lib/animals/animal.d.ts (used version)
-/user/username/projects/demo/lib/animals/dog.d.ts (used version)
-/user/username/projects/demo/lib/animals/index.d.ts (used version)
-/user/username/projects/demo/zoo/zoo.ts (computed .d.ts during emit)
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/demo/lib/core/utilities.js]
 "use strict";
@@ -433,6 +308,27 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
   "version": "FakeTSVersion",
   "size": 1348
 }
+
+
+Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
+Output::
+[[90m12:01:09 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/tsconfig.tsbuildinfo' does not exist
+
+[[90m12:01:10 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
+
+[[90m12:01:31 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/tsconfig.tsbuildinfo' does not exist
+
+[[90m12:01:32 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
+
+[[90m12:01:45 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 //// [/user/username/projects/demo/lib/animals/animal.js]
 "use strict";
@@ -734,3 +630,119 @@ export declare function createZoo(): Array<Dog>;
   "size": 1804
 }
 
+
+
+Program root files: [
+  "/user/username/projects/demo/core/utilities.ts"
+]
+Program options: {
+  "declaration": true,
+  "target": 1,
+  "module": 1,
+  "strict": true,
+  "noUnusedLocals": true,
+  "noUnusedParameters": true,
+  "noImplicitReturns": true,
+  "noFallthroughCasesInSwitch": true,
+  "composite": true,
+  "outDir": "/user/username/projects/demo/lib/core",
+  "rootDir": "/user/username/projects/demo/core",
+  "watch": true,
+  "configFilePath": "/user/username/projects/demo/core/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/demo/core/utilities.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/demo/core/utilities.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/demo/core/utilities.ts (computed .d.ts during emit)
+
+Program root files: [
+  "/user/username/projects/demo/animals/animal.ts",
+  "/user/username/projects/demo/animals/dog.ts",
+  "/user/username/projects/demo/animals/index.ts"
+]
+Program options: {
+  "declaration": true,
+  "target": 1,
+  "module": 1,
+  "strict": true,
+  "noUnusedLocals": true,
+  "noUnusedParameters": true,
+  "noImplicitReturns": true,
+  "noFallthroughCasesInSwitch": true,
+  "composite": true,
+  "outDir": "/user/username/projects/demo/lib/animals",
+  "rootDir": "/user/username/projects/demo/animals",
+  "watch": true,
+  "configFilePath": "/user/username/projects/demo/animals/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/demo/animals/animal.ts
+/user/username/projects/demo/animals/index.ts
+/user/username/projects/demo/lib/core/utilities.d.ts
+/user/username/projects/demo/animals/dog.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/demo/animals/animal.ts
+/user/username/projects/demo/animals/index.ts
+/user/username/projects/demo/lib/core/utilities.d.ts
+/user/username/projects/demo/animals/dog.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/demo/animals/animal.ts (used version)
+/user/username/projects/demo/animals/index.ts (computed .d.ts during emit)
+/user/username/projects/demo/lib/core/utilities.d.ts (used version)
+/user/username/projects/demo/animals/dog.ts (computed .d.ts during emit)
+
+Program root files: [
+  "/user/username/projects/demo/zoo/zoo.ts"
+]
+Program options: {
+  "declaration": true,
+  "target": 1,
+  "module": 1,
+  "strict": true,
+  "noUnusedLocals": true,
+  "noUnusedParameters": true,
+  "noImplicitReturns": true,
+  "noFallthroughCasesInSwitch": true,
+  "composite": true,
+  "outDir": "/user/username/projects/demo/lib/zoo",
+  "rootDir": "/user/username/projects/demo/zoo",
+  "watch": true,
+  "configFilePath": "/user/username/projects/demo/zoo/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/demo/lib/animals/animal.d.ts
+/user/username/projects/demo/lib/animals/dog.d.ts
+/user/username/projects/demo/lib/animals/index.d.ts
+/user/username/projects/demo/zoo/zoo.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/demo/lib/animals/animal.d.ts
+/user/username/projects/demo/lib/animals/dog.d.ts
+/user/username/projects/demo/lib/animals/index.d.ts
+/user/username/projects/demo/zoo/zoo.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/demo/lib/animals/animal.d.ts (used version)
+/user/username/projects/demo/lib/animals/dog.d.ts (used version)
+/user/username/projects/demo/lib/animals/index.d.ts (used version)
+/user/username/projects/demo/zoo/zoo.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined

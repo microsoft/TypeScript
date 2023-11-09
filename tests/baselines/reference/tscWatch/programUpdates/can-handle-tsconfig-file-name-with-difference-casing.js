@@ -33,6 +33,19 @@ Output::
 
 
 
+//// [/A/B/app.js]
+var x = 1;
+
+
+
+FsWatches::
+/a/b/app.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
 Program root files: [
   "/A/B/app.ts"
 ]
@@ -54,17 +67,4 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/app.ts (used version)
 
-FsWatches::
-/a/b/app.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/A/B/app.js]
-var x = 1;
-
-

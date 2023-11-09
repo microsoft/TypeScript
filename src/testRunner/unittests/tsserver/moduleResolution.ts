@@ -1,6 +1,3 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     dedent,
@@ -22,9 +19,9 @@ import {
 } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
     protocolTextSpanFromSubstring,
+    TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
@@ -66,7 +63,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                     `,
             };
             const host = createServerHost([configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([fileA], session);
             return {
                 host,
@@ -168,7 +165,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
 
     it("node10Result", () => {
         const host = createServerHost(getFsContentsForNode10Result());
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project/index.mts"], session);
         verifyGetErrRequest({
             files: ["/home/src/projects/project/index.mts"],
@@ -239,7 +236,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                 solutionBuildWithBaseline(host, ["packages/package-b"]);
                 host.clearOutput();
             }
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host), canUseEvents: true });
+            const session = new TestSession(host);
             openFilesForSession(["/home/src/projects/project/packages/package-b/src/index.ts"], session);
             verifyGetErrRequest({
                 session,

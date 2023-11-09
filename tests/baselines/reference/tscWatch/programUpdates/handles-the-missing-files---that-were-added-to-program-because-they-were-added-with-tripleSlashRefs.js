@@ -37,6 +37,22 @@ Output::
 
 
 
+//// [/a/b/commonFile1.js]
+/// <reference path="commonFile2.ts"/>
+var x = y;
+
+
+
+PolledWatches::
+/a/b/commonfile2.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/commonfile1.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
 Program root files: [
   "/a/b/commonFile1.ts"
 ]
@@ -56,23 +72,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/commonfile1.ts (used version)
 
-PolledWatches::
-/a/b/commonfile2.ts: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/commonfile1.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-/// <reference path="commonFile2.ts"/>
-var x = y;
-
-
 
 Change:: create file2
 
@@ -91,8 +91,12 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -100,6 +104,21 @@ Output::
 
 [[90m12:00:25 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/a/b/commonFile1.js] file written with same contents
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+
+
+FsWatches::
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 
 Program root files: [
@@ -123,18 +142,4 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/commonfile1.ts (computed .d.ts)
 
-FsWatches::
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts: *new*
-  {}
-/a/lib/lib.d.ts:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js] file written with same contents
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-

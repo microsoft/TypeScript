@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/anotherProject useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/user/username/projects/san2/x.js]
 const aaaaaaav = 1;
 
@@ -32,6 +32,42 @@ export function foo() { }
 }
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "compilerOptionsForInferredProjects",
+      "arguments": {
+        "options": {
+          "module": "CommonJS",
+          "target": "ES2016",
+          "jsx": "Preserve",
+          "experimentalDecorators": true,
+          "allowJs": true,
+          "allowSyntheticDefaultImports": true,
+          "allowNonTsExtensions": true
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/san2/x.js",
+        "projectRootPath": "/user/username/projects/san2"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/san2
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/san2/x.js :: No config files found.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/san2/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -81,7 +117,7 @@ TI:: [hh:mm:ss:mss] Finished processing cache location '/users/username/Library/
 TI:: [hh:mm:ss:mss] Npm config file: /users/username/Library/Caches/typescript/2.7/package.json
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/users/username/Library/Caches/typescript/2.7/node_modules/types-registry/index.json]
 {
@@ -179,6 +215,34 @@ TI:: [hh:mm:ss:mss] Sending response:
       "unresolvedImports": [],
       "kind": "action::set"
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "module": 1,
+          "target": 3,
+          "jsx": 1,
+          "experimentalDecorators": true,
+          "allowJs": true,
+          "allowSyntheticDefaultImports": true,
+          "allowNonTsExtensions": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -187,3 +251,24 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/san2/x.js ProjectRootPath: /user/username/projects/san2
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/a/lib/lib.es2016.full.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/san2/bower_components: *new*
+  {"pollingInterval":500}
+/user/username/projects/san2/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/san2/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/san2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/san2/tsconfig.json:
+  {"pollingInterval":2000}

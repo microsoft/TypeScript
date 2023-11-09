@@ -1,6 +1,3 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
@@ -8,9 +5,8 @@ import {
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
-    TestSessionOptions,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -23,7 +19,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
     const testProtocolCommandRequest = "testProtocolCommandRequest";
     const testProtocolCommandResponse = "testProtocolCommandResponse";
 
-    function createHostWithPlugin(files: readonly File[], opts?: Partial<TestSessionOptions>) {
+    function createHostWithPlugin(files: readonly File[], globalPlugins?: readonly string[]) {
         const host = createServerHost(files);
         host.require = (_initialPath, moduleName) => {
             session.logger.log(`Loading plugin: ${moduleName}`);
@@ -42,7 +38,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                 error: undefined,
             };
         };
-        const session = createSession(host, { ...opts, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, globalPlugins });
         return { host, session };
     }
 
@@ -74,7 +70,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             path: "/tsconfig.json",
             content: "{}",
         };
-        const { session } = createHostWithPlugin([aTs, tsconfig, libFile], { globalPlugins: [...expectedToLoad, ...notToLoad] });
+        const { session } = createHostWithPlugin([aTs, tsconfig, libFile], [...expectedToLoad, ...notToLoad]);
         openFilesForSession([aTs], session);
         baselineTsserverLogs("plugins", "With global plugins", session);
     });
@@ -135,7 +131,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                 error: undefined,
             };
         };
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs], session);
         session.logger.log(`ExternalFiles:: ${jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
@@ -197,7 +193,7 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
                 error: undefined,
             };
         };
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs, bTs, cTs], session);
         // Without arguments
         session.executeCommandSeq<ts.server.protocol.GetSupportedCodeFixesRequest>({
@@ -293,7 +289,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                 error: undefined,
             };
         };
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host), globalPlugins: ["myplugin"] });
+        const session = new TestSession({ host, globalPlugins: ["myplugin"] });
         openFilesForSession([aTs], session);
 
         host.writeFile("/user/username/projects/myproject/c.vue", "cVue file");

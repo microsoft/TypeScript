@@ -287,6 +287,36 @@ c.ts
 
 
 
+//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
+
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/a.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/b.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/c.ts: *new*
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/tsconfig.a.json: *new*
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json: *new*
+  {}
+/user/username/projects/transitivereferences/tsconfig.c.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/transitivereferences/refs: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/transitiveReferences/c.ts"
 ]
@@ -346,37 +376,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/a.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/b.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/c.ts: *new*
-  {}
-/user/username/projects/transitivereferences/refs/a.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/tsconfig.a.json: *new*
-  {}
-/user/username/projects/transitivereferences/tsconfig.b.json: *new*
-  {}
-/user/username/projects/transitivereferences/tsconfig.c.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitivereferences/refs: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
 Change:: non local edit b ts, and build b
 
@@ -472,8 +472,12 @@ export declare function gfoo(): void;
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -494,6 +498,9 @@ c.ts
   Part of 'files' list in tsconfig.json
 [[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
 
 Program root files: [
@@ -551,8 +558,6 @@ Dependencies for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
-
 Change:: edit on config file
 
 Input::
@@ -582,8 +587,12 @@ export class A {}
 
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -623,6 +632,45 @@ c.ts
   Part of 'files' list in tsconfig.json
 [[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
+
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/transitivereferences/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/b.d.ts:
+  {}
+/user/username/projects/transitivereferences/c.ts:
+  {}
+/user/username/projects/transitivereferences/nrefs/a.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/tsconfig.a.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.c.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/transitivereferences/nrefs: *new*
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/transitivereferences/refs:
+  {}
 
 
 Program root files: [
@@ -678,45 +726,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/transitivereferences/a.d.ts:
-  {}
-/user/username/projects/transitivereferences/b.d.ts:
-  {}
-/user/username/projects/transitivereferences/c.ts:
-  {}
-/user/username/projects/transitivereferences/nrefs/a.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/tsconfig.a.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.c.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitivereferences/nrefs: *new*
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/transitivereferences/refs:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
 Change:: Revert config file edit
 
@@ -742,8 +752,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -783,6 +797,45 @@ c.ts
   Part of 'files' list in tsconfig.json
 [[90m12:01:37 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
+
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/transitivereferences/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/b.d.ts:
+  {}
+/user/username/projects/transitivereferences/c.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/tsconfig.a.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.c.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/transitivereferences/nrefs/a.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/transitivereferences/refs: *new*
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/transitivereferences/nrefs:
+  {}
 
 
 Program root files: [
@@ -838,45 +891,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/transitivereferences/a.d.ts:
-  {}
-/user/username/projects/transitivereferences/b.d.ts:
-  {}
-/user/username/projects/transitivereferences/c.ts:
-  {}
-/user/username/projects/transitivereferences/refs/a.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/tsconfig.a.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.c.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/transitivereferences/nrefs/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitivereferences/refs: *new*
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/transitivereferences/nrefs:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
 Change:: edit in referenced config file
 
@@ -903,8 +918,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -929,6 +948,42 @@ c.ts
   Part of 'files' list in tsconfig.json
 [[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/transitivereferences/b.d.ts:
+  {}
+/user/username/projects/transitivereferences/c.ts:
+  {}
+/user/username/projects/transitivereferences/nrefs/a.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/tsconfig.a.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.c.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/transitivereferences/a.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/transitivereferences/nrefs: *new*
+  {}
+/user/username/projects/transitivereferences/refs:
+  {}
 
 
 Program root files: [
@@ -984,42 +1039,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/nrefs/a.d.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/transitivereferences/b.d.ts:
-  {}
-/user/username/projects/transitivereferences/c.ts:
-  {}
-/user/username/projects/transitivereferences/nrefs/a.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {}
-/user/username/projects/transitivereferences/tsconfig.a.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.c.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/transitivereferences/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitivereferences/nrefs: *new*
-  {}
-/user/username/projects/transitivereferences/refs:
-  {}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: Revert referenced config file edit
 
@@ -1046,8 +1066,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+5: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 5: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1071,6 +1095,42 @@ c.ts
   Part of 'files' list in tsconfig.json
 [[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/transitivereferences/b.d.ts:
+  {}
+/user/username/projects/transitivereferences/c.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/tsconfig.a.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.c.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/transitivereferences/nrefs/a.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/transitivereferences/refs:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/transitivereferences/nrefs:
+  {}
 
 
 Program root files: [
@@ -1119,50 +1179,19 @@ Dependencies for::
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/transitivereferences/b.d.ts:
-  {}
-/user/username/projects/transitivereferences/c.ts:
-  {}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {}
-/user/username/projects/transitivereferences/tsconfig.a.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.c.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/transitivereferences/nrefs/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitivereferences/refs:
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/transitivereferences/nrefs:
-  {}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: deleting referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/tsconfig.b.json] deleted
 
+Timeout callback:: count: 1
+6: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 6: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1201,6 +1230,40 @@ c.ts
   Part of 'files' list in tsconfig.json
 [[90m12:01:57 AM[0m] Found 1 error. Watching for file changes.
 
+
+
+//// [/user/username/projects/transitiveReferences/b.js] file written with same contents
+//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
+
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/transitivereferences/b.ts: *new*
+  {}
+/user/username/projects/transitivereferences/c.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.c.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/transitivereferences/b.d.ts:
+  {}
+/user/username/projects/transitivereferences/tsconfig.a.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/transitivereferences/refs:
+  {}
 
 
 Program root files: [
@@ -1251,40 +1314,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/transitivereferences/b.ts: *new*
-  {}
-/user/username/projects/transitivereferences/c.ts:
-  {}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.c.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/transitivereferences/b.d.ts:
-  {}
-/user/username/projects/transitivereferences/tsconfig.a.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitivereferences/refs:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/transitiveReferences/b.js] file written with same contents
-//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
 Change:: Revert deleting referenced config file
 
@@ -1311,8 +1341,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+7: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 7: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1338,6 +1372,41 @@ c.ts
   Part of 'files' list in tsconfig.json
 [[90m12:02:04 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
+
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/transitivereferences/a.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/b.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/c.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/tsconfig.a.json: *new*
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.c.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/transitivereferences/b.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/transitivereferences/refs:
+  {}
 
 
 Program root files: [
@@ -1395,49 +1464,19 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/transitivereferences/a.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/b.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/c.ts:
-  {}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {}
-/user/username/projects/transitivereferences/tsconfig.a.json: *new*
-  {}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.c.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/transitivereferences/b.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitivereferences/refs:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
 Change:: deleting transitively referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/tsconfig.a.json] deleted
 
+Timeout callback:: count: 1
+8: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 8: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1468,6 +1507,41 @@ c.ts
   Part of 'files' list in tsconfig.json
 [[90m12:02:10 AM[0m] Found 1 error. Watching for file changes.
 
+
+
+//// [/user/username/projects/transitiveReferences/a.js] file written with same contents
+
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/transitivereferences/a.ts: *new*
+  {}
+/user/username/projects/transitivereferences/b.d.ts:
+  {}
+/user/username/projects/transitivereferences/c.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/tsconfig.a.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.c.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/transitivereferences/a.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/transitivereferences/refs:
+  {}
 
 
 Program root files: [
@@ -1523,41 +1597,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/a.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/transitivereferences/a.ts: *new*
-  {}
-/user/username/projects/transitivereferences/b.d.ts:
-  {}
-/user/username/projects/transitivereferences/c.ts:
-  {}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {}
-/user/username/projects/transitivereferences/tsconfig.a.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.c.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/transitivereferences/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitivereferences/refs:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/transitiveReferences/a.js] file written with same contents
 
 Change:: Revert deleting transitively referenced config file
 
@@ -1573,8 +1613,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+9: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 9: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1597,6 +1641,40 @@ c.ts
   Part of 'files' list in tsconfig.json
 [[90m12:02:15 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/transitivereferences/a.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/b.d.ts:
+  {}
+/user/username/projects/transitivereferences/c.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/tsconfig.a.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {}
+/user/username/projects/transitivereferences/tsconfig.c.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/transitivereferences/a.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/transitivereferences/refs:
+  {}
 
 
 Program root files: [
@@ -1654,37 +1732,4 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/transitivereferences/a.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/b.d.ts:
-  {}
-/user/username/projects/transitivereferences/c.ts:
-  {}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {}
-/user/username/projects/transitivereferences/tsconfig.a.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {}
-/user/username/projects/transitivereferences/tsconfig.c.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/transitivereferences/a.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitivereferences/refs:
-  {}
-
 exitCode:: ExitStatus.undefined
-

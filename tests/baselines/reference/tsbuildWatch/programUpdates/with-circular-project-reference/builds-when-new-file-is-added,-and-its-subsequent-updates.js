@@ -106,126 +106,6 @@ Output::
 
 
 
-Program root files: [
-  "/user/username/projects/sample1/core/anotherModule.ts",
-  "/user/username/projects/sample1/core/index.ts",
-  "/user/username/projects/sample1/core/some_decl.d.ts"
-]
-Program options: {
-  "composite": true,
-  "declaration": true,
-  "watch": true,
-  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-/user/username/projects/sample1/core/some_decl.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-/user/username/projects/sample1/core/some_decl.d.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/sample1/core/anothermodule.ts (computed .d.ts during emit)
-/user/username/projects/sample1/core/index.ts (computed .d.ts during emit)
-/user/username/projects/sample1/core/some_decl.d.ts (used version)
-
-Program root files: [
-  "/user/username/projects/sample1/logic/index.ts"
-]
-Program options: {
-  "composite": true,
-  "declaration": true,
-  "sourceMap": true,
-  "forceConsistentCasingInFileNames": true,
-  "skipDefaultLibCheck": true,
-  "watch": true,
-  "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/sample1/core/index.d.ts (used version)
-/user/username/projects/sample1/core/anothermodule.d.ts (used version)
-/user/username/projects/sample1/logic/index.ts (computed .d.ts during emit)
-
-Program root files: [
-  "/user/username/projects/sample1/tests/index.ts"
-]
-Program options: {
-  "composite": true,
-  "declaration": true,
-  "forceConsistentCasingInFileNames": true,
-  "skipDefaultLibCheck": true,
-  "watch": true,
-  "configFilePath": "/user/username/projects/sample1/tests/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.d.ts
-/user/username/projects/sample1/tests/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.d.ts
-/user/username/projects/sample1/tests/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/sample1/core/index.d.ts (used version)
-/user/username/projects/sample1/core/anothermodule.d.ts (used version)
-/user/username/projects/sample1/logic/index.d.ts (used version)
-/user/username/projects/sample1/tests/index.ts (computed .d.ts during emit)
-
-FsWatches::
-/user/username/projects/sample1/core/anothermodule.ts: *new*
-  {}
-/user/username/projects/sample1/core/index.ts: *new*
-  {}
-/user/username/projects/sample1/core/some_decl.d.ts: *new*
-  {}
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
-/user/username/projects/sample1/logic/index.ts: *new*
-  {}
-/user/username/projects/sample1/logic/tsconfig.json: *new*
-  {}
-/user/username/projects/sample1/tests/index.ts: *new*
-  {}
-/user/username/projects/sample1/tests/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core: *new*
-  {}
-/user/username/projects/sample1/logic: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -552,27 +432,33 @@ export declare const m: typeof mod;
 }
 
 
-Change:: Change to new File and build core
+FsWatches::
+/user/username/projects/sample1/core/anothermodule.ts: *new*
+  {}
+/user/username/projects/sample1/core/index.ts: *new*
+  {}
+/user/username/projects/sample1/core/some_decl.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/tsconfig.json: *new*
+  {}
+/user/username/projects/sample1/logic/index.ts: *new*
+  {}
+/user/username/projects/sample1/logic/tsconfig.json: *new*
+  {}
+/user/username/projects/sample1/tests/index.ts: *new*
+  {}
+/user/username/projects/sample1/tests/tsconfig.json: *new*
+  {}
 
-Input::
-//// [/user/username/projects/sample1/core/newfile.ts]
-export const newFileConst = 30;
-
-
-Before running Timeout callback:: count: 1
-1: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 1
-2: timerToBuildInvalidatedProject
-Output::
->> Screen clear
-[[90m12:01:16 AM[0m] File change detected. Starting incremental compilation...
-
-
+FsWatchesRecursive::
+/user/username/projects/sample1/core: *new*
+  {}
+/user/username/projects/sample1/logic: *new*
+  {}
 
 Program root files: [
   "/user/username/projects/sample1/core/anotherModule.ts",
   "/user/username/projects/sample1/core/index.ts",
-  "/user/username/projects/sample1/core/newfile.ts",
   "/user/username/projects/sample1/core/some_decl.d.ts"
 ]
 Program options: {
@@ -586,42 +472,105 @@ Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
-/user/username/projects/sample1/core/newfile.ts
 /user/username/projects/sample1/core/some_decl.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/sample1/core/newfile.ts
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/some_decl.d.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/sample1/core/newfile.ts (computed .d.ts)
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.ts (computed .d.ts during emit)
+/user/username/projects/sample1/core/index.ts (computed .d.ts during emit)
+/user/username/projects/sample1/core/some_decl.d.ts (used version)
 
-FsWatches::
-/user/username/projects/sample1/core/anothermodule.ts:
-  {}
-/user/username/projects/sample1/core/index.ts:
-  {}
-/user/username/projects/sample1/core/newfile.ts: *new*
-  {}
-/user/username/projects/sample1/core/some_decl.d.ts:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/index.ts:
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
+Program root files: [
+  "/user/username/projects/sample1/logic/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "sourceMap": true,
+  "forceConsistentCasingInFileNames": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.ts
 
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/index.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.d.ts (used version)
+/user/username/projects/sample1/logic/index.ts (computed .d.ts during emit)
+
+Program root files: [
+  "/user/username/projects/sample1/tests/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "forceConsistentCasingInFileNames": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/tests/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.d.ts
+/user/username/projects/sample1/tests/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.d.ts
+/user/username/projects/sample1/tests/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/index.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.d.ts (used version)
+/user/username/projects/sample1/logic/index.d.ts (used version)
+/user/username/projects/sample1/tests/index.ts (computed .d.ts during emit)
 
 exitCode:: ExitStatus.undefined
+
+Change:: Change to new File and build core
+
+Input::
+//// [/user/username/projects/sample1/core/newfile.ts]
+export const newFileConst = 30;
+
+
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 1
+Output::
+>> Screen clear
+[[90m12:01:16 AM[0m] File change detected. Starting incremental compilation...
+
+
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts","./newfile.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"},{"version":"-16320201030-export const newFileConst = 30;","signature":"-22941483372-export declare const newFileConst = 30;\n"},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,5]],"options":{"composite":true,"declaration":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./newfile.d.ts"},"version":"FakeTSVersion"}
@@ -725,16 +674,79 @@ export declare const newFileConst = 30;
 
 
 
+FsWatches::
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/core/newfile.ts: *new*
+  {}
+/user/username/projects/sample1/core/some_decl.d.ts:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {}
+/user/username/projects/sample1/logic:
+  {}
+
+Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject *new*
+
+
+Program root files: [
+  "/user/username/projects/sample1/core/anotherModule.ts",
+  "/user/username/projects/sample1/core/index.ts",
+  "/user/username/projects/sample1/core/newfile.ts",
+  "/user/username/projects/sample1/core/some_decl.d.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/newfile.ts
+/user/username/projects/sample1/core/some_decl.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/sample1/core/newfile.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/core/newfile.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Build logic and tests
 
 Input::
 
 Before running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 [[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
 
 Program root files: [
@@ -785,9 +797,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
-//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
-
 Change:: Change to new File and build core
 
 Input::
@@ -796,43 +805,18 @@ export const newFileConst = 30;
 export class someClass2 { }
 
 
+Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 3: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 1
-4: timerToBuildInvalidatedProject
 Output::
 >> Screen clear
 [[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
 
 
-
-Program root files: [
-  "/user/username/projects/sample1/core/anotherModule.ts",
-  "/user/username/projects/sample1/core/index.ts",
-  "/user/username/projects/sample1/core/newfile.ts",
-  "/user/username/projects/sample1/core/some_decl.d.ts"
-]
-Program options: {
-  "composite": true,
-  "declaration": true,
-  "watch": true,
-  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-/user/username/projects/sample1/core/newfile.ts
-/user/username/projects/sample1/core/some_decl.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/sample1/core/newfile.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/sample1/core/newfile.ts (computed .d.ts)
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts","./newfile.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"},{"version":"-9703836816-export const newFileConst = 30;\nexport class someClass2 { }","signature":"-12384508924-export declare const newFileConst = 30;\nexport declare class someClass2 {\n}\n"},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,5]],"options":{"composite":true,"declaration":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./newfile.d.ts"},"version":"FakeTSVersion"}
@@ -944,16 +928,53 @@ export declare class someClass2 {
 
 
 
+Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject *new*
+
+
+Program root files: [
+  "/user/username/projects/sample1/core/anotherModule.ts",
+  "/user/username/projects/sample1/core/index.ts",
+  "/user/username/projects/sample1/core/newfile.ts",
+  "/user/username/projects/sample1/core/some_decl.d.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/newfile.ts
+/user/username/projects/sample1/core/some_decl.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/sample1/core/newfile.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/core/newfile.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Build logic and tests
 
 Input::
 
 Before running Timeout callback:: count: 1
 4: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 [[90m12:01:49 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
 
 Program root files: [
@@ -1003,6 +1024,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
-//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
