@@ -26,7 +26,7 @@ const arr2 = arr.filter(Boolean); // expect ("foo" | 1)[]
 
 //// [arrayFilterBooleanOverload.d.ts]
 declare const nullableValues: (string | null)[];
-declare const values1: (string | null)[];
+declare const values1: string[];
 declare const values2: (string | null)[];
 declare const arr: readonly [0, 1, "", "foo", null];
-declare const arr2: ("" | 0 | 1 | "foo" | null)[];
+declare const arr2: (1 | "foo")[];

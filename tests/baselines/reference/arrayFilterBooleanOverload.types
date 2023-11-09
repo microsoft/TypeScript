@@ -8,8 +8,8 @@ const nullableValues = ['a', 'b', null]; // expect (string | null)[]
 >'b' : "b"
 
 const values1 = nullableValues.filter(Boolean); // expect string[]
->values1 : (string | null)[]
->nullableValues.filter(Boolean) : (string | null)[]
+>values1 : string[]
+>nullableValues.filter(Boolean) : string[]
 >nullableValues.filter : { <S extends string | null>(predicate: (value: string | null, index: number, array: (string | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | null, index: number, array: (string | null)[]) => unknown, thisArg?: any): (string | null)[]; }
 >nullableValues : (string | null)[]
 >filter : { <S extends string | null>(predicate: (value: string | null, index: number, array: (string | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | null, index: number, array: (string | null)[]) => unknown, thisArg?: any): (string | null)[]; }
@@ -35,8 +35,8 @@ const arr = [0, 1, "", "foo", null] as const;
 >"foo" : "foo"
 
 const arr2 = arr.filter(Boolean); // expect ("foo" | 1)[]
->arr2 : ("" | 0 | 1 | "foo" | null)[]
->arr.filter(Boolean) : ("" | 0 | 1 | "foo" | null)[]
+>arr2 : (1 | "foo")[]
+>arr.filter(Boolean) : (1 | "foo")[]
 >arr.filter : { <S extends "" | 0 | 1 | "foo" | null>(predicate: (value: "" | 0 | 1 | "foo" | null, index: number, array: readonly ("" | 0 | 1 | "foo" | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "" | 0 | 1 | "foo" | null, index: number, array: readonly ("" | 0 | 1 | "foo" | null)[]) => unknown, thisArg?: any): ("" | 0 | 1 | "foo" | null)[]; }
 >arr : readonly [0, 1, "", "foo", null]
 >filter : { <S extends "" | 0 | 1 | "foo" | null>(predicate: (value: "" | 0 | 1 | "foo" | null, index: number, array: readonly ("" | 0 | 1 | "foo" | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "" | 0 | 1 | "foo" | null, index: number, array: readonly ("" | 0 | 1 | "foo" | null)[]) => unknown, thisArg?: any): ("" | 0 | 1 | "foo" | null)[]; }

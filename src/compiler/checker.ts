@@ -34120,6 +34120,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             result = chooseOverload(candidates, assignableRelation, isSingleNonGenericCandidate, signatureHelpTrailingComma);
         }
         if (result) {
+            const returnType = calculateSignatureReturnTypeForSpecialCases(result, args);
+            if (returnType) {
+                result = cloneSignature(result);
+                result.resolvedReturnType = returnType;
+            }
             return result;
         }
 
@@ -34234,6 +34239,70 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         return result;
+
+        function calculateSignatureReturnTypeForSpecialCases(signature: Readonly<Signature>, args: readonly Expression[]): Type | undefined {
+            if (args.length >= 1) {
+                // In some tsx cases "symbol" is undefined, even though it is defined in the typechecker. So add ?
+                if (
+                    signature.declaration?.symbol?.escapedName === "filter" && (
+                        signature.declaration?.symbol?.parent?.escapedName === "Array"
+                        || signature.declaration?.symbol?.parent?.escapedName === "ReadonlyArray"
+                    )
+                ) {
+                    const arg0Type = getTypeOfExpression(args[0]);
+                    // This is safe even if a different BooleanConstructor is defined in a namespace,
+                    // because in that case arg0Type.symbol.escapedName will appear as "__type".
+                    if (arg0Type.symbol.escapedName === "BooleanConstructor") {
+                        // It is a-priori knowledge the filter returns the same type as the array type
+                        // for a signature succeeding when BooleanConstructor is the argument type
+                        let returnType = (signature.mapper as undefined | { targets: readonly Type[]; })?.targets[1];
+                        // result.declaration?.symbol.parent?.escapedName==="ReadonlyArray"
+                        if (returnType) {
+                            const nonFalsieArrayTypesOut: Type[] = [];
+                            // the return type can only be an array type.
+                            // It cant actually be a union of array types for a single signature.
+                            // So this forEachType could be skipped, but may be used in the future with union of array types
+                            forEachType(returnType, at => {
+                                let elemType: Type;
+                                if (isTupleType(at)) {
+                                    // The tuple elements are unionized, *abondoning* the tupleness becuase
+                                    // filtering could create result of varying length.
+                                    // For variable length tuples, undefined is *not* added to the union within getElementTypes.
+                                    elemType = getUnionType(getElementTypes(at));
+                                }
+                                else if (isTupleLikeType(at)) {
+                                    // doesn't handle tupleLikeTypes
+                                    // just return the orginal type
+                                    nonFalsieArrayTypesOut.push(at);
+                                    return;
+                                }
+                                else {
+                                    elemType = getElementTypeOfArrayType(at) || anyType; // need test case for anyType
+                                }
+                                const nonFalsieElemTypes: Type[] = [];
+                                nonFalsieElemTypes.push(filterType(
+                                    elemType,
+                                    t => {
+                                        const facts = getTypeFacts(t, TypeFacts.Truthy | TypeFacts.Falsy);
+                                        if (facts === TypeFacts.Falsy) {
+                                            return false;
+                                        }
+                                        else {
+                                            return true;
+                                        }
+                                    },
+                                ));
+                                // output arrays are not not readonly
+                                const atout = createArrayType(getUnionType(nonFalsieElemTypes));
+                                nonFalsieArrayTypesOut.push(atout);
+                            });
+                            returnType = getUnionType(nonFalsieArrayTypesOut);
+                            return returnType;
+                        }
+                    }
+                }
+            }
+        }
 
         function addImplementationSuccessElaboration(failed: Signature, diagnostic: Diagnostic) {
             const oldCandidatesForArgumentError = candidatesForArgumentError;
