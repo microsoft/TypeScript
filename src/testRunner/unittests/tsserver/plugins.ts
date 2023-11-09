@@ -28,6 +28,8 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                     create(info: ts.server.PluginCreateInfo) {
                         info.session?.addProtocolHandler(testProtocolCommand, request => {
                             session.logger.log(`addProtocolHandler: ${jsonToReadableText(request)}`);
+                            // Assume this one needs program
+                            info.languageService.getProgram();
                             return {
                                 response: testProtocolCommandResponse,
                             };
@@ -99,6 +101,38 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         });
 
         baselineTsserverLogs("plugins", "With session and custom protocol message", session);
+    });
+
+    it("when plugins use LS to get program and update is pending", () => {
+        const pluginName = "some-plugin";
+        const aTs: File = {
+            path: "/user/username/projects/project/a.ts",
+            content: `/// <reference path="./b.ts"/>`,
+        };
+        const tsconfig: File = {
+            path: "/user/username/projects/project/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {
+                    plugins: [
+                        { name: pluginName },
+                    ],
+                },
+            }),
+        };
+
+        const { session, host } = createHostWithPlugin([aTs, tsconfig, libFile]);
+
+        openFilesForSession([aTs], session);
+        host.writeFile("/user/username/projects/project/b.ts", "const y = 10;"); // Missing file is writting so scheduling the update
+
+        session.executeCommandSeq({ // This should update LS with new program
+            command: testProtocolCommand,
+            arguments: testProtocolCommandRequest,
+        });
+
+        host.runQueuedTimeoutCallbacks(); // This results in program update
+
+        baselineTsserverLogs("plugins", "when plugins use LS to get program and update is pending", session);
     });
 
     it("gets external files with config file reload", () => {
