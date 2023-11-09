@@ -1353,7 +1353,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
         // update builder only if language service is enabled
         // otherwise tell it to drop its internal state
-        if (this.languageServiceEnabled && this.projectService.serverMode === LanguageServiceMode.Semantic) {
+        if (this.languageServiceEnabled && this.projectService.serverMode === LanguageServiceMode.Semantic && !this.isOrphan()) {
             // 1. no changes in structure, no changes in unresolved imports - do nothing
             // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
             // (can reuse cached imports for files that were not changed)
