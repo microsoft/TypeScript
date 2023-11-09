@@ -123,14 +123,17 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         const { session, host } = createHostWithPlugin([aTs, tsconfig, libFile]);
 
         openFilesForSession([aTs], session);
-        host.writeFile("/user/username/projects/project/b.ts", "const y = 10;"); // Missing file is writting so scheduling the update
+        // Write the missing file (referenced by 'a.ts') to schedule an update.
+        host.writeFile("/user/username/projects/project/b.ts", "const y = 10;");
 
-        session.executeCommandSeq({ // This should update LS with new program
+        // This should update the language service with a new program.
+        session.executeCommandSeq({
             command: testProtocolCommand,
             arguments: testProtocolCommandRequest,
         });
 
-        host.runQueuedTimeoutCallbacks(); // This results in program update
+        // This results in a program update.
+        host.runQueuedTimeoutCallbacks();
 
         baselineTsserverLogs("plugins", "when plugins use LS to get program and update is pending", session);
     });
