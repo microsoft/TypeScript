@@ -594,7 +594,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
 function verifyUnresolvedImports(_service: ts.server.ProjectService, project: ts.server.Project) {
     const cachedUnresolvedImportsPerFile = new Map<ts.Path, readonly string[]>();
     const lastCachedUnresolvedImportsList = project.useTypingsFromGlobalCache() ?
-        ts.server.getUnresolvedImports(project.getCurrentProgram()!, cachedUnresolvedImportsPerFile, ts.noop) :
+        ts.server.getUnresolvedImports(project.getCurrentProgram()!, cachedUnresolvedImportsPerFile) :
         undefined;
     verifyArray(
         lastCachedUnresolvedImportsList,
