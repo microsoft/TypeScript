@@ -34252,7 +34252,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const arg0Type = getTypeOfExpression(args[0]);
                     // This is safe even if a different BooleanConstructor is defined in a namespace,
                     // because in that case arg0Type.symbol.escapedName will appear as "__type".
-                    if (arg0Type.symbol.escapedName === "BooleanConstructor") {
+                    if (arg0Type.symbol?.escapedName === "BooleanConstructor") {
                         // It is a-priori knowledge the filter returns the same type as the array type
                         // for a signature succeeding when BooleanConstructor is the argument type
                         let returnType = (signature.mapper as undefined | { targets: readonly Type[]; })?.targets[1];
