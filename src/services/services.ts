@@ -1620,6 +1620,15 @@ export function createLanguageService(
     }
 
     function synchronizeHostData(): void {
+        if (host.updateFromProject && !host.updateFromProjectInProgress) {
+            host.updateFromProject();
+        }
+        else {
+            synchronizeHostDataWorker();
+        }
+    }
+
+    function synchronizeHostDataWorker(): void {
         Debug.assert(languageServiceMode !== LanguageServiceMode.Syntactic);
         // perform fast check if host supports it
         if (host.getProjectVersion) {
