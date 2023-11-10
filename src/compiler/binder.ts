@@ -1689,14 +1689,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const clauses = node.clauses;
         const isNarrowingSwitch = node.parent.expression.kind === SyntaxKind.TrueKeyword || isNarrowingExpression(node.parent.expression);
         let fallthroughFlow = unreachableFlow;
-        let afterPreviousClauseFlow: FlowNode | undefined;
 
         for (let i = 0; i < clauses.length; i++) {
             const clauseStart = i;
             while (!clauses[i].statements.length && i + 1 < clauses.length) {
-                if (afterPreviousClauseFlow && afterPreviousClauseFlow === unreachableFlow) {
+                if (fallthroughFlow === unreachableFlow) {
                     currentFlow = preSwitchCaseFlow!;
-                    afterPreviousClauseFlow = undefined;
                 }
                 bind(clauses[i]);
                 i++;
@@ -1707,7 +1705,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             currentFlow = finishFlowLabel(preCaseLabel);
             const clause = clauses[i];
             bind(clause);
-            fallthroughFlow = afterPreviousClauseFlow = currentFlow;
+            fallthroughFlow = currentFlow;
             if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
                 clause.fallthroughFlowNode = currentFlow;
             }
