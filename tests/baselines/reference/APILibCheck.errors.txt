@@ -1,0 +1,34 @@
+typescript.d.ts(9832,112): error TS2304: Cannot find name 'IsolatedEmitHost'.
+typescript.d.ts(9833,69): error TS2304: Cannot find name 'IsolatedEmitHost'.
+
+
+==== index.ts (0 errors) ====
+    import ts = require("typescript");
+    import tsInternal = require("typescript-internal");
+    import tsserverlibrary = require("tsserverlibrary");
+    import tsserverlibraryInternal = require("tsserverlibrary-internal");
+    
+==== node_modules/typescript/package.json (0 errors) ====
+    {
+        "name": "typescript",
+        "types": "/.ts/typescript.d.ts"
+    }
+    
+==== node_modules/typescript-internal/package.json (0 errors) ====
+    {
+        "name": "typescript-internal",
+        "types": "/.ts/typescript.internal.d.ts"
+    }
+    
+==== node_modules/tsserverlibrary/package.json (0 errors) ====
+    {
+        "name": "tsserverlibrary",
+        "types": "/.ts/tsserverlibrary.d.ts"
+    }
+    
+==== node_modules/tsserverlibrary-internal/package.json (0 errors) ====
+    {
+        "name": "tsserverlibrary-internal",
+        "types": "/.ts/tsserverlibrary.internal.d.ts"
+    }
+    

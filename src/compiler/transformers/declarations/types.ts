@@ -35,7 +35,6 @@ export interface IsolatedEmitHost extends ModuleResolutionHost {
     readonly redirectTargetsMap: RedirectTargetsMap;
     getCommonSourceDirectory(): string;
     getCompilerOptions(): CompilerOptions;
-    getSourceFiles(): SourceFile[];
     getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
     getLibFileFromReference(ref: FileReference): SourceFile | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;

@@ -1,3 +1,6 @@
+import {
+    fixTestFiles,
+} from "../harness/isolatedDeclarationFixer";
 import * as compiler from "./_namespaces/compiler";
 import {
     Baseline,
@@ -111,23 +114,37 @@ export class CompilerBaselineRunner extends RunnerBase {
         it(`Correct Sourcemap output for ${fileName}`, () => compilerTest.verifySourceMapOutput());
         it(`Correct type/symbol baselines for ${fileName}`, () => compilerTest.verifyTypesAndSymbols());
 
-        // We share all ASTs between the two runs to improve performance
-        // To ensure the tests don't interfere with each other, we run the isolated tests after
-        // node.symbol can be a source of interference.
         describe("isolated declarations", () => {
-            let isolatedTest: IsolatedDeclarationTest;
+            let isolatedTest: IsolatedDeclarationTest | undefined;
             before(() => {
-                isolatedTest = new IsolatedDeclarationTest({
-                    ...environment,
-                    fileSystem: environment.fileSystem.shadow(),
-                });
+                const isolatedTestEnv = IsolatedDeclarationTest.transformEnvironment(environment);
+                if (isolatedTestEnv) {
+                    isolatedTest = new IsolatedDeclarationTest(isolatedTestEnv);
+                }
             });
-            it(`Correct dte emit for ${fileName}`, () => isolatedTest.verifyDteOutput());
-            it(`Correct tsc emit for ${fileName}`, () => isolatedTest.verifyTscOutput());
-            it(`Correct dte/tsc diff ${fileName}`, () => isolatedTest.verifyDiff());
+            it(`Correct dte emit for ${fileName}`, () => isolatedTest?.verifyDteOutput());
+            it(`Correct tsc emit for ${fileName}`, () => isolatedTest?.verifyTscOutput());
+            it(`Correct dte/tsc diff ${fileName}`, () => isolatedTest?.verifyDiff());
 
             after(() => {
                 isolatedTest = undefined!;
+            });
+        });
+
+        describe("isolated declarations fixed", () => {
+            let fixedIsolatedTest: FixedIsolatedDeclarationTest | undefined;
+            before(() => {
+                const fixedIsolatedTestEnv = FixedIsolatedDeclarationTest.fixTestProject(environment);
+                if (fixedIsolatedTestEnv) {
+                    fixedIsolatedTest = new FixedIsolatedDeclarationTest(fixedIsolatedTestEnv);
+                }
+            });
+            it(`Correct dte emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
+            it(`Correct tsc emit for ${fileName}`, () => fixedIsolatedTest?.verifyTscOutput());
+            it(`Correct dte/tsc diff ${fileName}`, () => fixedIsolatedTest?.verifyDiff());
+
+            after(() => {
+                fixedIsolatedTest = undefined!;
             });
         });
 
@@ -356,7 +373,7 @@ class CompilerTestBase {
         return { file, configurations, content };
     }
 
-    private static createHarnessTestFile(unit: TestCaseParser.TestUnitData): Compiler.TestFile {
+    protected static createHarnessTestFile(unit: TestCaseParser.TestUnitData): Compiler.TestFile {
         return {
             unitName: unit.name,
             content: unit.content,
@@ -441,19 +458,28 @@ class CompilerTest extends CompilerTestBase {
     }
 }
 
-export class IsolatedDeclarationTest extends CompilerTestBase {
-    private dteDiagnostics: readonly ts.Diagnostic[];
-    private tscNonIsolatedDeclarationsErrors: readonly ts.Diagnostic[];
-    private isOutputEquivalent: boolean;
-    private dteDtsFile: Compiler.TestFile[];
-    private tscDtsFiles: Compiler.TestFile[];
-    private tscIsolatedDeclarationsErrors: readonly ts.Diagnostic[];
-    private isDiagnosticEquivalent: boolean;
+class IsolatedDeclarationTest extends CompilerTestBase {
+    protected dteDiagnostics: readonly ts.Diagnostic[];
+    protected tscNonIsolatedDeclarationsErrors: readonly ts.Diagnostic[];
+    protected isOutputEquivalent: boolean;
+    protected dteDtsFile: Compiler.TestFile[];
+    protected tscDtsFiles: Compiler.TestFile[];
+    protected tscIsolatedDeclarationsErrors: readonly ts.Diagnostic[];
+    protected isDiagnosticEquivalent: boolean;
 
-    static transformEnvironment(compilerEnvironment: CompilerTestEnvironment): CompilerTestEnvironment {
+    static transformEnvironment(compilerEnvironment: CompilerTestEnvironment): CompilerTestEnvironment | undefined {
+        const options = compilerEnvironment.compilerOptions;
+        // Exclude tests some tests
+        // - those explicitly not opting into isolatedDeclarations
+        // - those that do not usually emit output anyway
+        if (options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols) {
+            return undefined;
+        }
         const clonedOptions: ts.CompilerOptions & Compiler.HarnessOptions = ts.cloneCompilerOptions(compilerEnvironment.compilerOptions);
         clonedOptions.declaration = true;
-        clonedOptions.isolatedDeclarations = true;
+        if (clonedOptions.isolatedDeclarations === undefined) {
+            clonedOptions.isolatedDeclarations = true;
+        }
         clonedOptions.allowJs = false;
         clonedOptions.checkJs = false;
         clonedOptions.skipLibCheck = true;
@@ -476,6 +502,7 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
 
         return {
             ...compilerEnvironment,
+            fileSystem: compilerEnvironment.fileSystem.shadow(),
             testCaseContent: {
                 ...compilerEnvironment.testCaseContent,
                 settings: clonedSettings,
@@ -484,7 +511,7 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
         };
     }
     constructor(compilerEnvironment: CompilerTestEnvironment) {
-        super(IsolatedDeclarationTest.transformEnvironment(compilerEnvironment));
+        super(compilerEnvironment);
 
         const currentDirectory = this.harnessSettings.currentDirectory ?? vfs.srcFolder;
         const dteResult = Compiler.compileDeclarationFilesWithIsolatedEmitter(
@@ -537,12 +564,14 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
         ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code,
         ts.Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
     ]);
-
+    protected get baselinePath() {
+        return "isolated-declarations/original";
+    }
     verifyDteOutput() {
         if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
         Compiler.doDeclarationBaseline(
             this.configuredName,
-            "isolated-declarations/original/dte",
+            this.baselinePath + "/dte",
             this.fileName,
             this.dteDtsFile,
             ts.concatenate(this.dteDiagnostics, this.tscNonIsolatedDeclarationsErrors),
@@ -554,7 +583,7 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
         if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
         Compiler.doDeclarationBaseline(
             this.configuredName,
-            "isolated-declarations/original/tsc",
+            this.baselinePath + "/tsc",
             this.fileName,
             this.tscDtsFiles,
             ts.concatenate(this.tscIsolatedDeclarationsErrors, this.tscNonIsolatedDeclarationsErrors),
@@ -566,7 +595,7 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
         if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
         Compiler.doDeclarationDiffBaseline(
             this.configuredName,
-            "isolated-declarations/original/diff",
+            this.baselinePath + "/diff",
             this.fileName,
             this.dteDtsFile,
             ts.concatenate(this.dteDiagnostics, this.tscNonIsolatedDeclarationsErrors),
@@ -576,5 +605,81 @@ export class IsolatedDeclarationTest extends CompilerTestBase {
             this.options.pretty,
             this.harnessSettings.isolatedDeclarationDiffReason,
         );
+    }
+}
+
+class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
+    static fixTestProject(compilerEnvironment: CompilerTestEnvironment): CompilerTestEnvironment | undefined {
+        // Exclude test that disable types and symbols (good proxy for very complex test)
+        if (compilerEnvironment.compilerOptions.noTypesAndSymbols) {
+            return undefined;
+        }
+        if (!compilerEnvironment.compilerOptions.declaration) {
+            return undefined;
+        }
+
+        const env = IsolatedDeclarationTest.transformEnvironment(compilerEnvironment);
+        if (!env) {
+            return undefined;
+        }
+
+        const autoFixCacheTest = ts.combinePaths("tests/auto-fixed", compilerEnvironment.configuredName);
+        const existingTransformedTest = IO.readFile(autoFixCacheTest);
+        const hash = ts.sys.createHash!(env.testCaseContent.sourceCode);
+        const fixedTest = existingTransformedTest && TestCaseParser.makeUnitsFromTest(existingTransformedTest, compilerEnvironment.fileName);
+        let transformSucceeded = false;
+        if (fixedTest && fixedTest.settings.hash === hash) {
+            transformSucceeded = fixedTest.settings.succeeded !== "false";
+            if (transformSucceeded) {
+                env.allFiles = env.allFiles.map(f => {
+                    const testUnit = fixedTest.testUnitData.find(t => t.name === f.unitName);
+                    ts.Debug.assert(testUnit, "All files should be in the cached auto fixed version of the test");
+                    env.fileSystem.writeFileSync(testUnit.name, testUnit.content);
+                    return this.createHarnessTestFile(testUnit);
+                });
+                env.otherFiles = env.otherFiles.map(o => env.allFiles.find(f => f.unitName === o.unitName)!);
+                env.toBeCompiled = env.toBeCompiled.map(o => env.allFiles.find(f => f.unitName === o.unitName)!);
+            }
+        }
+        else {
+            transformSucceeded = fixTestFiles(env.fileSystem, env.programFileNames, env.compilerOptions);
+            let cachedTest = "// @hash: " + hash + "\n";
+
+            if (!transformSucceeded) {
+                cachedTest += "// @succeeded: false\n";
+            }
+            else {
+                for (const file of env.allFiles) {
+                    cachedTest += "\n// @fileName: " + file.unitName + "\n";
+                    const content = env.fileSystem.readFileSync(file.unitName, "utf-8");
+                    file.content = content;
+                    cachedTest += content;
+                }
+            }
+            IO.writeFile(autoFixCacheTest, cachedTest);
+        }
+        if (!transformSucceeded) {
+            return undefined;
+        }
+        env.fileSystem.makeReadonly();
+        env.fileSystem = env.fileSystem.shadow();
+        env.compilerOptions.isolatedDeclarations = false;
+        return env;
+    }
+    constructor(compilerEnvironment: CompilerTestEnvironment) {
+        super(compilerEnvironment);
+
+        // Suppress diff for tests with reference directives.
+        if (
+            this.dteDiagnostics.every(d => d.code === ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code)
+            && this.tscIsolatedDeclarationsErrors
+        ) {
+            this.isDiagnosticEquivalent = true;
+            this.isOutputEquivalent = true;
+        }
+    }
+
+    protected override get baselinePath() {
+        return "isolated-declarations/auto-fixed";
     }
 }

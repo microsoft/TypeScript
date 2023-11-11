@@ -1,11 +1,9 @@
 import {
     base64encode,
-    changeAnyExtension,
     combinePaths,
-    CompilerHost,
     CompilerOptions,
-    createEmitDeclarationHost,
     createEmitDeclarationResolver,
+    createGetCanonicalFileName,
     createPrinter,
     createSourceMapGenerator,
     createTextWriter,
@@ -16,81 +14,51 @@ import {
     ensureTrailingDirectorySeparator,
     factory,
     getBaseFileName,
-    getDeclarationEmitExtensionForPath,
+    getDeclarationEmitOutputFilePathWorker,
     getDirectoryPath,
     getNewLineCharacter,
-    getNormalizedAbsolutePath,
     getOutputPathsFor,
-    getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
     getRootLength,
     getSourceFilePathInNewDir,
+    IsolatedEmitHost,
     NewLineKind,
+    noop,
     normalizePath,
     normalizeSlashes,
-    pathIsAbsolute,
     PrinterOptions,
-    ScriptTarget,
+    returnFalse,
+    returnUndefined,
     SourceFile,
     SourceMapGenerator,
     sys,
+    System,
     TransformationContext,
     transformDeclarations,
 } from "../../_namespaces/ts";
 
-export function emitDeclarationsForProject(
-    projectPath: string,
-    files: string[] | undefined,
-    options: CompilerOptions,
-    host: CompilerHost,
-) {
-    const rootDir = options.rootDir ? normalizePath(sys.resolvePath(combinePaths(projectPath, options.rootDir))) : normalizePath(projectPath);
-    files ??= host.readDirectory!(rootDir, [".ts", ".tsx"], ["**/*.d.ts"], []);
-    emitDeclarationsForAllFiles(rootDir, files, host, options);
-    return rootDir;
-}
-
-function joinToRootIfNeeded(rootDir: string, existingPath: string) {
-    return normalizePath(pathIsAbsolute(existingPath) ? existingPath : combinePaths(rootDir, existingPath));
-}
-
-export function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions) {
-    const declarationDir = options.declarationDir ? joinToRootIfNeeded(rootDir, options.declarationDir) :
-        options.outDir ? joinToRootIfNeeded(rootDir, options.outDir) :
-        undefined;
-    rootDir = normalizePath(rootDir);
-    return (file: string, host: CompilerHost) => {
-        file = normalizePath(file);
-        const source = host.getSourceFile(file, {
-            languageVersion: options.target ?? ScriptTarget.ES2015,
-        });
-
-        if (!source) return {};
-
-        const { code, diagnostics, declarationMap, declarationMapPath } = emitDeclarationsForFile(source, options);
-        const extension = getDeclarationEmitExtensionForPath(file);
-        const relativeToRoot = getRelativePathFromDirectory(rootDir, file, !host.useCaseSensitiveFileNames());
-        const declarationPath = !declarationDir ? file : getNormalizedAbsolutePath(combinePaths(declarationDir, relativeToRoot), host.getCurrentDirectory());
-        const output = changeAnyExtension(declarationPath, extension);
-        host.writeFile(output, code, !!options.emitBOM);
-        if (declarationMap) {
-            host.writeFile(declarationMapPath!, declarationMap, !!options.emitBOM);
-        }
-        return { output, diagnostics };
+export function createEmitDeclarationHost(options: CompilerOptions, sys: System, commonSourceDirectory = sys.getCurrentDirectory()): IsolatedEmitHost {
+    return {
+        redirectTargetsMap: new Map(),
+        directoryExists: sys.directoryExists.bind(sys),
+        fileExists: sys.fileExists.bind(sys),
+        getDirectories: sys.getDirectories.bind(sys),
+        readFile: sys.readFile.bind(sys),
+        realpath: sys.realpath?.bind(sys),
+        getCurrentDirectory: sys.getCurrentDirectory.bind(sys),
+        getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames),
+        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+        getCompilerOptions: () => options,
+        getCommonSourceDirectory: () => ensureTrailingDirectorySeparator(sys.resolvePath(commonSourceDirectory)),
+        trace: noop,
+        getLibFileFromReference: returnUndefined,
+        getSourceFileFromReference: returnUndefined,
+        isSourceOfProjectReferenceRedirect: returnFalse,
     };
 }
 
-function emitDeclarationsForAllFiles(rootDir: string, files: string[], host: CompilerHost, options: CompilerOptions) {
-    const transformer = createIsolatedDeclarationsEmitter(rootDir, options);
-    for (const file of files) {
-        transformer(file, host);
-    }
-}
-
-export function emitDeclarationsForFile(sourceFile: SourceFile, options: CompilerOptions) {
-    options.declaration = true;
-    options.declarationMap = true;
-    const emitHost = createEmitDeclarationHost(options, sys);
+export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedEmitHost) {
+    const options: CompilerOptions = emitHost.getCompilerOptions();
     const emitResolver = createEmitDeclarationResolver(sourceFile, emitHost);
     const diagnostics: Diagnostic[] = [];
     const transformer = transformDeclarations({
@@ -101,7 +69,7 @@ export function emitDeclarationsForFile(sourceFile: SourceFile, options: Compile
             return emitResolver as EmitResolver;
         },
         getCompilerOptions() {
-            return options;
+            return emitHost.getCompilerOptions();
         },
         factory,
         addDiagnostic(diag: any) {
@@ -128,14 +96,21 @@ export function emitDeclarationsForFile(sourceFile: SourceFile, options: Compile
     if (diagnostics.length > 0) {
         throw new Error(`Cannot transform file '${sourceFile.fileName}' due to ${diagnostics.length} diagnostics`);
     }
-    const { declarationMapPath, declarationFilePath } = getOutputPathsFor(sourceFile, emitHost as unknown as EmitHost, /*forceDtsPaths*/ false);
+    const declarationPath = getDeclarationEmitOutputFilePathWorker(
+        sourceFile.fileName,
+        options,
+        emitHost.getCurrentDirectory(),
+        emitHost.getCommonSourceDirectory(),
+        emitHost.getCanonicalFileName,
+    );
+    const declarationMapPath = declarationPath + ".map";
 
     return {
-        code: writer.getText(),
-        diagnostics,
-        declarationFilePath: declarationFilePath!,
+        declaration: writer.getText(),
+        declarationPath,
         declarationMap: sourceMap?.sourceMapGenerator.toString(),
         declarationMapPath,
+        diagnostics,
     };
 
     // logic replicated from emitter.ts

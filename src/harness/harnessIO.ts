@@ -9,7 +9,9 @@ import {
 } from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 import {
+    createGetCanonicalFileName,
     mapDefined,
+    transpileDeclaration,
 } from "./_namespaces/ts";
 import * as Utils from "./_namespaces/Utils";
 import * as vfs from "./_namespaces/vfs";
@@ -646,29 +648,35 @@ export namespace Compiler {
         }
 
         const fs = tscHost.vfs.shadowRoot ? tscHost.vfs.shadowRoot.shadow() : tscHost.vfs;
-        const host = new fakes.CompilerHost(fs, options, /*setParentNodes*/ false);
-        const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
-        let commonSourceDirectory = ts.getCommonSourceDirectory(
+        const dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: fs.stringComparer, sort: "insertion" });
+
+        const getCanonicalFileName = createGetCanonicalFileName(tscHost.sys.useCaseSensitiveFileNames);
+        const commonSourceDirectory = ts.getCommonSourceDirectory(
             options,
             () => programFileNames.filter(f => !vpath.isDeclaration(f)),
             currentDirectory,
             getCanonicalFileName,
         );
-
-        if (commonSourceDirectory.length === 0) {
-            commonSourceDirectory = currentDirectory;
-        }
+        const emitterHost = ts.createEmitDeclarationHost(options, new fakes.System(fs), commonSourceDirectory);
         const diagnostics: ts.Diagnostic[] = [];
-        const transformer = ts.createIsolatedDeclarationsEmitter(commonSourceDirectory, options);
+
         programFileNames.forEach(fileName => {
             if (vpath.isDeclaration(fileName)) {
                 return;
             }
-            const { diagnostics: fileDiagnostics = [] } = transformer(fileName, host);
+            const file = tscHost.getSourceFile(fileName, {
+                languageVersion: ts.getEmitScriptTarget(options),
+            });
+            if (!file) {
+                return;
+            }
+
+            const { diagnostics: fileDiagnostics = [], declaration, declarationPath } = transpileDeclaration(file, emitterHost);
+            // Ensure file will be rebound.
+            file.locals = undefined;
+            dts.set(declarationPath, new documents.TextDocument(declarationPath, options.emitBOM ? Utils.addUTF8ByteOrderMark(declaration) : declaration));
             diagnostics.push(...fileDiagnostics);
         });
-        const dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: host.vfs.stringComparer, sort: "insertion" });
-        host.outputs.forEach(d => dts.set(d.file, new documents.TextDocument(d.file, d.text)));
         return { dts, diagnostics };
     }
 
@@ -1393,6 +1401,7 @@ export namespace TestCaseParser {
         tsConfig: ts.ParsedCommandLine | undefined;
         tsConfigFileUnitData: TestUnitData | undefined;
         symlinks?: vfs.FileSet;
+        sourceCode: string;
     }
 
     /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
@@ -1523,7 +1532,7 @@ export namespace TestCaseParser {
                 break;
             }
         }
-        return { settings, testUnitData, tsConfig, tsConfigFileUnitData, symlinks };
+        return { settings, testUnitData, tsConfig, tsConfigFileUnitData, symlinks, sourceCode: code };
     }
 }
 
