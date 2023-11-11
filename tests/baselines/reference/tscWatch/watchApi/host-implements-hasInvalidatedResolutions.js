@@ -1,7 +1,15 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"traceResolution":true,"extendedDiagnostics":true},"files":["main.ts"]}
+{
+  "compilerOptions": {
+    "traceResolution": true,
+    "extendedDiagnostics": true
+  },
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/main.ts]
 import { foo } from "./other";
@@ -52,23 +60,11 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/other.d.ts
-/user/username/projects/myproject/main.ts
+//// [/user/username/projects/myproject/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/other.d.ts
-/user/username/projects/myproject/main.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/other.d.ts (used version)
-/user/username/projects/myproject/main.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -86,31 +82,57 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/other.d.ts
+/user/username/projects/myproject/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/other.d.ts
+/user/username/projects/myproject/main.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/other.d.ts (used version)
+/user/username/projects/myproject/main.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: write other with same contents
 
 Input::
 //// [/user/username/projects/myproject/other.d.ts] file changed its modified time
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 
 
-exitCode:: ExitStatus.undefined
 
+
+exitCode:: ExitStatus.undefined
 
 Change:: change other file
 
@@ -119,13 +141,20 @@ Input::
 export function foo(): void;export function bar(): void;
 
 
-Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
@@ -136,8 +165,17 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/main.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -154,8 +192,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/main.js] file written with same contents
-
 Change:: write other with same contents but write ts file
 
 Input::
@@ -164,13 +200,20 @@ Input::
 export function foo() {}
 
 
-Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
@@ -187,21 +230,15 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.ts 250 
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/other.ts
-/user/username/projects/myproject/main.ts
+//// [/user/username/projects/myproject/main.js] file written with same contents
+//// [/user/username/projects/myproject/other.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = void 0;
+function foo() { }
+exports.foo = foo;
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/other.ts
-/user/username/projects/myproject/main.ts
 
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/other.ts (computed .d.ts)
-/user/username/projects/myproject/main.ts (computed .d.ts)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -221,14 +258,27 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {}
 
+
+Program root files: [
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/other.ts
+/user/username/projects/myproject/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/other.ts
+/user/username/projects/myproject/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/other.ts (computed .d.ts)
+/user/username/projects/myproject/main.ts (computed .d.ts)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js] file written with same contents
-//// [/user/username/projects/myproject/other.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
-function foo() { }
-exports.foo = foo;
-
-

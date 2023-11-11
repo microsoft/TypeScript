@@ -1,0 +1,185 @@
+// === QuickInfo ===
+=== /a.tsx ===
+// declare namespace JSX {
+//   interface IntrinsicElements {
+//     [k: `foo${string}`]: any;
+//     [k: `foobar${string}`]: any;
+//   }
+// }
+// <foobaz />;
+//  ^^^^^^
+// | ----------------------------------------------------------------------
+// | (index) IntrinsicElements[`foo${string}`]: any
+// | ----------------------------------------------------------------------
+// <foobarbaz />;
+//  ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (index) IntrinsicElements[`foo${string}` | `foobar${string}`]: any
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/a.tsx",
+      "position": 126,
+      "name": "1"
+    },
+    "item": {
+      "kind": "index",
+      "kindModifiers": "declare",
+      "textSpan": {
+        "start": 126,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "index",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "IntrinsicElements",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "`foo${",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": "}`",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/a.tsx",
+      "position": 138,
+      "name": "2"
+    },
+    "item": {
+      "kind": "index",
+      "kindModifiers": "declare",
+      "textSpan": {
+        "start": 138,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "index",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "IntrinsicElements",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "`foo${",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": "}`",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "`foobar${",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": "}`",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

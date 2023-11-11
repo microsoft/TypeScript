@@ -32,7 +32,7 @@ module.exports = x;
 
 
 //// [es6ImportNamedImportInIndirectExportAssignment_0.d.ts]
-export declare module a {
+export declare namespace a {
     class c {
     }
 }

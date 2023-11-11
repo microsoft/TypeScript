@@ -1,12 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
-    TestServerCancellationToken,
+    TestSession,
     TestSessionRequest,
 } from "../helpers/tsserver";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
+import {
+    createServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: cancellationToken", () => {
     // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
@@ -23,30 +26,24 @@ describe("unittests:: tsserver:: cancellationToken", () => {
     it("is attached to request", () => {
         const f1 = {
             path: "/a/b/app.ts",
-            content: "let xyz = 1;"
+            content: "let xyz = 1;",
         };
         const host = createServerHost([f1]);
-        const cancellationToken: ts.server.ServerCancellationToken = {
-            isCancellationRequested: () => false,
-            setRequest: requestId => session.logger.log(`ServerCancellationToken:: Cancellation Request id:: ${requestId}`),
-            resetRequest: ts.noop
-        };
-
-        const session = createSession(host, { cancellationToken, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, useCancellationToken: true });
 
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
-            arguments: { file: f1.path }
+            arguments: { file: f1.path },
         });
 
         session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
             command: ts.server.protocol.CommandTypes.Geterr,
-            arguments: { files: [f1.path], delay: 0 }
+            arguments: { files: [f1.path], delay: 0 },
         });
 
         session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
             command: ts.server.protocol.CommandTypes.DocumentHighlights,
-            arguments: { file: f1.path, line: 1, offset: 6, filesToSearch: [f1.path] }
+            arguments: { file: f1.path, line: 1, offset: 6, filesToSearch: [f1.path] },
         });
 
         host.runQueuedTimeoutCallbacks();
@@ -58,33 +55,29 @@ describe("unittests:: tsserver:: cancellationToken", () => {
     it("Geterr is cancellable", () => {
         const f1 = {
             path: "/a/app.ts",
-            content: "let x = 1"
+            content: "let x = 1",
         };
         const config = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
-                compilerOptions: {}
-            })
+            content: jsonToReadableText({
+                compilerOptions: {},
+            }),
         };
 
         const host = createServerHost([f1, config]);
-        const logger = createLoggerWithInMemoryLogs(host);
-        const cancellationToken = new TestServerCancellationToken(logger);
-        const session = createSession(host, {
-            canUseEvents: true,
-            eventHandler: ts.noop,
-            cancellationToken,
-            logger,
+        const session = new TestSession({
+            host,
+            useCancellationToken: true,
         });
         {
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
                 command: ts.server.protocol.CommandTypes.Open,
-                arguments: { file: f1.path }
+                arguments: { file: f1.path },
             });
             // send geterr for missing file
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
                 command: ts.server.protocol.CommandTypes.Geterr,
-                arguments: { files: ["/a/missing"], delay: 0 }
+                arguments: { files: ["/a/missing"], delay: 0 },
             });
             // Queued files
             host.runQueuedTimeoutCallbacks();
@@ -95,57 +88,57 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             // send geterr for a valid file
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
                 command: ts.server.protocol.CommandTypes.Geterr,
-                arguments: { files: [f1.path], delay: 0 }
+                arguments: { files: [f1.path], delay: 0 },
             });
 
             // run new request
             session.executeCommandSeq<ts.server.protocol.ProjectInfoRequest>({
                 command: ts.server.protocol.CommandTypes.ProjectInfo,
-                arguments: { file: f1.path, needFileNameList: false }
+                arguments: { file: f1.path, needFileNameList: false },
             });
 
             // cancel previously issued Geterr
-            cancellationToken.setRequestToCancel(getErrId);
+            session.serverCancellationToken.setRequestToCancel(getErrId);
             host.runQueuedTimeoutCallbacks();
-            cancellationToken.resetToken();
+            session.serverCancellationToken.resetToken();
         }
         {
             const getErrId = session.getNextSeq();
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
                 command: ts.server.protocol.CommandTypes.Geterr,
-                arguments: { files: [f1.path], delay: 0 }
+                arguments: { files: [f1.path], delay: 0 },
             });
 
             // run first step
             host.runQueuedTimeoutCallbacks();
 
-            cancellationToken.setRequestToCancel(getErrId);
+            session.serverCancellationToken.setRequestToCancel(getErrId);
             host.runQueuedImmediateCallbacks();
 
-            cancellationToken.resetToken();
+            session.serverCancellationToken.resetToken();
         }
         {
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
                 command: ts.server.protocol.CommandTypes.Geterr,
-                arguments: { files: [f1.path], delay: 0 }
+                arguments: { files: [f1.path], delay: 0 },
             });
             // run first step
             host.runQueuedTimeoutCallbacks();
             // the semanticDiag message
             host.runQueuedImmediateCallbacks();
             host.runQueuedImmediateCallbacks();
-            cancellationToken.resetToken();
+            session.serverCancellationToken.resetToken();
         }
         {
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
                 command: ts.server.protocol.CommandTypes.Geterr,
-                arguments: { files: [f1.path], delay: 0 }
+                arguments: { files: [f1.path], delay: 0 },
             });
             // run first step
             host.runQueuedTimeoutCallbacks();
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
                 command: ts.server.protocol.CommandTypes.Geterr,
-                arguments: { files: [f1.path], delay: 0 }
+                arguments: { files: [f1.path], delay: 0 },
             });
             // make sure that getErr1 is completed
         }
@@ -155,52 +148,48 @@ describe("unittests:: tsserver:: cancellationToken", () => {
     it("Lower priority tasks are cancellable", () => {
         const f1 = {
             path: "/a/app.ts",
-            content: `{ let x = 1; } var foo = "foo"; var bar = "bar"; var fooBar = "fooBar";`
+            content: `{ let x = 1; } var foo = "foo"; var bar = "bar"; var fooBar = "fooBar";`,
         };
         const config = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
-                compilerOptions: {}
-            })
+            content: jsonToReadableText({
+                compilerOptions: {},
+            }),
         };
         const host = createServerHost([f1, config]);
-        const logger = createLoggerWithInMemoryLogs(host);
-        const cancellationToken = new TestServerCancellationToken(logger, /*cancelAfterRequest*/ 3);
-        const session = createSession(host, {
-            canUseEvents: true,
-            eventHandler: ts.noop,
-            cancellationToken,
+        const session = new TestSession({
+            host,
             throttleWaitMilliseconds: 0,
-            logger,
+            useCancellationToken: 3,
         });
         {
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
                 command: ts.server.protocol.CommandTypes.Open,
-                arguments: { file: f1.path }
+                arguments: { file: f1.path },
             });
 
             // send navbar request (normal priority)
             session.executeCommandSeq<ts.server.protocol.NavBarRequest>({
                 command: ts.server.protocol.CommandTypes.NavBar,
-                arguments: { file: f1.path }
+                arguments: { file: f1.path },
             });
 
             // ensure the nav bar request can be canceled
             verifyExecuteCommandSeqIsCancellable<ts.server.protocol.NavBarRequest>({
                 command: ts.server.protocol.CommandTypes.NavBar,
-                arguments: { file: f1.path }
+                arguments: { file: f1.path },
             });
 
             // send outlining spans request (normal priority)
             session.executeCommandSeq<ts.server.protocol.OutliningSpansRequestFull>({
                 command: ts.server.protocol.CommandTypes.GetOutliningSpansFull,
-                arguments: { file: f1.path }
+                arguments: { file: f1.path },
             });
 
             // ensure the outlining spans request can be canceled
             verifyExecuteCommandSeqIsCancellable<ts.server.protocol.OutliningSpansRequestFull>({
                 command: ts.server.protocol.CommandTypes.GetOutliningSpansFull,
-                arguments: { file: f1.path }
+                arguments: { file: f1.path },
             });
         }
         baselineTsserverLogs("cancellationT", "Lower priority tasks are cancellable", session);
@@ -209,7 +198,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             // Set the next request to be cancellable
             // The cancellation token will cancel the request the third time
             // isCancellationRequested() is called.
-            cancellationToken.setRequestToCancel(session.getNextSeq());
+            session.serverCancellationToken.setRequestToCancel(session.getNextSeq());
             let operationCanceledExceptionThrown = false;
 
             try {
@@ -219,7 +208,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 session.logger.log(`Exception is OperationCanceledException: ${e instanceof ts.OperationCanceledException}`);
                 operationCanceledExceptionThrown = true;
             }
-            if (!operationCanceledExceptionThrown) session.logger.log("Operation Canceled Exception not thrown for request: " + JSON.stringify(request));
+            if (!operationCanceledExceptionThrown) session.logger.log("Operation Canceled Exception not thrown for request: " + jsonToReadableText(request));
         }
     });
 });

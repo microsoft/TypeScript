@@ -27,13 +27,13 @@ var B;
 
 
 //// [A.d.ts]
-declare module A {
+declare namespace A {
     interface I {
     }
 }
 //// [B.d.ts]
 /// <reference path="A.d.ts" />
-declare module A { }
-declare module B {
+declare namespace A { }
+declare namespace B {
     function f(): A.I;
 }

@@ -1,0 +1,44 @@
+// === Inlay Hints ===
+y.foo(1, 2)
+      ^
+{
+  "text": "",
+  "position": 88,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 40,
+        "length": 1
+      },
+      "file": "/a.js"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+y.foo(1, 2)
+         ^
+{
+  "text": "",
+  "position": 91,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "b",
+      "span": {
+        "start": 51,
+        "length": 1
+      },
+      "file": "/a.js"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}

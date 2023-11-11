@@ -1,0 +1,36 @@
+// === Inlay Hints ===
+const array = [1, 2]
+           ^
+{
+  "text": ": number[]",
+  "position": 45,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const a = object;
+       ^
+{
+  "text": ": { foo: number; bar: number; }",
+  "position": 62,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const b = array;
+       ^
+{
+  "text": ": number[]",
+  "position": 128,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const x = foo(1)
+       ^
+{
+  "text": ": 1",
+  "position": 244,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

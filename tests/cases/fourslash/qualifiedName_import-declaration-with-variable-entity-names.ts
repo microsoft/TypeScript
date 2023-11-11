@@ -13,7 +13,5 @@
 goTo.marker('import');
 verify.completions({ includes: { name: "x", text: "var Alpha.x: number" } });
 
-verify.baselineCommands(
-    { type: "documentHighlights", markerOrRange: "import" },
-    { type: "getDefinitionAtPosition", markerOrRange: "import" },
-);
+verify.baselineDocumentHighlights("import");
+verify.baselineGetDefinitionAtPosition("import");

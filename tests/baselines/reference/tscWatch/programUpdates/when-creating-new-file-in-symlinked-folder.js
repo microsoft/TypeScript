@@ -8,7 +8,20 @@ import * as M from "folder1/module1";
 
 //// [/user/username/projects/myproject/client/linktofolder2] symlink(/user/username/projects/myproject/folder2)
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"baseUrl":"client","paths":{"*":["*"]}},"include":["client/**/*","folder2"]}
+{
+  "compilerOptions": {
+    "baseUrl": "client",
+    "paths": {
+      "*": [
+        "*"
+      ]
+    }
+  },
+  "include": [
+    "client/**/*",
+    "folder2"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -49,23 +62,23 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder2 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/client/folder1/module1.ts","/user/username/projects/myproject/client/linktofolder2/module2.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject/client","paths":{"*":["*"]},"pathsBasePath":"/user/username/projects/myproject","watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/client/folder1/module1.ts
-/user/username/projects/myproject/client/linktofolder2/module2.ts
+//// [/user/username/projects/myproject/client/folder1/module1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Module1Class = void 0;
+var Module1Class = /** @class */ (function () {
+    function Module1Class() {
+    }
+    return Module1Class;
+}());
+exports.Module1Class = Module1Class;
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/client/folder1/module1.ts
-/user/username/projects/myproject/client/linktofolder2/module2.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/client/folder1/module1.ts (used version)
-/user/username/projects/myproject/client/linktofolder2/module2.ts (used version)
+//// [/user/username/projects/myproject/folder2/module2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -89,25 +102,40 @@ FsWatchesRecursive::
 /user/username/projects/myproject/folder2: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/client/folder1/module1.ts",
+  "/user/username/projects/myproject/client/linktofolder2/module2.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/myproject/client",
+  "paths": {
+    "*": [
+      "*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/myproject",
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/client/folder1/module1.ts
+/user/username/projects/myproject/client/linktofolder2/module2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/client/folder1/module1.ts
+/user/username/projects/myproject/client/linktofolder2/module2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/client/folder1/module1.ts (used version)
+/user/username/projects/myproject/client/linktofolder2/module2.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/client/folder1/module1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Module1Class = void 0;
-var Module1Class = /** @class */ (function () {
-    function Module1Class() {
-    }
-    return Module1Class;
-}());
-exports.Module1Class = Module1Class;
-
-
-//// [/user/username/projects/myproject/folder2/module2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: Add module3 to folder2
 
@@ -116,13 +144,20 @@ Input::
 import * as M from "folder1/module1";
 
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.ts :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.ts :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
@@ -138,20 +173,11 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 
-Program root files: ["/user/username/projects/myproject/client/folder1/module1.ts","/user/username/projects/myproject/client/linktofolder2/module2.ts","/user/username/projects/myproject/client/linktofolder2/module3.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject/client","paths":{"*":["*"]},"pathsBasePath":"/user/username/projects/myproject","watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/client/folder1/module1.ts
-/user/username/projects/myproject/client/linktofolder2/module2.ts
-/user/username/projects/myproject/client/linktofolder2/module3.ts
+//// [/user/username/projects/myproject/folder2/module3.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/client/linktofolder2/module3.ts
 
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/client/linktofolder2/module3.ts (computed .d.ts)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -177,10 +203,36 @@ FsWatchesRecursive::
 /user/username/projects/myproject/folder2:
   {}
 
+
+Program root files: [
+  "/user/username/projects/myproject/client/folder1/module1.ts",
+  "/user/username/projects/myproject/client/linktofolder2/module2.ts",
+  "/user/username/projects/myproject/client/linktofolder2/module3.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/myproject/client",
+  "paths": {
+    "*": [
+      "*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/myproject",
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/client/folder1/module1.ts
+/user/username/projects/myproject/client/linktofolder2/module2.ts
+/user/username/projects/myproject/client/linktofolder2/module3.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/client/linktofolder2/module3.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/client/linktofolder2/module3.ts (computed .d.ts)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/folder2/module3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-

@@ -1,5 +1,5 @@
-classStaticBlock23.ts(5,9): error TS18038: 'For await' loops cannot be used inside a class static block.
-classStaticBlock23.ts(14,11): error TS18038: 'For await' loops cannot be used inside a class static block.
+classStaticBlock23.ts(5,9): error TS18038: 'for await' loops cannot be used inside a class static block.
+classStaticBlock23.ts(14,11): error TS18038: 'for await' loops cannot be used inside a class static block.
 
 
 ==== classStaticBlock23.ts (2 errors) ====
@@ -9,7 +9,7 @@ classStaticBlock23.ts(14,11): error TS18038: 'For await' loops cannot be used in
       static {
         for await (const nn of nums) {
             ~~~~~
-!!! error TS18038: 'For await' loops cannot be used inside a class static block.
+!!! error TS18038: 'for await' loops cannot be used inside a class static block.
             console.log(nn)
         }
       }
@@ -20,7 +20,7 @@ classStaticBlock23.ts(14,11): error TS18038: 'For await' loops cannot be used in
         static {
           for await (const nn of nums) {
               ~~~~~
-!!! error TS18038: 'For await' loops cannot be used inside a class static block.
+!!! error TS18038: 'for await' loops cannot be used inside a class static block.
               console.log(nn)
           }
         }

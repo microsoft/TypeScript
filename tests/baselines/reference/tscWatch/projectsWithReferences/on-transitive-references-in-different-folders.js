@@ -14,13 +14,55 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
 //// [/user/username/projects/transitiveReferences/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../refs/*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 //// [/user/username/projects/transitiveReferences/a/index.ts]
 export class A {}
@@ -244,8 +286,61 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
+
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/c/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences: *new*
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json: *new*
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json: *new*
+  {}
+/user/username/projects/transitivereferences/c/index.ts: *new*
+  {}
+/user/username/projects/transitivereferences/c/tsconfig.json: *new*
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/transitivereferences/a: *new*
+  {}
+/user/username/projects/transitivereferences/b: *new*
+  {}
+/user/username/projects/transitivereferences/refs: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -288,45 +383,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/c/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/transitivereferences/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences: *new*
-  {}
-/user/username/projects/transitivereferences/a/index.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/a/tsconfig.json: *new*
-  {}
-/user/username/projects/transitivereferences/b/index.d.ts: *new*
-  {}
-/user/username/projects/transitivereferences/b/tsconfig.json: *new*
-  {}
-/user/username/projects/transitivereferences/c/index.ts: *new*
-  {}
-/user/username/projects/transitivereferences/c/tsconfig.json: *new*
-  {}
-/user/username/projects/transitivereferences/refs/a.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitivereferences/a: *new*
-  {}
-/user/username/projects/transitivereferences/b: *new*
-  {}
-/user/username/projects/transitivereferences/refs: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
 Change:: non local edit b ts, and build b
 
@@ -421,8 +478,12 @@ export declare function gfoo(): void;
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -445,8 +506,26 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
+//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -485,13 +564,28 @@ Dependencies for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
-
 Change:: edit on config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../nrefs/*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
 //// [/user/username/projects/transitiveReferences/nrefs/a.d.ts]
 export class X {}
@@ -499,9 +593,14 @@ export class A {}
 
 
 
+Timeout callback:: count: 2
+2: timerToInvalidateFailedLookupResolutions *new*
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 2
 2: timerToInvalidateFailedLookupResolutions
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -547,43 +646,7 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../nrefs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
-/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/nrefs/a.d.ts
-  /user/username/projects/transitiveReferences/c/index.ts
-/user/username/projects/transitiveReferences/a/index.d.ts:
-  /user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts:
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/nrefs/a.d.ts:
-  /user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts:
-  /user/username/projects/transitiveReferences/c/index.ts
-  /user/username/projects/transitiveReferences/nrefs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
+//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
@@ -629,19 +692,92 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/transitivereferences/refs:
   {}
 
-exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../nrefs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+/user/username/projects/transitiveReferences/nrefs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/transitiveReferences/nrefs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/nrefs/a.d.ts
+  /user/username/projects/transitiveReferences/c/index.ts
+/user/username/projects/transitiveReferences/a/index.d.ts:
+  /user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts:
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/nrefs/a.d.ts:
+  /user/username/projects/transitiveReferences/nrefs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts:
+  /user/username/projects/transitiveReferences/c/index.ts
+  /user/username/projects/transitiveReferences/nrefs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+
+exitCode:: ExitStatus.undefined
 
 Change:: Revert config file edit
 
 Input::
 //// [/user/username/projects/transitiveReferences/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../refs/*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../b"
+    }
+  ]
+}
 
+
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -687,43 +823,7 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/transitivereferences/refs/a.d.ts (used version)
-/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/c/index.ts
-/user/username/projects/transitiveReferences/a/index.d.ts:
-  /user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts:
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts:
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts:
-  /user/username/projects/transitiveReferences/c/index.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
+//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
@@ -769,19 +869,93 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/transitivereferences/nrefs:
   {}
 
-exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/refs/a.d.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/c/index.ts
+/user/username/projects/transitiveReferences/a/index.d.ts:
+  /user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts:
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts:
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts:
+  /user/username/projects/transitiveReferences/c/index.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+
+exitCode:: ExitStatus.undefined
 
 Change:: edit in referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../nrefs/*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
+
+Timeout callback:: count: 1
+5: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 5: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -808,43 +982,6 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
-/user/username/projects/transitivereferences/b/index.d.ts (used version)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/transitiveReferences/nrefs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/c/index.ts
-/user/username/projects/transitiveReferences/nrefs/a.d.ts:
-  /user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts:
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts:
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts:
-  /user/username/projects/transitiveReferences/c/index.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/nrefs/a.d.ts
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
@@ -890,18 +1027,93 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/transitivereferences/a:
   {}
 
-exitCode:: ExitStatus.undefined
 
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/transitiveReferences/nrefs/a.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/transitiveReferences/nrefs/a.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/transitiveReferences/nrefs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/c/index.ts
+/user/username/projects/transitiveReferences/nrefs/a.d.ts:
+  /user/username/projects/transitiveReferences/nrefs/a.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts:
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/nrefs/a.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts:
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts:
+  /user/username/projects/transitiveReferences/c/index.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/nrefs/a.d.ts
+
+exitCode:: ExitStatus.undefined
 
 Change:: Revert referenced config file edit
 
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../refs/*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
+
+Timeout callback:: count: 1
+6: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 6: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -927,36 +1139,6 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/b/index.d.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/transitivereferences/b/index.d.ts (used version)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/c/index.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts:
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts:
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts:
-  /user/username/projects/transitiveReferences/c/index.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
@@ -998,17 +1180,68 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/transitivereferences/nrefs:
   {}
 
-exitCode:: ExitStatus.undefined
 
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/transitiveReferences/b/index.d.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/c/index.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts:
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts:
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts:
+  /user/username/projects/transitiveReferences/c/index.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+
+exitCode:: ExitStatus.undefined
 
 Change:: deleting referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json] deleted
 
+Timeout callback:: count: 2
+7: timerToUpdateProgram *new*
+8: timerToInvalidateFailedLookupResolutions *new*
+
 Before running Timeout callback:: count: 2
 7: timerToUpdateProgram
 8: timerToInvalidateFailedLookupResolutions
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1027,10 +1260,14 @@ File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-[96mc/tsconfig.json[0m:[93m1[0m:[93m105[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/b' not found.
+[96mc/tsconfig.json[0m:[93m14[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/b' not found.
 
-[7m1[0m {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
-[7m [0m [91m                                                                                                        ~~~~~~~~~~~~~~~[0m
+[7m14[0m     {
+[7m  [0m [91m    ~[0m
+[7m15[0m       "path": "../b"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~[0m
+[7m16[0m     }
+[7m  [0m [91m~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -1045,38 +1282,8 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/b/index.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/b/index.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/transitivereferences/b/index.ts (computed .d.ts)
-/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.ts
-  /user/username/projects/transitiveReferences/c/index.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts:
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/b/index.ts:
-  /user/username/projects/transitiveReferences/b/index.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts:
-  /user/username/projects/transitiveReferences/c/index.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.ts
+//// [/user/username/projects/transitiveReferences/b/index.js] file written with same contents
+//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
@@ -1114,21 +1321,93 @@ FsWatchesRecursive::
 /user/username/projects/transitivereferences/refs:
   {}
 
-exitCode:: ExitStatus.undefined
+Timeout callback:: count: 0
+8: timerToInvalidateFailedLookupResolutions *deleted*
 
-//// [/user/username/projects/transitiveReferences/b/index.js] file written with same contents
-//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
+
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/b/index.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/transitiveReferences/b/index.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/b/index.ts (computed .d.ts)
+/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.ts
+  /user/username/projects/transitiveReferences/c/index.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts:
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/b/index.ts:
+  /user/username/projects/transitiveReferences/b/index.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts:
+  /user/username/projects/transitiveReferences/c/index.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.ts
+
+exitCode:: ExitStatus.undefined
 
 Change:: Revert deleting referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ref/*": [
+        "../*"
+      ]
+    }
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../a"
+    }
+  ]
+}
 
+
+Timeout callback:: count: 2
+9: timerToUpdateProgram *new*
+10: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 2
 9: timerToUpdateProgram
 10: timerToInvalidateFailedLookupResolutions
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1156,45 +1435,7 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/transitivereferences/a/index.d.ts (used version)
-/user/username/projects/transitivereferences/b/index.d.ts (used version)
-/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/c/index.ts
-/user/username/projects/transitiveReferences/a/index.d.ts:
-  /user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts:
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts:
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts:
-  /user/username/projects/transitiveReferences/c/index.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
+//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
@@ -1236,18 +1477,80 @@ FsWatchesRecursive::
 /user/username/projects/transitivereferences/refs:
   {}
 
-exitCode:: ExitStatus.undefined
+Timeout callback:: count: 0
+10: timerToInvalidateFailedLookupResolutions *deleted*
 
-//// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
+
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/a/index.d.ts (used version)
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/c/index.ts
+/user/username/projects/transitiveReferences/a/index.d.ts:
+  /user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts:
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts:
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts:
+  /user/username/projects/transitiveReferences/c/index.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+
+exitCode:: ExitStatus.undefined
 
 Change:: deleting transitively referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json] deleted
 
+Timeout callback:: count: 2
+11: timerToUpdateProgram *new*
+12: timerToInvalidateFailedLookupResolutions *new*
+
 Before running Timeout callback:: count: 2
 11: timerToUpdateProgram
 12: timerToInvalidateFailedLookupResolutions
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1256,10 +1559,14 @@ Output::
 Reusing resolution of module '../b' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'.
-[96mb/tsconfig.json[0m:[93m1[0m:[93m117[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/a' not found.
+[96mb/tsconfig.json[0m:[93m15[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/a' not found.
 
-[7m1[0m {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
-[7m [0m [91m                                                                                                                    ~~~~~~~~~~~~~~~[0m
+[7m15[0m     {
+[7m  [0m [91m    ~[0m
+[7m16[0m       "path": "../a"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~[0m
+[7m17[0m     }
+[7m  [0m [91m~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -1276,43 +1583,7 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/transitiveReferences/a/index.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/a/index.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/transitivereferences/a/index.ts (computed .d.ts)
-/user/username/projects/transitivereferences/b/index.d.ts (used version)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/transitiveReferences/a/index.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/c/index.ts
-/user/username/projects/transitiveReferences/a/index.ts:
-  /user/username/projects/transitiveReferences/a/index.ts
-/user/username/projects/transitiveReferences/b/index.d.ts:
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/a/index.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts:
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts:
-  /user/username/projects/transitiveReferences/c/index.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/a/index.ts
+//// [/user/username/projects/transitiveReferences/a/index.js] file written with same contents
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
@@ -1354,20 +1625,87 @@ FsWatchesRecursive::
 /user/username/projects/transitivereferences/refs:
   {}
 
-exitCode:: ExitStatus.undefined
+Timeout callback:: count: 0
+12: timerToInvalidateFailedLookupResolutions *deleted*
 
-//// [/user/username/projects/transitiveReferences/a/index.js] file written with same contents
+
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/transitiveReferences/a/index.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/transitiveReferences/a/index.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/a/index.ts (computed .d.ts)
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/transitiveReferences/a/index.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/c/index.ts
+/user/username/projects/transitiveReferences/a/index.ts:
+  /user/username/projects/transitiveReferences/a/index.ts
+/user/username/projects/transitiveReferences/b/index.d.ts:
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/a/index.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts:
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts:
+  /user/username/projects/transitiveReferences/c/index.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/a/index.ts
+
+exitCode:: ExitStatus.undefined
 
 Change:: Revert deleting transitively referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
+
+Timeout callback:: count: 2
+13: timerToUpdateProgram *new*
+14: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 2
 13: timerToUpdateProgram
 14: timerToInvalidateFailedLookupResolutions
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1392,45 +1730,6 @@ c/index.ts
 
 
 
-Program root files: ["/user/username/projects/transitiveReferences/c/index.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences/c","paths":{"@ref/*":["../refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences/c","watch":true,"project":"/user/username/projects/transitiveReferences/c","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/c/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts
-/user/username/projects/transitiveReferences/c/index.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/transitivereferences/a/index.d.ts (used version)
-/user/username/projects/transitivereferences/b/index.d.ts (used version)
-/user/username/projects/transitivereferences/c/index.ts (used version)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/c/index.ts
-/user/username/projects/transitiveReferences/a/index.d.ts:
-  /user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/b/index.d.ts:
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts:
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c/index.ts:
-  /user/username/projects/transitiveReferences/c/index.ts
-  /user/username/projects/transitiveReferences/refs/a.d.ts
-  /user/username/projects/transitiveReferences/b/index.d.ts
-  /user/username/projects/transitiveReferences/a/index.d.ts
 
 PolledWatches::
 /user/username/projects/node_modules/@types:
@@ -1472,5 +1771,63 @@ FsWatchesRecursive::
 /user/username/projects/transitivereferences/refs:
   {}
 
-exitCode:: ExitStatus.undefined
+Timeout callback:: count: 0
+14: timerToInvalidateFailedLookupResolutions *deleted*
 
+
+Program root files: [
+  "/user/username/projects/transitiveReferences/c/index.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/transitiveReferences/c",
+  "paths": {
+    "@ref/*": [
+      "../refs/*"
+    ]
+  },
+  "pathsBasePath": "/user/username/projects/transitiveReferences/c",
+  "watch": true,
+  "project": "/user/username/projects/transitiveReferences/c",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/transitiveReferences/c/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts
+/user/username/projects/transitiveReferences/c/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/a/index.d.ts (used version)
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (used version)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/c/index.ts
+/user/username/projects/transitiveReferences/a/index.d.ts:
+  /user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/b/index.d.ts:
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+/user/username/projects/transitiveReferences/refs/a.d.ts:
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+/user/username/projects/transitiveReferences/c/index.ts:
+  /user/username/projects/transitiveReferences/c/index.ts
+  /user/username/projects/transitiveReferences/refs/a.d.ts
+  /user/username/projects/transitiveReferences/b/index.d.ts
+  /user/username/projects/transitiveReferences/a/index.d.ts
+
+exitCode:: ExitStatus.undefined

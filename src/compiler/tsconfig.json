@@ -4,8 +4,7 @@
         "types": ["node"]
     },
 
-    "references": [
-    ],
+    "references": [],
 
     "include": ["**/*"]
 }

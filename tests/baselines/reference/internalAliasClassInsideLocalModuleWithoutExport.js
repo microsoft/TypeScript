@@ -45,13 +45,13 @@ var m2;
 
 
 //// [internalAliasClassInsideLocalModuleWithoutExport.d.ts]
-export declare module x {
+export declare namespace x {
     class c {
         foo(a: number): number;
     }
 }
-export declare module m2 {
-    module m3 {
+export declare namespace m2 {
+    namespace m3 {
         import c = x.c;
         var cProp: c;
     }
