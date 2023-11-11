@@ -1,0 +1,126 @@
+//// [tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts] ////
+
+//// [thisInInvalidContextsExternalModule.ts]
+class BaseErrClass {
+    constructor(t: any) { }
+}
+
+class ClassWithNoInitializer extends BaseErrClass {
+    t;
+    //'this' in optional super call
+    constructor() {
+        super(this); // error: "super" has to be called before "this" accessing
+    }
+}
+
+class ClassWithInitializer extends BaseErrClass {
+    t = 4;
+    //'this' in required super call
+    constructor() {
+        super(this); // Error
+    }
+}
+
+module M {
+    //'this' in module variable
+    var x = this; // Error
+}
+
+//'this' as type parameter constraint
+// function fn<T extends this >() { } // Error
+
+//'this' as a type argument
+function genericFunc<T>(x: T) { }
+genericFunc<this>(undefined);  // Should be an error
+
+class ErrClass3 extends this {
+
+}
+
+//'this' as a computed enum value
+enum SomeEnum {
+    A = this, // Should not be allowed
+    B = this.spaaaace // Also should not be allowed
+}
+
+export = this; // Should be an error
+
+/// [Declarations] ////
+
+
+
+//// [/.src/thisInInvalidContextsExternalModule.d.ts]
+declare const _default: invalid;
+export = _default;
+/// [Errors] ////
+
+thisInInvalidContextsExternalModule.ts(9,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+thisInInvalidContextsExternalModule.ts(17,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+thisInInvalidContextsExternalModule.ts(23,13): error TS2331: 'this' cannot be referenced in a module or namespace body.
+thisInInvalidContextsExternalModule.ts(31,13): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisInInvalidContextsExternalModule.ts(33,25): error TS2507: Type 'undefined' is not a constructor function type.
+thisInInvalidContextsExternalModule.ts(39,9): error TS2332: 'this' cannot be referenced in current location.
+thisInInvalidContextsExternalModule.ts(40,9): error TS2332: 'this' cannot be referenced in current location.
+thisInInvalidContextsExternalModule.ts(43,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+
+
+==== thisInInvalidContextsExternalModule.ts (8 errors) ====
+    class BaseErrClass {
+        constructor(t: any) { }
+    }
+    
+    class ClassWithNoInitializer extends BaseErrClass {
+        t;
+        //'this' in optional super call
+        constructor() {
+            super(this); // error: "super" has to be called before "this" accessing
+                  ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+        }
+    }
+    
+    class ClassWithInitializer extends BaseErrClass {
+        t = 4;
+        //'this' in required super call
+        constructor() {
+            super(this); // Error
+                  ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+        }
+    }
+    
+    module M {
+        //'this' in module variable
+        var x = this; // Error
+                ~~~~
+!!! error TS2331: 'this' cannot be referenced in a module or namespace body.
+    }
+    
+    //'this' as type parameter constraint
+    // function fn<T extends this >() { } // Error
+    
+    //'this' as a type argument
+    function genericFunc<T>(x: T) { }
+    genericFunc<this>(undefined);  // Should be an error
+                ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+    
+    class ErrClass3 extends this {
+                            ~~~~
+!!! error TS2507: Type 'undefined' is not a constructor function type.
+    
+    }
+    
+    //'this' as a computed enum value
+    enum SomeEnum {
+        A = this, // Should not be allowed
+            ~~~~
+!!! error TS2332: 'this' cannot be referenced in current location.
+        B = this.spaaaace // Also should not be allowed
+            ~~~~
+!!! error TS2332: 'this' cannot be referenced in current location.
+    }
+    
+    export = this; // Should be an error
+             ~~~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

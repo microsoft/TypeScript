@@ -1,0 +1,51 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/jsxComponentTypeErrors.tsx] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -13,11 +13,8 @@
+     type?: T;
+ }): {
+     type: T | undefined;
+ };
+-declare namespace FunctionComponent {
+-    var useThis: () => JSX.Element;
+-}
+ declare class ClassComponent {
+     type: string;
+ }
+ declare const MixedComponent: typeof FunctionComponent | typeof ClassComponent;
+@@ -34,8 +31,9 @@
+ declare const elem5: JSX.Element;
+ declare const elem6: JSX.Element;
+ /// [Errors] ////
+ 
++jsxComponentTypeErrors.tsx(10,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+ jsxComponentTypeErrors.tsx(18,11): error TS2786: 'this' cannot be used as a JSX component.
+   Its return type '{ type: "foo" | undefined; }' is not a valid JSX element.
+     Types of property 'type' are incompatible.
+       Type '"foo" | undefined' is not assignable to type '"element"'.
+@@ -63,9 +61,9 @@
+   Its instance type 'MemberClassComponent' is not a valid JSX element.
+     Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
+ 
+ 
+-==== jsxComponentTypeErrors.tsx (7 errors) ====
++==== jsxComponentTypeErrors.tsx (8 errors) ====
+     namespace JSX {
+       export interface Element {
+         type: 'element';
+       }
+@@ -74,8 +72,10 @@
+       }
+     }
+     
+     function FunctionComponent<T extends string>({type}: {type?: T}): {
++             ~~~~~~~~~~~~~~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+         type: T | undefined;
+     } {
+       return {
+         type

@@ -1,0 +1,62 @@
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts] ////
+
+//// [parserSkippedTokens16.ts]
+foo(): Bar { }
+function Foo      (): any ¬   { }
+4+:5
+module M {
+function a(
+    : T) { }
+}
+var x       =
+
+/// [Declarations] ////
+
+
+
+//// [/.src/parserSkippedTokens16.d.ts]
+declare function Foo(): any;
+declare namespace M {
+}
+declare var x: invalid;
+/// [Errors] ////
+
+parserSkippedTokens16.ts(1,1): error TS2552: Cannot find name 'foo'. Did you mean 'Foo'?
+parserSkippedTokens16.ts(1,6): error TS1005: ';' expected.
+parserSkippedTokens16.ts(1,8): error TS1434: Unexpected keyword or identifier.
+parserSkippedTokens16.ts(1,8): error TS2304: Cannot find name 'Bar'.
+parserSkippedTokens16.ts(2,27): error TS1127: Invalid character.
+parserSkippedTokens16.ts(3,3): error TS1109: Expression expected.
+parserSkippedTokens16.ts(6,5): error TS1138: Parameter declaration expected.
+parserSkippedTokens16.ts(8,14): error TS1109: Expression expected.
+parserSkippedTokens16.ts(8,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+
+
+==== parserSkippedTokens16.ts (9 errors) ====
+    foo(): Bar { }
+    ~~~
+!!! error TS2552: Cannot find name 'foo'. Did you mean 'Foo'?
+!!! related TS2728 parserSkippedTokens16.ts:2:10: 'Foo' is declared here.
+         ~
+!!! error TS1005: ';' expected.
+           ~~~
+!!! error TS1434: Unexpected keyword or identifier.
+           ~~~
+!!! error TS2304: Cannot find name 'Bar'.
+    function Foo      (): any ¬   { }
+                              ~
+!!! error TS1127: Invalid character.
+    4+:5
+      ~
+!!! error TS1109: Expression expected.
+    module M {
+    function a(
+        : T) { }
+        ~
+!!! error TS1138: Parameter declaration expected.
+    }
+    var x       =
+                 
+!!! error TS1109: Expression expected.
+                 
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

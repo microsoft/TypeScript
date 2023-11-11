@@ -1,0 +1,50 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/types/literal/templateLiteralTypes4.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -38,10 +38,10 @@
+     One = 1
+ }
+ type TNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum}` ? T : never;
+ declare const enum NonLiteralEnum {
+-    Zero = 0,
+-    One = 1
++    Zero,
++    One
+ }
+ type TNonLiteralEnum0 = "0" extends `${infer T extends NonLiteralEnum}` ? T : never;
+ type PString00 = "0" extends `${infer T extends string | StringLiteralEnum}` ? T : never;
+ type PString01 = "0" extends `${infer T extends string | number}` ? T : never;
+@@ -157,13 +157,15 @@
+ declare function f3<T extends bigint>(s: `**${T}**`): T;
+ declare function f4<T extends boolean>(s: `**${T}**`): T;
+ /// [Errors] ////
+ 
++templateLiteralTypes4.ts(43,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++templateLiteralTypes4.ts(43,60): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ templateLiteralTypes4.ts(285,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
+ templateLiteralTypes4.ts(289,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
+ 
+ 
+-==== templateLiteralTypes4.ts (2 errors) ====
++==== templateLiteralTypes4.ts (4 errors) ====
+     // infer from number
+     type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100
+     type TNumber1 = "-100" extends `${infer N extends number}` ? N : never; // -100
+     type TNumber2 = "1.1" extends `${infer N extends number}` ? N : never; // 1.1
+@@ -205,8 +207,12 @@
+     type TNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum}` ? T : never; // NumberLiteralEnum.Zero
+     
+     // infer from non-literal enums
+     const enum NonLiteralEnum { Zero = NumberLiteralEnum.Zero, One = NumberLiteralEnum.One }
++                                ~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                                                               ~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+     type TNonLiteralEnum0 = "0" extends `${infer T extends NonLiteralEnum}` ? T : never; // 0
+     
+     // infer using priority:
+     //     string > template-literal > (string-literal | string-literal-enum) >

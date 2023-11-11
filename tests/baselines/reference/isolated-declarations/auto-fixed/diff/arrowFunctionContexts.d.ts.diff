@@ -1,0 +1,43 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -38,16 +38,18 @@
+ declare var asserted2: any;
+ /// [Errors] ////
+ 
+ arrowFunctionContexts.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
++arrowFunctionContexts.ts(30,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ arrowFunctionContexts.ts(30,9): error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
++arrowFunctionContexts.ts(31,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ arrowFunctionContexts.ts(31,16): error TS2332: 'this' cannot be referenced in current location.
+ arrowFunctionContexts.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+ arrowFunctionContexts.ts(71,13): error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
+ arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in current location.
+ 
+ 
+-==== arrowFunctionContexts.ts (6 errors) ====
++==== arrowFunctionContexts.ts (8 errors) ====
+     // Arrow function used in with statement
+     with (window) {
+     ~~~~~~~~~~~~~
+ !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+@@ -78,11 +80,15 @@
+     
+     // Arrow function as enum value
+     enum E {
+         x = () => 4, // Error expected
++        ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+             ~~~~~~~
+ !!! error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
+         y = (() => this).length // error, can't use this in enum
++        ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                    ~~~~
+ !!! error TS2332: 'this' cannot be referenced in current location.
+     }
+     

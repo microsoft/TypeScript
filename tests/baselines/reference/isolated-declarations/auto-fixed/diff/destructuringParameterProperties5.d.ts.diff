@@ -1,0 +1,82 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -7,14 +7,14 @@
+     z: boolean;
+ };
+ type TupleType1 = [ObjType1, number, string];
+ declare class C1 {
+-    x1: any;
+-    x2: any;
+-    x3: any;
+-    { x1, x2, x3 }: any;
+-    y: number;
+-    z: string;
++    x1: invalid;
++    x2: invalid;
++    x3: invalid;
++    { x1, x2, x3 }: invalid;
++    y: invalid;
++    z: invalid;
+     constructor([{ x1, x2, x3 }, y, z]: TupleType1);
+ }
+ declare var a: C1;
+ declare const dest: any[];
+@@ -25,11 +25,17 @@
+ declare const a_z: any;
+ /// [Errors] ////
+ 
+ destructuringParameterProperties5.ts(5,17): error TS1187: A parameter property may not be declared using a binding pattern.
++destructuringParameterProperties5.ts(5,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ destructuringParameterProperties5.ts(5,27): error TS2339: Property 'x1' does not exist on type 'ObjType1'.
++destructuringParameterProperties5.ts(5,27): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ destructuringParameterProperties5.ts(5,31): error TS2339: Property 'x2' does not exist on type 'ObjType1'.
++destructuringParameterProperties5.ts(5,31): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ destructuringParameterProperties5.ts(5,35): error TS2339: Property 'x3' does not exist on type 'ObjType1'.
++destructuringParameterProperties5.ts(5,35): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++destructuringParameterProperties5.ts(5,41): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++destructuringParameterProperties5.ts(5,44): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ destructuringParameterProperties5.ts(7,29): error TS2339: Property 'x1' does not exist on type 'C1'.
+ destructuringParameterProperties5.ts(7,40): error TS2339: Property 'x2' does not exist on type 'C1'.
+ destructuringParameterProperties5.ts(7,51): error TS2339: Property 'x3' does not exist on type 'C1'.
+ destructuringParameterProperties5.ts(7,62): error TS2339: Property 'y' does not exist on type 'C1'.
+@@ -43,22 +49,34 @@
+ destructuringParameterProperties5.ts(12,42): error TS2339: Property 'y' does not exist on type 'C1'.
+ destructuringParameterProperties5.ts(12,47): error TS2339: Property 'z' does not exist on type 'C1'.
+ 
+ 
+-==== destructuringParameterProperties5.ts (17 errors) ====
++==== destructuringParameterProperties5.ts (23 errors) ====
+     type ObjType1 = { x: number; y: string; z: boolean }
+     type TupleType1 = [ObjType1, number, string]
+     
+     class C1 {
+         constructor(public [{ x1, x2, x3 }, y, z]: TupleType1) {
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS1187: A parameter property may not be declared using a binding pattern.
++                            ~~~~~~~~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                               ~~
+ !!! error TS2339: Property 'x1' does not exist on type 'ObjType1'.
++                              ~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                                   ~~
+ !!! error TS2339: Property 'x2' does not exist on type 'ObjType1'.
++                                  ~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                                       ~~
+ !!! error TS2339: Property 'x3' does not exist on type 'ObjType1'.
++                                      ~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                                            ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                                               ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+             var foo: any = x1 || x2 || x3 || y || z;
+             var bar: any = this.x1 || this.x2 || this.x3 || this.y || this.z;
+                                 ~~
+ !!! error TS2339: Property 'x1' does not exist on type 'C1'.

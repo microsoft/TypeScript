@@ -1,0 +1,39 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -2,12 +2,8 @@
+ 
+ //// [/.src/typeFromPropertyAssignment31.d.ts]
+ declare function ExpandoMerge(n: number): number;
+ declare namespace ExpandoMerge {
+-    var p1: number;
+-    var m: (n: number) => number;
+-}
+-declare namespace ExpandoMerge {
+     var p2: number;
+ }
+ declare namespace ExpandoMerge {
+     var p3: number;
+@@ -20,14 +16,17 @@
+ }
+ declare var n: number;
+ /// [Errors] ////
+ 
++typeFromPropertyAssignment31.ts(1,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+ typeFromPropertyAssignment31.ts(13,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
+ typeFromPropertyAssignment31.ts(25,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
+ 
+ 
+-==== typeFromPropertyAssignment31.ts (2 errors) ====
++==== typeFromPropertyAssignment31.ts (3 errors) ====
+     function ExpandoMerge(n: number): number {
++             ~~~~~~~~~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+         return n;
+     }
+     ExpandoMerge.p1 = 111
+     ExpandoMerge.m = function(n: number) {

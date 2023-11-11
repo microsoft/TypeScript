@@ -1,0 +1,55 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties3.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -2,11 +2,11 @@
+ 
+ //// [/.src/destructuringParameterProperties3.d.ts]
+ declare class C1<T, U, V> {
+     private k;
+-    private a: T;
+-    private b: U;
+-    private c: V;
++    private a: invalid;
++    private b: invalid;
++    private c: invalid;
+     constructor(k: T, [a, b, c]: [T, U, V]);
+     getA(): any;
+     getB(): any;
+     getC(): any;
+@@ -33,8 +33,11 @@
+ declare const z_c: any;
+ /// [Errors] ////
+ 
+ destructuringParameterProperties3.ts(2,31): error TS1187: A parameter property may not be declared using a binding pattern.
++destructuringParameterProperties3.ts(2,40): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++destructuringParameterProperties3.ts(2,43): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++destructuringParameterProperties3.ts(2,46): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ destructuringParameterProperties3.ts(3,59): error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
+ destructuringParameterProperties3.ts(3,83): error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.
+ destructuringParameterProperties3.ts(4,18): error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
+ destructuringParameterProperties3.ts(9,21): error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
+@@ -51,13 +54,19 @@
+ destructuringParameterProperties3.ts(42,7): error TS2451: Cannot redeclare block-scoped variable 'z_b'.
+ destructuringParameterProperties3.ts(43,7): error TS2451: Cannot redeclare block-scoped variable 'z_c'.
+ 
+ 
+-==== destructuringParameterProperties3.ts (17 errors) ====
++==== destructuringParameterProperties3.ts (20 errors) ====
+     class C1<T, U, V> {
+         constructor(private k: T, private [a, b, c]: [T,U,V]) {
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS1187: A parameter property may not be declared using a binding pattern.
++                                           ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                                              ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                                                 ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+             if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
+                                                               ~
+ !!! error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
+                                                                                       ~

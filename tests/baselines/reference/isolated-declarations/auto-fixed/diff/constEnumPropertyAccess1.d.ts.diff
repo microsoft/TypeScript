@@ -1,0 +1,36 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -19,21 +19,27 @@
+     set [G.B](x: number);
+ }
+ /// [Errors] ////
+ 
++constEnumPropertyAccess1.ts(8,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++constEnumPropertyAccess1.ts(9,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ constEnumPropertyAccess1.ts(25,9): error TS2322: Type 'boolean' is not assignable to type 'number'.
+ 
+ 
+-==== constEnumPropertyAccess1.ts (1 errors) ====
++==== constEnumPropertyAccess1.ts (3 errors) ====
+     // constant enum declarations are completely erased in the emitted JavaScript code.
+     // it is an error to reference a constant enum object in any other context
+     // than a property access that selects one of the enum's members
+     
+     const enum G {
+         A = 1,
+         B = 2,
+         C = A + B,
++        ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+         D = A * 2
++        ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+     }
+     
+     var o: {
+         [idx: number]: boolean

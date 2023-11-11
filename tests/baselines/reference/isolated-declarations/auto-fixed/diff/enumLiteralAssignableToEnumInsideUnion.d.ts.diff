@@ -1,0 +1,53 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -32,16 +32,20 @@
+ declare const e4: X.Foo.A | boolean;
+ declare const e5: Ka.Foo | boolean;
+ /// [Errors] ////
+ 
++enumLiteralAssignableToEnumInsideUnion.ts(13,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++enumLiteralAssignableToEnumInsideUnion.ts(14,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++enumLiteralAssignableToEnumInsideUnion.ts(19,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++enumLiteralAssignableToEnumInsideUnion.ts(20,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ enumLiteralAssignableToEnumInsideUnion.ts(24,7): error TS2322: Type 'Foo.A' is not assignable to type 'boolean | Foo'.
+ enumLiteralAssignableToEnumInsideUnion.ts(25,7): error TS2322: Type 'Foo.A' is not assignable to type 'boolean | Foo'.
+ enumLiteralAssignableToEnumInsideUnion.ts(26,7): error TS2322: Type 'Foo.A' is not assignable to type 'boolean | Foo.B'.
+ enumLiteralAssignableToEnumInsideUnion.ts(27,7): error TS2322: Type 'Foo.A' is not assignable to type 'boolean | Foo.A'.
+ enumLiteralAssignableToEnumInsideUnion.ts(28,7): error TS2322: Type 'Foo.A' is not assignable to type 'boolean | Foo'.
+ 
+ 
+-==== enumLiteralAssignableToEnumInsideUnion.ts (5 errors) ====
++==== enumLiteralAssignableToEnumInsideUnion.ts (9 errors) ====
+     module X {
+         export enum Foo {
+             A, B
+         }
+@@ -53,15 +57,23 @@
+     }
+     module Z {
+         export enum Foo {
+             A = 1 << 1,
++            ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+             B = 1 << 2,
++            ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+         }
+     }
+     module Ka {
+         export enum Foo {
+             A = 1 << 10,
++            ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+             B = 1 << 11,
++            ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+         }
+     }
+     const e0: X.Foo | boolean = Y.Foo.A; // ok
+     const e1: X.Foo | boolean = Z.Foo.A; // not legal, Z is computed

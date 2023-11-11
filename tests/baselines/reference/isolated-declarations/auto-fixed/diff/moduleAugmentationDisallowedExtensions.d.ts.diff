@@ -1,0 +1,65 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/moduleAugmentationDisallowedExtensions.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -19,9 +19,9 @@
+ declare module "./observable" {
+     var x: number;
+     let y: number;
+     const z: number;
+-    let x1: number, y1: string, n: number, el1: number, el2: number, el3: number;
++    let x1: invalid, y1: invalid, n: invalid, el1: invalid, el2: invalid, el3: invalid;
+     interface A {
+         x: any;
+     }
+     namespace N {
+@@ -43,8 +43,14 @@
+ //// [/.src/x0.d.ts]
+ export declare let a: number;
+ /// [Errors] ////
+ 
++x.ts(9,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++x.ts(9,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++x.ts(9,23): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++x.ts(9,38): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++x.ts(9,43): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++x.ts(9,48): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ x.ts(17,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+ x.ts(17,26): error TS2307: Cannot find module './x0' or its corresponding type declarations.
+ x.ts(18,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+ x.ts(18,21): error TS2307: Cannot find module './x0' or its corresponding type declarations.
+@@ -57,9 +63,9 @@
+ 
+ ==== x0.ts (0 errors) ====
+     export let a = 1;
+     
+-==== x.ts (9 errors) ====
++==== x.ts (15 errors) ====
+     namespace N1 {
+         export let x = 1;
+     }
+     
+@@ -67,8 +73,20 @@
+         var x: number;
+         let y: number;
+         const z: number;
+         let {x1, y1, z0: {n}, z1: {arr: [el1, el2, el3]}}: {x1: number, y1: string, z0: {n: number}, z1: {arr: number[]} }
++             ~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                 ~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                          ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                                         ~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                                              ~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                                                   ~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+         interface A { x }
+         namespace N {
+             export class C {}
+         }

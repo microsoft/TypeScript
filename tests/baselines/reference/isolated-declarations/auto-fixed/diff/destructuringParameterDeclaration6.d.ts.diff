@@ -1,0 +1,151 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -6,10 +6,10 @@
+ }): void;
+ declare function a1({ public }: {
+     public: any;
+ }): void;
+-declare function a4([any, [], [any, any, []], [any, any, [], [any, any, any, []]], [any, any, [], [any, any, any, []], [any, any, any, [], [any, any, any, any, []]]], [any, any, [], [any, any, any, []], [any, any, any, [], [any, any, any, any, []]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]]]], [any, any, [], [any, any, any, []], [any, any, any, [], [any, any, any, any, []]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]]]], [any, any, [], [any, any, any, []], [any, any, any, [], [any, any, any, any, []]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]], [any, any, any, any, any, [], [any, any, any, any, any, any, []], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []]]]]]], [any, any, [], [any, any, any, []], [any, any, any, [], [any, any, any, any, []]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]], [any, any, any, any, any, [], [any, any, any, any, any, any, []], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []]]]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]], [any, any, any, any, any, [], [any, any, any, any, any, any, []], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []]]]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]], [any, any, any, any, any, [], [any, any, any, any, any, any, []], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []]]], [any, any, any, any, any, [], [any, any, any, any, any, any, []], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []]], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []], [any, any, any, any, any, any, any, [], [any, any, any, any, any, any, any, any, []]]]]]]]]: [any, any[], [any, any, any[]], [any, any, any[], [any, any, any, any[]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]]]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]], [any, any, any, any, any, any, any[], [any, any, any, any, any, any, any, any[]]]]]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]], [any, any, any, any, any, any, any[], [any, any, any, any, any, any, any, any[]]]]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]], [any, any, any, any, any, any, any[], [any, any, any, any, any, any, any, any[]]]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]], [any, any, any, any, any, any, any[], [any, any, any, any, any, any, any, any[]]]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]], [any, any, any, any, any, any, any[], [any, any, any, any, any, any, any, any[]]], [any, any, any, any, any, any, any[], [any, any, any, any, any, any, any, any[]], [any, any, any, any, any, any, any, any[], [any, any, any, any, any, any, any, any, any[]]]]]]]]]): any;
+-declare function a5(...: any[]): any;
++declare function a4([any, [], [any, any, []], [any, any, [], [any, any, any, []]], [any, any, [], [any, any, any, []], [any, any, any, [], [any, any, any, any, []]]], [any, any, [], [any, any, any, []], [any, any, any, [], [any, any, any, any, []]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]]]], [any, any, [], [any, any, any, []], [any, any, any, [], [any, any, any, any, []]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]]]], [any, any, [], [any, any, any, []], [any, any, any, [], [any, any, any, any, []]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]], [any, any, any, any, any, [], [any, any, any, any, any, any, []], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []]]]]]], [any, any, [], [any, any, any, []], [any, any, any, [], [any, any, any, any, []]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]], [any, any, any, any, any, [], [any, any, any, any, any, any, []], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []]]]]], [any, any, any, [], [any, any, any, any, []], [any, any, any, any, [], [any, any, any, any, any, []]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]], [any, any, any, any, any, [], [any, any, any, any, any, any, []], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []]]]], [any, any, any, any, [], [any, any, any, any, any, []], [any, any, any, any, any, [], [any, any, any, any, any, any, []]], [any, any, any, any, any, [], [any, any, any, any, any, any, []], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []]]], [any, any, any, any, any, [], [any, any, any, any, any, any, []], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []]], [any, any, any, any, any, any, [], [any, any, any, any, any, any, any, []], [any, any, any, any, any, any, any, [], [any, any, any, any, any, any, any, any, []]]]]]]]]: invalid): invalid;
++declare function a5(...: any[]): invalid;
+ declare function a6(...public: any[]): void;
+ declare function a7(...a: string): void;
+ declare function b1({ public: x }: {
+     public: any;
+@@ -19,8 +19,10 @@
+ }): void;
+ /// [Errors] ////
+ 
+ destructuringParameterDeclaration6.ts(7,18): error TS1005: ':' expected.
++destructuringParameterDeclaration6.ts(13,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++destructuringParameterDeclaration6.ts(13,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ destructuringParameterDeclaration6.ts(13,14): error TS1181: Array element destructuring pattern expected.
+ destructuringParameterDeclaration6.ts(13,16): error TS2300: Duplicate identifier 'any'.
+ destructuringParameterDeclaration6.ts(13,19): error TS1005: ',' expected.
+ destructuringParameterDeclaration6.ts(13,21): error TS1005: ',' expected.
+@@ -740,15 +742,16 @@
+ destructuringParameterDeclaration6.ts(25,3276): error TS1005: '(' expected.
+ destructuringParameterDeclaration6.ts(25,3278): error TS2304: Cannot find name 'public'.
+ destructuringParameterDeclaration6.ts(25,3284): error TS1005: ';' expected.
+ destructuringParameterDeclaration6.ts(25,3285): error TS1128: Declaration or statement expected.
++destructuringParameterDeclaration6.ts(26,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ destructuringParameterDeclaration6.ts(26,16): error TS1003: Identifier expected.
+ destructuringParameterDeclaration6.ts(26,23): error TS1005: ',' expected.
+ destructuringParameterDeclaration6.ts(26,28): error TS1005: '(' expected.
+ destructuringParameterDeclaration6.ts(28,13): error TS2370: A rest parameter must be of an array type.
+ 
+ 
+-==== destructuringParameterDeclaration6.ts (726 errors) ====
++==== destructuringParameterDeclaration6.ts (729 errors) ====
+     // A parameter declaration may specify either an identifier or a binding pattern.
+     
+     // Reserved words are not allowed to be used as an identifier in parameter declaration
+     "use strict"
+@@ -762,8 +765,11 @@
+     function a1({public}: {
+             public: any;
+         }): void { }
+     function a4([: any[]: [
++             ~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++                ~~~~~~~~~~~
+                  ~
+ !!! error TS1181: Array element destructuring pattern expected.
+                    ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+@@ -771,27 +777,33 @@
+ !!! error TS1005: ',' expected.
+                         ~
+ !!! error TS1005: ',' expected.
+             any,
++    ~~~~~~~~~~~~
+             ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+             any[]
++    ~~~~~~~~~~~~~
+             ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+                ~
+ !!! error TS1005: ',' expected.
+         ]: [
++    ~~~~~~~~
+          ~
+ !!! error TS1005: ',' expected.
+             any,
++    ~~~~~~~~~~~~
+             ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+             any[],
++    ~~~~~~~~~~~~~~
+             ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+                ~
+ !!! error TS1005: ',' expected.
+             [any, any, any[]]
++    ~~~~~~~~~~~~~~~~~~~~~~~~~
+              ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+                   ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+@@ -799,19 +811,23 @@
+ !!! error TS2300: Duplicate identifier 'any'.
+                           ~
+ !!! error TS1005: ',' expected.
+         ]: [
++    ~~~~~~~~
+          ~
+ !!! error TS1005: ',' expected.
+             any,
++    ~~~~~~~~~~~~
+             ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+             any[],
++    ~~~~~~~~~~~~~~
+             ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+                ~
+ !!! error TS1005: ',' expected.
+             [any, any, any[]],
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+              ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+                   ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+@@ -819,8 +835,9 @@
+ !!! error TS2300: Duplicate identifier 'any'.
+                           ~
+ !!! error TS1005: ',' expected.
+             [any, any, any[], [any, any, any, any[]]]
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+                   ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+@@ -838,8 +855,10 @@
+ !!! error TS2300: Duplicate identifier 'any'.
+                                                  ~
+ !!! error TS1005: ',' expected.
+         ]: [any, any[], [any, any, any[]], [any, any, any[], [any, any, any, any[]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]]]]: [any, any[], [any, any, any[]], [any, any, any[], [any, any, any, any[]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]]]]]: [any, any[], [any, any, any[]], [any, any, any[], [any, any, any, any[]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]]]]]]: [any, any[], [any, any, any[]], [any, any, any[], [any, any, any, any[]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]]]]], [any, any, any[], [any, any, any, any[]], [any, any, any, any[], [any, any, any, any, any[]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]]]], [any, any, any, any[], [any, any, any, any, any[]], [any, any, any, any, any[], [any, any, any, any, any, any[]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]]], [any, any, any, any, any[], [any, any, any, any, any, any[]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]]], [any, any, any, any, any, any[], [any, any, any, any, any, any, any[]], [any, any, any, any, any, any, any[], [any, any, any, any, any, any, any, any[]]]]]]]]while, for, public]){ }
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+          ~
+ !!! error TS1005: ',' expected.
+             ~~~
+ !!! error TS2300: Duplicate identifier 'any'.
+@@ -2217,8 +2236,10 @@
+ !!! error TS1005: ';' expected.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ~
+ !!! error TS1128: Declaration or statement expected.
+     function a5(...: any[]while) { }
++             ~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                    ~
+ !!! error TS1003: Identifier expected.
+                           ~~~~~
+ !!! error TS1005: ',' expected.

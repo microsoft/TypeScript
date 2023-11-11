@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/enumPropertyAccessBeforeInitalisation.ts] ////
+
+//// [enumPropertyAccessBeforeInitalisation.ts]
+enum E {
+    A = A,
+    B = E.B,
+    C = E["C"],
+    D = 1 + D
+}
+
+
+/// [Declarations] ////
+
+
+
+//// [/.src/enumPropertyAccessBeforeInitalisation.d.ts]
+declare enum E {
+    A,
+    B,
+    C,
+    D
+}
+/// [Errors] ////
+
+enumPropertyAccessBeforeInitalisation.ts(2,9): error TS2565: Property 'A' is used before being assigned.
+enumPropertyAccessBeforeInitalisation.ts(3,9): error TS2565: Property 'B' is used before being assigned.
+enumPropertyAccessBeforeInitalisation.ts(4,9): error TS2565: Property 'C' is used before being assigned.
+enumPropertyAccessBeforeInitalisation.ts(5,13): error TS2565: Property 'D' is used before being assigned.
+
+
+==== enumPropertyAccessBeforeInitalisation.ts (4 errors) ====
+    enum E {
+        A = A,
+            ~
+!!! error TS2565: Property 'A' is used before being assigned.
+        B = E.B,
+            ~~~
+!!! error TS2565: Property 'B' is used before being assigned.
+        C = E["C"],
+            ~~~~~~
+!!! error TS2565: Property 'C' is used before being assigned.
+        D = 1 + D
+                ~
+!!! error TS2565: Property 'D' is used before being assigned.
+    }
+    

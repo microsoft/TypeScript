@@ -1,0 +1,46 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/declarationEmitWithInvalidPackageJsonTypings.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -4,5 +4,36 @@
+ export interface MutableRefObject<T> {
+     current: T;
+ }
+ export declare function useRef<T>(current: T): MutableRefObject<T>;
+-export declare const useCsvParser: () => MutableRefObject<typeof import("csv-parse")>;
++export declare const useCsvParser: invalid;
++/// [Errors] ////
++
++/p1/index.ts(7,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++
++
++==== /p1/node_modules/csv-parse/lib/index.d.ts (0 errors) ====
++    export function bar(): number;
++==== /p1/node_modules/csv-parse/package.json (0 errors) ====
++    {
++      "main": "./lib",
++      "name": "csv-parse",
++      "types": [
++        "./lib/index.d.ts",
++        "./lib/sync.d.ts"
++      ],
++      "version": "4.8.2"
++    }
++==== /p1/index.ts (1 errors) ====
++    export interface MutableRefObject<T> {
++        current: T;
++    }
++    export function useRef<T>(current: T): MutableRefObject<T> {
++        return { current };
++    }
++    export const useCsvParser = () => {
++                                ~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++        const parserRef = useRef<typeof import("csv-parse")>(null);
++        return parserRef;
++    };
++    
+\ No newline at end of file

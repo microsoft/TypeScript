@@ -1,0 +1,44 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource3.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -116,17 +116,22 @@
+ }
+ /// [Errors] ////
+ 
+ parserRealSource3.ts(4,21): error TS6053: File 'typescript.ts' not found.
++parserRealSource3.ts(4,21): error TS9010: Reference directives are not supported in isolated declaration mode.
++parserRealSource3.ts(116,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++parserRealSource3.ts(117,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ 
+ 
+-==== parserRealSource3.ts (1 errors) ====
++==== parserRealSource3.ts (4 errors) ====
+     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+     // See LICENSE.txt in the project root for complete license information.
+     
+     ///<reference path='typescript.ts' />
+                         ~~~~~~~~~~~~~
+ !!! error TS6053: File 'typescript.ts' not found.
++                        ~~~~~~~~~~~~~
++!!! error TS9010: Reference directives are not supported in isolated declaration mode.
+     
+     module TypeScript {
+         // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
+         export enum NodeType {
+@@ -237,7 +242,11 @@
+             Error,
+             Comment,
+             Debugger,
+             GeneralNode = FuncDecl,
++            ~~~~~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+             LastAsg = AsgRs2,
++            ~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+         }
+     }
+\ No newline at end of file

@@ -1,0 +1,34 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/es6/newTarget/newTargetNarrowing.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -2,7 +2,22 @@
+ 
+ //// [/.src/newTargetNarrowing.d.ts]
+ declare function foo(x: true): void;
+ declare function f(): void;
+-declare namespace f {
+-    var marked: boolean;
+-}
++/// [Errors] ////
++
++newTargetNarrowing.ts(3,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++
++
++==== newTargetNarrowing.ts (1 errors) ====
++    function foo(x: true): void { }
++    
++    function f(): void {
++             ~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++      if (new.target.marked === true) {
++        foo(new.target.marked);
++      }
++    }
++    
++    f.marked = true;
++    
+\ No newline at end of file

@@ -1,0 +1,45 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -12,11 +12,9 @@
+ declare class E {
+     get x(): number;
+     set x(v: number);
+ }
+-declare var x: {
+-    readonly x: number;
+-};
++declare var x: invalid;
+ declare var y: {
+     x: number;
+ };
+ /// [Errors] ////
+@@ -27,11 +25,12 @@
+ twoAccessorsWithSameName.ts(8,9): error TS2300: Duplicate identifier 'x'.
+ twoAccessorsWithSameName.ts(19,9): error TS2300: Duplicate identifier 'x'.
+ twoAccessorsWithSameName.ts(24,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+ twoAccessorsWithSameName.ts(24,9): error TS2300: Duplicate identifier 'x'.
++twoAccessorsWithSameName.ts(24,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ 
+ 
+-==== twoAccessorsWithSameName.ts (7 errors) ====
++==== twoAccessorsWithSameName.ts (8 errors) ====
+     class C {
+         get x(): number { return 1; }
+             ~
+ !!! error TS2300: Duplicate identifier 'x'.
+@@ -68,8 +67,10 @@
+             ~
+ !!! error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+             ~
+ !!! error TS2300: Duplicate identifier 'x'.
++            ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+             return 1;
+         }
+     }
+     

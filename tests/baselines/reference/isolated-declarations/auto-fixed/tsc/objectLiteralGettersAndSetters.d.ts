@@ -1,0 +1,209 @@
+//// [tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts] ////
+
+//// [objectLiteralGettersAndSetters.ts]
+// Get and set accessor with the same name
+var sameName1a: {
+    a: string;
+} = { get 'a'(): string { return ''; }, set a(n) { var p = n; var p: string; } };
+var sameName2a: {
+    0: string;
+} = { get 0.0(): string { return ''; }, set 0(n) { var p = n; var p: string; } };
+var sameName3a: {
+    32: string;
+} = { get 0x20(): string { return ''; }, set 3.2e1(n) { var p = n; var p: string; } };
+var sameName4a: {
+    "": string;
+} = { get ''(): string { return ''; }, set ""(n) { var p = n; var p: string; } };
+var sameName5a: {
+    '\t': string;
+} = { get '\t'(): string { return ''; }, set '\t'(n) { var p = n; var p: string; } };
+var sameName6a: {
+    a: string;
+} = { get 'a'(): string { return ''; }, set a(n) { var p = n; var p: string; } };
+
+// PropertyName CallSignature{FunctionBody} is equivalent to PropertyName:function CallSignature{FunctionBody}
+var callSig1 = { num(n: number): string { return '' } };
+var callSig1: { num: (n: number) => string; };
+var callSig2 = { num: function (n: number): string { return '' } };
+var callSig2: { num: (n: number) => string; };
+var callSig3 = { num: (n: number): string => '' };
+var callSig3: { num: (n: number) => string; };
+
+// Get accessor only, type of the property is the annotated return type of the get accessor
+var getter1 = { get x(): string { return undefined; } };
+var getter1: { readonly x: string; }
+
+// Get accessor only, type of the property is the inferred return type of the get accessor
+var getter2 = { get x(): string { return ''; } };
+var getter2: { readonly x: string; }
+
+// Set accessor only, type of the property is the param type of the set accessor
+var setter1 = { set x(n: number) { } };
+var setter1: { x: number };
+
+// Set accessor only, type of the property is Any for an unannotated set accessor
+var setter2: {
+    x: any;
+} = { set x(n) { } };
+var setter2: { x: any };
+
+var anyVar: any;
+// Get and set accessor with matching type annotations
+var sameType1: {
+    x: string;
+} = { get x(): string { return undefined; }, set x(n: string) { } };
+var sameType2: {
+    x: number[];
+} = { get x(): Array<number> { return undefined; }, set x(n: number[]) { } };
+var sameType3: {
+    x: any;
+} = { get x(): any { return undefined; }, set x(n: typeof anyVar) { } };
+var sameType4: {
+    x: Date;
+} = { get x(): Date { return undefined; }, set x(n: Date) { } };
+
+// Type of unannotated get accessor return type is the type annotation of the set accessor param
+var setParamType1 = {
+    set n(x: (t: string) => void) { },
+    get n(): (t: string) => void { return (t) => {
+            var p: string;
+            var p = t;
+        }
+    }
+};
+var setParamType2: {
+    n: (t: string) => void;
+} = {
+    get n() { return (t) => {
+            var p: string;
+            var p = t;
+        }
+    },
+    set n(x: (t: string) => void) { }
+};
+
+// Type of unannotated set accessor parameter is the return type annotation of the get accessor
+var getParamType1 = {
+    set n(x) {
+        var y = x;
+        var y: string;
+    },
+    get n(): string { return ''; }
+};
+var getParamType2: {
+    n: string;
+} = {
+    get n(): string { return ''; },
+    set n(x) {
+        var y = x;
+        var y: string;
+    }
+};
+
+// Type of unannotated accessors is the inferred return type of the get accessor
+var getParamType3: {
+    n: string;
+} = {
+    get n(): string { return ''; },
+    set n(x) {
+        var y = x;
+        var y: string;
+    }
+};
+
+
+
+/// [Declarations] ////
+
+
+
+//// [/.src/objectLiteralGettersAndSetters.d.ts]
+declare var sameName1a: {
+    a: string;
+};
+declare var sameName2a: {
+    0: string;
+};
+declare var sameName3a: {
+    32: string;
+};
+declare var sameName4a: {
+    "": string;
+};
+declare var sameName5a: {
+    '\t': string;
+};
+declare var sameName6a: {
+    a: string;
+};
+declare var callSig1: {
+    num(n: number): string;
+};
+declare var callSig1: {
+    num: (n: number) => string;
+};
+declare var callSig2: {
+    num: (n: number) => string;
+};
+declare var callSig2: {
+    num: (n: number) => string;
+};
+declare var callSig3: {
+    num: (n: number) => string;
+};
+declare var callSig3: {
+    num: (n: number) => string;
+};
+declare var getter1: {
+    readonly x: string;
+};
+declare var getter1: {
+    readonly x: string;
+};
+declare var getter2: {
+    readonly x: string;
+};
+declare var getter2: {
+    readonly x: string;
+};
+declare var setter1: {
+    x: number;
+};
+declare var setter1: {
+    x: number;
+};
+declare var setter2: {
+    x: any;
+};
+declare var setter2: {
+    x: any;
+};
+declare var anyVar: any;
+declare var sameType1: {
+    x: string;
+};
+declare var sameType2: {
+    x: number[];
+};
+declare var sameType3: {
+    x: any;
+};
+declare var sameType4: {
+    x: Date;
+};
+declare var setParamType1: {
+    get n(): (t: string) => void;
+    set n(x: (t: string) => void);
+};
+declare var setParamType2: {
+    n: (t: string) => void;
+};
+declare var getParamType1: {
+    n: string;
+};
+declare var getParamType2: {
+    n: string;
+};
+declare var getParamType3: {
+    n: string;
+};

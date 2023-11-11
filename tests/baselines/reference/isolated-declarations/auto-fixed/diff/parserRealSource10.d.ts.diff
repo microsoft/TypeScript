@@ -1,0 +1,80 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -233,16 +233,22 @@
+ }
+ /// [Errors] ////
+ 
+ parserRealSource10.ts(4,21): error TS6053: File 'typescript.ts' not found.
++parserRealSource10.ts(4,21): error TS9010: Reference directives are not supported in isolated declaration mode.
++parserRealSource10.ts(123,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++parserRealSource10.ts(124,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ parserRealSource10.ts(127,38): error TS2449: Class 'TokenInfo' used before its declaration.
+ parserRealSource10.ts(127,48): error TS1011: An element access expression should take an argument.
+ parserRealSource10.ts(128,41): error TS2693: 'string' only refers to a type, but is being used as a value here.
+ parserRealSource10.ts(128,48): error TS1011: An element access expression should take an argument.
+ parserRealSource10.ts(129,46): error TS2693: 'number' only refers to a type, but is being used as a value here.
+ parserRealSource10.ts(129,53): error TS1011: An element access expression should take an argument.
+ parserRealSource10.ts(130,40): error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+ parserRealSource10.ts(130,48): error TS1011: An element access expression should take an argument.
++parserRealSource10.ts(170,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++parserRealSource10.ts(171,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++parserRealSource10.ts(172,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ parserRealSource10.ts(179,54): error TS2304: Cannot find name 'ErrorRecoverySet'.
+ parserRealSource10.ts(179,54): error TS4063: Parameter 'ers' of constructor from exported class has or is using private name 'ErrorRecoverySet'.
+ parserRealSource10.ts(184,28): error TS2304: Cannot find name 'ErrorRecoverySet'.
+ parserRealSource10.ts(188,34): error TS2304: Cannot find name 'NodeType'.
+@@ -578,15 +584,17 @@
+ parserRealSource10.ts(356,53): error TS2304: Cannot find name 'NodeType'.
+ parserRealSource10.ts(449,46): error TS1011: An element access expression should take an argument.
+ 
+ 
+-==== parserRealSource10.ts (344 errors) ====
++==== parserRealSource10.ts (350 errors) ====
+     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+     // See LICENSE.txt in the project root for complete license information.
+     
+     ///<reference path='typescript.ts' />
+                         ~~~~~~~~~~~~~
+ !!! error TS6053: File 'typescript.ts' not found.
++                        ~~~~~~~~~~~~~
++!!! error TS9010: Reference directives are not supported in isolated declaration mode.
+     
+     module TypeScript {
+         export enum TokenID {
+             // Keywords
+@@ -704,9 +712,13 @@
+             Whitespace,
+             Comment,
+             Lim,
+             LimFixed = EqualsGreaterThan,
++            ~~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+             LimKeyword = Yield,
++            ~~~~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+         }
+     
+         export var tokenTable: any = new TokenInfo[];
+                                          ~~~~~~~~~
+@@ -768,10 +780,16 @@
+             JavascriptFuture = 2,
+             TypeScript = 4,
+             JavascriptFutureStrict = 8,
+             TypeScriptAndJS = Javascript | TypeScript,
++            ~~~~~~~~~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+             TypeScriptAndJSFuture = JavascriptFuture | TypeScript,
++            ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+             TypeScriptAndJSFutureStrict = JavascriptFutureStrict | TypeScript,
++            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+         }
+     
+         export class TokenInfo {
+             constructor (public tokenId: TokenID, public reservation: Reservation,

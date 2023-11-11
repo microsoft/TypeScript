@@ -1,0 +1,30 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,7 +1,18 @@
+ 
+ 
+ //// [/.src/expandoFunctionContextualTypesJSDocInTs.d.ts]
+ export declare function Foo(): void;
+-export declare namespace Foo {
+-    var bar: () => void;
+-}
++/// [Errors] ////
++
++expandoFunctionContextualTypesJSDocInTs.ts(1,17): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++
++
++==== expandoFunctionContextualTypesJSDocInTs.ts (1 errors) ====
++    export function Foo(): void { }
++                    ~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++    
++    // This comment should have no effect; this is a TS file.
++    /** @type {never} */
++    Foo.bar = () => { };
++    
+\ No newline at end of file

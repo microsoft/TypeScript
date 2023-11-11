@@ -1,0 +1,108 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,12 +1,8 @@
+ 
+ 
+ //// [/.src/typeFromPropertyAssignment29.d.ts]
+ declare function ExpandoDecl(n: number): string;
+-declare namespace ExpandoDecl {
+-    var prop: number;
+-    var m: (n: number) => number;
+-}
+ declare var n: number;
+ declare const ExpandoExpr: {
+     (n: number): string;
+     prop: {
+@@ -27,27 +23,18 @@
+ declare function ExpandoNested(n: number): {
+     (m: number): number;
+     total: number;
+ };
+-declare namespace ExpandoNested {
+-    var also: number;
+-}
+ declare function ExpandoMerge(n: number): number;
+ declare namespace ExpandoMerge {
+-    var p1: number;
+-}
+-declare namespace ExpandoMerge {
+     var p2: number;
+ }
+ declare namespace ExpandoMerge {
+     var p3: number;
+ }
+ declare var n: number;
+ declare namespace Ns {
+     function ExpandoNamespace(): void;
+-    namespace ExpandoNamespace {
+-        var p6: number;
+-    }
+     export function foo(): typeof ExpandoNamespace;
+     export {};
+ }
+ declare var ExpandoExpr2: (n: number) => string;
+@@ -63,8 +50,12 @@
+ };
+ declare var n: number;
+ /// [Errors] ////
+ 
++typeFromPropertyAssignment29.ts(1,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++typeFromPropertyAssignment29.ts(41,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++typeFromPropertyAssignment29.ts(53,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++typeFromPropertyAssignment29.ts(66,14): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+ typeFromPropertyAssignment29.ts(77,14): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
+ typeFromPropertyAssignment29.ts(78,14): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
+ typeFromPropertyAssignment29.ts(81,30): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
+ typeFromPropertyAssignment29.ts(81,50): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
+@@ -77,10 +68,12 @@
+ typeFromPropertyAssignment29.ts(101,30): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
+ typeFromPropertyAssignment29.ts(101,50): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
+ 
+ 
+-==== typeFromPropertyAssignment29.ts (12 errors) ====
++==== typeFromPropertyAssignment29.ts (16 errors) ====
+     function ExpandoDecl(n: number): string {
++             ~~~~~~~~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+         return n.toString();
+     }
+     ExpandoDecl.prop = 2
+     ExpandoDecl.m = function(n: number) {
+@@ -119,8 +112,10 @@
+     
+     }
+     
+     function ExpandoNested(n: number): {
++             ~~~~~~~~~~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+         (m: number): number;
+         total: number;
+     } {
+         const nested = function (m: number) {
+@@ -131,8 +126,10 @@
+     }
+     ExpandoNested.also = -1;
+     
+     function ExpandoMerge(n: number): number {
++             ~~~~~~~~~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+         return n * 100;
+     }
+     ExpandoMerge.p1 = 111
+     namespace ExpandoMerge {
+@@ -144,8 +141,10 @@
+     var n: number = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
+     
+     namespace Ns {
+         function ExpandoNamespace(): void {}
++                 ~~~~~~~~~~~~~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+         ExpandoNamespace.p6 = 42;
+         export function foo(): typeof ExpandoNamespace {
+             return ExpandoNamespace;
+         }

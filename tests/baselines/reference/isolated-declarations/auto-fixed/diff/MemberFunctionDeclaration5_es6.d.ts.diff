@@ -1,0 +1,31 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration5_es6.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,17 +1,20 @@
+ 
+ 
+ //// [/.src/MemberFunctionDeclaration5_es6.d.ts]
+ declare class C {
+-    (): any;
++    (): invalid;
+ }
+ /// [Errors] ////
+ 
++MemberFunctionDeclaration5_es6.ts(2,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ MemberFunctionDeclaration5_es6.ts(3,1): error TS1003: Identifier expected.
+ 
+ 
+-==== MemberFunctionDeclaration5_es6.ts (1 errors) ====
++==== MemberFunctionDeclaration5_es6.ts (2 errors) ====
+     class C {
+        *
++        
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+     }
+     ~
+ !!! error TS1003: Identifier expected.
+\ No newline at end of file

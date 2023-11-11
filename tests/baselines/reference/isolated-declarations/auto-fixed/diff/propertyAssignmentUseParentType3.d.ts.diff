@@ -1,0 +1,69 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/salsa/propertyAssignmentUseParentType3.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,21 +1,48 @@
+ 
+ 
+ //// [/.src/propertyAssignmentUseParentType3.d.ts]
+ declare function foo1(): number;
+-declare namespace foo1 {
+-    var toFixed: string;
+-}
+ declare function foo2(): any[];
+-declare namespace foo2 {
+-    var join: string;
+-}
+ declare function foo3(): string;
+-declare namespace foo3 {
+-    var trim: string;
+-}
+ declare function foo4(): ({
+     x: number;
+ });
+-declare namespace foo4 {
+-    var x: string;
+-}
++/// [Errors] ////
++
++propertyAssignmentUseParentType3.ts(3,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++propertyAssignmentUseParentType3.ts(8,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++propertyAssignmentUseParentType3.ts(13,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++propertyAssignmentUseParentType3.ts(18,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++
++
++==== propertyAssignmentUseParentType3.ts (4 errors) ====
++    // don't use the parent type if it's a function declaration (#33741)
++    
++    function foo1(): number {
++             ~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++        return 123;
++    }
++    foo1.toFixed = "";
++    
++    function foo2(): any[] {
++             ~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++        return [];
++    }
++    foo2.join = "";
++    
++    function foo3(): string {
++             ~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++        return "";
++    }
++    foo3.trim = "";
++    
++    function foo4(): ({x: number}) {
++             ~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++        return {x: 123};
++    }
++    foo4.x = "456";
++    
+\ No newline at end of file
