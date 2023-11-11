@@ -13701,6 +13701,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(type: Type, include: TypeFlags, stringsOnly: boolean, cb: (keyType: Type) => void) {
+        if (isTupleType(type)) {
+            forEachType(getUnionType(getElementTypes(type).map((_, i) => getStringLiteralType("" + i))), cb);
+            return;
+        }
+        if (isArrayType(type)) {
+            cb(numberType);
+            return;
+        }
         for (const prop of getPropertiesOfType(type)) {
             cb(getLiteralTypeFromProperty(prop, include));
         }
@@ -13735,15 +13743,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
         if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
             // We have a { [P in keyof T]: X }
-            if (isTupleType(modifiersType)) {
-                forEachType(getUnionType(getElementTypes(modifiersType).map((_, i) => getStringLiteralType("" + i))), addMemberForKeyType);
-            }
-            else if (isArrayType(modifiersType)) {
-                addMemberForKeyType(numberType);
-            }
-            else {
-                forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, include, keyofStringsOnly, addMemberForKeyType);
-            }
+            forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, include, keyofStringsOnly, addMemberForKeyType);
         }
         else {
             forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
