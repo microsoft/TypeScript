@@ -14,7 +14,6 @@ import {
     CommandLineOption,
     CompilerOptions,
     CompletionInfo,
-    ConfigFileProgramReloadLevel,
     contains,
     containsPath,
     convertCompilerOptionsForTelemetry,
@@ -27,6 +26,7 @@ import {
     Diagnostic,
     directorySeparator,
     DirectoryStructureHost,
+    DirectoryWatcherCallback,
     DocumentPosition,
     DocumentPositionMapper,
     DocumentRegistry,
@@ -37,6 +37,7 @@ import {
     FileExtensionInfo,
     fileExtensionIs,
     FileWatcher,
+    FileWatcherCallback,
     FileWatcherEventKind,
     find,
     flatMap,
@@ -71,6 +72,7 @@ import {
     isNodeModulesDirectory,
     isRootedDiskPath,
     isString,
+    JSDocParsingMode,
     LanguageServiceMode,
     length,
     map,
@@ -92,6 +94,7 @@ import {
     PerformanceEvent,
     PluginImport,
     PollingInterval,
+    ProgramUpdateLevel,
     ProjectPackageJsonInfo,
     ProjectReference,
     ReadMapFile,
@@ -126,6 +129,7 @@ import {
     version,
     WatchDirectoryFlags,
     WatchFactory,
+    WatchFactoryHost,
     WatchLogLevel,
     WatchOptions,
     WatchType,
@@ -136,6 +140,7 @@ import {
     ActionSet,
     asNormalizedPath,
     AutoImportProviderProject,
+    AuxiliaryProject,
     BeginEnablePluginResult,
     BeginInstallTypes,
     ConfiguredProject,
@@ -149,6 +154,7 @@ import {
     hasNoTypeScriptSource,
     InferredProject,
     InvalidateCachedTypings,
+    isBackgroundProject,
     isConfiguredProject,
     isDynamicFileName,
     isInferredProject,
@@ -192,6 +198,9 @@ export const ConfigFileDiagEvent = "configFileDiag";
 export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
 export const ProjectInfoTelemetryEvent = "projectInfo";
 export const OpenFileInfoTelemetryEvent = "openFileInfo";
+export const CreateFileWatcherEvent: protocol.CreateFileWatcherEventName = "createFileWatcher";
+export const CreateDirectoryWatcherEvent: protocol.CreateDirectoryWatcherEventName = "createDirectoryWatcher";
+export const CloseFileWatcherEvent: protocol.CloseFileWatcherEventName = "closeFileWatcher";
 const ensureProjectForOpenFileSchedule = "*ensureProjectForOpenFiles*";
 
 export interface ProjectsUpdatedInBackgroundEvent {
@@ -319,6 +328,21 @@ export interface OpenFileInfo {
     readonly checkJs: boolean;
 }
 
+export interface CreateFileWatcherEvent {
+    readonly eventName: protocol.CreateFileWatcherEventName;
+    readonly data: protocol.CreateFileWatcherEventBody;
+}
+
+export interface CreateDirectoryWatcherEvent {
+    readonly eventName: protocol.CreateDirectoryWatcherEventName;
+    readonly data: protocol.CreateDirectoryWatcherEventBody;
+}
+
+export interface CloseFileWatcherEvent {
+    readonly eventName: protocol.CloseFileWatcherEventName;
+    readonly data: protocol.CloseFileWatcherEventBody;
+}
+
 export type ProjectServiceEvent =
     | LargeFileReferencedEvent
     | ProjectsUpdatedInBackgroundEvent
@@ -327,7 +351,10 @@ export type ProjectServiceEvent =
     | ConfigFileDiagEvent
     | ProjectLanguageServiceStateEvent
     | ProjectInfoTelemetryEvent
-    | OpenFileInfoTelemetryEvent;
+    | OpenFileInfoTelemetryEvent
+    | CreateFileWatcherEvent
+    | CreateDirectoryWatcherEvent
+    | CloseFileWatcherEvent;
 
 export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -582,6 +609,7 @@ export interface ProjectServiceOptions {
     useInferredProjectPerProjectRoot: boolean;
     typingsInstaller?: ITypingsInstaller;
     eventHandler?: ProjectServiceEventHandler;
+    canUseWatchEvents?: boolean;
     suppressDiagnosticEvents?: boolean;
     throttleWaitMilliseconds?: number;
     globalPlugins?: readonly string[];
@@ -591,6 +619,7 @@ export interface ProjectServiceOptions {
     serverMode?: LanguageServiceMode;
     session: Session<unknown> | undefined;
     /** @internal */ incrementalVerifier?: (service: ProjectService) => void;
+    jsDocParsingMode?: JSDocParsingMode;
 }
 
 interface OriginalFileInfo {
@@ -847,12 +876,115 @@ export interface ParsedConfig {
      * true if watchedDirectories need to be updated as per parsedCommandLine's updated watched directories
      */
     watchedDirectoriesStale?: boolean;
-    reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
+    updateLevel?: ProgramUpdateLevel.RootNamesAndUpdate | ProgramUpdateLevel.Full;
 }
 
 function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => string) {
     let nextId = 1;
     return () => nameFactory(nextId++);
+}
+
+interface HostWatcherMap<T> {
+    idToCallbacks: Map<number, Set<T>>;
+    pathToId: Map<Path, number>;
+}
+
+function getHostWatcherMap<T>(): HostWatcherMap<T> {
+    return { idToCallbacks: new Map(), pathToId: new Map() };
+}
+
+function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseWatchEvents: boolean | undefined): WatchFactoryHost | undefined {
+    if (!canUseWatchEvents || !service.eventHandler || !service.session) return undefined;
+    const watchedFiles = getHostWatcherMap<FileWatcherCallback>();
+    const watchedDirectories = getHostWatcherMap<DirectoryWatcherCallback>();
+    const watchedDirectoriesRecursive = getHostWatcherMap<DirectoryWatcherCallback>();
+    let ids = 1;
+    service.session.addProtocolHandler(protocol.CommandTypes.WatchChange, req => {
+        onWatchChange((req as protocol.WatchChangeRequest).arguments);
+        return { responseRequired: false };
+    });
+    return {
+        watchFile,
+        watchDirectory,
+        getCurrentDirectory: () => service.host.getCurrentDirectory(),
+        useCaseSensitiveFileNames: service.host.useCaseSensitiveFileNames,
+    };
+    function watchFile(path: string, callback: FileWatcherCallback): FileWatcher {
+        return getOrCreateFileWatcher(
+            watchedFiles,
+            path,
+            callback,
+            id => ({ eventName: CreateFileWatcherEvent, data: { id, path } }),
+        );
+    }
+    function watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+        return getOrCreateFileWatcher(
+            recursive ? watchedDirectoriesRecursive : watchedDirectories,
+            path,
+            callback,
+            id => ({ eventName: CreateDirectoryWatcherEvent, data: { id, path, recursive: !!recursive } }),
+        );
+    }
+    function getOrCreateFileWatcher<T>(
+        { pathToId, idToCallbacks }: HostWatcherMap<T>,
+        path: string,
+        callback: T,
+        event: (id: number) => CreateFileWatcherEvent | CreateDirectoryWatcherEvent,
+    ) {
+        const key = service.toPath(path);
+        let id = pathToId.get(key);
+        if (!id) pathToId.set(key, id = ids++);
+        let callbacks = idToCallbacks.get(id);
+        if (!callbacks) {
+            idToCallbacks.set(id, callbacks = new Set());
+            // Add watcher
+            service.eventHandler!(event(id));
+        }
+        callbacks.add(callback);
+        return {
+            close() {
+                const callbacks = idToCallbacks.get(id!);
+                if (!callbacks?.delete(callback)) return;
+                if (callbacks.size) return;
+                idToCallbacks.delete(id!);
+                pathToId.delete(key);
+                service.eventHandler!({ eventName: CloseFileWatcherEvent, data: { id: id! } });
+            },
+        };
+    }
+    function onWatchChange({ id, path, eventType }: protocol.WatchChangeRequestArgs) {
+        // console.log(`typescript-vscode-watcher:: Invoke:: ${id}:: ${path}:: ${eventType}`);
+        onFileWatcherCallback(id, path, eventType);
+        onDirectoryWatcherCallback(watchedDirectories, id, path, eventType);
+        onDirectoryWatcherCallback(watchedDirectoriesRecursive, id, path, eventType);
+    }
+
+    function onFileWatcherCallback(
+        id: number,
+        eventPath: string,
+        eventType: "create" | "delete" | "update",
+    ) {
+        watchedFiles.idToCallbacks.get(id)?.forEach(callback => {
+            const eventKind = eventType === "create" ?
+                FileWatcherEventKind.Created :
+                eventType === "delete" ?
+                FileWatcherEventKind.Deleted :
+                FileWatcherEventKind.Changed;
+            callback(eventPath, eventKind);
+        });
+    }
+
+    function onDirectoryWatcherCallback(
+        { idToCallbacks }: HostWatcherMap<DirectoryWatcherCallback>,
+        id: number,
+        eventPath: string,
+        eventType: "create" | "delete" | "update",
+    ) {
+        if (eventType === "update") return;
+        idToCallbacks.get(id)?.forEach(callback => {
+            callback(eventPath);
+        });
+    }
 }
 
 export class ProjectService {
@@ -959,7 +1091,8 @@ export class ProjectService {
     public readonly typingsInstaller: ITypingsInstaller;
     private readonly globalCacheLocationDirectoryPath: Path | undefined;
     public readonly throttleWaitMilliseconds?: number;
-    private readonly eventHandler?: ProjectServiceEventHandler;
+    /** @internal */
+    readonly eventHandler?: ProjectServiceEventHandler;
     private readonly suppressDiagnosticEvents?: boolean;
 
     public readonly globalPlugins: readonly string[];
@@ -997,6 +1130,10 @@ export class ProjectService {
     private currentPluginEnablementPromise?: Promise<void>;
 
     /** @internal */ verifyDocumentRegistry = noop;
+    /** @internal */ verifyProgram: (project: Project) => void = noop;
+    /** @internal */ onProjectCreation: (project: Project) => void = noop;
+
+    readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
     constructor(opts: ProjectServiceOptions) {
         this.host = opts.host;
@@ -1013,6 +1150,7 @@ export class ProjectService {
         this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
         this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
         this.session = opts.session;
+        this.jsDocParsingMode = opts.jsDocParsingMode;
 
         if (opts.serverMode !== undefined) {
             this.serverMode = opts.serverMode;
@@ -1049,7 +1187,7 @@ export class ProjectService {
             extraFileExtensions: [],
         };
 
-        this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this);
+        this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this.jsDocParsingMode, this);
         const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
             this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
         const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
@@ -1059,7 +1197,12 @@ export class ProjectService {
                 watchFile: returnNoopFileWatcher,
                 watchDirectory: returnNoopFileWatcher,
             } :
-            getWatchFactory(this.host, watchLogLevel, log, getDetailWatchInfo);
+            getWatchFactory(
+                createWatchFactoryHostUsingWatchEvents(this, opts.canUseWatchEvents) || this.host,
+                watchLogLevel,
+                log,
+                getDetailWatchInfo,
+            );
         opts.incrementalVerifier?.(this);
     }
 
@@ -1185,15 +1328,14 @@ export class ProjectService {
 
     private delayUpdateProjectGraph(project: Project) {
         project.markAsDirty();
-        if (project.projectKind !== ProjectKind.AutoImportProvider && project.projectKind !== ProjectKind.Auxiliary) {
-            const projectName = project.getProjectName();
-            this.pendingProjectUpdates.set(projectName, project);
-            this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
-                if (this.pendingProjectUpdates.delete(projectName)) {
-                    updateProjectIfDirty(project);
-                }
-            });
-        }
+        if (isBackgroundProject(project)) return;
+        const projectName = project.getProjectName();
+        this.pendingProjectUpdates.set(projectName, project);
+        this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
+            if (this.pendingProjectUpdates.delete(projectName)) {
+                updateProjectIfDirty(project);
+            }
+        });
     }
 
     /** @internal */
@@ -1526,11 +1668,12 @@ export class ProjectService {
                         useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
                         writeLog: s => this.logger.info(s),
                         toPath: s => this.toPath(s),
+                        getScriptKind: configuredProjectForConfig ? (fileName => configuredProjectForConfig.getScriptKind(fileName)) : undefined,
                     })
                 ) return;
 
                 // Reload is pending, do the reload
-                if (config.reloadLevel !== ConfigFileProgramReloadLevel.Full) config.reloadLevel = ConfigFileProgramReloadLevel.Partial;
+                if (config.updateLevel !== ProgramUpdateLevel.Full) config.updateLevel = ProgramUpdateLevel.RootNamesAndUpdate;
                 config.projects.forEach((watchWildcardDirectories, projectCanonicalPath) => {
                     if (!watchWildcardDirectories) return;
                     const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
@@ -1538,23 +1681,23 @@ export class ProjectService {
 
                     // Load root file names for configured project with the config file name
                     // But only schedule update if project references this config file
-                    const reloadLevel = configuredProjectForConfig === project ? ConfigFileProgramReloadLevel.Partial : ConfigFileProgramReloadLevel.None;
-                    if (project.pendingReload !== undefined && project.pendingReload > reloadLevel) return;
+                    const updateLevel = configuredProjectForConfig === project ? ProgramUpdateLevel.RootNamesAndUpdate : ProgramUpdateLevel.Update;
+                    if (project.pendingUpdateLevel !== undefined && project.pendingUpdateLevel > updateLevel) return;
 
                     // don't trigger callback on open, existing files
                     if (this.openFiles.has(fileOrDirectoryPath)) {
                         const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
                         if (info.isAttached(project)) {
-                            const loadLevelToSet = Math.max(reloadLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ConfigFileProgramReloadLevel.None) as ConfigFileProgramReloadLevel;
+                            const loadLevelToSet = Math.max(updateLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ProgramUpdateLevel.Update) as ProgramUpdateLevel;
                             project.openFileWatchTriggered.set(fileOrDirectoryPath, loadLevelToSet);
                         }
                         else {
-                            project.pendingReload = reloadLevel;
+                            project.pendingUpdateLevel = updateLevel;
                             this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
                         }
                     }
                     else {
-                        project.pendingReload = reloadLevel;
+                        project.pendingUpdateLevel = updateLevel;
                         this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
                     }
                 });
@@ -1567,12 +1710,12 @@ export class ProjectService {
     }
 
     /** @internal */
-    private delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalConfigFilePath: NormalizedPath, reloadReason: string) {
+    private delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalConfigFilePath: NormalizedPath, loadReason: string) {
         const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
         if (!configFileExistenceInfo?.config) return false;
         let scheduledAnyProjectUpdate = false;
         // Update projects watching cached config
-        configFileExistenceInfo.config.reloadLevel = ConfigFileProgramReloadLevel.Full;
+        configFileExistenceInfo.config.updateLevel = ProgramUpdateLevel.Full;
 
         configFileExistenceInfo.config.projects.forEach((_watchWildcardDirectories, projectCanonicalPath) => {
             const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
@@ -1582,8 +1725,8 @@ export class ProjectService {
             if (projectCanonicalPath === canonicalConfigFilePath) {
                 // Skip refresh if project is not yet loaded
                 if (project.isInitialLoadPending()) return;
-                project.pendingReload = ConfigFileProgramReloadLevel.Full;
-                project.pendingReloadReason = reloadReason;
+                project.pendingUpdateLevel = ProgramUpdateLevel.Full;
+                project.pendingUpdateReason = loadReason;
                 this.delayUpdateProjectGraph(project);
             }
             else {
@@ -1781,11 +1924,11 @@ export class ProjectService {
 
                 // If project had open file affecting
                 // Reload the root Files from config if its not already scheduled
-                const reloadLevel = p.openFileWatchTriggered.get(info.path);
-                if (reloadLevel !== undefined) {
+                const updateLevel = p.openFileWatchTriggered.get(info.path);
+                if (updateLevel !== undefined) {
                     p.openFileWatchTriggered.delete(info.path);
-                    if (p.pendingReload !== undefined && p.pendingReload < reloadLevel) {
-                        p.pendingReload = reloadLevel;
+                    if (p.pendingUpdateLevel !== undefined && p.pendingUpdateLevel < updateLevel) {
+                        p.pendingUpdateLevel = updateLevel;
                         p.markFileAsDirty(info.path);
                     }
                 }
@@ -2277,6 +2420,7 @@ export class ProjectService {
     private addFilesToNonInferredProject<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, typeAcquisition: TypeAcquisition): void {
         this.updateNonInferredProjectFiles(project, files, propertyReader);
         project.setTypeAcquisition(typeAcquisition);
+        project.markAsDirty();
     }
 
     /** @internal */
@@ -2297,7 +2441,7 @@ export class ProjectService {
             configFileExistenceInfo.config = {
                 cachedDirectoryStructureHost: createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!,
                 projects: new Map(),
-                reloadLevel: ConfigFileProgramReloadLevel.Full,
+                updateLevel: ProgramUpdateLevel.Full,
             };
         }
 
@@ -2316,8 +2460,8 @@ export class ProjectService {
     /** @internal */
     private createConfiguredProjectWithDelayLoad(configFileName: NormalizedPath, reason: string) {
         const project = this.createConfiguredProject(configFileName);
-        project.pendingReload = ConfigFileProgramReloadLevel.Full;
-        project.pendingReloadReason = reason;
+        project.pendingUpdateLevel = ProgramUpdateLevel.Full;
+        project.pendingUpdateReason = reason;
         return project;
     }
 
@@ -2380,7 +2524,7 @@ export class ProjectService {
             this.watchWildcards(configFilename, configFileExistenceInfo, project);
         }
         project.enablePluginsWithOptions(compilerOptions);
-        const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
+        const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles(ProgramUpdateLevel.Full));
         this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
         tracing?.pop();
     }
@@ -2388,8 +2532,8 @@ export class ProjectService {
     /** @internal */
     ensureParsedConfigUptoDate(configFilename: NormalizedPath, canonicalConfigFilePath: NormalizedPath, configFileExistenceInfo: ConfigFileExistenceInfo, forProject: ConfiguredProject): ConfigFileExistenceInfo {
         if (configFileExistenceInfo.config) {
-            if (!configFileExistenceInfo.config.reloadLevel) return configFileExistenceInfo;
-            if (configFileExistenceInfo.config.reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+            if (!configFileExistenceInfo.config.updateLevel) return configFileExistenceInfo;
+            if (configFileExistenceInfo.config.updateLevel === ProgramUpdateLevel.RootNamesAndUpdate) {
                 this.reloadFileNamesOfParsedConfig(configFilename, configFileExistenceInfo.config);
                 return configFileExistenceInfo;
             }
@@ -2439,7 +2583,7 @@ export class ProjectService {
         else {
             configFileExistenceInfo.config.parsedCommandLine = parsedCommandLine;
             configFileExistenceInfo.config.watchedDirectoriesStale = true;
-            configFileExistenceInfo.config.reloadLevel = undefined;
+            configFileExistenceInfo.config.updateLevel = undefined;
         }
 
         // If watch options different than older options when setting for the first time, update the config file watcher
@@ -2528,7 +2672,7 @@ export class ProjectService {
         configFileExistenceInfo.config.watchedDirectoriesStale = undefined;
     }
 
-    private updateNonInferredProjectFiles<T>(project: Project, files: T[], propertyReader: FilePropertyReader<T>) {
+    private updateNonInferredProjectFiles<T>(project: Project, files: readonly T[], propertyReader: FilePropertyReader<T>) {
         const projectRootFilesMap = project.getRootFilesMap();
         const newRootScriptInfoMap = new Map<string, true>();
 
@@ -2595,10 +2739,6 @@ export class ProjectService {
                 }
             });
         }
-
-        // Just to ensure that even if root files dont change, the changes to the non root file are picked up,
-        // mark the project as dirty unconditionally
-        project.markAsDirty();
     }
 
     private updateRootAndOptionsOfNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean | undefined, watchOptions: WatchOptions | undefined) {
@@ -2620,14 +2760,15 @@ export class ProjectService {
     reloadFileNamesOfConfiguredProject(project: ConfiguredProject) {
         const fileNames = this.reloadFileNamesOfParsedConfig(project.getConfigFilePath(), this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!.config!);
         project.updateErrorOnNoInputFiles(fileNames);
-        this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
+        this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles(ProgramUpdateLevel.RootNamesAndUpdate)), fileNamePropertyReader);
+        project.markAsDirty();
         return project.updateGraph();
     }
 
     /** @internal */
     private reloadFileNamesOfParsedConfig(configFileName: NormalizedPath, config: ParsedConfig) {
-        if (config.reloadLevel === undefined) return config.parsedCommandLine!.fileNames;
-        Debug.assert(config.reloadLevel === ConfigFileProgramReloadLevel.Partial);
+        if (config.updateLevel === undefined) return config.parsedCommandLine!.fileNames;
+        Debug.assert(config.updateLevel === ProgramUpdateLevel.RootNamesAndUpdate);
         const configFileSpecs = config.parsedCommandLine!.options.configFile!.configFileSpecs!;
         const fileNames = getFileNamesFromConfigSpecs(
             configFileSpecs,
@@ -2641,7 +2782,7 @@ export class ProjectService {
     }
 
     /** @internal */
-    setFileNamesOfAutoImportProviderProject(project: AutoImportProviderProject, fileNames: string[]) {
+    setFileNamesOfAutpImportProviderOrAuxillaryProject(project: AutoImportProviderProject | AuxiliaryProject, fileNames: readonly string[]) {
         this.updateNonInferredProjectFiles(project, fileNames, fileNamePropertyReader);
     }
 
@@ -3257,7 +3398,7 @@ export class ProjectService {
                     this.configuredProjects.forEach(project => {
                         if (
                             project.hasExternalProjectRef() &&
-                            project.pendingReload === ConfigFileProgramReloadLevel.Full &&
+                            project.pendingUpdateLevel === ProgramUpdateLevel.Full &&
                             !this.pendingProjectUpdates.has(project.getProjectName())
                         ) {
                             project.updateGraph();
@@ -3327,7 +3468,7 @@ export class ProjectService {
 
         // Ensure everything is reloaded for cached configs
         this.configFileExistenceInfoCache.forEach(info => {
-            if (info.config) info.config.reloadLevel = ConfigFileProgramReloadLevel.Full;
+            if (info.config) info.config.updateLevel = ProgramUpdateLevel.Full;
         });
 
         // Reload Projects
@@ -3376,8 +3517,8 @@ export class ProjectService {
                 if (!updatedProjects.has(project.canonicalConfigFilePath)) {
                     updatedProjects.set(project.canonicalConfigFilePath, true);
                     if (delayReload) {
-                        project.pendingReload = ConfigFileProgramReloadLevel.Full;
-                        project.pendingReloadReason = reason;
+                        project.pendingUpdateLevel = ProgramUpdateLevel.Full;
+                        project.pendingUpdateReason = reason;
                         if (clearSemanticCache) this.clearSemanticCache(project);
                         this.delayUpdateProjectGraph(project);
                     }

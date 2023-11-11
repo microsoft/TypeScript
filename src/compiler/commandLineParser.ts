@@ -110,7 +110,6 @@ import {
     toFileNameLowerCase,
     toPath,
     tracing,
-    trimString,
     TsConfigOnlyOption,
     TsConfigSourceFile,
     TypeAcquisition,
@@ -176,6 +175,7 @@ const libEntries: [string, string][] = [
     ["es2015.symbol", "lib.es2015.symbol.d.ts"],
     ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
     ["es2016.array.include", "lib.es2016.array.include.d.ts"],
+    ["es2016.intl", "lib.es2016.intl.d.ts"],
     ["es2017.date", "lib.es2017.date.d.ts"],
     ["es2017.object", "lib.es2017.object.d.ts"],
     ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"],
@@ -529,6 +529,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
+    deprecatedKeys: new Set(["es3"]),
     paramType: Diagnostics.VERSION,
     showInSimplifiedHelpView: true,
     category: Diagnostics.Language_and_Environment,
@@ -554,6 +555,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         node16: ModuleKind.Node16,
         nodenext: ModuleKind.NodeNext,
     })),
+    affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
@@ -648,7 +650,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "allowJs",
         type: "boolean",
-        affectsModuleResolution: true,
+        allowJsFlag: true,
+        affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these_files,
@@ -658,6 +661,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         name: "checkJs",
         type: "boolean",
         affectsModuleResolution: true,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Enable_error_reporting_in_type_checked_JavaScript_files,
@@ -670,6 +675,10 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsModuleResolution: true,
+        // The checker emits an error when it sees JSX but this option is not set in compilerOptions.
+        // This is effectively a semantic error, so mark this option as affecting semantic diagnostics
+        // so we know to refresh errors when this option is changed.
+        affectsSemanticDiagnostics: true,
         paramType: Diagnostics.KIND,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Language_and_Environment,
@@ -988,6 +997,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             bundler: ModuleResolutionKind.Bundler,
         })),
         deprecatedKeys: new Set(["node"]),
+        affectsSourceFile: true,
         affectsModuleResolution: true,
         paramType: Diagnostics.STRATEGY,
         category: Diagnostics.Modules,
@@ -1241,7 +1251,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsDeclarationPath: true,
-        isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
+        isFilePath: false, // This is intentionally broken to support compatibility with existing tsconfig files
         // for correct behaviour, please use outFile
         category: Diagnostics.Backwards_Compatibility,
         paramType: Diagnostics.FILE,
@@ -1534,6 +1544,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             legacy: ModuleDetectionKind.Legacy,
             force: ModuleDetectionKind.Force,
         })),
+        affectsSourceFile: true,
         affectsModuleResolution: true,
         description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
         category: Diagnostics.Language_and_Environment,
@@ -1565,7 +1576,7 @@ export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOptio
 export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsModuleResolution);
 
 /** @internal */
-export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
+export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSourceFile || !!option.affectsBindDiagnostics);
 
 /** @internal */
 export const optionsAffectingProgramStructure: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsProgramStructure);
@@ -1699,13 +1710,13 @@ function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType
 }
 
 /** @internal */
-export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
-    return convertJsonOptionOfCustomType(opt, trimString(value || ""), errors);
+export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string | undefined, errors: Diagnostic[]) {
+    return convertJsonOptionOfCustomType(opt, (value ?? "").trim(), errors);
 }
 
 /** @internal */
 export function parseListTypeOption(opt: CommandLineOptionOfListType, value = "", errors: Diagnostic[]): string | (string | number)[] | undefined {
-    value = trimString(value);
+    value = value.trim();
     if (startsWith(value, "-")) {
         return undefined;
     }
@@ -2375,7 +2386,7 @@ export function convertToJson(
                 // Currently having element option declaration in the tsconfig with type "object"
                 // determines if it needs onSetValidOptionKeyValueInParent callback or not
                 // At moment there are only "compilerOptions", "typeAcquisition" and "typingOptions"
-                // that satifies it and need it to modify options set in them (for normalizing file paths)
+                // that satisfies it and need it to modify options set in them (for normalizing file paths)
                 // vs what we set in the json
                 // If need arises, we can modify this interface and callbacks as needed
                 return convertObjectLiteralExpressionToJson(objectLiteralExpression, option as TsConfigOnlyOption);
@@ -3850,7 +3861,10 @@ function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<stri
         return false;
     }
     for (const ext of extensionGroup) {
-        if (fileExtensionIs(file, ext)) {
+        // d.ts files match with .ts extension and with case sensitive sorting the file order for same files with ts tsx and dts extension is
+        // d.ts, .ts, .tsx in that order so we need to handle tsx and dts of same same name case here and in remove files with same extensions
+        // So dont match .d.ts files with .ts extension
+        if (fileExtensionIs(file, ext) && (ext !== Extension.Ts || !fileExtensionIs(file, Extension.Dts))) {
             return false;
         }
         const higherPriorityPath = keyMapper(changeExtension(file, ext));

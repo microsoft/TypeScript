@@ -1,7 +1,11 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node16"}}
+{
+  "compilerOptions": {
+    "moduleResolution": "node16"
+  }
+}
 
 //// [/user/username/projects/myproject/index.ts]
 /// <reference types="pkg" resolution-mode="import"/>
@@ -14,7 +18,14 @@ export const x = 10;
 
 
 //// [/user/username/projects/myproject/node_modules/pkg/package.json]
-{"name":"pkg","version":"0.0.1","exports":{"import":"./import.js","require":"./require.js"}}
+{
+  "name": "pkg",
+  "version": "0.0.1",
+  "exports": {
+    "import": "./import.js",
+    "require": "./require.js"
+  }
+}
 
 //// [/user/username/projects/myproject/node_modules/pkg/import.d.ts]
 export {};
@@ -31,7 +42,14 @@ declare global {
 
 
 //// [/user/username/projects/myproject/node_modules/pkg1/package.json]
-{"name":"pkg1","version":"0.0.1","exports":{"import":"./import.js","require":"./require.js"}}
+{
+  "name": "pkg1",
+  "version": "0.0.1",
+  "exports": {
+    "import": "./import.js",
+    "require": "./require.js"
+  }
+}
 
 //// [/user/username/projects/myproject/node_modules/pkg1/import.d.ts]
 export {};
@@ -137,24 +155,20 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/index.ts"]
-Program options: {"moduleResolution":3,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/node_modules/pkg/import.d.ts
-/user/username/projects/myproject/index.ts
-/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
 
-No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
-/user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
-/user/username/projects/myproject/index.ts (used version)
-/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts (used version)
+//// [/user/username/projects/myproject/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference types="pkg" resolution-mode="import"/>
+/// <reference types="pkg1" resolution-mode="require"/>
+
+
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types/package.json: *new*
@@ -198,22 +212,34 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules/@types: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/node_modules/pkg/import.d.ts
+/user/username/projects/myproject/index.ts
+/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
+/user/username/projects/myproject/index.ts (used version)
+/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/user/username/projects/myproject/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference types="pkg" resolution-mode="import"/>
-/// <reference types="pkg1" resolution-mode="require"/>
-
-
 
 Change:: modify aFile by adding import
 
@@ -224,8 +250,12 @@ export const x = 10;
 
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -302,8 +332,26 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/index.ts"]
-Program options: {"moduleResolution":3,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+/// <reference types="pkg" resolution-mode="import"/>
+exports.x = 10;
+
+
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -318,12 +366,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-/// <reference types="pkg" resolution-mode="import"/>
-exports.x = 10;
-
-

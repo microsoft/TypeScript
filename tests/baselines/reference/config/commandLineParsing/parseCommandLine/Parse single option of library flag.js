@@ -1,9 +1,9 @@
 --lib es6 0.ts
 CompilerOptions::
 {
- "lib": [
-  "lib.es2015.d.ts"
- ]
+  "lib": [
+    "lib.es2015.d.ts"
+  ]
 }
 WatchOptions::
 

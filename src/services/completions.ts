@@ -58,6 +58,7 @@ import {
     escapeSnippetText,
     every,
     ExportKind,
+    ExportMapInfoKey,
     Expression,
     ExpressionWithTypeArguments,
     factory,
@@ -485,14 +486,14 @@ interface SymbolOriginInfoExport extends SymbolOriginInfo {
     moduleSymbol: Symbol;
     isDefaultExport: boolean;
     exportName: string;
-    exportMapKey: string;
+    exportMapKey: ExportMapInfoKey;
 }
 
 interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
     symbolName: string;
     moduleSymbol: Symbol;
     exportName: string;
-    exportMapKey?: string;
+    exportMapKey?: ExportMapInfoKey;
     moduleSpecifier: string;
 }
 
@@ -1328,7 +1329,11 @@ function completionInfoFromData(
 
     if (keywordFilters !== KeywordCompletionFilters.None) {
         for (const keywordEntry of getKeywordCompletions(keywordFilters, !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile))) {
-            if (isTypeOnlyLocation && isTypeKeyword(stringToToken(keywordEntry.name)!) || !uniqueNames.has(keywordEntry.name)) {
+            if (
+                isTypeOnlyLocation && isTypeKeyword(stringToToken(keywordEntry.name)!) ||
+                !isTypeOnlyLocation && isContextualKeywordInAutoImportableExpressionSpace(keywordEntry.name) ||
+                !uniqueNames.has(keywordEntry.name)
+            ) {
                 uniqueNames.add(keywordEntry.name);
                 insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
             }
@@ -1983,7 +1988,7 @@ function getEntryForMemberCompletion(
                 // and we need to make sure the modifiers are uniform for all nodes/signatures.
                 modifiers = node.modifierFlagsCache | requiredModifiers;
             }
-            node = factory.updateModifiers(node, modifiers);
+            node = factory.replaceModifiers(node, modifiers);
             completionNodes.push(node);
         },
         body,
@@ -2013,12 +2018,12 @@ function getEntryForMemberCompletion(
             modifiers &= ~ModifierFlags.Public;
         }
         modifiers |= allowedAndPresent;
-        completionNodes = completionNodes.map(node => factory.updateModifiers(node, modifiers));
+        completionNodes = completionNodes.map(node => factory.replaceModifiers(node, modifiers));
         // Add back the decorators that were already present.
         if (presentDecorators?.length) {
             const lastNode = completionNodes[completionNodes.length - 1];
             if (canHaveDecorators(lastNode)) {
-                completionNodes[completionNodes.length - 1] = factory.updateModifierLike(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
+                completionNodes[completionNodes.length - 1] = factory.replaceDecoratorsAndModifiers(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
             }
         }
 
@@ -2823,7 +2828,7 @@ export function getCompletionEntryDetails(
             return createSimpleDetails(completionNameForLiteral(sourceFile, preferences, literal), ScriptElementKind.string, typeof literal === "string" ? SymbolDisplayPartKind.stringLiteral : SymbolDisplayPartKind.numericLiteral);
         }
         case "cases": {
-            const { entry, importAdder } = getExhaustiveCaseSnippets(
+            const snippets = getExhaustiveCaseSnippets(
                 contextToken!.parent as CaseBlock,
                 sourceFile,
                 preferences,
@@ -2831,8 +2836,10 @@ export function getCompletionEntryDetails(
                 host,
                 program,
                 /*formatContext*/ undefined,
-            )!;
-            if (importAdder.hasFixes()) {
+            );
+
+            if (snippets?.importAdder.hasFixes()) {
+                const { entry, importAdder } = snippets;
                 const changes = textChanges.ChangeTracker.with(
                     { host, formatContext, preferences },
                     importAdder.writeFixes,
@@ -2849,8 +2856,9 @@ export function getCompletionEntryDetails(
                     }],
                 };
             }
+
             return {
-                name: entry.name,
+                name,
                 kind: ScriptElementKind.unknown,
                 kindModifiers: "",
                 displayParts: [],
@@ -5824,4 +5832,32 @@ function toUpperCharCode(charCode: number) {
         return charCode - 32;
     }
     return charCode;
+}
+
+/**
+ * These are all the contextual keywords that would be valid to auto-import
+ * in expression space and also a valid keyword in the same location, depending
+ * on what gets typed afterwards. In these cases, we want to offer both the
+ * auto-import and the keyword completion. For example,
+ *
+ * ```ts
+ * type
+ * ```
+ *
+ * may be the beginning of a type alias declaration (keyword completion), or
+ * it may be the beginning of
+ *
+ * ```ts
+ * import { type } from "os";
+ * type() === "Darwin" ? doSomething() : doSomethingElse();
+ * ```
+ */
+function isContextualKeywordInAutoImportableExpressionSpace(keyword: string) {
+    return keyword === "abstract" ||
+        keyword === "async" ||
+        keyword === "await" ||
+        keyword === "declare" ||
+        keyword === "module" ||
+        keyword === "namespace" ||
+        keyword === "type";
 }

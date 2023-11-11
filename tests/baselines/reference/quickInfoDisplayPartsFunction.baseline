@@ -1,3 +1,4 @@
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoDisplayPartsFunction.ts ===
 // function foo(param: string, optionalParam?: string, paramWithInitializer = "hello", ...restParam: string[]) {
 //          ^^^

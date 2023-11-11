@@ -43,7 +43,10 @@ import {
     isFunctionTypeNode,
     isIdentifier,
     isJSDoc,
+    isJSDocOverloadTag,
     isJSDocParameterTag,
+    isJSDocPropertyLikeTag,
+    isJSDocTypeLiteral,
     isWhiteSpaceSingleLine,
     JSDoc,
     JSDocAugmentsTag,
@@ -228,6 +231,11 @@ function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDo
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocTypedefTag:
             return [declaration as JSDocTypedefTag, (declaration as JSDocTypedefTag).parent];
+        case SyntaxKind.JSDocSignature:
+            if (isJSDocOverloadTag(declaration.parent)) {
+                return [declaration.parent.parent];
+            }
+            // falls through
         default:
             return getJSDocCommentsAndTags(declaration);
     }
@@ -250,6 +258,12 @@ export function getJsDocTagsFromDeclarations(declarations?: Declaration[], check
         }
         for (const tag of tags) {
             infos.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
+
+            if (isJSDocPropertyLikeTag(tag) && tag.isNameFirst && tag.typeExpression && isJSDocTypeLiteral(tag.typeExpression.type)) {
+                forEach(tag.typeExpression.type.jsDocPropertyTags, propTag => {
+                    infos.push({ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) });
+                });
+            }
         }
     });
     return infos;

@@ -29,20 +29,10 @@ Output::
 
 
 
-Program root files: ["/a/b/app.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/app.ts
+//// [/a/b/app.js]
+var x = 10;
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/app.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/app.ts (used version)
 
 FsWatches::
 /a/b/app.ts: *new*
@@ -56,12 +46,28 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
+Program root files: [
+  "/a/b/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/app.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/app.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/app.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/app.js]
-var x = 10;
-
-
 
 Change:: change config file to add error
 
@@ -74,8 +80,12 @@ Input::
                     }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -90,8 +100,16 @@ Output::
 
 
 
-Program root files: ["/a/b/app.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+
+
+Program root files: [
+  "/a/b/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -102,7 +120,6 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: change config file to remove error
 
@@ -114,8 +131,12 @@ Input::
                     }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -125,8 +146,16 @@ Output::
 
 
 
-Program root files: ["/a/b/app.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+
+
+Program root files: [
+  "/a/b/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -137,4 +166,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

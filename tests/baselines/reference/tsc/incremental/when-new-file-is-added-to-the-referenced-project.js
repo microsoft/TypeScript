@@ -22,13 +22,31 @@ declare class class1 {}
 class class1 {}
 
 //// [/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "exclude": [
+    "temp"
+  ]
+}
 
 //// [/src/projects/project2/class2.ts]
 class class2 {}
 
 //// [/src/projects/project2/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../project1"
+    }
+  ]
+}
 
 
 
@@ -127,9 +145,13 @@ Output::
   The file is in the program because:
     Output from referenced project '/src/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
 
-  [96msrc/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
-    [7m1[0m {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
-    [7m [0m [96m                                                                    ~~~~~~~~~~~~~~~~~~~~~~[0m
+  [96msrc/projects/project2/tsconfig.json[0m:[93m7[0m:[93m5[0m
+    [7m7[0m     {
+    [7m [0m [96m    ~[0m
+    [7m8[0m       "path": "../project1"
+    [7m [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m9[0m     }
+    [7m [0m [96m~~~~~[0m
     File is output from referenced project specified here.
 
 
@@ -253,9 +275,13 @@ Output::
   The file is in the program because:
     Output from referenced project '/src/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
 
-  [96msrc/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
-    [7m1[0m {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
-    [7m [0m [96m                                                                    ~~~~~~~~~~~~~~~~~~~~~~[0m
+  [96msrc/projects/project2/tsconfig.json[0m:[93m7[0m:[93m5[0m
+    [7m7[0m     {
+    [7m [0m [96m    ~[0m
+    [7m8[0m       "path": "../project1"
+    [7m [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    [7m9[0m     }
+    [7m [0m [96m~~~~~[0m
     File is output from referenced project specified here.
 
 

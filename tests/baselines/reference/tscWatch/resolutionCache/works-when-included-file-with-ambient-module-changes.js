@@ -43,23 +43,11 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts","/users/username/projects/project/bar.d.ts"]
-Program options: {"watch":true}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/foo.ts
-/users/username/projects/project/bar.d.ts
+//// [/users/username/projects/project/foo.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/foo.ts
-/users/username/projects/project/bar.d.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/foo.ts (used version)
-/users/username/projects/project/bar.d.ts (used version)
 
 PolledWatches::
 /users/username/projects/node_modules: *new*
@@ -79,13 +67,30 @@ FsWatches::
 /users/username/projects/project/foo.ts: *new*
   {}
 
+Program root files: [
+  "/users/username/projects/project/foo.ts",
+  "/users/username/projects/project/bar.d.ts"
+]
+Program options: {
+  "watch": true
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/foo.ts
+/users/username/projects/project/bar.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/foo.ts
+/users/username/projects/project/bar.d.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/foo.ts (used version)
+/users/username/projects/project/bar.d.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/foo.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: Add fs definition
 
@@ -106,8 +111,12 @@ declare module "fs" {
 
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -117,8 +126,16 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts","/users/username/projects/project/bar.d.ts"]
-Program options: {"watch":true}
+//// [/users/username/projects/project/foo.js] file written with same contents
+
+
+Program root files: [
+  "/users/username/projects/project/foo.ts",
+  "/users/username/projects/project/bar.d.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -134,5 +151,3 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/foo.js] file written with same contents

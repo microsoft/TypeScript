@@ -5,7 +5,6 @@ import {
     combinePaths,
     createGetCanonicalFileName,
     Debug,
-    forEachAncestorDirectory,
     getDirectoryPath,
     MapLike,
     normalizePath,
@@ -15,7 +14,6 @@ import {
     version,
 } from "./_namespaces/ts";
 import {
-    ActionPackageInstalled,
     Arguments,
     EventTypesRegistry,
     findArgument,
@@ -23,7 +21,7 @@ import {
     InitializationFailedResponse,
     InstallTypingHost,
     nowString,
-    PackageInstalledResponse,
+    stringifyIndented,
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
@@ -181,19 +179,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
                 break;
             }
             case "installPackage": {
-                const { fileName, packageName, projectName, projectRootPath } = req;
-                const cwd = getDirectoryOfPackageJson(fileName, this.installTypingHost) || projectRootPath;
-                if (cwd) {
-                    this.installWorker(-1, [packageName], cwd, success => {
-                        const message = success ? `Package ${packageName} installed.` : `There was an error installing ${packageName}.`;
-                        const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success, message };
-                        this.sendResponse(response);
-                    });
-                }
-                else {
-                    const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success: false, message: "Could not determine a project root path." };
-                    this.sendResponse(response);
-                }
+                this.installPackage(req);
                 break;
             }
             default:
@@ -203,7 +189,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
 
     protected sendResponse(response: TypingInstallerResponseUnion) {
         if (this.log.isEnabled()) {
-            this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
+            this.log.writeLine(`Sending response:${stringifyIndented(response)}`);
         }
         process.send!(response); // TODO: GH#18217
         if (this.log.isEnabled()) {
@@ -213,7 +199,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
 
     protected installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
         if (this.log.isEnabled()) {
-            this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
+            this.log.writeLine(`#${requestId} with cwd: ${cwd} arguments: ${JSON.stringify(packageNames)}`);
         }
         const start = Date.now();
         const hasError = installNpmPackages(this.npmPath, version, packageNames, command => this.execSyncAndLog(command, { cwd }));
@@ -241,14 +227,6 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             return true;
         }
     }
-}
-
-function getDirectoryOfPackageJson(fileName: string, host: InstallTypingHost): string | undefined {
-    return forEachAncestorDirectory(getDirectoryPath(fileName), directory => {
-        if (host.fileExists(combinePaths(directory, "package.json"))) {
-            return directory;
-        }
-    });
 }
 
 const logFilePath = findArgument(Arguments.LogFile);

@@ -19,7 +19,11 @@ declare const console: { log(msg: any): void; };
 const a = "hello
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"noEmit":true}}
+{
+  "compilerOptions": {
+    "noEmit": true
+  }
+}
 
 
 
@@ -41,8 +45,13 @@ Output::
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/a.ts"]
-Program options: {"noEmit":true,"configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/a.ts"
+]
+Program options: {
+  "noEmit": true,
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -77,8 +86,13 @@ Output::
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/a.ts"]
-Program options: {"noEmit":true,"configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/a.ts"
+]
+Program options: {
+  "noEmit": true,
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -108,8 +122,13 @@ Output::
 [[90m12:00:17 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/a.ts"]
-Program options: {"noEmit":true,"configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/a.ts"
+]
+Program options: {
+  "noEmit": true,
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -140,8 +159,13 @@ Output::
 [[90m12:00:20 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/a.ts"]
-Program options: {"noEmit":true,"configFilePath":"/src/tsconfig.json"}
+Program root files: [
+  "/src/a.ts"
+]
+Program options: {
+  "noEmit": true,
+  "configFilePath": "/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
