@@ -104,6 +104,13 @@ const doc2_46309: IDocument_46309 = {
   [`added_${tech1_46309.uuid}` as const]: [19700101],
 };
 
+function genericFn1<T extends string>(input: T) {
+  const genericPattern = `get${input}` as const;
+  return {
+    [genericPattern]: 1,
+  };
+}
+
 
 //// [computedPropertyNamesTemplateLiteralTypes.js]
 "use strict";
@@ -181,3 +188,9 @@ const doc2_46309 = {
     name: "",
     [`added_${tech1_46309.uuid}`]: [19700101],
 };
+function genericFn1(input) {
+    const genericPattern = `get${input}`;
+    return {
+        [genericPattern]: 1,
+    };
+}

@@ -257,3 +257,22 @@ const doc2_46309: IDocument_46309 = {
 
 };
 
+function genericFn1<T extends string>(input: T) {
+>genericFn1 : Symbol(genericFn1, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 101, 2))
+>T : Symbol(T, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 103, 20))
+>input : Symbol(input, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 103, 38))
+>T : Symbol(T, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 103, 20))
+
+  const genericPattern = `get${input}` as const;
+>genericPattern : Symbol(genericPattern, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 104, 7))
+>input : Symbol(input, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 103, 38))
+>const : Symbol(const)
+
+  return {
+    [genericPattern]: 1,
+>[genericPattern] : Symbol([genericPattern], Decl(computedPropertyNamesTemplateLiteralTypes.ts, 105, 10))
+>genericPattern : Symbol(genericPattern, Decl(computedPropertyNamesTemplateLiteralTypes.ts, 104, 7))
+
+  };
+}
+

@@ -113,3 +113,10 @@ computedPropertyNamesTemplateLiteralTypes.ts(94,7): error TS2322: Type '{ [x: st
       [`added_${tech1_46309.uuid}` as const]: [19700101],
     };
     
+    function genericFn1<T extends string>(input: T) {
+      const genericPattern = `get${input}` as const;
+      return {
+        [genericPattern]: 1,
+      };
+    }
+    

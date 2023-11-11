@@ -103,3 +103,10 @@ const doc2_46309: IDocument_46309 = {
   name: "",
   [`added_${tech1_46309.uuid}` as const]: [19700101],
 };
+
+function genericFn1<T extends string>(input: T) {
+  const genericPattern = `get${input}` as const;
+  return {
+    [genericPattern]: 1,
+  };
+}

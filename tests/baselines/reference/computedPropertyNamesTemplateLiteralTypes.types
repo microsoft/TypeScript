@@ -315,3 +315,24 @@ const doc2_46309: IDocument_46309 = {
 
 };
 
+function genericFn1<T extends string>(input: T) {
+>genericFn1 : <T extends string>(input: T) => { [x: string]: number; }
+>input : T
+
+  const genericPattern = `get${input}` as const;
+>genericPattern : `get${T}`
+>`get${input}` as const : `get${T}`
+>`get${input}` : `get${T}`
+>input : T
+
+  return {
+>{    [genericPattern]: 1,  } : { [x: string]: number; }
+
+    [genericPattern]: 1,
+>[genericPattern] : number
+>genericPattern : `get${T}`
+>1 : 1
+
+  };
+}
+
