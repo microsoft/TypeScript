@@ -42,7 +42,7 @@
             // duplicate field/accessor
             "symbolDeclarationEmit12",
             // symbol merges with global eval and is not written to declarations.
-            "parserStrictMode8",
+            "parserStrictMode8"
         ],
         "ts-bugs": [
             // https://github.com/microsoft/TypeScript/issues/55571
