@@ -149,83 +149,6 @@ Output::
 
 
 
-Program root files: [
-  "/user/username/projects/demo/animals/animal.ts",
-  "/user/username/projects/demo/animals/dog.ts",
-  "/user/username/projects/demo/animals/index.ts"
-]
-Program options: {
-  "declaration": true,
-  "target": 1,
-  "module": 1,
-  "strict": true,
-  "noUnusedLocals": true,
-  "noUnusedParameters": true,
-  "noImplicitReturns": true,
-  "noFallthroughCasesInSwitch": true,
-  "composite": true,
-  "outDir": "/user/username/projects/demo/lib/animals",
-  "rootDir": "/user/username/projects/demo/animals",
-  "configFilePath": "/user/username/projects/demo/animals/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/demo/animals/animal.ts
-/user/username/projects/demo/animals/index.ts
-/user/username/projects/demo/core/utilities.ts
-/user/username/projects/demo/animals/dog.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/demo/animals/animal.ts
-/user/username/projects/demo/animals/index.ts
-/user/username/projects/demo/core/utilities.ts
-/user/username/projects/demo/animals/dog.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/demo/animals/animal.ts (used version)
-/user/username/projects/demo/animals/index.ts (computed .d.ts during emit)
-/user/username/projects/demo/core/utilities.ts (used version)
-/user/username/projects/demo/animals/dog.ts (computed .d.ts during emit)
-
-PolledWatches::
-/user/username/projects/demo/animals/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/demo/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/demo/animals: *new*
-  {}
-/user/username/projects/demo/animals/animal.ts: *new*
-  {}
-/user/username/projects/demo/animals/dog.ts: *new*
-  {}
-/user/username/projects/demo/animals/index.ts: *new*
-  {}
-/user/username/projects/demo/animals/tsconfig.json: *new*
-  {}
-/user/username/projects/demo/core/tsconfig.json: *new*
-  {}
-/user/username/projects/demo/core/utilities.ts: *new*
-  {}
-/user/username/projects/demo/tsconfig-base.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/demo/animals: *new*
-  {}
-/user/username/projects/demo/core: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/demo/lib/animals/animal.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -399,3 +322,80 @@ export declare function createDog(): Dog;
   "size": 2349
 }
 
+
+PolledWatches::
+/user/username/projects/demo/animals/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/demo/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/demo/animals: *new*
+  {}
+/user/username/projects/demo/animals/animal.ts: *new*
+  {}
+/user/username/projects/demo/animals/dog.ts: *new*
+  {}
+/user/username/projects/demo/animals/index.ts: *new*
+  {}
+/user/username/projects/demo/animals/tsconfig.json: *new*
+  {}
+/user/username/projects/demo/core/tsconfig.json: *new*
+  {}
+/user/username/projects/demo/core/utilities.ts: *new*
+  {}
+/user/username/projects/demo/tsconfig-base.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/demo/animals: *new*
+  {}
+/user/username/projects/demo/core: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/demo/animals/animal.ts",
+  "/user/username/projects/demo/animals/dog.ts",
+  "/user/username/projects/demo/animals/index.ts"
+]
+Program options: {
+  "declaration": true,
+  "target": 1,
+  "module": 1,
+  "strict": true,
+  "noUnusedLocals": true,
+  "noUnusedParameters": true,
+  "noImplicitReturns": true,
+  "noFallthroughCasesInSwitch": true,
+  "composite": true,
+  "outDir": "/user/username/projects/demo/lib/animals",
+  "rootDir": "/user/username/projects/demo/animals",
+  "configFilePath": "/user/username/projects/demo/animals/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/demo/animals/animal.ts
+/user/username/projects/demo/animals/index.ts
+/user/username/projects/demo/core/utilities.ts
+/user/username/projects/demo/animals/dog.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/demo/animals/animal.ts
+/user/username/projects/demo/animals/index.ts
+/user/username/projects/demo/core/utilities.ts
+/user/username/projects/demo/animals/dog.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/demo/animals/animal.ts (used version)
+/user/username/projects/demo/animals/index.ts (computed .d.ts during emit)
+/user/username/projects/demo/core/utilities.ts (used version)
+/user/username/projects/demo/animals/dog.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined

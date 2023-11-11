@@ -7049,6 +7049,7 @@ declare namespace ts {
         ExportEquals = "export=",
         Default = "default",
         This = "this",
+        InstantiationExpression = "__instantiationExpression",
     }
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.

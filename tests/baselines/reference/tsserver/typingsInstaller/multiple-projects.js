@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/project/app.js]
 
@@ -70,6 +70,16 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/app.js :: Config file name: /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/project/app.js to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/project/app.js"
@@ -126,7 +136,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -225,10 +235,88 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typingsInstallerVersion": "FakeVersion",
       "projectName": "/user/username/projects/project/tsconfig.json"
     }
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "beginInstallTypes",
+      "body": {
+        "eventId": 1
+      }
+    }
+TI:: [hh:mm:ss:mss] #1 with cwd: /a/data arguments: [
   "@types/jquery@tsFakeMajor.Minor"
-]'.
+]
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/project/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "ff5803d884ff4e4485901596e00c181622d4efba4fec19a41fe48adf94ccdf94",
+          "fileStats": {
+            "js": 1,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 0,
+            "tsSize": 0,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "allowJs": true
+          },
+          "typeAcquisition": {
+            "enable": true,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/project/app.js",
+        "configFile": "/user/username/projects/project/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "Cannot write file '/user/username/projects/project/app.js' because it would overwrite input file.",
+            "code": 5055,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -264,12 +352,19 @@ FsWatchesRecursive::
 /user/username/projects/project:
   {}
 
-TI:: [hh:mm:ss:mss] #1 with arguments'[
-  "@types/jquery@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@ts5.4"
+] *new*
 
-TI:: After installWorker
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor"
+]
+
+TI:: Installation #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor"
+] complete with success::true
 //// [/a/data/node_modules/@types/jquery/index.d.ts]
 declare const $: { x: number }
 
@@ -297,6 +392,30 @@ TI:: [hh:mm:ss:mss] Sending response:
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/user/username/projects/project/tsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "configFilePath": "/user/username/projects/project/tsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [
+          "/a/data/node_modules/@types/jquery/index.d.ts"
+        ],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::endInstallTypes",
@@ -308,6 +427,25 @@ TI:: [hh:mm:ss:mss] Sending response:
       "installSuccess": true,
       "typingsInstallerVersion": "FakeVersion"
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "endInstallTypes",
+      "body": {
+        "eventId": 1,
+        "packages": [
+          "@types/jquery@tsFakeMajor.Minor"
+        ],
+        "success": true
+      }
+    }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+1: /user/username/projects/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Before running Timeout callback:: count: 2
 1: /user/username/projects/project/tsconfig.json
 2: *ensureProjectForOpenFiles*
@@ -395,6 +533,30 @@ TI:: [hh:mm:ss:mss] Sending response:
       "unresolvedImports": [],
       "kind": "action::set"
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/user/username/projects/project/tsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "configFilePath": "/user/username/projects/project/tsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [
+          "/a/data/node_modules/@types/jquery/index.d.ts"
+        ],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
@@ -413,6 +575,18 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/project/app.js
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/user/username/projects/project/app.js"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
 
 Before request
@@ -477,6 +651,16 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project2
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project2/app.js :: Config file name: /user/username/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project2/tsconfig.json 2000 undefined Project: /user/username/projects/project2/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/project2/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/project2/app.js to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project2/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/project2/app.js"
@@ -570,10 +754,88 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typingsInstallerVersion": "FakeVersion",
       "projectName": "/user/username/projects/project2/tsconfig.json"
     }
-TI:: [hh:mm:ss:mss] #2 with arguments'[
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "beginInstallTypes",
+      "body": {
+        "eventId": 2
+      }
+    }
+TI:: [hh:mm:ss:mss] #2 with cwd: /a/data arguments: [
   "@types/commander@tsFakeMajor.Minor"
-]'.
+]
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project2/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/project2/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "ab5dca5aa762deb9743ab400c40ad9203529eb8c8c9844c7b047e94e9eeef955",
+          "fileStats": {
+            "js": 1,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 0,
+            "tsSize": 0,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "allowJs": true
+          },
+          "typeAcquisition": {
+            "enable": true,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/project2/app.js",
+        "configFile": "/user/username/projects/project2/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "Cannot write file '/user/username/projects/project2/app.js' because it would overwrite input file.",
+            "code": 5055,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -665,3 +927,8 @@ FsWatchesRecursive::
 FsWatchesRecursive *deleted*::
 /user/username/projects/project:
   {}
+
+PendingInstalls callback:: count: 1
+2: #2 with arguments:: [
+  "@types/commander@ts5.4"
+] *new*

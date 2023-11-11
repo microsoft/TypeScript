@@ -468,6 +468,39 @@ tests/index.ts
 
 
 
+
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/sample1/tests/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/index.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/tsconfig.json: *new*
+  {}
+/user/username/projects/sample1/logic/index.d.ts: *new*
+  {}
+/user/username/projects/sample1/logic/tsconfig.json: *new*
+  {}
+/user/username/projects/sample1/tests/index.ts: *new*
+  {}
+/user/username/projects/sample1/tests/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core: *new*
+  {}
+/user/username/projects/sample1/logic: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/sample1/tests/index.ts"
 ]
@@ -514,40 +547,7 @@ Dependencies for::
   /user/username/projects/sample1/logic/index.d.ts
   /user/username/projects/sample1/core/index.d.ts
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/sample1/tests/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/sample1/core/anothermodule.d.ts: *new*
-  {}
-/user/username/projects/sample1/core/index.d.ts: *new*
-  {}
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
-/user/username/projects/sample1/logic/index.d.ts: *new*
-  {}
-/user/username/projects/sample1/logic/tsconfig.json: *new*
-  {}
-/user/username/projects/sample1/tests/index.ts: *new*
-  {}
-/user/username/projects/sample1/tests/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core: *new*
-  {}
-/user/username/projects/sample1/logic: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: local edit in logic ts, and build logic
 
@@ -662,12 +662,8 @@ function foo() { }
 }
 
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: non local edit in logic ts, and build logic
 
@@ -791,8 +787,12 @@ export declare function gfoo(): void;
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -816,58 +816,6 @@ tests/index.ts
 [[90m12:01:58 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: [
-  "/user/username/projects/sample1/tests/index.ts"
-]
-Program options: {
-  "composite": true,
-  "declaration": true,
-  "forceConsistentCasingInFileNames": true,
-  "skipDefaultLibCheck": true,
-  "watch": true,
-  "project": "/user/username/projects/sample1/tests",
-  "traceResolution": true,
-  "explainFiles": true,
-  "configFilePath": "/user/username/projects/sample1/tests/tsconfig.json"
-}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.d.ts
-/user/username/projects/sample1/tests/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/sample1/logic/index.d.ts
-/user/username/projects/sample1/tests/index.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/sample1/logic/index.d.ts (used version)
-/user/username/projects/sample1/tests/index.ts (computed .d.ts)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/sample1/core/index.d.ts
-  /user/username/projects/sample1/core/anotherModule.d.ts
-  /user/username/projects/sample1/logic/index.d.ts
-  /user/username/projects/sample1/tests/index.ts
-/user/username/projects/sample1/core/index.d.ts:
-  /user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts:
-  /user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.d.ts:
-  /user/username/projects/sample1/logic/index.d.ts
-  /user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/tests/index.ts:
-  /user/username/projects/sample1/tests/index.ts
-  /user/username/projects/sample1/core/anotherModule.d.ts
-  /user/username/projects/sample1/logic/index.d.ts
-  /user/username/projects/sample1/core/index.d.ts
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/tests/index.js] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
@@ -966,6 +914,59 @@ exitCode:: ExitStatus.undefined
   "size": 1613
 }
 
+
+
+Program root files: [
+  "/user/username/projects/sample1/tests/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "forceConsistentCasingInFileNames": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "project": "/user/username/projects/sample1/tests",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/sample1/tests/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.d.ts
+/user/username/projects/sample1/tests/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/sample1/logic/index.d.ts
+/user/username/projects/sample1/tests/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/logic/index.d.ts (used version)
+/user/username/projects/sample1/tests/index.ts (computed .d.ts)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/sample1/core/index.d.ts
+  /user/username/projects/sample1/core/anotherModule.d.ts
+  /user/username/projects/sample1/logic/index.d.ts
+  /user/username/projects/sample1/tests/index.ts
+/user/username/projects/sample1/core/index.d.ts:
+  /user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts:
+  /user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.d.ts:
+  /user/username/projects/sample1/logic/index.d.ts
+  /user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/tests/index.ts:
+  /user/username/projects/sample1/tests/index.ts
+  /user/username/projects/sample1/core/anotherModule.d.ts
+  /user/username/projects/sample1/logic/index.d.ts
+  /user/username/projects/sample1/core/index.d.ts
+
+exitCode:: ExitStatus.undefined
 
 Change:: change in project reference config file builds correctly
 
@@ -1090,8 +1091,12 @@ export declare function gfoo(): void;
 
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -1121,94 +1126,6 @@ tests/index.ts
 [[90m12:02:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: [
-  "/user/username/projects/sample1/tests/index.ts"
-]
-Program options: {
-  "composite": true,
-  "declaration": true,
-  "forceConsistentCasingInFileNames": true,
-  "skipDefaultLibCheck": true,
-  "watch": true,
-  "project": "/user/username/projects/sample1/tests",
-  "traceResolution": true,
-  "explainFiles": true,
-  "configFilePath": "/user/username/projects/sample1/tests/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/decls/index.d.ts
-/user/username/projects/sample1/tests/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/sample1/logic/decls/index.d.ts
-/user/username/projects/sample1/tests/index.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/sample1/logic/decls/index.d.ts (used version)
-/user/username/projects/sample1/tests/index.ts (computed .d.ts)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/sample1/core/index.d.ts
-  /user/username/projects/sample1/core/anotherModule.d.ts
-  /user/username/projects/sample1/logic/decls/index.d.ts
-  /user/username/projects/sample1/tests/index.ts
-/user/username/projects/sample1/core/index.d.ts:
-  /user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts:
-  /user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/decls/index.d.ts:
-  /user/username/projects/sample1/logic/decls/index.d.ts
-  /user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/tests/index.ts:
-  /user/username/projects/sample1/tests/index.ts
-  /user/username/projects/sample1/core/anotherModule.d.ts
-  /user/username/projects/sample1/logic/decls/index.d.ts
-  /user/username/projects/sample1/core/index.d.ts
-
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {}
-/user/username/projects/sample1/core/index.d.ts:
-  {}
-/user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1/logic/decls/index.d.ts: *new*
-  {}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {}
-/user/username/projects/sample1/tests/index.ts:
-  {}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/sample1/logic/index.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {}
-/user/username/projects/sample1/logic:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/tests/index.js] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
@@ -1307,3 +1224,92 @@ exitCode:: ExitStatus.undefined
   "size": 1619
 }
 
+
+PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts:
+  {}
+/user/username/projects/sample1/core/index.d.ts:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/decls/index.d.ts: *new*
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/sample1/logic/index.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {}
+/user/username/projects/sample1/logic:
+  {}
+
+
+Program root files: [
+  "/user/username/projects/sample1/tests/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "forceConsistentCasingInFileNames": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "project": "/user/username/projects/sample1/tests",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/sample1/tests/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/decls/index.d.ts
+/user/username/projects/sample1/tests/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/sample1/logic/decls/index.d.ts
+/user/username/projects/sample1/tests/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/logic/decls/index.d.ts (used version)
+/user/username/projects/sample1/tests/index.ts (computed .d.ts)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/sample1/core/index.d.ts
+  /user/username/projects/sample1/core/anotherModule.d.ts
+  /user/username/projects/sample1/logic/decls/index.d.ts
+  /user/username/projects/sample1/tests/index.ts
+/user/username/projects/sample1/core/index.d.ts:
+  /user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts:
+  /user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/decls/index.d.ts:
+  /user/username/projects/sample1/logic/decls/index.d.ts
+  /user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/tests/index.ts:
+  /user/username/projects/sample1/tests/index.ts
+  /user/username/projects/sample1/core/anotherModule.d.ts
+  /user/username/projects/sample1/logic/decls/index.d.ts
+  /user/username/projects/sample1/core/index.d.ts
+
+exitCode:: ExitStatus.undefined

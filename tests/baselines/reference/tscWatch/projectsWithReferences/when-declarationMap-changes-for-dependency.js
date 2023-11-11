@@ -237,85 +237,6 @@ logic/index.ts
 
 
 
-Program root files: [
-  "/user/username/projects/sample1/logic/index.ts"
-]
-Program options: {
-  "composite": true,
-  "declaration": true,
-  "sourceMap": true,
-  "forceConsistentCasingInFileNames": true,
-  "skipDefaultLibCheck": true,
-  "watch": true,
-  "project": "/user/username/projects/sample1/logic",
-  "traceResolution": true,
-  "explainFiles": true,
-  "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/sample1/core/index.d.ts (used version)
-/user/username/projects/sample1/core/anothermodule.d.ts (used version)
-/user/username/projects/sample1/logic/index.ts (computed .d.ts during emit)
-
-Dependencies for::
-/a/lib/lib.d.ts:
-  /a/lib/lib.d.ts
-  /user/username/projects/sample1/core/index.d.ts
-  /user/username/projects/sample1/core/anotherModule.d.ts
-  /user/username/projects/sample1/logic/index.ts
-/user/username/projects/sample1/core/index.d.ts:
-  /user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts:
-  /user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.ts:
-  /user/username/projects/sample1/logic/index.ts
-  /user/username/projects/sample1/core/anotherModule.d.ts
-  /user/username/projects/sample1/core/index.d.ts
-
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/sample1/logic/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/sample1/core/anothermodule.d.ts: *new*
-  {}
-/user/username/projects/sample1/core/index.d.ts: *new*
-  {}
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
-/user/username/projects/sample1/logic/index.ts: *new*
-  {}
-/user/username/projects/sample1/logic/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core: *new*
-  {}
-/user/username/projects/sample1/logic: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/sample1/logic/index.js.map]
 {"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
@@ -422,6 +343,85 @@ export declare const m: typeof mod;
 }
 
 
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/sample1/logic/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/index.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/tsconfig.json: *new*
+  {}
+/user/username/projects/sample1/logic/index.ts: *new*
+  {}
+/user/username/projects/sample1/logic/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core: *new*
+  {}
+/user/username/projects/sample1/logic: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/sample1/logic/index.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "sourceMap": true,
+  "forceConsistentCasingInFileNames": true,
+  "skipDefaultLibCheck": true,
+  "watch": true,
+  "project": "/user/username/projects/sample1/logic",
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/index.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.d.ts (used version)
+/user/username/projects/sample1/logic/index.ts (computed .d.ts during emit)
+
+Dependencies for::
+/a/lib/lib.d.ts:
+  /a/lib/lib.d.ts
+  /user/username/projects/sample1/core/index.d.ts
+  /user/username/projects/sample1/core/anotherModule.d.ts
+  /user/username/projects/sample1/logic/index.ts
+/user/username/projects/sample1/core/index.d.ts:
+  /user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts:
+  /user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.ts:
+  /user/username/projects/sample1/logic/index.ts
+  /user/username/projects/sample1/core/anotherModule.d.ts
+  /user/username/projects/sample1/core/index.d.ts
+
+exitCode:: ExitStatus.undefined
+
 Change:: change declration map in core
 
 Input::
@@ -527,8 +527,12 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
+Timeout callback:: count: 1
+5: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 5: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -547,6 +551,8 @@ core/anotherModule.d.ts
 logic/index.ts
   Matched by default include pattern '**/*'
 [[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 
 
@@ -592,4 +598,3 @@ Dependencies for::
   /user/username/projects/sample1/core/index.d.ts
 
 exitCode:: ExitStatus.undefined
-

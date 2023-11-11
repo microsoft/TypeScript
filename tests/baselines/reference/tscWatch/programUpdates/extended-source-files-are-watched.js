@@ -50,6 +50,25 @@ Output::
 
 
 
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+
+
+FsWatches::
+/a/b/commonfile1.ts: *new*
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
 Program root files: [
   "/a/b/commonFile1.ts",
   "/a/b/commonFile2.ts"
@@ -75,26 +94,7 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-FsWatches::
-/a/b/commonfile1.ts: *new*
-  {}
-/a/b/commonfile2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-
 
 Change:: Change config to extend another config
 
@@ -110,8 +110,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -119,6 +123,32 @@ Output::
 
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/a/b/commonFile1.js]
+"use strict";
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+"use strict";
+var y = 1;
+
+
+
+FsWatches::
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/b/first.tsconfig.json: *new*
+  {}
+/a/b/second.tsconfig.json: *new*
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 
 Program root files: [
@@ -144,32 +174,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-FsWatches::
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/first.tsconfig.json: *new*
-  {}
-/a/b/second.tsconfig.json: *new*
-  {}
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-"use strict";
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-"use strict";
-var y = 1;
-
-
 
 Change:: Change first extended config
 
@@ -182,14 +187,28 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+var y = 1;
+
 
 
 
@@ -218,15 +237,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/commonFile1.js]
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-
-
 Change:: Change second extended config
 
 Input::
@@ -239,14 +249,20 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 
 
@@ -276,7 +292,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: Change config to stop extending another config
 
 Input::
@@ -290,8 +305,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -299,6 +318,24 @@ Output::
 
 [[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+
+FsWatches::
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/first.tsconfig.json:
+  {}
+/a/b/second.tsconfig.json:
+  {}
 
 
 Program root files: [
@@ -323,21 +360,4 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-FsWatches::
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatches *deleted*::
-/a/b/first.tsconfig.json:
-  {}
-/a/b/second.tsconfig.json:
-  {}
-
 exitCode:: ExitStatus.undefined
-

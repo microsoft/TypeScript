@@ -1,10 +1,31 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/a/b/app.ts]
 
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "openExternalProject",
+      "arguments": {
+        "projectFileName": "/a/app/test.csproj",
+        "options": {},
+        "rootFiles": [
+          {
+            "fileName": "/a/b/app.ts"
+          }
+        ],
+        "typeAcquisition": {
+          "enable": true,
+          "include": [
+            "jquery"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test.csproj WatchType: Missing file
@@ -36,7 +57,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -120,13 +141,61 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typingsInstallerVersion": "FakeVersion",
       "projectName": "/a/app/test.csproj"
     }
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "beginInstallTypes",
+      "body": {
+        "eventId": 1
+      }
+    }
+TI:: [hh:mm:ss:mss] #1 with cwd: /a/data arguments: [
   "@types/jquery@tsFakeMajor.Minor"
-]'.
-TI:: [hh:mm:ss:mss] #1 with arguments'[
-  "@types/jquery@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+]
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "6011e60969d97dd67a30c213a0f84e4df5372512e4d76256ab889fe749192088",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 0,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": true,
+            "include": true,
+            "exclude": false
+          },
+          "compileOnSave": true,
+          "configFileName": "other",
+          "projectType": "external",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
 
 PolledWatches::
 /a/app/bower_components: *new*
@@ -140,7 +209,19 @@ FsWatches::
 /a/b/app.ts:
   {}
 
-TI:: After installWorker
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@ts5.4"
+] *new*
+
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor"
+]
+
+TI:: Installation #1 with arguments:: [
+  "@types/jquery@tsFakeMajor.Minor"
+] complete with success::true
 //// [/a/data/node_modules/@types/jquery/index.d.ts]
 declare const $: { x: number }
 
@@ -168,6 +249,31 @@ TI:: [hh:mm:ss:mss] Sending response:
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /a/app/test.csproj
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/a/app/test.csproj",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [
+            "jquery"
+          ],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowNonTsExtensions": true,
+          "noEmitForJsFiles": true
+        },
+        "typings": [
+          "/a/data/node_modules/@types/jquery/index.d.ts"
+        ],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::endInstallTypes",
@@ -179,3 +285,20 @@ TI:: [hh:mm:ss:mss] Sending response:
       "installSuccess": true,
       "typingsInstallerVersion": "FakeVersion"
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "endInstallTypes",
+      "body": {
+        "eventId": 1,
+        "packages": [
+          "@types/jquery@tsFakeMajor.Minor"
+        ],
+        "success": true
+      }
+    }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 1
+1: /a/app/test.csproj *new*

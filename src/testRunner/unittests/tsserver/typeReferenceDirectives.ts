@@ -1,13 +1,10 @@
 import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import {
     jsonToReadableText,
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -63,7 +60,7 @@ declare class TestLib {
 
         const files = [typeLib, appLib, testFile, testConfig, libFile];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([testFile], session);
         host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
         host.runQueuedTimeoutCallbacks();
@@ -92,7 +89,7 @@ declare class TestLib {
         };
         const files = [file, tsconfig, filesystem, libFile];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective is relative path and in a sibling folder", session);
     });

@@ -34,6 +34,29 @@ Output::
 
 
 
+//// [/a/a.js]
+var x = 1;
+
+
+//// [/a/b.js]
+var y = 1;
+
+
+
+FsWatches::
+/a/a.ts: *new*
+  {}
+/a/b.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/a/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a: *new*
+  {}
+
 Program root files: [
   "/a/a.ts",
   "/a/b.ts",
@@ -60,30 +83,7 @@ Shape signatures in builder refreshed for::
 /a/b.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-FsWatches::
-/a/a.ts: *new*
-  {}
-/a/b.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-/a/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/a: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/a.js]
-var x = 1;
-
-
-//// [/a/b.js]
-var y = 1;
-
-
 
 Change:: Make change in the file
 
@@ -92,8 +92,12 @@ Input::
 let x = 11
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -103,6 +107,13 @@ Output::
 
 
 
+//// [/a/a.js]
+var x = 11;
+
+
+//// [/a/b.js] file written with same contents
+
+
 Program root files: [
   "/a/a.ts",
   "/a/b.ts",
@@ -130,12 +141,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/a.js]
-var x = 11;
-
-
-//// [/a/b.js] file written with same contents
-
 Change:: Make change in the file again
 
 Input::
@@ -143,8 +148,12 @@ Input::
 let xy = 11
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -154,6 +163,13 @@ Output::
 
 
 
+//// [/a/a.js]
+var xy = 11;
+
+
+//// [/a/b.js] file written with same contents
+
+
 Program root files: [
   "/a/a.ts",
   "/a/b.ts",
@@ -180,9 +196,3 @@ Shape signatures in builder refreshed for::
 /a/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/a.js]
-var xy = 11;
-
-
-//// [/a/b.js] file written with same contents

@@ -17,7 +17,7 @@ import {
 import {
     createLoggerWithInMemoryLogs,
     HarnessLSCouldNotResolveModule,
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "./tsserverLogger";
 import {
     createWatchUtils,
@@ -130,7 +130,7 @@ export interface LanguageServiceAdapter {
     getLanguageService(): ts.LanguageService;
     getClassifier(): ts.Classifier;
     getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo;
-    getLogger(): Logger | undefined;
+    getLogger(): LoggerWithInMemoryLogs | undefined;
 }
 
 export abstract class LanguageServiceAdapterHost {
@@ -611,7 +611,7 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
     private host: SessionClientHost;
     private client: ts.server.SessionClient;
     private server: FourslashSession;
-    private logger: Logger;
+    private logger: LoggerWithInMemoryLogs;
     constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
         // This is the main host that tests use to direct tests
         const clientHost = new SessionClientHost(cancellationToken, options);

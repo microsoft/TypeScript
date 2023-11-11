@@ -54,6 +54,44 @@ Output::
 
 
 
+//// [/a/b/output/main.js]
+var Main;
+(function (Main) {
+    function fooBar() { }
+    Main.fooBar = fooBar;
+})(Main || (Main = {}));
+
+
+//// [/a/b/output/main2.js]
+var main;
+(function (main) {
+    var file4;
+    (function (file4) {
+        function foo(a) { }
+        file4.foo = foo;
+    })(file4 = main.file4 || (main.file4 = {}));
+})(main || (main = {}));
+
+
+
+PolledWatches::
+/a/b/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/dependencies/file2.d.ts: *new*
+  {}
+/a/b/output/anotherdependency/file1.d.ts: *new*
+  {}
+/a/b/project/src/main.ts: *new*
+  {}
+/a/b/project/src/main2.ts: *new*
+  {}
+/a/b/project/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
 Program root files: [
   "/a/b/output/AnotherDependency/file1.d.ts",
   "/a/b/dependencies/file2.d.ts",
@@ -89,42 +127,4 @@ Shape signatures in builder refreshed for::
 /a/b/project/src/main.ts (used version)
 /a/b/project/src/main2.ts (used version)
 
-PolledWatches::
-/a/b/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/dependencies/file2.d.ts: *new*
-  {}
-/a/b/output/anotherdependency/file1.d.ts: *new*
-  {}
-/a/b/project/src/main.ts: *new*
-  {}
-/a/b/project/src/main2.ts: *new*
-  {}
-/a/b/project/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/output/main.js]
-var Main;
-(function (Main) {
-    function fooBar() { }
-    Main.fooBar = fooBar;
-})(Main || (Main = {}));
-
-
-//// [/a/b/output/main2.js]
-var main;
-(function (main) {
-    var file4;
-    (function (file4) {
-        function foo(a) { }
-        file4.foo = foo;
-    })(file4 = main.file4 || (main.file4 = {}));
-})(main || (main = {}));
-
-

@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/app.js]
 let x = 1;
@@ -236,6 +236,10 @@ Before running Timeout callback:: count: 2
 }
 
 
+Timeout callback:: count: 2
+1: /a/jsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -328,7 +332,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/data
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/data/node_modules/types-registry/index.json :: WatchInfo: /a 1 undefined Config: /a/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /a/jsconfig.json Detected file add/remove of non supported extension: /a/data/node_modules/types-registry/index.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/data/node_modules/types-registry/index.json :: WatchInfo: /a 1 undefined Config: /a/jsconfig.json WatchType: Wild card directory
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -354,6 +358,11 @@ FsWatches::
 FsWatchesRecursive::
 /a:
   {}
+
+Timeout callback:: count: 2
+2: *ensureProjectForOpenFiles* *deleted*
+7: /a/jsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -426,6 +435,31 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typings": [],
       "kind": "action::set"
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/a/jsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "maxNodeModuleJsDepth": 2,
+          "allowSyntheticDefaultImports": true,
+          "skipLibCheck": true,
+          "noEmit": true,
+          "configFilePath": "/a/jsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -497,8 +531,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 2
-7: /a/jsconfig.json
-8: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /a/bower_components: *new*

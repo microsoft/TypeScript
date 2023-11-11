@@ -44,49 +44,6 @@ Output::
 
 
 
-Program root files: [
-  "/src/project/data.d.json.ts",
-  "/src/project/main.ts"
-]
-Program options: {
-  "resolveJsonModule": true,
-  "project": "/src/project",
-  "incremental": true,
-  "watch": true,
-  "configFilePath": "/src/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/src/project/data.d.json.ts
-/src/project/main.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/src/project/data.d.json.ts
-/src/project/main.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/src/project/data.d.json.ts (used version)
-/src/project/main.ts (used version)
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/src/project/data.d.json.ts: *new*
-  {}
-/src/project/main.ts: *new*
-  {}
-/src/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/src/project: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/src/project/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -159,6 +116,49 @@ var x = data_json_1.default;
 }
 
 
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/src/project/data.d.json.ts: *new*
+  {}
+/src/project/main.ts: *new*
+  {}
+/src/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/src/project: *new*
+  {}
+
+Program root files: [
+  "/src/project/data.d.json.ts",
+  "/src/project/main.ts"
+]
+Program options: {
+  "resolveJsonModule": true,
+  "project": "/src/project",
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/src/project/data.d.json.ts
+/src/project/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/src/project/data.d.json.ts
+/src/project/main.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/src/project/data.d.json.ts (used version)
+/src/project/main.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Change json setting
 
 Input::
@@ -170,8 +170,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -183,6 +187,8 @@ Output::
 [7m [0m [91m                 ~~~~~~~~~~~~~[0m
 
 [[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
+
+
 
 
 
@@ -208,4 +214,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

@@ -1,5 +1,6 @@
 import {
     combinePaths,
+    forEachAncestorDirectory,
     forEachKey,
     getBaseFileName,
     getDirectoryPath,
@@ -18,6 +19,7 @@ import {
     versionMajorMinor,
 } from "./_namespaces/ts";
 import {
+    ActionPackageInstalled,
     ActionSet,
     ActionWatchTypingLocations,
     BeginInstallTypes,
@@ -26,8 +28,10 @@ import {
     EndInstallTypes,
     EventBeginInstallTypes,
     EventEndInstallTypes,
+    InstallPackageRequest,
     InstallTypingHost,
     InvalidateCachedTypings,
+    PackageInstalledResponse,
     SetTypings,
     stringifyIndented,
     WatchTypingLocations,
@@ -193,6 +197,39 @@ export abstract class TypingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`No new typings were requested as a result of typings discovery`);
             }
+        }
+    }
+
+    /** @internal */
+    installPackage(req: InstallPackageRequest) {
+        const { fileName, packageName, projectName, projectRootPath } = req;
+        const cwd = forEachAncestorDirectory(getDirectoryPath(fileName), directory => {
+            if (this.installTypingHost.fileExists(combinePaths(directory, "package.json"))) {
+                return directory;
+            }
+        }) || projectRootPath;
+        if (cwd) {
+            this.installWorker(-1, [packageName], cwd, success => {
+                const message = success ?
+                    `Package ${packageName} installed.` :
+                    `There was an error installing ${packageName}.`;
+                const response: PackageInstalledResponse = {
+                    kind: ActionPackageInstalled,
+                    projectName,
+                    success,
+                    message,
+                };
+                this.sendResponse(response);
+            });
+        }
+        else {
+            const response: PackageInstalledResponse = {
+                kind: ActionPackageInstalled,
+                projectName,
+                success: false,
+                message: "Could not determine a project root path.",
+            };
+            this.sendResponse(response);
         }
     }
 
@@ -455,7 +492,8 @@ export abstract class TypingsInstaller {
 
     protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
     protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
-
+    /** @internal */
+    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse): void;
     protected readonly latestDistTag = "latest";
 }
 
