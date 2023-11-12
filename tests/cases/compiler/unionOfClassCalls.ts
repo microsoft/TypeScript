@@ -25,7 +25,6 @@ arr.map((a: number | string, index: number) => {
     return index
 })
 
-// This case still doesn't work because `reduce` has multiple overloads :(
 arr.reduce((acc: Array<string>, a: number | string, index: number) => { 
     return []
 }, [])
