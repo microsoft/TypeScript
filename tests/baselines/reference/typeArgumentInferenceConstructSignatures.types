@@ -502,13 +502,13 @@ var a: any;
 
 // Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
 var arr = new someGenerics9([], null, undefined);
->arr : any
->new someGenerics9([], null, undefined) : any
+>arr : any[]
+>new someGenerics9([], null, undefined) : any[]
 >someGenerics9 : someGenerics9
 >[] : undefined[]
 >undefined : undefined
 
 var arr: any[];
->arr : any
+>arr : any[]
 
 

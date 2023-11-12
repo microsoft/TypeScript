@@ -7360,7 +7360,7 @@ declare namespace ts {
         PartialHomomorphicMappedType = 16,
         MappedTypeConstraint = 32,
         ContravariantConditional = 64,
-        EmptyLiteral = 128,
+        ImplicitNever = 128,
         ReturnType = 256,
         LiteralKeyof = 512,
         NoConstraints = 1024,

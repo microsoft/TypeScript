@@ -20,10 +20,9 @@ typeArgumentInferenceWithConstraints.ts(73,29): error TS2345: Argument of type '
 typeArgumentInferenceWithConstraints.ts(74,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
 typeArgumentInferenceWithConstraints.ts(88,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
 typeArgumentInferenceWithConstraints.ts(89,70): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
-typeArgumentInferenceWithConstraints.ts(103,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'any', but here has type 'any[]'.
 
 
-==== typeArgumentInferenceWithConstraints.ts (16 errors) ====
+==== typeArgumentInferenceWithConstraints.ts (15 errors) ====
     // Generic call with no parameters
     function noParams<T extends {}>() { }
     noParams();
@@ -167,8 +166,5 @@ typeArgumentInferenceWithConstraints.ts(103,5): error TS2403: Subsequent variabl
     // Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
     var arr = someGenerics9([], null, undefined);
     var arr: any[];
-        ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'any', but here has type 'any[]'.
-!!! related TS6203 typeArgumentInferenceWithConstraints.ts:102:5: 'arr' was also declared here.
     
     

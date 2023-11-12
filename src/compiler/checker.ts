@@ -25237,8 +25237,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (candidate === blockedStringType) {
                             return;
                         }
-                        if (isEmptyLiteralType(candidate) || isEmptyArrayLiteralType(candidate)) {
-                            priority |= InferencePriority.EmptyLiteral;
+                        // without strictNullChecks an inference from an array of undefinedWideningType is still better than an inference from a widening null/undefined
+                        // so we avoid deprioritization of those inferences when strictNullChecks are not enabled
+                        if (strictNullChecks && (isEmptyLiteralType(candidate) || isEmptyArrayLiteralType(candidate))) {
+                            priority |= InferencePriority.ImplicitNever;
                         }
                         if (inference.priority === undefined || priority < inference.priority) {
                             inference.candidates = undefined;
