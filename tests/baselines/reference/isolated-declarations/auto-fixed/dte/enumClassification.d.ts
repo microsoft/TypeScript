@@ -145,19 +145,13 @@ declare enum E20 {
 }
 /// [Errors] ////
 
-enumClassification.ts(50,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-enumClassification.ts(51,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-enumClassification.ts(52,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-enumClassification.ts(66,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-enumClassification.ts(67,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-enumClassification.ts(68,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumClassification.ts(74,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumClassification.ts(75,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumClassification.ts(76,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumClassification.ts(77,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 
 
-==== enumClassification.ts (10 errors) ====
+==== enumClassification.ts (4 errors) ====
     // An enum type where each member has no initializer or an initializer that specififes
     // a numeric literal, a string literal, or a single identifier naming another member in
     // the enum type is classified as a literal enum type. An enum type that doesn't adhere
@@ -208,14 +202,8 @@ enumClassification.ts(77,5): error TS9007: Declaration emit for this file requir
         A = 10,
         B = "hello",
         C = A,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         D = B,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         E = C,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     }
     
     // Examples of numeric enum types with only constant members
@@ -230,14 +218,8 @@ enumClassification.ts(77,5): error TS9007: Declaration emit for this file requir
     
     enum E12 {
         A = 1 << 0,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         B = 1 << 1,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         C = 1 << 2
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     }
     
     // Examples of numeric enum types with constant and computed members

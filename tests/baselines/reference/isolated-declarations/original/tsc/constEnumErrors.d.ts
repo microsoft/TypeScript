@@ -85,7 +85,6 @@ declare const enum NaNOrInfinity {
 
 constEnumErrors.ts(1,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 constEnumErrors.ts(5,8): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-constEnumErrors.ts(12,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 constEnumErrors.ts(12,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
 constEnumErrors.ts(14,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 constEnumErrors.ts(14,9): error TS2474: const enum member initializers must be constant expressions.
@@ -104,19 +103,12 @@ constEnumErrors.ts(27,9): error TS9007: Declaration emit for this file requires 
 constEnumErrors.ts(28,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 constEnumErrors.ts(28,10): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
 constEnumErrors.ts(33,5): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
-constEnumErrors.ts(37,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-constEnumErrors.ts(38,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-constEnumErrors.ts(39,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-constEnumErrors.ts(40,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-constEnumErrors.ts(41,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 constEnumErrors.ts(41,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-constEnumErrors.ts(42,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 constEnumErrors.ts(42,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-constEnumErrors.ts(43,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 constEnumErrors.ts(43,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
 
 
-==== constEnumErrors.ts (31 errors) ====
+==== constEnumErrors.ts (23 errors) ====
     const enum E {
                ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
@@ -133,8 +125,6 @@ constEnumErrors.ts(43,9): error TS2478: 'const' enum member initializer was eval
         // illegal case
         // forward reference to the element of the same enum
         X = Y,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
             ~
 !!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
         // forward reference to the element of the same enum
@@ -196,30 +186,16 @@ constEnumErrors.ts(43,9): error TS2478: 'const' enum member initializer was eval
     const enum NaNOrInfinity {
         A = 9007199254740992,
         B = A * A,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         C = B * B,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         D = C * C,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         E = D * D,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         F = E * E, // overflow
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
             ~~~~~
 !!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
         G = 1 / 0, // overflow
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
             ~~~~~
 !!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
         H = 0 / 0  // NaN
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
             ~~~~~
 !!! error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
     }

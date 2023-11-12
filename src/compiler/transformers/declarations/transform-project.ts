@@ -13,6 +13,7 @@ import {
     EmitResolver,
     ensureTrailingDirectorySeparator,
     factory,
+    getAreDeclarationMapsEnabled,
     getBaseFileName,
     getDeclarationEmitOutputFilePathWorker,
     getDirectoryPath,
@@ -89,13 +90,10 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
     const sourceMap = getSourceMapGenerator();
     printer.writeFile(result, writer, sourceMap?.sourceMapGenerator);
     if (sourceMap) {
-        if (!writer.isAtStartOfLine()) writer.rawWrite(getNewLineCharacter(options));
+        if (!writer.isAtStartOfLine()) writer.writeLine();
         writer.writeComment(sourceMap.sourceMappingURL);
     }
 
-    if (diagnostics.length > 0) {
-        throw new Error(`Cannot transform file '${sourceFile.fileName}' due to ${diagnostics.length} diagnostics`);
-    }
     const declarationPath = getDeclarationEmitOutputFilePathWorker(
         sourceFile.fileName,
         options,
@@ -134,7 +132,7 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
 
     // logic replicated from emitter.ts
     function getSourceMapGenerator() {
-        if (!options.declarationMap) return;
+        if (!getAreDeclarationMapsEnabled(options)) return;
 
         const mapOptions = {
             sourceRoot: options.sourceRoot,
@@ -146,7 +144,7 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
         const sourceRoot = normalizeSlashes(options.sourceRoot || "");
         const { declarationMapPath, declarationFilePath } = getOutputPathsFor(sourceFile, emitHost as unknown as EmitHost, /*forceDtsPaths*/ false);
         const sourceMapGenerator = createSourceMapGenerator(
-            emitHost as unknown as EmitHost,
+            emitHost,
             getBaseFileName(normalizeSlashes(declarationFilePath!)),
             sourceRoot ? ensureTrailingDirectorySeparator(sourceRoot) : sourceRoot,
             getSourceMapDirectory(options, sourceFile.fileName, sourceFile),

@@ -9831,9 +9831,11 @@ declare namespace ts {
     function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
     function createEmitDeclarationHost(options: CompilerOptions, sys: System, commonSourceDirectory?: string): IsolatedEmitHost;
     function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedEmitHost): {
-        code: string;
+        declaration: string;
+        declarationPath: string;
+        declarationMap: string | undefined;
+        declarationMapPath: string;
         diagnostics: Diagnostic[];
-        outputPath: string;
     };
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
     function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];

@@ -84,20 +84,12 @@ declare const enum E6 {
 }
 /// [Errors] ////
 
-enumConstantMembers.ts(22,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-enumConstantMembers.ts(23,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-enumConstantMembers.ts(24,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-enumConstantMembers.ts(25,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumConstantMembers.ts(26,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumConstantMembers.ts(27,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumConstantMembers.ts(28,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-enumConstantMembers.ts(32,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumConstantMembers.ts(32,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-enumConstantMembers.ts(33,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumConstantMembers.ts(33,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-enumConstantMembers.ts(34,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumConstantMembers.ts(34,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-enumConstantMembers.ts(35,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumConstantMembers.ts(35,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
 enumConstantMembers.ts(36,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 enumConstantMembers.ts(36,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
@@ -107,7 +99,7 @@ enumConstantMembers.ts(38,5): error TS9007: Declaration emit for this file requi
 enumConstantMembers.ts(38,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
 
 
-==== enumConstantMembers.ts (21 errors) ====
+==== enumConstantMembers.ts (13 errors) ====
     // Constant members allow negatives, but not decimals. Also hex literals are allowed
     enum E1 {
         a = 1,
@@ -130,17 +122,9 @@ enumConstantMembers.ts(38,9): error TS2477: 'const' enum member initializer was 
     
     enum E5 {
         a = 1 / 0,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         b = 2 / 0.0,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         c = 1.0 / 0.0,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         d = 0.0 / 0.0,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         e = NaN,
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -154,23 +138,15 @@ enumConstantMembers.ts(38,9): error TS2477: 'const' enum member initializer was 
     
     const enum E6 {
         a = 1 / 0,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
             ~~~~~
 !!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
         b = 2 / 0.0,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
             ~~~~~~~
 !!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
         c = 1.0 / 0.0,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
             ~~~~~~~~~
 !!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
         d = 0.0 / 0.0,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
             ~~~~~~~~~
 !!! error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
         e = NaN,

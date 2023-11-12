@@ -486,6 +486,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         clonedOptions.forceDtsEmit = true;
         delete clonedOptions.outFile;
         delete clonedOptions.out;
+        delete clonedOptions.declarationMap;
 
         const clonedSettings: TestCaseParser.CompilerSettings = {
             ...compilerEnvironment.testCaseContent.settings,
@@ -497,6 +498,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             skipLibCheck: "true",
         };
         delete clonedSettings.outFile;
+        delete clonedSettings.declarationMap;
         delete clonedSettings.outfile;
         delete clonedSettings.out;
 

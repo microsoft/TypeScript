@@ -72,12 +72,10 @@ declare enum e5 {
 }
 /// [Errors] ////
 
-declFileEnums.ts(9,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 declFileEnums.ts(15,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declFileEnums.ts(16,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 
 
-==== declFileEnums.ts (3 errors) ====
+==== declFileEnums.ts (1 errors) ====
     enum e1 {
         a,
         b,
@@ -87,8 +85,6 @@ declFileEnums.ts(16,5): error TS9007: Declaration emit for this file requires ty
     enum e2 {
         a = 10,
         b = a + 2,
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         c = 10,
     }
     
@@ -98,8 +94,6 @@ declFileEnums.ts(16,5): error TS9007: Declaration emit for this file requires ty
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         c = a + 3
-        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     }
     
     enum e4 {

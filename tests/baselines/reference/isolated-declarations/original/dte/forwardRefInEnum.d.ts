@@ -37,12 +37,10 @@ forwardRefInEnum.ts(4,9): error TS2651: A member initializer in a enum declarati
 forwardRefInEnum.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 forwardRefInEnum.ts(5,10): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
 forwardRefInEnum.ts(7,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-forwardRefInEnum.ts(7,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
 forwardRefInEnum.ts(8,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-forwardRefInEnum.ts(8,10): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
 
 
-==== forwardRefInEnum.ts (8 errors) ====
+==== forwardRefInEnum.ts (6 errors) ====
     enum E1 {
         // illegal case
         // forward reference to the element of the same enum
@@ -60,13 +58,9 @@ forwardRefInEnum.ts(8,10): error TS2651: A member initializer in a enum declarat
         Y = E1.Z,
         ~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-            ~~~~
-!!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
         Y1 = E1["Z"]
         ~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-             ~~~~~~~
-!!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
     }
     
     enum E1 {
