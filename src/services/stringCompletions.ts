@@ -407,7 +407,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
         case SyntaxKind.NewExpression:
         case SyntaxKind.JsxAttribute:
             if (!isRequireCallArgument(node) && !isImportCall(parent)) {
-                const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(parent.kind === SyntaxKind.JsxAttribute ? parent.parent : node, position, sourceFile);
+                const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(parent.kind === SyntaxKind.JsxAttribute ? parent.parent : node, position, sourceFile, typeChecker);
                 // Get string literal completions from specialized signatures of the target
                 // i.e. declare function f(a: 'A');
                 // f("/*completion position*/")
