@@ -7362,9 +7362,10 @@ declare namespace ts {
         ContravariantConditional = 64,
         ReturnType = 128,
         LiteralKeyof = 256,
-        NoConstraints = 512,
-        AlwaysStrict = 1024,
-        MaxValue = 2048,
+        EmptyLiteral = 512,
+        NoConstraints = 1024,
+        AlwaysStrict = 2048,
+        MaxValue = 4096,
         PriorityImpliesCombination = 416,
         Circularity = -1,
     }

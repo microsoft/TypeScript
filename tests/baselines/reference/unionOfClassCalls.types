@@ -66,7 +66,7 @@ arr.map((a: number | string, index: number) => {
 
 // This case still doesn't work because `reduce` has multiple overloads :(
 arr.reduce((acc: Array<string>, a: number | string, index: number) => { 
->arr.reduce((acc: Array<string>, a: number | string, index: number) => {     return []}, []) : never[]
+>arr.reduce((acc: Array<string>, a: number | string, index: number) => {     return []}, []) : string[]
 >arr.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U_1>(callbackfn: (previousValue: U_1, currentValue: string, currentIndex: number, array: string[]) => U_1, initialValue: U_1): U_1; }
 >arr : number[] | string[]
 >reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U_1>(callbackfn: (previousValue: U_1, currentValue: string, currentIndex: number, array: string[]) => U_1, initialValue: U_1): U_1; }
@@ -154,7 +154,7 @@ arr2.map((a:  string, index: number) => {
 })
 
 arr2.reduce((acc: string[], a: string, index: number) => { 
->arr2.reduce((acc: string[], a: string, index: number) => {     return []}, []) : never[]
+>arr2.reduce((acc: string[], a: string, index: number) => {     return []}, []) : string[]
 >arr2.reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
 >arr2 : string[]
 >reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }

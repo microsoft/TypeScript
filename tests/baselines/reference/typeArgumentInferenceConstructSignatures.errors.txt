@@ -12,9 +12,10 @@ typeArgumentInferenceConstructSignatures.ts(106,33): error TS2345: Argument of t
 typeArgumentInferenceConstructSignatures.ts(107,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
 typeArgumentInferenceConstructSignatures.ts(121,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
 typeArgumentInferenceConstructSignatures.ts(122,74): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
+typeArgumentInferenceConstructSignatures.ts(136,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'any', but here has type 'any[]'.
 
 
-==== typeArgumentInferenceConstructSignatures.ts (8 errors) ====
+==== typeArgumentInferenceConstructSignatures.ts (9 errors) ====
     // Generic call with no parameters
     interface NoParams {
         new <T>();
@@ -175,5 +176,8 @@ typeArgumentInferenceConstructSignatures.ts(122,74): error TS2353: Object litera
     // Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
     var arr = new someGenerics9([], null, undefined);
     var arr: any[];
+        ~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'any', but here has type 'any[]'.
+!!! related TS6203 typeArgumentInferenceConstructSignatures.ts:135:5: 'arr' was also declared here.
     
     

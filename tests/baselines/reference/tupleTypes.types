@@ -155,9 +155,9 @@ var tt2: number | string;
 >tt2 : undefined
 
 tt = tuple2(1, undefined);
->tt = tuple2(1, undefined) : [number, any]
+>tt = tuple2(1, undefined) : [number, string]
 >tt : [number, string]
->tuple2(1, undefined) : [number, any]
+>tuple2(1, undefined) : [number, string]
 >tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
 >1 : 1
 >undefined : undefined
