@@ -6817,9 +6817,9 @@ export const enum InferencePriority {
     PartialHomomorphicMappedType = 1 << 4,  // Partial reverse inference for homomorphic mapped type
     MappedTypeConstraint         = 1 << 5,  // Reverse inference for mapped type
     ContravariantConditional     = 1 << 6,  // Conditional type in contravariant position
-    ReturnType                   = 1 << 7,  // Inference made from return type of generic function
-    LiteralKeyof                 = 1 << 8,  // Inference made from a string literal to a keyof T
-    EmptyLiteral                 = 1 << 9,  // Inference made from an empty literal type
+    EmptyLiteral                 = 1 << 7,  // Inference made from an empty literal type
+    ReturnType                   = 1 << 8,  // Inference made from return type of generic function
+    LiteralKeyof                 = 1 << 9,  // Inference made from a string literal to a keyof T
     NoConstraints                = 1 << 10, // Don't infer from constraints of instantiable types
     AlwaysStrict                 = 1 << 11, // Always use strict rules for contravariant inferences
     MaxValue                     = 1 << 12, // Seed for inference priority tracking

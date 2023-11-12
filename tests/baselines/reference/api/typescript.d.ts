@@ -7360,13 +7360,13 @@ declare namespace ts {
         PartialHomomorphicMappedType = 16,
         MappedTypeConstraint = 32,
         ContravariantConditional = 64,
-        ReturnType = 128,
-        LiteralKeyof = 256,
-        EmptyLiteral = 512,
+        EmptyLiteral = 128,
+        ReturnType = 256,
+        LiteralKeyof = 512,
         NoConstraints = 1024,
         AlwaysStrict = 2048,
         MaxValue = 4096,
-        PriorityImpliesCombination = 416,
+        PriorityImpliesCombination = 800,
         Circularity = -1,
     }
     interface FileExtensionInfo {

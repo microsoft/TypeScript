@@ -47,7 +47,7 @@ function fn2() { return undefined; }
 
 var d1: Date = fn2 `${ 0 }${ undefined }`; // contextually typed
 >d1 : Date
->fn2 `${ 0 }${ undefined }` : Date
+>fn2 `${ 0 }${ undefined }` : any
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
 >`${ 0 }${ undefined }` : string
 >0 : 0
