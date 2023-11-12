@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/arrayFilterBooleanExternalOverload4.ts] ////
+
+=== arrayFilterBooleanExternalOverload4.ts ===
+// #56013
+
+interface F2<T extends number,U extends number> {
+>F2 : Symbol(F2, Decl(arrayFilterBooleanExternalOverload4.ts, 0, 0))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 13))
+>U : Symbol(U, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 30))
+
+    (p1:(t:1)=>T,p2:(u:1)=>U):11;
+>p1 : Symbol(p1, Decl(arrayFilterBooleanExternalOverload4.ts, 3, 5))
+>t : Symbol(t, Decl(arrayFilterBooleanExternalOverload4.ts, 3, 9))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 13))
+>p2 : Symbol(p2, Decl(arrayFilterBooleanExternalOverload4.ts, 3, 17))
+>u : Symbol(u, Decl(arrayFilterBooleanExternalOverload4.ts, 3, 21))
+>U : Symbol(U, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 30))
+
+    (p1:(t:1)=>T,p2:(u:U)=>U):19;
+>p1 : Symbol(p1, Decl(arrayFilterBooleanExternalOverload4.ts, 4, 5))
+>t : Symbol(t, Decl(arrayFilterBooleanExternalOverload4.ts, 4, 9))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 13))
+>p2 : Symbol(p2, Decl(arrayFilterBooleanExternalOverload4.ts, 4, 17))
+>u : Symbol(u, Decl(arrayFilterBooleanExternalOverload4.ts, 4, 21))
+>U : Symbol(U, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 30))
+>U : Symbol(U, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 30))
+
+    (p1:(t:T)=>T,p2:(u:1)=>U):91;
+>p1 : Symbol(p1, Decl(arrayFilterBooleanExternalOverload4.ts, 5, 5))
+>t : Symbol(t, Decl(arrayFilterBooleanExternalOverload4.ts, 5, 9))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 13))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 13))
+>p2 : Symbol(p2, Decl(arrayFilterBooleanExternalOverload4.ts, 5, 17))
+>u : Symbol(u, Decl(arrayFilterBooleanExternalOverload4.ts, 5, 21))
+>U : Symbol(U, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 30))
+
+    (p1:(t:T)=>T,p2:(u:U)=>U):99;
+>p1 : Symbol(p1, Decl(arrayFilterBooleanExternalOverload4.ts, 6, 5))
+>t : Symbol(t, Decl(arrayFilterBooleanExternalOverload4.ts, 6, 9))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 13))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 13))
+>p2 : Symbol(p2, Decl(arrayFilterBooleanExternalOverload4.ts, 6, 17))
+>u : Symbol(u, Decl(arrayFilterBooleanExternalOverload4.ts, 6, 21))
+>U : Symbol(U, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 30))
+>U : Symbol(U, Decl(arrayFilterBooleanExternalOverload4.ts, 2, 30))
+}
+type ID = <I>() => (i:I) => I;
+>ID : Symbol(ID, Decl(arrayFilterBooleanExternalOverload4.ts, 7, 1))
+>I : Symbol(I, Decl(arrayFilterBooleanExternalOverload4.ts, 8, 11))
+>i : Symbol(i, Decl(arrayFilterBooleanExternalOverload4.ts, 8, 20))
+>I : Symbol(I, Decl(arrayFilterBooleanExternalOverload4.ts, 8, 11))
+>I : Symbol(I, Decl(arrayFilterBooleanExternalOverload4.ts, 8, 11))
+
+declare const id: ID;
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload4.ts, 10, 13))
+>ID : Symbol(ID, Decl(arrayFilterBooleanExternalOverload4.ts, 7, 1))
+
+
+const t11 = (0 as any as F2<1,1>)(id(),id());
+>t11 : Symbol(t11, Decl(arrayFilterBooleanExternalOverload4.ts, 13, 5))
+>F2 : Symbol(F2, Decl(arrayFilterBooleanExternalOverload4.ts, 0, 0))
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload4.ts, 10, 13))
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload4.ts, 10, 13))
+
+const t12 = (0 as any as F2<1,2>)(id(),id());
+>t12 : Symbol(t12, Decl(arrayFilterBooleanExternalOverload4.ts, 14, 5))
+>F2 : Symbol(F2, Decl(arrayFilterBooleanExternalOverload4.ts, 0, 0))
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload4.ts, 10, 13))
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload4.ts, 10, 13))
+
+const t21 = (0 as any as F2<2,1>)(id(),id());
+>t21 : Symbol(t21, Decl(arrayFilterBooleanExternalOverload4.ts, 15, 5))
+>F2 : Symbol(F2, Decl(arrayFilterBooleanExternalOverload4.ts, 0, 0))
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload4.ts, 10, 13))
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload4.ts, 10, 13))
+
+const t22 = (0 as any as F2<2,2>)(id(),id());
+>t22 : Symbol(t22, Decl(arrayFilterBooleanExternalOverload4.ts, 16, 5))
+>F2 : Symbol(F2, Decl(arrayFilterBooleanExternalOverload4.ts, 0, 0))
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload4.ts, 10, 13))
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload4.ts, 10, 13))
+
+t11 satisfies 11;
+>t11 : Symbol(t11, Decl(arrayFilterBooleanExternalOverload4.ts, 13, 5))
+
+t12 satisfies 19;
+>t12 : Symbol(t12, Decl(arrayFilterBooleanExternalOverload4.ts, 14, 5))
+
+t21 satisfies 91;
+>t21 : Symbol(t21, Decl(arrayFilterBooleanExternalOverload4.ts, 15, 5))
+
+t22 satisfies 99;
+>t22 : Symbol(t22, Decl(arrayFilterBooleanExternalOverload4.ts, 16, 5))
+
+

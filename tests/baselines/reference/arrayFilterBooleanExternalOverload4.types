@@ -1,0 +1,103 @@
+//// [tests/cases/compiler/arrayFilterBooleanExternalOverload4.ts] ////
+
+=== arrayFilterBooleanExternalOverload4.ts ===
+// #56013
+
+interface F2<T extends number,U extends number> {
+    (p1:(t:1)=>T,p2:(u:1)=>U):11;
+>p1 : (t: 1) => T
+>t : 1
+>p2 : (u: 1) => U
+>u : 1
+
+    (p1:(t:1)=>T,p2:(u:U)=>U):19;
+>p1 : (t: 1) => T
+>t : 1
+>p2 : (u: U) => U
+>u : U
+
+    (p1:(t:T)=>T,p2:(u:1)=>U):91;
+>p1 : (t: T) => T
+>t : T
+>p2 : (u: 1) => U
+>u : 1
+
+    (p1:(t:T)=>T,p2:(u:U)=>U):99;
+>p1 : (t: T) => T
+>t : T
+>p2 : (u: U) => U
+>u : U
+}
+type ID = <I>() => (i:I) => I;
+>ID : <I>() => (i: I) => I
+>i : I
+
+declare const id: ID;
+>id : ID
+
+
+const t11 = (0 as any as F2<1,1>)(id(),id());
+>t11 : 11
+>(0 as any as F2<1,1>)(id(),id()) : 11
+>(0 as any as F2<1,1>) : F2<1, 1>
+>0 as any as F2<1,1> : F2<1, 1>
+>0 as any : any
+>0 : 0
+>id() : (i: 1) => 1
+>id : ID
+>id() : (i: 1) => 1
+>id : ID
+
+const t12 = (0 as any as F2<1,2>)(id(),id());
+>t12 : never
+>(0 as any as F2<1,2>)(id(),id()) : never
+>(0 as any as F2<1,2>) : F2<1, 2>
+>0 as any as F2<1,2> : F2<1, 2>
+>0 as any : any
+>0 : 0
+>id() : (i: 1) => 1
+>id : ID
+>id() : (i: 1) => 1
+>id : ID
+
+const t21 = (0 as any as F2<2,1>)(id(),id());
+>t21 : never
+>(0 as any as F2<2,1>)(id(),id()) : never
+>(0 as any as F2<2,1>) : F2<2, 1>
+>0 as any as F2<2,1> : F2<2, 1>
+>0 as any : any
+>0 : 0
+>id() : (i: 1) => 1
+>id : ID
+>id() : (i: 1) => 1
+>id : ID
+
+const t22 = (0 as any as F2<2,2>)(id(),id());
+>t22 : never
+>(0 as any as F2<2,2>)(id(),id()) : never
+>(0 as any as F2<2,2>) : F2<2, 2>
+>0 as any as F2<2,2> : F2<2, 2>
+>0 as any : any
+>0 : 0
+>id() : (i: 1) => 1
+>id : ID
+>id() : (i: 2) => 2
+>id : ID
+
+t11 satisfies 11;
+>t11 satisfies 11 : 11
+>t11 : 11
+
+t12 satisfies 19;
+>t12 satisfies 19 : never
+>t12 : never
+
+t21 satisfies 91;
+>t21 satisfies 91 : never
+>t21 : never
+
+t22 satisfies 99;
+>t22 satisfies 99 : never
+>t22 : never
+
+

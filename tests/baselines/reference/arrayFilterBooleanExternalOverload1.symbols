@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/arrayFilterBooleanExternalOverload1.ts] ////
+
+=== arrayFilterBooleanExternalOverload1.ts ===
+// #56013
+
+// For reference, thise cases work as expected (no errors) when no external BooleanConstrudtor like overload is present
+declare const maybe: boolean;
+>maybe : Symbol(maybe, Decl(arrayFilterBooleanExternalOverload1.ts, 3, 13))
+{
+    const id = <T>() => (t: T) => !!t;
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload1.ts, 5, 9))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload1.ts, 5, 16))
+>t : Symbol(t, Decl(arrayFilterBooleanExternalOverload1.ts, 5, 25))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload1.ts, 5, 16))
+>t : Symbol(t, Decl(arrayFilterBooleanExternalOverload1.ts, 5, 25))
+
+    const result1 = (maybe ? ['foo', 'bar', undefined] : [1] ).filter(id());
+>result1 : Symbol(result1, Decl(arrayFilterBooleanExternalOverload1.ts, 7, 9))
+>(maybe ? ['foo', 'bar', undefined] : [1] ).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>maybe : Symbol(maybe, Decl(arrayFilterBooleanExternalOverload1.ts, 3, 13))
+>undefined : Symbol(undefined)
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload1.ts, 5, 9))
+
+    result1;
+>result1 : Symbol(result1, Decl(arrayFilterBooleanExternalOverload1.ts, 7, 9))
+
+    const result2 = ['foo', 'bar', undefined].filter(id()); // want id() = (t: string) => boolean
+>result2 : Symbol(result2, Decl(arrayFilterBooleanExternalOverload1.ts, 11, 9))
+>['foo', 'bar', undefined].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload1.ts, 5, 9))
+
+    result2;
+>result2 : Symbol(result2, Decl(arrayFilterBooleanExternalOverload1.ts, 11, 9))
+}
+

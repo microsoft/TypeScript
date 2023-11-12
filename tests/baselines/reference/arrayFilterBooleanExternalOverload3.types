@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/arrayFilterBooleanExternalOverload3.ts] ////
+
+=== arrayFilterBooleanExternalOverload3.ts ===
+// #56013
+
+const symbool = Symbol("MyBooleanSymbol");
+>symbool : unique symbol
+>Symbol("MyBooleanSymbol") : unique symbol
+>Symbol : SymbolConstructor
+>"MyBooleanSymbol" : "MyBooleanSymbol"
+
+declare const MyBoolean: typeof Boolean & { prototype: typeof symbool };
+>MyBoolean : BooleanConstructor & { prototype: typeof symbool; }
+>Boolean : BooleanConstructor
+>prototype : unique symbol
+>symbool : unique symbol
+
+interface Array<T> {
+    filter(predicate: typeof MyBoolean): (T extends (0 | 0n | "" | false | null | undefined) ? never : T)[];
+>filter : { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[]; (predicate: typeof MyBoolean): (T extends (0 | 0n | "" | false | null | undefined) ? never : T)[]; }
+>predicate : BooleanConstructor & { prototype: unique symbol; }
+>MyBoolean : BooleanConstructor & { prototype: unique symbol; }
+>false : false
+}
+
+declare const maybe: boolean;
+>maybe : boolean
+{
+    const id = <T,>() => (t: T) => !!t;
+>id : <T>() => (t: T) => boolean
+><T,>() => (t: T) => !!t : <T>() => (t: T) => boolean
+>(t: T) => !!t : (t: T) => boolean
+>t : T
+>!!t : boolean
+>!t : boolean
+>t : T
+
+    const result1 = (maybe ? ['foo', 'bar', undefined] : [1] ).filter(MyBoolean);
+>result1 : number[] | string[]
+>(maybe ? ['foo', 'bar', undefined] : [1] ).filter(MyBoolean) : number[] | string[]
+>(maybe ? ['foo', 'bar', undefined] : [1] ).filter : { <S extends string | undefined>(predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => unknown, thisArg?: any): (string | undefined)[]; (predicate: BooleanConstructor & { prototype: unique symbol; }): string[]; } | { <S_1 extends number>(predicate: (value: number, index: number, array: number[]) => value is S_1, thisArg?: any): S_1[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; (predicate: BooleanConstructor & { prototype: unique symbol; }): number[]; }
+>(maybe ? ['foo', 'bar', undefined] : [1] ) : (string | undefined)[] | number[]
+>maybe ? ['foo', 'bar', undefined] : [1] : (string | undefined)[] | number[]
+>maybe : boolean
+>['foo', 'bar', undefined] : (string | undefined)[]
+>'foo' : "foo"
+>'bar' : "bar"
+>undefined : undefined
+>[1] : number[]
+>1 : 1
+>filter : { <S extends string | undefined>(predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => unknown, thisArg?: any): (string | undefined)[]; (predicate: BooleanConstructor & { prototype: unique symbol; }): string[]; } | { <S_1 extends number>(predicate: (value: number, index: number, array: number[]) => value is S_1, thisArg?: any): S_1[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; (predicate: BooleanConstructor & { prototype: unique symbol; }): number[]; }
+>MyBoolean : BooleanConstructor & { prototype: unique symbol; }
+
+    result1;
+>result1 : number[] | string[]
+
+    const result2 = ['foo', 'bar', undefined].filter(MyBoolean); // want id() = (t: string) => boolean
+>result2 : string[]
+>['foo', 'bar', undefined].filter(MyBoolean) : string[]
+>['foo', 'bar', undefined].filter : { <S extends string | undefined>(predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => unknown, thisArg?: any): (string | undefined)[]; (predicate: BooleanConstructor & { prototype: unique symbol; }): string[]; }
+>['foo', 'bar', undefined] : (string | undefined)[]
+>'foo' : "foo"
+>'bar' : "bar"
+>undefined : undefined
+>filter : { <S extends string | undefined>(predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => unknown, thisArg?: any): (string | undefined)[]; (predicate: BooleanConstructor & { prototype: unique symbol; }): string[]; }
+>MyBoolean : BooleanConstructor & { prototype: unique symbol; }
+
+    result2;
+>result2 : string[]
+}
+
