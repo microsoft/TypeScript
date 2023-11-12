@@ -25239,7 +25239,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         // without strictNullChecks an inference from an array of undefinedWideningType is still better than an inference from a widening null/undefined
                         // so we avoid deprioritization of those inferences when strictNullChecks are not enabled
-                        if (strictNullChecks && (isEmptyLiteralType(candidate) || isEmptyArrayLiteralType(candidate))) {
+                        if (strictNullChecks && isEmptyArrayLiteralType(candidate)) {
                             priority |= InferencePriority.ImplicitNever;
                         }
                         if (inference.priority === undefined || priority < inference.priority) {
