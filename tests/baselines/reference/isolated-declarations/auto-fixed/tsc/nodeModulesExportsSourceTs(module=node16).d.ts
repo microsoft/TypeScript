@@ -31,9 +31,6 @@ export const x: () => Thing = null as any;
 
 
 
-//// [index.d.ts]
-export declare const a: any;
-
 //// [/.src/node_modules/inner/index.d.ts]
 export { x } from "./other.js";
 

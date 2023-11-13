@@ -23,7 +23,6 @@ import {
     getRootLength,
     getSourceFilePathInNewDir,
     IsolatedEmitHost,
-    NewLineKind,
     noop,
     normalizePath,
     normalizeSlashes,
@@ -80,10 +79,16 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
     const result = transformer(sourceFile);
 
     const printer = createPrinter({
-        onlyPrintJsDocStyle: true,
-        newLine: options.newLine ?? NewLineKind.CarriageReturnLineFeed,
-        target: options.target,
         removeComments: options.removeComments,
+        newLine: options.newLine,
+        noEmitHelpers: true,
+        module: options.module,
+        target: options.target,
+        sourceMap: options.declarationMap,
+        inlineSourceMap: options.inlineSourceMap,
+        extendedDiagnostics: options.extendedDiagnostics,
+        onlyPrintJsDocStyle: true,
+        omitBraceSourceMapPositions: true,
     } as PrinterOptions);
 
     const writer = createTextWriter(getNewLineCharacter(options));
@@ -92,6 +97,7 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
     if (sourceMap) {
         if (!writer.isAtStartOfLine()) writer.writeLine();
         writer.writeComment(sourceMap.sourceMappingURL);
+        writer.writeLine();
     }
 
     const declarationPath = getDeclarationEmitOutputFilePathWorker(
@@ -101,13 +107,12 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
         emitHost.getCommonSourceDirectory(),
         emitHost.getCanonicalFileName,
     );
-    const declarationMapPath = declarationPath + ".map";
 
     return {
         declaration: writer.getText(),
         declarationPath,
         declarationMap: sourceMap?.sourceMapGenerator.toString(),
-        declarationMapPath,
+        declarationMapPath: sourceMap && declarationPath + ".map",
         diagnostics,
     };
 

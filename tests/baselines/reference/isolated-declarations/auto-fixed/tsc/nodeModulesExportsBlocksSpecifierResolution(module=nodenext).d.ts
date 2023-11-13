@@ -29,10 +29,6 @@ export const x: () => Thing;
 /// [Declarations] ////
 
 
-
-//// [index.d.ts]
-export declare const a: any;
-
 /// [Errors] ////
 
 error TS2468: Cannot find global value 'Promise'.

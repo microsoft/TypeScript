@@ -462,10 +462,13 @@ class IsolatedDeclarationTest extends CompilerTestBase {
     protected dteDiagnostics: readonly ts.Diagnostic[];
     protected tscNonIsolatedDeclarationsErrors: readonly ts.Diagnostic[];
     protected isOutputEquivalent: boolean;
-    protected dteDtsFile: Compiler.TestFile[];
+    protected dteDtsFiles: Compiler.TestFile[];
     protected tscDtsFiles: Compiler.TestFile[];
+    protected dteDtsMapFiles: Compiler.TestFile[];
+    protected tscDtsMapFiles: Compiler.TestFile[];
     protected tscIsolatedDeclarationsErrors: readonly ts.Diagnostic[];
     protected isDiagnosticEquivalent: boolean;
+    protected isOutputMapEquivalent: boolean;
 
     static transformEnvironment(compilerEnvironment: CompilerTestEnvironment): CompilerTestEnvironment | undefined {
         const options = compilerEnvironment.compilerOptions;
@@ -515,40 +518,43 @@ class IsolatedDeclarationTest extends CompilerTestBase {
     constructor(compilerEnvironment: CompilerTestEnvironment) {
         super(compilerEnvironment);
 
+        const tscResult = this.result;
+        const fileCompare = (a: Compiler.TestFile, b: Compiler.TestFile) => this.result.host.vfs.stringComparer(a.unitName, b.unitName);
         const currentDirectory = this.harnessSettings.currentDirectory ?? vfs.srcFolder;
         const dteResult = Compiler.compileDeclarationFilesWithIsolatedEmitter(
             this.toBeCompiled,
             this.otherFiles,
-            this.result.host,
+            tscResult.host,
             this.options,
             currentDirectory,
         );
         this.dteDiagnostics = ts.sortAndDeduplicateDiagnostics(dteResult.diagnostics);
-        this.dteDtsFile = [...ts.mapDefinedIterator(dteResult.dts, ([, f]) => ({
-            unitName: this.result.host.vfs.realpathSync(f.file),
-            content: f.text,
-        }))];
-        this.dteDtsFile.sort((a, b) => this.result.host.vfs.stringComparer(a.unitName, b.unitName));
+        this.dteDtsFiles = [...ts.mapDefinedIterator(dteResult.dts, ([, f]) => f.asTestFile())];
+        this.dteDtsFiles.sort(fileCompare);
+        this.dteDtsMapFiles = [...ts.mapDefinedIterator(dteResult.dtsMap, ([, f]) => f.asTestFile())];
 
         // With force get JSON definition files we need to ignore
-        this.tscDtsFiles = [...ts.mapDefinedIterator(this.result.dts, ([name, f]) =>
-            name.endsWith(".d.json.ts") ? undefined : {
-                unitName: this.result.host.vfs.realpathSync(f.file),
-                content: f.text,
-            })];
+        this.tscDtsFiles = [...ts.mapDefinedIterator(tscResult.dts, ([name, f]) => name.endsWith(".d.json.ts") ? undefined : f.asTestFile())];
 
-        this.tscDtsFiles.sort((a, b) => this.result.host.vfs.stringComparer(a.unitName, b.unitName));
+        this.tscDtsFiles.sort(fileCompare);
+        this.tscDtsMapFiles = ts.mapDefined(this.tscDtsFiles, f => tscResult.maps.get(f.unitName + ".map")?.asTestFile());
+
         const tscDiagnostics = ts.sortAndDeduplicateDiagnostics(this.result.diagnostics);
         this.tscNonIsolatedDeclarationsErrors = tscDiagnostics.filter(d => !IsolatedDeclarationTest.dteDiagnosticErrors.has(d.code));
         this.tscIsolatedDeclarationsErrors = tscDiagnostics.filter(d => IsolatedDeclarationTest.dteDiagnosticErrors.has(d.code));
 
         // If DTE is the same as TS output we don't need to do any extra checks.
-        this.isOutputEquivalent = this.dteDtsFile.length === this.tscDtsFiles.length && this.dteDtsFile
+        this.isOutputEquivalent = this.dteDtsFiles.length === this.tscDtsFiles.length && this.dteDtsFiles
             .every((dteDecl, index) => {
                 const tscDecl = this.tscDtsFiles[index];
                 return tscDecl.unitName === dteDecl.unitName && dteDecl.content === tscDecl.content;
             });
 
+        this.isOutputMapEquivalent = this.dteDtsMapFiles.length === this.tscDtsMapFiles.length && this.dteDtsMapFiles
+            .every((dteDecl, index) => {
+                const tscDecl = this.tscDtsMapFiles[index];
+                return tscDecl.unitName === dteDecl.unitName && dteDecl.content === tscDecl.content;
+            });
         this.isDiagnosticEquivalent = this.tscIsolatedDeclarationsErrors.length === this.dteDiagnostics.length &&
             this.dteDiagnostics.every((dteDiag, index) => {
                 const tscDiag = this.tscIsolatedDeclarationsErrors[index];
@@ -575,7 +581,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             this.configuredName,
             this.baselinePath + "/dte",
             this.fileName,
-            this.dteDtsFile,
+            this.dteDtsFiles,
             ts.concatenate(this.dteDiagnostics, this.tscNonIsolatedDeclarationsErrors),
             this.allFiles,
             this.options.pretty,
@@ -593,18 +599,56 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             this.options.pretty,
         );
     }
+    verifyDteMapOutput() {
+        if (this.isOutputMapEquivalent) return;
+        Compiler.doDeclarationMapBaseline(
+            this.configuredName,
+            this.baselinePath + "/dte",
+            this.fileName,
+            this.dteDtsFiles,
+            this.dteDtsMapFiles,
+            this.allFiles,
+        );
+    }
+    verifyTscMapOutput() {
+        if (this.isOutputMapEquivalent) return;
+        Compiler.doDeclarationMapBaseline(
+            this.configuredName,
+            this.baselinePath + "/tsc",
+            this.fileName,
+            this.tscDtsFiles,
+            this.tscDtsMapFiles,
+            this.allFiles,
+        );
+    }
+
     verifyDiff() {
         if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
         Compiler.doDeclarationDiffBaseline(
             this.configuredName,
             this.baselinePath + "/diff",
             this.fileName,
-            this.dteDtsFile,
+            this.dteDtsFiles,
             ts.concatenate(this.dteDiagnostics, this.tscNonIsolatedDeclarationsErrors),
             this.tscDtsFiles,
             ts.concatenate(this.tscIsolatedDeclarationsErrors, this.tscNonIsolatedDeclarationsErrors),
             this.allFiles,
             this.options.pretty,
+            this.harnessSettings.isolatedDeclarationDiffReason,
+        );
+    }
+
+    verifySourceMapDiff() {
+        if (this.isOutputMapEquivalent) return;
+        Compiler.doDeclarationMapDiffBaseline(
+            this.configuredName,
+            this.baselinePath + "/diff",
+            this.fileName,
+            this.dteDtsFiles,
+            this.dteDtsMapFiles,
+            this.tscDtsFiles,
+            this.tscDtsMapFiles,
+            this.allFiles,
             this.harnessSettings.isolatedDeclarationDiffReason,
         );
     }
@@ -624,6 +668,9 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         if (!env) {
             return undefined;
         }
+
+        env.compilerOptions.declarationMap = false;
+        env.compilerOptions.forceDtsEmit = false;
 
         const autoFixCacheTest = ts.combinePaths("tests/auto-fixed", compilerEnvironment.configuredName);
         const existingTransformedTest = IO.readFile(autoFixCacheTest);

@@ -54,49 +54,6 @@ class C4 {
 /// [Declarations] ////
 
 
-
-//// [declarationFiles.d.ts]
-declare class C1 {
-    x: this;
-    f(x: this): this;
-    constructor(x: this);
-}
-declare class C2 {
-    [x: string]: this;
-}
-interface Foo<T> {
-    x: T;
-    y: this;
-}
-declare class C3 {
-    a: this[];
-    b: [this, this];
-    c: this | Date;
-    d: this & Date;
-    e: (((this)));
-    f: (x: this) => this;
-    g: new (x: this) => this;
-    h: Foo<this>;
-    i: Foo<this | (() => this)>;
-    j: (x: any) => x is this;
-}
-declare const x3_a: typeof globalThis;
-declare const x1_a: typeof globalThis;
-declare class C4 {
-    x1: {
-        a: typeof globalThis;
-    };
-    x2: this[];
-    x3: readonly [{
-        readonly a: typeof globalThis;
-    }];
-    x4: () => this;
-    f1(): any;
-    f2(): this[];
-    f3(): any;
-    f4(): () => this;
-}
-
 /// [Errors] ////
 
 declarationFiles.ts(4,20): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
