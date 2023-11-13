@@ -951,6 +951,22 @@
         "category": "Error",
         "code": 1288
     },
+    "'{0}' resolves to a type-only declaration and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'import type' where '{0}' is imported.": {
+        "category": "Error",
+        "code": 1289
+    },
+    "'{0}' resolves to a type-only declaration and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'export type { {0} as default }'.": {
+        "category": "Error",
+        "code": 1290
+    },
+    "'{0}' resolves to a type and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'import type' where '{0}' is imported.": {
+        "category": "Error",
+        "code": 1291
+    },
+    "'{0}' resolves to a type and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'export type { {0} as default }'.": {
+        "category": "Error",
+        "code": 1292
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",

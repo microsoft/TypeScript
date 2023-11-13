@@ -8,7 +8,6 @@
 /main4.ts(1,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main5.ts(1,1): error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main6.ts(2,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
-/main6.ts(2,16): error TS2693: 'I' only refers to a type, but is being used as a value here.
 /main7.ts(2,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 
 
@@ -77,13 +76,11 @@
     ~~~~~~
 !!! error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     
-==== /main6.ts (2 errors) ====
+==== /main6.ts (1 errors) ====
     interface I {}
     export default I; // error
     ~~~~~~~~~~~~~~~~~
 !!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
-                   ~
-!!! error TS2693: 'I' only refers to a type, but is being used as a value here.
     
 ==== /main7.ts (1 errors) ====
     import type esmy from "./decl";

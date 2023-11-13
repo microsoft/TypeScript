@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/isolatedModulesExportDeclarationType.ts] ////
+
+=== /type.ts ===
+export type T = number;
+>T : number
+
+=== /test1.ts ===
+import { T } from "./type";
+>T : 0
+
+const T = 0;      // Error as of #56354
+>T : 0
+>0 : 0
+
+export default T; // Ok
+>T : number
+
+=== /test2.ts ===
+import { T } from "./type";
+>T : any
+
+type T = number;  // Merge error
+>T : number
+
+export default T; // Transpiler could assume the alias resolves to a value?
+>T : number
+
+=== /test3.ts ===
+import { T } from "./type";
+>T : any
+
+export default T; // Error
+>T : number
+
