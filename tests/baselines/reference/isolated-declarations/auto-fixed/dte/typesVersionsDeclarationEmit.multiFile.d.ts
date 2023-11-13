@@ -41,6 +41,7 @@ export function fb(): B;
 //// [/.src/main.d.ts]
 export declare const va: invalid;
 export declare const vb: invalid;
+//# sourceMappingURL=main.d.ts.map
 
 /// [Errors] ////
 

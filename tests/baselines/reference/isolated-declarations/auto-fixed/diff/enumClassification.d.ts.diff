@@ -5,11 +5,14 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -57,4 +57,101 @@
+@@ -57,5 +57,102 @@
      B,
      C,
      D
  }
+-//# sourceMappingURL=enumClassification.d.ts.map
+\ No newline at end of file
++//# sourceMappingURL=enumClassification.d.ts.map
 +
 +/// [Errors] ////
 +

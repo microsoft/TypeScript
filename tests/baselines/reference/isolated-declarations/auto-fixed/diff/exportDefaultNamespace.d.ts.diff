@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,8 +1,19 @@
+@@ -1,9 +1,20 @@
  
  
  //// [exportDefaultNamespace.d.ts]
@@ -14,7 +14,10 @@
 -    var someProp: string;
 -}
 -export default someFunc;
+-//# sourceMappingURL=exportDefaultNamespace.d.ts.map
+\ No newline at end of file
 +export default function someFunc(): string;
++//# sourceMappingURL=exportDefaultNamespace.d.ts.map
 +
 +/// [Errors] ////
 +

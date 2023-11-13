@@ -5,17 +5,24 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,6 +1,9 @@
+@@ -1,32 +1,41 @@
  
  
 +//// [index.d.ts]
 +export declare const a: invalid;
++//# sourceMappingURL=index.d.ts.map
 +
  //// [/.src/node_modules/inner/index.d.ts]
  export { x } from "./other.js";
- 
+ //# sourceMappingURL=index.d.ts.map
++
  //// [/.src/node_modules/inner/other.d.ts]
-@@ -12,21 +15,24 @@
+ export interface Thing {
+ }
+ export declare const x: () => Thing;
+ //# sourceMappingURL=other.d.ts.map
++
+ /// [Errors] ////
  
  error TS2468: Cannot find global value 'Promise'.
  index.ts(2,23): error TS2307: Cannot find module 'inner/other' or its corresponding type declarations.

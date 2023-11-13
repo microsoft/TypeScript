@@ -33,12 +33,12 @@ export const x: () => Thing = null as any;
 
 //// [/.src/node_modules/inner/index.d.ts]
 export { x } from "./other.js";
-
+//# sourceMappingURL=index.d.ts.map
 //// [/.src/node_modules/inner/other.d.ts]
 export interface Thing {
 }
 export declare const x: () => Thing;
-
+//# sourceMappingURL=other.d.ts.map
 /// [Errors] ////
 
 error TS2468: Cannot find global value 'Promise'.

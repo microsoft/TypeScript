@@ -158,6 +158,7 @@ declare var ExpandoExpr3: {
     };
 };
 declare var n: number;
+//# sourceMappingURL=typeFromPropertyAssignment29.d.ts.map
 
 /// [Errors] ////
 

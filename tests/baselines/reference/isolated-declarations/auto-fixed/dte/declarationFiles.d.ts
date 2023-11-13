@@ -96,6 +96,7 @@ declare class C4 {
     f3(): invalid;
     f4(): () => this;
 }
+//# sourceMappingURL=declarationFiles.d.ts.map
 
 /// [Errors] ////
 

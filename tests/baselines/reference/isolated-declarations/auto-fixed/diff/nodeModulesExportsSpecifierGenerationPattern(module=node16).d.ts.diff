@@ -5,13 +5,14 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,24 +1,27 @@
+@@ -1,24 +1,28 @@
  
  
  //// [index.d.ts]
 -export declare const a: import("inner/other.js").Thing;
 +export declare const a: invalid;
- 
+ //# sourceMappingURL=index.d.ts.map
++
  /// [Errors] ////
  
  error TS2468: Cannot find global value 'Promise'.

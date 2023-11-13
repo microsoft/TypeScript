@@ -18,3 +18,4 @@ declare namespace someFunc {
     var someProp: string;
 }
 export default someFunc;
+//# sourceMappingURL=exportDefaultNamespace.d.ts.map

@@ -142,6 +142,9 @@ export class CompilerBaselineRunner extends RunnerBase {
             it(`Correct dte emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
             it(`Correct tsc emit for ${fileName}`, () => fixedIsolatedTest?.verifyTscOutput());
             it(`Correct dte/tsc diff ${fileName}`, () => fixedIsolatedTest?.verifyDiff());
+            it(`Correct dte map emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteMapOutput());
+            it(`Correct tsc map emit for ${fileName}`, () => fixedIsolatedTest?.verifyTscMapOutput());
+            it(`Correct dte/tsc map diff ${fileName}`, () => fixedIsolatedTest?.verifyMapDiff());
 
             after(() => {
                 fixedIsolatedTest = undefined!;
@@ -555,6 +558,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
                 const tscDecl = this.tscDtsMapFiles[index];
                 return tscDecl.unitName === dteDecl.unitName && dteDecl.content === tscDecl.content;
             });
+
         this.isDiagnosticEquivalent = this.tscIsolatedDeclarationsErrors.length === this.dteDiagnostics.length &&
             this.dteDiagnostics.every((dteDiag, index) => {
                 const tscDiag = this.tscIsolatedDeclarationsErrors[index];
@@ -600,7 +604,8 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         );
     }
     verifyDteMapOutput() {
-        if (this.isOutputMapEquivalent) return;
+        // No point to check maps if output is different
+        if (this.isOutputMapEquivalent || !this.isOutputEquivalent) return;
         Compiler.doDeclarationMapBaseline(
             this.configuredName,
             this.baselinePath + "/dte",
@@ -611,7 +616,8 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         );
     }
     verifyTscMapOutput() {
-        if (this.isOutputMapEquivalent) return;
+        // No point to check maps if output is different
+        if (this.isOutputMapEquivalent || !this.isOutputEquivalent) return;
         Compiler.doDeclarationMapBaseline(
             this.configuredName,
             this.baselinePath + "/tsc",
@@ -638,8 +644,9 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         );
     }
 
-    verifySourceMapDiff() {
-        if (this.isOutputMapEquivalent) return;
+    verifyMapDiff() {
+        // No point to check maps if output is different
+        if (this.isOutputMapEquivalent || !this.isOutputEquivalent) return;
         Compiler.doDeclarationMapDiffBaseline(
             this.configuredName,
             this.baselinePath + "/diff",
@@ -669,7 +676,8 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
             return undefined;
         }
 
-        env.compilerOptions.declarationMap = false;
+        env.compilerOptions.isolatedDeclarations = false;
+        env.compilerOptions.declarationMap = true;
         env.compilerOptions.forceDtsEmit = false;
 
         const autoFixCacheTest = ts.combinePaths("tests/auto-fixed", compilerEnvironment.configuredName);
@@ -712,7 +720,6 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         }
         env.fileSystem.makeReadonly();
         env.fileSystem = env.fileSystem.shadow();
-        env.compilerOptions.isolatedDeclarations = false;
         return env;
     }
     constructor(compilerEnvironment: CompilerTestEnvironment) {
@@ -723,6 +730,7 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
             this.dteDiagnostics.every(d => d.code === ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code)
             && this.tscIsolatedDeclarationsErrors
         ) {
+            this.isOutputMapEquivalent = true;
             this.isDiagnosticEquivalent = true;
             this.isOutputEquivalent = true;
         }

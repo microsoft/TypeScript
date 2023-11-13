@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,85 +1,96 @@
+@@ -1,86 +1,97 @@
  
  
  //// [nullPropertyName.d.ts]
@@ -91,6 +91,9 @@
 -    export var of: number;
 -    export { _a as break, _b as case, _c as catch, _d as class, _e as const, _f as continue, _g as debugger, _h as default, _j as delete, _k as do, _l as else, _m as enum, _o as export, _p as extends, _q as false, _r as finally, _s as for, _t as function, _u as if, _v as import, _w as in, _x as instanceof, _y as new, _z as null, _0 as return, _1 as super, _2 as switch, _3 as this, _4 as throw, _5 as true, _6 as try, _7 as typeof, _8 as var, _9 as void, _10 as while, _11 as with, _12 as implements, _13 as interface, _14 as let, _15 as package, _16 as private, _17 as protected, _18 as public, _19 as static, _20 as yield };
 -}
+-//# sourceMappingURL=nullPropertyName.d.ts.map
+\ No newline at end of file
++//# sourceMappingURL=nullPropertyName.d.ts.map
 +
 +/// [Errors] ////
 +

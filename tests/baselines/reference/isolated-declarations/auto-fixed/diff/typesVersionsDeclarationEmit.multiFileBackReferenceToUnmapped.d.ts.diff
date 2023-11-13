@@ -5,14 +5,17 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,5 +1,46 @@
+@@ -1,6 +1,47 @@
  
  
  //// [/.src/main.d.ts]
 -export declare const va: import("ext").A2;
 -export declare const va2: import("ext").A2;
+-//# sourceMappingURL=main.d.ts.map
+\ No newline at end of file
 +export declare const va: invalid;
 +export declare const va2: invalid;
++//# sourceMappingURL=main.d.ts.map
 +
 +/// [Errors] ////
 +

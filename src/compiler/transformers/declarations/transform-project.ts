@@ -18,7 +18,6 @@ import {
     getDeclarationEmitOutputFilePathWorker,
     getDirectoryPath,
     getNewLineCharacter,
-    getOutputPathsFor,
     getRelativePathToDirectoryOrUrl,
     getRootLength,
     getSourceFilePathInNewDir,
@@ -92,14 +91,6 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
     } as PrinterOptions);
 
     const writer = createTextWriter(getNewLineCharacter(options));
-    const sourceMap = getSourceMapGenerator();
-    printer.writeFile(result, writer, sourceMap?.sourceMapGenerator);
-    if (sourceMap) {
-        if (!writer.isAtStartOfLine()) writer.writeLine();
-        writer.writeComment(sourceMap.sourceMappingURL);
-        writer.writeLine();
-    }
-
     const declarationPath = getDeclarationEmitOutputFilePathWorker(
         sourceFile.fileName,
         options,
@@ -107,12 +98,20 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
         emitHost.getCommonSourceDirectory(),
         emitHost.getCanonicalFileName,
     );
+    const declarationMapPath = declarationPath + ".map";
+    const sourceMap = getSourceMapGenerator(declarationPath, declarationMapPath);
+    printer.writeFile(result, writer, sourceMap?.sourceMapGenerator);
+    if (sourceMap) {
+        if (!writer.isAtStartOfLine()) writer.writeLine();
+        writer.writeComment(sourceMap.sourceMappingURL);
+        writer.writeLine();
+    }
 
     return {
         declaration: writer.getText(),
         declarationPath,
         declarationMap: sourceMap?.sourceMapGenerator.toString(),
-        declarationMapPath: sourceMap && declarationPath + ".map",
+        declarationMapPath: sourceMap && declarationMapPath,
         diagnostics,
     };
 
@@ -136,7 +135,7 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
     }
 
     // logic replicated from emitter.ts
-    function getSourceMapGenerator() {
+    function getSourceMapGenerator(declarationFilePath: string, declarationMapPath: string) {
         if (!getAreDeclarationMapsEnabled(options)) return;
 
         const mapOptions = {
@@ -147,19 +146,18 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
         };
 
         const sourceRoot = normalizeSlashes(options.sourceRoot || "");
-        const { declarationMapPath, declarationFilePath } = getOutputPathsFor(sourceFile, emitHost as unknown as EmitHost, /*forceDtsPaths*/ false);
         const sourceMapGenerator = createSourceMapGenerator(
             emitHost,
-            getBaseFileName(normalizeSlashes(declarationFilePath!)),
+            getBaseFileName(normalizeSlashes(declarationFilePath)),
             sourceRoot ? ensureTrailingDirectorySeparator(sourceRoot) : sourceRoot,
-            getSourceMapDirectory(options, sourceFile.fileName, sourceFile),
+            getSourceMapDirectory(options, declarationFilePath, sourceFile),
             mapOptions,
         );
 
         const sourceMappingURL = getSourceMappingURL(
             mapOptions,
             sourceMapGenerator,
-            declarationFilePath!,
+            declarationFilePath,
             declarationMapPath,
             sourceFile,
         );

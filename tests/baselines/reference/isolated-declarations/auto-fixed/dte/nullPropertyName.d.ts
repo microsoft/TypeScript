@@ -91,6 +91,7 @@ foo.of = 1;
 
 //// [nullPropertyName.d.ts]
 declare function foo(): void;
+//# sourceMappingURL=nullPropertyName.d.ts.map
 
 /// [Errors] ////
 

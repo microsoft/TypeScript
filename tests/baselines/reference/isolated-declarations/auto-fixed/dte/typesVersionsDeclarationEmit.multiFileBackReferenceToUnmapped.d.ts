@@ -38,6 +38,7 @@ export * from "../other";
 //// [/.src/main.d.ts]
 export declare const va: invalid;
 export declare const va2: invalid;
+//# sourceMappingURL=main.d.ts.map
 
 /// [Errors] ////
 

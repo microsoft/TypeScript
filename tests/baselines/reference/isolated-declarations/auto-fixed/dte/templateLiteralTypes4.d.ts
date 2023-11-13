@@ -466,6 +466,7 @@ declare function f1<T extends string | number>(s: `**${T}**`): T;
 declare function f2<T extends number>(s: `**${T}**`): T;
 declare function f3<T extends bigint>(s: `**${T}**`): T;
 declare function f4<T extends boolean>(s: `**${T}**`): T;
+//# sourceMappingURL=templateLiteralTypes4.d.ts.map
 
 /// [Errors] ////
 

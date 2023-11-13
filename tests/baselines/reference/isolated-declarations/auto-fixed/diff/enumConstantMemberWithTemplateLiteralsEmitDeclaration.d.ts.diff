@@ -5,11 +5,14 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -33,4 +33,53 @@
+@@ -33,5 +33,54 @@
      a = "1",
      b = "11",
      c = "21"
  }
+-//# sourceMappingURL=enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts.map
+\ No newline at end of file
++//# sourceMappingURL=enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts.map
 +
 +/// [Errors] ////
 +

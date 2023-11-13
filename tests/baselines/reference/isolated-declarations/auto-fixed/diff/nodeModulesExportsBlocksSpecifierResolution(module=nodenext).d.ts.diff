@@ -5,11 +5,12 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,23 +1,30 @@
+@@ -1,23 +1,31 @@
  
 +
 +//// [index.d.ts]
 +export declare const a: invalid;
++//# sourceMappingURL=index.d.ts.map
 +
  /// [Errors] ////
  

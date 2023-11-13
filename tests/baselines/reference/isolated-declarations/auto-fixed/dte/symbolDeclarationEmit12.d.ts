@@ -31,6 +31,7 @@ declare namespace M {
     }
     export {};
 }
+//# sourceMappingURL=symbolDeclarationEmit12.d.ts.map
 
 /// [Errors] ////
 

@@ -18,9 +18,12 @@
  type TNonLiteralEnum0 = "0" extends `${infer T extends NonLiteralEnum}` ? T : never;
  type PString00 = "0" extends `${infer T extends string | StringLiteralEnum}` ? T : never;
  type PString01 = "0" extends `${infer T extends string | number}` ? T : never;
-@@ -158,13 +158,15 @@
+@@ -156,15 +156,18 @@
+ declare function f2<T extends number>(s: `**${T}**`): T;
+ declare function f3<T extends bigint>(s: `**${T}**`): T;
  declare function f4<T extends boolean>(s: `**${T}**`): T;
- 
+ //# sourceMappingURL=templateLiteralTypes4.d.ts.map
++
  /// [Errors] ////
  
 +templateLiteralTypes4.ts(43,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -35,7 +38,7 @@
      type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100
      type TNumber1 = "-100" extends `${infer N extends number}` ? N : never; // -100
      type TNumber2 = "1.1" extends `${infer N extends number}` ? N : never; // 1.1
-@@ -206,8 +208,12 @@
+@@ -206,8 +209,12 @@
      type TNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum}` ? T : never; // NumberLiteralEnum.Zero
      
      // infer from non-literal enums

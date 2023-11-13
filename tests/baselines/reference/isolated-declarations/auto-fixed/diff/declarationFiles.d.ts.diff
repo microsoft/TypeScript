@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,13 +1,58 @@
+@@ -1,13 +1,59 @@
  
 +
 +//// [declarationFiles.d.ts]
@@ -49,6 +49,7 @@
 +    f3(): invalid;
 +    f4(): () => this;
 +}
++//# sourceMappingURL=declarationFiles.d.ts.map
 +
  /// [Errors] ////
  
@@ -65,7 +66,7 @@
          x: this;
          f(x: this): this { return undefined; }
          constructor(x: this) { }
-@@ -46,16 +91,20 @@
+@@ -46,16 +92,20 @@
          x4 = (): this => this;
          f1() {
          ~~

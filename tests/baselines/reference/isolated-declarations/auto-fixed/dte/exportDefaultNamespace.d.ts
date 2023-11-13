@@ -14,6 +14,7 @@ someFunc.someProp = 'yo';
 
 //// [exportDefaultNamespace.d.ts]
 export default function someFunc(): string;
+//# sourceMappingURL=exportDefaultNamespace.d.ts.map
 
 /// [Errors] ////
 

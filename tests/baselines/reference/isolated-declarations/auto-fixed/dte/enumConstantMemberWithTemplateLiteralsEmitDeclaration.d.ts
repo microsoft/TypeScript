@@ -80,6 +80,7 @@ declare enum T7 {
     b = "11",
     c = "21"
 }
+//# sourceMappingURL=enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts.map
 
 /// [Errors] ////
 

@@ -174,6 +174,47 @@ export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEm
         }
         return false;
     }
+    function clonePrimitiveLiteralValue(node: Expression): Expression {
+        if (isNumericLiteral(node)) {
+            return factory.createNumericLiteral(node.text, node.numericLiteralFlags);
+        }
+        if (isBigIntLiteral(node)) {
+            return factory.createBigIntLiteral(node.text);
+        }
+        if (isStringLiteralLike(node)) {
+            return factory.createStringLiteral(node.text);
+        }
+
+        if (node.kind === SyntaxKind.FalseKeyword) {
+            return factory.createFalse();
+        }
+
+        if (node.kind === SyntaxKind.TrueKeyword) {
+            return factory.createTrue();
+        }
+
+        if (isPrefixUnaryExpression(node)) {
+            return factory.createPrefixUnaryExpression(
+                node.operator,
+                clonePrimitiveLiteralValue(node.operand),
+            );
+        }
+        if (isTemplateExpression(node)) {
+            return factory.createTemplateExpression(
+                factory.createTemplateHead(node.head.text, node.head.rawText, node.head.templateFlags),
+                node.templateSpans.map(t =>
+                    factory.createTemplateSpan(
+                        clonePrimitiveLiteralValue(t.expression),
+                        t.literal.kind === SyntaxKind.TemplateMiddle ?
+                            factory.createTemplateMiddle(t.literal.text, t.literal.rawText, t.literal.templateFlags) :
+                            factory.createTemplateTail(t.literal.text, t.literal.rawText, t.literal.templateFlags),
+                    )
+                ),
+            );
+        }
+        Debug.assert(false, `Unable to clone unknown literal type. Kind: ${node.kind}`);
+    }
+
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
         if (isDeclarationReadonly(node) || (isVariableDeclaration(node) && isVarConst(node)) || isEnumMember(node)) {
             if (!(isEnumMember(node) || !node.type)) return false;
@@ -365,11 +406,7 @@ export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEm
         },
         createLiteralConstValue(node) {
             if (hasProperty(node, "initializer") && node.initializer) {
-                const initializer = node.initializer;
-                if (isStringLiteralLike(initializer)) {
-                    return factory.createStringLiteral(initializer.text);
-                }
-                return node.initializer;
+                return clonePrimitiveLiteralValue(node.initializer);
             }
             Debug.fail();
         },
