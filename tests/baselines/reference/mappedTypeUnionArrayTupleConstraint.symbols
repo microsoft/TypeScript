@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/mappedTypeUnionArrayTupleConstraint.ts] ////
+
+=== mappedTypeUnionArrayTupleConstraint.ts ===
+// https://github.com/microsoft/TypeScript/issues/56018
+
+type Renamed = readonly ({ [k: PropertyKey]: string } | undefined)[];
+>Renamed : Symbol(Renamed, Decl(mappedTypeUnionArrayTupleConstraint.ts, 0, 0))
+>k : Symbol(k, Decl(mappedTypeUnionArrayTupleConstraint.ts, 2, 28))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+type Foo<T extends readonly (PropertyKey | undefined)[] | Renamed> =
+>Foo : Symbol(Foo, Decl(mappedTypeUnionArrayTupleConstraint.ts, 2, 69))
+>T : Symbol(T, Decl(mappedTypeUnionArrayTupleConstraint.ts, 4, 9))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>Renamed : Symbol(Renamed, Decl(mappedTypeUnionArrayTupleConstraint.ts, 0, 0))
+
+  T extends Renamed ? GetKeys<Required<T>> : Required<T>;
+>T : Symbol(T, Decl(mappedTypeUnionArrayTupleConstraint.ts, 4, 9))
+>Renamed : Symbol(Renamed, Decl(mappedTypeUnionArrayTupleConstraint.ts, 0, 0))
+>GetKeys : Symbol(GetKeys, Decl(mappedTypeUnionArrayTupleConstraint.ts, 5, 57))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeUnionArrayTupleConstraint.ts, 4, 9))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeUnionArrayTupleConstraint.ts, 4, 9))
+
+type GetKeys<R extends Renamed> = { [K in keyof R]: keyof R[K] };
+>GetKeys : Symbol(GetKeys, Decl(mappedTypeUnionArrayTupleConstraint.ts, 5, 57))
+>R : Symbol(R, Decl(mappedTypeUnionArrayTupleConstraint.ts, 7, 13))
+>Renamed : Symbol(Renamed, Decl(mappedTypeUnionArrayTupleConstraint.ts, 0, 0))
+>K : Symbol(K, Decl(mappedTypeUnionArrayTupleConstraint.ts, 7, 37))
+>R : Symbol(R, Decl(mappedTypeUnionArrayTupleConstraint.ts, 7, 13))
+>R : Symbol(R, Decl(mappedTypeUnionArrayTupleConstraint.ts, 7, 13))
+>K : Symbol(K, Decl(mappedTypeUnionArrayTupleConstraint.ts, 7, 37))
+
+// usage
+type A = Foo<["a"?]>;
+>A : Symbol(A, Decl(mappedTypeUnionArrayTupleConstraint.ts, 7, 65))
+>Foo : Symbol(Foo, Decl(mappedTypeUnionArrayTupleConstraint.ts, 2, 69))
+
+type B = Foo<[{ a?: "b" }]>;
+>B : Symbol(B, Decl(mappedTypeUnionArrayTupleConstraint.ts, 10, 21))
+>Foo : Symbol(Foo, Decl(mappedTypeUnionArrayTupleConstraint.ts, 2, 69))
+>a : Symbol(a, Decl(mappedTypeUnionArrayTupleConstraint.ts, 11, 15))
+
