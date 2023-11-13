@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -44,24 +44,29 @@
+@@ -45,24 +45,29 @@
  declarationEmitLateBoundAssignments2.ts(36,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
  declarationEmitLateBoundAssignments2.ts(36,17): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
  declarationEmitLateBoundAssignments2.ts(39,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -41,7 +41,7 @@
      
      const c = "C"
      const num = 1
-@@ -146,10 +151,12 @@
+@@ -147,10 +152,12 @@
  !!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
      arrow["B"] = 'bar'
      
@@ -55,7 +55,7 @@
      
      export const arrow3 = () => {}
                   ~~~~~~
-@@ -158,10 +165,12 @@
+@@ -159,10 +166,12 @@
  !!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
      arrow3[77] = 0
      
@@ -69,7 +69,7 @@
      
      export const arrow5 = () => {}
                   ~~~~~~
-@@ -170,10 +179,12 @@
+@@ -171,10 +180,12 @@
  !!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
      arrow5["101"] = 0
      
@@ -83,7 +83,7 @@
      
      export const arrow7 = () => {}
                   ~~~~~~
-@@ -182,10 +193,12 @@
+@@ -183,10 +194,12 @@
  !!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
      arrow7["qwe rty"] = 0
      
@@ -97,7 +97,7 @@
      
      export const arrow9 = () => {}
                   ~~~~~~
-@@ -194,8 +207,10 @@
+@@ -195,8 +208,10 @@
  !!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
      arrow9["🤪"] = 0
      

@@ -27,3 +27,4 @@ export declare namespace foo {
     var bar: number;
     var strMemName: string;
 }
+//# sourceMappingURL=declarationEmitLateBoundAssignments.d.ts.map

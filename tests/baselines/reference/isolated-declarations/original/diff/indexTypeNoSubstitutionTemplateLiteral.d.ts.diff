@@ -5,8 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -5,17 +5,14 @@
- type Test = keyof typeof Foo;
+@@ -6,17 +6,14 @@
  
  /// [Errors] ////
  

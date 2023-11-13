@@ -50,9 +50,10 @@ export {IdType} from '@raymondfeng/pkg1';
 
 
 
-//// [monorepo/pkg3/dist/index.d.ts]
+//// [/.src/monorepo/pkg3/dist/index.d.ts]
 export * from './keys';
-
-//// [monorepo/pkg3/dist/keys.d.ts]
+//# sourceMappingURL=index.d.ts.map
+//// [/.src/monorepo/pkg3/dist/keys.d.ts]
 import { MetadataAccessor } from "@raymondfeng/pkg2";
 export declare const ADMIN: MetadataAccessor<boolean, import("@raymondfeng/pkg2/dist/secondary").IdType>;
+//# sourceMappingURL=keys.d.ts.map

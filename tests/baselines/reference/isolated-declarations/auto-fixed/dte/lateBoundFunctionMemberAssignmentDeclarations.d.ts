@@ -15,6 +15,7 @@ const x: string = foo[_private];
 
 //// [index.d.ts]
 export declare function foo(): void;
+//# sourceMappingURL=index.d.ts.map
 
 /// [Errors] ////
 

@@ -20,6 +20,7 @@ baz.normal = false;
 declare function foo(): void;
 declare function bar(): void;
 declare function baz(): void;
+//# sourceMappingURL=declarationEmitFunctionKeywordProp.d.ts.map
 
 /// [Errors] ////
 

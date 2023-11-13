@@ -5,8 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -4,23 +4,29 @@
- export declare const expr: invalid;
+@@ -5,23 +5,29 @@
  export declare const expr2: invalid;
  
  /// [Errors] ////

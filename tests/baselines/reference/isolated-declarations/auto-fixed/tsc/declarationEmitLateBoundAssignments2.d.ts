@@ -154,3 +154,4 @@ export declare const arrow10: {
     (): void;
     "\uD83E\uDD37\u200D\u2642\uFE0F": number;
 };
+//# sourceMappingURL=declarationEmitLateBoundAssignments2.d.ts.map

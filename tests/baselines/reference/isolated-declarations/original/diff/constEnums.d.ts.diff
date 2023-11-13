@@ -16,7 +16,7 @@
          }
      }
  }
-@@ -102,17 +102,18 @@
+@@ -103,17 +103,18 @@
  constEnums.ts(34,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
  constEnums.ts(34,10): error TS2474: const enum member initializers must be constant expressions.
  constEnums.ts(35,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -36,7 +36,7 @@
         A0 = 100,
      }
      
-@@ -178,8 +179,10 @@
+@@ -179,8 +180,10 @@
              export module C {
                  export const enum E {
                      V1 = 1,

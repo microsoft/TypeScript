@@ -47,6 +47,7 @@ declare class C3 {
     z: invalid;
     constructor({ x, y, z }: ObjType1);
 }
+//# sourceMappingURL=declarationEmitDestructuringParameterProperties.d.ts.map
 
 /// [Errors] ////
 

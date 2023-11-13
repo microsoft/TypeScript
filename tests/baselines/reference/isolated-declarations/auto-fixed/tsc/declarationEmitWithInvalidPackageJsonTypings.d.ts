@@ -35,3 +35,4 @@ export interface MutableRefObject<T> {
 }
 export declare function useRef<T>(current: T): MutableRefObject<T>;
 export declare const useCsvParser: () => MutableRefObject<typeof import("csv-parse")>;
+//# sourceMappingURL=index.d.ts.map

@@ -9834,7 +9834,7 @@ declare namespace ts {
         declaration: string;
         declarationPath: string;
         declarationMap: string | undefined;
-        declarationMapPath: string;
+        declarationMapPath: string | undefined;
         diagnostics: Diagnostic[];
     };
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;

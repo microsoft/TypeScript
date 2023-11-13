@@ -23,6 +23,7 @@ const a: string = foo[dashStrMem];
 
 //// [declarationEmitLateBoundAssignments.d.ts]
 export declare function foo(): void;
+//# sourceMappingURL=declarationEmitLateBoundAssignments.d.ts.map
 
 /// [Errors] ////
 

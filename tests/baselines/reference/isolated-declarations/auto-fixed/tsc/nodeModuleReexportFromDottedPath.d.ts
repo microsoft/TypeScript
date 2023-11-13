@@ -27,3 +27,4 @@ export default new EnhancedPrisma();
 import { PrismaClient } from "@prisma/client";
 declare const _default: PrismaClient<import(".prisma/client").PrismaClientOptions>;
 export default _default;
+//# sourceMappingURL=index.d.ts.map

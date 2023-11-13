@@ -5,8 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -6,9 +6,8 @@
- //// [/mod2.d.ts]
+@@ -7,9 +7,8 @@
  export declare const bar: invalid;
  
  /// [Errors] ////
@@ -16,7 +15,7 @@
  
  
  ==== /mod2.ts (1 errors) ====
-@@ -18,9 +17,7 @@
+@@ -19,9 +18,7 @@
  !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
  ==== /types/lib/index.d.ts (0 errors) ====
      interface Lib { x }

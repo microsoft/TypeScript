@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,19 +1,30 @@
+@@ -1,20 +1,32 @@
  
  
  //// [declarationEmitFunctionKeywordProp.d.ts]
@@ -25,8 +25,11 @@
 -    export var normal: boolean;
 -    export { _a as class };
 -}
+-//# sourceMappingURL=declarationEmitFunctionKeywordProp.d.ts.map
+\ No newline at end of file
++//# sourceMappingURL=declarationEmitFunctionKeywordProp.d.ts.map
 +
- /// [Errors] ////
++/// [Errors] ////
 +
 +declarationEmitFunctionKeywordProp.ts(1,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +declarationEmitFunctionKeywordProp.ts(4,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

@@ -83,3 +83,4 @@ declare enum E {
 }
 declare const e: E;
 declare const x: E.ONE;
+//# sourceMappingURL=numericEnumMappedType.d.ts.map

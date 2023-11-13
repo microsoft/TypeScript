@@ -40,3 +40,4 @@ export const a: import("typescript-fsa").A;
 
 //// [/p1/index.d.ts]
 export declare const a: import("typescript-fsa").A;
+//# sourceMappingURL=index.d.ts.map

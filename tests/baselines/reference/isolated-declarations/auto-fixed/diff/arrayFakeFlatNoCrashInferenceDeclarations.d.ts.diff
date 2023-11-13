@@ -5,14 +5,20 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -7,15 +7,16 @@
-         "recur": Arr extends ReadonlyArray<infer InnerArr> ? BadFlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]> : Arr;
-     }[Depth extends -1 ? "done" : "recur"];
- }["obj"];
- declare function flat<A, D extends number = 1>(arr: A, depth?: D): BadFlatArray<A, D>[];
--declare function foo<T>(arr: T[], depth: number): any;
-+declare function foo<T>(arr: T[], depth: number): invalid;
+@@ -1,11 +1,24 @@
  
++
++//// [arrayFakeFlatNoCrashInferenceDeclarations.d.ts]
++type BadFlatArray<Arr, Depth extends number> = {
++    obj: {
++        "done": Arr;
++        "recur": Arr extends ReadonlyArray<infer InnerArr> ? BadFlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]> : Arr;
++    }[Depth extends -1 ? "done" : "recur"];
++}["obj"];
++declare function flat<A, D extends number = 1>(arr: A, depth?: D): BadFlatArray<A, D>[];
++declare function foo<T>(arr: T[], depth: number): invalid;
++//# sourceMappingURL=arrayFakeFlatNoCrashInferenceDeclarations.d.ts.map
++
  /// [Errors] ////
  
  arrayFakeFlatNoCrashInferenceDeclarations.ts(13,10): error TS5088: The inferred type of 'foo' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
@@ -25,7 +31,7 @@
          "done": Arr,
          "recur": Arr extends ReadonlyArray<infer InnerArr>
          ? BadFlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]>
-@@ -29,6 +30,8 @@
+@@ -19,6 +32,8 @@
      
      function foo<T>(arr: T[], depth: number) {
               ~~~

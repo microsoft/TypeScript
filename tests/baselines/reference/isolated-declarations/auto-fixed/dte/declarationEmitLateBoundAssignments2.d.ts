@@ -125,6 +125,7 @@ export declare const arrow9: {
     "🤪": number;
 };
 export declare const arrow10: invalid;
+//# sourceMappingURL=declarationEmitLateBoundAssignments2.d.ts.map
 
 /// [Errors] ////
 

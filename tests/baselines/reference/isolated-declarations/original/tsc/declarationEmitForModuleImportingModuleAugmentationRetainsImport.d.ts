@@ -33,7 +33,7 @@ declare module './parent' {
 }
 export declare function child1(prototype: ParentThing): invalid;
 
-//// [parent.d.ts]
+//// [/.src/parent.d.ts]
 export declare class ParentThing implements ParentThing {
 }
 

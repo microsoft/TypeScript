@@ -123,6 +123,7 @@ declare enum MyDeclaredEnum {
     C
 }
 declare let val2: MyDeclaredEnum;
+//# sourceMappingURL=computedEnumTypeWidening.d.ts.map
 
 /// [Errors] ////
 

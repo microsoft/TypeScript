@@ -49,6 +49,7 @@ import { DefaultTheme, StyledComponent } from "styled-components";
 export declare const C: StyledComponent<"div", DefaultTheme, {}, never>;
 declare const _default: invalid;
 export default _default;
+//# sourceMappingURL=index.d.ts.map
 
 /// [Errors] ////
 

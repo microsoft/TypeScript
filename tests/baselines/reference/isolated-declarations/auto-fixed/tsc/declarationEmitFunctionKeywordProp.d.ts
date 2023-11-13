@@ -33,3 +33,4 @@ declare namespace baz {
     export var normal: boolean;
     export { _a as class };
 }
+//# sourceMappingURL=declarationEmitFunctionKeywordProp.d.ts.map

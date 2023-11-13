@@ -19,13 +19,7 @@ interface I {
 }
 export declare function f(): I;
 export {};
-
-//// [b.d.ts]
-export declare function q(): void;
-export declare namespace q {
-    var val: I;
-}
-
+//# sourceMappingURL=a.d.ts.map
 /// [Errors] ////
 
 b.ts(4,1): error TS4032: Property 'val' of exported interface has or is using name 'I' from private module '"a"'.

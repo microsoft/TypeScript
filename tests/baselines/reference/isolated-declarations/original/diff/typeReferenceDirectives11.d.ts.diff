@@ -5,8 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -6,9 +6,8 @@
- //// [/mod2.d.ts]
+@@ -7,9 +7,8 @@
  export declare const bar: invalid;
  
  /// [Errors] ////
@@ -16,7 +15,7 @@
  
  
  ==== /mod2.ts (1 errors) ====
-@@ -19,9 +18,7 @@
+@@ -20,9 +19,7 @@
      
  ==== /types/lib/index.d.ts (0 errors) ====
      interface Lib { x }

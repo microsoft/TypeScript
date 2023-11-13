@@ -16,8 +16,7 @@
      Y1
  }
  declare const enum E2 {
-@@ -34,8 +34,9 @@
- 
+@@ -35,8 +35,9 @@
  /// [Errors] ////
  
  constEnumErrors.ts(1,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
@@ -27,7 +26,7 @@
  constEnumErrors.ts(14,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
  constEnumErrors.ts(14,9): error TS2474: const enum member initializers must be constant expressions.
  constEnumErrors.ts(14,12): error TS2339: Property 'Z' does not exist on type 'typeof E1'.
-@@ -57,9 +58,9 @@
+@@ -58,9 +59,9 @@
  constEnumErrors.ts(42,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
  constEnumErrors.ts(43,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
  
@@ -38,7 +37,7 @@
                 ~
  !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
          A
-@@ -74,8 +75,10 @@
+@@ -75,8 +76,10 @@
      const enum E1 {
          // illegal case
          // forward reference to the element of the same enum

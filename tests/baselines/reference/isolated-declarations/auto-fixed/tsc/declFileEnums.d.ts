@@ -70,3 +70,4 @@ declare enum e5 {
     "Sunday" = 2,
     "Weekend days" = 3
 }
+//# sourceMappingURL=declFileEnums.d.ts.map

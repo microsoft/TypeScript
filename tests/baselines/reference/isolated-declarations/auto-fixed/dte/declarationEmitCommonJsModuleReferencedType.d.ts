@@ -32,6 +32,7 @@ export const y: RootProps = bar();
 import { RootProps } from "root";
 export declare const x: invalid;
 export declare const y: RootProps;
+//# sourceMappingURL=entry.d.ts.map
 
 /// [Errors] ////
 

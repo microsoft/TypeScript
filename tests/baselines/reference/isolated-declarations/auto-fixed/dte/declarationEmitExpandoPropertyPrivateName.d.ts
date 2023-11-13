@@ -19,9 +19,11 @@ interface I {
 }
 export declare function f(): I;
 export {};
+//# sourceMappingURL=a.d.ts.map
 
 //// [b.d.ts]
 export declare function q(): void;
+//# sourceMappingURL=b.d.ts.map
 
 /// [Errors] ////
 

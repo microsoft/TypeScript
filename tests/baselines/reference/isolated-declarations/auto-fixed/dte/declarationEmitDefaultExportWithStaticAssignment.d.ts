@@ -39,22 +39,27 @@ C.B = B;
 //// [foo.d.ts]
 export declare class Foo {
 }
+//# sourceMappingURL=foo.d.ts.map
 
 //// [index1.d.ts]
 export default function Example(): void;
+//# sourceMappingURL=index1.d.ts.map
 
 //// [index2.d.ts]
 import { Foo } from './foo';
 export { Foo };
 export default function Example(): void;
+//# sourceMappingURL=index2.d.ts.map
 
 //// [index3.d.ts]
 export declare class Bar {
 }
 export default function Example(): void;
+//# sourceMappingURL=index3.d.ts.map
 
 //// [index4.d.ts]
 export declare function C(): any;
+//# sourceMappingURL=index4.d.ts.map
 
 /// [Errors] ////
 

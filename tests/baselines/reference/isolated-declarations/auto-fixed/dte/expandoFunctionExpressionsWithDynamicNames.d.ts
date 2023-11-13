@@ -19,6 +19,7 @@ expr2[s] = 0
 //// [expandoFunctionExpressionsWithDynamicNames.d.ts]
 export declare const expr: invalid;
 export declare const expr2: invalid;
+//# sourceMappingURL=expandoFunctionExpressionsWithDynamicNames.d.ts.map
 
 /// [Errors] ////
 

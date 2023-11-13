@@ -26,6 +26,7 @@ export default new EnhancedPrisma();
 //// [/index.d.ts]
 declare const _default: invalid;
 export default _default;
+//# sourceMappingURL=index.d.ts.map
 
 /// [Errors] ////
 

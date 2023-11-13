@@ -20,3 +20,4 @@ declare function f(a: 1): 1;
 declare namespace f {
     var x: number;
 }
+//# sourceMappingURL=declarationEmitFunctionDuplicateNamespace.d.ts.map

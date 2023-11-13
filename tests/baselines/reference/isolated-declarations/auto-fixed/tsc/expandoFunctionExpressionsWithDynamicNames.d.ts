@@ -25,3 +25,4 @@ export declare const expr2: {
     (): void;
     X: number;
 };
+//# sourceMappingURL=expandoFunctionExpressionsWithDynamicNames.d.ts.map

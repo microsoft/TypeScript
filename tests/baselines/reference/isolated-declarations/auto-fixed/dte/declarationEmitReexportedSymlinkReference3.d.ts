@@ -47,11 +47,13 @@ export {MetadataAccessor} from '@raymondfeng/pkg1';
 
 
 
-//// [monorepo/pkg3/dist/index.d.ts]
+//// [/.src/monorepo/pkg3/dist/index.d.ts]
 export * from './keys';
+//# sourceMappingURL=index.d.ts.map
 
-//// [monorepo/pkg3/dist/keys.d.ts]
+//// [/.src/monorepo/pkg3/dist/keys.d.ts]
 export declare const ADMIN: invalid;
+//# sourceMappingURL=keys.d.ts.map
 
 /// [Errors] ////
 
