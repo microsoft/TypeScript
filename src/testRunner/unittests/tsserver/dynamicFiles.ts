@@ -1,12 +1,11 @@
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createProjectService,
-    createSession,
+    closeFilesForSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     setCompilerOptionsForInferredProjectsRequestForSession,
+    TestSession,
     verifyDynamic,
 } from "../helpers/tsserver";
 import {
@@ -21,14 +20,14 @@ function verifyPathRecognizedAsDynamic(subscenario: string, path: string) {
             path,
             content: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />
 /// <reference path="../../../../../../typings/@epic/Shell.d.ts" />
-var x = 10;`
+var x = 10;`,
         };
         const host = createServerHost([libFile]);
-        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        projectService.openClientFile(file.path, file.content);
-        verifyDynamic(projectService, projectService.toPath(file.path));
+        const session = new TestSession(host);
+        openFilesForSession([{ file, content: file.content }], session);
+        verifyDynamic(session, session.getProjectService().toPath(file.path));
 
-        baselineTsserverLogs("dynamicFiles", subscenario, projectService);
+        baselineTsserverLogs("dynamicFiles", subscenario, session);
     });
 }
 
@@ -38,7 +37,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
         const aTs: File = { path: "/proj/a.ts", content: "" };
         const tsconfig: File = { path: "/proj/tsconfig.json", content: "{}" };
         const host = createServerHost([aTs, tsconfig]);
-        const session = createSession(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
 
         openFilesForSession([aTs], session);
 
@@ -51,7 +50,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
                 projectRootPath: "/proj",
             },
         });
-        verifyDynamic(session.getProjectService(), `/proj/untitled:^untitled-1`);
+        verifyDynamic(session, `/proj/untitled:^untitled-1`);
         session.executeCommandSeq<ts.server.protocol.CodeFixRequest>({
             command: ts.server.protocol.CommandTypes.GetCodeFixes,
             arguments: {
@@ -61,7 +60,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
                 endLine: 3,
                 endOffset: 5,
                 errorCodes: [ts.Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
-            }
+            },
         });
         baselineTsserverLogs("dynamicFiles", "untitled can convert positions to locations", session);
     });
@@ -69,67 +68,92 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
     it("opening untitled files", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([config, libFile], { useCaseSensitiveFileNames: true, currentDirectory: "/user/username/projects/myproject" });
-        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        service.openClientFile(untitledFile, "const x = 10;", /*scriptKind*/ undefined, "/user/username/projects/myproject");
-        verifyDynamic(service, `/user/username/projects/myproject/${untitledFile}`);
+        const session = new TestSession(host);
+        openFilesForSession([{
+            file: untitledFile,
+            content: "const x = 10;",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        verifyDynamic(session, `/user/username/projects/myproject/${untitledFile}`);
 
         const untitled: File = {
             path: `/user/username/projects/myproject/Untitled-1.ts`,
-            content: "const x = 10;"
+            content: "const x = 10;",
         };
         host.writeFile(untitled.path, untitled.content);
-        service.testhost.logTimeoutQueueLength();
-        service.openClientFile(untitled.path, untitled.content, /*scriptKind*/ undefined, "/user/username/projects/myproject");
+        openFilesForSession([{
+            file: untitled.path,
+            content: untitled.content,
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
 
-        service.closeClientFile(untitledFile);
+        closeFilesForSession([untitledFile], session);
 
-        service.openClientFile(untitledFile, "const x = 10;", /*scriptKind*/ undefined, "/user/username/projects/myproject");
-        verifyDynamic(service, `/user/username/projects/myproject/${untitledFile}`);
-        baselineTsserverLogs("dynamicFiles", "opening untitled files", service);
+        openFilesForSession([{
+            file: untitledFile,
+            content: "const x = 10;",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        verifyDynamic(session, `/user/username/projects/myproject/${untitledFile}`);
+        baselineTsserverLogs("dynamicFiles", "opening untitled files", session);
     });
 
     it("opening and closing untitled files when projectRootPath is different from currentDirectory", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const file: File = {
             path: `/user/username/projects/myproject/file.ts`,
-            content: "const y = 10"
+            content: "const y = 10",
         };
         const host = createServerHost([config, file, libFile], { useCaseSensitiveFileNames: true });
-        const service = createProjectService(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
-        service.openClientFile(untitledFile, "const x = 10;", /*scriptKind*/ undefined, "/user/username/projects/myproject");
-        verifyDynamic(service, `/user/username/projects/myproject/${untitledFile}`);
+        const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
+        openFilesForSession([{
+            file: untitledFile,
+            content: "const x = 10;",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        verifyDynamic(session, `/user/username/projects/myproject/${untitledFile}`);
 
         // Close untitled file
-        service.closeClientFile(untitledFile);
+        closeFilesForSession([untitledFile], session);
 
         // Open file from configured project which should collect inferredProject
-        service.openClientFile(file.path);
-        baselineTsserverLogs("dynamicFiles", "opening and closing untitled files when projectRootPath is different from currentDirectory", service);
+        openFilesForSession([file], session);
+        baselineTsserverLogs("dynamicFiles", "opening and closing untitled files when projectRootPath is different from currentDirectory", session);
     });
 
     it("when changing scriptKind of the untitled files", () => {
         const host = createServerHost([libFile], { useCaseSensitiveFileNames: true });
-        const service = createProjectService(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
-        service.openClientFile(untitledFile, "const x = 10;", ts.ScriptKind.TS, "/user/username/projects/myproject");
-        const program = service.inferredProjects[0].getCurrentProgram()!;
+        const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
+        openFilesForSession([{
+            file: untitledFile,
+            content: "const x = 10;",
+            scriptKindName: "TS",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        const program = session.getProjectService().inferredProjects[0].getCurrentProgram()!;
         const sourceFile = program.getSourceFile(untitledFile)!;
 
         // Close untitled file
-        service.closeClientFile(untitledFile);
+        closeFilesForSession([untitledFile], session);
 
         // Open untitled file with different mode
-        service.openClientFile(untitledFile, "const x = 10;", ts.ScriptKind.TSX, "/user/username/projects/myproject");
-        const newProgram = service.inferredProjects[0].getCurrentProgram()!;
+        openFilesForSession([{
+            file: untitledFile,
+            content: "const x = 10;",
+            scriptKindName: "TSX",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        const newProgram = session.getProjectService().inferredProjects[0].getCurrentProgram()!;
         const newSourceFile = newProgram.getSourceFile(untitledFile)!;
         assert.notStrictEqual(newProgram, program);
         assert.notStrictEqual(newSourceFile, sourceFile);
-        baselineTsserverLogs("dynamicFiles", "when changing scriptKind of the untitled files", service);
+        baselineTsserverLogs("dynamicFiles", "when changing scriptKind of the untitled files", session);
     });
 });
 
@@ -137,23 +161,23 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
     it("dynamic file without external project", () => {
         const file: File = {
             path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
-            content: "var x = 10;"
+            content: "var x = 10;",
         };
         const host = createServerHost([libFile], { useCaseSensitiveFileNames: true });
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         setCompilerOptionsForInferredProjectsRequestForSession({
-            module: ts.ModuleKind.CommonJS,
+            module: ts.server.protocol.ModuleKind.CommonJS,
             allowJs: true,
             allowSyntheticDefaultImports: true,
-            allowNonTsExtensions: true
+            allowNonTsExtensions: true,
         }, session);
         openFilesForSession([{ file: file.path, content: "var x = 10;" }], session);
 
-        verifyDynamic(session.getProjectService(), `/${file.path}`);
+        verifyDynamic(session, `/${file.path}`);
 
         session.executeCommandSeq<ts.server.protocol.QuickInfoRequest>({
             command: ts.server.protocol.CommandTypes.Quickinfo,
-            arguments: protocolFileLocationFromSubstring(file, "x")
+            arguments: protocolFileLocationFromSubstring(file, "x"),
         });
         baselineTsserverLogs("dynamicFiles", "dynamic file without external project", session);
     });
@@ -163,29 +187,28 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
     describe("dynamic file with projectRootPath", () => {
         const file: File = {
             path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
-            content: "var x = 10;"
+            content: "var x = 10;",
         };
         const configFile: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const configProjectFile: File = {
             path: `/user/username/projects/myproject/a.ts`,
-            content: "let y = 10;"
+            content: "let y = 10;",
         };
         it("with useInferredProjectPerProjectRoot", () => {
             const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
-            const session = createSession(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
             openFilesForSession([{ file: file.path, projectRootPath: "/user/username/projects/myproject" }], session);
 
-            const projectService = session.getProjectService();
-            verifyDynamic(projectService, `/user/username/projects/myproject/${file.path}`);
+            verifyDynamic(session, `/user/username/projects/myproject/${file.path}`);
 
             session.executeCommandSeq<ts.server.protocol.OutliningSpansRequest>({
                 command: ts.server.protocol.CommandTypes.GetOutliningSpans,
                 arguments: {
-                    file: file.path
-                }
+                    file: file.path,
+                },
             });
 
             // Without project root
@@ -196,19 +219,23 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
 
         it("fails when useInferredProjectPerProjectRoot is false", () => {
             const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             try {
-                projectService.openClientFile(file.path, file.content, /*scriptKind*/ undefined, "/user/username/projects/myproject");
+                openFilesForSession([{
+                    file,
+                    content: file.content,
+                    projectRootPath: "/user/username/projects/myproject",
+                }], session);
             }
             catch (e) {
                 assert.strictEqual(
                     e.message.replace(/\r?\n/, "\n"),
-                    `Debug Failure. False expression.\nVerbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`
+                    `Debug Failure. False expression.\nVerbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`,
                 );
             }
             const file2Path = file.path.replace("#1", "#2");
-            projectService.openClientFile(file2Path, file.content);
-            baselineTsserverLogs("dynamicFiles", "dynamic file with projectRootPath fails when useInferredProjectPerProjectRoot is false", projectService);
+            openFilesForSession([{ file: file2Path, content: file.content }], session);
+            baselineTsserverLogs("dynamicFiles", "dynamic file with projectRootPath fails when useInferredProjectPerProjectRoot is false", session);
         });
     });
 

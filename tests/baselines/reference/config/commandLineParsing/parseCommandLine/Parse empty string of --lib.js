@@ -1,7 +1,7 @@
 0.ts --lib 
 CompilerOptions::
 {
- "lib": []
+  "lib": []
 }
 WatchOptions::
 

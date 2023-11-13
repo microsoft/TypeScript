@@ -33,7 +33,7 @@
 
 {
     type T_HasGetSet = {
->T_HasGetSet : { foo: number; }
+>T_HasGetSet : { get foo(): number; set foo(v: number | string); }
 
         get foo(): number;
 >foo : number
@@ -44,20 +44,20 @@
     }
     
     const t_hgs: T_HasGetSet = null as any;
->t_hgs : { foo: number; }
+>t_hgs : { get foo(): number; set foo(v: string | number); }
 >null as any : any
 
     t_hgs.foo = "32";
 >t_hgs.foo = "32" : "32"
 >t_hgs.foo : string | number
->t_hgs : { foo: number; }
+>t_hgs : { get foo(): number; set foo(v: string | number); }
 >foo : string | number
 >"32" : "32"
 
     let r_t_hgs_foo: number = t_hgs.foo;
 >r_t_hgs_foo : number
 >t_hgs.foo : number
->t_hgs : { foo: number; }
+>t_hgs : { get foo(): number; set foo(v: string | number); }
 >foo : number
 }
 

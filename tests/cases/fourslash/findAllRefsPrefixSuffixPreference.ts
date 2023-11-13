@@ -37,10 +37,8 @@ const zReferenceGroup2: FourSlashInterface.ReferenceGroup = {
     ranges: [z1, z2]
 };
 
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['q0', 'q1', 'q2', 'q3', 'z0', 'z1', 'z2'] },
-    { type: "findRenameLocations", markerOrRange: [q0, q1, q2, q3], options: { providePrefixAndSuffixTextForRename: true } },
-    { type: "findRenameLocations", markerOrRange: [q0, q1, q2, q3], options: { providePrefixAndSuffixTextForRename: false } },
-    { type: "findRenameLocations", markerOrRange: [z0, z1, z2], options: { providePrefixAndSuffixTextForRename: true } },
-    { type: "findRenameLocations", markerOrRange: [z0, z1, z2], options: { providePrefixAndSuffixTextForRename: false } },
-);
+verify.baselineFindAllReferences('q0', 'q1', 'q2', 'q3', 'z0', 'z1', 'z2');
+verify.baselineRename([q0, q1, q2, q3], { providePrefixAndSuffixTextForRename: true });
+verify.baselineRename([q0, q1, q2, q3], { providePrefixAndSuffixTextForRename: false });
+verify.baselineRename([z0, z1, z2], { providePrefixAndSuffixTextForRename: true });
+verify.baselineRename([z0, z1, z2], { providePrefixAndSuffixTextForRename: false });

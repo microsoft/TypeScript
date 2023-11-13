@@ -1,9 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     TestSession,
@@ -18,7 +19,7 @@ function checkDeclarationFiles(file: File, session: TestSession): void {
     const project = ts.Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as ts.server.NormalizedPath, /*ensureProject*/ false));
     const program = project.getCurrentProgram()!;
     const output = ts.getFileEmitOutput(program, ts.Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
-    session.logger.log(`ts.getFileEmitOutput: ${file.path}: ${JSON.stringify(output, undefined, " ")}`);
+    session.logger.log(`ts.getFileEmitOutput: ${file.path}: ${jsonToReadableText(output)}`);
     closeFilesForSession([file], session);
 }
 
@@ -33,7 +34,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         declarationMap: true,
         composite: true,
     };
-    const configContent = JSON.stringify({ compilerOptions });
+    const configContent = jsonToReadableText({ compilerOptions });
     const aTsconfig: File = { path: "/a/tsconfig.json", content: configContent };
 
     const aDtsMapContent: ts.RawSourceMap = {
@@ -42,11 +43,11 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         sourceRoot: "",
         sources: ["../a.ts"],
         names: [],
-        mappings: "AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC"
+        mappings: "AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC",
     };
     const aDtsMap: File = {
         path: "/a/bin/a.d.ts.map",
-        content: JSON.stringify(aDtsMapContent),
+        content: jsonToReadableText(aDtsMapContent),
     };
     const aDts: File = {
         path: "/a/bin/a.d.ts",
@@ -70,7 +71,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     };
     const bDtsMap: File = {
         path: "/b/bin/b.d.ts.map",
-        content: JSON.stringify(bDtsMapContent),
+        content: jsonToReadableText(bDtsMapContent),
     };
     const bDts: File = {
         // ${""} is need to mangle the sourceMappingURL part so it doesn't break the build
@@ -80,7 +81,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     const dummyFile: File = {
         path: "/dummy/dummy.ts",
-        content: "let a = 10;"
+        content: "let a = 10;",
     };
 
     const userTs: File = {
@@ -95,15 +96,15 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     const userTsconfig: File = {
         path: "/user/tsconfig.json",
-        content: JSON.stringify({
+        content: jsonToReadableText({
             file: ["user.ts"],
-            references: [{ path: "../a" }, { path: "../b" }]
-        })
+            references: [{ path: "../a" }, { path: "../b" }],
+        }),
     };
 
     function makeSampleProjects(addUserTsConfig?: boolean, keepAllFiles?: boolean) {
         const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         checkDeclarationFiles(aTs, session);
         checkDeclarationFiles(bTs, session);
@@ -138,7 +139,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.DefinitionRequest>({
             command: ts.server.protocol.CommandTypes.Definition,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnA()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnA()"),
         });
         verifySingleInferredProject(session);
         baselineTsserverLogs("declarationFileMaps", "goToDefinition", session);
@@ -148,7 +149,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.DefinitionAndBoundSpanRequest>({
             command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnA()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnA()"),
         });
         verifySingleInferredProject(session);
         baselineTsserverLogs("declarationFileMaps", "getDefinitionAndBoundSpan", session);
@@ -158,7 +159,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects(/*addUserTsConfig*/ true);
         session.executeCommandSeq<ts.server.protocol.DefinitionAndBoundSpanRequest>({
             command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnA()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnA()"),
         });
 
         // Navigate to the definition
@@ -175,7 +176,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.TypeDefinitionRequest>({
             command: ts.server.protocol.CommandTypes.TypeDefinition,
-            arguments: protocolFileLocationFromSubstring(userTs, "instanceA")
+            arguments: protocolFileLocationFromSubstring(userTs, "instanceA"),
         });
         verifySingleInferredProject(session);
         baselineTsserverLogs("declarationFileMaps", "goToType", session);
@@ -185,7 +186,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.ImplementationRequest>({
             command: ts.server.protocol.CommandTypes.Implementation,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnA()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnA()"),
         });
         verifySingleInferredProject(session);
         baselineTsserverLogs("declarationFileMaps", "goToImplementation", session);
@@ -195,7 +196,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.DefinitionRequest>({
             command: ts.server.protocol.CommandTypes.Definition,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnB()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnB()"),
         });
         verifySingleInferredProject(session);
         baselineTsserverLogs("declarationFileMaps", "goToDefinition target does not exist", session);
@@ -205,7 +206,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
-            arguments: { file: userTs.path, searchValue: "fn" }
+            arguments: { file: userTs.path, searchValue: "fn" },
         });
         verifySingleInferredProject(session);
         baselineTsserverLogs("declarationFileMaps", "navigateTo", session);
@@ -215,7 +216,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
-            arguments: { file: undefined, searchValue: "fn" }
+            arguments: { file: undefined, searchValue: "fn" },
         });
         baselineTsserverLogs("declarationFileMaps", "navigateToAll neither file not project is specified", session);
     });
@@ -224,7 +225,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
-            arguments: { projectFileName: bTsconfig.path, file: undefined, searchValue: "fn" }
+            arguments: { projectFileName: bTsconfig.path, file: undefined, searchValue: "fn" },
         });
         baselineTsserverLogs("declarationFileMaps", "navigateToAll file is not specified but project is", session);
     });
@@ -233,7 +234,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
             command: ts.server.protocol.CommandTypes.References,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnA()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnA()"),
         });
 
         verifyATsConfigOriginalProject(session);
@@ -245,19 +246,21 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
         session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
             command: ts.server.protocol.CommandTypes.References,
-            arguments: protocolFileLocationFromSubstring(aTs, "fnA")
+            arguments: protocolFileLocationFromSubstring(aTs, "fnA"),
         });
         verifyATsConfigWhenOpened(session);
         baselineTsserverLogs("declarationFileMaps", "findAllReferences starting at definition", session);
     });
 
-    interface ReferencesFullRequest extends ts.server.protocol.FileLocationRequest { readonly command: ts.server.protocol.CommandTypes.ReferencesFull; }
+    interface ReferencesFullRequest extends ts.server.protocol.FileLocationRequest {
+        readonly command: ts.server.protocol.CommandTypes.ReferencesFull;
+    }
     it("findAllReferencesFull", () => {
         const session = makeSampleProjects();
 
         session.executeCommandSeq<ReferencesFullRequest>({
             command: ts.server.protocol.CommandTypes.ReferencesFull,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnA()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnA()"),
         });
         verifyATsConfigOriginalProject(session);
         baselineTsserverLogs("declarationFileMaps", "findAllReferencesFull", session);
@@ -267,24 +270,24 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const aTs: File = { path: "/a/a.ts", content: `function f() {}` };
         const aTsconfig: File = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" } }),
+            content: jsonToReadableText({ compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" } }),
         };
         const bTs: File = { path: "/b/b.ts", content: `f();` };
-        const bTsconfig: File = { path: "/b/tsconfig.json", content: JSON.stringify({ references: [{ path: "../a" }] }) };
+        const bTsconfig: File = { path: "/b/tsconfig.json", content: jsonToReadableText({ references: [{ path: "../a" }] }) };
         const aDts: File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map` };
         const aDtsMap: File = {
             path: "/bin/a.d.ts.map",
-            content: JSON.stringify({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
+            content: jsonToReadableText({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
         };
 
         const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         checkDeclarationFiles(aTs, session);
         openFilesForSession([bTs], session);
 
         session.executeCommandSeq<ReferencesFullRequest>({
             command: ts.server.protocol.CommandTypes.ReferencesFull,
-            arguments: protocolFileLocationFromSubstring(bTs, "f()")
+            arguments: protocolFileLocationFromSubstring(bTs, "f()"),
         });
         baselineTsserverLogs("declarationFileMaps", "findAllReferencesFull definition is in mapped file", session);
     });
@@ -293,7 +296,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
             command: ts.server.protocol.CommandTypes.References,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnB()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnB()"),
         });
         verifySingleInferredProject(session);
         baselineTsserverLogs("declarationFileMaps", "findAllReferences target does not exist", session);
@@ -303,7 +306,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnA()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnA()"),
         });
         verifyATsConfigOriginalProject(session);
         baselineTsserverLogs("declarationFileMaps", "renameLocations", session);
@@ -314,7 +317,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(aTs, "fnA")
+            arguments: protocolFileLocationFromSubstring(aTs, "fnA"),
         });
         verifyATsConfigWhenOpened(session);
         baselineTsserverLogs("declarationFileMaps", "renameLocations starting at definition", session);
@@ -324,7 +327,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.RenameFullRequest>({
             command: ts.server.protocol.CommandTypes.RenameLocationsFull,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnA()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnA()"),
         });
         verifyATsConfigOriginalProject(session);
         baselineTsserverLogs("declarationFileMaps", "renameLocationsFull", session);
@@ -334,7 +337,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const session = makeSampleProjects();
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnB()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnB()"),
         });
         verifySingleInferredProject(session);
         baselineTsserverLogs("declarationFileMaps", "renameLocations target does not exist", session);
@@ -347,7 +350,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
             arguments: {
                 oldFilePath: aTs.path,
                 newFilePath: "/a/aNew.ts",
-            }
+            },
         });
         verifySingleInferredProject(session);
         baselineTsserverLogs("declarationFileMaps", "getEditsForFileRename", session);
@@ -357,19 +360,19 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const aTs: File = { path: "/a/src/a.ts", content: "" };
         const aTsconfig: File = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     declaration: true,
                     declarationMap: true,
                     outDir: "./build",
-                }
+                },
             }),
         };
         const bTs: File = { path: "/b/src/b.ts", content: "" };
         const bTsconfig: File = {
             path: "/b/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     outDir: "./build",
@@ -380,14 +383,14 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         };
 
         const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
             command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
                 oldFilePath: aTs.path,
                 newFilePath: "/a/src/a1.ts",
-            }
+            },
         });
         baselineTsserverLogs("declarationFileMaps", "getEditsForFileRename when referencing project doesnt include file and its renamed", session);
     });
@@ -395,14 +398,14 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("does not jump to source if inlined sources", () => {
         const aDtsInlinedSources: ts.RawSourceMap = {
             ...aDtsMapContent,
-            sourcesContent: [aTs.content]
+            sourcesContent: [aTs.content],
         };
         const aDtsMapInlinedSources: File = {
             path: aDtsMap.path,
-            content: JSON.stringify(aDtsInlinedSources)
+            content: jsonToReadableText(aDtsInlinedSources),
         };
         const host = createServerHost([aTs, aDtsMapInlinedSources, aDts, bTs, bDtsMap, bDts, userTs, dummyFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         openFilesForSession([userTs], session);
         // If config file then userConfig project and bConfig project since it is referenced
@@ -410,13 +413,13 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         // Inlined so does not jump to aTs
         session.executeCommandSeq<ts.server.protocol.DefinitionAndBoundSpanRequest>({
             command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnA()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnA()"),
         });
 
         // Not inlined, jumps to bTs
         session.executeCommandSeq<ts.server.protocol.DefinitionAndBoundSpanRequest>({
             command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
-            arguments: protocolFileLocationFromSubstring(userTs, "fnB()")
+            arguments: protocolFileLocationFromSubstring(userTs, "fnB()"),
         });
         verifySingleInferredProject(session);
         baselineTsserverLogs("declarationFileMaps", "does not jump to source if inlined sources", session);

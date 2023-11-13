@@ -6,7 +6,6 @@ import {
     ArrayBindingOrAssignmentElement,
     ArrayBindingOrAssignmentPattern,
     AssertionExpression,
-    AssertionKey,
     AssignmentDeclarationKind,
     AssignmentPattern,
     AutoAccessorPropertyDeclaration,
@@ -92,6 +91,7 @@ import {
     hasSyntacticModifier,
     HasType,
     Identifier,
+    ImportAttributeName,
     ImportClause,
     ImportEqualsDeclaration,
     ImportSpecifier,
@@ -102,7 +102,9 @@ import {
     isArrowFunction,
     isAssignmentExpression,
     isBinaryExpression,
+    isBindableStaticAccessExpression,
     isBindableStaticElementAccessExpression,
+    isBindableStaticNameExpression,
     isBindingElement,
     isBlock,
     isCallExpression,
@@ -111,6 +113,7 @@ import {
     isClassStaticBlockDeclaration,
     isDecorator,
     isElementAccessExpression,
+    isExpandoPropertyDeclaration,
     isExportAssignment,
     isExportDeclaration,
     isExportSpecifier,
@@ -153,6 +156,7 @@ import {
     isPropertyAccessExpression,
     isPropertyAssignment,
     isPropertyDeclaration,
+    isPrototypeAccess,
     isRootedDiskPath,
     isSourceFile,
     isStringLiteral,
@@ -311,7 +315,7 @@ export function getDefaultLibFileName(options: CompilerOptions): string {
         case ScriptTarget.ES2016:
             return "lib.es2016.full.d.ts";
         case ScriptTarget.ES2015:
-            return "lib.es6.d.ts";  // We don't use lib.es2015.full.d.ts due to breaking change.
+            return "lib.es6.d.ts"; // We don't use lib.es2015.full.d.ts due to breaking change.
         default:
             return "lib.d.ts";
     }
@@ -403,7 +407,7 @@ export function createTextChangeRange(span: TextSpan, newLength: number): TextCh
     return { span, newLength };
 }
 
-export let unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0); // eslint-disable-line prefer-const
+export const unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
 
 /**
  * Called to merge all the changes that occurred across several versions of a script snapshot
@@ -539,7 +543,7 @@ export function getTypeParameterOwner(d: Declaration): Declaration | undefined {
     }
 }
 
-export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration, name: Identifier };
+export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration; name: Identifier; };
 
 export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
     return isParameter(node) && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
@@ -621,10 +625,11 @@ export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "
  */
 export function validateLocaleAndSetLanguage(
     locale: string,
-    sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
-    errors?: Diagnostic[]) {
+    sys: { getExecutingFilePath(): string; resolvePath(path: string): string; fileExists(fileName: string): boolean; readFile(fileName: string): string | undefined; },
+    errors?: Diagnostic[],
+) {
     const lowerCaseLocale = locale.toLowerCase();
-    const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(lowerCaseLocale);
+    const matchResult = /^([a-z]+)([_-]([a-z]+))?$/.exec(lowerCaseLocale);
 
     if (!matchResult) {
         if (errors) {
@@ -871,7 +876,7 @@ export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier 
 }
 
 /** @internal */
-export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName } {
+export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName; } {
     return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
 }
 
@@ -1003,8 +1008,7 @@ export function getJSDocParameterTagsNoCache(param: ParameterDeclaration): reado
 
 function getJSDocTypeParameterTagsWorker(param: TypeParameterDeclaration, noCache?: boolean): readonly JSDocTemplateTag[] {
     const name = param.name.escapedText;
-    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag =>
-        isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
+    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag => isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
 }
 
 /**
@@ -1330,7 +1334,7 @@ export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
  *
  * @internal
  */
-export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot } {
+export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot; } {
     return isOptionalChainRoot(node.parent) && node.parent.expression === node;
 }
 
@@ -1518,12 +1522,12 @@ export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnl
     return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
 }
 
-export function isAssertionKey(node: Node): node is AssertionKey {
-    return isStringLiteral(node) || isIdentifier(node);
-}
-
 export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
     return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
+}
+
+export function isImportAttributeName(node: Node): node is ImportAttributeName {
+    return isStringLiteral(node) || isIdentifier(node);
 }
 
 // Identifiers
@@ -1705,6 +1709,14 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
 }
 
 /** @internal */
+export function isClassInstanceProperty(node: Declaration): boolean {
+    if (isInJSFile(node) && isExpandoPropertyDeclaration(node)) {
+        return (!isBindableStaticAccessExpression(node) || !isPrototypeAccess(node.expression)) && !isBindableStaticNameExpression(node, /*excludeThisKeyword*/ true);
+    }
+    return node.parent && isClassLike(node.parent) && isPropertyDeclaration(node) && !hasAccessorModifier(node);
+}
+
+/** @internal */
 export function isMethodOrAccessor(node: Node): node is MethodDeclaration | AccessorDeclaration {
     switch (node.kind) {
         case SyntaxKind.MethodDeclaration:
@@ -1801,13 +1813,11 @@ export function isAssignmentPattern(node: Node): node is AssignmentPattern {
         || kind === SyntaxKind.ObjectLiteralExpression;
 }
 
-
 export function isArrayBindingElement(node: Node): node is ArrayBindingElement {
     const kind = node.kind;
     return kind === SyntaxKind.BindingElement
         || kind === SyntaxKind.OmittedExpression;
 }
-
 
 /**
  * Determines whether the BindingOrAssignmentElement is a BindingElement-like declaration
@@ -1915,6 +1925,11 @@ export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAcc
     const kind = node.kind;
     return kind === SyntaxKind.PropertyAccessExpression
         || kind === SyntaxKind.QualifiedName;
+}
+
+/** @internal */
+export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | SignatureDeclaration {
+    return isCallLikeExpression(node) || isFunctionLike(node);
 }
 
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {

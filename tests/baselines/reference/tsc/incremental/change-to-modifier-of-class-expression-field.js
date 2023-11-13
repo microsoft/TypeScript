@@ -33,7 +33,11 @@ type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"declaration":false}}
+{
+  "compilerOptions": {
+    "declaration": false
+  }
+}
 
 
 
@@ -151,6 +155,17 @@ var wrapper = function () { return Messageable(); };
   "version": "FakeTSVersion",
   "size": 1590
 }
+
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc -p src/project --incremental
+exitCode:: ExitStatus.Success
+
 
 
 
@@ -289,6 +304,25 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc -p src/project --incremental
+[96msrc/project/main.ts[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS2445: [0mProperty 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.
+
+[7m3[0m     console.log( person.message );
+[7m [0m [91m                        ~~~~~~~[0m
+
+
+Found 1 error in src/project/main.ts[90m:3[0m
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
+
 Change:: modify protected to public
 Input::
 //// [/src/project/MessageablePerson.ts]
@@ -401,4 +435,15 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
   "version": "FakeTSVersion",
   "size": 1864
 }
+
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc -p src/project --incremental
+exitCode:: ExitStatus.Success
+
 
