@@ -1,4 +1,6 @@
 // @isolatedModules: true
+// @noEmit: true
+// @noTypesAndSymbols: true
 
 // @Filename: /type.ts
 export type T = number;
