@@ -1,0 +1,18 @@
+parseNoWhitespaceBeforeExclamation.ts(3,6): error TS1289: A non-null assertion may not be preceded by whitespace.
+parseNoWhitespaceBeforeExclamation.ts(4,6): error TS1289: A non-null assertion may not be preceded by whitespace.
+parseNoWhitespaceBeforeExclamation.ts(5,6): error TS1289: A non-null assertion may not be preceded by whitespace.
+
+
+==== parseNoWhitespaceBeforeExclamation.ts (3 errors) ====
+    declare var value: any;
+    
+    value !;
+         ~~
+!!! error TS1289: A non-null assertion may not be preceded by whitespace.
+    value !instanceof String;
+         ~~
+!!! error TS1289: A non-null assertion may not be preceded by whitespace.
+    value/* this is a comment */! instanceof String;
+         ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1289: A non-null assertion may not be preceded by whitespace.
+    

@@ -951,6 +951,10 @@
         "category": "Error",
         "code": 1288
     },
+    "A non-null assertion may not be preceded by whitespace.": {
+        "category": "Error",
+        "code": 1289
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",

@@ -6438,8 +6438,12 @@ namespace Parser {
 
             if (!questionDotToken) {
                 if (token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                    const start = scanner.getTokenFullStart();
                     nextToken();
                     expression = finishNode(factory.createNonNullExpression(expression), pos);
+                    if (expression.end - start !== 1) {
+                        parseErrorAt(start, expression.end, Diagnostics.A_non_null_assertion_may_not_be_preceded_by_whitespace);
+                    }
                     continue;
                 }
                 const typeArguments = tryParse(parseTypeArgumentsInExpression);
