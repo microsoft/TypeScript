@@ -9,7 +9,7 @@ interface I {
 
 
 
-//// [/.src/parserIndexSignature5.d.ts]
+//// [parserIndexSignature5.d.ts]
 interface I {
     [a]: any;
 }

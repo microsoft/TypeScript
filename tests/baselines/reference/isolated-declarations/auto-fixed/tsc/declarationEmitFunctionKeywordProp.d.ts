@@ -16,7 +16,7 @@ baz.normal = false;
 
 
 
-//// [/.src/declarationEmitFunctionKeywordProp.d.ts]
+//// [declarationEmitFunctionKeywordProp.d.ts]
 declare function foo(): void;
 declare namespace foo {
     var _a: boolean;

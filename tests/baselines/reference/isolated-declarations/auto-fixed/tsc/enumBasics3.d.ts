@@ -24,7 +24,7 @@ module M {
 
 
 
-//// [/.src/enumBasics3.d.ts]
+//// [enumBasics3.d.ts]
 declare namespace M {
     namespace N {
         enum E1 {

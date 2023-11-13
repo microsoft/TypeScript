@@ -165,7 +165,7 @@ var f12: (x: number) => any = x => { // should be (x: number) => Base | AnotherC
 
 
 
-//// [/.src/functionImplementations.d.ts]
+//// [functionImplementations.d.ts]
 declare var v: void;
 declare var a: any;
 declare var a: any;

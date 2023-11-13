@@ -45,7 +45,7 @@ someNumber > E2.C1;
 
 
 
-//// [/.src/mixedTypeEnumComparison.d.ts]
+//// [mixedTypeEnumComparison.d.ts]
 declare const enum E {
     S1 = "foo",
     S2 = "bar",

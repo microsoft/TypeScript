@@ -14,7 +14,7 @@ f.x = 2;
 
 
 
-//// [/.src/declarationEmitFunctionDuplicateNamespace.d.ts]
+//// [declarationEmitFunctionDuplicateNamespace.d.ts]
 declare function f(a: 0): 0;
 declare function f(a: 1): 1;
 declare namespace f {

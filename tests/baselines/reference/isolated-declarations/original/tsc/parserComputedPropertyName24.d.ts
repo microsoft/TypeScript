@@ -9,7 +9,7 @@ class C {
 
 
 
-//// [/.src/parserComputedPropertyName24.d.ts]
+//// [parserComputedPropertyName24.d.ts]
 declare class C {
     set [e](v: invalid);
 }

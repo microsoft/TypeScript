@@ -21,7 +21,7 @@ const a: string = foo[dashStrMem];
 
 
 
-//// [/.src/declarationEmitLateBoundAssignments.d.ts]
+//// [declarationEmitLateBoundAssignments.d.ts]
 export declare function foo(): void;
 export declare namespace foo {
     var bar: number;

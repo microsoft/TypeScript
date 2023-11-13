@@ -9,6 +9,6 @@ declare var {c, d};  // Error, destructuring declaration not allowed in ambient 
 
 
 
-//// [/.src/declarationInAmbientContext.d.ts]
+//// [declarationInAmbientContext.d.ts]
 declare var a: any, b: any;
 declare var c: any, d: any;

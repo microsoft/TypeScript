@@ -11,7 +11,7 @@ enum E {
 
 
 
-//// [/.src/underscoreEscapedNameInEnum.d.ts]
+//// [underscoreEscapedNameInEnum.d.ts]
 declare enum E {
     "__foo" = 1,
     bar = 2

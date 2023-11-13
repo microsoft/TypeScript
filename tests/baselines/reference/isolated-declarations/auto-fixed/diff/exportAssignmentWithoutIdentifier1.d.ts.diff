@@ -8,7 +8,7 @@
 @@ -1,5 +1,21 @@
  
  
- //// [/.src/exportAssignmentWithoutIdentifier1.d.ts]
+ //// [exportAssignmentWithoutIdentifier1.d.ts]
 -declare const _default: any;
 +declare const _default: invalid;
  export = _default;

@@ -14,7 +14,7 @@ var x       =
 
 
 
-//// [/.src/parserSkippedTokens16.d.ts]
+//// [parserSkippedTokens16.d.ts]
 declare function Foo(): any;
 declare namespace M {
 }

@@ -9,7 +9,7 @@ class C {
 
 
 
-//// [/.src/parserES5SymbolProperty5.d.ts]
+//// [parserES5SymbolProperty5.d.ts]
 declare class C {
     [Symbol.isRegExp]: string;
 }

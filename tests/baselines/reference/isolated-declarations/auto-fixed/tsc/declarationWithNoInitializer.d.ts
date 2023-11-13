@@ -9,7 +9,7 @@ var {c, d};          // Error, no initializer
 
 
 
-//// [/.src/declarationWithNoInitializer.d.ts]
+//// [declarationWithNoInitializer.d.ts]
 declare var a: any, b: any;
 declare var c: any, d: any;
 /// [Errors] ////

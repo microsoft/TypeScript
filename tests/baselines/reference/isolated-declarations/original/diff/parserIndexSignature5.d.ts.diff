@@ -8,7 +8,7 @@
 @@ -1,8 +1,9 @@
  
  
- //// [/.src/parserIndexSignature5.d.ts]
+ //// [parserIndexSignature5.d.ts]
  interface I {
 +    [a]: any;
  }

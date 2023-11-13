@@ -49,7 +49,7 @@ export = this; // Should be an error
 
 
 
-//// [/.src/thisInInvalidContextsExternalModule.d.ts]
+//// [thisInInvalidContextsExternalModule.d.ts]
 declare const _default: undefined;
 export = _default;
 /// [Errors] ////

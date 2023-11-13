@@ -11,7 +11,7 @@ class C {
 
 
 
-//// [/.src/parserComputedPropertyName27.d.ts]
+//// [parserComputedPropertyName27.d.ts]
 declare class C {
     [e]: number;
     number: invalid;

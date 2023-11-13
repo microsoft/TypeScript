@@ -36,7 +36,7 @@ class C {
 
 
 
-//// [/.src/constEnumPropertyAccess1.d.ts]
+//// [constEnumPropertyAccess1.d.ts]
 declare const enum G {
     A = 1,
     B = 2,

@@ -25,7 +25,7 @@ E["E"].toString();
 
 
 
-//// [/.src/constEnumPropertyAccess3.d.ts]
+//// [constEnumPropertyAccess3.d.ts]
 declare const enum E {
     A = -2,
     B = -1,

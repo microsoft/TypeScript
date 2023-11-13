@@ -44,7 +44,7 @@ const z_c: any = dest[2];
 
 
 
-//// [/.src/destructuringParameterProperties2.d.ts]
+//// [destructuringParameterProperties2.d.ts]
 declare class C1 {
     private k;
     private a: invalid;

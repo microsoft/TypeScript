@@ -16,7 +16,7 @@ class C {
 
 
 
-//// [/.src/computedPropertyNamesWithStaticProperty.d.ts]
+//// [computedPropertyNamesWithStaticProperty.d.ts]
 declare class C {
     static staticProp: number;
     get [C.staticProp](): invalid;

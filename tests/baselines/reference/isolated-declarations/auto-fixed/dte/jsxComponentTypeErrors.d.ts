@@ -47,7 +47,7 @@ const elem6: JSX.Element = <obj. MemberClassComponent />;
 
 
 
-//// [/.src/jsxComponentTypeErrors.d.ts]
+//// [jsxComponentTypeErrors.d.ts]
 declare namespace JSX {
     interface Element {
         type: 'element';

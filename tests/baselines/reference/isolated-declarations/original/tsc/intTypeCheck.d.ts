@@ -211,7 +211,7 @@ var obj87: i8 = new {};
 
 
 
-//// [/.src/intTypeCheck.d.ts]
+//// [intTypeCheck.d.ts]
 interface i1 {
     p: any;
     p1?: any;

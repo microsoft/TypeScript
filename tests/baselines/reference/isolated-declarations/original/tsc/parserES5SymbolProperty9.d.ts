@@ -9,7 +9,7 @@ var x: {
 
 
 
-//// [/.src/parserES5SymbolProperty9.d.ts]
+//// [parserES5SymbolProperty9.d.ts]
 declare var x: {};
 /// [Errors] ////
 

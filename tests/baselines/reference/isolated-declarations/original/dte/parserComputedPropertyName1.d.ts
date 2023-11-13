@@ -7,7 +7,7 @@ var v = { [e] };
 
 
 
-//// [/.src/parserComputedPropertyName1.d.ts]
+//// [parserComputedPropertyName1.d.ts]
 declare var v: invalid;
 /// [Errors] ////
 

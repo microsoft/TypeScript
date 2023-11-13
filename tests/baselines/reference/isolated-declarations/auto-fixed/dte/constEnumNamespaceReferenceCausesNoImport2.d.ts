@@ -26,7 +26,7 @@ export = Foo.ConstEnumOnlyModule;
 
 
 
-//// [/.src/foo.d.ts]
+//// [foo.d.ts]
 export declare namespace ConstEnumOnlyModule {
     const enum ConstFooEnum {
         Some = 0,
@@ -35,10 +35,10 @@ export declare namespace ConstEnumOnlyModule {
     }
 }
 
-//// [/.src/index.d.ts]
+//// [index.d.ts]
 export {};
 
-//// [/.src/reexport.d.ts]
+//// [reexport.d.ts]
 declare const _default: invalid;
 export = _default;
 /// [Errors] ////

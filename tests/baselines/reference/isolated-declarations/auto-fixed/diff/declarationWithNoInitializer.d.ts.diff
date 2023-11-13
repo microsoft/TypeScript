@@ -8,7 +8,7 @@
 @@ -1,19 +1,31 @@
  
  
- //// [/.src/declarationWithNoInitializer.d.ts]
+ //// [declarationWithNoInitializer.d.ts]
 -declare var a: any, b: any;
 -declare var c: any, d: any;
 +declare var a: invalid, b: invalid;

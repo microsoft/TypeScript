@@ -32,7 +32,7 @@ type T4 = {
 
 
 
-//// [/.src/typeUsedAsTypeLiteralIndex.d.ts]
+//// [typeUsedAsTypeLiteralIndex.d.ts]
 type K = number | string;
 type T = {
     [K]: number;

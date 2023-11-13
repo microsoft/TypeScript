@@ -8,7 +8,7 @@
 @@ -1,29 +1,29 @@
  
  
- //// [/.src/destructuringParameterProperties1.d.ts]
+ //// [destructuringParameterProperties1.d.ts]
  declare class C1 {
 -    x: string;
 -    y: string;

@@ -8,7 +8,7 @@
 @@ -1,5 +1,48 @@
  
  
- //// [/.src/main.d.ts]
+ //// [main.d.ts]
 -export declare const va: import("ext").A;
 -export declare const vb: import("ext/other").B;
 +export declare const va: invalid;

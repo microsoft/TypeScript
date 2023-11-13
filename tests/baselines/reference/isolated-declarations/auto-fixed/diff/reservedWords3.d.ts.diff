@@ -8,7 +8,7 @@
 @@ -1,59 +1,77 @@
  
  
- //// [/.src/reservedWords3.d.ts]
+ //// [reservedWords3.d.ts]
 -declare function f1(): any;
 +declare function f1(): invalid;
  declare enum  {

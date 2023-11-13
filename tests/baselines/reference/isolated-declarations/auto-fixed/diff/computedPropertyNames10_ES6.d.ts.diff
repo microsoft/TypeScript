@@ -6,7 +6,7 @@
 --- TSC	declarations
 +++ DTE	declarations
 @@ -3,11 +3,41 @@
- //// [/.src/computedPropertyNames10_ES6.d.ts]
+ //// [computedPropertyNames10_ES6.d.ts]
  declare var s: string;
  declare var n: number;
  declare var a: any;

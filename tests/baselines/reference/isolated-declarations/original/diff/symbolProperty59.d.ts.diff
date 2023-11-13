@@ -8,7 +8,7 @@
 @@ -1,8 +1,9 @@
  
  
- //// [/.src/symbolProperty59.d.ts]
+ //// [symbolProperty59.d.ts]
  interface I {
 +    [Symbol.keyFor]: string;
  }

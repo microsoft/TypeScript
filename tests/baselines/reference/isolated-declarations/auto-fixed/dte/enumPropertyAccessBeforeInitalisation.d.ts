@@ -13,7 +13,7 @@ enum E {
 
 
 
-//// [/.src/enumPropertyAccessBeforeInitalisation.d.ts]
+//// [enumPropertyAccessBeforeInitalisation.d.ts]
 declare enum E {
     A,
     B,

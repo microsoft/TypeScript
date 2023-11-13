@@ -8,7 +8,7 @@
 @@ -1,20 +1,19 @@
  
  
- //// [/.src/symbolProperty52.d.ts]
+ //// [symbolProperty52.d.ts]
 -declare var obj: invalid;
 +declare var obj: {
 +    [Symbol.nonsense]: number;

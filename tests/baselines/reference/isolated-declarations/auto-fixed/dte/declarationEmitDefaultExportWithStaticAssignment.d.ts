@@ -36,24 +36,24 @@ C.B = B;
 
 
 
-//// [/.src/foo.d.ts]
+//// [foo.d.ts]
 export declare class Foo {
 }
 
-//// [/.src/index1.d.ts]
+//// [index1.d.ts]
 export default function Example(): void;
 
-//// [/.src/index2.d.ts]
+//// [index2.d.ts]
 import { Foo } from './foo';
 export { Foo };
 export default function Example(): void;
 
-//// [/.src/index3.d.ts]
+//// [index3.d.ts]
 export declare class Bar {
 }
 export default function Example(): void;
 
-//// [/.src/index4.d.ts]
+//// [index4.d.ts]
 export declare function C(): any;
 /// [Errors] ////
 

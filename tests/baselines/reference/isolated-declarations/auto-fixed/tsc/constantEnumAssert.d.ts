@@ -80,7 +80,7 @@ const foo12: {
 
 
 
-//// [/.src/constantEnumAssert.d.ts]
+//// [constantEnumAssert.d.ts]
 declare enum E1 {
     a = 0,
     b = 1

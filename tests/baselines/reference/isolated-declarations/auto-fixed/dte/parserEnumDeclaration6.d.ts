@@ -12,7 +12,7 @@ enum E {
 
 
 
-//// [/.src/parserEnumDeclaration6.d.ts]
+//// [parserEnumDeclaration6.d.ts]
 declare enum E {
     A = 1,
     B = 2,

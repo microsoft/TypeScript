@@ -48,7 +48,7 @@ function f2(v: E2): void {
 
 
 
-//// [/.src/equalityWithEnumTypes.d.ts]
+//// [equalityWithEnumTypes.d.ts]
 declare enum E1 {
     a = 1,
     b = 2

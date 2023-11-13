@@ -8,7 +8,7 @@
 @@ -1,18 +1,17 @@
  
  
- //// [/.src/parserComputedPropertyName37.d.ts]
+ //// [parserComputedPropertyName37.d.ts]
 -declare var v: invalid;
 +declare var v: {
 +    [public]: number;

@@ -8,7 +8,7 @@ function f(a: any, {
 
 
 
-//// [/.src/parserErrorRecovery_ParameterList2.d.ts]
+//// [parserErrorRecovery_ParameterList2.d.ts]
 declare function f(a: any, {}: {}): any;
 /// [Errors] ////
 

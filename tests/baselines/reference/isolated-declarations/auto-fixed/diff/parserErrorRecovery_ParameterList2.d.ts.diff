@@ -8,7 +8,7 @@
 @@ -1,17 +1,20 @@
  
  
- //// [/.src/parserErrorRecovery_ParameterList2.d.ts]
+ //// [parserErrorRecovery_ParameterList2.d.ts]
 -declare function f(a: any, {}: {}): any;
 +declare function f(a: any, {}: {}): invalid;
  /// [Errors] ////

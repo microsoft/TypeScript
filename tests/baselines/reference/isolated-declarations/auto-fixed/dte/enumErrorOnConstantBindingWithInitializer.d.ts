@@ -18,7 +18,7 @@ enum E {
 
 
 
-//// [/.src/enumErrorOnConstantBindingWithInitializer.d.ts]
+//// [enumErrorOnConstantBindingWithInitializer.d.ts]
 type Thing = {
     value?: string | number;
 };

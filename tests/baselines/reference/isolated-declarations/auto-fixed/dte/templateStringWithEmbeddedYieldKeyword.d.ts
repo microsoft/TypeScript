@@ -11,7 +11,7 @@ function* gen {
 
 
 
-//// [/.src/templateStringWithEmbeddedYieldKeyword.d.ts]
+//// [templateStringWithEmbeddedYieldKeyword.d.ts]
 declare function gen(): invalid;
 /// [Errors] ////
 

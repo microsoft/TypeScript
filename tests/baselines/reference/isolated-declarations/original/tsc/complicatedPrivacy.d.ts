@@ -110,7 +110,7 @@ module mglo5 {
 
 
 
-//// [/.src/complicatedPrivacy.d.ts]
+//// [complicatedPrivacy.d.ts]
 declare namespace m1 {
     export namespace m2 {
         function f1(c1: C1): invalid;

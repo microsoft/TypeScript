@@ -17,7 +17,7 @@ app.foo.bar.someFun(1);
 
 
 
-//// [/.src/contextualReturnTypeOfIIFE2.d.ts]
+//// [contextualReturnTypeOfIIFE2.d.ts]
 declare namespace app {
     function foo(): void;
 }

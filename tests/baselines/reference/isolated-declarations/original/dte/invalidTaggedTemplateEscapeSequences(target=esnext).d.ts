@@ -31,7 +31,7 @@ const a14 = tag`${ 100 }\x00` // \x00
 
 
 
-//// [/.src/invalidTaggedTemplateEscapeSequences.d.ts]
+//// [invalidTaggedTemplateEscapeSequences.d.ts]
 declare function tag(str: any, ...args: any[]): any;
 declare const a: invalid;
 declare const b: invalid;

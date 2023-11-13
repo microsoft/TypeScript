@@ -41,7 +41,7 @@ enum e5 {
 
 
 
-//// [/.src/declFileEnums.d.ts]
+//// [declFileEnums.d.ts]
 declare enum e1 {
     a = 0,
     b = 1,

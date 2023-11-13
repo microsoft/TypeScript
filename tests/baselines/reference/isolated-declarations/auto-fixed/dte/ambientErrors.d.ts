@@ -65,7 +65,7 @@ declare module 'bar' {
 
 
 
-//// [/.src/ambientErrors.d.ts]
+//// [ambientErrors.d.ts]
 declare var x: number;
 declare function fn(x: number): string;
 declare function fn(x: 'foo'): number;

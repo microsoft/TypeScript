@@ -26,7 +26,7 @@ const test2 = mod2; // Possible false positive instantiation, but ok
 
 
 
-//// [/.src/reExportAliasMakesInstantiated.d.ts]
+//// [reExportAliasMakesInstantiated.d.ts]
 declare namespace pack1 {
     const test1: string;
     export { test1 };

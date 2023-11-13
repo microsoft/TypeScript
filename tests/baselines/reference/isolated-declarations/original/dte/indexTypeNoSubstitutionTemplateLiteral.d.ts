@@ -12,7 +12,7 @@ type Test = keyof typeof Foo;
 
 
 
-//// [/.src/indexTypeNoSubstitutionTemplateLiteral.d.ts]
+//// [indexTypeNoSubstitutionTemplateLiteral.d.ts]
 declare function Foo(): invalid;
 type Test = keyof typeof Foo;
 /// [Errors] ////

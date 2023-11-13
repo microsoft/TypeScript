@@ -20,14 +20,14 @@ export enum Bar {
 
 
 
-//// [/.src/bar.d.ts]
+//// [bar.d.ts]
 export declare enum Bar {
     a = 1,
     c = 3,
     e = 5
 }
 
-//// [/.src/foo.d.ts]
+//// [foo.d.ts]
 export declare enum Foo {
     a = 1,
     b = 2,

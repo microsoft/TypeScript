@@ -8,7 +8,7 @@
 @@ -1,8 +1,18 @@
  
  
- //// [/.src/exportDefaultNamespace.d.ts]
+ //// [exportDefaultNamespace.d.ts]
 -declare function someFunc(): string;
 -declare namespace someFunc {
 -    var someProp: string;

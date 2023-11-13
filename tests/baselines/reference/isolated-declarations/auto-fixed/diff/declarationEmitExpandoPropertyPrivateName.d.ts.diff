@@ -8,7 +8,7 @@
 @@ -7,23 +7,23 @@
  export {};
  
- //// [/.src/b.d.ts]
+ //// [b.d.ts]
  export declare function q(): void;
 -export declare namespace q {
 -    var val: I;

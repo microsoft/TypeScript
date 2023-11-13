@@ -13,7 +13,7 @@ Foo.bar = () => { };
 
 
 
-//// [/.src/expandoFunctionContextualTypesNoValue.d.ts]
+//// [expandoFunctionContextualTypesNoValue.d.ts]
 export declare function Foo(): void;
 /// [Errors] ////
 

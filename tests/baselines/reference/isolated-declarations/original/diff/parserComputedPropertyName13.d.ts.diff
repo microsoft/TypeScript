@@ -8,7 +8,7 @@
 @@ -1,8 +1,10 @@
  
  
- //// [/.src/parserComputedPropertyName13.d.ts]
+ //// [parserComputedPropertyName13.d.ts]
 -declare var v: {};
 +declare var v: {
 +    [e]: number;

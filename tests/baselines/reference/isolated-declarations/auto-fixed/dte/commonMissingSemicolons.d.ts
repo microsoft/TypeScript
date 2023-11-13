@@ -85,7 +85,7 @@ class NoSemicolonClassE {
 
 
 
-//// [/.src/commonMissingSemicolons.d.ts]
+//// [commonMissingSemicolons.d.ts]
 declare function myAsyncFunction1(): Promise<void>;
 declare function myAsyncFunction2(): void;
 declare function myAsyncFunction3(): void;

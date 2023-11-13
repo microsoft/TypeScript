@@ -8,7 +8,7 @@
 @@ -1,10 +1,10 @@
  
  
- //// [/.src/bar.d.ts]
+ //// [bar.d.ts]
  export declare enum Bar {
 -    a = 1,
 -    c = 3,
@@ -17,4 +17,4 @@
      e = 5
  }
  
- //// [/.src/foo.d.ts]
+ //// [foo.d.ts]

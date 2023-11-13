@@ -10,7 +10,7 @@ class C {
 
 
 
-//// [/.src/indexWithoutParamType2.d.ts]
+//// [indexWithoutParamType2.d.ts]
 declare class C {
     [x]: string;
 }

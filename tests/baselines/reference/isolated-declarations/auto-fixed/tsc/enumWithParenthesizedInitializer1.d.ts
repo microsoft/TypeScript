@@ -9,7 +9,7 @@ enum E {
 
 
 
-//// [/.src/enumWithParenthesizedInitializer1.d.ts]
+//// [enumWithParenthesizedInitializer1.d.ts]
 declare enum E {
     e = -3
 }

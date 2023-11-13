@@ -8,7 +8,7 @@
 @@ -1,8 +1,9 @@
  
  
- //// [/.src/parserComputedPropertyName20.d.ts]
+ //// [parserComputedPropertyName20.d.ts]
  interface I {
 +    [e](): number;
  }

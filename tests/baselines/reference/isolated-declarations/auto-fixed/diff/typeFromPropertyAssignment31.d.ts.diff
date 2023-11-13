@@ -7,7 +7,7 @@
 +++ DTE	declarations
 @@ -2,12 +2,8 @@
  
- //// [/.src/typeFromPropertyAssignment31.d.ts]
+ //// [typeFromPropertyAssignment31.d.ts]
  declare function ExpandoMerge(n: number): number;
  declare namespace ExpandoMerge {
 -    var p1: number;

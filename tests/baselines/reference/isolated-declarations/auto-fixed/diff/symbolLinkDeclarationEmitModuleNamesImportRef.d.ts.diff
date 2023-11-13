@@ -8,7 +8,7 @@
 @@ -1,4 +1,30 @@
  
  
- //// [/.src/Folder/monorepo/core/index.d.ts]
+ //// [Folder/monorepo/core/index.d.ts]
 -export declare function getStyles(): import("styled-components").InterpolationValue[];
 +export declare function getStyles(): invalid;
 +/// [Errors] ////

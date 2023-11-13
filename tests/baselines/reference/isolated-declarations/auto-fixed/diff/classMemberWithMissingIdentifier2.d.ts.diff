@@ -8,7 +8,7 @@
 @@ -1,26 +1,29 @@
  
  
- //// [/.src/classMemberWithMissingIdentifier2.d.ts]
+ //// [classMemberWithMissingIdentifier2.d.ts]
  declare class C {
 -    : any;
 +    : invalid;

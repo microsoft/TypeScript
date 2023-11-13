@@ -117,7 +117,7 @@ var getParamType3: {
 
 
 
-//// [/.src/objectLiteralGettersAndSetters.d.ts]
+//// [objectLiteralGettersAndSetters.d.ts]
 declare var sameName1a: {
     a: string;
 };

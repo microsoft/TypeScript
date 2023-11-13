@@ -31,10 +31,10 @@ let y = x.map(x => x + 1);
 
 
 
-//// [/.src/main.d.ts]
+//// [main.d.ts]
 import "./map";
 
-//// [/.src/map.d.ts]
+//// [map.d.ts]
 declare module "./observable" {
     interface Observable<T> {
         map<U>(proj: (e: T) => U): Observable<U>;
@@ -47,7 +47,7 @@ declare module "./observable" {
 }
 export {};
 
-//// [/.src/observable.d.ts]
+//// [observable.d.ts]
 export declare class Observable<T> {
     filter(pred: (e: T) => boolean): Observable<T>;
 }

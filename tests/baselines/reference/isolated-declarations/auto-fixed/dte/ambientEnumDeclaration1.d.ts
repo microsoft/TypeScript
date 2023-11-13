@@ -15,7 +15,7 @@ declare enum E {
 
 
 
-//// [/.src/ambientEnumDeclaration1.d.ts]
+//// [ambientEnumDeclaration1.d.ts]
 declare enum E {
     a = 10,
     b = 11,

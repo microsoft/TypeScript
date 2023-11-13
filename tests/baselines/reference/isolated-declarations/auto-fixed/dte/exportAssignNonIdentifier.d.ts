@@ -31,36 +31,36 @@ export = null; // Ok
 
 
 
-//// [/.src/foo1.d.ts]
+//// [foo1.d.ts]
 declare const _default: invalid;
 export = _default;
 
-//// [/.src/foo2.d.ts]
+//// [foo2.d.ts]
 declare const _default: "sausages";
 export = _default;
 
-//// [/.src/foo3.d.ts]
+//// [foo3.d.ts]
 declare const _default: {
     new (): {};
 };
 export = _default;
 
-//// [/.src/foo4.d.ts]
+//// [foo4.d.ts]
 declare const _default: true;
 export = _default;
 
-//// [/.src/foo5.d.ts]
+//// [foo5.d.ts]
 export = undefined;
 
-//// [/.src/foo6.d.ts]
+//// [foo6.d.ts]
 declare const _default: invalid;
 export = _default;
 
-//// [/.src/foo7.d.ts]
+//// [foo7.d.ts]
 declare const _default: invalid;
 export = _default;
 
-//// [/.src/foo8.d.ts]
+//// [foo8.d.ts]
 declare const _default: any;
 export = _default;
 /// [Errors] ////

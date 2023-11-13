@@ -8,7 +8,7 @@
 @@ -1,5 +1,25 @@
  
  
- //// [/.src/declarationInAmbientContext.d.ts]
+ //// [declarationInAmbientContext.d.ts]
 -declare var a: any, b: any;
 -declare var c: any, d: any;
 +declare var a: invalid, b: invalid;

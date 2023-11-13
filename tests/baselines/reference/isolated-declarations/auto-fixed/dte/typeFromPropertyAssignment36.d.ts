@@ -89,7 +89,7 @@ g.both
 
 
 
-//// [/.src/typeFromPropertyAssignment36.d.ts]
+//// [typeFromPropertyAssignment36.d.ts]
 declare function f(b: boolean): {
     (): void;
     e: number;

@@ -7,7 +7,7 @@
 +++ DTE	declarations
 @@ -2,8 +2,9 @@
  
- //// [/.src/parserComputedPropertyName15.d.ts]
+ //// [parserComputedPropertyName15.d.ts]
  declare var v: {
      [e: number]: string;
 +    [e]: number;

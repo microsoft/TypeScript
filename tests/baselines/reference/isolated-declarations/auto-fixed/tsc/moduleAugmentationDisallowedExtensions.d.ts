@@ -49,19 +49,19 @@ import "./x";
 
 
 
-//// [/.src/main.d.ts]
+//// [main.d.ts]
 import "./x";
 
-//// [/.src/observable.d.ts]
+//// [observable.d.ts]
 export declare class Observable<T> {
     filter(pred: (e: T) => boolean): Observable<T>;
 }
 export declare var x: number;
 
-//// [/.src/test.d.ts]
+//// [test.d.ts]
 export declare let b: number;
 
-//// [/.src/x.d.ts]
+//// [x.d.ts]
 declare namespace N1 {
     let x: number;
 }
@@ -89,7 +89,7 @@ declare module "./test" {
 }
 export {};
 
-//// [/.src/x0.d.ts]
+//// [x0.d.ts]
 export declare let a: number;
 /// [Errors] ////
 

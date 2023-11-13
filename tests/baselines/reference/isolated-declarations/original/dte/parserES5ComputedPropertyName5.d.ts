@@ -9,7 +9,7 @@ interface I {
 
 
 
-//// [/.src/parserES5ComputedPropertyName5.d.ts]
+//// [parserES5ComputedPropertyName5.d.ts]
 interface I {
     [e]: number;
 }

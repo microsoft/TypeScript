@@ -14,7 +14,7 @@ enum Test {
 
 
 
-//// [/.src/enumNumbering1.d.ts]
+//// [enumNumbering1.d.ts]
 declare enum Test {
     A = 0,
     B = 1,

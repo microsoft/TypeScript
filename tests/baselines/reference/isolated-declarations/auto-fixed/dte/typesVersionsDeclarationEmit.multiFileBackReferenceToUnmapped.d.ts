@@ -35,7 +35,7 @@ export * from "../other";
 
 
 
-//// [/.src/main.d.ts]
+//// [main.d.ts]
 export declare const va: invalid;
 export declare const va2: invalid;
 /// [Errors] ////

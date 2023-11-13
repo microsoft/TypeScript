@@ -60,7 +60,7 @@ enum E14 { a, b: any "hello" += 1, c, d}
 
 
 
-//// [/.src/enumErrors.d.ts]
+//// [enumErrors.d.ts]
 declare enum any {
 }
 declare enum number {

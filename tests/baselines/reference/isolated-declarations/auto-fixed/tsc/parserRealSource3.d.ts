@@ -125,7 +125,7 @@ module TypeScript {
 
 
 
-//// [/.src/parserRealSource3.d.ts]
+//// [parserRealSource3.d.ts]
 declare namespace TypeScript {
     enum NodeType {
         None = 0,

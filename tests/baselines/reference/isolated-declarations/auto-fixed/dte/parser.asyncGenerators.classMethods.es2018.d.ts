@@ -152,134 +152,134 @@ class C25 {
 
 
 
-//// [/.src/asyncGeneratorGetAccessorIsError.d.ts]
+//// [asyncGeneratorGetAccessorIsError.d.ts]
 declare class C23 {
     get(): invalid;
     x(): number;
 }
 
-//// [/.src/asyncGeneratorPropertyIsError.d.ts]
+//// [asyncGeneratorPropertyIsError.d.ts]
 declare class C25 {
     x(): invalid;
     1: any;
 }
 
-//// [/.src/asyncGeneratorSetAccessorIsError.d.ts]
+//// [asyncGeneratorSetAccessorIsError.d.ts]
 declare class C24 {
     set(): invalid;
     x(value: number): void;
 }
 
-//// [/.src/awaitAsTypeIsOk.d.ts]
+//// [awaitAsTypeIsOk.d.ts]
 interface await {
 }
 declare class C19 {
     f(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/awaitInParameterInitializerIsError.d.ts]
+//// [awaitInParameterInitializerIsError.d.ts]
 declare class C6 {
     f(a?: number): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/awaitMethodNameIsOk.d.ts]
+//// [awaitMethodNameIsOk.d.ts]
 declare class C2 {
     await(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/awaitMissingValueIsError.d.ts]
+//// [awaitMissingValueIsError.d.ts]
 declare class C18 {
     f(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/awaitParameterIsError.d.ts]
+//// [awaitParameterIsError.d.ts]
 declare class C4 {
     f(await: any): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/awaitWithValueIsOk.d.ts]
+//// [awaitWithValueIsOk.d.ts]
 declare class C17 {
     f(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/methodIsOk.d.ts]
+//// [methodIsOk.d.ts]
 declare class C1 {
     f(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/nestedAsyncGeneratorIsOk.d.ts]
+//// [nestedAsyncGeneratorIsOk.d.ts]
 declare class C8 {
     f(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/nestedFunctionDeclarationNamedAwaitIsError.d.ts]
+//// [nestedFunctionDeclarationNamedAwaitIsError.d.ts]
 declare class C11 {
     f(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/nestedFunctionDeclarationNamedYieldIsError.d.ts]
+//// [nestedFunctionDeclarationNamedYieldIsError.d.ts]
 declare class C9 {
     f(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/nestedFunctionExpressionNamedAwaitIsError.d.ts]
+//// [nestedFunctionExpressionNamedAwaitIsError.d.ts]
 declare class C12 {
     f(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/nestedFunctionExpressionNamedYieldIsError.d.ts]
+//// [nestedFunctionExpressionNamedYieldIsError.d.ts]
 declare class C10 {
     f(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/yieldAsTypeIsStrictError.d.ts]
+//// [yieldAsTypeIsStrictError.d.ts]
 interface yield {
 }
 declare class C20 {
     f(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/yieldInClassComputedPropertyIsError.d.ts]
+//// [yieldInClassComputedPropertyIsError.d.ts]
 declare class C21 {
     [yield](): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/yieldInNestedComputedPropertyIsOk.d.ts]
+//// [yieldInNestedComputedPropertyIsOk.d.ts]
 declare class C22 {
     f(): AsyncGenerator<any, void, unknown>;
 }
 
-//// [/.src/yieldInParameterInitializerIsError.d.ts]
+//// [yieldInParameterInitializerIsError.d.ts]
 declare class C7 {
     f(a?: any): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/yieldIsOk.d.ts]
+//// [yieldIsOk.d.ts]
 declare class C13 {
     f(): AsyncGenerator<any, void, unknown>;
 }
 
-//// [/.src/yieldMethodNameIsOk.d.ts]
+//// [yieldMethodNameIsOk.d.ts]
 declare class C3 {
     yield(): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/yieldParameterIsError.d.ts]
+//// [yieldParameterIsError.d.ts]
 declare class C5 {
     f(yield: any): AsyncGenerator<never, void, unknown>;
 }
 
-//// [/.src/yieldStarMissingValueIsError.d.ts]
+//// [yieldStarMissingValueIsError.d.ts]
 declare class C15 {
     f(): AsyncGenerator<any, void, any>;
 }
 
-//// [/.src/yieldStarWithValueIsOk.d.ts]
+//// [yieldStarWithValueIsOk.d.ts]
 declare class C16 {
     f(): AsyncGenerator<any, void, undefined>;
 }
 
-//// [/.src/yieldWithValueIsOk.d.ts]
+//// [yieldWithValueIsOk.d.ts]
 declare class C14 {
     f(): AsyncGenerator<number, void, unknown>;
 }

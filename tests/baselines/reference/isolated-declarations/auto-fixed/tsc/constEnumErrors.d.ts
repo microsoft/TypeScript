@@ -50,7 +50,7 @@ const enum NaNOrInfinity {
 
 
 
-//// [/.src/constEnumErrors.d.ts]
+//// [constEnumErrors.d.ts]
 declare const enum E {
     A = 0
 }

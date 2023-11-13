@@ -16,7 +16,7 @@ export enum Animals {
 
 
 
-//// [/.src/enumExportMergingES6.d.ts]
+//// [enumExportMergingES6.d.ts]
 export declare enum Animals {
     Cat = 1
 }

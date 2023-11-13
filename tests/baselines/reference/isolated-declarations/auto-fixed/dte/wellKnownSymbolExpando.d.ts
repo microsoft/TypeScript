@@ -9,7 +9,7 @@ f[Symbol.iterator] = function() {}
 
 
 
-//// [/.src/wellKnownSymbolExpando.d.ts]
+//// [wellKnownSymbolExpando.d.ts]
 declare function f(): void;
 /// [Errors] ////
 

@@ -17,7 +17,7 @@
      }
      namespace N {
 @@ -43,8 +43,14 @@
- //// [/.src/x0.d.ts]
+ //// [x0.d.ts]
  export declare let a: number;
  /// [Errors] ////
  

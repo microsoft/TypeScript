@@ -686,7 +686,7 @@ export declare module eaM {
 
 
 
-//// [/.src/giant.d.ts]
+//// [giant.d.ts]
 export declare var eV: invalid;
 export declare function eF(): invalid;
 export declare class eC {

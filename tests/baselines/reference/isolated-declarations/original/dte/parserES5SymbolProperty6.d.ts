@@ -9,7 +9,7 @@ class C {
 
 
 
-//// [/.src/parserES5SymbolProperty6.d.ts]
+//// [parserES5SymbolProperty6.d.ts]
 declare class C {
     [Symbol.toStringTag]: string;
 }

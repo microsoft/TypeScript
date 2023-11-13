@@ -16,7 +16,7 @@ U8.bit_2
 
 
 
-//// [/.src/exactSpellingSuggestion.d.ts]
+//// [exactSpellingSuggestion.d.ts]
 declare enum U8 {
     BIT_0 = 1,
     BIT_1 = 2,

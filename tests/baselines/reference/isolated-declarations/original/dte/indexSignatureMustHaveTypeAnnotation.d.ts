@@ -21,7 +21,7 @@ class C2 {
 
 
 
-//// [/.src/indexSignatureMustHaveTypeAnnotation.d.ts]
+//// [indexSignatureMustHaveTypeAnnotation.d.ts]
 interface I {
     [x]: string;
     [x: string]: any;

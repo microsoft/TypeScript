@@ -11,7 +11,7 @@ enum E {
 
 
 
-//// [/.src/enumWithoutInitializerAfterComputedMember.d.ts]
+//// [enumWithoutInitializerAfterComputedMember.d.ts]
 declare enum E {
     a = 0,
     b = 0,

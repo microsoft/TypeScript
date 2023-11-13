@@ -76,7 +76,7 @@ oneTwoOrThree(0);  oneTwoOrThree(1);  oneTwoOrThree(2);  oneTwoOrThree(3);
 
 
 
-//// [/.src/parseBigInt.d.ts]
+//// [parseBigInt.d.ts]
 declare const bin = 0b101, binBig = 5n;
 declare const oct = 0o567, octBig = 375n;
 declare const hex = 0xC0B, hexBig = 0xc0bn;

@@ -24,7 +24,7 @@ child1(ParentThing.prototype);
 
 
 
-//// [/.src/child1.d.ts]
+//// [child1.d.ts]
 import { ParentThing } from './parent';
 declare module './parent' {
     interface ParentThing {
@@ -33,7 +33,7 @@ declare module './parent' {
 }
 export declare function child1(prototype: ParentThing): invalid;
 
-//// [/.src/parent.d.ts]
+//// [parent.d.ts]
 export declare class ParentThing implements ParentThing {
 }
 /// [Errors] ////

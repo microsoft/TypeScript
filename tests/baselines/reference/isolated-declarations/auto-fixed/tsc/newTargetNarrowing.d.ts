@@ -16,7 +16,7 @@ f.marked = true;
 
 
 
-//// [/.src/newTargetNarrowing.d.ts]
+//// [newTargetNarrowing.d.ts]
 declare function foo(x: true): void;
 declare function f(): void;
 declare namespace f {

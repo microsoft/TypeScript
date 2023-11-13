@@ -9,7 +9,7 @@ function eval() {
 
 
 
-//// [/.src/parserStrictMode8.d.ts]
+//// [parserStrictMode8.d.ts]
 declare function eval(): invalid;
 /// [Errors] ////
 

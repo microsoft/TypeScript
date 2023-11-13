@@ -7,7 +7,7 @@ function =>
 
 
 
-//// [/.src/parserEqualsGreaterThanAfterFunction1.d.ts]
+//// [parserEqualsGreaterThanAfterFunction1.d.ts]
 declare function (): any;
 /// [Errors] ////
 

@@ -86,7 +86,7 @@ var doPropagate: (E9 | E6 | E5)[] = [
 
 
 
-//// [/.src/enumBasics.d.ts]
+//// [enumBasics.d.ts]
 declare enum E1 {
     A = 0,
     B = 1,

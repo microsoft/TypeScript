@@ -50,7 +50,7 @@ const z_c: any = dest_1[2];
 
 
 
-//// [/.src/destructuringParameterProperties3.d.ts]
+//// [destructuringParameterProperties3.d.ts]
 declare class C1<T, U, V> {
     private k;
     private a: T;

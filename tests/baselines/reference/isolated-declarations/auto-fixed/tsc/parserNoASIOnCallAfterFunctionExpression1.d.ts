@@ -9,7 +9,7 @@ var x = function (): void { }
 
 
 
-//// [/.src/parserNoASIOnCallAfterFunctionExpression1.d.ts]
+//// [parserNoASIOnCallAfterFunctionExpression1.d.ts]
 declare var x: any;
 /// [Errors] ////
 

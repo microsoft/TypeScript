@@ -13,7 +13,7 @@ class C {
 
 
 
-//// [/.src/computedPropertyNamesOnOverloads_ES6.d.ts]
+//// [computedPropertyNamesOnOverloads_ES6.d.ts]
 declare var methodName: string;
 declare var accessorName: string;
 declare class C {

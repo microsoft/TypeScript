@@ -109,7 +109,7 @@ var n: number = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n
 
 
 
-//// [/.src/typeFromPropertyAssignment29.d.ts]
+//// [typeFromPropertyAssignment29.d.ts]
 declare function ExpandoDecl(n: number): string;
 declare namespace ExpandoDecl {
     var prop: number;

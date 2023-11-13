@@ -461,7 +461,7 @@ module TypeScript {
 
 
 
-//// [/.src/parserRealSource10.d.ts]
+//// [parserRealSource10.d.ts]
 declare namespace TypeScript {
     enum TokenID {
         Any = 0,

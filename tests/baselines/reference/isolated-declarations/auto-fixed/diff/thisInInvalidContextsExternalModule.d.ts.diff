@@ -8,7 +8,7 @@
 @@ -1,8 +1,8 @@
  
  
- //// [/.src/thisInInvalidContextsExternalModule.d.ts]
+ //// [thisInInvalidContextsExternalModule.d.ts]
 -declare const _default: undefined;
 +declare const _default: invalid;
  export = _default;

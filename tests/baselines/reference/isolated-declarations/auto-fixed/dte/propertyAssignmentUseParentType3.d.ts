@@ -28,7 +28,7 @@ foo4.x = "456";
 
 
 
-//// [/.src/propertyAssignmentUseParentType3.d.ts]
+//// [propertyAssignmentUseParentType3.d.ts]
 declare function foo1(): number;
 declare function foo2(): any[];
 declare function foo3(): string;

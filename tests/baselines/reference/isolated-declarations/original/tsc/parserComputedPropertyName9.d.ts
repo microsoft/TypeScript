@@ -9,7 +9,7 @@ class C {
 
 
 
-//// [/.src/parserComputedPropertyName9.d.ts]
+//// [parserComputedPropertyName9.d.ts]
 declare class C {
     [e]: Type;
 }

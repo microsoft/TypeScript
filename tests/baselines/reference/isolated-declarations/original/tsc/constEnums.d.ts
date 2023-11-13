@@ -184,7 +184,7 @@ function baz(c: Comments) {
 
 
 
-//// [/.src/constEnums.d.ts]
+//// [constEnums.d.ts]
 declare const enum Enum1 {
     A0 = 100
 }

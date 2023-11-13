@@ -24,5 +24,5 @@ export interface InterpolationValue {}
 
 
 
-//// [/.src/Folder/monorepo/core/index.d.ts]
+//// [Folder/monorepo/core/index.d.ts]
 export declare function getStyles(): import("styled-components").InterpolationValue[];

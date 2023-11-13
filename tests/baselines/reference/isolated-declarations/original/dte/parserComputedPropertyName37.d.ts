@@ -9,7 +9,7 @@ var v = {
 
 
 
-//// [/.src/parserComputedPropertyName37.d.ts]
+//// [parserComputedPropertyName37.d.ts]
 declare var v: {
     [public]: number;
 };

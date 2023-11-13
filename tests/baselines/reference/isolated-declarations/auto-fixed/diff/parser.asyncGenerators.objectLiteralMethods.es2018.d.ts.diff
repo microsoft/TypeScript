@@ -8,26 +8,26 @@
 @@ -1,22 +1,16 @@
  
  
- //// [/.src/asyncGeneratorGetAccessorIsError.d.ts]
+ //// [asyncGeneratorGetAccessorIsError.d.ts]
 -declare const o22: {
 -    get(): any;
 -    x(): number;
 -};
 +declare const o22: invalid;
  
- //// [/.src/asyncGeneratorPropertyIsError.d.ts]
+ //// [asyncGeneratorPropertyIsError.d.ts]
  declare const o24: {
      x(): 1;
  };
  
- //// [/.src/asyncGeneratorSetAccessorIsError.d.ts]
+ //// [asyncGeneratorSetAccessorIsError.d.ts]
 -declare const o23: {
 -    set(): any;
 -    x(value: number): void;
 -};
 +declare const o23: invalid;
  
- //// [/.src/awaitAsTypeIsOk.d.ts]
+ //// [awaitAsTypeIsOk.d.ts]
  interface await {
  }
 @@ -126,10 +120,12 @@

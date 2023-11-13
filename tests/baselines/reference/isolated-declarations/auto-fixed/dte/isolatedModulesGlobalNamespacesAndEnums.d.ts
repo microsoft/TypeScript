@@ -37,7 +37,7 @@ declare enum Enum {
 
 
 
-//// [/.src/enum1.d.ts]
+//// [enum1.d.ts]
 declare enum Enum {
     A = 0,
     B = 1,
@@ -48,7 +48,7 @@ declare enum Enum {
 }
 declare const d = "d";
 
-//// [/.src/enum2.d.ts]
+//// [enum2.d.ts]
 declare enum Enum {
     D,
     E,// error
@@ -59,12 +59,12 @@ declare enum Enum {
     F
 }
 
-//// [/.src/module-namespaces.d.ts]
+//// [module-namespaces.d.ts]
 export declare namespace Instantiated {
     const x = 1;
 }
 
-//// [/.src/script-namespaces.d.ts]
+//// [script-namespaces.d.ts]
 declare namespace Instantiated {
     const x = 1;
 }

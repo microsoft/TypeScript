@@ -10,7 +10,7 @@ enum Color {
 
 
 
-//// [/.src/collisionCodeGenEnumWithEnumMemberConflict.d.ts]
+//// [collisionCodeGenEnumWithEnumMemberConflict.d.ts]
 declare enum Color {
     Color = 0,
     Thing = 0

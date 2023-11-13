@@ -30,7 +30,7 @@ let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Comput
 
 
 
-//// [/.src/enumAssignmentCompat5.d.ts]
+//// [enumAssignmentCompat5.d.ts]
 declare enum E {
     A = 0,
     B = 1,

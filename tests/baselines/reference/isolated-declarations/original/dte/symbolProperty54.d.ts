@@ -9,7 +9,7 @@ var obj = {
 
 
 
-//// [/.src/symbolProperty54.d.ts]
+//// [symbolProperty54.d.ts]
 declare var obj: {
     [Symbol.prototype]: number;
 };

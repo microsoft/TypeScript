@@ -12,7 +12,7 @@
 
 
 
-//// [/.src/parserEnum2.d.ts]
+//// [parserEnum2.d.ts]
 export declare enum SignatureFlags {
     None = 0,
     IsIndexer = 1,

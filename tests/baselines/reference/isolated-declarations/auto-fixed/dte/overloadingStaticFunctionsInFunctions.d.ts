@@ -11,7 +11,7 @@ function boo {
 
 
 
-//// [/.src/overloadingStaticFunctionsInFunctions.d.ts]
+//// [overloadingStaticFunctionsInFunctions.d.ts]
 declare function boo(): invalid;
 /// [Errors] ////
 

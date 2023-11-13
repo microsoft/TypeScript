@@ -13,7 +13,7 @@ obj[Symbol.nonsense];
 
 
 
-//// [/.src/symbolProperty52.d.ts]
+//// [symbolProperty52.d.ts]
 declare var obj: {
     [Symbol.nonsense]: number;
 };

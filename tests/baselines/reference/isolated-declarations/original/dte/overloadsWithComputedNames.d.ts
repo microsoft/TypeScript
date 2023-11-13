@@ -67,7 +67,7 @@ interface I3 {
 
 
 
-//// [/.src/overloadsWithComputedNames.d.ts]
+//// [overloadsWithComputedNames.d.ts]
 declare class Person {
     ["B"](a: number): string;
     ["A"](a: string | number): number | string;

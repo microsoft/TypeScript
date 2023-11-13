@@ -8,7 +8,7 @@
 @@ -12,15 +12,15 @@
  declare const d = "d";
  
- //// [/.src/enum2.d.ts]
+ //// [enum2.d.ts]
  declare enum Enum {
 -    D = "d",
 -    E = 0,// error
@@ -24,5 +24,5 @@
 +    F
  }
  
- //// [/.src/module-namespaces.d.ts]
+ //// [module-namespaces.d.ts]
  export declare namespace Instantiated {

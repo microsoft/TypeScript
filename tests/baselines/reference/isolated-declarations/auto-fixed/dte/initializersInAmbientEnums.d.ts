@@ -11,7 +11,7 @@ declare enum E {
 
 
 
-//// [/.src/initializersInAmbientEnums.d.ts]
+//// [initializersInAmbientEnums.d.ts]
 declare enum E {
     a = 10,
     b = 10,

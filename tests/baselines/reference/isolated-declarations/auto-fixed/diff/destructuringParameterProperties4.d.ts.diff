@@ -7,7 +7,7 @@
 +++ DTE	declarations
 @@ -2,11 +2,11 @@
  
- //// [/.src/destructuringParameterProperties4.d.ts]
+ //// [destructuringParameterProperties4.d.ts]
  declare class C1<T, U, V> {
      private k;
 -    protected a: T;

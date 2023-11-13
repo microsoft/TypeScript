@@ -21,16 +21,16 @@ export = {
 
 
 
-//// [/.src/foo1.d.ts]
+//// [foo1.d.ts]
 declare class x {
 }
 export = x;
 
-//// [/.src/foo2.d.ts]
+//// [foo2.d.ts]
 declare const _default: invalid;
 export = _default;
 
-//// [/.src/foo3.d.ts]
+//// [foo3.d.ts]
 export {};
 /// [Errors] ////
 

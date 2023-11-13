@@ -9,7 +9,7 @@ interface I {
 
 
 
-//// [/.src/parserComputedPropertyName21.d.ts]
+//// [parserComputedPropertyName21.d.ts]
 interface I {
 }
 /// [Errors] ////

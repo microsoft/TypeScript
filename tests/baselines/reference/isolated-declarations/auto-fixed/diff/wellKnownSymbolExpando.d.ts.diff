@@ -8,7 +8,7 @@
 @@ -1,5 +1,15 @@
  
  
- //// [/.src/wellKnownSymbolExpando.d.ts]
+ //// [wellKnownSymbolExpando.d.ts]
  declare function f(): void;
 -declare namespace f { }
 +/// [Errors] ////

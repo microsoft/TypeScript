@@ -8,7 +8,7 @@
 @@ -1,85 +1,95 @@
  
  
- //// [/.src/nullPropertyName.d.ts]
+ //// [nullPropertyName.d.ts]
  declare function foo(): void;
 -declare namespace foo {
 -    export var x: number;

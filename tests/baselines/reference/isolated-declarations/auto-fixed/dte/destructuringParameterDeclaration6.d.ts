@@ -47,7 +47,7 @@ b2({ while: 1 });
 
 
 
-//// [/.src/destructuringParameterDeclaration6.d.ts]
+//// [destructuringParameterDeclaration6.d.ts]
 declare function a({ while:  }: {
     while: any;
 }): void;

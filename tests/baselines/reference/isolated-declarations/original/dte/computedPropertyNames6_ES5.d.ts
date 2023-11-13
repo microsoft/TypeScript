@@ -14,7 +14,7 @@ var v = {
 
 
 
-//// [/.src/computedPropertyNames6_ES5.d.ts]
+//// [computedPropertyNames6_ES5.d.ts]
 declare var p1: number | string;
 declare var p2: number | number[];
 declare var p3: string | boolean;

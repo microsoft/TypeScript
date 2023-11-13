@@ -7,7 +7,7 @@
 +++ DTE	declarations
 @@ -2,13 +2,14 @@
  
- //// [/.src/index.d.ts]
+ //// [index.d.ts]
  import { DefaultTheme, StyledComponent } from "styled-components";
  export declare const C: StyledComponent<"div", DefaultTheme, {}, never>;
 -declare const _default;

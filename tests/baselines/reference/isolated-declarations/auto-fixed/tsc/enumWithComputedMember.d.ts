@@ -12,7 +12,7 @@ enum A {
 
 
 
-//// [/.src/enumWithComputedMember.d.ts]
+//// [enumWithComputedMember.d.ts]
 declare enum A {
     X,
     Y,

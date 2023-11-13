@@ -12,7 +12,7 @@ someFunc.someProp = 'yo';
 
 
 
-//// [/.src/exportDefaultNamespace.d.ts]
+//// [exportDefaultNamespace.d.ts]
 export default function someFunc(): string;
 /// [Errors] ////
 

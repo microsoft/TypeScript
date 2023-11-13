@@ -48,7 +48,7 @@ module M2 {
 
 
 
-//// [/.src/enumMergingErrors.d.ts]
+//// [enumMergingErrors.d.ts]
 declare namespace M {
     enum E1 {
         A = 0

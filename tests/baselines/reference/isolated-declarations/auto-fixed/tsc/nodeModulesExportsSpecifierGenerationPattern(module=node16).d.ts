@@ -32,7 +32,7 @@ export const x: () => Thing;
 
 
 
-//// [/.src/index.d.ts]
+//// [index.d.ts]
 export declare const a: import("inner/other.js").Thing;
 /// [Errors] ////
 

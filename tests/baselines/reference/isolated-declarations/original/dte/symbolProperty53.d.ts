@@ -11,7 +11,7 @@ obj[Symbol.for];
 
 
 
-//// [/.src/symbolProperty53.d.ts]
+//// [symbolProperty53.d.ts]
 declare var obj: {
     [Symbol.for]: number;
 };

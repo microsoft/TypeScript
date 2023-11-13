@@ -8,7 +8,7 @@
 @@ -1,18 +1,21 @@
  
  
- //// [/.src/parserEqualsGreaterThanAfterFunction2.d.ts]
+ //// [parserEqualsGreaterThanAfterFunction2.d.ts]
 -declare function (a: any, b: any): any;
 +declare function (a: any, b: any): invalid;
  /// [Errors] ////

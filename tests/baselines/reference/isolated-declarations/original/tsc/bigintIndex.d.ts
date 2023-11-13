@@ -36,7 +36,7 @@ const c = {[bigNum]: 789};
 
 
 
-//// [/.src/a.d.ts]
+//// [a.d.ts]
 interface BigIntIndex<E> {
     [index: bigint]: E;
 }
@@ -46,7 +46,7 @@ declare let key: keyof any;
 declare const bigNum: bigint;
 declare const typedArray: invalid;
 
-//// [/.src/b.d.ts]
+//// [b.d.ts]
 declare const a: {};
 declare const b: {
     [1n]: number;

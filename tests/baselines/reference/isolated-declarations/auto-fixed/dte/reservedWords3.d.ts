@@ -12,7 +12,7 @@ function f5(for) {}
 
 
 
-//// [/.src/reservedWords3.d.ts]
+//// [reservedWords3.d.ts]
 declare function f1(): invalid;
 declare enum  {
 }

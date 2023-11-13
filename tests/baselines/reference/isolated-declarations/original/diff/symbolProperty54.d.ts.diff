@@ -8,7 +8,7 @@
 @@ -1,18 +1,17 @@
  
  
- //// [/.src/symbolProperty54.d.ts]
+ //// [symbolProperty54.d.ts]
 -declare var obj: invalid;
 +declare var obj: {
 +    [Symbol.prototype]: number;

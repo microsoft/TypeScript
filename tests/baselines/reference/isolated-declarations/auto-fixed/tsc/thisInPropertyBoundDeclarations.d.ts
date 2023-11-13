@@ -75,7 +75,7 @@ class B {
 
 
 
-//// [/.src/thisInPropertyBoundDeclarations.d.ts]
+//// [thisInPropertyBoundDeclarations.d.ts]
 declare class Bug {
     private name;
     private static func;

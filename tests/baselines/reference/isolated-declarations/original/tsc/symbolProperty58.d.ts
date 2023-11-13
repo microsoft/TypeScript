@@ -13,7 +13,7 @@ var obj = {
 
 
 
-//// [/.src/symbolProperty58.d.ts]
+//// [symbolProperty58.d.ts]
 interface SymbolConstructor {
     foo: string;
 }

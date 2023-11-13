@@ -89,7 +89,7 @@ foo.of = 1;
 
 
 
-//// [/.src/nullPropertyName.d.ts]
+//// [nullPropertyName.d.ts]
 declare function foo(): void;
 declare namespace foo {
     export var x: number;

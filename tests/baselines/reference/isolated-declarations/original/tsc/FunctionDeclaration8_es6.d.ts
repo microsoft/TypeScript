@@ -7,7 +7,7 @@ var v = { [yield]: foo }
 
 
 
-//// [/.src/FunctionDeclaration8_es6.d.ts]
+//// [FunctionDeclaration8_es6.d.ts]
 declare var v: invalid;
 /// [Errors] ////
 

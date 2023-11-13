@@ -7,7 +7,7 @@
 +++ DTE	declarations
 @@ -2,11 +2,11 @@
  
- //// [/.src/destructuringParameterProperties2.d.ts]
+ //// [destructuringParameterProperties2.d.ts]
  declare class C1 {
      private k;
 -    private a: number;

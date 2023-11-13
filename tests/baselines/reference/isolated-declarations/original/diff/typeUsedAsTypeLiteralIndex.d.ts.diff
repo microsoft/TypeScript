@@ -8,7 +8,7 @@
 @@ -1,19 +1,26 @@
  
  
- //// [/.src/typeUsedAsTypeLiteralIndex.d.ts]
+ //// [typeUsedAsTypeLiteralIndex.d.ts]
  type K = number | string;
 -type T = {};
 +type T = {

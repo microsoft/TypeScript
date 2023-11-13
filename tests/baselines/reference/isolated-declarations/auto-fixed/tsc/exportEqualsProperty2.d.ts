@@ -21,9 +21,9 @@ export = C.B;
 
 
 
-//// [/.src/a.d.ts]
+//// [a.d.ts]
 declare const _default: number;
 export = _default;
 
-//// [/.src/b.d.ts]
+//// [b.d.ts]
 export {};

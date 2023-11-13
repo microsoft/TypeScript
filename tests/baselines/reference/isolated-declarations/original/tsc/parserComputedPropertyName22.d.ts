@@ -9,7 +9,7 @@ declare class C {
 
 
 
-//// [/.src/parserComputedPropertyName22.d.ts]
+//// [parserComputedPropertyName22.d.ts]
 declare class C {
     [e]: number;
 }

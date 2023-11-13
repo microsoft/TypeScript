@@ -8,7 +8,7 @@
 @@ -1,15 +1,16 @@
  
  
- //// [/.src/negateOperatorInvalidOperations.d.ts]
+ //// [negateOperatorInvalidOperations.d.ts]
 -declare var NUMBER1: any;
 +declare var NUMBER1: invalid;
  declare var NUMBER: any;

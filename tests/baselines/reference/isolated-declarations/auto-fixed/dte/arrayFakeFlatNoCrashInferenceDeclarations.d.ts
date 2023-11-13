@@ -21,7 +21,7 @@ function foo<T>(arr: T[], depth: number) {
 
 
 
-//// [/.src/arrayFakeFlatNoCrashInferenceDeclarations.d.ts]
+//// [arrayFakeFlatNoCrashInferenceDeclarations.d.ts]
 type BadFlatArray<Arr, Depth extends number> = {
     obj: {
         "done": Arr;

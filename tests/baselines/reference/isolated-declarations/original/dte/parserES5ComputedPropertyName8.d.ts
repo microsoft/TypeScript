@@ -7,7 +7,7 @@ var v: { [e]: number };
 
 
 
-//// [/.src/parserES5ComputedPropertyName8.d.ts]
+//// [parserES5ComputedPropertyName8.d.ts]
 declare var v: {
     [e]: number;
 };

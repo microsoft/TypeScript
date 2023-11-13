@@ -6,10 +6,10 @@
 --- TSC	declarations
 +++ DTE	declarations
 @@ -3,23 +3,25 @@
- //// [/.src/monorepo/pkg3/dist/index.d.ts]
+ //// [monorepo/pkg3/dist/index.d.ts]
  export * from './keys';
  
- //// [/.src/monorepo/pkg3/dist/keys.d.ts]
+ //// [monorepo/pkg3/dist/keys.d.ts]
 -import { MetadataAccessor } from "@raymondfeng/pkg2";
 -export declare const ADMIN: any;
 +export declare const ADMIN: invalid;

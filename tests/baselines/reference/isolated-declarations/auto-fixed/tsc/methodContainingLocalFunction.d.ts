@@ -56,7 +56,7 @@ enum E {
 
 
 
-//// [/.src/methodContainingLocalFunction.d.ts]
+//// [methodContainingLocalFunction.d.ts]
 declare class BugExhibition<T> {
     exhibitBug(): void;
 }

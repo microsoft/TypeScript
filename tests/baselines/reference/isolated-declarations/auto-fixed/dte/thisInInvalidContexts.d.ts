@@ -50,7 +50,7 @@ enum SomeEnum {
 
 
 
-//// [/.src/thisInInvalidContexts.d.ts]
+//// [thisInInvalidContexts.d.ts]
 declare class BaseErrClass {
     constructor(t: any);
 }

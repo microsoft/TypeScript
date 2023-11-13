@@ -85,7 +85,7 @@ enum E20 {
 
 
 
-//// [/.src/enumClassification.d.ts]
+//// [enumClassification.d.ts]
 declare enum E01 {
     A = 0
 }

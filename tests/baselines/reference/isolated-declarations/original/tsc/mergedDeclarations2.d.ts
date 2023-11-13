@@ -16,7 +16,7 @@ module Foo {
 
 
 
-//// [/.src/mergedDeclarations2.d.ts]
+//// [mergedDeclarations2.d.ts]
 declare enum Foo {
     b = 0
 }

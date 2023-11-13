@@ -20,7 +20,7 @@ const enum E {
 
 
 
-//// [/.src/constEnum1.d.ts]
+//// [constEnum1.d.ts]
 declare const enum E {
     a = 10,
     b = 10,

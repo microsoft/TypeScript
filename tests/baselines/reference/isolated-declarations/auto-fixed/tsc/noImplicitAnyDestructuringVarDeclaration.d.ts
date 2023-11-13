@@ -23,7 +23,7 @@ const a5: any = temp === undefined ? undefined : dest_2[0]; // error
 
 
 
-//// [/.src/noImplicitAnyDestructuringVarDeclaration.d.ts]
+//// [noImplicitAnyDestructuringVarDeclaration.d.ts]
 declare var a: any, b: any, c: any, d: any;
 declare var a1: any, b1: any, c1: any, d1: any;
 declare var a2: any, b2: any, c2: any, d2: any;

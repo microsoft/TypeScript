@@ -44,7 +44,7 @@ export = "foo".length;
 
 
 
-//// [/.src/a.d.ts]
+//// [a.d.ts]
 declare namespace A {
     class B {
         constructor(b: number);
@@ -56,10 +56,10 @@ declare namespace A {
 declare const _default: typeof A.B;
 export = _default;
 
-//// [/.src/b.d.ts]
+//// [b.d.ts]
 declare const _default: number;
 export = _default;
 
-//// [/.src/index.d.ts]
+//// [index.d.ts]
 /// <reference path="declarations.d.ts" />
 export {};

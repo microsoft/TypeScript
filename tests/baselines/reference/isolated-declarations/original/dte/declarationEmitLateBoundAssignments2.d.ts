@@ -74,7 +74,7 @@ arrow10[emoji] = 0
 
 
 
-//// [/.src/declarationEmitLateBoundAssignments2.d.ts]
+//// [declarationEmitLateBoundAssignments2.d.ts]
 export declare function decl(): invalid;
 export declare function decl2(): invalid;
 export declare function decl3(): invalid;

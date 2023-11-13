@@ -32,7 +32,7 @@ class C2 extends C1<number, string, boolean> {
 
 
 
-//// [/.src/destructuringParameterProperties4.d.ts]
+//// [destructuringParameterProperties4.d.ts]
 declare class C1<T, U, V> {
     private k;
     protected a: invalid;

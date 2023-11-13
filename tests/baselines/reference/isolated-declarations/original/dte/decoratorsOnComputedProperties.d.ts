@@ -195,7 +195,7 @@ void class J {
 
 
 
-//// [/.src/decoratorsOnComputedProperties.d.ts]
+//// [decoratorsOnComputedProperties.d.ts]
 declare function x(o: object, k: PropertyKey): invalid;
 declare let i: number;
 declare function foo(): string;

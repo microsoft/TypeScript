@@ -43,7 +43,7 @@ const x: E.ONE = e;
 
 
 
-//// [/.src/numericEnumMappedType.d.ts]
+//// [numericEnumMappedType.d.ts]
 declare enum E1 {
     ONE = 0,
     TWO = 1,

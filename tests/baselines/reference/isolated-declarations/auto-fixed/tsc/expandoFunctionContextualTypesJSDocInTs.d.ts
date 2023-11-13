@@ -12,7 +12,7 @@ Foo.bar = () => { };
 
 
 
-//// [/.src/expandoFunctionContextualTypesJSDocInTs.d.ts]
+//// [expandoFunctionContextualTypesJSDocInTs.d.ts]
 export declare function Foo(): void;
 export declare namespace Foo {
     var bar: () => void;

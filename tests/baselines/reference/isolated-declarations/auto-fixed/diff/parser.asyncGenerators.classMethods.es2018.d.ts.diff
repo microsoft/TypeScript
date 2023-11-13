@@ -8,37 +8,37 @@
 @@ -1,21 +1,21 @@
  
  
- //// [/.src/asyncGeneratorGetAccessorIsError.d.ts]
+ //// [asyncGeneratorGetAccessorIsError.d.ts]
  declare class C23 {
 -    get(): any;
 +    get(): invalid;
      x(): number;
  }
  
- //// [/.src/asyncGeneratorPropertyIsError.d.ts]
+ //// [asyncGeneratorPropertyIsError.d.ts]
  declare class C25 {
 -    x(): any;
 +    x(): invalid;
      1: any;
  }
  
- //// [/.src/asyncGeneratorSetAccessorIsError.d.ts]
+ //// [asyncGeneratorSetAccessorIsError.d.ts]
  declare class C24 {
 -    set(): any;
 +    set(): invalid;
      x(value: number): void;
  }
  
- //// [/.src/awaitAsTypeIsOk.d.ts]
+ //// [awaitAsTypeIsOk.d.ts]
 @@ -88,8 +88,9 @@
  }
  
- //// [/.src/yieldInClassComputedPropertyIsError.d.ts]
+ //// [yieldInClassComputedPropertyIsError.d.ts]
  declare class C21 {
 +    [yield](): AsyncGenerator<never, void, unknown>;
  }
  
- //// [/.src/yieldInNestedComputedPropertyIsOk.d.ts]
+ //// [yieldInNestedComputedPropertyIsOk.d.ts]
  declare class C22 {
 @@ -131,10 +132,13 @@
      f(): AsyncGenerator<number, void, unknown>;

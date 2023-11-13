@@ -38,7 +38,7 @@ export function fb(): B;
 
 
 
-//// [/.src/main.d.ts]
+//// [main.d.ts]
 export declare const va: invalid;
 export declare const vb: invalid;
 /// [Errors] ////

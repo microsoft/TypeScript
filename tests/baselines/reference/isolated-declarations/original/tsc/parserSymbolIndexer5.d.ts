@@ -9,7 +9,7 @@ var x = {
 
 
 
-//// [/.src/parserSymbolIndexer5.d.ts]
+//// [parserSymbolIndexer5.d.ts]
 declare var x: invalid;
 /// [Errors] ////
 

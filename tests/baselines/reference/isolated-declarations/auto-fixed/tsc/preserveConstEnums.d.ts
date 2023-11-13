@@ -9,7 +9,7 @@ const enum E {
 
 
 
-//// [/.src/preserveConstEnums.d.ts]
+//// [preserveConstEnums.d.ts]
 declare const enum E {
     Value = 1,
     Value2 = 1

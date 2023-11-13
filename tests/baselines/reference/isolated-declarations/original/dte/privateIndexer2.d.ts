@@ -15,7 +15,7 @@ var y: {
 
 
 
-//// [/.src/privateIndexer2.d.ts]
+//// [privateIndexer2.d.ts]
 declare var x: invalid;
 declare var y: {
     private []: string;

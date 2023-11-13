@@ -16,7 +16,7 @@ obj[Symbol.foo];
 
 
 
-//// [/.src/ES5SymbolProperty1.d.ts]
+//// [ES5SymbolProperty1.d.ts]
 interface SymbolConstructor {
     foo: string;
 }

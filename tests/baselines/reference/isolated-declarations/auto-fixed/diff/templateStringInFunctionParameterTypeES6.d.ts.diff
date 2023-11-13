@@ -8,7 +8,7 @@
 @@ -1,19 +1,22 @@
  
  
- //// [/.src/templateStringInFunctionParameterTypeES6.d.ts]
+ //// [templateStringInFunctionParameterTypeES6.d.ts]
 -declare function f(any: any, : any): any;
 +declare function f(any: any, : invalid): any;
  declare function f(x: string): any;

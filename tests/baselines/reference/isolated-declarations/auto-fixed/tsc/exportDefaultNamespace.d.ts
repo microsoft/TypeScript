@@ -12,7 +12,7 @@ someFunc.someProp = 'yo';
 
 
 
-//// [/.src/exportDefaultNamespace.d.ts]
+//// [exportDefaultNamespace.d.ts]
 declare function someFunc(): string;
 declare namespace someFunc {
     var someProp: string;

@@ -8,7 +8,7 @@
 @@ -1,22 +1,21 @@
  
  
- //// [/.src/symbolProperty53.d.ts]
+ //// [symbolProperty53.d.ts]
 -declare var obj: invalid;
 +declare var obj: {
 +    [Symbol.for]: number;

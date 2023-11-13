@@ -22,7 +22,7 @@ class C3 {
 
 
 
-//// [/.src/declarationEmitDestructuringParameterProperties.d.ts]
+//// [declarationEmitDestructuringParameterProperties.d.ts]
 declare class C1 {
     x: string;
     y: string;

@@ -7,7 +7,7 @@ var v = { [e]: 1 };
 
 
 
-//// [/.src/parserComputedPropertyName2.d.ts]
+//// [parserComputedPropertyName2.d.ts]
 declare var v: {
     [e]: number;
 };

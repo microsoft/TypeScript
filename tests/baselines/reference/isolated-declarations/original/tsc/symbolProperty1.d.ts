@@ -14,7 +14,7 @@ var x = {
 
 
 
-//// [/.src/symbolProperty1.d.ts]
+//// [symbolProperty1.d.ts]
 declare var s: symbol;
 declare var x: invalid;
 /// [Errors] ////

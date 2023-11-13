@@ -14,13 +14,13 @@ q.val = f();
 
 
 
-//// [/.src/a.d.ts]
+//// [a.d.ts]
 interface I {
 }
 export declare function f(): I;
 export {};
 
-//// [/.src/b.d.ts]
+//// [b.d.ts]
 export declare function q(): void;
 /// [Errors] ////
 

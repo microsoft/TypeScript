@@ -55,7 +55,7 @@ export const o9 = {
 
 
 
-//// [/.src/computedPropertiesNarrowed.d.ts]
+//// [computedPropertiesNarrowed.d.ts]
 export declare let o: invalid;
 declare const y: 0;
 export declare let o2: {

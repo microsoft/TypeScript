@@ -44,7 +44,7 @@ export default Object.assign(A, {
 
 
 
-//// [/.src/index.d.ts]
+//// [index.d.ts]
 import { DefaultTheme, StyledComponent } from "styled-components";
 export declare const C: StyledComponent<"div", DefaultTheme, {}, never>;
 declare const _default;

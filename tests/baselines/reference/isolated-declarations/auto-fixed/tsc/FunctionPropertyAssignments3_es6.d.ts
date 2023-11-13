@@ -7,7 +7,7 @@ var v = { *{ } }
 
 
 
-//// [/.src/FunctionPropertyAssignments3_es6.d.ts]
+//// [FunctionPropertyAssignments3_es6.d.ts]
 declare var v: {
     ""(): Generator<never, void, unknown>;
 };

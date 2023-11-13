@@ -15,7 +15,7 @@ f["prop"] = 3;
 
 
 
-//// [/.src/typeFromPropertyAssignment38.d.ts]
+//// [typeFromPropertyAssignment38.d.ts]
 declare function F(): void;
 declare namespace F {
     var prop: number;

@@ -41,7 +41,7 @@ const c3_z: any = dest_1[2];
 
 
 
-//// [/.src/destructuringParameterProperties1.d.ts]
+//// [destructuringParameterProperties1.d.ts]
 declare class C1 {
     x: invalid;
     y: invalid;

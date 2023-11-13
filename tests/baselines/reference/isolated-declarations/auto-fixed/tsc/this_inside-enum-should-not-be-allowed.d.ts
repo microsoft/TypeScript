@@ -15,7 +15,7 @@ module ModuleEnum {
 
 
 
-//// [/.src/this_inside-enum-should-not-be-allowed.d.ts]
+//// [this_inside-enum-should-not-be-allowed.d.ts]
 declare enum TopLevelEnum {
     ThisWasAllowedButShouldNotBe
 }

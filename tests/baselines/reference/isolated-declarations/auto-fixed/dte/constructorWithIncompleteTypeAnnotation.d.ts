@@ -285,7 +285,7 @@ TypeScriptAllInOne.Program.Main();
 
 
 
-//// [/.src/constructorWithIncompleteTypeAnnotation.d.ts]
+//// [constructorWithIncompleteTypeAnnotation.d.ts]
 declare module "fs" {
     class File {
         constructor(filename: string);

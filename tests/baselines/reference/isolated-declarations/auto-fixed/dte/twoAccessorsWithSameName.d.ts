@@ -42,7 +42,7 @@ var y: {
 
 
 
-//// [/.src/twoAccessorsWithSameName.d.ts]
+//// [twoAccessorsWithSameName.d.ts]
 declare class C {
     get x(): number;
     get x(): number;

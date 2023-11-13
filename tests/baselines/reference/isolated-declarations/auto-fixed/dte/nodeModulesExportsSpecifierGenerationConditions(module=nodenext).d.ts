@@ -37,7 +37,7 @@ export const x: () => Thing;
 
 
 
-//// [/.src/index.d.ts]
+//// [index.d.ts]
 export declare const a: invalid;
 /// [Errors] ////
 

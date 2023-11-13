@@ -9,7 +9,7 @@ class C {
 
 
 
-//// [/.src/MemberFunctionDeclaration5_es6.d.ts]
+//// [MemberFunctionDeclaration5_es6.d.ts]
 declare class C {
     (): any;
 }

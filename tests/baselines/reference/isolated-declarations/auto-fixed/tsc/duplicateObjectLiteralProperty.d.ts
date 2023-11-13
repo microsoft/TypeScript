@@ -24,7 +24,7 @@ var y = {
 
 
 
-//// [/.src/duplicateObjectLiteralProperty.d.ts]
+//// [duplicateObjectLiteralProperty.d.ts]
 declare var x: {
     a: {
         c: number;

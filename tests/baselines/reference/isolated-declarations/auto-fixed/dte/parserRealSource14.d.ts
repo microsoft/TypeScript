@@ -581,7 +581,7 @@ module TypeScript {
 
 
 
-//// [/.src/parserRealSource14.d.ts]
+//// [parserRealSource14.d.ts]
 declare namespace TypeScript {
     function lastOf(items: any[]): any;
     function max(a: number, b: number): number;

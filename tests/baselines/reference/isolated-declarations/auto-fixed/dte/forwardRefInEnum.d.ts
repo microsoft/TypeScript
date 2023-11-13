@@ -20,7 +20,7 @@ enum E1 {
 
 
 
-//// [/.src/forwardRefInEnum.d.ts]
+//// [forwardRefInEnum.d.ts]
 declare enum E1 {
     X,
     X1,

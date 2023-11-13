@@ -9,7 +9,7 @@ class C {
 
 
 
-//// [/.src/classMemberWithMissingIdentifier.d.ts]
+//// [classMemberWithMissingIdentifier.d.ts]
 declare class C {
     : any;
 }

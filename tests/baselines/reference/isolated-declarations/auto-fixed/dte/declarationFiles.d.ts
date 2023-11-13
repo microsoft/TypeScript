@@ -55,7 +55,7 @@ class C4 {
 
 
 
-//// [/.src/declarationFiles.d.ts]
+//// [declarationFiles.d.ts]
 declare class C1 {
     x: this;
     f(x: this): this;

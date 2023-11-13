@@ -55,7 +55,7 @@ export const o9 = {
 
 
 
-//// [/.src/computedPropertiesNarrowed.d.ts]
+//// [computedPropertiesNarrowed.d.ts]
 declare const x: 0 | 1;
 export declare let o: {
     [x]: number;

@@ -8,7 +8,7 @@
 @@ -1,13 +1,14 @@
  
  
- //// [/.src/b.d.ts]
+ //// [b.d.ts]
 -declare var x: number;
 +declare var x: invalid;
  /// [Errors] ////

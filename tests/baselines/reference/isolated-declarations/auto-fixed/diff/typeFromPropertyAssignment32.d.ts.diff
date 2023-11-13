@@ -8,7 +8,7 @@
 @@ -1,12 +1,8 @@
  
  
- //// [/.src/expando.d.ts]
+ //// [expando.d.ts]
  declare function ExpandoMerge(n: number): number;
 -declare namespace ExpandoMerge {
 -    var p1: number;
@@ -16,7 +16,7 @@
 -}
  declare var n: number;
  
- //// [/.src/ns.d.ts]
+ //// [ns.d.ts]
  declare namespace ExpandoMerge {
 @@ -22,16 +18,19 @@
      var p2: number;

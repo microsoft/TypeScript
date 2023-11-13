@@ -8,7 +8,7 @@
 @@ -1,17 +1,21 @@
  
  
- //// [/.src/parserNoASIOnCallAfterFunctionExpression1.d.ts]
+ //// [parserNoASIOnCallAfterFunctionExpression1.d.ts]
 -declare var x: any;
 +declare var x: invalid;
  /// [Errors] ////

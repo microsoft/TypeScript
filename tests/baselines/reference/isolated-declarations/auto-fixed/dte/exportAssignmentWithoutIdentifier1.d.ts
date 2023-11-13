@@ -14,7 +14,7 @@ export = new Greeter();
 
 
 
-//// [/.src/exportAssignmentWithoutIdentifier1.d.ts]
+//// [exportAssignmentWithoutIdentifier1.d.ts]
 declare const _default: invalid;
 export = _default;
 /// [Errors] ////

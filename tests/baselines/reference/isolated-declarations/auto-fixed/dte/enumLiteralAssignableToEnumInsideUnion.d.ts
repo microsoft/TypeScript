@@ -35,7 +35,7 @@ const e5: Ka.Foo | boolean = Z.Foo.A; // ok
 
 
 
-//// [/.src/enumLiteralAssignableToEnumInsideUnion.d.ts]
+//// [enumLiteralAssignableToEnumInsideUnion.d.ts]
 declare namespace X {
     enum Foo {
         A = 0,

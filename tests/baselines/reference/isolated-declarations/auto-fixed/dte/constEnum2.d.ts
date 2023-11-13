@@ -19,7 +19,7 @@ const enum D {
 
 
 
-//// [/.src/constEnum2.d.ts]
+//// [constEnum2.d.ts]
 declare const CONST: number;
 declare const enum D {
     d = 10,

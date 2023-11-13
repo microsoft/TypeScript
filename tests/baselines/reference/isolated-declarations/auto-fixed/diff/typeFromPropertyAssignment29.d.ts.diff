@@ -8,7 +8,7 @@
 @@ -1,12 +1,8 @@
  
  
- //// [/.src/typeFromPropertyAssignment29.d.ts]
+ //// [typeFromPropertyAssignment29.d.ts]
  declare function ExpandoDecl(n: number): string;
 -declare namespace ExpandoDecl {
 -    var prop: number;

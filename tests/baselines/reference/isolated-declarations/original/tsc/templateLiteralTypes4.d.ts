@@ -310,7 +310,7 @@ f4("**false**"); // false | "false"
 
 
 
-//// [/.src/templateLiteralTypes4.d.ts]
+//// [templateLiteralTypes4.d.ts]
 type TNumber0 = "100" extends `${infer N extends number}` ? N : never;
 type TNumber1 = "-100" extends `${infer N extends number}` ? N : never;
 type TNumber2 = "1.1" extends `${infer N extends number}` ? N : never;

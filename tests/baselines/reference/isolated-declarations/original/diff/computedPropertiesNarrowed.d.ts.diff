@@ -8,7 +8,7 @@
 @@ -1,8 +1,11 @@
  
  
- //// [/.src/computedPropertiesNarrowed.d.ts]
+ //// [computedPropertiesNarrowed.d.ts]
 -export declare let o: invalid;
 +declare const x: 0 | 1;
 +export declare let o: {

@@ -47,9 +47,9 @@ export * from '@raymondfeng/pkg1';
 
 
 
-//// [/.src/monorepo/pkg3/dist/index.d.ts]
+//// [monorepo/pkg3/dist/index.d.ts]
 export * from './keys';
 
-//// [/.src/monorepo/pkg3/dist/keys.d.ts]
+//// [monorepo/pkg3/dist/keys.d.ts]
 import { MetadataAccessor } from "@raymondfeng/pkg2";
 export declare const ADMIN: MetadataAccessor<boolean, import("@raymondfeng/pkg2").IdType>;

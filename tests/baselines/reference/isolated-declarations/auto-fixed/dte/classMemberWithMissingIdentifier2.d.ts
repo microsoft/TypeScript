@@ -9,7 +9,7 @@ class C {
 
 
 
-//// [/.src/classMemberWithMissingIdentifier2.d.ts]
+//// [classMemberWithMissingIdentifier2.d.ts]
 declare class C {
     : invalid;
 }

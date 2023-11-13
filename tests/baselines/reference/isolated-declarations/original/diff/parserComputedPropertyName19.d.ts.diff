@@ -8,7 +8,7 @@
 @@ -1,8 +1,10 @@
  
  
- //// [/.src/parserComputedPropertyName19.d.ts]
+ //// [parserComputedPropertyName19.d.ts]
 -declare var v: {};
 +declare var v: {
 +    [e]?: any;

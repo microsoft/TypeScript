@@ -22,7 +22,7 @@ var v = {
 
 
 
-//// [/.src/computedPropertyNames4_ES6.d.ts]
+//// [computedPropertyNames4_ES6.d.ts]
 declare var s: string;
 declare var n: number;
 declare var a: any;

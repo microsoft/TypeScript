@@ -7,7 +7,7 @@ var v = { [await]: foo }
 
 
 
-//// [/.src/asyncFunctionDeclaration8_es6.d.ts]
+//// [asyncFunctionDeclaration8_es6.d.ts]
 declare var v: invalid;
 /// [Errors] ////
 

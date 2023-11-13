@@ -147,122 +147,122 @@ const o24 = {
 
 
 
-//// [/.src/asyncGeneratorGetAccessorIsError.d.ts]
+//// [asyncGeneratorGetAccessorIsError.d.ts]
 declare const o22: invalid;
 
-//// [/.src/asyncGeneratorPropertyIsError.d.ts]
+//// [asyncGeneratorPropertyIsError.d.ts]
 declare const o24: {
     x(): 1;
 };
 
-//// [/.src/asyncGeneratorSetAccessorIsError.d.ts]
+//// [asyncGeneratorSetAccessorIsError.d.ts]
 declare const o23: invalid;
 
-//// [/.src/awaitAsTypeIsOk.d.ts]
+//// [awaitAsTypeIsOk.d.ts]
 interface await {
 }
 declare const o19: {
     f(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/awaitInParameterInitializerIsError.d.ts]
+//// [awaitInParameterInitializerIsError.d.ts]
 declare const o6: {
     f(a?: number): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/awaitMethodNameIsOk.d.ts]
+//// [awaitMethodNameIsOk.d.ts]
 declare const o2: {
     await(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/awaitMissingValueIsError.d.ts]
+//// [awaitMissingValueIsError.d.ts]
 declare const o18: {
     f(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/awaitParameterIsError.d.ts]
+//// [awaitParameterIsError.d.ts]
 declare const o4: {
     f(await: any): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/awaitWithValueIsOk.d.ts]
+//// [awaitWithValueIsOk.d.ts]
 declare const o17: {
     f(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/methodIsOk.d.ts]
+//// [methodIsOk.d.ts]
 declare const o1: {
     f(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/nestedAsyncGeneratorIsOk.d.ts]
+//// [nestedAsyncGeneratorIsOk.d.ts]
 declare const o8: {
     f(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/nestedFunctionDeclarationNamedAwaitIsError.d.ts]
+//// [nestedFunctionDeclarationNamedAwaitIsError.d.ts]
 declare const o11: {
     f(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/nestedFunctionDeclarationNamedYieldIsError.d.ts]
+//// [nestedFunctionDeclarationNamedYieldIsError.d.ts]
 declare const o9: {
     f(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/nestedFunctionExpressionNamedAwaitIsError.d.ts]
+//// [nestedFunctionExpressionNamedAwaitIsError.d.ts]
 declare const o12: {
     f(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/nestedFunctionExpressionNamedYieldIsError.d.ts]
+//// [nestedFunctionExpressionNamedYieldIsError.d.ts]
 declare const o10: {
     f(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/yieldAsTypeIsOk.d.ts]
+//// [yieldAsTypeIsOk.d.ts]
 interface yield {
 }
 declare const o20: {
     f(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/yieldInNestedComputedPropertyIsOk.d.ts]
+//// [yieldInNestedComputedPropertyIsOk.d.ts]
 declare const o21: {
     f(): AsyncGenerator<any, void, unknown>;
 };
 
-//// [/.src/yieldInParameterInitializerIsError.d.ts]
+//// [yieldInParameterInitializerIsError.d.ts]
 declare const o7: {
     f(a?: any): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/yieldIsOk.d.ts]
+//// [yieldIsOk.d.ts]
 declare const o13: {
     f(): AsyncGenerator<any, void, unknown>;
 };
 
-//// [/.src/yieldMethodNameIsOk.d.ts]
+//// [yieldMethodNameIsOk.d.ts]
 declare const o3: {
     yield(): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/yieldParameterIsError.d.ts]
+//// [yieldParameterIsError.d.ts]
 declare const o5: {
     f(yield: any): AsyncGenerator<never, void, unknown>;
 };
 
-//// [/.src/yieldStarMissingValueIsError.d.ts]
+//// [yieldStarMissingValueIsError.d.ts]
 declare const o15: {
     f(): AsyncGenerator<any, void, any>;
 };
 
-//// [/.src/yieldStarWithValueIsOk.d.ts]
+//// [yieldStarWithValueIsOk.d.ts]
 declare const o16: {
     f(): AsyncGenerator<any, void, undefined>;
 };
 
-//// [/.src/yieldWithValueIsOk.d.ts]
+//// [yieldWithValueIsOk.d.ts]
 declare const o14: {
     f(): AsyncGenerator<number, void, unknown>;
 };

@@ -12,7 +12,7 @@ enum x {
 
 
 
-//// [/.src/enumWithExport.d.ts]
+//// [enumWithExport.d.ts]
 declare namespace x {
     let y: number;
 }

@@ -15,7 +15,7 @@ var v = {
 
 
 
-//// [/.src/computedPropertyNames5_ES5.d.ts]
+//// [computedPropertyNames5_ES5.d.ts]
 declare var b: boolean;
 declare var v: invalid;
 /// [Errors] ////

@@ -9,7 +9,7 @@ interface I {
 
 
 
-//// [/.src/symbolProperty59.d.ts]
+//// [symbolProperty59.d.ts]
 interface I {
 }
 /// [Errors] ////

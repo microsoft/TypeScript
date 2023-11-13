@@ -39,7 +39,7 @@ declare enum T6 {
 
 
 
-//// [/.src/enumConstantMemberWithString.d.ts]
+//// [enumConstantMemberWithString.d.ts]
 declare enum T1 {
     a = "1",
     b = "12",

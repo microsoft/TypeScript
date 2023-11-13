@@ -8,7 +8,7 @@
 @@ -1,22 +1,22 @@
  
  
- //// [/.src/expandoFunctionContextualTypesNoValue.d.ts]
+ //// [expandoFunctionContextualTypesNoValue.d.ts]
  export declare function Foo(): void;
 -export declare namespace Foo {
 -    var bar: () => void;

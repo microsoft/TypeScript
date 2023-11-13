@@ -16,7 +16,7 @@ baz.normal = false;
 
 
 
-//// [/.src/declarationEmitFunctionKeywordProp.d.ts]
+//// [declarationEmitFunctionKeywordProp.d.ts]
 declare function foo(): void;
 declare function bar(): void;
 declare function baz(): void;

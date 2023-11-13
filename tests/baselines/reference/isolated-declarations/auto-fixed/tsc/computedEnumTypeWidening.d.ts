@@ -83,7 +83,7 @@ val2 = MyDeclaredEnum.B;
 
 
 
-//// [/.src/computedEnumTypeWidening.d.ts]
+//// [computedEnumTypeWidening.d.ts]
 declare function computed(x: number): number;
 declare enum E {
     A,

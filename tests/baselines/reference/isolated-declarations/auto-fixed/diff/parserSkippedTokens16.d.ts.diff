@@ -6,7 +6,7 @@
 --- TSC	declarations
 +++ DTE	declarations
 @@ -3,9 +3,9 @@
- //// [/.src/parserSkippedTokens16.d.ts]
+ //// [parserSkippedTokens16.d.ts]
  declare function Foo(): any;
  declare namespace M {
  }

@@ -6,10 +6,10 @@
 --- TSC	declarations
 +++ DTE	declarations
 @@ -12,7 +12,34 @@
- //// [/.src/index.d.ts]
+ //// [index.d.ts]
  export {};
  
- //// [/.src/reexport.d.ts]
+ //// [reexport.d.ts]
 -import * as Foo from "./foo";
 -declare const _default: typeof Foo.ConstEnumOnlyModule;
 +declare const _default: invalid;

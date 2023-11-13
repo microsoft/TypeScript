@@ -8,7 +8,7 @@
 @@ -1,21 +1,64 @@
  
  
- //// [/.src/a.d.ts]
+ //// [a.d.ts]
 -declare namespace A {
 -    class B {
 -        constructor(b: number);
@@ -21,12 +21,12 @@
 +declare const _default: invalid;
  export = _default;
  
- //// [/.src/b.d.ts]
+ //// [b.d.ts]
 -declare const _default: number;
 +declare const _default: invalid;
  export = _default;
  
- //// [/.src/index.d.ts]
+ //// [index.d.ts]
 -/// <reference path="declarations.d.ts" />
  export {};
 +/// [Errors] ////

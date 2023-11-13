@@ -11,7 +11,7 @@ function f(x: string) {
 
 
 
-//// [/.src/templateStringInFunctionParameterType.d.ts]
+//// [templateStringInFunctionParameterType.d.ts]
 declare function f(any: any, : invalid): any;
 declare function f(x: string): any;
 /// [Errors] ////

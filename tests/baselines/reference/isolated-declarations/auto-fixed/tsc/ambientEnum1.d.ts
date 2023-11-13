@@ -14,7 +14,7 @@
 
 
 
-//// [/.src/ambientEnum1.d.ts]
+//// [ambientEnum1.d.ts]
 declare enum E1 {
     y = 4.23
 }

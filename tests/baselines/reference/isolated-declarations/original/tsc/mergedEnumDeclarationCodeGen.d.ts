@@ -13,7 +13,7 @@ enum E {
 
 
 
-//// [/.src/mergedEnumDeclarationCodeGen.d.ts]
+//// [mergedEnumDeclarationCodeGen.d.ts]
 declare enum E {
     a = 0,
     b = 0

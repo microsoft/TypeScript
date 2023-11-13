@@ -101,7 +101,7 @@ var asserted2: any;
 
 
 
-//// [/.src/arrowFunctionContexts.d.ts]
+//// [arrowFunctionContexts.d.ts]
 declare class Base {
     constructor(n: any);
 }

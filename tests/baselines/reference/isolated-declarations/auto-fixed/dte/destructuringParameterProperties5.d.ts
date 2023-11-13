@@ -23,7 +23,7 @@ const a_z: any = dest[4];
 
 
 
-//// [/.src/destructuringParameterProperties5.d.ts]
+//// [destructuringParameterProperties5.d.ts]
 type ObjType1 = {
     x: number;
     y: string;

@@ -15,7 +15,7 @@ var x = function (): number {
 
 
 
-//// [/.src/b.d.ts]
+//// [b.d.ts]
 declare var x: number;
 /// [Errors] ////
 

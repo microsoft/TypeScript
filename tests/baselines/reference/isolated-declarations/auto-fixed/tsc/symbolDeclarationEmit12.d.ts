@@ -18,7 +18,7 @@ module M {
 
 
 
-//// [/.src/symbolDeclarationEmit12.d.ts]
+//// [symbolDeclarationEmit12.d.ts]
 declare namespace M {
     interface I {
     }

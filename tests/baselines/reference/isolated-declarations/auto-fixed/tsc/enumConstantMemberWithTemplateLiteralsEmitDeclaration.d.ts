@@ -46,7 +46,7 @@ declare enum T7 {
 
 
 
-//// [/.src/enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts]
+//// [enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts]
 declare enum T1 {
     a = "1"
 }

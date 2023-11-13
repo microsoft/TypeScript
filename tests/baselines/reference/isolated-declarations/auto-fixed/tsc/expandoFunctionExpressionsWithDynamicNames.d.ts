@@ -16,7 +16,7 @@ expr2[s] = 0
 
 
 
-//// [/.src/expandoFunctionExpressionsWithDynamicNames.d.ts]
+//// [expandoFunctionExpressionsWithDynamicNames.d.ts]
 export declare const expr: {
     (): void;
     X: number;

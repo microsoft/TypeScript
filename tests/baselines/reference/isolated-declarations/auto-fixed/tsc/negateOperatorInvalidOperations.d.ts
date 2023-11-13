@@ -18,7 +18,7 @@ var NUMBER =-;
 
 
 
-//// [/.src/negateOperatorInvalidOperations.d.ts]
+//// [negateOperatorInvalidOperations.d.ts]
 declare var NUMBER1: any;
 declare var NUMBER: any;
 declare var NUMBER2: number;

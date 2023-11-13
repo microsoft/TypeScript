@@ -9,7 +9,7 @@ class C {
 
 
 
-//// [/.src/parserComputedPropertyName36.d.ts]
+//// [parserComputedPropertyName36.d.ts]
 declare class C {
     [public]: string;
 }

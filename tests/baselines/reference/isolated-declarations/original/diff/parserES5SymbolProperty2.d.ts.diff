@@ -8,7 +8,7 @@
 @@ -1,8 +1,9 @@
  
  
- //// [/.src/parserES5SymbolProperty2.d.ts]
+ //// [parserES5SymbolProperty2.d.ts]
  interface I {
 +    [Symbol.unscopables](): string;
  }

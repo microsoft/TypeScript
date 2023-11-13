@@ -11,7 +11,7 @@ const orbitol: 01 = 01
 
 
 
-//// [/.src/strictModeOctalLiterals.d.ts]
+//// [strictModeOctalLiterals.d.ts]
 export declare enum E {
     A = 13
 }

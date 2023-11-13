@@ -9,7 +9,7 @@ interface I {
 
 
 
-//// [/.src/parserES5SymbolProperty1.d.ts]
+//// [parserES5SymbolProperty1.d.ts]
 interface I {
     [Symbol.iterator]: string;
 }

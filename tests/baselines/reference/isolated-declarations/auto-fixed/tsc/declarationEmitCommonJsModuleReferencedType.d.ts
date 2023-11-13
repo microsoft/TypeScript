@@ -28,7 +28,7 @@ export const y: RootProps = bar();
 
 
 
-//// [/.src/r/entry.d.ts]
+//// [r/entry.d.ts]
 import { RootProps } from "root";
 export declare const x: any;
 export declare const y: RootProps;

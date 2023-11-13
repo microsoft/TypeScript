@@ -11,7 +11,7 @@ interface I {
 
 
 
-//// [/.src/parserIndexSignature11.d.ts]
+//// [parserIndexSignature11.d.ts]
 interface I {
     [p1: string]: any;
     [p2: string, p3: number]: any;

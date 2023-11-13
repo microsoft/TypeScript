@@ -20,7 +20,7 @@ foo3 = bar3; // should be an error
 
 
 
-//// [/.src/propertyAssignment.d.ts]
+//// [propertyAssignment.d.ts]
 declare var foo1: {
     new (): any;
 };

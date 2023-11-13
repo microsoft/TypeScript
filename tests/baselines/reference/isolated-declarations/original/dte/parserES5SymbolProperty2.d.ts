@@ -9,7 +9,7 @@ interface I {
 
 
 
-//// [/.src/parserES5SymbolProperty2.d.ts]
+//// [parserES5SymbolProperty2.d.ts]
 interface I {
     [Symbol.unscopables](): string;
 }

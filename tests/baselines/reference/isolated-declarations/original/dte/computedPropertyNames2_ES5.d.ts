@@ -16,7 +16,7 @@ class C {
 
 
 
-//// [/.src/computedPropertyNames2_ES5.d.ts]
+//// [computedPropertyNames2_ES5.d.ts]
 declare var methodName: string;
 declare var accessorName: string;
 declare class C {

@@ -46,7 +46,7 @@ const enum E6 {
 
 
 
-//// [/.src/enumConstantMembers.d.ts]
+//// [enumConstantMembers.d.ts]
 declare enum E1 {
     a = 1,
     b = 2

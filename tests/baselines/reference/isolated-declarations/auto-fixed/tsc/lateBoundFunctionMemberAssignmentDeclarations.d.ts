@@ -13,7 +13,7 @@ const x: string = foo[_private];
 
 
 
-//// [/.src/index.d.ts]
+//// [index.d.ts]
 export declare function foo(): void;
 export declare namespace foo {
     var bar: number;

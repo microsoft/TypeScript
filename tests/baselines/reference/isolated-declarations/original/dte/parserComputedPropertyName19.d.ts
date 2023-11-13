@@ -7,7 +7,7 @@ var v: { [e]? };
 
 
 
-//// [/.src/parserComputedPropertyName19.d.ts]
+//// [parserComputedPropertyName19.d.ts]
 declare var v: {
     [e]?: any;
 };

@@ -8,7 +8,7 @@
 @@ -1,20 +1,23 @@
  
  
- //// [/.src/MemberFunctionDeclaration6_es6.d.ts]
+ //// [MemberFunctionDeclaration6_es6.d.ts]
  declare class C {
 -    foo(): any;
 +    foo(): invalid;

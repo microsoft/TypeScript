@@ -36,18 +36,18 @@ C.B = B;
 
 
 
-//// [/.src/foo.d.ts]
+//// [foo.d.ts]
 export declare class Foo {
 }
 
-//// [/.src/index1.d.ts]
+//// [index1.d.ts]
 declare function Example(): void;
 declare namespace Example {
     var Foo: typeof import("./foo").Foo;
 }
 export default Example;
 
-//// [/.src/index2.d.ts]
+//// [index2.d.ts]
 import { Foo } from './foo';
 export { Foo };
 declare function Example(): void;
@@ -56,7 +56,7 @@ declare namespace Example {
 }
 export default Example;
 
-//// [/.src/index3.d.ts]
+//// [index3.d.ts]
 export declare class Bar {
 }
 declare function Example(): void;
@@ -65,7 +65,7 @@ declare namespace Example {
 }
 export default Example;
 
-//// [/.src/index4.d.ts]
+//// [index4.d.ts]
 export declare function C(): any;
 export declare namespace C {
     var A: () => void;

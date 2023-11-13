@@ -36,7 +36,7 @@ export * from "../other";
 
 
 
-//// [/.src/main.d.ts]
+//// [main.d.ts]
 export declare const va: any;
 export declare const vb: import("ext/other").B;
 /// [Errors] ////

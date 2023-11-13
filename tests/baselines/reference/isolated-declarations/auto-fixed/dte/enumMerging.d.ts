@@ -72,7 +72,7 @@ module M6 {
 
 
 
-//// [/.src/enumMerging.d.ts]
+//// [enumMerging.d.ts]
 declare namespace M1 {
     enum EConst1 {
         A = 3,

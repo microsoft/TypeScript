@@ -14,10 +14,10 @@ export function x(): boolean{
 
 
 
-//// [/.src/foo1.d.ts]
+//// [foo1.d.ts]
 export declare function x(): boolean;
 
-//// [/.src/foo2.d.ts]
+//// [foo2.d.ts]
 import foo1 = require('./foo1');
 declare const _default: typeof foo1.x;
 export = _default;

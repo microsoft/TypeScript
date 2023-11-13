@@ -80,7 +80,7 @@ module m {
 
 
 
-//// [/.src/disallowLineTerminatorBeforeArrow.d.ts]
+//// [disallowLineTerminatorBeforeArrow.d.ts]
 declare var f1: () => void;
 declare var f2: (x: string, y: string) => void;
 declare var f3: (x: string, y: number, ...rest: any[]) => void;

@@ -277,7 +277,7 @@ module TypeScript {
 
 
 
-//// [/.src/parserRealSource2.d.ts]
+//// [parserRealSource2.d.ts]
 declare namespace TypeScript {
     function hasFlag(val: number, flag: number): boolean;
     enum ErrorRecoverySet {

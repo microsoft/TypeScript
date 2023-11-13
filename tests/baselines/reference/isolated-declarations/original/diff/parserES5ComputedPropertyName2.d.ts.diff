@@ -8,7 +8,7 @@
 @@ -1,16 +1,15 @@
  
  
- //// [/.src/parserES5ComputedPropertyName2.d.ts]
+ //// [parserES5ComputedPropertyName2.d.ts]
 -declare var v: invalid;
 +declare var v: {
 +    [e]: number;

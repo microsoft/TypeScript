@@ -89,7 +89,7 @@ arrow10[emoji] = 0
 
 
 
-//// [/.src/declarationEmitLateBoundAssignments2.d.ts]
+//// [declarationEmitLateBoundAssignments2.d.ts]
 export declare function decl(): void;
 export declare namespace decl {
     var B: string;

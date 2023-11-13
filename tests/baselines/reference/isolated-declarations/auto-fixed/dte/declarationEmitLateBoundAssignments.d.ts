@@ -21,7 +21,7 @@ const a: string = foo[dashStrMem];
 
 
 
-//// [/.src/declarationEmitLateBoundAssignments.d.ts]
+//// [declarationEmitLateBoundAssignments.d.ts]
 export declare function foo(): void;
 /// [Errors] ////
 

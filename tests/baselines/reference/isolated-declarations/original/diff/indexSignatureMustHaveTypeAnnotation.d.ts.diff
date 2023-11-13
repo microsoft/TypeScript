@@ -8,7 +8,7 @@
 @@ -1,8 +1,9 @@
  
  
- //// [/.src/indexSignatureMustHaveTypeAnnotation.d.ts]
+ //// [indexSignatureMustHaveTypeAnnotation.d.ts]
  interface I {
 +    [x]: string;
      [x: string]: any;

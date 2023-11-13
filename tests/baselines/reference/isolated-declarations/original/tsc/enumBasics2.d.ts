@@ -21,7 +21,7 @@ enum Bar {
 
 
 
-//// [/.src/enumBasics2.d.ts]
+//// [enumBasics2.d.ts]
 declare enum Foo {
     a = 2,
     b = 3,

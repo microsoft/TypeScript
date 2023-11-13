@@ -12,7 +12,7 @@ function boo{
 
 
 
-//// [/.src/staticsInAFunction.d.ts]
+//// [staticsInAFunction.d.ts]
 declare function boo(): invalid;
 /// [Errors] ////
 

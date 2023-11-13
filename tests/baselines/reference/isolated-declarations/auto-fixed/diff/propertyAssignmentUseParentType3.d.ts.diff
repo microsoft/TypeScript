@@ -8,7 +8,7 @@
 @@ -1,21 +1,48 @@
  
  
- //// [/.src/propertyAssignmentUseParentType3.d.ts]
+ //// [propertyAssignmentUseParentType3.d.ts]
  declare function foo1(): number;
 -declare namespace foo1 {
 -    var toFixed: string;

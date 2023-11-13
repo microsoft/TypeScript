@@ -6,7 +6,7 @@
 --- TSC	declarations
 +++ DTE	declarations
 @@ -3,33 +3,28 @@
- //// [/.src/computedPropertyNames6_ES6.d.ts]
+ //// [computedPropertyNames6_ES6.d.ts]
  declare var p1: number | string;
  declare var p2: number | number[];
  declare var p3: string | boolean;

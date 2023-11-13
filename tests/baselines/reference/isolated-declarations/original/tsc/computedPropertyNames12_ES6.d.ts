@@ -22,7 +22,7 @@ class C {
 
 
 
-//// [/.src/computedPropertyNames12_ES6.d.ts]
+//// [computedPropertyNames12_ES6.d.ts]
 declare var s: string;
 declare var n: number;
 declare var a: any;

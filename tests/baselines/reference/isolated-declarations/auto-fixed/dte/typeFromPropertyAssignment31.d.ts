@@ -33,7 +33,7 @@ var n: number = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMer
 
 
 
-//// [/.src/typeFromPropertyAssignment31.d.ts]
+//// [typeFromPropertyAssignment31.d.ts]
 declare function ExpandoMerge(n: number): number;
 declare namespace ExpandoMerge {
     var p2: number;

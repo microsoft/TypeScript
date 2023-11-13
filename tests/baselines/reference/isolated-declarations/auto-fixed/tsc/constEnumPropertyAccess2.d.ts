@@ -25,7 +25,7 @@ G.B = 3;
 
 
 
-//// [/.src/constEnumPropertyAccess2.d.ts]
+//// [constEnumPropertyAccess2.d.ts]
 declare const enum G {
     A = 1,
     B = 2,

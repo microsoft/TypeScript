@@ -354,7 +354,7 @@ export class ExportedStaticArgumentsFn {
 
 
 
-//// [/.src/staticPropertyNameConflicts.d.ts]
+//// [staticPropertyNameConflicts.d.ts]
 declare const FunctionPropertyNames: {
     readonly name: "name";
     readonly length: "length";
