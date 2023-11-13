@@ -13,6 +13,7 @@ var v = {
 declare var v: {
     [public]: number;
 };
+
 /// [Errors] ////
 
 parserComputedPropertyName37.ts(2,6): error TS2304: Cannot find name 'public'.

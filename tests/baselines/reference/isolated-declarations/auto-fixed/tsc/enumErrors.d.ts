@@ -113,6 +113,7 @@ declare enum E14 {
     c = 5,
     d = 6
 }
+
 /// [Errors] ////
 
 enumErrors.ts(2,6): error TS2431: Enum name cannot be 'any'.

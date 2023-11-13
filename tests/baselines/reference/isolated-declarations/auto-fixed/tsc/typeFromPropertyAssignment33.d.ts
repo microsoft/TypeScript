@@ -58,6 +58,7 @@ declare namespace ExpandoMerge {
 declare namespace ExpandoMerge {
     var p2: number;
 }
+
 /// [Errors] ////
 
 expando.ts(12,1): error TS2322: Type 'boolean' is not assignable to type 'number'.

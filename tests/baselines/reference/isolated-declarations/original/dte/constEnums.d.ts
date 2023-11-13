@@ -279,6 +279,7 @@ declare function foo2(e: I2.C.E): void;
 declare function foo(x: Enum1): invalid;
 declare function bar(e: A.B.C.E): number;
 declare function baz(c: Comments): invalid;
+
 /// [Errors] ////
 
 constEnums.ts(33,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -52,6 +52,7 @@ declare namespace ExpandoMerge {
     let p9: number;
 }
 declare var n: number;
+
 /// [Errors] ////
 
 typeFromPropertyAssignment31.ts(13,1): error TS2322: Type 'boolean' is not assignable to type 'number'.

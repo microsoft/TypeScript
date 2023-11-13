@@ -5,11 +5,12 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -57,4 +57,100 @@
+@@ -57,4 +57,101 @@
      B,
      C,
      D
  }
++
 +/// [Errors] ////
 +
 +enumClassification.ts(74,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

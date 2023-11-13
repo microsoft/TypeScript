@@ -66,6 +66,7 @@ declare const e2: X.Foo.A | X.Foo.B | boolean;
 declare const e3: X.Foo.B | boolean;
 declare const e4: X.Foo.A | boolean;
 declare const e5: Ka.Foo | boolean;
+
 /// [Errors] ////
 
 enumLiteralAssignableToEnumInsideUnion.ts(24,7): error TS2322: Type 'Foo.A' is not assignable to type 'boolean | Foo'.

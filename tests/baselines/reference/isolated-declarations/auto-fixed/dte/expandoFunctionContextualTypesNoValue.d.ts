@@ -15,6 +15,7 @@ Foo.bar = () => { };
 
 //// [expandoFunctionContextualTypesNoValue.d.ts]
 export declare function Foo(): void;
+
 /// [Errors] ////
 
 expandoFunctionContextualTypesNoValue.ts(2,17): error TS2307: Cannot find module 'blah' or its corresponding type declarations.

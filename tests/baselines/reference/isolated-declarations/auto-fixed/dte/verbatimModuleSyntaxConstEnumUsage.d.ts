@@ -33,6 +33,7 @@ export declare enum Foo {
     b = 2,
     c = 3
 }
+
 /// [Errors] ////
 
 bar.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

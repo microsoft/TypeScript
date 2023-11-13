@@ -9,6 +9,7 @@ function =>
 
 //// [parserEqualsGreaterThanAfterFunction1.d.ts]
 declare function (): invalid;
+
 /// [Errors] ////
 
 parserEqualsGreaterThanAfterFunction1.ts(1,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

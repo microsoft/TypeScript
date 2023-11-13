@@ -12,7 +12,8 @@
  export declare function useRef<T>(current: T): MutableRefObject<T>;
 -export declare const useCsvParser: () => MutableRefObject<typeof import("csv-parse")>;
 +export declare const useCsvParser: invalid;
-+/// [Errors] ////
++
+ /// [Errors] ////
 +
 +/p1/index.ts(7,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 +

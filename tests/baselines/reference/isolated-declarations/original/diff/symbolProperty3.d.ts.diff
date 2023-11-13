@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -6,25 +6,22 @@
+@@ -7,25 +7,22 @@
  /// [Errors] ////
  
  symbolProperty3.ts(1,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

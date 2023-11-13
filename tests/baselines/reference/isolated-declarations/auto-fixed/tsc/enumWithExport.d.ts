@@ -19,6 +19,7 @@ declare namespace x {
 declare enum x {
     z
 }
+
 /// [Errors] ////
 
 enumWithExport.ts(5,7): error TS2304: Cannot find name 'y'.

@@ -52,6 +52,7 @@ declare namespace ExpandoMerge {
 declare namespace ExpandoMerge {
     var p2: number;
 }
+
 /// [Errors] ////
 
 expando.ts(1,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

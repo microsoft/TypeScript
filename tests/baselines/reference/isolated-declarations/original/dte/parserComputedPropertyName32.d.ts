@@ -13,6 +13,7 @@ declare class C {
 declare class C {
     [e](): number;
 }
+
 /// [Errors] ////
 
 parserComputedPropertyName32.ts(2,5): error TS1165: A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.

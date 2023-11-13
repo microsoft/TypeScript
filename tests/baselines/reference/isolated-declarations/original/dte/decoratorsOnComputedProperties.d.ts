@@ -267,6 +267,7 @@ declare class I {
     [fieldNameB]: any;
     [fieldNameC]: any;
 }
+
 /// [Errors] ////
 
 decoratorsOnComputedProperties.ts(1,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

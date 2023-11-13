@@ -21,6 +21,7 @@ declare enum TopLevelEnum {
 }
 declare namespace ModuleEnum {
 }
+
 /// [Errors] ////
 
 this_inside-enum-should-not-be-allowed.ts(2,36): error TS2332: 'this' cannot be referenced in current location.

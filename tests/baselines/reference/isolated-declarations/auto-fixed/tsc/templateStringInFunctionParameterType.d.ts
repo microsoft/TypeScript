@@ -14,6 +14,7 @@ function f(x: string) {
 //// [templateStringInFunctionParameterType.d.ts]
 declare function f(any: any, : any): any;
 declare function f(x: string): any;
+
 /// [Errors] ////
 
 templateStringInFunctionParameterType.ts(1,12): error TS1138: Parameter declaration expected.

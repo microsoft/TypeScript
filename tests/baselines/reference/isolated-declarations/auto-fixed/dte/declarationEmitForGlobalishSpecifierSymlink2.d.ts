@@ -28,6 +28,7 @@ export const a: import("typescript-fsa").A;
 
 //// [/p1/index.d.ts]
 export declare const a: invalid;
+
 /// [Errors] ////
 
 /p1/index.ts(4,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

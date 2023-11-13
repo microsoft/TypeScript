@@ -14,6 +14,7 @@ function boo{
 
 //// [staticsInAFunction.d.ts]
 declare function boo(): invalid;
+
 /// [Errors] ////
 
 staticsInAFunction.ts(1,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

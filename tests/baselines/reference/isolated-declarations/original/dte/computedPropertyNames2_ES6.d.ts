@@ -27,6 +27,7 @@ declare class C {
     static get [accessorName](): invalid;
     static set [accessorName](v: invalid);
 }
+
 /// [Errors] ////
 
 computedPropertyNames2_ES6.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

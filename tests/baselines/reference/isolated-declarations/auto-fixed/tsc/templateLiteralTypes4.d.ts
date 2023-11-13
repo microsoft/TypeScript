@@ -466,6 +466,7 @@ declare function f1<T extends string | number>(s: `**${T}**`): T;
 declare function f2<T extends number>(s: `**${T}**`): T;
 declare function f3<T extends bigint>(s: `**${T}**`): T;
 declare function f4<T extends boolean>(s: `**${T}**`): T;
+
 /// [Errors] ////
 
 templateLiteralTypes4.ts(285,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.

@@ -23,6 +23,7 @@ declare function f3(): any;
 declare function (): any;
 declare function f4(): any;
 declare function f5(): any;
+
 /// [Errors] ////
 
 reservedWords3.ts(1,13): error TS1390: 'enum' is not allowed as a parameter name.

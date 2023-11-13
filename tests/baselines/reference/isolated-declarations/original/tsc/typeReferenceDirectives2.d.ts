@@ -16,6 +16,7 @@ interface $ { x }
 interface A {
     x: $;
 }
+
 /// [Errors] ////
 
 /app.ts(2,8): error TS9008: Declaration emit for this file requires adding a type reference directive. Add a type reference directive to lib to unblock declaration emit.

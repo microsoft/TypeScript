@@ -403,6 +403,7 @@ export declare class ExportedStaticArgumentsFn {
     [FunctionPropertyNames.arguments](): invalid;
 }
 export {};
+
 /// [Errors] ////
 
 staticPropertyNameConflicts.ts(11,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.

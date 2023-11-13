@@ -5,9 +5,9 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -3,17 +3,17 @@
- //// [parserComputedPropertyName1.d.ts]
+@@ -4,17 +4,17 @@
  declare var v: invalid;
+ 
  /// [Errors] ////
  
 -parserComputedPropertyName1.ts(1,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

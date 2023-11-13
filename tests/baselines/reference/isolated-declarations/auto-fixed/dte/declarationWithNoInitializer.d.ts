@@ -12,6 +12,7 @@ var {c, d};          // Error, no initializer
 //// [declarationWithNoInitializer.d.ts]
 declare var a: invalid, b: invalid;
 declare var c: invalid, d: invalid;
+
 /// [Errors] ////
 
 declarationWithNoInitializer.ts(1,5): error TS1182: A destructuring declaration must have an initializer.

@@ -22,6 +22,7 @@ declare enum Test {
     D = 10,
     E = 11
 }
+
 /// [Errors] ////
 
 enumNumbering1.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

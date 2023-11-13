@@ -33,5 +33,6 @@
 +    [K4]: number;
      k4: string;
  };
+ 
  /// [Errors] ////
  

@@ -46,6 +46,7 @@ declare class C1<T, U, V> {
 declare class C2 extends C1<number, string, boolean> {
     doSomethingWithSuperProperties(): string;
 }
+
 /// [Errors] ////
 
 destructuringParameterProperties4.ts(2,31): error TS1187: A parameter property may not be declared using a binding pattern.

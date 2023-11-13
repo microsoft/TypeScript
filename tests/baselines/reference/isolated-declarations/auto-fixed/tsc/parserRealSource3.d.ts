@@ -239,6 +239,7 @@ declare namespace TypeScript {
         LastAsg = 41
     }
 }
+
 /// [Errors] ////
 
 parserRealSource3.ts(4,21): error TS6053: File 'typescript.ts' not found.

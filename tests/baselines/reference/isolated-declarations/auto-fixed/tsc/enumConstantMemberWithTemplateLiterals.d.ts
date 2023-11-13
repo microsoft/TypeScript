@@ -88,6 +88,7 @@ declare enum T7 {
     b = "11",
     c = "21"
 }
+
 /// [Errors] ////
 
 enumConstantMemberWithTemplateLiterals.ts(28,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

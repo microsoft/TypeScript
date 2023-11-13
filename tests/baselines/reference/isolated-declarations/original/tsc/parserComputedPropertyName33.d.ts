@@ -15,6 +15,7 @@ class C {
 declare class C {
     [e]: invalid;
 }
+
 /// [Errors] ////
 
 parserComputedPropertyName33.ts(3,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -9,6 +9,7 @@ var v = { [yield]: foo }
 
 //// [FunctionDeclaration8_es6.d.ts]
 declare var v: invalid;
+
 /// [Errors] ////
 
 FunctionDeclaration8_es6.ts(1,12): error TS2304: Cannot find name 'yield'.

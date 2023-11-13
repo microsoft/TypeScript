@@ -339,6 +339,7 @@ declare enum Fruit {
 interface IDisposable {
     Dispose(): void;
 }
+
 /// [Errors] ////
 
 constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2503: Cannot find namespace 'module'.

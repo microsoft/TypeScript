@@ -22,6 +22,7 @@
      getC(): any;
 @@ -16,8 +16,11 @@
  }
+ 
  /// [Errors] ////
  
  destructuringParameterProperties4.ts(2,31): error TS1187: A parameter property may not be declared using a binding pattern.

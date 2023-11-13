@@ -26,6 +26,7 @@ export interface InterpolationValue {}
 
 //// [Folder/monorepo/core/index.d.ts]
 export declare function getStyles(): invalid;
+
 /// [Errors] ////
 
 Folder/monorepo/core/index.ts(3,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

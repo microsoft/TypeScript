@@ -7,6 +7,7 @@
 +++ DTE	declarations
 @@ -233,16 +233,22 @@
  }
+ 
  /// [Errors] ////
  
  parserRealSource10.ts(4,21): error TS6053: File 'typescript.ts' not found.

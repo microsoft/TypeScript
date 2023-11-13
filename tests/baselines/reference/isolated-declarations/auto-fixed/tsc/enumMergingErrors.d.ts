@@ -112,6 +112,7 @@ declare namespace M2 {
         C = 0
     }
 }
+
 /// [Errors] ////
 
 enumMergingErrors.ts(26,22): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.

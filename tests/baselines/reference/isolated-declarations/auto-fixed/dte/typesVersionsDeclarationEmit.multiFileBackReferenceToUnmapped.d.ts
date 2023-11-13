@@ -35,9 +35,10 @@ export * from "../other";
 
 
 
-//// [main.d.ts]
+//// [/.src/main.d.ts]
 export declare const va: invalid;
 export declare const va2: invalid;
+
 /// [Errors] ////
 
 main.ts(4,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

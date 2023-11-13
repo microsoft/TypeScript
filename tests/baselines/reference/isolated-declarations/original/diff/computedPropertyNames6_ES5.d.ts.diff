@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -3,33 +3,28 @@
+@@ -3,34 +3,29 @@
  //// [computedPropertyNames6_ES5.d.ts]
  declare var p1: number | string;
  declare var p2: number | number[];
@@ -16,6 +16,7 @@
 +    [p2]: number;
 +    [p3]: number;
 +};
+ 
  /// [Errors] ////
  
 -computedPropertyNames6_ES5.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

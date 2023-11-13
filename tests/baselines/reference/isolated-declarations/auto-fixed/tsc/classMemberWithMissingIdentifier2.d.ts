@@ -13,6 +13,7 @@ class C {
 declare class C {
     : any;
 }
+
 /// [Errors] ////
 
 classMemberWithMissingIdentifier2.ts(2,11): error TS1146: Declaration expected.

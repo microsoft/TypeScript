@@ -272,6 +272,7 @@ declare const o16: {
 declare const o14: {
     f(): AsyncGenerator<number, void, unknown>;
 };
+
 /// [Errors] ////
 
 asyncGeneratorGetAccessorIsError.ts(2,17): error TS1005: '(' expected.

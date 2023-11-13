@@ -16,6 +16,7 @@ declare enum E {
     "__foo" = 1,
     bar = 2
 }
+
 /// [Errors] ////
 
 underscoreEscapedNameInEnum.ts(3,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

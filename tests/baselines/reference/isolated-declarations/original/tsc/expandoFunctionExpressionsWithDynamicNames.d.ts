@@ -19,6 +19,7 @@ expr2[s] = 0
 //// [expandoFunctionExpressionsWithDynamicNames.d.ts]
 export declare const expr: invalid;
 export declare const expr2: invalid;
+
 /// [Errors] ////
 
 expandoFunctionExpressionsWithDynamicNames.ts(5,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -26,6 +26,7 @@ export default new EnhancedPrisma();
 //// [/index.d.ts]
 declare const _default: invalid;
 export default _default;
+
 /// [Errors] ////
 
 /index.ts(4,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

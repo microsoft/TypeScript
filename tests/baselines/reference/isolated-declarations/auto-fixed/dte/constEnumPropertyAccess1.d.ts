@@ -54,6 +54,7 @@ declare class C {
     get [G.B](): number;
     set [G.B](x: number);
 }
+
 /// [Errors] ////
 
 constEnumPropertyAccess1.ts(8,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

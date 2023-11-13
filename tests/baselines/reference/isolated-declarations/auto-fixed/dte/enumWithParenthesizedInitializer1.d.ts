@@ -13,6 +13,7 @@ enum E {
 declare enum E {
     e = -3
 }
+
 /// [Errors] ////
 
 enumWithParenthesizedInitializer1.ts(2,2): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

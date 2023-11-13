@@ -13,6 +13,7 @@ function boo {
 
 //// [overloadingStaticFunctionsInFunctions.d.ts]
 declare function boo(): void;
+
 /// [Errors] ////
 
 overloadingStaticFunctionsInFunctions.ts(1,14): error TS1005: '(' expected.

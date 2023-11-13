@@ -75,6 +75,7 @@ declare namespace M {
 declare enum E {
     A
 }
+
 /// [Errors] ////
 
 methodContainingLocalFunction.ts(44,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

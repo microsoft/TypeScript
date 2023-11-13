@@ -80,6 +80,7 @@ declare const obj: {
 };
 declare const elem5: JSX.Element;
 declare const elem6: JSX.Element;
+
 /// [Errors] ////
 
 jsxComponentTypeErrors.tsx(18,11): error TS2786: 'this' cannot be used as a JSX component.

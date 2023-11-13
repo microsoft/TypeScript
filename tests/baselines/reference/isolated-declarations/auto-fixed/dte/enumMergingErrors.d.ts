@@ -112,6 +112,7 @@ declare namespace M2 {
         C = 0
     }
 }
+
 /// [Errors] ////
 
 enumMergingErrors.ts(8,22): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

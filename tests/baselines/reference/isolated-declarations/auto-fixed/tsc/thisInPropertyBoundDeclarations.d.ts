@@ -102,6 +102,7 @@ declare class B {
     };
     prop6: any;
 }
+
 /// [Errors] ////
 
 thisInPropertyBoundDeclarations.ts(64,5): error TS2527: The inferred type of 'prop6' references an inaccessible 'this' type. A type annotation is necessary.

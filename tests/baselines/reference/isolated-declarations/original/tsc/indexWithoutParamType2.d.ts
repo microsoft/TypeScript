@@ -14,6 +14,7 @@ class C {
 declare class C {
     [x]: string;
 }
+
 /// [Errors] ////
 
 indexWithoutParamType2.ts(3,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

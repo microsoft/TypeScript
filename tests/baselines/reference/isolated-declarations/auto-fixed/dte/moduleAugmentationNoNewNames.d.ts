@@ -51,6 +51,7 @@ export {};
 export declare class Observable<T> {
     filter(pred: (e: T) => boolean): Observable<T>;
 }
+
 /// [Errors] ////
 
 map.ts(11,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

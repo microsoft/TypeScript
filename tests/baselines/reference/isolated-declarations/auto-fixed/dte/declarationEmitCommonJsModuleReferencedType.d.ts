@@ -32,6 +32,7 @@ export const y: RootProps = bar();
 import { RootProps } from "root";
 export declare const x: invalid;
 export declare const y: RootProps;
+
 /// [Errors] ////
 
 r/entry.ts(3,14): error TS2742: The inferred type of 'x' cannot be named without a reference to 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.

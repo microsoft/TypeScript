@@ -81,6 +81,7 @@ declare const enum NaNOrInfinity {
     G = Infinity,// overflow
     H = NaN
 }
+
 /// [Errors] ////
 
 constEnumErrors.ts(1,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.

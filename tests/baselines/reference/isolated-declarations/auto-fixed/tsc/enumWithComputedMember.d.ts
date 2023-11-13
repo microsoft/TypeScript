@@ -18,6 +18,7 @@ declare enum A {
     Y,
     Z
 }
+
 /// [Errors] ////
 
 enumWithComputedMember.ts(4,5): error TS1061: Enum member must have initializer.

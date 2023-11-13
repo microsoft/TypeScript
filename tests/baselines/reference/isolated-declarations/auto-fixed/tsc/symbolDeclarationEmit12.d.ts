@@ -30,6 +30,7 @@ declare namespace M {
     }
     export {};
 }
+
 /// [Errors] ////
 
 symbolDeclarationEmit12.ts(9,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.

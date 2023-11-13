@@ -15,6 +15,7 @@ obj[Symbol.for];
 declare var obj: {
     [Symbol.for]: number;
 };
+
 /// [Errors] ////
 
 symbolProperty53.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.

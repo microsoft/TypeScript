@@ -25,6 +25,7 @@ declare var NUMBER2: number;
 declare var NUMBER3: number;
 declare var NUMBER4: number;
 declare var NUMBER: any;
+
 /// [Errors] ////
 
 negateOperatorInvalidOperations.ts(4,15): error TS1109: Expression expected.

@@ -61,6 +61,7 @@ declare enum E2 {
     N1 = 1000,
     C1
 }
+
 /// [Errors] ////
 
 mixedTypeEnumComparison.ts(33,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

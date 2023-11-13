@@ -216,6 +216,7 @@ declare var f9: (x: number) => any;
 declare var f10: (x: number) => any;
 declare var f11: (x: number) => any;
 declare var f12: (x: number) => any;
+
 /// [Errors] ////
 
 functionImplementations.ts(67,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type '3 | 5'.

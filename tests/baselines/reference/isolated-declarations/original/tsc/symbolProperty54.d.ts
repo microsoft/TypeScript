@@ -11,6 +11,7 @@ var obj = {
 
 //// [symbolProperty54.d.ts]
 declare var obj: invalid;
+
 /// [Errors] ////
 
 symbolProperty54.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.

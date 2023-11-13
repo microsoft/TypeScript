@@ -19,6 +19,7 @@ declare function Foo(): any;
 declare namespace M {
 }
 declare var x: any;
+
 /// [Errors] ////
 
 parserSkippedTokens16.ts(1,1): error TS2552: Cannot find name 'foo'. Did you mean 'Foo'?

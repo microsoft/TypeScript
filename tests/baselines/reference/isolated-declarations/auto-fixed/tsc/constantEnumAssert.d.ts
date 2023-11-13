@@ -138,6 +138,7 @@ declare const foo11: {
 declare const foo12: {
     a: string;
 };
+
 /// [Errors] ////
 
 constantEnumAssert.ts(73,10): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.

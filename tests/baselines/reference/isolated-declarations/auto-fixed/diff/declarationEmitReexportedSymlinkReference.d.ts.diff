@@ -13,7 +13,8 @@
 -import { MetadataAccessor } from "@raymondfeng/pkg2";
 -export declare const ADMIN: MetadataAccessor<boolean, import("@raymondfeng/pkg2").IdType>;
 +export declare const ADMIN: invalid;
-+/// [Errors] ////
++
+ /// [Errors] ////
 +
 +monorepo/pkg3/src/keys.ts(3,22): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 +

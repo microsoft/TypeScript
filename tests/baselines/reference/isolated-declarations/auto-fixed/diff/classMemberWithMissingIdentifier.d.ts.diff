@@ -13,6 +13,7 @@
 -    : any;
 +    : invalid;
  }
+ 
  /// [Errors] ////
  
  classMemberWithMissingIdentifier.ts(2,11): error TS1146: Declaration expected.

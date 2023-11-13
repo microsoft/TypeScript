@@ -95,6 +95,7 @@ export declare const arrow7: invalid;
 export declare const arrow8: invalid;
 export declare const arrow9: invalid;
 export declare const arrow10: invalid;
+
 /// [Errors] ////
 
 declarationEmitLateBoundAssignments2.ts(9,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -59,6 +59,7 @@ declare enum E2 {
 }
 declare function f1(v: E1): void;
 declare function f2(v: E2): void;
+
 /// [Errors] ////
 
 equalityWithEnumTypes.ts(9,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

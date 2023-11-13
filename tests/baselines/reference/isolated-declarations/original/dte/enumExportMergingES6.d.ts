@@ -26,6 +26,7 @@ export declare enum Animals {
 export declare enum Animals {
     CatDog
 }
+
 /// [Errors] ////
 
 enumExportMergingES6.ts(8,2): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -21,6 +21,7 @@ app.foo.bar.someFun(1);
 declare namespace app {
     function foo(): void;
 }
+
 /// [Errors] ////
 
 contextualReturnTypeOfIIFE2.ts(2,12): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

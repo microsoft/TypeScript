@@ -59,6 +59,7 @@ declare enum E2 {
 }
 declare function f1(v: E1): void;
 declare function f2(v: E2): void;
+
 /// [Errors] ////
 
 equalityWithEnumTypes.ts(14,9): error TS2367: This comparison appears to be unintentional because the types 'E1' and '0' have no overlap.

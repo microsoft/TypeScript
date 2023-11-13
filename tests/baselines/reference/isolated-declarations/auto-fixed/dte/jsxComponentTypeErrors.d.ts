@@ -77,6 +77,7 @@ declare const obj: {
 };
 declare const elem5: JSX.Element;
 declare const elem6: JSX.Element;
+
 /// [Errors] ////
 
 jsxComponentTypeErrors.tsx(10,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

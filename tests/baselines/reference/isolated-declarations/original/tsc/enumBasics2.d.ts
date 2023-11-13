@@ -35,6 +35,7 @@ declare enum Bar {
     c,// ok
     d
 }
+
 /// [Errors] ////
 
 enumBasics2.ts(4,3): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

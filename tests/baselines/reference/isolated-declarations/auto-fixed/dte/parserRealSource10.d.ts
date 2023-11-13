@@ -692,6 +692,7 @@ declare namespace TypeScript {
     var staticTokens: any;
     function initializeStaticTokens(): void;
 }
+
 /// [Errors] ////
 
 parserRealSource10.ts(4,21): error TS6053: File 'typescript.ts' not found.

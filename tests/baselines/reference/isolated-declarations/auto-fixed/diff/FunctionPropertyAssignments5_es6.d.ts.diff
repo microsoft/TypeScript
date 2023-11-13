@@ -13,6 +13,7 @@
 -    [x: number]: () => Generator<never, void, unknown>;
 -};
 +declare var v: invalid;
+ 
  /// [Errors] ////
  
 +FunctionPropertyAssignments5_es6.ts(1,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

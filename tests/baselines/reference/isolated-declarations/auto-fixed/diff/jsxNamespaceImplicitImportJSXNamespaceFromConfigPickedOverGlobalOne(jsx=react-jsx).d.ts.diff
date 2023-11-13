@@ -11,7 +11,8 @@
  //// [/index.d.ts]
 -export declare const Comp: () => import("@emotion/react/jsx-runtime").JSX.Element;
 +export declare const Comp: invalid;
-+/// [Errors] ////
++
+ /// [Errors] ////
 +
 +/index.tsx(1,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 +

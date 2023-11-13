@@ -20,6 +20,7 @@ declare var x: invalid;
 declare var y: {
     private []: string;
 };
+
 /// [Errors] ////
 
 privateIndexer2.ts(4,15): error TS1005: ']' expected.

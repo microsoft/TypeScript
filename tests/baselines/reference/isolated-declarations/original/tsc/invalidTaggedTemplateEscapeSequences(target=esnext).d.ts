@@ -52,6 +52,7 @@ declare const a11: invalid;
 declare const a12: invalid;
 declare const a13: invalid;
 declare const a14: invalid;
+
 /// [Errors] ////
 
 invalidTaggedTemplateEscapeSequences.ts(5,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

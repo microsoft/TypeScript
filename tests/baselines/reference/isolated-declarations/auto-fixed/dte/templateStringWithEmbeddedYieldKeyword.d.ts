@@ -13,6 +13,7 @@ function* gen {
 
 //// [templateStringWithEmbeddedYieldKeyword.d.ts]
 declare function gen(): invalid;
+
 /// [Errors] ////
 
 error TS2318: Cannot find global type 'IterableIterator'.

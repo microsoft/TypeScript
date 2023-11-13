@@ -22,6 +22,7 @@
  declare const dest: any[];
  declare const a4: any;
 @@ -20,52 +20,73 @@
+ 
  /// [Errors] ////
  
  noImplicitAnyDestructuringVarDeclaration.ts(1,5): error TS1182: A destructuring declaration must have an initializer.

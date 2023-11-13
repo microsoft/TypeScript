@@ -82,6 +82,7 @@ declare const enum E6 {
     f,
     g
 }
+
 /// [Errors] ////
 
 enumConstantMembers.ts(22,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

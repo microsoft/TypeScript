@@ -26,6 +26,7 @@ declare enum Foo {
 declare namespace Foo {
     var x: any;
 }
+
 /// [Errors] ////
 
 mergedDeclarations2.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

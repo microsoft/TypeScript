@@ -100,6 +100,7 @@ declare module 'bar' {
     export var q: any;
     export = n;
 }
+
 /// [Errors] ////
 
 ambientErrors.ts(2,17): error TS1039: Initializers are not allowed in ambient contexts.

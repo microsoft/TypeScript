@@ -37,6 +37,7 @@ export interface Thing {} // not exported in export map, inaccessible under new 
 
 //// [index.d.ts]
 export declare const a: invalid;
+
 /// [Errors] ////
 
 index.ts(1,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -20,6 +20,7 @@ declare enum E {
     C,
     D
 }
+
 /// [Errors] ////
 
 enumPropertyAccessBeforeInitalisation.ts(2,9): error TS2565: Property 'A' is used before being assigned.

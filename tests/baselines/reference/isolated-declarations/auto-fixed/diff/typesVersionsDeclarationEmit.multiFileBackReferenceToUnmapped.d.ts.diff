@@ -5,14 +5,15 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,5 +1,45 @@
+@@ -1,5 +1,46 @@
  
  
- //// [main.d.ts]
+ //// [/.src/main.d.ts]
 -export declare const va: import("ext").A2;
 -export declare const va2: import("ext").A2;
 +export declare const va: invalid;
 +export declare const va2: invalid;
++
 +/// [Errors] ////
 +
 +main.ts(4,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

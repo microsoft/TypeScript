@@ -27,6 +27,7 @@ declare const enum D {
     f,
     g
 }
+
 /// [Errors] ////
 
 constEnum2.ts(10,9): error TS2474: const enum member initializers must be constant expressions.

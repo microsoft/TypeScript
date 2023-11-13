@@ -64,6 +64,7 @@ declare function b1({ public: x }: {
 declare function b2({ while: y }: {
     while: any;
 }): void;
+
 /// [Errors] ////
 
 destructuringParameterDeclaration6.ts(7,18): error TS1005: ':' expected.

@@ -16,6 +16,7 @@ function foo(): Error2 {
 
 //// [/app.d.ts]
 declare function foo(): Error2;
+
 /// [Errors] ////
 
 /app.ts(1,17): error TS9008: Declaration emit for this file requires adding a type reference directive. Add a type reference directive to node to unblock declaration emit.

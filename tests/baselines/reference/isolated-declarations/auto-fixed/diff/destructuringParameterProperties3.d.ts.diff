@@ -22,6 +22,7 @@
      getC(): any;
 @@ -33,8 +33,11 @@
  declare const z_c: any;
+ 
  /// [Errors] ////
  
  destructuringParameterProperties3.ts(2,31): error TS1187: A parameter property may not be declared using a binding pattern.

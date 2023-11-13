@@ -40,6 +40,7 @@ declare var c4: any, d4: any;
 declare const dest_2: any[];
 declare const temp: any;
 declare const a5: any;
+
 /// [Errors] ////
 
 noImplicitAnyDestructuringVarDeclaration.ts(1,5): error TS1182: A destructuring declaration must have an initializer.

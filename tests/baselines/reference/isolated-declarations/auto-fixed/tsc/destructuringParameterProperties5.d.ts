@@ -46,6 +46,7 @@ declare const a_x2: any;
 declare const a_x3: any;
 declare const a_y: any;
 declare const a_z: any;
+
 /// [Errors] ////
 
 destructuringParameterProperties5.ts(5,17): error TS1187: A parameter property may not be declared using a binding pattern.

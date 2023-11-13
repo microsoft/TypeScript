@@ -63,6 +63,7 @@ export = _default;
 //// [foo8.d.ts]
 declare const _default: any;
 export = _default;
+
 /// [Errors] ////
 
 foo1.ts(2,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

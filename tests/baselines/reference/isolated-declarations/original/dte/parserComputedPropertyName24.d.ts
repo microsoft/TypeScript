@@ -13,6 +13,7 @@ class C {
 declare class C {
     set [e](v: invalid);
 }
+
 /// [Errors] ////
 
 parserComputedPropertyName24.ts(2,10): error TS2304: Cannot find name 'e'.

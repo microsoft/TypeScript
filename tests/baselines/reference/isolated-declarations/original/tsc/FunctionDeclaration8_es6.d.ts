@@ -9,6 +9,7 @@ var v = { [yield]: foo }
 
 //// [FunctionDeclaration8_es6.d.ts]
 declare var v: invalid;
+
 /// [Errors] ////
 
 FunctionDeclaration8_es6.ts(1,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

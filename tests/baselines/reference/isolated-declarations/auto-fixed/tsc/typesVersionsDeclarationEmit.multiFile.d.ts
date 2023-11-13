@@ -38,6 +38,6 @@ export function fb(): B;
 
 
 
-//// [main.d.ts]
+//// [/.src/main.d.ts]
 export declare const va: import("ext").A;
 export declare const vb: import("ext/other").B;

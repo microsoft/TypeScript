@@ -53,6 +53,7 @@ export * from './keys';
 //// [monorepo/pkg3/dist/keys.d.ts]
 import { MetadataAccessor } from "@raymondfeng/pkg2";
 export declare const ADMIN: any;
+
 /// [Errors] ////
 
 monorepo/pkg3/src/keys.ts(3,14): error TS2742: The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.

@@ -663,6 +663,7 @@ declare namespace TypeScript {
     function getTokenizationOffset(script: TypeScript.Script, position: number): number;
     function walkAST(ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void): void;
 }
+
 /// [Errors] ////
 
 parserRealSource14.ts(4,21): error TS6053: File 'typescript.ts' not found.

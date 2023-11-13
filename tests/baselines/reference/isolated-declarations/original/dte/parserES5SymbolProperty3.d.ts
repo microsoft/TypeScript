@@ -13,6 +13,7 @@ declare class C {
 declare class C {
     [Symbol.unscopables](): string;
 }
+
 /// [Errors] ////
 
 parserES5SymbolProperty3.ts(2,5): error TS1165: A computed property name in an ambient context must refer to an expression whose type is a literal type or a 'unique symbol' type.

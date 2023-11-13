@@ -124,6 +124,7 @@ declare class NoSemicolonClassD {
 declare class NoSemicolonClassE {
     ['a']: any;
 }
+
 /// [Errors] ////
 
 commonMissingSemicolons.ts(1,36): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.

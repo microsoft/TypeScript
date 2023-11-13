@@ -82,6 +82,7 @@ declare const enum E6 {
     f = Infinity,
     g = -Infinity
 }
+
 /// [Errors] ////
 
 enumConstantMembers.ts(32,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.

@@ -283,6 +283,7 @@ declare class C16 {
 declare class C14 {
     f(): AsyncGenerator<number, void, unknown>;
 }
+
 /// [Errors] ////
 
 asyncGeneratorGetAccessorIsError.ts(2,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

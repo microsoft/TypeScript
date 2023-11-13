@@ -106,6 +106,7 @@ declare namespace m {
     }
     var v: any, any: any;
 }
+
 /// [Errors] ////
 
 disallowLineTerminatorBeforeArrow.ts(67,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

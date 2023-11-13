@@ -5,9 +5,9 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -4,19 +4,16 @@
- declare var s: symbol;
+@@ -5,19 +5,16 @@
  declare var x: invalid;
+ 
  /// [Errors] ////
  
 -symbolProperty1.ts(3,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -41,6 +41,7 @@ declare namespace M {
         }
     }
 }
+
 /// [Errors] ////
 
 enumBasics3.ts(5,13): error TS2339: Property 'a' does not exist on type 'E1.a'.

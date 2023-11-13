@@ -14,6 +14,7 @@ someFunc.someProp = 'yo';
 
 //// [exportDefaultNamespace.d.ts]
 export default function someFunc(): string;
+
 /// [Errors] ////
 
 exportDefaultNamespace.ts(1,25): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

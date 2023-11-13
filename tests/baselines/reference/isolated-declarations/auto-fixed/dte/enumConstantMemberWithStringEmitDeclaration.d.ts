@@ -59,6 +59,7 @@ declare enum T6 {
     a = "1",
     b = "12"
 }
+
 /// [Errors] ////
 
 enumConstantMemberWithStringEmitDeclaration.ts(3,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

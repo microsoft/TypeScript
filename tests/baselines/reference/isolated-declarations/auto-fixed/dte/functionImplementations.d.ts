@@ -216,6 +216,7 @@ declare var f9: (x: number) => any;
 declare var f10: (x: number) => any;
 declare var f11: (x: number) => any;
 declare var f12: (x: number) => any;
+
 /// [Errors] ////
 
 functionImplementations.ts(40,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

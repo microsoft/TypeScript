@@ -80,6 +80,7 @@ declare enum T7 {
     b = "11",
     c = "21"
 }
+
 /// [Errors] ////
 
 enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts(32,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

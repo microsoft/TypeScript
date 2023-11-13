@@ -96,6 +96,7 @@ declare class C4 {
     f3(): invalid;
     f4(): () => this;
 }
+
 /// [Errors] ////
 
 declarationFiles.ts(4,20): error TS2526: A 'this' type is available only in a non-static member of a class or interface.

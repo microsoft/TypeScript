@@ -13,6 +13,7 @@ var x: {
 declare var x: {
     [Symbol.toPrimitive](): string;
 };
+
 /// [Errors] ////
 
 parserES5SymbolProperty8.ts(2,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.

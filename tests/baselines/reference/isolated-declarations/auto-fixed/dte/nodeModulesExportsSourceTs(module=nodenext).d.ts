@@ -41,6 +41,7 @@ export { x } from "./other.js";
 export interface Thing {
 }
 export declare const x: () => Thing;
+
 /// [Errors] ////
 
 error TS2468: Cannot find global value 'Promise'.

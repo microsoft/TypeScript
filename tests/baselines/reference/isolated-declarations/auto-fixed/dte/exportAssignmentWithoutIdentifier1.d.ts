@@ -17,6 +17,7 @@ export = new Greeter();
 //// [exportAssignmentWithoutIdentifier1.d.ts]
 declare const _default: invalid;
 export = _default;
+
 /// [Errors] ////
 
 exportAssignmentWithoutIdentifier1.ts(7,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

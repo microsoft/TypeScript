@@ -13,6 +13,7 @@ class C {
 declare class C {
     [e]: number;
 }
+
 /// [Errors] ////
 
 parserES5ComputedPropertyName10.ts(2,4): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

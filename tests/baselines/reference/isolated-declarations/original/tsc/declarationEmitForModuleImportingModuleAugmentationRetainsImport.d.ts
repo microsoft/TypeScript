@@ -36,6 +36,7 @@ export declare function child1(prototype: ParentThing): invalid;
 //// [parent.d.ts]
 export declare class ParentThing implements ParentThing {
 }
+
 /// [Errors] ////
 
 child1.ts(9,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

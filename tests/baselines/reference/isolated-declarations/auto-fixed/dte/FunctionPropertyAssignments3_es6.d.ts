@@ -9,6 +9,7 @@ var v = { *{ } }
 
 //// [FunctionPropertyAssignments3_es6.d.ts]
 declare var v: invalid;
+
 /// [Errors] ////
 
 FunctionPropertyAssignments3_es6.ts(1,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

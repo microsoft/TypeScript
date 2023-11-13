@@ -63,6 +63,7 @@ export = _default;
 //// [foo8.d.ts]
 declare const _default: any;
 export = _default;
+
 /// [Errors] ////
 
 foo6.ts(1,14): error TS1109: Expression expected.

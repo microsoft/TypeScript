@@ -26,6 +26,7 @@ declare enum Foo {
 declare namespace Foo {
     var x: any;
 }
+
 /// [Errors] ////
 
 mergedDeclarations2.ts(9,25): error TS2304: Cannot find name 'b'.

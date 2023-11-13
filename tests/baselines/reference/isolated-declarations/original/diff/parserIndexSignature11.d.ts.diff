@@ -14,4 +14,4 @@
      [p1: string]: any;
      [p2: string, p3: number]: any;
  }
- /// [Errors] ////
+ 

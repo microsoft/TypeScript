@@ -17,6 +17,7 @@ declare enum E {
     b = 0,
     c = 1
 }
+
 /// [Errors] ////
 
 enumWithoutInitializerAfterComputedMember.ts(3,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

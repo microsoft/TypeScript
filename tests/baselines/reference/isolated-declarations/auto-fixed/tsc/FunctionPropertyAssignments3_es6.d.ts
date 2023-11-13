@@ -11,6 +11,7 @@ var v = { *{ } }
 declare var v: {
     ""(): Generator<never, void, unknown>;
 };
+
 /// [Errors] ////
 
 FunctionPropertyAssignments3_es6.ts(1,12): error TS1003: Identifier expected.

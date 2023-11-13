@@ -22,6 +22,7 @@ declare enum U8 {
     BIT_1 = 2,
     BIT_2 = 4
 }
+
 /// [Errors] ////
 
 exactSpellingSuggestion.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

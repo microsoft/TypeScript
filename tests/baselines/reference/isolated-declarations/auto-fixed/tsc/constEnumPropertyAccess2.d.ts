@@ -36,6 +36,7 @@ declare var z: typeof G;
 declare var z1: any;
 declare var g: G;
 declare function foo(x: G): void;
+
 /// [Errors] ////
 
 constEnumPropertyAccess2.ts(13,19): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.

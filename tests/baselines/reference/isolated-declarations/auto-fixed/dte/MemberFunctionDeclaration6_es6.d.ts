@@ -13,6 +13,7 @@ class C {
 declare class C {
     foo(): invalid;
 }
+
 /// [Errors] ////
 
 MemberFunctionDeclaration6_es6.ts(2,5): error TS2391: Function implementation is missing or not immediately following the declaration.

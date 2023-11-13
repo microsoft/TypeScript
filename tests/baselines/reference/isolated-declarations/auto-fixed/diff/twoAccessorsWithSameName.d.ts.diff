@@ -17,6 +17,7 @@
  declare var y: {
      x: number;
  };
+ 
  /// [Errors] ////
 @@ -27,11 +25,12 @@
  twoAccessorsWithSameName.ts(8,9): error TS2300: Duplicate identifier 'x'.

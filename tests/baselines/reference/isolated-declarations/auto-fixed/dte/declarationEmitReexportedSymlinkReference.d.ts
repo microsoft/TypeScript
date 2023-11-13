@@ -52,6 +52,7 @@ export * from './keys';
 
 //// [monorepo/pkg3/dist/keys.d.ts]
 export declare const ADMIN: invalid;
+
 /// [Errors] ////
 
 monorepo/pkg3/src/keys.ts(3,22): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -19,6 +19,7 @@ export declare function foo(): Lib;
 
 //// [/mod2.d.ts]
 export declare const bar: invalid;
+
 /// [Errors] ////
 
 /mod1.ts(1,24): error TS9008: Declaration emit for this file requires adding a type reference directive. Add a type reference directive to lib to unblock declaration emit.

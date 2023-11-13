@@ -10,6 +10,7 @@ function f(a: any {
 
 //// [parserErrorRecovery_ParameterList1.d.ts]
 declare function f(a: any, {}: {}): invalid;
+
 /// [Errors] ////
 
 parserErrorRecovery_ParameterList1.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.

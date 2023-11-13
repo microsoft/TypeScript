@@ -84,6 +84,7 @@ declare function f(b: boolean): invalid;
 declare var test: invalid;
 declare function d(): invalid;
 declare const g: invalid;
+
 /// [Errors] ////
 
 typeFromPropertyAssignment36.ts(1,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

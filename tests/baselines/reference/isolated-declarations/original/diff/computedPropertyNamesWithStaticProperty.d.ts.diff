@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -10,15 +10,14 @@
+@@ -11,15 +11,14 @@
  /// [Errors] ////
  
  computedPropertyNamesWithStaticProperty.ts(3,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -22,7 +22,7 @@
          static staticProp = 10;
          get [C.staticProp]() {
              ~~~~~~~~~~~~~~
-@@ -28,10 +27,8 @@
+@@ -29,10 +28,8 @@
  !!! related TS2728 computedPropertyNamesWithStaticProperty.ts:1:7: 'C' is declared here.
              return "hello";
          }

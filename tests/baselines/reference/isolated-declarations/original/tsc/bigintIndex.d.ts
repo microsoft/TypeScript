@@ -52,6 +52,7 @@ declare const b: {
     [1n]: number;
 };
 declare const c: invalid;
+
 /// [Errors] ////
 
 a.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.

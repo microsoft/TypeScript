@@ -18,7 +18,8 @@
 -    "hello bye"(): void;
 -};
 +declare var v: invalid;
-+/// [Errors] ////
++
+ /// [Errors] ////
 +
 +computedPropertyNames10_ES6.ts(7,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 +computedPropertyNames10_ES6.ts(8,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

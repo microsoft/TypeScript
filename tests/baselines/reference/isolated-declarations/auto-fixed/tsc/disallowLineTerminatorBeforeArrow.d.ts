@@ -106,6 +106,7 @@ declare namespace m {
     }
     var v: any, any: any;
 }
+
 /// [Errors] ////
 
 disallowLineTerminatorBeforeArrow.ts(71,25): error TS2304: Cannot find name 'x'.

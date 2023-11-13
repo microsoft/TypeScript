@@ -13,6 +13,7 @@ class C {
 declare class C {
     (): invalid;
 }
+
 /// [Errors] ////
 
 MemberFunctionDeclaration5_es6.ts(2,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

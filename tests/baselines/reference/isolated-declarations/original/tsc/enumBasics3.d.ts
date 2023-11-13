@@ -41,6 +41,7 @@ declare namespace M {
         }
     }
 }
+
 /// [Errors] ////
 
 enumBasics3.ts(5,7): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

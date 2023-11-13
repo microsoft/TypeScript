@@ -15,7 +15,7 @@
  //// [/.src/node_modules/inner/index.d.ts]
  export { x } from "./other.js";
  
-@@ -14,21 +14,24 @@
+@@ -15,21 +15,24 @@
  
  error TS2468: Cannot find global value 'Promise'.
  index.ts(2,23): error TS2307: Cannot find module 'inner/other' or its corresponding type declarations.

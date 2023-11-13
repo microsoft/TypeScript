@@ -14,6 +14,7 @@ function boo{
 
 //// [staticsInAFunction.d.ts]
 declare function boo(): void;
+
 /// [Errors] ////
 
 staticsInAFunction.ts(1,13): error TS1005: '(' expected.

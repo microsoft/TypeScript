@@ -83,6 +83,7 @@ declare enum E {
 }
 declare const e: E;
 declare const x: E.ONE;
+
 /// [Errors] ////
 
 numericEnumMappedType.ts(25,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

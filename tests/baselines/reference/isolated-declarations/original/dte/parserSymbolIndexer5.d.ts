@@ -11,6 +11,7 @@ var x = {
 
 //// [parserSymbolIndexer5.d.ts]
 declare var x: invalid;
+
 /// [Errors] ////
 
 parserSymbolIndexer5.ts(2,6): error TS2304: Cannot find name 's'.

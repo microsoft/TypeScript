@@ -15,6 +15,7 @@ type Test = keyof typeof Foo;
 //// [indexTypeNoSubstitutionTemplateLiteral.d.ts]
 declare function Foo(): invalid;
 type Test = keyof typeof Foo;
+
 /// [Errors] ////
 
 indexTypeNoSubstitutionTemplateLiteral.ts(1,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

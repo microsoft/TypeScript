@@ -30,6 +30,7 @@ declare enum E1 {
 declare enum E1 {
     Z = 4
 }
+
 /// [Errors] ////
 
 forwardRefInEnum.ts(4,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.

@@ -9,6 +9,7 @@ function =>
 
 //// [parserEqualsGreaterThanAfterFunction1.d.ts]
 declare function (): any;
+
 /// [Errors] ////
 
 parserEqualsGreaterThanAfterFunction1.ts(1,10): error TS1003: Identifier expected.

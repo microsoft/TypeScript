@@ -14,6 +14,7 @@ declare const enum E {
     Value = 1,
     Value2 = 1
 }
+
 /// [Errors] ////
 
 preserveConstEnums.ts(2,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

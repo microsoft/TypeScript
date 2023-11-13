@@ -13,6 +13,7 @@ class C {
 declare class C {
     [public]: string;
 }
+
 /// [Errors] ////
 
 parserComputedPropertyName36.ts(2,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

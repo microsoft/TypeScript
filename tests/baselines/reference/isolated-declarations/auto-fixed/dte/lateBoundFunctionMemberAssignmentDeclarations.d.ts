@@ -15,6 +15,7 @@ const x: string = foo[_private];
 
 //// [index.d.ts]
 export declare function foo(): void;
+
 /// [Errors] ////
 
 index.ts(1,17): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

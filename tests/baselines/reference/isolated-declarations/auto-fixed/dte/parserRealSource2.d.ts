@@ -492,6 +492,7 @@ declare namespace TypeScript {
     var optimizeModuleCodeGen: boolean;
     function flagsToString(e: any, flags: number): string;
 }
+
 /// [Errors] ////
 
 parserRealSource2.ts(4,21): error TS6053: File 'typescript.ts' not found.

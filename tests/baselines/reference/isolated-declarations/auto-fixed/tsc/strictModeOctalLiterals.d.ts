@@ -15,6 +15,7 @@ const orbitol: 01 = 01
 export declare enum E {
     A = 13
 }
+
 /// [Errors] ////
 
 strictModeOctalLiterals.ts(2,14): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.

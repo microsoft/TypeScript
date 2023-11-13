@@ -30,6 +30,7 @@ declare enum E1 {
 declare enum E1 {
     Z = 4
 }
+
 /// [Errors] ////
 
 forwardRefInEnum.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

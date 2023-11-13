@@ -36,6 +36,7 @@ declare var z: typeof G;
 declare var z1: any;
 declare var g: G;
 declare function foo(x: G): void;
+
 /// [Errors] ////
 
 constEnumPropertyAccess2.ts(8,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

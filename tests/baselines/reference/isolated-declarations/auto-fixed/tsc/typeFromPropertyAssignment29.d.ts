@@ -171,6 +171,7 @@ declare var ExpandoExpr3: {
     };
 };
 declare var n: number;
+
 /// [Errors] ////
 
 typeFromPropertyAssignment29.ts(77,14): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.

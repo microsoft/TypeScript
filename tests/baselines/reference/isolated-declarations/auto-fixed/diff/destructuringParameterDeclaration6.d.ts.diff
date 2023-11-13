@@ -20,6 +20,7 @@
      public: any;
 @@ -19,8 +19,10 @@
  }): void;
+ 
  /// [Errors] ////
  
  destructuringParameterDeclaration6.ts(7,18): error TS1005: ':' expected.

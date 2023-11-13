@@ -47,6 +47,7 @@ declare class C3 {
     z: boolean;
     constructor({ x, y, z }: ObjType1);
 }
+
 /// [Errors] ////
 
 declarationEmitDestructuringParameterProperties.ts(2,17): error TS1187: A parameter property may not be declared using a binding pattern.

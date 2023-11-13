@@ -13,6 +13,7 @@ var obj = {
 declare var obj: {
     [Symbol.prototype]: number;
 };
+
 /// [Errors] ////
 
 symbolProperty54.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.

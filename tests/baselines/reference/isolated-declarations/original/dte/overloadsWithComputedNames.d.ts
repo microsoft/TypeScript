@@ -107,6 +107,7 @@ interface I3 {
     [2](): void;
     [2](): void;
 }
+
 /// [Errors] ////
 
 overloadsWithComputedNames.ts(4,5): error TS2389: Function implementation name must be '["B"]'.

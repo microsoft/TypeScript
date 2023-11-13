@@ -19,6 +19,7 @@ export declare enum SignatureFlags {
     IsStringIndexer = 2,
     IsNumberIndexer = 4
 }
+
 /// [Errors] ////
 
 parserEnum2.ts(4,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

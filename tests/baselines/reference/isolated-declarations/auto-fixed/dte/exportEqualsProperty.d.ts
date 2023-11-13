@@ -54,6 +54,7 @@ export = _default;
 
 //// [index.d.ts]
 export {};
+
 /// [Errors] ////
 
 a.ts(5,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -983,6 +983,7 @@ export declare namespace eaM {
         namespace eM { }
     }
 }
+
 /// [Errors] ////
 
 giant.ts(22,12): error TS2300: Duplicate identifier 'pgF'.

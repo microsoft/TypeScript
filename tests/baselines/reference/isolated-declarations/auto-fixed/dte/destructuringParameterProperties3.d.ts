@@ -81,6 +81,7 @@ declare const dest_1: any[];
 declare const z_a: any;
 declare const z_b: any;
 declare const z_c: any;
+
 /// [Errors] ////
 
 destructuringParameterProperties3.ts(2,31): error TS1187: A parameter property may not be declared using a binding pattern.

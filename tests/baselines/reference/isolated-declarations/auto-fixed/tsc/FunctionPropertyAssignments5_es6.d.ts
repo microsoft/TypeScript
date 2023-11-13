@@ -11,6 +11,7 @@ var v = { *[foo()](): Generator<never, void, unknown> { } }
 declare var v: {
     [x: number]: () => Generator<never, void, unknown>;
 };
+
 /// [Errors] ////
 
 FunctionPropertyAssignments5_es6.ts(1,13): error TS2304: Cannot find name 'foo'.

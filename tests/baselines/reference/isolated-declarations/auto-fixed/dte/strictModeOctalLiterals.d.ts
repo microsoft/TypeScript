@@ -15,6 +15,7 @@ const orbitol: 01 = 01
 export declare enum E {
     A = 13
 }
+
 /// [Errors] ////
 
 strictModeOctalLiterals.ts(2,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -202,6 +202,7 @@ declare var getParamType2: {
 declare var getParamType3: {
     n: string;
 };
+
 /// [Errors] ////
 
 objectLiteralGettersAndSetters.ts(65,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

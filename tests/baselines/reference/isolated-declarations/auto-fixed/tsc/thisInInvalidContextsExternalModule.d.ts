@@ -52,6 +52,7 @@ export = this; // Should be an error
 //// [thisInInvalidContextsExternalModule.d.ts]
 declare const _default: undefined;
 export = _default;
+
 /// [Errors] ////
 
 thisInInvalidContextsExternalModule.ts(9,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.

@@ -19,6 +19,7 @@ declare var p1: number | string;
 declare var p2: number | number[];
 declare var p3: string | boolean;
 declare var v: invalid;
+
 /// [Errors] ////
 
 computedPropertyNames6_ES6.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

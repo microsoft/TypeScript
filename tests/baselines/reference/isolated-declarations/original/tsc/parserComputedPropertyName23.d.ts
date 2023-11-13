@@ -13,6 +13,7 @@ declare class C {
 declare class C {
     get [e](): number;
 }
+
 /// [Errors] ////
 
 parserComputedPropertyName23.ts(2,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

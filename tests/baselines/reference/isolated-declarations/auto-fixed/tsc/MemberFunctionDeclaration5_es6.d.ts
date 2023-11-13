@@ -13,6 +13,7 @@ class C {
 declare class C {
     (): any;
 }
+
 /// [Errors] ////
 
 MemberFunctionDeclaration5_es6.ts(3,1): error TS1003: Identifier expected.

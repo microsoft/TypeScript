@@ -8,6 +8,7 @@
 @@ -8,18 +8,21 @@
      x
  }
+ 
  /// [Errors] ////
  
 +ambientEnum1.ts(7,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

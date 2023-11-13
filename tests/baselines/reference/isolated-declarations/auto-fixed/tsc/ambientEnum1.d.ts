@@ -21,6 +21,7 @@ declare enum E1 {
 declare enum E2 {
     x
 }
+
 /// [Errors] ////
 
 ambientEnum1.ts(7,13): error TS1066: In ambient enum declarations member initializer must be constant expression.

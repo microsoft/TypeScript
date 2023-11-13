@@ -5,12 +5,13 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,26 +1,29 @@
+@@ -1,27 +1,30 @@
  
  
  //// [index.d.ts]
 -export declare const a: any;
 +export declare const a: invalid;
+ 
  /// [Errors] ////
  
  error TS2468: Cannot find global value 'Promise'.

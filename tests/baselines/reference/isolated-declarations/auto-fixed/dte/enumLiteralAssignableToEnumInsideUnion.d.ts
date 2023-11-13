@@ -66,6 +66,7 @@ declare const e2: X.Foo.A | X.Foo.B | boolean;
 declare const e3: X.Foo.B | boolean;
 declare const e4: X.Foo.A | boolean;
 declare const e5: Ka.Foo | boolean;
+
 /// [Errors] ////
 
 enumLiteralAssignableToEnumInsideUnion.ts(13,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

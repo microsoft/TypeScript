@@ -22,6 +22,7 @@ declare enum U8 {
     BIT_1 = 2,
     BIT_2 = 4
 }
+
 /// [Errors] ////
 
 exactSpellingSuggestion.ts(9,4): error TS2551: Property 'bit_2' does not exist on type 'typeof U8'. Did you mean 'BIT_2'?

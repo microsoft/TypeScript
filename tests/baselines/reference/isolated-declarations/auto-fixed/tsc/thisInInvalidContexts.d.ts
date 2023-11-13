@@ -72,6 +72,7 @@ declare enum SomeEnum {
     A,// Should not be allowed
     B
 }
+
 /// [Errors] ////
 
 thisInInvalidContexts.ts(9,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.

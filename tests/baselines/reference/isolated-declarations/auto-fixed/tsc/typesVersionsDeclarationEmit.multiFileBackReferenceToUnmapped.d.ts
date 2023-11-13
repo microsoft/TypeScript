@@ -35,6 +35,6 @@ export * from "../other";
 
 
 
-//// [main.d.ts]
+//// [/.src/main.d.ts]
 export declare const va: import("ext").A2;
 export declare const va2: import("ext").A2;

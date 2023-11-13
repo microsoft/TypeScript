@@ -46,6 +46,7 @@
  declare var useC1Properties: boolean;
 @@ -39,10 +39,19 @@
  declare const c3_z: any;
+ 
  /// [Errors] ////
  
  destructuringParameterProperties1.ts(2,17): error TS1187: A parameter property may not be declared using a binding pattern.

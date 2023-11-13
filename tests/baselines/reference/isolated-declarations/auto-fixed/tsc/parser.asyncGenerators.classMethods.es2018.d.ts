@@ -282,6 +282,7 @@ declare class C16 {
 declare class C14 {
     f(): AsyncGenerator<number, void, unknown>;
 }
+
 /// [Errors] ////
 
 asyncGeneratorGetAccessorIsError.ts(2,17): error TS1005: '(' expected.

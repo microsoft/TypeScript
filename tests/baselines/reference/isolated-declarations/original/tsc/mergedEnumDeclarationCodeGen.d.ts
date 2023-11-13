@@ -21,6 +21,7 @@ declare enum E {
 declare enum E {
     c = 0
 }
+
 /// [Errors] ////
 
 mergedEnumDeclarationCodeGen.ts(3,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

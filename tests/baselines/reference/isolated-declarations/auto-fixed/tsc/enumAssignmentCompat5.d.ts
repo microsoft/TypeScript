@@ -46,6 +46,7 @@ declare let e: E;
 declare let a: E.A;
 declare let c: Computed;
 declare let ca: Computed.A;
+
 /// [Errors] ////
 
 enumAssignmentCompat5.ts(12,1): error TS2322: Type '4' is not assignable to type 'E'.

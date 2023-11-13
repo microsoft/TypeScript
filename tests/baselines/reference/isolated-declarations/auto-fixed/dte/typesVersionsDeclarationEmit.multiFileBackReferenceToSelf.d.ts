@@ -36,9 +36,10 @@ export * from "../other";
 
 
 
-//// [main.d.ts]
+//// [/.src/main.d.ts]
 export declare const va: any;
 export declare const vb: invalid;
+
 /// [Errors] ////
 
 main.ts(1,10): error TS2305: Module '"ext"' has no exported member 'fa'.

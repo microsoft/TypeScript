@@ -35,6 +35,7 @@ declare function foo3(): string;
 declare function foo4(): ({
     x: number;
 });
+
 /// [Errors] ////
 
 propertyAssignmentUseParentType3.ts(3,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

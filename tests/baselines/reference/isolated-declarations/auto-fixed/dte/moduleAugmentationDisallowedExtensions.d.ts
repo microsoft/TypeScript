@@ -91,6 +91,7 @@ export {};
 
 //// [x0.d.ts]
 export declare let a: number;
+
 /// [Errors] ////
 
 x.ts(9,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

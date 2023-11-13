@@ -18,6 +18,7 @@ interface SymbolConstructor {
     foo: string;
 }
 declare var obj: invalid;
+
 /// [Errors] ////
 
 symbolProperty58.ts(6,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

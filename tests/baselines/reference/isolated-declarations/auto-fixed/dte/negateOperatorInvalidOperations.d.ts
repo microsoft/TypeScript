@@ -25,6 +25,7 @@ declare var NUMBER2: number;
 declare var NUMBER3: number;
 declare var NUMBER4: number;
 declare var NUMBER: number;
+
 /// [Errors] ////
 
 negateOperatorInvalidOperations.ts(4,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

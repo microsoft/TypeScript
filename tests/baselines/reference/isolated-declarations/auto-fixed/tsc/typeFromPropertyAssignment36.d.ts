@@ -109,6 +109,7 @@ declare const g: {
     expando: number;
     both: string | number;
 };
+
 /// [Errors] ////
 
 typeFromPropertyAssignment36.ts(17,7): error TS2565: Property 'q' is used before being assigned.

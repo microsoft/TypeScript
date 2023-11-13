@@ -35,6 +35,7 @@ declare enum Bar {
     c,// ok
     d
 }
+
 /// [Errors] ////
 
 enumBasics2.ts(4,9): error TS2339: Property 'b' does not exist on type 'Foo.a'.

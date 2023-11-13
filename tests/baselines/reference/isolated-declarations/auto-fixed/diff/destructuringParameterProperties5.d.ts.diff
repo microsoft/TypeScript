@@ -28,6 +28,7 @@
  declare const dest: any[];
 @@ -25,11 +25,17 @@
  declare const a_z: any;
+ 
  /// [Errors] ////
  
  destructuringParameterProperties5.ts(5,17): error TS1187: A parameter property may not be declared using a binding pattern.

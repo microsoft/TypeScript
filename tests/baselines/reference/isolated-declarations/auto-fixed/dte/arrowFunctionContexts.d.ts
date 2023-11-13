@@ -137,6 +137,7 @@ declare var asserted1: any;
 declare var asserted1: any;
 declare var asserted2: any;
 declare var asserted2: any;
+
 /// [Errors] ////
 
 arrowFunctionContexts.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.

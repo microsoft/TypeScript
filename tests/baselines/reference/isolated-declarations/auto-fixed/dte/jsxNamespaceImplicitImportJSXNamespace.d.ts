@@ -107,6 +107,7 @@ export const Comp = () => <div></div>;
 
 //// [/index.d.ts]
 export declare const Comp: invalid;
+
 /// [Errors] ////
 
 /index.tsx(1,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

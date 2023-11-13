@@ -121,6 +121,7 @@ declare const leadingSeparator: invalid;
 declare const trailingSeparator = 123n;
 declare const doubleSeparator = 123456789n;
 declare const oneTwoOrThree: (x: 1n | 2n | 3n) => bigint;
+
 /// [Errors] ////
 
 parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.

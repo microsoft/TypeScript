@@ -34,6 +34,7 @@ declare var x: {
 declare var y: {
     readonly a: number;
 };
+
 /// [Errors] ////
 
 duplicateObjectLiteralProperty.ts(4,5): error TS1117: An object literal cannot have multiple properties with the same name.

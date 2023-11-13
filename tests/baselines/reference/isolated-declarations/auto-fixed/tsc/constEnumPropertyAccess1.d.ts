@@ -54,6 +54,7 @@ declare class C {
     get [G.B](): number;
     set [G.B](x: number);
 }
+
 /// [Errors] ////
 
 constEnumPropertyAccess1.ts(25,9): error TS2322: Type 'boolean' is not assignable to type 'number'.

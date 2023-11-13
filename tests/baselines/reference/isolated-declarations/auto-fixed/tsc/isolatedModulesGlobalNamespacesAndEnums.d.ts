@@ -74,6 +74,7 @@ declare namespace Uninstantiated {
 declare namespace Ambient {
     const x: number;
 }
+
 /// [Errors] ////
 
 enum2.ts(3,9): error TS1281: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.

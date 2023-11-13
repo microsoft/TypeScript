@@ -11,6 +11,7 @@ var x = function (): void { }
 
 //// [parserNoASIOnCallAfterFunctionExpression1.d.ts]
 declare var x: any;
+
 /// [Errors] ////
 
 parserNoASIOnCallAfterFunctionExpression1.ts(2,2): error TS2554: Expected 0 arguments, but got 1.

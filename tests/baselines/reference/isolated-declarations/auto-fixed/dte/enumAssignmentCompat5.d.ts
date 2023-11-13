@@ -46,6 +46,7 @@ declare let e: E;
 declare let a: E.A;
 declare let c: Computed;
 declare let ca: Computed.A;
+
 /// [Errors] ////
 
 enumAssignmentCompat5.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -13,6 +13,7 @@ enum E {
 declare enum E {
     e = -3
 }
+
 /// [Errors] ////
 
 enumWithParenthesizedInitializer1.ts(3,1): error TS1005: ')' expected.

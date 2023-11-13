@@ -91,6 +91,7 @@ export {};
 
 //// [x0.d.ts]
 export declare let a: number;
+
 /// [Errors] ////
 
 x.ts(17,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.

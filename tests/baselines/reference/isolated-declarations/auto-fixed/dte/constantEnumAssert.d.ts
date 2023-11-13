@@ -138,6 +138,7 @@ declare const foo11: {
 declare const foo12: {
     a: string;
 };
+
 /// [Errors] ////
 
 constantEnumAssert.ts(13,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

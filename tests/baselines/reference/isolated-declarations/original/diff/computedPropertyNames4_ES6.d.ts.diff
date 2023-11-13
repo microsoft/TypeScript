@@ -5,9 +5,9 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -6,28 +6,24 @@
- declare var a: any;
+@@ -7,28 +7,24 @@
  declare var v: invalid;
+ 
  /// [Errors] ////
  
 -computedPropertyNames4_ES6.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -37,7 +37,7 @@
          [s + s]: 1,
          ~~~~~~~
  !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-@@ -39,10 +35,8 @@
+@@ -40,10 +36,8 @@
  !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
          [""]: 0,
          [0]: 0,

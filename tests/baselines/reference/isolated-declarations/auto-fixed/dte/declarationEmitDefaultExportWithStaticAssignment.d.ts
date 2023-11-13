@@ -55,6 +55,7 @@ export default function Example(): void;
 
 //// [index4.d.ts]
 export declare function C(): any;
+
 /// [Errors] ////
 
 index1.ts(2,25): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

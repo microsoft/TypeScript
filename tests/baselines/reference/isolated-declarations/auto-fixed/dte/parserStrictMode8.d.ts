@@ -11,6 +11,7 @@ function eval() {
 
 //// [parserStrictMode8.d.ts]
 declare function eval(): invalid;
+
 /// [Errors] ////
 
 parserStrictMode8.ts(2,10): error TS1100: Invalid use of 'eval' in strict mode.

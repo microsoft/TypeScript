@@ -19,6 +19,7 @@ declare namespace x {
 declare enum x {
     z
 }
+
 /// [Errors] ////
 
 enumWithExport.ts(5,3): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

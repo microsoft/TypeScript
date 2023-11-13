@@ -17,6 +17,7 @@ var x = function (): number {
 
 //// [b.d.ts]
 declare var x: invalid;
+
 /// [Errors] ////
 
 error TS6504: File 'a.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?

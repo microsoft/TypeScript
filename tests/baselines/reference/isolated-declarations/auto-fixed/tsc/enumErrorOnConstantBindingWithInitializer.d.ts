@@ -28,6 +28,7 @@ declare const value: string | number;
 declare enum E {
     test
 }
+
 /// [Errors] ////
 
 enumErrorOnConstantBindingWithInitializer.ts(7,7): error TS2322: Type 'string | number | undefined' is not assignable to type 'string | number'.

@@ -15,6 +15,7 @@ obj[Symbol.nonsense];
 
 //// [symbolProperty52.d.ts]
 declare var obj: invalid;
+
 /// [Errors] ////
 
 symbolProperty52.ts(2,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

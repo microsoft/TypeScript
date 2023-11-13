@@ -140,6 +140,7 @@ declare enum E9 {
 }
 declare var doNotPropagate: (E8 | E7 | E4 | E3)[];
 declare var doPropagate: (E9 | E6 | E5)[];
+
 /// [Errors] ////
 
 enumBasics.ts(33,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
