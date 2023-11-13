@@ -157,7 +157,6 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile, host: Isolate
     setExternalModuleIndicator(file);
     file.impliedNodeFormat = getImpliedNodeFormatForFile(
         toPath(file.fileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host)),
-        // toPath(file.resolvedPath, /*basePath*/ undefined, hostGetCanonicalFileName(host)),
         /*packageJsonInfoCache*/ undefined,
         host,
         options,
