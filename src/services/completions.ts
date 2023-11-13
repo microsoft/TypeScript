@@ -5654,6 +5654,11 @@ function getImportStatementCompletionInfo(contextToken: Node, sourceFile: Source
             }
             return undefined;
         }
+        if (isExportDeclaration(parent) && contextToken.kind === SyntaxKind.AsteriskToken || isNamedExports(parent) && contextToken.kind === SyntaxKind.CloseBraceToken) {
+            isKeywordOnlyCompletion = true;
+            keywordCompletion = SyntaxKind.FromKeyword;
+            return undefined;
+        }
         if (isImportKeyword(contextToken) && isSourceFile(parent)) {
             // A lone import keyword with nothing following it does not parse as a statement at all
             keywordCompletion = SyntaxKind.TypeKeyword;
