@@ -1,5 +1,0 @@
-/build
-/node_modules
-/src/*.tsbuildinfo
-/tests/actual
-/tsc-tests

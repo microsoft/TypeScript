@@ -48,9 +48,6 @@
         "internal/**",
         "**/*.generated.*",
         "scripts/*.d.*",
-        "external-declarations/tsc-tests/**",
-        "external-declarations/tests/**",
-        "external-declarations/fixer-test/**"
     ],
     // Note: if adding new languages, make sure settings.template.json is updated too.
     "plugins": [
