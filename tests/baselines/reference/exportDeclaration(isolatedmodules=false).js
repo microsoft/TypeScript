@@ -31,7 +31,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 new A();
 //// [c.js]
 "use strict";
-module.exports = A;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [d.js]
 "use strict";
-module.exports = A;
+Object.defineProperty(exports, "__esModule", { value: true });

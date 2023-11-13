@@ -47585,7 +47585,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 );
             case SyntaxKind.ExportAssignment:
                 return (node as ExportAssignment).expression && (node as ExportAssignment).expression.kind === SyntaxKind.Identifier ?
-                    isAliasResolvedToValue(getSymbolOfDeclaration(node as ExportAssignment)) :
+                    isAliasResolvedToValue(getSymbolOfDeclaration(node as ExportAssignment), /*excludeTypeOnlyValues*/ true) :
                     true;
         }
         return false;
