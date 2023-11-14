@@ -37,20 +37,15 @@ describe("unittests:: tsserver:: codeFix::", () => {
     }
     it("install package", () => {
         const { host, session, actions } = setup();
-        try {
-            actions.commands?.forEach(command =>
-                session.executeCommandSeq<ts.server.protocol.ApplyCodeActionCommandRequest>({
-                    command: ts.server.protocol.CommandTypes.ApplyCodeActionCommand,
-                    arguments: {
-                        command,
-                    },
-                })
-            );
-            host.runPendingInstalls();
-        }
-        catch (e) {
-            session.logger.log(e.message);
-        }
+        actions.commands?.forEach(command =>
+            session.executeCommandSeq<ts.server.protocol.ApplyCodeActionCommandRequest>({
+                command: ts.server.protocol.CommandTypes.ApplyCodeActionCommand,
+                arguments: {
+                    command,
+                },
+            })
+        );
+        host.runPendingInstalls();
         baselineTsserverLogs("codeFix", "install package", session);
     });
 

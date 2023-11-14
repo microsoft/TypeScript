@@ -233,7 +233,7 @@ export abstract class TypingsInstaller {
 
     /** @internal */
     installPackage(req: InstallPackageRequest) {
-        const { fileName, packageName, projectName, projectRootPath } = req;
+        const { fileName, packageName, projectName, projectRootPath, id } = req;
         const cwd = forEachAncestorDirectory(getDirectoryPath(fileName), directory => {
             if (this.installTypingHost.fileExists(combinePaths(directory, "package.json"))) {
                 return directory;
@@ -247,6 +247,7 @@ export abstract class TypingsInstaller {
                 const response: PackageInstalledResponse = {
                     kind: ActionPackageInstalled,
                     projectName,
+                    id,
                     success,
                     message,
                 };
@@ -257,6 +258,7 @@ export abstract class TypingsInstaller {
             const response: PackageInstalledResponse = {
                 kind: ActionPackageInstalled,
                 projectName,
+                id,
                 success: false,
                 message: "Could not determine a project root path.",
             };

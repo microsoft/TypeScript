@@ -317,6 +317,7 @@ TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "action::packageInstalled",
       "projectName": "/home/src/projects/project/tsconfig.json",
+      "id": 1,
       "success": true,
       "message": "Package @types/node installed."
     }
@@ -328,6 +329,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "kind": "action::packageInstalled",
         "projectName": "/home/src/projects/project/tsconfig.json",
+        "id": 1,
         "success": true,
         "message": "Package @types/node installed."
       }
@@ -377,6 +379,7 @@ TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "action::packageInstalled",
       "projectName": "/home/src/projects/project/tsconfig.json",
+      "id": 2,
       "success": true,
       "message": "Package @types/node installed."
     }
@@ -388,6 +391,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "kind": "action::packageInstalled",
         "projectName": "/home/src/projects/project/tsconfig.json",
+        "id": 2,
         "success": true,
         "message": "Package @types/node installed."
       }
@@ -437,6 +441,7 @@ TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "action::packageInstalled",
       "projectName": "/home/src/projects/project/tsconfig.json",
+      "id": 3,
       "success": true,
       "message": "Package @types/vscode installed."
     }
@@ -448,6 +453,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "kind": "action::packageInstalled",
         "projectName": "/home/src/projects/project/tsconfig.json",
+        "id": 3,
         "success": true,
         "message": "Package @types/vscode installed."
       }
