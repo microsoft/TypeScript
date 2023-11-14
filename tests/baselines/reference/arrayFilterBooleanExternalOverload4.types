@@ -49,37 +49,37 @@ const t11 = (0 as any as F2<1,1>)(id(),id());
 >id : ID
 
 const t12 = (0 as any as F2<1,2>)(id(),id());
->t12 : never
->(0 as any as F2<1,2>)(id(),id()) : never
+>t12 : 19
+>(0 as any as F2<1,2>)(id(),id()) : 19
 >(0 as any as F2<1,2>) : F2<1, 2>
 >0 as any as F2<1,2> : F2<1, 2>
 >0 as any : any
 >0 : 0
 >id() : (i: 1) => 1
 >id : ID
->id() : (i: 1) => 1
+>id() : (i: 2) => 2
 >id : ID
 
 const t21 = (0 as any as F2<2,1>)(id(),id());
->t21 : never
->(0 as any as F2<2,1>)(id(),id()) : never
+>t21 : 91
+>(0 as any as F2<2,1>)(id(),id()) : 91
 >(0 as any as F2<2,1>) : F2<2, 1>
 >0 as any as F2<2,1> : F2<2, 1>
 >0 as any : any
 >0 : 0
->id() : (i: 1) => 1
+>id() : (i: 2) => 2
 >id : ID
 >id() : (i: 1) => 1
 >id : ID
 
 const t22 = (0 as any as F2<2,2>)(id(),id());
->t22 : never
->(0 as any as F2<2,2>)(id(),id()) : never
+>t22 : 99
+>(0 as any as F2<2,2>)(id(),id()) : 99
 >(0 as any as F2<2,2>) : F2<2, 2>
 >0 as any as F2<2,2> : F2<2, 2>
 >0 as any : any
 >0 : 0
->id() : (i: 1) => 1
+>id() : (i: 2) => 2
 >id : ID
 >id() : (i: 2) => 2
 >id : ID
@@ -89,15 +89,15 @@ t11 satisfies 11;
 >t11 : 11
 
 t12 satisfies 19;
->t12 satisfies 19 : never
->t12 : never
+>t12 satisfies 19 : 19
+>t12 : 19
 
 t21 satisfies 91;
->t21 satisfies 91 : never
->t21 : never
+>t21 satisfies 91 : 91
+>t21 : 91
 
 t22 satisfies 99;
->t22 satisfies 99 : never
->t22 : never
+>t22 satisfies 99 : 99
+>t22 : 99
 
 

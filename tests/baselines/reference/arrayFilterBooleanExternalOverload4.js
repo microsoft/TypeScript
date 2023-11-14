@@ -49,6 +49,6 @@ interface F2<T extends number, U extends number> {
 type ID = <I>() => (i: I) => I;
 declare const id: ID;
 declare const t11: 11;
-declare const t12: never;
-declare const t21: never;
-declare const t22: never;
+declare const t12: 19;
+declare const t21: 91;
+declare const t22: 99;

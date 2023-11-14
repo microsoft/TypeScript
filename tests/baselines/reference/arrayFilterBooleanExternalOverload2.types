@@ -72,7 +72,7 @@ declare const maybe: boolean;
 >'bar' : "bar"
 >undefined : undefined
 >filter : { <S extends string | undefined>(predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => unknown, thisArg?: any): (string | undefined)[]; (predicate: BooleanConstructor & { prototype: unique symbol; }): string[]; }
->id() : (t: unknown) => boolean
+>id() : (t: string | undefined) => boolean
 >id : <T>() => (t: T) => boolean
 
     result2;

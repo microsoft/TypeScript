@@ -1487,6 +1487,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var lastGetCombinedModifierFlagsNode: Declaration | undefined;
     var lastGetCombinedModifierFlagsResult = ModifierFlags.None;
 
+    var chooseOverloadRecursionLevel = -1; // #56013
+    var chooseOverloadFlushNodesSignaturesReq: (Set<Node> | undefined)[] = []; // #56013
+
     // for public members that accept a Node or one of its subtypes, we must guard against
     // synthetic nodes created during transformations by calling `getParseTreeNode`.
     // for most of these, we perform the guard only on `checker` to avoid any possible
@@ -34310,69 +34313,50 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function chooseOverload(candidates: Signature[], relation: Map<string, RelationComparisonResult>, isSingleNonGenericCandidate: boolean, signatureHelpTrailingComma = false) {
-            candidatesForArgumentError = undefined;
-            candidateForArgumentArityError = undefined;
-            candidateForTypeArgumentError = undefined;
+            chooseOverloadRecursionLevel++; // #56013
+            chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel] = undefined;
+            const result = (() => {
+                candidatesForArgumentError = undefined;
+                candidateForArgumentArityError = undefined;
+                candidateForTypeArgumentError = undefined;
 
-            if (isSingleNonGenericCandidate) {
-                const candidate = candidates[0];
-                if (some(typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
-                    return undefined;
-                }
-                if (getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
-                    candidatesForArgumentError = [candidate];
-                    return undefined;
-                }
-                return candidate;
-            }
-
-            for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
-                const candidate = candidates[candidateIndex];
-                if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
-                    continue;
-                }
-
-                let checkCandidate: Signature;
-                let inferenceContext: InferenceContext | undefined;
-
-                if (candidate.typeParameters) {
-                    let typeArgumentTypes: Type[] | undefined;
-                    if (some(typeArguments)) {
-                        typeArgumentTypes = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
-                        if (!typeArgumentTypes) {
-                            candidateForTypeArgumentError = candidate;
-                            continue;
-                        }
+                if (isSingleNonGenericCandidate) {
+                    const candidate = candidates[0];
+                    if (some(typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
+                        return undefined;
                     }
-                    else {
-                        inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-                        typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
-                        argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
+                    if (getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                        candidatesForArgumentError = [candidate];
+                        return undefined;
                     }
-                    checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
-                    // If the original signature has a generic rest type, instantiation may produce a
-                    // signature with different arity and we need to perform another arity check.
-                    if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
-                        candidateForArgumentArityError = checkCandidate;
+                    return candidate;
+                }
+
+                for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
+                    if (candidateIndex > 0) chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel] = new Set(); // #56013
+                    const candidate = candidates[candidateIndex];
+                    if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                         continue;
                     }
-                }
-                else {
-                    checkCandidate = candidate;
-                }
-                if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
-                    // Give preference to error candidates that have no rest parameters (as they are more specific)
-                    (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
-                    continue;
-                }
-                if (argCheckMode) {
-                    // If one or more context sensitive arguments were excluded, we start including
-                    // them now (and keeping do so for any subsequent candidates) and perform a second
-                    // round of type inference and applicability checking for this particular candidate.
-                    argCheckMode = CheckMode.Normal;
-                    if (inferenceContext) {
-                        const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
-                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
+
+                    let checkCandidate: Signature;
+                    let inferenceContext: InferenceContext | undefined;
+
+                    if (candidate.typeParameters) {
+                        let typeArgumentTypes: Type[] | undefined;
+                        if (some(typeArguments)) {
+                            typeArgumentTypes = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
+                            if (!typeArgumentTypes) {
+                                candidateForTypeArgumentError = candidate;
+                                continue;
+                            }
+                        }
+                        else {
+                            inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                            typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
+                            argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
+                        }
+                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
                         // If the original signature has a generic rest type, instantiation may produce a
                         // signature with different arity and we need to perform another arity check.
                         if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
@@ -34380,17 +34364,44 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             continue;
                         }
                     }
+                    else {
+                        checkCandidate = candidate;
+                    }
                     if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
                         (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                         continue;
                     }
+                    if (argCheckMode) {
+                        // If one or more context sensitive arguments were excluded, we start including
+                        // them now (and keeping do so for any subsequent candidates) and perform a second
+                        // round of type inference and applicability checking for this particular candidate.
+                        argCheckMode = CheckMode.Normal;
+                        if (inferenceContext) {
+                            const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
+                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
+                            // If the original signature has a generic rest type, instantiation may produce a
+                            // signature with different arity and we need to perform another arity check.
+                            if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
+                                candidateForArgumentArityError = checkCandidate;
+                                continue;
+                            }
+                        }
+                        if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                            // Give preference to error candidates that have no rest parameters (as they are more specific)
+                            (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
+                            continue;
+                        }
+                    }
+                    candidates[candidateIndex] = checkCandidate;
+                    return checkCandidate;
                 }
-                candidates[candidateIndex] = checkCandidate;
-                return checkCandidate;
-            }
 
-            return undefined;
+                return undefined;
+            })();
+            chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel] = undefined;
+            chooseOverloadRecursionLevel--;
+            return result;
         }
     }
 
@@ -35159,7 +35170,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // since resolving such signature leads to resolving the potential outer signature, its arguments and thus the very same signature
             // it's possible that this inner resolution sets the resolvedSignature first.
             // In such a case we ignore the local result and reuse the correct one that was cached.
-            if (links.resolvedSignature !== resolvingSignature) {
+            // [cph 56013] This is buggy - links.resolvedSignature could be `undefined`. Unfortunately flow did not warn us.
+            // if (links.resolvedSignature !== resolvingSignature) {
+            //     result = links.resolvedSignature;
+            // }
+            if (links.resolvedSignature /* #56013 */ && links.resolvedSignature !== resolvingSignature) {
                 result = links.resolvedSignature;
             }
             // If signature resolution originated in control flow type analysis (for example to compute the
@@ -35167,6 +35182,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // types from the control flow analysis.
             links.resolvedSignature = flowLoopStart === flowLoopCount ? result : cached;
         }
+        Debug.assert(result); // [cph] #56013
         return result;
     }
 
@@ -35361,6 +35377,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkDeprecatedSignature(signature: Signature, node: CallLikeExpression) {
+        Debug.assert(signature);
         if (signature.flags & SignatureFlags.IsSignatureCandidateForOverloadFailure) return;
         if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
             const suggestionNode = getDeprecatedSuggestionNode(node);
@@ -38932,6 +38949,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const saveCurrentNode = currentNode;
         currentNode = node;
         instantiationCount = 0;
+        // #56013
+        if (node.kind === SyntaxKind.CallExpression && chooseOverloadRecursionLevel >= 0) {
+            let setOfNode: Set<Node> | undefined;
+            if (chooseOverloadRecursionLevel >= 0 && (setOfNode = chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel])) {
+                if (!setOfNode.has(node)) {
+                    getNodeLinks(node).resolvedSignature = undefined;
+                    setOfNode.add(node);
+                }
+            }
+        }
         const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
         const type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
         if (isConstEnumObjectType(type)) {
