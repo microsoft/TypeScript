@@ -1804,6 +1804,7 @@ function nodeModuleNameResolverWorker(
     const failedLookupLocations: string[] = [];
     const affectingLocations: string[] = [];
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+    const originalConditions = conditions;
     conditions ??= getConditions(
         compilerOptions,
         moduleResolution === ModuleResolutionKind.Bundler || moduleResolution === ModuleResolutionKind.Node10
@@ -1864,6 +1865,20 @@ function nodeModuleNameResolverWorker(
         if (diagnosticResult?.value?.isExternalLibraryImport) {
             legacyResult = diagnosticResult.value.resolved.path;
         }
+    }
+
+    if (!compilerOptions.noDtsResolution && result?.value?.isExternalLibraryImport && result.value.resolved.extension === Extension.Dts) {
+        resolveModuleName(
+            moduleName,
+            combinePaths(containingDirectory, "__noDtsResolution__.ts"),
+            { ...compilerOptions, noDtsResolution: true },
+            host,
+            cache,
+            redirectedReference,
+            originalConditions
+                ? (features & NodeResolutionFeatures.EsmMode ? ModuleKind.ESNext : ModuleKind.CommonJS)
+                : undefined,
+        );
     }
 
     return createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
