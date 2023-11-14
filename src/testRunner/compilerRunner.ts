@@ -699,7 +699,9 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
             }
         }
         else {
-            transformSucceeded = fixTestFiles(env.fileSystem, env.programFileNames, env.compilerOptions);
+            const fixerOptions = ts.cloneCompilerOptions(env.compilerOptions);
+            fixerOptions.isolatedDeclarations = true;
+            transformSucceeded = fixTestFiles(env.fileSystem, env.programFileNames, fixerOptions);
             let cachedTest = "// @hash: " + hash + "\n";
 
             if (!transformSucceeded) {
