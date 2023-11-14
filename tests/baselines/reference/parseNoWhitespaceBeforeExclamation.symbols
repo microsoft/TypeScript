@@ -11,7 +11,31 @@ value !instanceof String;
 >value : Symbol(value, Decl(parseNoWhitespaceBeforeExclamation.ts, 0, 11))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
+value ! instanceof String
+>value : Symbol(value, Decl(parseNoWhitespaceBeforeExclamation.ts, 0, 11))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+value/* this is a comment */!instanceof String;
+>value : Symbol(value, Decl(parseNoWhitespaceBeforeExclamation.ts, 0, 11))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
 value/* this is a comment */! instanceof String;
+>value : Symbol(value, Decl(parseNoWhitespaceBeforeExclamation.ts, 0, 11))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+value !in String;
+>value : Symbol(value, Decl(parseNoWhitespaceBeforeExclamation.ts, 0, 11))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+value ! in String
+>value : Symbol(value, Decl(parseNoWhitespaceBeforeExclamation.ts, 0, 11))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+value/* this is a comment */!in String;
+>value : Symbol(value, Decl(parseNoWhitespaceBeforeExclamation.ts, 0, 11))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+value/* this is a comment */! in String;
 >value : Symbol(value, Decl(parseNoWhitespaceBeforeExclamation.ts, 0, 11))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 

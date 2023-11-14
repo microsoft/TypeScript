@@ -14,8 +14,44 @@ value !instanceof String;
 >value : any
 >String : StringConstructor
 
+value ! instanceof String
+>value ! instanceof String : boolean
+>value ! : any
+>value : any
+>String : StringConstructor
+
+value/* this is a comment */!instanceof String;
+>value/* this is a comment */!instanceof String : boolean
+>value/* this is a comment */! : any
+>value : any
+>String : StringConstructor
+
 value/* this is a comment */! instanceof String;
 >value/* this is a comment */! instanceof String : boolean
+>value/* this is a comment */! : any
+>value : any
+>String : StringConstructor
+
+value !in String;
+>value !in String : boolean
+>value ! : any
+>value : any
+>String : StringConstructor
+
+value ! in String
+>value ! in String : boolean
+>value ! : any
+>value : any
+>String : StringConstructor
+
+value/* this is a comment */!in String;
+>value/* this is a comment */!in String : boolean
+>value/* this is a comment */! : any
+>value : any
+>String : StringConstructor
+
+value/* this is a comment */! in String;
+>value/* this is a comment */! in String : boolean
 >value/* this is a comment */! : any
 >value : any
 >String : StringConstructor
