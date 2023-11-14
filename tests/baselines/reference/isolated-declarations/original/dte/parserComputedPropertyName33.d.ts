@@ -11,10 +11,11 @@ class C {
 
 
 
-//// [/.src/parserComputedPropertyName33.d.ts]
+//// [parserComputedPropertyName33.d.ts]
 declare class C {
     [e]: invalid;
 }
+
 /// [Errors] ////
 
 parserComputedPropertyName33.ts(3,6): error TS2304: Cannot find name 'e'.

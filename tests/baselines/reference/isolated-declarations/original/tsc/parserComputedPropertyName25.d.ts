@@ -11,10 +11,11 @@ class C {
 
 
 
-//// [/.src/parserComputedPropertyName25.d.ts]
+//// [parserComputedPropertyName25.d.ts]
 declare class C {
     [e]: invalid;
 }
+
 /// [Errors] ////
 
 parserComputedPropertyName25.ts(3,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

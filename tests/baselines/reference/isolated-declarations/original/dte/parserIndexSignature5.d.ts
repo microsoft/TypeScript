@@ -9,10 +9,11 @@ interface I {
 
 
 
-//// [/.src/parserIndexSignature5.d.ts]
+//// [parserIndexSignature5.d.ts]
 interface I {
     [a]: any;
 }
+
 /// [Errors] ////
 
 parserIndexSignature5.ts(2,3): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.

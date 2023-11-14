@@ -11,11 +11,12 @@ interface I {
 
 
 
-//// [/.src/parserIndexSignature11.d.ts]
+//// [parserIndexSignature11.d.ts]
 interface I {
     [p1: string]: any;
     [p2: string, p3: number]: any;
 }
+
 /// [Errors] ////
 
 parserIndexSignature11.ts(2,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.

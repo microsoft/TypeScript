@@ -9829,16 +9829,12 @@ declare namespace ts {
      * @param context A lexical environment context for the visitor.
      */
     function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
-    function emitDeclarationsForProject(projectPath: string, files: string[] | undefined, options: CompilerOptions, host: CompilerHost): string;
-    function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions): (file: string, host: CompilerHost) => {
-        output?: undefined;
-        diagnostics?: undefined;
-    } | {
-        output: string;
-        diagnostics: Diagnostic[];
-    };
-    function emitDeclarationsForFile(sourceFile: SourceFile, options: CompilerOptions): {
-        code: string;
+    function createEmitDeclarationHost(options: CompilerOptions, sys: System, commonSourceDirectory?: string): IsolatedEmitHost;
+    function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedEmitHost): {
+        declaration: string;
+        declarationPath: string;
+        declarationMap: string | undefined;
+        declarationMapPath: string | undefined;
         diagnostics: Diagnostic[];
     };
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;

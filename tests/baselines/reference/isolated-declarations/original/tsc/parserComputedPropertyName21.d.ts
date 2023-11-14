@@ -9,9 +9,10 @@ interface I {
 
 
 
-//// [/.src/parserComputedPropertyName21.d.ts]
+//// [parserComputedPropertyName21.d.ts]
 interface I {
 }
+
 /// [Errors] ////
 
 parserComputedPropertyName21.ts(2,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.

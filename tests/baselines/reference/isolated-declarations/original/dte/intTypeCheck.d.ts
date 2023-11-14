@@ -211,7 +211,7 @@ var obj87: i8 = new {};
 
 
 
-//// [/.src/intTypeCheck.d.ts]
+//// [intTypeCheck.d.ts]
 interface i1 {
     p: any;
     p1?: any;
@@ -369,6 +369,7 @@ declare var obj83: i8;
 declare var obj85: i8;
 declare var obj86: i8;
 declare var obj87: i8;
+
 /// [Errors] ////
 
 intTypeCheck.ts(9,8): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

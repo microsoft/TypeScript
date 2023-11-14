@@ -22,7 +22,7 @@ class C {
 
 
 
-//// [/.src/computedPropertyNames12_ES5.d.ts]
+//// [computedPropertyNames12_ES5.d.ts]
 declare var s: string;
 declare var n: number;
 declare var a: any;
@@ -34,6 +34,7 @@ declare class C {
     [a]: number;
     [`hello bye`]: number;
 }
+
 /// [Errors] ////
 
 computedPropertyNames12_ES5.ts(5,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

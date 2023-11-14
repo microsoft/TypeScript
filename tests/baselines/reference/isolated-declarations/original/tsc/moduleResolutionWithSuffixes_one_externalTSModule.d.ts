@@ -14,6 +14,7 @@ export function base() {}
 
 //// [/bin/test.d.ts]
 export {};
+
 /// [Errors] ////
 
 /node_modules/some-library/index.ios.ts(1,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

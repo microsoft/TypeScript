@@ -1,0 +1,37 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFileBackReferenceToSelf.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,23 +1,27 @@
+ 
+ 
+ //// [/.src/main.d.ts]
+ export declare const va: any;
+-export declare const vb: import("ext/other").B;
++export declare const vb: invalid;
+ //# sourceMappingURL=main.d.ts.map
++
+ /// [Errors] ////
+ 
+ main.ts(1,10): error TS2305: Module '"ext"' has no exported member 'fa'.
++main.ts(5,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ 
+ 
+-==== main.ts (1 errors) ====
++==== main.ts (2 errors) ====
+     import { fa } from "ext";
+              ~~
+ !!! error TS2305: Module '"ext"' has no exported member 'fa'.
+     import { fb } from "ext/other";
+     
+     export const va: any = fa();
+     export const vb = fb();
++                      ~~~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+     
+ ==== node_modules/ext/package.json (0 errors) ====
+     {
+         "name": "ext",

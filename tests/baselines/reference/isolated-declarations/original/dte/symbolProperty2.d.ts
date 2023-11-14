@@ -14,9 +14,10 @@ var x = {
 
 
 
-//// [/.src/symbolProperty2.d.ts]
+//// [symbolProperty2.d.ts]
 declare var s: invalid;
 declare var x: invalid;
+
 /// [Errors] ////
 
 symbolProperty2.ts(1,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

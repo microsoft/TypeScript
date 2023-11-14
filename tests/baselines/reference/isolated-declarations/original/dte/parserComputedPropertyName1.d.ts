@@ -7,8 +7,9 @@ var v = { [e] };
 
 
 
-//// [/.src/parserComputedPropertyName1.d.ts]
+//// [parserComputedPropertyName1.d.ts]
 declare var v: invalid;
+
 /// [Errors] ////
 
 parserComputedPropertyName1.ts(1,12): error TS2304: Cannot find name 'e'.

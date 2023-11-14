@@ -14,7 +14,7 @@ var v = {
 
 
 
-//// [/.src/computedPropertyNames6_ES5.d.ts]
+//// [computedPropertyNames6_ES5.d.ts]
 declare var p1: number | string;
 declare var p2: number | number[];
 declare var p3: string | boolean;
@@ -23,6 +23,7 @@ declare var v: {
     [p2]: number;
     [p3]: number;
 };
+
 /// [Errors] ////
 
 computedPropertyNames6_ES5.ts(6,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.

@@ -20,6 +20,7 @@ declare namespace NS {
 //// [/src/index.d.ts]
 declare class Src implements NS.Dep {
 }
+
 /// [Errors] ////
 
 /src/index.ts(1,22): error TS9008: Declaration emit for this file requires adding a type reference directive. Add a type reference directive to dep to unblock declaration emit.

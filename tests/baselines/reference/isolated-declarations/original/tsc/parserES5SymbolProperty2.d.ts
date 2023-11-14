@@ -9,9 +9,10 @@ interface I {
 
 
 
-//// [/.src/parserES5SymbolProperty2.d.ts]
+//// [parserES5SymbolProperty2.d.ts]
 interface I {
 }
+
 /// [Errors] ////
 
 parserES5SymbolProperty2.ts(2,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.

@@ -5,9 +5,9 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -3,12 +3,12 @@
- //// [/.src/parserSymbolIndexer5.d.ts]
+@@ -4,12 +4,12 @@
  declare var x: invalid;
+ 
  /// [Errors] ////
  
 -parserSymbolIndexer5.ts(2,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -19,7 +19,7 @@
  parserSymbolIndexer5.ts(2,16): error TS1136: Property assignment expected.
  parserSymbolIndexer5.ts(2,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
  parserSymbolIndexer5.ts(3,1): error TS1005: ':' expected.
-@@ -16,17 +16,17 @@
+@@ -17,17 +17,17 @@
  
  ==== parserSymbolIndexer5.ts (8 errors) ====
      var x = {

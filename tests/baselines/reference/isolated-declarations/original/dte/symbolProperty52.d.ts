@@ -13,10 +13,11 @@ obj[Symbol.nonsense];
 
 
 
-//// [/.src/symbolProperty52.d.ts]
+//// [symbolProperty52.d.ts]
 declare var obj: {
     [Symbol.nonsense]: number;
 };
+
 /// [Errors] ////
 
 symbolProperty52.ts(2,13): error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.

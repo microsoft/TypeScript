@@ -7,10 +7,11 @@ var v = { [e]: 1 };
 
 
 
-//// [/.src/parserES5ComputedPropertyName2.d.ts]
+//// [parserES5ComputedPropertyName2.d.ts]
 declare var v: {
     [e]: number;
 };
+
 /// [Errors] ////
 
 parserES5ComputedPropertyName2.ts(1,12): error TS2304: Cannot find name 'e'.

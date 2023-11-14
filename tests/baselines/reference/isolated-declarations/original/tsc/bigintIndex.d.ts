@@ -36,7 +36,7 @@ const c = {[bigNum]: 789};
 
 
 
-//// [/.src/a.d.ts]
+//// [a.d.ts]
 interface BigIntIndex<E> {
     [index: bigint]: E;
 }
@@ -46,12 +46,13 @@ declare let key: keyof any;
 declare const bigNum: bigint;
 declare const typedArray: invalid;
 
-//// [/.src/b.d.ts]
+//// [b.d.ts]
 declare const a: {};
 declare const b: {
     [1n]: number;
 };
 declare const c: invalid;
+
 /// [Errors] ////
 
 a.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.

@@ -9,7 +9,9 @@ import {
 } from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 import {
+    createGetCanonicalFileName,
     mapDefined,
+    transpileDeclaration,
 } from "./_namespaces/ts";
 import * as Utils from "./_namespaces/Utils";
 import * as vfs from "./_namespaces/vfs";
@@ -646,30 +648,46 @@ export namespace Compiler {
         }
 
         const fs = tscHost.vfs.shadowRoot ? tscHost.vfs.shadowRoot.shadow() : tscHost.vfs;
-        const host = new fakes.CompilerHost(fs, options, /*setParentNodes*/ false);
-        const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
-        let commonSourceDirectory = ts.getCommonSourceDirectory(
+        const dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: fs.stringComparer, sort: "insertion" });
+        const dtsMap = new collections.SortedMap<string, documents.TextDocument>({ comparer: fs.stringComparer, sort: "insertion" });
+
+        const getCanonicalFileName = createGetCanonicalFileName(tscHost.sys.useCaseSensitiveFileNames);
+        const commonSourceDirectory = ts.getCommonSourceDirectory(
             options,
             () => programFileNames.filter(f => !vpath.isDeclaration(f)),
             currentDirectory,
             getCanonicalFileName,
         );
-
-        if (commonSourceDirectory.length === 0) {
-            commonSourceDirectory = currentDirectory;
-        }
+        const emitterHost = ts.createEmitDeclarationHost(options, new fakes.System(fs), commonSourceDirectory);
         const diagnostics: ts.Diagnostic[] = [];
-        const transformer = ts.createIsolatedDeclarationsEmitter(commonSourceDirectory, options);
+
         programFileNames.forEach(fileName => {
             if (vpath.isDeclaration(fileName)) {
                 return;
             }
-            const { diagnostics: fileDiagnostics = [] } = transformer(fileName, host);
+            const file = tscHost.getSourceFile(fileName, {
+                languageVersion: ts.getEmitScriptTarget(options),
+            });
+            if (!file) {
+                return;
+            }
+
+            const {
+                diagnostics: fileDiagnostics = [],
+                declaration,
+                declarationPath,
+                declarationMap,
+                declarationMapPath,
+            } = transpileDeclaration(file, emitterHost);
+            // Ensure file will be rebound.
+            file.locals = undefined;
+            dts.set(declarationPath, new documents.TextDocument(declarationPath, options.emitBOM ? Utils.addUTF8ByteOrderMark(declaration) : declaration));
+            if (declarationMapPath && declarationMap) {
+                dtsMap.set(declarationMapPath, new documents.TextDocument(declarationMapPath, options.emitBOM ? Utils.addUTF8ByteOrderMark(declarationMap) : declarationMap));
+            }
             diagnostics.push(...fileDiagnostics);
         });
-        const dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: host.vfs.stringComparer, sort: "insertion" });
-        host.outputs.forEach(d => dts.set(d.file, new documents.TextDocument(d.file, d.text)));
-        return { dts, diagnostics };
+        return { dts, dtsMap, diagnostics };
     }
 
     export function compileDeclarationFiles(context: DeclarationCompilationContext | undefined, symlinks: vfs.FileSet | undefined) {
@@ -1012,7 +1030,7 @@ export namespace Compiler {
                     if (sourceMapCode) sourceMapCode += "\r\n";
                     sourceMapCode += fileOutput(sourceMap, harnessSettings);
                     if (!options.inlineSourceMap) {
-                        sourceMapCode += createSourceMapPreviewLink(sourceMap.text, result);
+                        sourceMapCode += createSourceMapPreviewLink(sourceMap.text, result.outputs, result.inputs);
                     }
                 });
             }
@@ -1020,17 +1038,39 @@ export namespace Compiler {
         }
     }
 
-    function createSourceMapPreviewLink(sourcemap: string, result: compiler.CompilationResult) {
+    function createSourceMapPreviewLink(sourcemap: string, outputs: readonly documents.TextDocument[], inputs: readonly documents.TextDocument[]) {
         const sourcemapJSON = JSON.parse(sourcemap);
-        const outputJSFile = result.outputs.find(td => td.file.endsWith(sourcemapJSON.file));
+        const outputJSFile = outputs.find(td => td.file.endsWith(sourcemapJSON.file));
         if (!outputJSFile) return "";
 
-        const sourceTDs = ts.map(sourcemapJSON.sources, (s: string) => result.inputs.find(td => td.file.endsWith(s)));
+        const sourceTDs = ts.map(sourcemapJSON.sources, (s: string) => inputs.find(td => td.file.endsWith(s)));
         const anyUnfoundSources = ts.contains(sourceTDs, /*value*/ undefined);
         if (anyUnfoundSources) return "";
 
         const hash = "#base64," + ts.map([outputJSFile.text, sourcemap].concat(sourceTDs.map(td => td!.text)), s => ts.convertToBase64(decodeURIComponent(encodeURIComponent(s)))).join(",");
         return "\n//// https://sokra.github.io/source-map-visualization" + hash + "\n";
+    }
+
+    export function doDeclarationMapDiffBaseline(
+        baselinePath: string,
+        type: string,
+        header: string,
+        dteDeclarationFiles: readonly TestFile[],
+        dteDeclarationMapFiles: readonly TestFile[],
+        tscDeclarationFiles: readonly TestFile[],
+        tscDeclarationMapFiles: readonly TestFile[],
+        tsSources: readonly TestFile[],
+        reason: string | undefined,
+    ) {
+        const Diff = require("diff");
+        const dteContent = declarationSourceMapContent(dteDeclarationFiles, dteDeclarationMapFiles, tsSources);
+        const tscContent = declarationSourceMapContent(tscDeclarationFiles, tscDeclarationMapFiles, tsSources);
+
+        let fullDiff = "// [[Reason: " + reason + "]] ////\r\n\r\n";
+        fullDiff += "//// [" + header + "] ////\r\n\r\n";
+        fullDiff += Diff.createTwoFilesPatch("TSC", "DTE", tscContent, dteContent, "declarations", "declarations");
+
+        Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts.map.diff`), fullDiff);
     }
 
     export function doDeclarationDiffBaseline(
@@ -1066,25 +1106,66 @@ export namespace Compiler {
             }
         }
         if (errors.length > 0) {
-            dtsCode += "/// [Errors] ////\r\n\r\n";
+            dtsCode += "\r\n/// [Errors] ////\r\n\r\n";
             dtsCode += getErrorBaseline(tsSources, errors, prettyErrors);
         }
         return dtsCode;
     }
-    export function doDeclarationBaseline(baselinePath: string, type: string, header: string, declarationFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], tsSources: readonly TestFile[], prettyErrors?: boolean) {
-        let tsCode = "";
-        tsCode += "//// [" + header + "] ////\r\n\r\n";
+
+    function declarationSourceMapContent(
+        declarationFiles: readonly TestFile[],
+        declarationMapFiles: readonly TestFile[],
+        tsSources: readonly TestFile[],
+    ) {
+        let code = "";
+        const outputs = declarationFiles.map(u => new documents.TextDocument(u.unitName, u.content));
+        const inputs = tsSources.map(u => new documents.TextDocument(u.unitName, u.content));
+        for (const mapFile of declarationMapFiles) {
+            code += "\r\n//// [" + mapFile.unitName + "]\r\n";
+            code += mapFile.content + "\r\n";
+            code += createSourceMapPreviewLink(mapFile.content, outputs, inputs) + "\r\n";
+        }
+        return code;
+    }
+    export function doDeclarationBaseline(
+        baselinePath: string,
+        type: string,
+        header: string,
+        declarationFiles: readonly TestFile[],
+        errors: readonly ts.Diagnostic[],
+        tsSources: readonly TestFile[],
+        prettyErrors?: boolean,
+    ) {
+        let code = "";
+        code += "//// [" + header + "] ////\r\n\r\n";
 
         for (let i = 0; i < tsSources.length; i++) {
-            tsCode += "//// [" + tsSources[i].unitName + "]\r\n";
-            tsCode += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
+            code += "//// [" + tsSources[i].unitName + "]\r\n";
+            code += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
         }
 
-        let dtsCode = "/// [Declarations] ////\r\n\r\n";
-        dtsCode += declarationContent(declarationFiles, tsSources, errors, prettyErrors);
+        code += "\r\n\r\n/// [Declarations] ////\r\n\r\n";
+        code += declarationContent(declarationFiles, tsSources, errors, prettyErrors);
 
         // eslint-disable-next-line no-null/no-null
-        Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts`), tsCode.length > 0 ? tsCode + "\r\n\r\n" + dtsCode : null);
+        Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts`), code.length > 0 ? code : null);
+    }
+
+    export function doDeclarationMapBaseline(
+        baselinePath: string,
+        type: string,
+        header: string,
+        declarationFiles: readonly TestFile[],
+        declarationMapFiles: readonly TestFile[],
+        tsSources: readonly TestFile[],
+    ) {
+        let code = "";
+        code += "//// [" + header + "] ////\r\n\r\n";
+        code += "\r\n\r\n/// [Declarations Maps] ////\r\n\r\n";
+        code += declarationSourceMapContent(declarationFiles, declarationMapFiles, tsSources);
+
+        // eslint-disable-next-line no-null/no-null
+        Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts.map`), code.length > 0 ? code : null);
     }
 
     export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {
@@ -1393,6 +1474,7 @@ export namespace TestCaseParser {
         tsConfig: ts.ParsedCommandLine | undefined;
         tsConfigFileUnitData: TestUnitData | undefined;
         symlinks?: vfs.FileSet;
+        sourceCode: string;
     }
 
     /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
@@ -1523,7 +1605,7 @@ export namespace TestCaseParser {
                 break;
             }
         }
-        return { settings, testUnitData, tsConfig, tsConfigFileUnitData, symlinks };
+        return { settings, testUnitData, tsConfig, tsConfigFileUnitData, symlinks, sourceCode: code };
     }
 }
 

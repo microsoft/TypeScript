@@ -1,11 +1,9 @@
 import {
     base64encode,
-    changeAnyExtension,
     combinePaths,
-    CompilerHost,
     CompilerOptions,
-    createEmitDeclarationHost,
     createEmitDeclarationResolver,
+    createGetCanonicalFileName,
     createPrinter,
     createSourceMapGenerator,
     createTextWriter,
@@ -15,82 +13,51 @@ import {
     EmitResolver,
     ensureTrailingDirectorySeparator,
     factory,
+    getAreDeclarationMapsEnabled,
     getBaseFileName,
-    getDeclarationEmitExtensionForPath,
+    getDeclarationEmitOutputFilePathWorker,
     getDirectoryPath,
     getNewLineCharacter,
-    getNormalizedAbsolutePath,
-    getOutputPathsFor,
-    getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
     getRootLength,
     getSourceFilePathInNewDir,
-    NewLineKind,
+    IsolatedEmitHost,
+    noop,
     normalizePath,
     normalizeSlashes,
-    pathIsAbsolute,
     PrinterOptions,
-    ScriptTarget,
+    returnFalse,
+    returnUndefined,
     SourceFile,
     SourceMapGenerator,
     sys,
+    System,
     TransformationContext,
     transformDeclarations,
 } from "../../_namespaces/ts";
 
-export function emitDeclarationsForProject(
-    projectPath: string,
-    files: string[] | undefined,
-    options: CompilerOptions,
-    host: CompilerHost,
-) {
-    const rootDir = options.rootDir ? normalizePath(sys.resolvePath(combinePaths(projectPath, options.rootDir))) : normalizePath(projectPath);
-    files ??= host.readDirectory!(rootDir, [".ts", ".tsx"], ["**/*.d.ts"], []);
-    emitDeclarationsForAllFiles(rootDir, files, host, options);
-    return rootDir;
-}
-
-function joinToRootIfNeeded(rootDir: string, existingPath: string) {
-    return normalizePath(pathIsAbsolute(existingPath) ? existingPath : combinePaths(rootDir, existingPath));
-}
-
-export function createIsolatedDeclarationsEmitter(rootDir: string, options: CompilerOptions) {
-    const declarationDir = options.declarationDir ? joinToRootIfNeeded(rootDir, options.declarationDir) :
-        options.outDir ? joinToRootIfNeeded(rootDir, options.outDir) :
-        undefined;
-    rootDir = normalizePath(rootDir);
-    return (file: string, host: CompilerHost) => {
-        file = normalizePath(file);
-        const source = host.getSourceFile(file, {
-            languageVersion: options.target ?? ScriptTarget.ES2015,
-        });
-
-        if (!source) return {};
-
-        const { code, diagnostics, declarationMap, declarationMapPath } = emitDeclarationsForFile(source, options);
-        const extension = getDeclarationEmitExtensionForPath(file);
-        const relativeToRoot = getRelativePathFromDirectory(rootDir, file, !host.useCaseSensitiveFileNames());
-        const declarationPath = !declarationDir ? file : getNormalizedAbsolutePath(combinePaths(declarationDir, relativeToRoot), host.getCurrentDirectory());
-        const output = changeAnyExtension(declarationPath, extension);
-        host.writeFile(output, code, !!options.emitBOM);
-        if (declarationMap) {
-            host.writeFile(declarationMapPath!, declarationMap, !!options.emitBOM);
-        }
-        return { output, diagnostics };
+export function createEmitDeclarationHost(options: CompilerOptions, sys: System, commonSourceDirectory = sys.getCurrentDirectory()): IsolatedEmitHost {
+    return {
+        redirectTargetsMap: new Map(),
+        directoryExists: sys.directoryExists.bind(sys),
+        fileExists: sys.fileExists.bind(sys),
+        getDirectories: sys.getDirectories.bind(sys),
+        readFile: sys.readFile.bind(sys),
+        realpath: sys.realpath?.bind(sys),
+        getCurrentDirectory: sys.getCurrentDirectory.bind(sys),
+        getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames),
+        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+        getCompilerOptions: () => options,
+        getCommonSourceDirectory: () => ensureTrailingDirectorySeparator(sys.resolvePath(commonSourceDirectory)),
+        trace: noop,
+        getLibFileFromReference: returnUndefined,
+        getSourceFileFromReference: returnUndefined,
+        isSourceOfProjectReferenceRedirect: returnFalse,
     };
 }
 
-function emitDeclarationsForAllFiles(rootDir: string, files: string[], host: CompilerHost, options: CompilerOptions) {
-    const transformer = createIsolatedDeclarationsEmitter(rootDir, options);
-    for (const file of files) {
-        transformer(file, host);
-    }
-}
-
-export function emitDeclarationsForFile(sourceFile: SourceFile, options: CompilerOptions) {
-    options.declaration = true;
-    options.declarationMap = true;
-    const emitHost = createEmitDeclarationHost(options, sys);
+export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedEmitHost) {
+    const options: CompilerOptions = emitHost.getCompilerOptions();
     const emitResolver = createEmitDeclarationResolver(sourceFile, emitHost);
     const diagnostics: Diagnostic[] = [];
     const transformer = transformDeclarations({
@@ -101,7 +68,7 @@ export function emitDeclarationsForFile(sourceFile: SourceFile, options: Compile
             return emitResolver as EmitResolver;
         },
         getCompilerOptions() {
-            return options;
+            return emitHost.getCompilerOptions();
         },
         factory,
         addDiagnostic(diag: any) {
@@ -111,31 +78,41 @@ export function emitDeclarationsForFile(sourceFile: SourceFile, options: Compile
     const result = transformer(sourceFile);
 
     const printer = createPrinter({
-        onlyPrintJsDocStyle: true,
-        newLine: options.newLine ?? NewLineKind.CarriageReturnLineFeed,
-        target: options.target,
         removeComments: options.removeComments,
+        newLine: options.newLine,
+        noEmitHelpers: true,
+        module: options.module,
+        target: options.target,
+        sourceMap: options.declarationMap,
+        inlineSourceMap: options.inlineSourceMap,
+        extendedDiagnostics: options.extendedDiagnostics,
+        onlyPrintJsDocStyle: true,
+        omitBraceSourceMapPositions: true,
     } as PrinterOptions);
 
     const writer = createTextWriter(getNewLineCharacter(options));
-    const sourceMap = getSourceMapGenerator();
+    const declarationPath = getDeclarationEmitOutputFilePathWorker(
+        sourceFile.fileName,
+        options,
+        emitHost.getCurrentDirectory(),
+        emitHost.getCommonSourceDirectory(),
+        emitHost.getCanonicalFileName,
+    );
+    const declarationMapPath = declarationPath + ".map";
+    const sourceMap = getSourceMapGenerator(declarationPath, declarationMapPath);
     printer.writeFile(result, writer, sourceMap?.sourceMapGenerator);
     if (sourceMap) {
-        if (!writer.isAtStartOfLine()) writer.rawWrite(getNewLineCharacter(options));
+        if (!writer.isAtStartOfLine()) writer.writeLine();
         writer.writeComment(sourceMap.sourceMappingURL);
+        writer.writeLine();
     }
-
-    if (diagnostics.length > 0) {
-        throw new Error(`Cannot transform file '${sourceFile.fileName}' due to ${diagnostics.length} diagnostics`);
-    }
-    const { declarationMapPath, declarationFilePath } = getOutputPathsFor(sourceFile, emitHost as unknown as EmitHost, /*forceDtsPaths*/ false);
 
     return {
-        code: writer.getText(),
-        diagnostics,
-        declarationFilePath: declarationFilePath!,
+        declaration: writer.getText(),
+        declarationPath,
         declarationMap: sourceMap?.sourceMapGenerator.toString(),
-        declarationMapPath,
+        declarationMapPath: sourceMap && declarationMapPath,
+        diagnostics,
     };
 
     // logic replicated from emitter.ts
@@ -158,8 +135,8 @@ export function emitDeclarationsForFile(sourceFile: SourceFile, options: Compile
     }
 
     // logic replicated from emitter.ts
-    function getSourceMapGenerator() {
-        if (!options.declarationMap) return;
+    function getSourceMapGenerator(declarationFilePath: string, declarationMapPath: string) {
+        if (!getAreDeclarationMapsEnabled(options)) return;
 
         const mapOptions = {
             sourceRoot: options.sourceRoot,
@@ -169,19 +146,18 @@ export function emitDeclarationsForFile(sourceFile: SourceFile, options: Compile
         };
 
         const sourceRoot = normalizeSlashes(options.sourceRoot || "");
-        const { declarationMapPath, declarationFilePath } = getOutputPathsFor(sourceFile, emitHost as unknown as EmitHost, /*forceDtsPaths*/ false);
         const sourceMapGenerator = createSourceMapGenerator(
-            emitHost as unknown as EmitHost,
-            getBaseFileName(normalizeSlashes(declarationFilePath!)),
+            emitHost,
+            getBaseFileName(normalizeSlashes(declarationFilePath)),
             sourceRoot ? ensureTrailingDirectorySeparator(sourceRoot) : sourceRoot,
-            getSourceMapDirectory(options, sourceFile.fileName, sourceFile),
+            getSourceMapDirectory(options, declarationFilePath, sourceFile),
             mapOptions,
         );
 
         const sourceMappingURL = getSourceMappingURL(
             mapOptions,
             sourceMapGenerator,
-            declarationFilePath!,
+            declarationFilePath,
             declarationMapPath,
             sourceFile,
         );

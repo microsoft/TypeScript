@@ -76,10 +76,10 @@ oneTwoOrThree(0);  oneTwoOrThree(1);  oneTwoOrThree(2);  oneTwoOrThree(3);
 
 
 
-//// [/.src/parseBigInt.d.ts]
-declare const bin = 0b101, binBig = 5n;
-declare const oct = 0o567, octBig = 375n;
-declare const hex = 0xC0B, hexBig = 0xc0bn;
+//// [parseBigInt.d.ts]
+declare const bin = 5, binBig = 5n;
+declare const oct = 375, octBig = 375n;
+declare const hex = 3083, hexBig = 0xc0bn;
 declare const dec = 123, decBig = 123n;
 declare const largeBin = 384307168202282325n;
 declare const largeOct = 1505852261029722487n;
@@ -121,6 +121,7 @@ declare const leadingSeparator: invalid;
 declare const trailingSeparator = 123n;
 declare const doubleSeparator = 123456789n;
 declare const oneTwoOrThree: (x: 1n | 2n | 3n) => bigint;
+
 /// [Errors] ////
 
 parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.

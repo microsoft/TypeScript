@@ -8,6 +8,6 @@
 @@ -1,4 +1,4 @@
  
  
- //// [/.src/templateLiteralsSourceMap.d.ts]
+ //// [templateLiteralsSourceMap.d.ts]
 -declare const s = "a0b1c2";
 +declare const s = `a${0}b${1}c${2}`;

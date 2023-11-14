@@ -5,14 +5,15 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,22 +1,21 @@
+@@ -1,23 +1,22 @@
  
  
- //// [/.src/symbolProperty53.d.ts]
+ //// [symbolProperty53.d.ts]
 -declare var obj: invalid;
 +declare var obj: {
 +    [Symbol.for]: number;
 +};
+ 
  /// [Errors] ////
  
  symbolProperty53.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.

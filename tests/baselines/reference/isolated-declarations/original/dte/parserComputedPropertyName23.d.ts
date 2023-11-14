@@ -9,10 +9,11 @@ declare class C {
 
 
 
-//// [/.src/parserComputedPropertyName23.d.ts]
+//// [parserComputedPropertyName23.d.ts]
 declare class C {
     get [e](): number;
 }
+
 /// [Errors] ////
 
 parserComputedPropertyName23.ts(2,10): error TS2304: Cannot find name 'e'.

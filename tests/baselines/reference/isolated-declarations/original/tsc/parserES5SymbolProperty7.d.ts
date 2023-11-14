@@ -9,10 +9,11 @@ class C {
 
 
 
-//// [/.src/parserES5SymbolProperty7.d.ts]
+//// [parserES5SymbolProperty7.d.ts]
 declare class C {
     [Symbol.toStringTag](): void;
 }
+
 /// [Errors] ////
 
 parserES5SymbolProperty7.ts(2,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

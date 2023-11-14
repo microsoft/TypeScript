@@ -58,7 +58,6 @@ export * from "../transformers/module/esnextAnd2015";
 export * from "../transformers/module/node";
 export * from "../transformers/declarations/diagnostics";
 export * from "../transformers/declarations/emit-binder";
-export * from "../transformers/declarations/emit-host";
 export * from "../transformers/declarations/emit-resolver";
 export * from "../transformers/declarations/transform-project";
 export * from "../transformers/declarations/types";

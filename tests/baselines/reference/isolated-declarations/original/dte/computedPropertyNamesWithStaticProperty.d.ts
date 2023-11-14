@@ -16,13 +16,14 @@ class C {
 
 
 
-//// [/.src/computedPropertyNamesWithStaticProperty.d.ts]
+//// [computedPropertyNamesWithStaticProperty.d.ts]
 declare class C {
     static staticProp: number;
     get [C.staticProp](): invalid;
     set [C.staticProp](x: string);
     [C.staticProp](): invalid;
 }
+
 /// [Errors] ////
 
 computedPropertyNamesWithStaticProperty.ts(3,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

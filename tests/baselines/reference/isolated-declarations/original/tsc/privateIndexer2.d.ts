@@ -15,11 +15,12 @@ var y: {
 
 
 
-//// [/.src/privateIndexer2.d.ts]
+//// [privateIndexer2.d.ts]
 declare var x: invalid;
 declare var y: {
     private []: string;
 };
+
 /// [Errors] ////
 
 privateIndexer2.ts(4,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

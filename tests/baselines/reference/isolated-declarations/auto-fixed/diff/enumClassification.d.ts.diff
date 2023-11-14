@@ -1,0 +1,113 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/enums/enumClassification.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -57,5 +57,102 @@
+     B,
+     C,
+     D
+ }
+-//# sourceMappingURL=enumClassification.d.ts.map
+\ No newline at end of file
++//# sourceMappingURL=enumClassification.d.ts.map
++
++/// [Errors] ////
++
++enumClassification.ts(74,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++enumClassification.ts(75,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++enumClassification.ts(76,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++enumClassification.ts(77,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++
++
++==== enumClassification.ts (4 errors) ====
++    // An enum type where each member has no initializer or an initializer that specififes
++    // a numeric literal, a string literal, or a single identifier naming another member in
++    // the enum type is classified as a literal enum type. An enum type that doesn't adhere
++    // to this pattern is classified as a numeric enum type.
++    
++    // Examples of literal enum types
++    
++    enum E01 {
++        A
++    }
++    
++    enum E02 {
++        A = 123
++    }
++    
++    enum E03 {
++        A = "hello"
++    }
++    
++    enum E04 {
++        A,
++        B,
++        C
++    }
++    
++    enum E05 {
++        A,
++        B = 10,
++        C
++    }
++    
++    enum E06 {
++        A = "one",
++        B = "two",
++        C = "three"
++    }
++    
++    enum E07 {
++        A,
++        B,
++        C = "hi",
++        D = 10,
++        E,
++        F = "bye"
++    }
++    
++    enum E08 {
++        A = 10,
++        B = "hello",
++        C = A,
++        D = B,
++        E = C,
++    }
++    
++    // Examples of numeric enum types with only constant members
++    
++    enum E10 {}
++    
++    enum E11 {
++        A = +0,
++        B,
++        C
++    }
++    
++    enum E12 {
++        A = 1 << 0,
++        B = 1 << 1,
++        C = 1 << 2
++    }
++    
++    // Examples of numeric enum types with constant and computed members
++    
++    enum E20 {
++        A = "foo".length,
++        ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++        B = A + 1,
++        ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++        C = +"123",
++        ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++        D = Math.sin(1)
++        ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++    }
++    
+\ No newline at end of file

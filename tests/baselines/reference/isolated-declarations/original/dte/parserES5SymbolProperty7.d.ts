@@ -9,10 +9,11 @@ class C {
 
 
 
-//// [/.src/parserES5SymbolProperty7.d.ts]
+//// [parserES5SymbolProperty7.d.ts]
 declare class C {
     [Symbol.toStringTag](): void;
 }
+
 /// [Errors] ////
 
 parserES5SymbolProperty7.ts(2,6): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.

@@ -7,8 +7,9 @@ var v = { [e] };
 
 
 
-//// [/.src/parserComputedPropertyName1.d.ts]
+//// [parserComputedPropertyName1.d.ts]
 declare var v: invalid;
+
 /// [Errors] ////
 
 parserComputedPropertyName1.ts(1,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

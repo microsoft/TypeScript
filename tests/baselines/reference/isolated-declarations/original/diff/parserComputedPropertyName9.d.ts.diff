@@ -5,8 +5,8 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -6,22 +6,19 @@
- }
+@@ -7,22 +7,19 @@
+ 
  /// [Errors] ////
  
  parserComputedPropertyName9.ts(2,4): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

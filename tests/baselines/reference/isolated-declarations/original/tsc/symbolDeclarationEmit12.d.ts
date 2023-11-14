@@ -18,7 +18,7 @@ module M {
 
 
 
-//// [/.src/symbolDeclarationEmit12.d.ts]
+//// [symbolDeclarationEmit12.d.ts]
 declare namespace M {
     interface I {
     }
@@ -30,6 +30,7 @@ declare namespace M {
     }
     export {};
 }
+
 /// [Errors] ////
 
 symbolDeclarationEmit12.ts(9,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.

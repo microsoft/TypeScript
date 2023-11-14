@@ -195,7 +195,7 @@ void class J {
 
 
 
-//// [/.src/decoratorsOnComputedProperties.d.ts]
+//// [decoratorsOnComputedProperties.d.ts]
 declare function x(o: object, k: PropertyKey): invalid;
 declare let i: number;
 declare function foo(): string;
@@ -267,6 +267,7 @@ declare class I {
     [fieldNameB]: any;
     [fieldNameC]: any;
 }
+
 /// [Errors] ////
 
 decoratorsOnComputedProperties.ts(1,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

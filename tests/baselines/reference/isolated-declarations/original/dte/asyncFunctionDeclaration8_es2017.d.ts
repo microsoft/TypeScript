@@ -7,8 +7,9 @@ var v = { [await]: foo }
 
 
 
-//// [/.src/asyncFunctionDeclaration8_es2017.d.ts]
+//// [asyncFunctionDeclaration8_es2017.d.ts]
 declare var v: invalid;
+
 /// [Errors] ////
 
 asyncFunctionDeclaration8_es2017.ts(1,12): error TS2304: Cannot find name 'await'.

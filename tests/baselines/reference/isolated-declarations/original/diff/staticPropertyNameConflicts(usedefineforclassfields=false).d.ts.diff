@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -111,9 +111,8 @@
+@@ -112,9 +112,8 @@
  staticPropertyNameConflicts.ts(272,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
  staticPropertyNameConflicts.ts(277,12): error TS1319: A default export can only be used in an ECMAScript-style module.
  staticPropertyNameConflicts.ts(278,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
@@ -15,7 +15,7 @@
  staticPropertyNameConflicts.ts(290,16): error TS2300: Duplicate identifier 'prototype'.
  staticPropertyNameConflicts.ts(290,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
  staticPropertyNameConflicts.ts(296,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
-@@ -137,9 +136,9 @@
+@@ -138,9 +137,9 @@
  staticPropertyNameConflicts.ts(346,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
  staticPropertyNameConflicts.ts(347,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
  
@@ -26,7 +26,7 @@
          name: 'name',
          length: 'length',
          prototype: 'prototype',
-@@ -544,10 +543,8 @@
+@@ -545,10 +544,8 @@
      export class ExportedStaticPrototype {
          static [FunctionPropertyNames.prototype]: number; // always an error
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

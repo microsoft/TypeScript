@@ -8,14 +8,14 @@
 @@ -1,8 +1,9 @@
  
  
- //// [/.src/indexSignatureMustHaveTypeAnnotation.d.ts]
+ //// [indexSignatureMustHaveTypeAnnotation.d.ts]
  interface I {
 +    [x]: string;
      [x: string]: any;
  }
  declare class C {
      [x]: string;
-@@ -15,15 +16,14 @@
+@@ -16,15 +17,14 @@
  indexSignatureMustHaveTypeAnnotation.ts(3,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
  indexSignatureMustHaveTypeAnnotation.ts(3,6): error TS2304: Cannot find name 'x'.
  indexSignatureMustHaveTypeAnnotation.ts(4,5): error TS1021: An index signature must have a type annotation.
@@ -32,7 +32,7 @@
          // Used to be indexer, now it is a computed property
          [x]: string;
          ~~~
-@@ -39,10 +39,8 @@
+@@ -40,10 +40,8 @@
          // Used to be indexer, now it is a computed property
          [x]: string
          ~~~

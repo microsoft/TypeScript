@@ -18,7 +18,7 @@ module M {
 
 
 
-//// [/.src/symbolDeclarationEmit12.d.ts]
+//// [symbolDeclarationEmit12.d.ts]
 declare namespace M {
     interface I {
     }
@@ -31,6 +31,7 @@ declare namespace M {
     }
     export {};
 }
+
 /// [Errors] ////
 
 symbolDeclarationEmit12.ts(5,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

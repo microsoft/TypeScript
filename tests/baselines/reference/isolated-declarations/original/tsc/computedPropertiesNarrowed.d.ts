@@ -55,7 +55,7 @@ export const o9 = {
 
 
 
-//// [/.src/computedPropertiesNarrowed.d.ts]
+//// [computedPropertiesNarrowed.d.ts]
 export declare let o: invalid;
 declare const y: 0;
 export declare let o2: {
@@ -83,6 +83,7 @@ export declare const o8: {
 };
 export declare const o9: invalid;
 export {};
+
 /// [Errors] ////
 
 computedPropertiesNarrowed.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

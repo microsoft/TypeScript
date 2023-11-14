@@ -22,11 +22,12 @@ var v = {
 
 
 
-//// [/.src/computedPropertyNames4_ES6.d.ts]
+//// [computedPropertyNames4_ES6.d.ts]
 declare var s: string;
 declare var n: number;
 declare var a: any;
 declare var v: invalid;
+
 /// [Errors] ////
 
 computedPropertyNames4_ES6.ts(6,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

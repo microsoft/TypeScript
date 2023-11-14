@@ -31,7 +31,7 @@ const a14 = tag`${ 100 }\x00` // \x00
 
 
 
-//// [/.src/invalidTaggedTemplateEscapeSequences.d.ts]
+//// [invalidTaggedTemplateEscapeSequences.d.ts]
 declare function tag(str: any, ...args: any[]): any;
 declare const a: invalid;
 declare const b: invalid;
@@ -52,6 +52,7 @@ declare const a11: invalid;
 declare const a12: invalid;
 declare const a13: invalid;
 declare const a14: invalid;
+
 /// [Errors] ////
 
 invalidTaggedTemplateEscapeSequences.ts(5,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

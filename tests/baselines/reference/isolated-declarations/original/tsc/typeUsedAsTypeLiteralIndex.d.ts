@@ -32,7 +32,7 @@ type T4 = {
 
 
 
-//// [/.src/typeUsedAsTypeLiteralIndex.d.ts]
+//// [typeUsedAsTypeLiteralIndex.d.ts]
 type K = number | string;
 type T = {};
 declare const K1: invalid;
@@ -47,6 +47,7 @@ type K4 = number | string;
 type T4 = {
     k4: string;
 };
+
 /// [Errors] ////
 
 typeUsedAsTypeLiteralIndex.ts(3,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.

@@ -1,0 +1,65 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/conformance/enums/enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -33,5 +33,54 @@
+     a = "1",
+     b = "11",
+     c = "21"
+ }
+-//# sourceMappingURL=enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts.map
+\ No newline at end of file
++//# sourceMappingURL=enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts.map
++
++/// [Errors] ////
++
++enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts(32,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++
++
++==== enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts (1 errors) ====
++    enum T1 {
++        a = `1`
++    }
++    
++    enum T2 {
++        a = `1`,
++        b = "2",
++        c = 3
++    }
++    
++    enum T3 {
++        a = `1` + `1`
++    }
++    
++    enum T4 {
++        a = `1`,
++        b = `1` + `1`,
++        c = `1` + "2",
++        d = "2" + `1`,
++        e = "2" + `1` + `1`
++    }
++    
++    enum T5 {
++        a = `1`,
++        b = `1` + `2`,
++        c = `1` + `2` + `3`,
++        d = 1
++    }
++    
++    enum T6 {
++        a = 1,
++        b = `12`.length
++        ~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++    }
++    
++    declare enum T7 {
++        a = `1`,
++        b = `1` + `1`,
++        c = "2" + `1`
++    }
++    
+\ No newline at end of file

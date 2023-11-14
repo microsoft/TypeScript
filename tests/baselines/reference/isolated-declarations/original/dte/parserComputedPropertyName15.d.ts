@@ -7,11 +7,12 @@ var v: { [e: number]: string; [e]: number };
 
 
 
-//// [/.src/parserComputedPropertyName15.d.ts]
+//// [parserComputedPropertyName15.d.ts]
 declare var v: {
     [e: number]: string;
     [e]: number;
 };
+
 /// [Errors] ////
 
 parserComputedPropertyName15.ts(1,31): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.

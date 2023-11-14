@@ -13,13 +13,14 @@ class C {
 
 
 
-//// [/.src/computedPropertyNamesOnOverloads_ES5.d.ts]
+//// [computedPropertyNamesOnOverloads_ES5.d.ts]
 declare var methodName: string;
 declare var accessorName: string;
 declare class C {
     [methodName](v: string): invalid;
     [methodName](): invalid;
 }
+
 /// [Errors] ////
 
 computedPropertyNamesOnOverloads_ES5.ts(4,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.

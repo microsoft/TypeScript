@@ -19,6 +19,7 @@ export declare function foo(): Lib;
 
 //// [/mod2.d.ts]
 export declare const bar: invalid;
+
 /// [Errors] ////
 
 /mod2.ts(2,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -686,7 +686,7 @@ export declare module eaM {
 
 
 
-//// [/.src/giant.d.ts]
+//// [giant.d.ts]
 export declare var eV: invalid;
 export declare function eF(): invalid;
 export declare class eC {
@@ -979,6 +979,7 @@ export declare namespace eaM {
         namespace eM { }
     }
 }
+
 /// [Errors] ////
 
 giant.ts(22,12): error TS2300: Duplicate identifier 'pgF'.

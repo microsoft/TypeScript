@@ -5,22 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -28,11 +28,11 @@
-     T = 11,
-     U = 11,
-     V = 11,
-     W = 11,
--    W1 = 100,
--    W2 = 100,
--    W3 = 100,
-+    W1,
-+    W2,
-+    W3,
-     W4 = 11,
-     W5 = 11
- }
- declare const enum Comments {
-@@ -48,19 +48,19 @@
+@@ -48,9 +48,9 @@
      namespace B {
          namespace C {
              const enum E {
@@ -31,15 +16,34 @@
          }
      }
  }
- declare namespace A {
-     namespace B {
-         namespace C {
-             const enum E {
--                V3 = 64,
--                V4 = 2
-+                V3,
-+                V4
+@@ -103,17 +103,18 @@
+ constEnums.ts(34,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ constEnums.ts(34,10): error TS2474: const enum member initializers must be constant expressions.
+ constEnums.ts(35,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ constEnums.ts(35,10): error TS2474: const enum member initializers must be constant expressions.
++constEnums.ts(55,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ constEnums.ts(65,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ constEnums.ts(65,22): error TS2474: const enum member initializers must be constant expressions.
+ constEnums.ts(66,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ constEnums.ts(66,22): error TS2474: const enum member initializers must be constant expressions.
+ constEnums.ts(124,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ constEnums.ts(166,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ 
+ 
+-==== constEnums.ts (12 errors) ====
++==== constEnums.ts (13 errors) ====
+     const enum Enum1 {
+        A0 = 100,
+     }
+     
+@@ -179,8 +180,10 @@
+             export module C {
+                 export const enum E {
+                     V1 = 1,
+                     V2 = A.B.C.E.V1 | 100
++                    ~~
++!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                 }
              }
          }
      }
- }

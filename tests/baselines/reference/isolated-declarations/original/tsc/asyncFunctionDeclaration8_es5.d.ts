@@ -7,8 +7,9 @@ var v = { [await]: foo }
 
 
 
-//// [/.src/asyncFunctionDeclaration8_es5.d.ts]
+//// [asyncFunctionDeclaration8_es5.d.ts]
 declare var v: invalid;
+
 /// [Errors] ////
 
 asyncFunctionDeclaration8_es5.ts(1,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

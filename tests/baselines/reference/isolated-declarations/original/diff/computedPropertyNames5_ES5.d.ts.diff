@@ -5,8 +5,8 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -5,28 +5,24 @@
- declare var v: invalid;
+@@ -6,28 +6,24 @@
+ 
  /// [Errors] ////
  
  computedPropertyNames5_ES5.ts(3,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
@@ -35,7 +35,7 @@
          ~~~~~~
  !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
          [[]]: 0,
-@@ -41,10 +37,8 @@
+@@ -42,10 +38,8 @@
  !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
          [undefined]: undefined,
          ~~~~~~~~~~~

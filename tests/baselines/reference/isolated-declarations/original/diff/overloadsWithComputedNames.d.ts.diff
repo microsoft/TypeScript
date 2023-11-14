@@ -26,7 +26,7 @@
  declare class C3 {
      [1](): void;
      [2](): void;
-@@ -47,21 +46,16 @@
+@@ -48,21 +47,16 @@
  overloadsWithComputedNames.ts(8,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
  overloadsWithComputedNames.ts(14,5): error TS2391: Function implementation is missing or not immediately following the declaration.
  overloadsWithComputedNames.ts(16,5): error TS2389: Function implementation name must be '["bar"]'.
@@ -49,7 +49,7 @@
      class Person {
          ["B"](a: number): string;
          ["A"](a: string|number): number | string {
-@@ -98,10 +92,8 @@
+@@ -99,10 +93,8 @@
      class C1 {
          [sym](): void;  // should error
          ~~~~~
@@ -60,7 +60,7 @@
          ~~~~~~~~~~~~
  !!! error TS2391: Function implementation is missing or not immediately following the declaration.
          [uniqueSym](): void;
-@@ -120,24 +112,16 @@
+@@ -121,24 +113,16 @@
      class C2 {
          [strUnion](): void; // should error
          ~~~~~~~~~~

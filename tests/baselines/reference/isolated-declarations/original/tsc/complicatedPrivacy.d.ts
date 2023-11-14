@@ -110,7 +110,7 @@ module mglo5 {
 
 
 
-//// [/.src/complicatedPrivacy.d.ts]
+//// [complicatedPrivacy.d.ts]
 declare namespace m1 {
     export namespace m2 {
         function f1(c1: C1): invalid;
@@ -162,6 +162,7 @@ declare namespace mglo5 {
         f1(): string;
     }
 }
+
 /// [Errors] ////
 
 complicatedPrivacy.ts(5,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

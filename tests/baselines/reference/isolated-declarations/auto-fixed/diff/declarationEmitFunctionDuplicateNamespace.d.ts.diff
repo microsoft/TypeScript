@@ -1,0 +1,36 @@
+// [[Reason: undefined]] ////
+
+//// [tests/cases/compiler/declarationEmitFunctionDuplicateNamespace.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -2,8 +2,22 @@
+ 
+ //// [declarationEmitFunctionDuplicateNamespace.d.ts]
+ declare function f(a: 0): 0;
+ declare function f(a: 1): 1;
+-declare namespace f {
+-    var x: number;
+-}
+-//# sourceMappingURL=declarationEmitFunctionDuplicateNamespace.d.ts.map
+\ No newline at end of file
++//# sourceMappingURL=declarationEmitFunctionDuplicateNamespace.d.ts.map
++
++/// [Errors] ////
++
++declarationEmitFunctionDuplicateNamespace.ts(2,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++
++
++==== declarationEmitFunctionDuplicateNamespace.ts (1 errors) ====
++    function f(a: 0): 0;
++    function f(a: 1): 1;
++             ~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++    function f(a: 0 | 1) {
++        return a;
++    }
++    
++    f.x = 2;
++    
+\ No newline at end of file
