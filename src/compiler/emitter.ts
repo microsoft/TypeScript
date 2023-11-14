@@ -223,6 +223,7 @@ import {
     isGeneratedIdentifier,
     isGeneratedPrivateIdentifier,
     isIdentifier,
+    isImportAttributes,
     isIncrementalCompilation,
     isInJsonFile,
     isInternalDeclaration,
@@ -1840,7 +1841,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
         if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
         if (hint === EmitHint.MappedTypeParameter) return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
-        if (hint === EmitHint.TypeImportAttributes) return emitTypeImportAttributes(cast(node, ts.isImportAttributes));
+        if (hint === EmitHint.TypeImportAttributes) return emitTypeImportAttributes(cast(node, isImportAttributes));
         if (hint === EmitHint.EmbeddedStatement) {
             Debug.assertNode(node, isEmptyStatement);
             return emitEmptyStatement(/*isEmbeddedStatement*/ true);
