@@ -1,5 +1,6 @@
 import {
     combinePaths,
+    Debug,
     forEachAncestorDirectory,
     forEachKey,
     getBaseFileName,
@@ -28,12 +29,15 @@ import {
     EndInstallTypes,
     EventBeginInstallTypes,
     EventEndInstallTypes,
+    EventTypesRegistry,
     InstallPackageRequest,
     InstallTypingHost,
     InvalidateCachedTypings,
     PackageInstalledResponse,
     SetTypings,
     stringifyIndented,
+    TypesRegistryResponse,
+    TypingInstallerRequestUnion,
     WatchTypingLocations,
 } from "./_namespaces/ts.server";
 
@@ -110,7 +114,7 @@ export abstract class TypingsInstaller {
     private readonly projectWatchers = new Map<string, Set<string>>();
     private safeList: JsTyping.SafeList | undefined;
     /** @internal */
-    readonly pendingRunRequests: PendingRequest[] = [];
+    private pendingRunRequests: PendingRequest[] = [];
 
     private installRunCount = 1;
     private inFlightRequestCount = 0;
@@ -130,6 +134,33 @@ export abstract class TypingsInstaller {
             this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
         }
         this.processCacheLocation(this.globalCachePath);
+    }
+
+    /** @internal */
+    handleRequest(req: TypingInstallerRequestUnion) {
+        switch (req.kind) {
+            case "discover":
+                this.install(req);
+                break;
+            case "closeProject":
+                this.closeProject(req);
+                break;
+            case "typesRegistry": {
+                const typesRegistry: { [key: string]: MapLike<string>; } = {};
+                this.typesRegistry.forEach((value, key) => {
+                    typesRegistry[key] = value;
+                });
+                const response: TypesRegistryResponse = { kind: EventTypesRegistry, typesRegistry };
+                this.sendResponse(response);
+                break;
+            }
+            case "installPackage": {
+                this.installPackage(req);
+                break;
+            }
+            default:
+                Debug.assertNever(req);
+        }
     }
 
     closeProject(req: CloseProject) {
@@ -493,7 +524,7 @@ export abstract class TypingsInstaller {
     protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
     protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
     /** @internal */
-    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse): void;
+    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse | TypesRegistryResponse): void;
     protected readonly latestDistTag = "latest";
 }
 

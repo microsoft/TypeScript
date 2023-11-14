@@ -170,12 +170,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/tmp",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/bower.json' dependencies: ["jquery"]
@@ -541,12 +537,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/tmp",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/bower.json' dependencies: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []

@@ -4,12 +4,6 @@ import {
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
-    ActionInvalidate,
-    ActionPackageInstalled,
-    ActionSet,
-    ActionWatchTypingLocations,
-    EventBeginInstallTypes,
-    EventEndInstallTypes,
     stringifyIndented,
 } from "../../_namespaces/ts.server";
 import {
@@ -91,7 +85,7 @@ export type PendingInstallCallback = (
 ) => void;
 export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.TypingsInstaller {
     readonly typesRegistry: Map<string, ts.MapLike<string>>;
-    constructor(readonly testTypingInstaller: TestTypingsInstaller) {
+    constructor(readonly testTypingInstaller: TestTypingsInstallerAdapter) {
         const log = loggerToTypingsInstallerLog(testTypingInstaller.session.logger);
         ts.Debug.assert(testTypingInstaller.session.host.patched);
         testTypingInstaller.session.host.baselineHost("TI:: Creating typing installer");
@@ -175,17 +169,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
 
     sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes | ts.server.WatchTypingLocations | ts.server.PackageInstalledResponse) {
         this.log.writeLine(`Sending response:${stringifyIndented(response)}`);
-        this.testTypingInstaller.onResponse(response);
-    }
-
-    enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
-        const request = ts.server.createInstallTypingsRequest(
-            project,
-            typeAcquisition,
-            unresolvedImports,
-            this.testTypingInstaller.globalTypingsCacheLocation,
-        );
-        this.install(request);
+        this.testTypingInstaller.handleMessage(response);
     }
 }
 
@@ -196,111 +180,50 @@ export interface TestTypingsInstallerOptions {
     throttleLimit?: number;
     installAction?: InstallAction;
     typesRegistry?: string | readonly string[];
+    throttledRequests?: number;
 }
 
-export class TestTypingsInstaller implements ts.server.ITypingsInstaller {
-    protected projectService!: ts.server.ProjectService;
-    public installer!: TestTypingsInstallerWorker;
+export class TestTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapter {
+    worker: TestTypingsInstallerWorker | undefined;
     session!: TestSession;
-    packageInstalledPromise: { resolve(value: ts.ApplyCodeActionCommandResult): void; reject(reason: unknown): void; } | undefined;
-
     // Options
-    readonly globalTypingsCacheLocation: string;
     readonly throttleLimit: number;
     readonly installAction: InstallAction;
     readonly typesRegistry: string | readonly string[] | undefined;
+    readonly throttledRequests: number | undefined;
 
     constructor(options: TestTypingsInstallerOptions) {
-        this.globalTypingsCacheLocation = options.globalTypingsCacheLocation || options.host.getHostSpecificPath("/a/data");
+        const globalTypingsCacheLocation = options.globalTypingsCacheLocation || options.host.getHostSpecificPath("/a/data");
+        super(
+            /*telemetryEnabled*/ false,
+            options.throttledRequests === undefined ?
+                { ...options.logger!, hasLevel: ts.returnFalse } :
+                options.logger!,
+            options.host,
+            globalTypingsCacheLocation,
+            (...args) => this.session.event(...args),
+            // Some large number so requests arent throttled
+            options.throttledRequests === undefined ? 10 : options.throttledRequests,
+        );
         this.throttleLimit = options.throttleLimit || 5;
         this.installAction = options.installAction !== undefined ? options.installAction : true;
         this.typesRegistry = options.typesRegistry;
+        this.throttledRequests = options.throttledRequests;
     }
 
-    isKnownTypesPackageName(name: string): boolean {
-        // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
-        const validationResult = ts.JsTyping.validatePackageName(name);
-        if (validationResult !== ts.JsTyping.NameValidationResult.Ok) {
-            return false;
+    protected override createInstallerProcess(): ts.server.TypingsInstallerWorkerProcess {
+        return {
+            send: req => (this.worker ??= new TestTypingsInstallerWorker(this)).handleRequest(req),
+        };
+    }
+
+    override scheduleRequest(request: ts.server.DiscoverTypings): void {
+        if (this.throttledRequests === undefined) {
+            this.activeRequestCount++;
+            this.installer.send(request);
         }
-
-        return this.ensureInstaller().typesRegistry.has(name);
-    }
-
-    installPackage(options: ts.server.InstallPackageOptionsWithProject): Promise<ts.ApplyCodeActionCommandResult> {
-        this.ensureInstaller().installPackage({ kind: "installPackage", ...options });
-        ts.Debug.assert(this.packageInstalledPromise === undefined);
-        return new Promise<ts.ApplyCodeActionCommandResult>((resolve, reject) => {
-            this.packageInstalledPromise = { resolve, reject };
-        });
-    }
-
-    attach(projectService: ts.server.ProjectService) {
-        this.projectService = projectService;
-    }
-
-    onProjectClosed(p: ts.server.Project) {
-        this.installer?.closeProject({ projectName: p.getProjectName(), kind: "closeProject" });
-    }
-
-    enqueueInstallTypingsRequest(project: ts.server.Project, typeAcquisition: ts.TypeAcquisition, unresolvedImports: ts.SortedReadonlyArray<string>) {
-        this.ensureInstaller().enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
-    }
-
-    private ensureInstaller() {
-        return this.installer ??= new TestTypingsInstallerWorker(this);
-    }
-
-    onResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes | ts.server.WatchTypingLocations | ts.server.PackageInstalledResponse) {
-        switch (response.kind) {
-            case ActionPackageInstalled: {
-                const { success, message } = response;
-                if (success) {
-                    this.packageInstalledPromise!.resolve({ successMessage: message });
-                }
-                else {
-                    this.packageInstalledPromise!.reject(message);
-                }
-                this.packageInstalledPromise = undefined;
-
-                this.projectService.updateTypingsForProject(response);
-                // The behavior is the same as for setTypings, so send the same event.
-                this.session.event(response, "setTypings");
-                break;
-            }
-            case EventBeginInstallTypes: {
-                const body: ts.server.protocol.BeginInstallTypesEventBody = {
-                    eventId: response.eventId,
-                    packages: response.packagesToInstall,
-                };
-                const eventName: ts.server.protocol.BeginInstallTypesEventName = "beginInstallTypes";
-                this.session.event(body, eventName);
-                break;
-            }
-            case EventEndInstallTypes: {
-                const body: ts.server.protocol.EndInstallTypesEventBody = {
-                    eventId: response.eventId,
-                    packages: response.packagesToInstall,
-                    success: response.installSuccess,
-                };
-                const eventName: ts.server.protocol.EndInstallTypesEventName = "endInstallTypes";
-                this.session.event(body, eventName);
-                break;
-            }
-            case ActionInvalidate: {
-                this.projectService.updateTypingsForProject(response);
-                break;
-            }
-            case ActionSet: {
-                this.projectService.updateTypingsForProject(response);
-                this.session.event(response, "setTypings");
-                break;
-            }
-            case ActionWatchTypingLocations:
-                this.projectService.watchTypingLocations(response);
-                break;
-            default:
-                ts.assertType<never>(response);
+        else {
+            super.scheduleRequest(request);
         }
     }
 }
