@@ -2,6 +2,7 @@ import {
     AnyImportSyntax,
     appendIfUnique,
     ComputedPropertyName,
+    createEvaluator,
     Debug,
     Declaration,
     DeclarationName,
@@ -91,9 +92,6 @@ import {
     EmitDeclarationSymbol,
 } from "./emit-binder";
 import {
-    makeEvaluator,
-} from "./evaluator";
-import {
     IsolatedEmitHost,
     IsolatedEmitResolver,
     MemberKey,
@@ -125,7 +123,7 @@ export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEm
         }
         return undefined;
     }
-    const evaluate = makeEvaluator({
+    const evaluate = createEvaluator({
         evaluateElementAccessExpression(expr, location) {
             // We only resolve names in the current enum declaration
             if (!location || !isEnumDeclaration(location)) return undefined;
