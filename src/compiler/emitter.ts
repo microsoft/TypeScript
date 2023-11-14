@@ -1840,6 +1840,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
         if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
         if (hint === EmitHint.MappedTypeParameter) return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
+        if (hint === EmitHint.TypeImportAttributes) return emitTypeImportAttributes(cast(node, ts.isImportAttributes));
         if (hint === EmitHint.EmbeddedStatement) {
             Debug.assertNode(node, isEmptyStatement);
             return emitEmptyStatement(/*isEmbeddedStatement*/ true);
@@ -2944,15 +2945,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (node.attributes) {
             writePunctuation(",");
             writeSpace();
-            writePunctuation("{");
-            writeSpace();
-            writeKeyword(node.attributes.token === SyntaxKind.AssertKeyword ? "assert" : "with");
-            writePunctuation(":");
-            writeSpace();
-            const elements = node.attributes.elements;
-            emitList(node.attributes, elements, ListFormat.ImportAttributes);
-            writeSpace();
-            writePunctuation("}");
+            pipelineEmit(EmitHint.TypeImportAttributes, node.attributes);
         }
         writePunctuation(")");
         if (node.qualifier) {
@@ -4075,6 +4068,18 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             emitWithLeadingSpace(node.attributes);
         }
         writeTrailingSemicolon();
+    }
+
+    function emitTypeImportAttributes(node: ImportAttributes) {
+        writePunctuation("{");
+        writeSpace();
+        writeKeyword(node.token === SyntaxKind.AssertKeyword ? "assert" : "with");
+        writePunctuation(":");
+        writeSpace();
+        const elements = node.elements;
+        emitList(node, elements, ListFormat.ImportAttributes);
+        writeSpace();
+        writePunctuation("}");
     }
 
     function emitImportAttributes(node: ImportAttributes) {

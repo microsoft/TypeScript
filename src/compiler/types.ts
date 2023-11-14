@@ -8148,6 +8148,7 @@ export const enum EmitHint {
     Unspecified,         // Emitting an otherwise unspecified node
     EmbeddedStatement,   // Emitting an embedded statement
     JsxAttributeValue,   // Emitting a JSX attribute value
+    TypeImportAttributes,// Emitting attributes as part of an ImportTypeNode
 }
 
 /** @internal */
