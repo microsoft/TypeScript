@@ -35162,6 +35162,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         links.resolvedSignature = resolvingSignature;
         let result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal);
+        /**
+         * #56013
+         * The following is an invariant condition beneath the above call to resolveSignature:
+         * - links.resolvedSignature is either the global constant readonly value `resolvingSignature`
+         * - or a calculated signature.
+         */
+        Debug.assert(links.resolvedSignature);
+
         // When CheckMode.SkipGenericFunctions is set we use resolvingSignature to indicate that call
         // resolution should be deferred.
         if (result !== resolvingSignature) {
@@ -35170,11 +35178,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // since resolving such signature leads to resolving the potential outer signature, its arguments and thus the very same signature
             // it's possible that this inner resolution sets the resolvedSignature first.
             // In such a case we ignore the local result and reuse the correct one that was cached.
-            // [cph 56013] This is buggy - links.resolvedSignature could be `undefined`. Unfortunately flow did not warn us.
-            // if (links.resolvedSignature !== resolvingSignature) {
-            //     result = links.resolvedSignature;
-            // }
-            if (links.resolvedSignature /* #56013 */ && links.resolvedSignature !== resolvingSignature) {
+            if (links.resolvedSignature !== resolvingSignature) {
                 result = links.resolvedSignature;
             }
             // If signature resolution originated in control flow type analysis (for example to compute the
@@ -35182,7 +35186,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // types from the control flow analysis.
             links.resolvedSignature = flowLoopStart === flowLoopCount ? result : cached;
         }
-        Debug.assert(result); // [cph] #56013
         return result;
     }
 
@@ -38954,7 +38957,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let setOfNode: Set<Node> | undefined;
             if (chooseOverloadRecursionLevel >= 0 && (setOfNode = chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel])) {
                 if (!setOfNode.has(node)) {
-                    getNodeLinks(node).resolvedSignature = undefined;
+                    /**
+                     * #56013
+                     * The following is an invariant condition beneath the above call to resolveSignature:
+                     * - getNodeLinks(node).resolvedSignature is either the global constant readonly value `resolvingSignature`
+                     * - or a calculated signature.
+                     * Therefore resetting must set to `resolvingSignature` - it means "not yet calculated".
+                     */
+                    getNodeLinks(node).resolvedSignature = resolvingSignature;
                     setOfNode.add(node);
                 }
             }
