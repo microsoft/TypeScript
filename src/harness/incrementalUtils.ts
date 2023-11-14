@@ -431,6 +431,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
     const getDefaultLibLocation = compilerHost.getDefaultLibLocation!;
     compilerHost.getDefaultLibLocation = () => ts.getNormalizedAbsolutePath(getDefaultLibLocation(), service.host.getCurrentDirectory());
     compilerHost.getDefaultLibFileName = options => ts.combinePaths(compilerHost.getDefaultLibLocation!(), ts.getDefaultLibFileName(options));
+    compilerHost.trace = ts.noop; // We dont want to update host just because of trace
     const readFile = compilerHost.readFile;
     compilerHost.readFile = fileName => {
         const path = project.toPath(fileName);

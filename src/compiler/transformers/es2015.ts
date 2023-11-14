@@ -9,6 +9,7 @@ import {
     arrayIsEqualTo,
     ArrayLiteralExpression,
     ArrowFunction,
+    AssignmentExpression,
     BinaryExpression,
     BindingElement,
     BindingPattern,
@@ -39,18 +40,19 @@ import {
     elementAt,
     EmitFlags,
     EmitHint,
+    EqualsToken,
     every,
     Expression,
     ExpressionStatement,
     ExpressionWithTypeArguments,
     filter,
-    findSuperStatementIndexPath,
     first,
     firstOrUndefined,
     flatten,
     flattenDestructuringAssignment,
     flattenDestructuringBinding,
     FlattenLevel,
+    forEachChild,
     ForInStatement,
     ForOfStatement,
     ForStatement,
@@ -58,6 +60,7 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
+    GeneratedIdentifier,
     GeneratedIdentifierFlags,
     getAllAccessorDeclarations,
     getClassExtendsHeritageElement,
@@ -104,6 +107,7 @@ import {
     isForStatement,
     isFunctionExpression,
     isFunctionLike,
+    isGeneratedIdentifier,
     isHoistedFunction,
     isHoistedVariableStatement,
     isIdentifier,
@@ -113,26 +117,24 @@ import {
     isIterationStatement,
     isLabeledStatement,
     isModifier,
-    isNumericLiteral,
     isObjectLiteralElementLike,
-    isObjectLiteralExpression,
     isOmittedExpression,
     isPackedArrayLiteral,
     isPrivateIdentifier,
-    isPropertyAssignment,
+    isPropertyAccessExpression,
     isPropertyDeclaration,
     isPropertyName,
     isReturnStatement,
     isSpreadElement,
     isStatement,
     isStatic,
+    isSuperCall,
     isSuperProperty,
     isSwitchStatement,
     isTryStatement,
     isVariableDeclaration,
     isVariableDeclarationList,
     isVariableStatement,
-    isVoidExpression,
     isWithStatement,
     IterationStatement,
     LabeledStatement,
@@ -154,6 +156,7 @@ import {
     NodeCheckFlags,
     NodeFlags,
     nodeIsSynthesized,
+    nullTransformationContext,
     NumericLiteral,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
@@ -162,7 +165,9 @@ import {
     PrimaryExpression,
     ProcessLevel,
     processTaggedTemplateExpression,
+    PropertyAccessExpression,
     PropertyAssignment,
+    PropertyDeclaration,
     rangeEndIsOnSameLineAsRangeStart,
     ReturnStatement,
     SemicolonClassElement,
@@ -187,11 +192,13 @@ import {
     startOnNewLine,
     Statement,
     StringLiteral,
+    SuperExpression,
     SwitchStatement,
     SyntaxKind,
     TaggedTemplateExpression,
     TemplateExpression,
     TextRange,
+    ThisExpression,
     TokenFlags,
     TransformationContext,
     TransformFlags,
@@ -381,7 +388,7 @@ const enum HierarchyFacts {
     IterationContainer = 1 << 10,           // Enclosed in an outer IterationStatement
     ForStatement = 1 << 11,                 // Enclosing block-scoped container is a ForStatement
     ForInOrForOfStatement = 1 << 12,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
-    ConstructorWithCapturedSuper = 1 << 13, // Enclosed in a constructor that captures 'this' for use with 'super'
+    ConstructorWithSuperCall = 1 << 13,     // Enclosed in a constructor that captures 'this' for use with 'super'
     StaticInitializer = 1 << 14,            // Enclosed in a static initializer
 
     // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
@@ -404,14 +411,14 @@ const enum HierarchyFacts {
 
     // Functions, methods, and accessors are both new lexical scopes and new block scopes.
     FunctionIncludes = Function | TopLevel,
-    FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | IterationContainer | StaticInitializer,
+    FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithSuperCall | IterationContainer | StaticInitializer,
 
     AsyncFunctionBodyIncludes = FunctionIncludes | AsyncFunctionBody,
     AsyncFunctionBodyExcludes = FunctionExcludes & ~NonStaticClassElement,
 
     // Arrow functions are lexically scoped to their container, but are new block scopes.
     ArrowFunctionIncludes = ArrowFunction | TopLevel,
-    ArrowFunctionExcludes = BlockScopeExcludes & ~TopLevel | ConstructorWithCapturedSuper,
+    ArrowFunctionExcludes = BlockScopeExcludes & ~TopLevel | ConstructorWithSuperCall,
 
     // Constructors are both new lexical scopes and new block scopes. Constructors are also
     // always considered non-static members of a class.
@@ -448,7 +455,8 @@ const enum HierarchyFacts {
     //
 
     NewTarget = 1 << 15,                            // Contains a 'new.target' meta-property
-    CapturedLexicalThis = 1 << 16,                  // Contains a lexical `this` reference captured by an arrow function.
+    LexicalThis = 1 << 16,                          // Contains a lexical `this` reference
+    CapturedLexicalThis = 1 << 17,                  // Contains a lexical `this` reference captured by an arrow function.
 
     //
     // Subtree masks
@@ -457,7 +465,7 @@ const enum HierarchyFacts {
     SubtreeFactsMask = ~AncestorFactsMask,
 
     ArrowFunctionSubtreeExcludes = None,
-    FunctionSubtreeExcludes = NewTarget | CapturedLexicalThis,
+    FunctionSubtreeExcludes = NewTarget | LexicalThis | CapturedLexicalThis,
 }
 
 // dprint-ignore
@@ -561,7 +569,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function isReturnVoidStatementInConstructorWithCapturedSuper(node: Node): boolean {
-        return (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper) !== 0
+        return (hierarchyFacts & HierarchyFacts.ConstructorWithSuperCall) !== 0
             && node.kind === SyntaxKind.ReturnStatement
             && !(node as ReturnStatement).expression;
     }
@@ -585,7 +593,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     function shouldVisitNode(node: Node): boolean {
         return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
             || convertedLoopState !== undefined
-            || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && isOrMayContainReturnCompletion(node))
+            || (hierarchyFacts & HierarchyFacts.ConstructorWithSuperCall && isOrMayContainReturnCompletion(node))
             || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatement(node))
             || (getInternalEmitFlags(node) & InternalEmitFlags.TypeScriptClassWrapper) !== 0;
     }
@@ -617,7 +625,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
     function callExpressionVisitor(node: Node): VisitResult<Node | undefined> {
         if (node.kind === SyntaxKind.SuperKeyword) {
-            return visitSuperKeyword(/*isExpressionOfCall*/ true);
+            return visitSuperKeyword(node as SuperExpression, /*isExpressionOfCall*/ true);
         }
         return visitor(node);
     }
@@ -741,7 +749,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 return visitSpreadElement(node as SpreadElement);
 
             case SyntaxKind.SuperKeyword:
-                return visitSuperKeyword(/*isExpressionOfCall*/ false);
+                return visitSuperKeyword(node as SuperExpression, /*isExpressionOfCall*/ false);
 
             case SyntaxKind.ThisKeyword:
                 return visitThisKeyword(node);
@@ -811,7 +819,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function returnCapturedThis(node: Node): ReturnStatement {
-        return setOriginalNode(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)), node);
+        return setOriginalNode(factory.createReturnStatement(createCapturedThis()), node);
+    }
+
+    function createCapturedThis() {
+        return factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel) as CapturedThis;
     }
 
     function visitReturnStatement(node: ReturnStatement): Statement {
@@ -840,6 +852,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function visitThisKeyword(node: Node): Node {
+        hierarchyFacts |= HierarchyFacts.LexicalThis;
         if (hierarchyFacts & HierarchyFacts.ArrowFunction && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
             hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
         }
@@ -1035,7 +1048,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             /*asteriskToken*/ undefined,
             /*name*/ undefined,
             /*typeParameters*/ undefined,
-            extendsClauseElement ? [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel))] : [],
+            extendsClauseElement ? [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, createSyntheticSuper())] : [],
             /*type*/ undefined,
             transformClassBody(node, extendsClauseElement),
         );
@@ -1196,192 +1209,39 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return block;
     }
 
-    function transformConstructorBodyWorker(
-        prologueOut: Statement[],
-        statementsOut: Statement[],
-        statementsIn: NodeArray<Statement>,
-        statementOffset: number,
-        superPath: readonly number[],
-        superPathDepth: number,
-        constructor: ConstructorDeclaration & { body: FunctionBody; },
-        isDerivedClass: boolean,
-        hasSynthesizedSuper: boolean,
-        isFirstStatement: boolean,
-    ): boolean {
-        let mayReplaceThis = false;
-
-        const superStatementIndex = superPathDepth < superPath.length ? superPath[superPathDepth] : -1;
-        const leadingStatementsEnd = superStatementIndex >= 0 ? superStatementIndex : statementsIn.length;
-
-        // find the index of the first statement material to evaluation
-        if (isFirstStatement && superStatementIndex >= 0) {
-            let firstMaterialIndex = statementOffset;
-            while (isFirstStatement && firstMaterialIndex < superStatementIndex) {
-                const statement = constructor.body.statements[firstMaterialIndex];
-                if (!isUninitializedVariableStatement(statement) && !isUsingDeclarationStateVariableStatement(statement)) break;
-                firstMaterialIndex++;
-            }
-
-            isFirstStatement = superStatementIndex === firstMaterialIndex;
-        }
-
-        // visit everything prior to the statement containing `super()`.
-        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, leadingStatementsEnd - statementOffset));
-
-        const superStatement = superStatementIndex >= 0 ? statementsIn[superStatementIndex] : undefined;
-        if (superStatement && isTryStatement(superStatement)) {
-            const tryBlockStatements: Statement[] = [];
-
-            mayReplaceThis = transformConstructorBodyWorker(
-                prologueOut,
-                tryBlockStatements,
-                superStatement.tryBlock.statements,
-                /*statementOffset*/ 0,
-                superPath,
-                superPathDepth + 1,
-                constructor,
-                isDerivedClass,
-                hasSynthesizedSuper,
-                isFirstStatement,
-            );
-
-            const tryBlockStatementsArray = factory.createNodeArray(tryBlockStatements);
-            setTextRange(tryBlockStatementsArray, superStatement.tryBlock.statements);
-
-            statementsOut.push(factory.updateTryStatement(
-                superStatement,
-                factory.updateBlock(superStatement.tryBlock, tryBlockStatements),
-                visitNode(superStatement.catchClause, visitor, isCatchClause),
-                visitNode(superStatement.finallyBlock, visitor, isBlock),
-            ));
-        }
-        else {
-            const superCall = superStatement && getSuperCallFromStatement(superStatement);
-            let superCallExpression: Expression | undefined;
-            if (hasSynthesizedSuper) {
-                superCallExpression = createDefaultSuperCallOrThis();
-                hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
-            }
-            else if (superCall) {
-                superCallExpression = visitSuperCallInBody(superCall);
-                hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
-            }
-
-            if (isDerivedClass || superCallExpression) {
-                if (
-                    superCallExpression &&
-                    superStatementIndex === statementsIn.length - 1 &&
-                    !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)
-                ) {
-                    // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
-                    // following representation:
-                    //
-                    // ```
-                    // // es2015 (source)
-                    // class C extends Base {
-                    //     constructor() {
-                    //         super("foo");
-                    //     }
-                    // }
-                    //
-                    // // es5 (transformed)
-                    // var C = (function (_super) {
-                    //     function C() {
-                    //         return _super.call(this, "foo") || this;
-                    //     }
-                    //     return C;
-                    // })(Base);
-                    // ```
-
-                    const superCall = cast(cast(superCallExpression, isBinaryExpression).left, isCallExpression);
-                    const returnStatement = factory.createReturnStatement(superCallExpression);
-                    setCommentRange(returnStatement, getCommentRange(superCall));
-                    setEmitFlags(superCall, EmitFlags.NoComments);
-                    statementsOut.push(returnStatement);
-                    return false;
-                }
-                else {
-                    // Otherwise, we will use the following transformed representation for calls to `super()` in a constructor:
-                    //
-                    // ```
-                    // // es2015 (source)
-                    // class C extends Base {
-                    //     constructor() {
-                    //         super("foo");
-                    //         this.x = 1;
-                    //     }
-                    // }
-                    //
-                    // // es5 (transformed)
-                    // var C = (function (_super) {
-                    //     function C() {
-                    //         var _this = _super.call(this, "foo") || this;
-                    //         _this.x = 1;
-                    //         return _this;
-                    //     }
-                    //     return C;
-                    // })(Base);
-                    // ```
-
-                    // If the super() call is the first statement, we can directly create and assign its result to `_this`
-                    if (isFirstStatement) {
-                        insertCaptureThisForNode(statementsOut, constructor, superCallExpression || createActualThis());
-                    }
-                    // Since the `super()` call isn't the first statement, it's split across 1-2 statements:
-                    // * A prologue `var _this = this;`, in case the constructor accesses this before super()
-                    // * If it exists, a reassignment to that `_this` of the super() call
-                    else {
-                        insertCaptureThisForNode(prologueOut, constructor, createActualThis());
-                        if (superCallExpression) {
-                            addSuperThisCaptureThisForNode(statementsOut, superCallExpression);
-                        }
-                    }
-
-                    mayReplaceThis = true;
-                }
-            }
-            else {
-                // If a class is not derived from a base class or does not have a call to `super()`, `this` is only
-                // captured when necessitated by an arrow function capturing the lexical `this`:
-                //
-                // ```
-                // // es2015
-                // class C {}
-                //
-                // // es5
-                // var C = (function () {
-                //     function C() {
-                //     }
-                //     return C;
-                // })();
-                // ```
-                insertCaptureThisForNodeIfNeeded(prologueOut, constructor);
-            }
-        }
-
-        // visit everything following the statement containing `super()`.
-        if (superStatementIndex >= 0) {
-            addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex + 1));
-        }
-
-        return mayReplaceThis;
-    }
-
     function isUninitializedVariableStatement(node: Statement) {
         return isVariableStatement(node) && every(node.declarationList.declarations, decl => isIdentifier(decl.name) && !decl.initializer);
     }
 
-    function isUsingDeclarationStateVariableStatement(node: Statement) {
-        if (!isVariableStatement(node) || node.declarationList.declarations.length !== 1) return false;
-        const varDecl = node.declarationList.declarations[0];
-        if (!isIdentifier(varDecl.name) || !varDecl.initializer) return false;
-        const initializer = varDecl.initializer;
-        if (!isObjectLiteralExpression(initializer) || initializer.properties.length !== 3) return false;
-        const [stackProp, errorProp, hasErrorProp] = initializer.properties;
-        if (!isPropertyAssignment(stackProp) || !isIdentifier(stackProp.name) || idText(stackProp.name) !== "stack" || !isArrayLiteralExpression(stackProp.initializer)) return false;
-        if (!isPropertyAssignment(errorProp) || !isIdentifier(errorProp.name) || idText(errorProp.name) !== "error" || !isVoidExpression(errorProp.initializer) || !isNumericLiteral(errorProp.initializer.expression)) return false;
-        if (!isPropertyAssignment(hasErrorProp) || !isIdentifier(hasErrorProp.name) || idText(hasErrorProp.name) !== "hasError" || hasErrorProp.initializer.kind !== SyntaxKind.FalseKeyword) return false;
-        return true;
+    function containsSuperCall(node: Node): boolean {
+        if (isSuperCall(node)) {
+            return true;
+        }
+        if (!(node.transformFlags & TransformFlags.ContainsLexicalSuper)) {
+            return false;
+        }
+        switch (node.kind) {
+            // stop at function boundaries
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                return false;
+
+            // only step into computed property names for class and object literal elements
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.PropertyDeclaration: {
+                const named = node as AccessorDeclaration | MethodDeclaration | PropertyDeclaration;
+                if (isComputedPropertyName(named.name)) {
+                    return !!forEachChild(named.name, containsSuperCall);
+                }
+                return false;
+            }
+        }
+        return !!forEachChild(node, containsSuperCall);
     }
 
     /**
@@ -1423,32 +1283,29 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         // In derived classes, there may be code before the necessary super() call
         // We'll remove pre-super statements to be tacked on after the rest of the body
         const standardPrologueEnd = factory.copyStandardPrologue(constructor.body.statements, prologue, /*statementOffset*/ 0);
-        const superStatementIndices = findSuperStatementIndexPath(constructor.body.statements, standardPrologueEnd);
-        if (hasSynthesizedSuper || superStatementIndices.length > 0) {
-            hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
+        if (hasSynthesizedSuper || containsSuperCall(constructor.body)) {
+            hierarchyFacts |= HierarchyFacts.ConstructorWithSuperCall;
         }
 
-        const mayReplaceThis = transformConstructorBodyWorker(
-            prologue,
-            statements,
-            constructor.body.statements,
-            standardPrologueEnd,
-            superStatementIndices,
-            /*superPathDepth*/ 0,
-            constructor,
-            isDerivedClass,
-            hasSynthesizedSuper,
-            /*isFirstStatement*/ true, // NOTE: this will be recalculated inside of transformConstructorBodyWorker
-        );
+        addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, standardPrologueEnd));
+
+        const mayReplaceThis = isDerivedClass || hierarchyFacts & HierarchyFacts.ConstructorWithSuperCall;
 
         // Add parameter defaults at the beginning of the output, with prologue statements
         addDefaultValueAssignmentsIfNeeded(prologue, constructor);
         addRestParameterIfNeeded(prologue, constructor, hasSynthesizedSuper);
         insertCaptureNewTargetIfNeeded(prologue, constructor);
+        if (mayReplaceThis) {
+            insertCaptureThisForNode(prologue, constructor, createActualThis());
+        }
+        else {
+            insertCaptureThisForNodeIfNeeded(prologue, constructor);
+        }
+
         factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
 
         if (mayReplaceThis && !isSufficientlyCoveredByReturnStatements(constructor.body)) {
-            statements.push(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)));
+            statements.push(factory.createReturnStatement(createCapturedThis()));
         }
 
         const body = factory.createBlock(
@@ -1465,6 +1322,469 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         );
 
         setTextRange(body, constructor.body);
+        return simplifyConstructor(body, constructor.body, hasSynthesizedSuper);
+    }
+
+    type CapturedThis = GeneratedIdentifier & { readonly escapedText: __String & "__this"; };
+    type SyntheticSuper = GeneratedIdentifier & { readonly escapedText: __String & "__super"; };
+    type ThisCapturingVariableDeclaration = VariableDeclaration & { readonly name: CapturedThis; readonly initializer: Expression; };
+    type ThisCapturingVariableStatement = VariableStatement & { readonly declarationList: { readonly declarations: { 0: ThisCapturingVariableDeclaration; }; }; };
+    type ThisCapturingAssignmentExpression = AssignmentExpression<EqualsToken> & { readonly left: CapturedThis; };
+    type TransformedSuperCall = CallExpression & { readonly expression: PropertyAccessExpression & { readonly expression: SyntheticSuper; }; };
+    type TransformedSuperCallWithFallback = BinaryExpression & { readonly left: TransformedSuperCall; readonly right: ThisExpression; };
+    type ImplicitSuperCall = BinaryExpression & { readonly left: BinaryExpression; readonly right: TransformedSuperCall; };
+    type ImplicitSuperCallWithFallback = BinaryExpression & { readonly left: ImplicitSuperCall; readonly right: ThisExpression; };
+    type ThisCapturingTransformedSuperCallWithFallback = ThisCapturingAssignmentExpression & { readonly right: TransformedSuperCallWithFallback; };
+    type ThisCapturingImplicitSuperCallWithFallback = ThisCapturingAssignmentExpression & { readonly right: ImplicitSuperCallWithFallback; };
+    type TransformedSuperCallLike =
+        | TransformedSuperCall
+        | TransformedSuperCallWithFallback
+        | ThisCapturingTransformedSuperCallWithFallback
+        | ImplicitSuperCall
+        | ImplicitSuperCallWithFallback
+        | ThisCapturingImplicitSuperCallWithFallback;
+
+    /** Tests whether `node` is a generated identifier whose base text is `_this` */
+    function isCapturedThis(node: Node): node is CapturedThis {
+        return isGeneratedIdentifier(node) && idText(node) === "_this";
+    }
+
+    /** Tests whether `node` is a generated identifier whose base text is `_super` */
+    function isSyntheticSuper(node: Node): node is SyntheticSuper {
+        return isGeneratedIdentifier(node) &&
+            idText(node) === "_super";
+    }
+
+    /** Tests whether `node` is VariableStatement like `var _this = ...;` */
+    function isThisCapturingVariableStatement(node: Node): node is ThisCapturingVariableStatement {
+        return isVariableStatement(node) && node.declarationList.declarations.length === 1 &&
+            isThisCapturingVariableDeclaration(node.declarationList.declarations[0]);
+    }
+
+    /** Tests whether `node` is a VariableDeclaration like in `var _this = ...` */
+    function isThisCapturingVariableDeclaration(node: Node): node is ThisCapturingVariableDeclaration {
+        return isVariableDeclaration(node) && isCapturedThis(node.name) && !!node.initializer;
+    }
+
+    /** Tests whether `node` is an AssignmentExpression like `_this = ...` */
+    function isThisCapturingAssignment(node: Node): node is ThisCapturingAssignmentExpression {
+        return isAssignmentExpression(node, /*excludeCompoundAssignment*/ true) && isCapturedThis(node.left);
+    }
+
+    /** Tests whether `node` is a call like `_super.call(this, ...)` or `_super.apply(this, ...)` */
+    function isTransformedSuperCall(node: Node): node is TransformedSuperCall {
+        return isCallExpression(node) &&
+            isPropertyAccessExpression(node.expression) &&
+            isSyntheticSuper(node.expression.expression) &&
+            isIdentifier(node.expression.name) &&
+            (idText(node.expression.name) === "call" || idText(node.expression.name) === "apply") &&
+            node.arguments.length >= 1 &&
+            node.arguments[0].kind === SyntaxKind.ThisKeyword;
+    }
+
+    /** Tests whether `node` is an expression like `_super.call(this) || this` */
+    function isTransformedSuperCallWithFallback(node: Node): node is TransformedSuperCallWithFallback {
+        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.BarBarToken &&
+            node.right.kind === SyntaxKind.ThisKeyword &&
+            isTransformedSuperCall(node.left);
+    }
+
+    /** Tests whether `node` is a call like `_super !== null && _super.apply(this, arguments)` */
+    function isImplicitSuperCall(node: Node): node is ImplicitSuperCall {
+        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
+            isBinaryExpression(node.left) && node.left.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken &&
+            isSyntheticSuper(node.left.left) &&
+            node.left.right.kind === SyntaxKind.NullKeyword &&
+            isTransformedSuperCall(node.right) &&
+            idText(node.right.expression.name) === "apply";
+    }
+
+    /** Tests whether `node` is an expression like `_super !== null && _super.apply(this, arguments) || this` */
+    function isImplicitSuperCallWithFallback(node: Node): node is ImplicitSuperCallWithFallback {
+        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.BarBarToken &&
+            node.right.kind === SyntaxKind.ThisKeyword &&
+            isImplicitSuperCall(node.left);
+    }
+
+    /** Tests whether `node` is an expression like `_this = _super.call(this) || this` */
+    function isThisCapturingTransformedSuperCallWithFallback(node: Node): node is ThisCapturingTransformedSuperCallWithFallback {
+        return isThisCapturingAssignment(node) && isTransformedSuperCallWithFallback(node.right);
+    }
+
+    /** Tests whether `node` is an expression like `_this = _super.call(this) || this` */
+    function isThisCapturingImplicitSuperCallWithFallback(node: Node): node is ThisCapturingImplicitSuperCallWithFallback {
+        return isThisCapturingAssignment(node) && isImplicitSuperCallWithFallback(node.right);
+    }
+
+    function isTransformedSuperCallLike(node: Node): node is TransformedSuperCallLike {
+        return isTransformedSuperCall(node) ||
+            isTransformedSuperCallWithFallback(node) ||
+            isThisCapturingTransformedSuperCallWithFallback(node) ||
+            isImplicitSuperCall(node) ||
+            isImplicitSuperCallWithFallback(node) ||
+            isThisCapturingImplicitSuperCallWithFallback(node);
+    }
+
+    /**
+     * Simplifies a constructor by inlining `_this = _super.call(this) || this;` into a `var _this = this;` statement
+     * that precedes it when they appear at the top level of the constructor body. No nested transformation is performed
+     * as it is assumed that `body` has already been transformed prior to invoking this function.
+     */
+    function simplifyConstructorInlineSuperInThisCaptureVariable(body: Block) {
+        // given:
+        //
+        //   var C = (function (_super) {
+        //       function C() {
+        //           var _this = this;
+        //           _this = _super.call(this) || this;
+        //           _this.x = 1;
+        //           return _this;
+        //       }
+        //       return C;
+        //   })(Base);
+        //
+        // simplifies to:
+        //
+        //   var C = (function (_super) {
+        //       function C() {
+        //           var _this = _super.call(this) || this;
+        //           _this.x = 1;
+        //           return _this;
+        //       }
+        //       return C;
+        //   })(Base);
+        //
+
+        for (let i = 0; i < body.statements.length - 1; i++) {
+            const statement = body.statements[i];
+            // walk forward until we find `var _this = ...;`
+            if (!isThisCapturingVariableStatement(statement)) {
+                continue;
+            }
+
+            // Only perform inlining for `var _this = this;`
+            const varDecl = statement.declarationList.declarations[0];
+            if (varDecl.initializer.kind !== SyntaxKind.ThisKeyword) {
+                continue;
+            }
+
+            // It's possible that temporary variables may have been injected between `var _this` and `_this = ...`,
+            // so we'll track any intervening statements to stitch them back in to the result.
+            const thisCaptureStatementIndex = i;
+            let superCallIndex = i + 1;
+            while (superCallIndex < body.statements.length) {
+                const statement = body.statements[superCallIndex];
+                // stop on the next `_this = _super.call(...) || this` statement
+                if (isExpressionStatement(statement)) {
+                    if (isTransformedSuperCallLike(skipOuterExpressions(statement.expression))) {
+                        break;
+                    }
+                }
+
+                // skip over hoisted temporary variables
+                if (isUninitializedVariableStatement(statement)) {
+                    superCallIndex++;
+                    continue;
+                }
+
+                // if there are any other statements following `var _this = ...` then we cannot simplify.
+                return body;
+            }
+
+            const following = body.statements[superCallIndex] as ExpressionStatement;
+
+            // If the expression that follows is `_this = ...`, strip off the assignment to `_this` since that will
+            // be handled by the variable initializer.
+            let expression = following.expression;
+            if (isThisCapturingAssignment(expression)) {
+                expression = expression.right;
+            }
+
+            const newVarDecl = factory.updateVariableDeclaration(
+                varDecl,
+                varDecl.name,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                expression,
+            );
+
+            const newDeclList = factory.updateVariableDeclarationList(statement.declarationList, [newVarDecl]);
+            const newVarStatement = factory.createVariableStatement(statement.modifiers, newDeclList);
+            setOriginalNode(newVarStatement, following);
+            setTextRange(newVarStatement, following);
+            const newStatements = factory.createNodeArray([
+                ...body.statements.slice(0, thisCaptureStatementIndex), // copy statements preceding to `var _this`
+                ...body.statements.slice(thisCaptureStatementIndex + 1, superCallIndex), // copy intervening temp variables
+                newVarStatement,
+                ...body.statements.slice(superCallIndex + 1), // copy statements following `super.call(this, ...)`
+            ]);
+            setTextRange(newStatements, body.statements);
+            return factory.updateBlock(body, newStatements);
+        }
+
+        return body;
+    }
+
+    /**
+     * Simplifies a constructor by inlining `_this = _super.call(this) || this;` into a `return _this;` statement
+     * that follows it when they appear at the top level of the constructor body. No nested transformation is performed
+     * as it is assumed that `body` has already been transformed prior to invoking this function.
+     */
+    function simplifyConstructorInlineSuperReturn(body: Block, original: Block) {
+        // given:
+        //
+        //   var C = (function (_super) {
+        //       function C() {
+        //           ...
+        //           _this = _super.call(this) || this;
+        //           return _this;
+        //       }
+        //       return C;
+        //   })(Base);
+        //
+        // simplifies to:
+        //
+        //   var C = (function (_super) {
+        //       function C() {
+        //           ...
+        //           return _super.call(this) || this;
+        //       }
+        //       return C;
+        //   })(Base);
+        //
+
+        // bail if there is a non-top-level `super()` in the original body
+        for (const statement of original.statements) {
+            if (statement.transformFlags & TransformFlags.ContainsLexicalSuper && !getSuperCallFromStatement(statement)) {
+                return body;
+            }
+        }
+
+        // If the original node contained a lexical `this` that must be preserved, or if we recorded a captured `this`
+        // or `super`, then we cannot simplify `var _this = ...;`, but may still be able to inline standalone `_this = ...`
+        // assignment statements.
+        const canElideThisCapturingVariable = !(original.transformFlags & TransformFlags.ContainsLexicalThis) &&
+            !(hierarchyFacts & HierarchyFacts.LexicalThis) &&
+            !(hierarchyFacts & HierarchyFacts.CapturedLexicalThis);
+
+        // find the return statement and the preceding transformed `super()` call
+        for (let i = body.statements.length - 1; i > 0; i--) {
+            // walk backwards until we find a `return _this;`
+            const statement = body.statements[i];
+            if (isReturnStatement(statement) && statement.expression && isCapturedThis(statement.expression)) {
+                const preceding = body.statements[i - 1];
+                let expression: Expression | undefined;
+                if (
+                    isExpressionStatement(preceding) &&
+                    isThisCapturingTransformedSuperCallWithFallback(skipOuterExpressions(preceding.expression))
+                ) {
+                    // The preceding statement is `_this = _super.call(this, ...) || this`, so we'll inline the
+                    // expression.
+                    expression = preceding.expression;
+                }
+                else if (canElideThisCapturingVariable && isThisCapturingVariableStatement(preceding)) {
+                    const varDecl = preceding.declarationList.declarations[0];
+                    if (isTransformedSuperCallLike(skipOuterExpressions(varDecl.initializer))) {
+                        // The preceding statement is `var _this = _super.call(this, ...) || this`, so we'll inline the
+                        // initializer as a `_this` assignment, though it may be removed in a later pass.
+                        expression = factory.createAssignment(
+                            createCapturedThis(),
+                            varDecl.initializer,
+                        );
+                    }
+                }
+
+                if (!expression) {
+                    break;
+                }
+
+                const newReturnStatement = factory.createReturnStatement(expression);
+                setOriginalNode(newReturnStatement, preceding);
+                setTextRange(newReturnStatement, preceding);
+                const newStatements = factory.createNodeArray([
+                    ...body.statements.slice(0, i - 1), // copy all statements preceding `_super.call(this, ...)`
+                    newReturnStatement,
+                    ...body.statements.slice(i + 1), // copy all statements following `return _this;`
+                ]);
+                setTextRange(newStatements, body.statements);
+                return factory.updateBlock(body, newStatements);
+            }
+        }
+
+        return body;
+    }
+
+    /** Elides `var _this =` and `_this =` within the current function scope. */
+    function elideUnusedThisCaptureWorker(node: Node): VisitResult<Node | undefined> {
+        if (isThisCapturingVariableStatement(node)) {
+            const varDecl = node.declarationList.declarations[0];
+            if (varDecl.initializer.kind === SyntaxKind.ThisKeyword) {
+                return undefined; // elide `var _this = this;`
+            }
+        }
+        else if (isThisCapturingAssignment(node)) {
+            return factory.createPartiallyEmittedExpression(node.right, node); // elide `_this =`
+        }
+
+        switch (node.kind) {
+            // stop at function boundaries
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                return node;
+
+            // only step into computed property names for class and object literal elements
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.PropertyDeclaration: {
+                const named = node as AccessorDeclaration | MethodDeclaration | PropertyDeclaration;
+                if (isComputedPropertyName(named.name)) {
+                    return factory.replacePropertyName(named, visitEachChild(named.name, elideUnusedThisCaptureWorker, nullTransformationContext));
+                }
+                return node;
+            }
+        }
+        return visitEachChild(node, elideUnusedThisCaptureWorker, nullTransformationContext);
+    }
+
+    /**
+     * Simplifies a constructor by eliding `var _this = this;` and `_this = ...` when `this` capturing is no longer
+     * necessary after other simplifications have been performed. No nested transformation is performed as it is assumed
+     * that `body` has already been transformed prior to invoking this function. It is also assumed that this function is
+     * only invoked after some other simplification has successfully replaced `body`.
+     */
+    function simplifyConstructorElideUnusedThisCapture(body: Block, original: Block) {
+        // given:
+        //
+        //   var C = (function (_super) {
+        //       function C() {
+        //           var _this = this;
+        //           return _super.call(this) || this;
+        //       }
+        //       return C;
+        //   })(Base);
+        //
+        // becomes:
+        //
+        //   var C = (function (_super) {
+        //       function C() {
+        //           return _super.call(this) || this;
+        //       }
+        //       return C;
+        //   })(Base);
+        //
+
+        // If the original node contained a lexical `this` that must be preserved, or if we recorded a captured `this`,
+        // then there is nothing we can simplify.
+        if (
+            original.transformFlags & TransformFlags.ContainsLexicalThis ||
+            hierarchyFacts & HierarchyFacts.LexicalThis ||
+            hierarchyFacts & HierarchyFacts.CapturedLexicalThis
+        ) {
+            return body;
+        }
+
+        // bail if there is a non-top-level `super()` in the original body
+        for (const statement of original.statements) {
+            if (statement.transformFlags & TransformFlags.ContainsLexicalSuper && !getSuperCallFromStatement(statement)) {
+                return body;
+            }
+        }
+
+        return factory.updateBlock(body, visitNodes(body.statements, elideUnusedThisCaptureWorker, isStatement));
+    }
+
+    /** Injects `_super !== null &&` preceding any instance of a synthetic `_super.apply(this, arguments)` */
+    function injectSuperPresenceCheckWorker(node: Node): VisitResult<Node | undefined> {
+        if (
+            isTransformedSuperCall(node) && node.arguments.length === 2 &&
+            isIdentifier(node.arguments[1]) && idText(node.arguments[1]) === "arguments"
+        ) {
+            return factory.createLogicalAnd(
+                factory.createStrictInequality(
+                    createSyntheticSuper(),
+                    factory.createNull(),
+                ),
+                node,
+            );
+        }
+
+        switch (node.kind) {
+            // stop at function boundaries
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                return node;
+
+            // only step into computed property names for class and object literal elements
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.PropertyDeclaration: {
+                const named = node as AccessorDeclaration | MethodDeclaration | PropertyDeclaration;
+                if (isComputedPropertyName(named.name)) {
+                    return factory.replacePropertyName(named, visitEachChild(named.name, injectSuperPresenceCheckWorker, nullTransformationContext));
+                }
+                return node;
+            }
+        }
+        return visitEachChild(node, injectSuperPresenceCheckWorker, nullTransformationContext);
+    }
+
+    /**
+     * A slight non-simplification of a constructor, this injects a `_super !== null` test prior to a synthetic
+     * `_super.call(this)` expression to support the synthetic super call we introduce for subclasses with an
+     * implicit constructor, in the event the derviced class in the `extends` clause evaluates to `null`. No nested
+     * transformation is performed as it is assumed that `body` has already been transformed prior to invoking this
+     * function. It is also assumed that this function is only invoked for a constructor containing a synthetic
+     * implicit `super()` call.
+     */
+    function complicateConstructorInjectSuperPresenceCheck(body: Block) {
+        // given:
+        //
+        //   var C = (function (_super) {
+        //       function C() {
+        //           return _super.call(this) || this;
+        //       }
+        //       return C;
+        //   })(Base);
+        //
+        // becomes:
+        //
+        //   var C = (function (_super) {
+        //       function C() {
+        //           return _super !== null && _super.call(this) || this;
+        //       }
+        //       return C;
+        //   })(Base);
+        //
+
+        return factory.updateBlock(body, visitNodes(body.statements, injectSuperPresenceCheckWorker, isStatement));
+    }
+
+    /**
+     * Simplifies a derived constructor by performing inlining tasks related to this-capturing and transformed
+     * `super()` calls.
+     * @param body The constructor body.
+     * @param original The original constructor body.
+     * @param hasSynthesizedSuper A value indicating whether the body may contain a synthetic implicit `super()` call.
+     */
+    function simplifyConstructor(body: Block, original: Block, hasSynthesizedSuper: boolean) {
+        const inputBody = body;
+        body = simplifyConstructorInlineSuperInThisCaptureVariable(body);
+        body = simplifyConstructorInlineSuperReturn(body, original);
+        if (body !== inputBody) {
+            // Only perform `var _this = this` elision if some other simplification succeeded.
+            body = simplifyConstructorElideUnusedThisCapture(body, original);
+        }
+        if (hasSynthesizedSuper) {
+            body = complicateConstructorInjectSuperPresenceCheck(body);
+        }
         return body;
     }
 
@@ -1505,11 +1825,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return factory.createLogicalOr(
             factory.createLogicalAnd(
                 factory.createStrictInequality(
-                    factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                    createSyntheticSuper(),
                     factory.createNull(),
                 ),
                 factory.createFunctionApplyCall(
-                    factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                    createSyntheticSuper(),
                     createActualThis(),
                     factory.createIdentifier("arguments"),
                 ),
@@ -1836,32 +2156,13 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return false;
     }
 
-    /**
-     * Assigns the `this` in a constructor to the result of its `super()` call.
-     *
-     * @param statements Statements in the constructor body.
-     * @param superExpression Existing `super()` call for the constructor.
-     */
-    function addSuperThisCaptureThisForNode(statements: Statement[], superExpression: Expression): void {
-        enableSubstitutionsForCapturedThis();
-        const assignSuperExpression = factory.createExpressionStatement(
-            factory.createBinaryExpression(
-                factory.createThis(),
-                SyntaxKind.EqualsToken,
-                superExpression,
-            ),
-        );
-        statements.push(assignSuperExpression);
-        setCommentRange(assignSuperExpression, getOriginalNode(superExpression).parent);
-    }
-
     function insertCaptureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {
         enableSubstitutionsForCapturedThis();
         const captureThisStatement = factory.createVariableStatement(
             /*modifiers*/ undefined,
             factory.createVariableDeclarationList([
                 factory.createVariableDeclaration(
-                    factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                    createCapturedThis(),
                     /*exclamationToken*/ undefined,
                     /*type*/ undefined,
                     initializer,
@@ -4219,10 +4520,6 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         );
     }
 
-    function visitSuperCallInBody(node: CallExpression) {
-        return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ false);
-    }
-
     function visitCallExpressionWithPotentialCapturedThisAssignment(node: CallExpression, assignToCapturedThis: boolean): CallExpression | BinaryExpression {
         // We are here either because SuperKeyword was used somewhere in the expression, or
         // because we contain a SpreadElementExpression.
@@ -4284,10 +4581,14 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                     createActualThis(),
                 );
                 resultingCall = assignToCapturedThis
-                    ? factory.createAssignment(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), initializer)
+                    ? factory.createAssignment(createCapturedThis(), initializer)
                     : initializer;
             }
             return setOriginalNode(resultingCall, node);
+        }
+
+        if (isSuperCall(node)) {
+            hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
         }
 
         return visitEachChild(node, visitor, context);
@@ -4520,14 +4821,21 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return setTextRange(expression, node);
     }
 
+    function createSyntheticSuper() {
+        return factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel) as SyntheticSuper;
+    }
+
     /**
      * Visits the `super` keyword
      */
-    function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
-        return hierarchyFacts & HierarchyFacts.NonStaticClassElement
-                && !isExpressionOfCall
-            ? factory.createPropertyAccessExpression(factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), "prototype")
-            : factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+    function visitSuperKeyword(node: SuperExpression, isExpressionOfCall: boolean): LeftHandSideExpression {
+        const expression = hierarchyFacts & HierarchyFacts.NonStaticClassElement && !isExpressionOfCall
+            ? factory.createPropertyAccessExpression(setOriginalNode(createSyntheticSuper(), node), "prototype")
+            : createSyntheticSuper();
+        setOriginalNode(expression, node);
+        setCommentRange(expression, node);
+        setSourceMapRange(expression, node);
+        return expression;
     }
 
     function visitMetaProperty(node: MetaProperty) {
@@ -4712,7 +5020,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis
             && hierarchyFacts & HierarchyFacts.CapturesThis
         ) {
-            return setTextRange(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), node);
+            return setTextRange(createCapturedThis(), node);
         }
         return node;
     }

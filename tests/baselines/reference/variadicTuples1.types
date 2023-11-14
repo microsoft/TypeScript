@@ -1324,11 +1324,11 @@ function f21<U extends string[]>(args: [...U, number?]) {
 }
 
 declare function f22<T extends unknown[] = []>(args: [...T, number]): T;
->f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
 >args : [...T, number]
 
 declare function f22<T extends unknown[] = []>(args: [...T]): T;
->f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
+>f22 : { <T_1 extends unknown[] = []>(args: [...T_1, number]): T_1; <T extends unknown[] = []>(args: [...T]): T; }
 >args : [...T]
 
 function f23<U extends string[]>(args: [...U, number]) {
@@ -1338,13 +1338,13 @@ function f23<U extends string[]>(args: [...U, number]) {
     let v1 = f22(args);  // U
 >v1 : U
 >f22(args) : U
->f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
 >args : [...U, number]
 
     let v2 = f22(["foo", "bar"]);  // [string, string]
 >v2 : [string, string]
 >f22(["foo", "bar"]) : [string, string]
->f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
 >["foo", "bar"] : [string, string]
 >"foo" : "foo"
 >"bar" : "bar"
@@ -1352,7 +1352,7 @@ function f23<U extends string[]>(args: [...U, number]) {
     let v3 = f22(["foo", 42]);  // [string]
 >v3 : [string]
 >f22(["foo", 42]) : [string]
->f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
 >["foo", 42] : [string, number]
 >"foo" : "foo"
 >42 : 42

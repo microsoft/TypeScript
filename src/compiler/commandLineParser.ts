@@ -175,6 +175,7 @@ const libEntries: [string, string][] = [
     ["es2015.symbol", "lib.es2015.symbol.d.ts"],
     ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
     ["es2016.array.include", "lib.es2016.array.include.d.ts"],
+    ["es2016.intl", "lib.es2016.intl.d.ts"],
     ["es2017.date", "lib.es2017.date.d.ts"],
     ["es2017.object", "lib.es2017.object.d.ts"],
     ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"],
@@ -528,6 +529,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
+    deprecatedKeys: new Set(["es3"]),
     paramType: Diagnostics.VERSION,
     showInSimplifiedHelpView: true,
     category: Diagnostics.Language_and_Environment,
@@ -1257,7 +1259,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsDeclarationPath: true,
-        isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
+        isFilePath: false, // This is intentionally broken to support compatibility with existing tsconfig files
         // for correct behaviour, please use outFile
         category: Diagnostics.Backwards_Compatibility,
         paramType: Diagnostics.FILE,
@@ -2392,7 +2394,7 @@ export function convertToJson(
                 // Currently having element option declaration in the tsconfig with type "object"
                 // determines if it needs onSetValidOptionKeyValueInParent callback or not
                 // At moment there are only "compilerOptions", "typeAcquisition" and "typingOptions"
-                // that satifies it and need it to modify options set in them (for normalizing file paths)
+                // that satisfies it and need it to modify options set in them (for normalizing file paths)
                 // vs what we set in the json
                 // If need arises, we can modify this interface and callbacks as needed
                 return convertObjectLiteralExpressionToJson(objectLiteralExpression, option as TsConfigOnlyOption);

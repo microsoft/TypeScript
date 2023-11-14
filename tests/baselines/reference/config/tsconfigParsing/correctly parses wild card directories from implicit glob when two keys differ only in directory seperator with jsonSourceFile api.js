@@ -1,6 +1,11 @@
 Fs::
 //// [/foo.bar/tsconfig.json]
-{"include":["./","./**/*.json"]}
+{
+  "include": [
+    "./",
+    "./**/*.json"
+  ]
+}
 
 
 configFileName:: /foo.bar/tsconfig.json

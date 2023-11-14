@@ -217,18 +217,22 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // to be consumable by other bundlers, we need to convert these calls back to
             // require so our imports are visible again.
             //
-            // The leading spaces are to keep the offsets the same within the files to keep
-            // source maps working (though this only really matters for the line the require is on).
+            // To fix this, we redefine "require" to a name we're unlikely to use with the
+            // same length as "require", then replace it back to "require" after bundling,
+            // ensuring that source maps still work.
             //
             // See: https://github.com/evanw/esbuild/issues/1905
-            options.define = { require: "$$require" };
+            const require = "require";
+            const fakeName = "Q".repeat(require.length);
+            const fakeNameRegExp = new RegExp(fakeName, "g");
+            options.define = { [require]: fakeName };
             options.plugins = [
                 {
                     name: "fix-require",
                     setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(/\$\$require/g, "  require");
+                            contents = contents.replace(fakeNameRegExp, require);
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },

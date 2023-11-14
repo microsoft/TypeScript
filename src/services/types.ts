@@ -316,6 +316,9 @@ export interface IncompleteCompletionsCache {
 export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalResolutionCacheHost {
     getCompilationSettings(): CompilerOptions;
     getNewLine?(): string;
+    /** @internal */ updateFromProject?(): void;
+    /** @internal */ updateFromProjectInProgress?: boolean;
+
     getProjectVersion?(): string;
     getScriptFileNames(): string[];
     getScriptKind?(fileName: string): ScriptKind;

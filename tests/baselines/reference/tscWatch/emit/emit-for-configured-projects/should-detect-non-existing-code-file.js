@@ -40,20 +40,14 @@ Output::
 
 
 
-Program root files: ["/a/b/referenceFile1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/referenceFile1.ts
+//// [/a/b/referenceFile1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+/// <reference path="./moduleFile2.ts" />
+exports.x = Foo();
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/referenceFile1.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/referencefile1.ts (used version)
 
 PolledWatches::
 /a/b/modulefile2.ts: *new*
@@ -71,16 +65,28 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
+Program root files: [
+  "/a/b/referenceFile1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/referenceFile1.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/referenceFile1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/referencefile1.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/referenceFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-/// <reference path="./moduleFile2.ts" />
-exports.x = Foo();
-
-
 
 Change:: edit refereceFile1
 
@@ -90,8 +96,12 @@ Input::
 export var x = Foo();export var yy = Foo();
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -116,8 +126,25 @@ Output::
 
 
 
-Program root files: ["/a/b/referenceFile1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/referenceFile1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.yy = exports.x = void 0;
+/// <reference path="./moduleFile2.ts" />
+exports.x = Foo();
+exports.yy = Foo();
+
+
+
+
+Program root files: [
+  "/a/b/referenceFile1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -130,16 +157,6 @@ Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/referenceFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.yy = exports.x = void 0;
-/// <reference path="./moduleFile2.ts" />
-exports.x = Foo();
-exports.yy = Foo();
-
-
 
 Change:: create moduleFile2
 
@@ -164,8 +181,12 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -185,21 +206,14 @@ Output::
 
 
 
-Program root files: ["/a/b/moduleFile2.ts","/a/b/referenceFile1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/moduleFile2.ts
-/a/b/referenceFile1.ts
+//// [/a/b/referenceFile1.js] file written with same contents
+//// [/a/b/moduleFile2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo4 = void 0;
+exports.Foo4 = 10;
 
-Semantic diagnostics in builder refreshed for::
-/a/b/moduleFile2.ts
-/a/b/referenceFile1.ts
 
-Shape signatures in builder refreshed for::
-/a/b/modulefile2.ts (computed .d.ts)
-/a/b/referencefile1.ts (computed .d.ts)
 
 FsWatches::
 /a/b/modulefile2.ts: *new*
@@ -215,13 +229,28 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+
+Program root files: [
+  "/a/b/moduleFile2.ts",
+  "/a/b/referenceFile1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/moduleFile2.ts
+/a/b/referenceFile1.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/b/moduleFile2.ts
+/a/b/referenceFile1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/modulefile2.ts (computed .d.ts)
+/a/b/referencefile1.ts (computed .d.ts)
+
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/referenceFile1.js] file written with same contents
-//// [/a/b/moduleFile2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo4 = void 0;
-exports.Foo4 = 10;
-
-

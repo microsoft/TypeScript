@@ -1,9 +1,11 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -30,7 +32,7 @@ const packageJsonContent = {
 };
 const packageJson: File = {
     path: "/package.json",
-    content: JSON.stringify(packageJsonContent, undefined, 2),
+    content: jsonToReadableText(packageJsonContent),
 };
 
 describe("unittests:: tsserver:: packageJsonInfo::", () => {
@@ -41,7 +43,7 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
 
         // Add package.json
         host.writeFile(packageJson.path, packageJson.content);
-        session.testhost.baselineHost("Add package.json");
+        session.host.baselineHost("Add package.json");
         let packageJsonInfo = projectService.packageJsonCache.getInDirectory("/" as ts.Path)!;
         assert.ok(packageJsonInfo);
         assert.ok(packageJsonInfo.dependencies);
@@ -52,12 +54,12 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
         // Edit package.json
         host.writeFile(
             packageJson.path,
-            JSON.stringify({
+            jsonToReadableText({
                 ...packageJsonContent,
                 dependencies: undefined,
             }),
         );
-        session.testhost.baselineHost("Edit package.json");
+        session.host.baselineHost("Edit package.json");
         packageJsonInfo = projectService.packageJsonCache.getInDirectory("/" as ts.Path)!;
         assert.isUndefined(packageJsonInfo.dependencies);
 
@@ -72,7 +74,7 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
 
         // Delete package.json
         host.deleteFile(packageJson.path);
-        session.testhost.baselineHost("delete packageJson");
+        session.host.baselineHost("delete packageJson");
         assert.isUndefined(projectService.packageJsonCache.getInDirectory("/" as ts.Path));
         baselineTsserverLogs("packageJsonInfo", "finds package.json on demand, watches for deletion, and removes them from cache", session);
     });
@@ -82,7 +84,7 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
         const { session, projectService, host } = setup();
         // Add package.json in /src
         host.writeFile("/src/package.json", packageJson.content);
-        session.testhost.baselineHost("packageJson");
+        session.host.baselineHost("packageJson");
         assert.lengthOf(projectService.getPackageJsonsVisibleToFile("/a.ts" as ts.Path), 1);
         assert.lengthOf(projectService.getPackageJsonsVisibleToFile("/src/b.ts" as ts.Path), 2);
         baselineTsserverLogs("packageJsonInfo", "finds multiple package.json files when present", session);
@@ -96,7 +98,7 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
         assert.isFalse(packageJsonInfo.parseable);
 
         host.writeFile(packageJson.path, packageJson.content);
-        session.testhost.baselineHost("packageJson");
+        session.host.baselineHost("packageJson");
         projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as ts.Path);
         const packageJsonInfo2 = projectService.packageJsonCache.getInDirectory("/" as ts.Path)!;
         assert.ok(packageJsonInfo2);
@@ -115,7 +117,7 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
         assert.isFalse(packageJsonInfo.parseable);
 
         host.writeFile(packageJson.path, packageJson.content);
-        session.testhost.baselineHost("PackageJson");
+        session.host.baselineHost("PackageJson");
         projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as ts.Path);
         const packageJsonInfo2 = projectService.packageJsonCache.getInDirectory("/" as ts.Path)!;
         assert.ok(packageJsonInfo2);
@@ -129,7 +131,7 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
 
 function setup(files: readonly File[] = [tsConfig, packageJson]) {
     const host = createServerHost(files);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    const session = new TestSession(host);
     openFilesForSession([files[0]], session);
     return { host, session, projectService: session.getProjectService() };
 }
