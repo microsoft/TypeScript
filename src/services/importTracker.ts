@@ -477,7 +477,7 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
                 }
             }
             for (const ref of referencingFile.typeReferenceDirectives) {
-                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
+                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat, /*noDtsResolution*/ false)?.resolvedTypeReferenceDirective;
                 if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                     refs.push({ kind: "reference", referencingFile, ref });
                 }

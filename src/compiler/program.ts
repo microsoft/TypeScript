@@ -1055,7 +1055,7 @@ export function loadWithModeAwareCache<Entry, SourceFile, ResolutionCache, Resol
     for (const entry of entries) {
         const name = loader.nameAndMode.getName(entry);
         const mode = loader.nameAndMode.getMode(entry, containingSourceFile);
-        const key = createModeAwareCacheKey(name, mode);
+        const key = createModeAwareCacheKey(name, mode, !!options.noDtsResolution);
         let result = cache.get(key);
         if (!result) {
             cache.set(key, result = loader.resolve(name, mode));
@@ -1768,7 +1768,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolutions = resolveTypeReferenceDirectiveNamesReusingOldState(automaticTypeDirectiveNames, containingFilename);
             for (let i = 0; i < automaticTypeDirectiveNames.length; i++) {
                 // under node16/nodenext module resolution, load `types`/ata include names as cjs resolution results by passing an `undefined` mode
-                automaticTypeDirectiveResolutions.set(automaticTypeDirectiveNames[i], /*mode*/ undefined, resolutions[i]);
+                automaticTypeDirectiveResolutions.set(automaticTypeDirectiveNames[i], /*mode*/ undefined, !!options.noDtsResolution, resolutions[i]);
                 processTypeReferenceDirective(
                     automaticTypeDirectiveNames[i],
                     /*mode*/ undefined,
@@ -1950,11 +1950,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     return program;
 
     function getResolvedModule(file: SourceFile, moduleName: string, mode: ResolutionMode) {
-        return resolvedModules?.get(file.path)?.get(moduleName, mode);
+        return resolvedModules?.get(file.path)?.get(moduleName, mode, !!options.noDtsResolution);
     }
 
     function getResolvedTypeReferenceDirective(file: SourceFile, typeDirectiveName: string, mode: ResolutionMode) {
-        return resolvedTypeReferenceDirectiveNames?.get(file.path)?.get(typeDirectiveName, mode);
+        return resolvedTypeReferenceDirectiveNames?.get(file.path)?.get(typeDirectiveName, mode, !!options.noDtsResolution);
     }
 
     function forEachResolvedModule(
@@ -1976,8 +1976,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         callback: (resolution: T, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
         file: SourceFile | undefined,
     ) {
-        if (file) resolutionCache?.get(file.path)?.forEach((resolution, name, mode) => callback(resolution, name, mode, file.path));
-        else resolutionCache?.forEach((resolutions, filePath) => resolutions.forEach((resolution, name, mode) => callback(resolution, name, mode, filePath)));
+        if (file) resolutionCache?.get(file.path)?.forEach((resolution, name, mode, noDtsResolution) => !noDtsResolution && callback(resolution, name, mode, file.path));
+        else resolutionCache?.forEach((resolutions, filePath) => resolutions.forEach((resolution, name, mode, noDtsResolution) => !noDtsResolution && callback(resolution, name, mode, filePath)));
     }
 
     function getPackagesMap() {
@@ -2020,7 +2020,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // This may totally change if/when the issue of output paths not mapping to input files is fixed in a broader context
         // When it is, how we extract diagnostics from the module name resolver will have the be refined - the current cache
         // APIs wrapping the underlying resolver make it almost impossible to smuggle the diagnostics out in a generalized way
-        const fromCache = moduleResolutionCache.getFromNonRelativeNameCache(name, mode, containingDir, redirectedReference);
+        const fromCache = moduleResolutionCache.getFromNonRelativeNameCache(name, mode, containingDir, !!options.noDtsResolution, redirectedReference);
         if (fromCache) addResolutionDiagnostics(fromCache);
     }
 
@@ -2279,7 +2279,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 const mode = getModeForFileReference(entry, containingSourceFile?.impliedNodeFormat);
                 const oldResolution = !isString(containingFile) ?
                     oldProgram?.getResolvedTypeReferenceDirective(containingFile, typeDirectiveName, mode) :
-                    oldProgram?.getAutomaticTypeDirectiveResolutions()?.get(typeDirectiveName, mode);
+                    oldProgram?.getAutomaticTypeDirectiveResolutions()?.get(typeDirectiveName, mode, !!options.noDtsResolution);
                 if (oldResolution?.resolvedTypeReferenceDirective) {
                     if (isTraceEnabled(options, host)) {
                         trace(
@@ -3859,7 +3859,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolvedTypeReferenceDirective = resolutions[index];
             // store resolved type directive on the file
             const fileName = toFileNameLowerCase(ref.fileName);
-            resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
+            resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), !!options.noDtsResolution, resolvedTypeReferenceDirective);
             const mode = ref.resolutionMode || file.impliedNodeFormat;
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
         }
@@ -3884,7 +3884,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     ): void {
         addResolutionDiagnostics(resolution);
         // If we already found this library as a primary reference - nothing to do
-        const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective, mode)?.resolvedTypeReferenceDirective;
+        const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective, mode, !!options.noDtsResolution)?.resolvedTypeReferenceDirective;
         if (previousResolution && previousResolution.primary) {
             return;
         }
@@ -3930,7 +3930,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (saveResolution) {
-            resolvedTypeReferenceDirectives.set(typeReferenceDirective, mode, resolution);
+            resolvedTypeReferenceDirectives.set(typeReferenceDirective, mode, !!options.noDtsResolution, resolution);
         }
     }
 
@@ -4029,7 +4029,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 const resolution = resolutions[index].resolvedModule;
                 const moduleName = moduleNames[index].text;
                 const mode = getModeForUsageLocation(file, moduleNames[index]);
-                resolutionsInFile.set(moduleName, mode, resolutions[index]);
+                resolutionsInFile.set(moduleName, mode, !!options.noDtsResolution, resolutions[index]);
                 addResolutionDiagnosticsFromResolutionOrCache(file, moduleName, resolutions[index], mode);
 
                 if (!resolution) {

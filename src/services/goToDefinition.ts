@@ -322,7 +322,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
 
     const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
     if (typeReferenceDirective) {
-        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
+        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat, !!program.getCompilerOptions().noDtsResolution)?.resolvedTypeReferenceDirective;
         const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
         return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
     }

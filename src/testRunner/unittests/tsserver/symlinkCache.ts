@@ -74,7 +74,7 @@ describe("unittests:: tsserver:: symlinkCache", () => {
         const cache = ts.createSymlinkCache("/", ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
         // Used to crash, #44953
         const map = ts.createModeAwareCache<ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
-        map.set("foo", /*mode*/ undefined, {
+        map.set("foo", /*mode*/ undefined, /*noDtsResolution*/ false, {
             resolvedTypeReferenceDirective: {
                 primary: true,
                 originalPath: "/foo",

@@ -7964,7 +7964,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const contextFile = getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration));
             const resolutionMode = overrideImportMode || contextFile?.impliedNodeFormat;
-            const cacheKey = createModeAwareCacheKey(contextFile.path, resolutionMode);
+            const cacheKey = createModeAwareCacheKey(contextFile.path, resolutionMode, !!compilerOptions.noDtsResolution);
             const links = getSymbolLinks(symbol);
             let specifier = links.specifierCache && links.specifierCache.get(cacheKey);
             if (!specifier) {
@@ -47979,8 +47979,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (resolvedTypeReferenceDirectives) {
             // populate reverse mapping: file path -> type reference directive that was resolved to this file
             fileToDirective = new Map<string, [specifier: string, mode: ResolutionMode]>();
-            resolvedTypeReferenceDirectives.forEach(({ resolvedTypeReferenceDirective }, key, mode) => {
-                if (!resolvedTypeReferenceDirective?.resolvedFileName) {
+            resolvedTypeReferenceDirectives.forEach(({ resolvedTypeReferenceDirective }, key, mode, noDtsResolution) => {
+                if (!resolvedTypeReferenceDirective?.resolvedFileName || noDtsResolution) {
                     return;
                 }
                 const file = host.getSourceFile(resolvedTypeReferenceDirective.resolvedFileName);

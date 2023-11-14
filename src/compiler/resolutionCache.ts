@@ -824,10 +824,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         for (const entry of entries) {
             const name = loader.nameAndMode.getName(entry);
             const mode = loader.nameAndMode.getMode(entry, containingSourceFile);
-            let resolution = resolutionsInFile.get(name, mode);
+            let resolution = resolutionsInFile.get(name, mode, !!options.noDtsResolution);
             // Resolution is valid if it is present and not invalidated
             if (
-                !seenNamesInFile.has(name, mode) &&
+                !seenNamesInFile.has(name, mode, !!options.noDtsResolution) &&
                 (allModuleAndTypeResolutionsAreInvalidated || unmatchedRedirects || !resolution || resolution.isInvalidated ||
                     // If the name is unresolved import that was invalidated, recalculate
                     (hasInvalidatedNonRelativeUnresolvedImport && !isExternalModuleNameRelative(name) && shouldRetryResolution(resolution)))
@@ -837,7 +837,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 if (resolutionHost.onDiscoveredSymlink && resolutionIsSymlink(resolution)) {
                     resolutionHost.onDiscoveredSymlink();
                 }
-                resolutionsInFile.set(name, mode, resolution);
+                resolutionsInFile.set(name, mode, !!options.noDtsResolution, resolution);
                 if (resolution !== existingResolution) {
                     watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName, deferWatchingNonRelativeResolution);
                     if (existingResolution) {
@@ -853,7 +853,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             }
             else {
                 const host = getModuleResolutionHost(resolutionHost);
-                if (isTraceEnabled(options, host) && !seenNamesInFile.has(name, mode)) {
+                if (isTraceEnabled(options, host) && !seenNamesInFile.has(name, mode, !!options.noDtsResolution)) {
                     const resolved = getResolutionWithResolvedFileName(resolution!);
                     trace(
                         host,
@@ -876,22 +876,23 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 }
             }
             Debug.assert(resolution !== undefined && !resolution.isInvalidated);
-            seenNamesInFile.set(name, mode, true);
+            seenNamesInFile.set(name, mode, !!options.noDtsResolution, true);
             resolvedModules.push(resolution);
         }
         reusedNames?.forEach(entry =>
             seenNamesInFile.set(
                 loader.nameAndMode.getName(entry),
                 loader.nameAndMode.getMode(entry, containingSourceFile),
+                !!options.noDtsResolution,
                 true,
             )
         );
         if (resolutionsInFile.size() !== seenNamesInFile.size()) {
             // Stop watching and remove the unused name
-            resolutionsInFile.forEach((resolution, name, mode) => {
-                if (!seenNamesInFile.has(name, mode)) {
+            resolutionsInFile.forEach((resolution, name, mode, noDtsResolution) => {
+                if (!seenNamesInFile.has(name, mode, noDtsResolution)) {
                     stopWatchFailedLookupLocationOfResolution(resolution, path, getResolutionWithResolvedFileName);
-                    resolutionsInFile.delete(name, mode);
+                    resolutionsInFile.delete(name, mode, noDtsResolution);
                 }
             });
         }
@@ -1016,7 +1017,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     function resolveSingleModuleNameWithoutWatching(moduleName: string, containingFile: string) {
         const path = resolutionHost.toPath(containingFile);
         const resolutionsInFile = resolvedModuleNames.get(path);
-        const resolution = resolutionsInFile?.get(moduleName, /*mode*/ undefined);
+        const resolution = resolutionsInFile?.get(moduleName, /*mode*/ undefined, !!resolutionHost.getCompilationSettings().noDtsResolution);
         if (resolution && !resolution.isInvalidated) return resolution;
         const data = resolutionHost.beforeResolveSingleModuleNameWithoutWatching?.(moduleResolutionCache);
         const host = getModuleResolutionHost(resolutionHost);

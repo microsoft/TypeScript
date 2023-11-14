@@ -301,11 +301,11 @@ export function verifyResolutionCache(
             `${projectName}:: ${cacheType} ${fileName} Expect cache for file in program or auto type ref`,
         );
         let expectedCache: ts.ModeAwareCache<ts.ResolutionWithFailedLookupLocations> | undefined;
-        cache?.forEach((resolved, name, mode) => {
+        cache?.forEach((resolved, name, mode, noDtsResolution) => {
             const resolvedFileName = getResolvedFileName(resolved);
             const expected = collectResolution(cacheType, fileName, resolved, resolvedFileName, name, mode, deferWatchingNonRelativeResolution);
             if (!expectedCache) storeExpcted.set(fileName, expectedCache = ts.createModeAwareCache());
-            expectedCache.set(name, mode, expected);
+            expectedCache.set(name, mode, noDtsResolution, expected);
         });
     }
 
