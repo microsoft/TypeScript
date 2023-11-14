@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty13.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty13.ts ===
+interface Data {
+>Data : Symbol(Data, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 0, 0))
+
+  a?: number;
+>a : Symbol(Data.a, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 0, 16))
+}
+
+declare const data: Data;
+>data : Symbol(data, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 4, 13))
+>Data : Symbol(Data, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 0, 0))
+
+let key = "a" as const;
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 6, 3))
+>const : Symbol(const)
+
+if (data.a !== undefined) {
+>data.a : Symbol(Data.a, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 0, 16))
+>data : Symbol(data, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 4, 13))
+>a : Symbol(Data.a, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 0, 16))
+>undefined : Symbol(undefined)
+
+  const a = data[key];
+>a : Symbol(a, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 9, 7))
+>data : Symbol(data, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 4, 13))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty13.ts, 6, 3))
+}
+

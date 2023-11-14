@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty13.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty13.ts ===
+interface Data {
+  a?: number;
+>a : number | undefined
+}
+
+declare const data: Data;
+>data : Data
+
+let key = "a" as const;
+>key : "a"
+>"a" as const : "a"
+>"a" : "a"
+
+if (data.a !== undefined) {
+>data.a !== undefined : boolean
+>data.a : number | undefined
+>data : Data
+>a : number | undefined
+>undefined : undefined
+
+  const a = data[key];
+>a : number
+>data[key] : number
+>data : Data
+>key : "a"
+}
+
