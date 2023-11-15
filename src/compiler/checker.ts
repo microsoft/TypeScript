@@ -45427,6 +45427,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
                 error(node, message, symbolToString(symbol));
             }
+            else if (node.kind !== SyntaxKind.ExportSpecifier) {
+                // Look at 'compilerOptions.isolatedModules' and not 'getIsolatedModules(...)' (which considers 'verbatimModuleSyntax')
+                // here because 'verbatimModuleSyntax' will already have an error for importing a type without 'import type'.
+                const appearsValueyToTranspiler = compilerOptions.isolatedModules && !findAncestor(node, isTypeOnlyImportOrExportDeclaration);
+                if (appearsValueyToTranspiler && symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+                    error(
+                        node,
+                        Diagnostics.Import_0_conflicts_with_local_value_so_must_be_declared_with_a_type_only_import_when_isolatedModules_is_enabled,
+                        symbolToString(symbol),
+                        isolatedModulesLikeFlagName,
+                    );
+                }
+            }
 
             if (
                 getIsolatedModules(compilerOptions)
