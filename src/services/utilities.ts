@@ -3886,15 +3886,6 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
     }
 }
 
-function tryParseJson(text: string) {
-    try {
-        return JSON.parse(text);
-    }
-    catch {
-        return undefined;
-    }
-}
-
 /** @internal */
 export function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
     return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));

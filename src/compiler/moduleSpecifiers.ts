@@ -110,19 +110,11 @@ import {
     SymbolFlags,
     toPath,
     tryGetExtensionFromPath,
+    tryParseJson,
     tryParsePatterns,
     TypeChecker,
     UserPreferences,
 } from "./_namespaces/ts";
-
-function safeJsonRead(packageJsonPath: string, readFile: (path: string) => string | undefined) {
-    try {
-        return JSON.parse(readFile(packageJsonPath)!);
-    }
-    catch {
-        return {};
-    }
-}
 
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 
@@ -959,7 +951,7 @@ function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDi
     if (typeof cachedPackageJson !== "object" && cachedPackageJson !== undefined || !host.fileExists(packageJsonPath)) {
         return undefined;
     }
-    const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || safeJsonRead(packageJsonPath, host.readFile);
+    const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || tryParseJson(host.readFile(packageJsonPath)!);
     const imports = packageJsonContent?.imports;
     if (!imports) {
         return undefined;
@@ -1061,7 +1053,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         let maybeBlockedByTypesVersions = false;
         const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
         if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
-            const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || safeJsonRead(packageJsonPath, host.readFile!);
+            const packageJsonContent: Record<string, any> | undefined = cachedPackageJson?.contents.packageJsonContent || tryParseJson(host.readFile!(packageJsonPath)!);
             const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
             if (getResolvePackageJsonExports(options)) {
                 // The package name that we found in node_modules could be different from the package
@@ -1070,17 +1062,17 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                 const nodeModulesDirectoryName = packageRootPath.substring(parts.topLevelPackageNameIndex + 1);
                 const packageName = getPackageNameFromTypesPackageName(nodeModulesDirectoryName);
                 const conditions = getConditions(options, importMode);
-                const fromExports = packageJsonContent.exports
+                const fromExports = packageJsonContent?.exports
                     ? tryGetModuleNameFromExports(options, host, path, packageRootPath, packageName, packageJsonContent.exports, conditions)
                     : undefined;
                 if (fromExports) {
                     return { ...fromExports, verbatimFromExports: true };
                 }
-                if (packageJsonContent.exports) {
+                if (packageJsonContent?.exports) {
                     return { moduleFileToTry: path, blockedByExports: true };
                 }
             }
-            const versionPaths = packageJsonContent.typesVersions
+            const versionPaths = packageJsonContent?.typesVersions
                 ? getPackageJsonTypesVersionsPaths(packageJsonContent.typesVersions)
                 : undefined;
             if (versionPaths) {
@@ -1100,7 +1092,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                 }
             }
             // If the file is the main module, it can be imported by the package name
-            const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main || "index.js";
+            const mainFileRelative = packageJsonContent?.typings || packageJsonContent?.types || packageJsonContent?.main || "index.js";
             if (isString(mainFileRelative) && !(maybeBlockedByTypesVersions && matchPatternOrExact(tryParsePatterns(versionPaths!.paths), mainFileRelative))) {
                 // The 'main' file is also subject to mapping through typesVersions, and we couldn't come up with a path
                 // explicitly through typesVersions, so if it matches a key in typesVersions now, it's not reachable.
@@ -1115,7 +1107,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                     return { packageRootPath, moduleFileToTry };
                 }
                 else if (
-                    packageJsonContent.type !== "module" &&
+                    packageJsonContent?.type !== "module" &&
                     !fileExtensionIsOneOf(canonicalModuleFileToTry, extensionsNotSupportingExtensionlessResolution) &&
                     startsWith(canonicalModuleFileToTry, mainExportFile) &&
                     getDirectoryPath(canonicalModuleFileToTry) === removeTrailingDirectorySeparator(mainExportFile) &&
