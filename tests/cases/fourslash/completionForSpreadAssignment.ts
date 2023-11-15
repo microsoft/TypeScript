@@ -12,7 +12,6 @@
 // @Filename: /d.ts
 //// const test3 = [{...foo/*3*/}]
 
-// hereby runtests --tests=completionForSpreadAssignment
 verify.completions({ 
     marker: "1",
     includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
