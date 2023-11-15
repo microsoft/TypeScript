@@ -164,7 +164,12 @@ export function createLocalInferenceResolver({
         },
         isolatedDeclarations: options.isolatedDeclarations,
     };
+    function hasParseError(node: Node) {
+        return !!(node.flags & NodeFlags.ThisNodeHasError);
+    }
     function reportIsolatedDeclarationError(node: Node) {
+        // Do not report errors on nodes with other errors.
+        if (hasParseError(node)) return;
         const message = createDiagnosticForNode(
             node,
             Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit,
@@ -229,6 +234,8 @@ export function createLocalInferenceResolver({
         return invalid(getAccessor ?? setAccessor!);
     }
     function localInference(node: Node, inferenceFlags: NarrowBehavior = NarrowBehavior.None): LocalTypeInfo {
+        // Bail if node has parse errors, we're just adding noise
+        if (hasParseError(node)) return invalid(node);
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
                 return localInference((node as ParenthesizedExpression).expression, inferenceFlags & NarrowBehavior.NotKeepLiterals);
@@ -380,6 +387,7 @@ export function createLocalInferenceResolver({
         let replaceWithInvalid = false;
         for (let propIndex = 0, length = objectLiteral.properties.length; propIndex < length; propIndex++) {
             const prop = objectLiteral.properties[propIndex];
+            if (hasParseError(prop)) return invalid(prop);
 
             if (isShorthandPropertyAssignment(prop)) {
                 reportIsolatedDeclarationError(prop);
@@ -391,6 +399,8 @@ export function createLocalInferenceResolver({
                 inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
                 continue;
             }
+
+            if (hasParseError(prop.name)) return invalid(prop.name);
 
             if (isPrivateIdentifier(prop.name)) {
                 // Not valid in object literals but the compiler will complain about this, we just ignore it here.
