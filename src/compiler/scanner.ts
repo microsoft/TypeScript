@@ -41,6 +41,12 @@ export function tokenIsIdentifierOrKeywordOrGreaterThan(token: SyntaxKind): bool
     return token === SyntaxKind.GreaterThanToken || tokenIsIdentifierOrKeyword(token);
 }
 
+/** @internal */
+export interface ScanRegExpRemainderResult {
+    unterminated: boolean;
+    updatedPosition: number;
+}
+
 export interface Scanner {
     /** @deprecated use {@link getTokenFullStart} */
     getStartPos(): number;
@@ -70,7 +76,7 @@ export interface Scanner {
     getTokenFlags(): TokenFlags;
     reScanGreaterToken(): SyntaxKind;
     /** @internal */
-    tryReScanSlashToken(): DiagnosticMessage | undefined;
+    scanRegExpRemainder(): ScanRegExpRemainderResult;
     reScanSlashToken(): SyntaxKind;
     reScanAsteriskEqualsToken(): SyntaxKind;
     reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
@@ -1036,7 +1042,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         getTokenFlags: () => tokenFlags,
         reScanGreaterToken,
         reScanAsteriskEqualsToken,
-        tryReScanSlashToken,
+        scanRegExpRemainder,
         reScanSlashToken,
         reScanTemplateToken,
         reScanTemplateHeadOrNoSubstitutionTemplate,
@@ -2369,69 +2375,71 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return token = SyntaxKind.EqualsToken;
     }
 
-    function tryReScanSlashToken(): DiagnosticMessage | undefined {
-        let diagnostic: DiagnosticMessage | undefined;
+    /**
+     * Scans the remainder of a regular expression, without modifying token or pos state.
+     */
+    function scanRegExpRemainder(): ScanRegExpRemainderResult {
+        let updatedPosition = tokenStart + 1;
+        let inEscape = false;
+        let inCharacterClass = false;
+        let unterminated = false;
 
-        if (token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) {
-            let p = tokenStart + 1;
-            let inEscape = false;
-            let inCharacterClass = false;
-            while (true) {
-                // If we reach the end of a file, or hit a newline, then this is an unterminated
-                // regex.  Report error and return what we have so far.
-                if (p >= end) {
-                    tokenFlags |= TokenFlags.Unterminated;
-                    diagnostic = Diagnostics.Unterminated_regular_expression_literal;
-                    break;
-                }
-
-                const ch = text.charCodeAt(p);
-                if (isLineBreak(ch)) {
-                    tokenFlags |= TokenFlags.Unterminated;
-                    diagnostic = Diagnostics.Unterminated_regular_expression_literal;
-                    break;
-                }
-
-                if (inEscape) {
-                    // Parsing an escape character;
-                    // reset the flag and just advance to the next char.
-                    inEscape = false;
-                }
-                else if (ch === CharacterCodes.slash && !inCharacterClass) {
-                    // A slash within a character class is permissible,
-                    // but in general it signals the end of the regexp literal.
-                    p++;
-                    break;
-                }
-                else if (ch === CharacterCodes.openBracket) {
-                    inCharacterClass = true;
-                }
-                else if (ch === CharacterCodes.backslash) {
-                    inEscape = true;
-                }
-                else if (ch === CharacterCodes.closeBracket) {
-                    inCharacterClass = false;
-                }
-                p++;
+        while (true) {
+            // If we reach the end of a file, or hit a newline, then this is an unterminated
+            // regex.  Report error and return what we have so far.
+            if (updatedPosition >= end) {
+                unterminated = true;
+                break;
             }
 
-            while (p < end && isIdentifierPart(text.charCodeAt(p), languageVersion)) {
-                p++;
+            const ch = text.charCodeAt(updatedPosition);
+            if (isLineBreak(ch)) {
+                unterminated = true;
+                break;
             }
-            pos = p;
-            tokenValue = text.substring(tokenStart, pos);
-            token = SyntaxKind.RegularExpressionLiteral;
+
+            if (inEscape) {
+                // Parsing an escape character;
+                // reset the flag and just advance to the next char.
+                inEscape = false;
+            }
+            else if (ch === CharacterCodes.slash && !inCharacterClass) {
+                // A slash within a character class is permissible,
+                // but in general it signals the end of the regexp literal.
+                updatedPosition++;
+                break;
+            }
+            else if (ch === CharacterCodes.openBracket) {
+                inCharacterClass = true;
+            }
+            else if (ch === CharacterCodes.backslash) {
+                inEscape = true;
+            }
+            else if (ch === CharacterCodes.closeBracket) {
+                inCharacterClass = false;
+            }
+            updatedPosition++;
         }
 
-        return diagnostic;
+        while (updatedPosition < end && isIdentifierPart(text.charCodeAt(updatedPosition), languageVersion)) {
+            updatedPosition++;
+        }
+
+        return { unterminated, updatedPosition };
     }
 
     function reScanSlashToken(): SyntaxKind {
-        const p = pos;
-        const diagnostic = tryReScanSlashToken();
+        if (token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) {
+            const { unterminated, updatedPosition } = scanRegExpRemainder();
 
-        if (diagnostic) {
-            error(diagnostic, p);
+            if (unterminated) {
+                tokenFlags |= TokenFlags.Unterminated;
+                error(Diagnostics.Unterminated_regular_expression_literal, pos);
+            }
+
+            pos = updatedPosition;
+            tokenValue = text.substring(tokenStart, pos);
+            token = SyntaxKind.RegularExpressionLiteral;
         }
 
         return token;

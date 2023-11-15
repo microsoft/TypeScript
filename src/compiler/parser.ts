@@ -6614,7 +6614,8 @@ namespace Parser {
                 // JSX inside a .ts (not .tsx) file gets a specialized error...
                 if (previousNode && isTypeAssertionExpression(previousNode)) {
                     // ...however, code like <tag>inner</tag>/ might be a regular expression after an assertion
-                    if (speculationHelper(() => scanner.tryReScanSlashToken(), SpeculationKind.Lookahead)) {
+                    const { unterminated } = scanner.scanRegExpRemainder();
+                    if (unterminated) {
                         nextToken(); // slash
                         const identifier = parseIdentifier(); // identifier (tag name)
                         // Skip through the tag so we don't report additional diagnostics after the "JSX tags are not permitted" notice
