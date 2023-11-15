@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/trackedSymbolsNoCrash.ts] ////
+
+=== index.ts ===
+import ts = require("typescript");
+>ts : Symbol(ts, Decl(index.ts, 0, 0))
+
+// TODO(jakebailey): this test should not depend on typescript itself
+export const isNodeOfType =
+>isNodeOfType : Symbol(isNodeOfType, Decl(index.ts, 3, 12))
+
+  <NodeType extends ts.SyntaxKind>(nodeType: NodeType) =>
+>NodeType : Symbol(NodeType, Decl(index.ts, 4, 3))
+>ts : Symbol(ts, Decl(index.ts, 0, 0))
+>SyntaxKind : Symbol(ts.SyntaxKind, Decl(typescript.internal.d.ts, 7017, 5))
+>nodeType : Symbol(nodeType, Decl(index.ts, 4, 35))
+>NodeType : Symbol(NodeType, Decl(index.ts, 4, 3))
+
+  (
+    node: ts.ForEachChildNodes | null | undefined,
+>node : Symbol(node, Decl(index.ts, 5, 3))
+>ts : Symbol(ts, Decl(index.ts, 0, 0))
+>ForEachChildNodes : Symbol(ts.ForEachChildNodes, Decl(typescript.internal.d.ts, 7777, 573))
+
+  ): node is Extract<ts.ForEachChildNodes, { kind: NodeType }> =>
+>node : Symbol(node, Decl(index.ts, 5, 3))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>ts : Symbol(ts, Decl(index.ts, 0, 0))
+>ForEachChildNodes : Symbol(ts.ForEachChildNodes, Decl(typescript.internal.d.ts, 7777, 573))
+>kind : Symbol(kind, Decl(index.ts, 7, 44))
+>NodeType : Symbol(NodeType, Decl(index.ts, 4, 3))
+
+    node?.kind === nodeType;
+>node?.kind : Symbol(kind, Decl(typescript.internal.d.ts, 9892, 63), Decl(typescript.internal.d.ts, 9647, 34), Decl(typescript.internal.d.ts, 8789, 125), Decl(typescript.internal.d.ts, 9203, 56), Decl(typescript.internal.d.ts, 8244, 103) ... and 169 more)
+>node : Symbol(node, Decl(index.ts, 5, 3))
+>kind : Symbol(kind, Decl(typescript.internal.d.ts, 9892, 63), Decl(typescript.internal.d.ts, 9647, 34), Decl(typescript.internal.d.ts, 8789, 125), Decl(typescript.internal.d.ts, 9203, 56), Decl(typescript.internal.d.ts, 8244, 103) ... and 169 more)
+>nodeType : Symbol(nodeType, Decl(index.ts, 4, 35))
+
