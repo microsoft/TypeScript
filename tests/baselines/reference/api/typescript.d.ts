@@ -7892,7 +7892,7 @@ declare namespace ts {
         Unspecified = 4,
         EmbeddedStatement = 5,
         JsxAttributeValue = 6,
-        TypeImportAttributes = 7,
+        ImportTypeNodeAttributes = 7,
     }
     enum OuterExpressionKinds {
         Parentheses = 1,

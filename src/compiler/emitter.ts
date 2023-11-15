@@ -1841,7 +1841,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
         if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
         if (hint === EmitHint.MappedTypeParameter) return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
-        if (hint === EmitHint.TypeImportAttributes) return emitTypeImportAttributes(cast(node, isImportAttributes));
+        if (hint === EmitHint.ImportTypeNodeAttributes) return emitImportTypeNodeAttributes(cast(node, isImportAttributes));
         if (hint === EmitHint.EmbeddedStatement) {
             Debug.assertNode(node, isEmptyStatement);
             return emitEmptyStatement(/*isEmbeddedStatement*/ true);
@@ -2946,7 +2946,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (node.attributes) {
             writePunctuation(",");
             writeSpace();
-            pipelineEmit(EmitHint.TypeImportAttributes, node.attributes);
+            pipelineEmit(EmitHint.ImportTypeNodeAttributes, node.attributes);
         }
         writePunctuation(")");
         if (node.qualifier) {
@@ -4071,7 +4071,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeTrailingSemicolon();
     }
 
-    function emitTypeImportAttributes(node: ImportAttributes) {
+    function emitImportTypeNodeAttributes(node: ImportAttributes) {
         writePunctuation("{");
         writeSpace();
         writeKeyword(node.token === SyntaxKind.AssertKeyword ? "assert" : "with");
