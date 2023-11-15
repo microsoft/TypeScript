@@ -359,6 +359,7 @@ import {
     tokenToString,
     toPath,
     tryCast,
+    tryParseJson,
     Type,
     TypeChecker,
     TypeFlags,
