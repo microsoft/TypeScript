@@ -852,28 +852,28 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
         switch (mode) {
             case MatchingMode.Exact:
                 if (
-                    extensionSwappedTarget && comparePaths(extensionSwappedTarget, pathOrPattern) === Comparison.EqualTo ||
-                    comparePaths(targetFilePath, pathOrPattern) === Comparison.EqualTo ||
-                    outputFile && comparePaths(outputFile, pathOrPattern) === Comparison.EqualTo ||
-                    declarationFile && comparePaths(declarationFile, pathOrPattern) === Comparison.EqualTo
+                    extensionSwappedTarget && comparePaths(extensionSwappedTarget, pathOrPattern, ignoreCase) === Comparison.EqualTo ||
+                    comparePaths(targetFilePath, pathOrPattern, ignoreCase) === Comparison.EqualTo ||
+                    outputFile && comparePaths(outputFile, pathOrPattern, ignoreCase) === Comparison.EqualTo ||
+                    declarationFile && comparePaths(declarationFile, pathOrPattern, ignoreCase) === Comparison.EqualTo
                 ) {
                     return { moduleFileToTry: packageName };
                 }
                 break;
             case MatchingMode.Directory:
-                if (extensionSwappedTarget && containsPath(pathOrPattern, extensionSwappedTarget)) {
+                if (extensionSwappedTarget && containsPath(pathOrPattern, extensionSwappedTarget, ignoreCase)) {
                     const fragment = getRelativePathFromDirectory(pathOrPattern, extensionSwappedTarget, /*ignoreCase*/ false);
                     return { moduleFileToTry: getNormalizedAbsolutePath(combinePaths(combinePaths(packageName, exports), fragment), /*currentDirectory*/ undefined) };
                 }
-                if (containsPath(pathOrPattern, targetFilePath)) {
+                if (containsPath(pathOrPattern, targetFilePath, ignoreCase)) {
                     const fragment = getRelativePathFromDirectory(pathOrPattern, targetFilePath, /*ignoreCase*/ false);
                     return { moduleFileToTry: getNormalizedAbsolutePath(combinePaths(combinePaths(packageName, exports), fragment), /*currentDirectory*/ undefined) };
                 }
-                if (outputFile && containsPath(pathOrPattern, outputFile)) {
+                if (outputFile && containsPath(pathOrPattern, outputFile, ignoreCase)) {
                     const fragment = getRelativePathFromDirectory(pathOrPattern, outputFile, /*ignoreCase*/ false);
                     return { moduleFileToTry: combinePaths(packageName, fragment) };
                 }
-                if (declarationFile && containsPath(pathOrPattern, declarationFile)) {
+                if (declarationFile && containsPath(pathOrPattern, declarationFile, ignoreCase)) {
                     const fragment = getRelativePathFromDirectory(pathOrPattern, declarationFile, /*ignoreCase*/ false);
                     return { moduleFileToTry: combinePaths(packageName, fragment) };
                 }
