@@ -1,11 +1,11 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -29,7 +29,7 @@ describe("unittests:: tsserver:: completions", () => {
         };
 
         const host = createServerHost([aTs, bTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
 
         const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
@@ -73,7 +73,7 @@ describe("unittests:: tsserver:: completions", () => {
         const projectRoot = "e:/myproject";
         const appPackage: File = {
             path: `${projectRoot}/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "test",
                 version: "0.1.0",
                 dependencies: {
@@ -94,7 +94,7 @@ import {
         const localAtTypes = `${localNodeModules}/@types`;
         const localReactPackage: File = {
             path: `${localAtTypes}/react/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "@types/react",
                 version: "16.9.14",
             }),
@@ -106,7 +106,7 @@ import {
         };
         const localReactRouterDomPackage: File = {
             path: `${localNodeModules}/react-router-dom/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "react-router-dom",
                 version: "5.1.2",
             }),
@@ -117,7 +117,7 @@ import {
         };
         const localPropTypesPackage: File = {
             path: `${localAtTypes}/prop-types/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "@types/prop-types",
                 version: "15.7.3",
             }),
@@ -135,7 +135,7 @@ import {
         const globalAtTypes = `${globalTypingsCacheLocation}/node_modules/@types`;
         const globalReactRouterDomPackage: File = {
             path: `${globalAtTypes}/react-router-dom/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 name: "@types/react-router-dom",
                 version: "5.1.2",
             }),
@@ -179,11 +179,7 @@ export interface BrowserRouterProps {
         ];
 
         const host = createServerHost(files, { windowsStyleRoot: "c:/" });
-        const logger = createLoggerWithInMemoryLogs(host);
-        const session = createSession(host, {
-            globalTypingsCacheLocation,
-            logger,
-        });
+        const session = new TestSession({ host, globalTypingsCacheLocation });
         openFilesForSession([appFile], session);
         session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
             command: ts.server.protocol.CommandTypes.CompletionInfo,

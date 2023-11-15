@@ -1,8 +1,15 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/src/tsconfig.json]
-{"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out","traceResolution":true}}
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "Node16",
+    "outDir": "../out",
+    "traceResolution": true
+  }
+}
 
 //// [/user/username/projects/myproject/src/fileA.ts]
 import { foo } from "./fileB.mjs";
@@ -15,7 +22,10 @@ export function foo() {
 
 
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
+{
+  "name": "app",
+  "version": "1.0.0"
+}
 
 //// [/a/lib/lib.es2016.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -223,15 +233,24 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Before running Timeout callback:: count: 1
 1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module"
+}
 
+
+Timeout callback:: count: 1
+1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-2: /user/username/projects/myproject/src/tsconfig.json
-3: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+2: /user/username/projects/myproject/src/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 2: /user/username/projects/myproject/src/tsconfig.json
@@ -281,7 +300,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/fileA.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/fileA.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -293,8 +312,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-4: checkOne
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -316,8 +334,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+4: checkOne *new*
+
 Before running Timeout callback:: count: 1
-5: checkOne
+4: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -330,6 +351,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
@@ -345,7 +369,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -378,21 +404,29 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Before running Timeout callback:: count: 1
-6: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
+5: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
+{
+  "name": "app",
+  "version": "1.0.0"
+}
 
+
+Timeout callback:: count: 1
+5: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-7: /user/username/projects/myproject/src/tsconfig.json
-8: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+6: /user/username/projects/myproject/src/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
-7: /user/username/projects/myproject/src/tsconfig.json
-8: *ensureProjectForOpenFiles*
+6: /user/username/projects/myproject/src/tsconfig.json
+7: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
@@ -438,7 +472,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/fileA.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/fileA.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -450,8 +484,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-9: checkOne
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -473,8 +506,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+8: checkOne *new*
+
 Before running Timeout callback:: count: 1
-10: checkOne
+8: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -487,6 +523,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+3: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -516,7 +555,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-4: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 4: suggestionCheck
@@ -550,19 +591,24 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/my
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Before running Timeout callback:: count: 1
-11: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
+9: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json] deleted
+
+Timeout callback:: count: 1
+9: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-12: /user/username/projects/myproject/src/tsconfig.json
-13: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+10: /user/username/projects/myproject/src/tsconfig.json *new*
+11: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
-12: /user/username/projects/myproject/src/tsconfig.json
-13: *ensureProjectForOpenFiles*
+10: /user/username/projects/myproject/src/tsconfig.json
+11: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
@@ -611,7 +657,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/fileA.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/fileA.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -623,8 +669,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-14: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -672,8 +717,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+12: checkOne *new*
+
 Before running Timeout callback:: count: 1
-15: checkOne
+12: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -686,6 +734,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+5: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
@@ -715,7 +766,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-6: suggestionCheck
+
+Immedidate callback:: count: 1
+6: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 6: suggestionCheck
@@ -746,21 +799,30 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/my
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Before running Timeout callback:: count: 1
-16: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
+13: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module"
+}
 
+
+Timeout callback:: count: 1
+13: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-17: /user/username/projects/myproject/src/tsconfig.json
-18: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+14: /user/username/projects/myproject/src/tsconfig.json *new*
+15: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
-17: /user/username/projects/myproject/src/tsconfig.json
-18: *ensureProjectForOpenFiles*
+14: /user/username/projects/myproject/src/tsconfig.json
+15: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
@@ -807,7 +869,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/fileA.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/fileA.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -819,8 +881,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-19: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -870,8 +931,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+16: checkOne *new*
+
 Before running Timeout callback:: count: 1
-20: checkOne
+16: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -884,6 +948,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+7: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 7: semanticCheck
@@ -899,7 +966,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-8: suggestionCheck
+
+Immedidate callback:: count: 1
+8: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 8: suggestionCheck
@@ -930,19 +999,24 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/my
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Before running Timeout callback:: count: 1
-21: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
+17: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json] deleted
+
+Timeout callback:: count: 1
+17: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-22: /user/username/projects/myproject/src/tsconfig.json
-23: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+18: /user/username/projects/myproject/src/tsconfig.json *new*
+19: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
-22: /user/username/projects/myproject/src/tsconfig.json
-23: *ensureProjectForOpenFiles*
+18: /user/username/projects/myproject/src/tsconfig.json
+19: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
@@ -997,7 +1071,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/fileA.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/fileA.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1009,8 +1083,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-24: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -1058,8 +1131,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+20: checkOne *new*
+
 Before running Timeout callback:: count: 1
-25: checkOne
+20: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1072,6 +1148,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+9: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 9: semanticCheck
@@ -1101,7 +1180,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-10: suggestionCheck
+
+Immedidate callback:: count: 1
+10: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 10: suggestionCheck

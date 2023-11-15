@@ -1,5 +1,5 @@
 currentDirectory:: C:/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "C:/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [C:/temp/replay/axios-src/lib/core/AxiosHeaders.js]
 export const b = 10;
@@ -23,10 +23,19 @@ export const b2 = 10;
 
 
 //// [C:/temp/replay/axios-src/package.json]
-{"name":"axios","version":"1.4.0","dependencies":{"follow-redirects":"^1.15.0"}}
+{
+  "name": "axios",
+  "version": "1.4.0",
+  "dependencies": {
+    "follow-redirects": "^1.15.0"
+  }
+}
 
 //// [C:/temp/replay/axios-src/node_modules/follow-redirects/package.json]
-{"name":"follow-redirects","version":"1.15.0"}
+{
+  "name": "follow-redirects",
+  "version": "1.15.0"
+}
 
 //// [C:/temp/replay/axios-src/node_modules/follow-redirects/index.js]
 export const x = 10;

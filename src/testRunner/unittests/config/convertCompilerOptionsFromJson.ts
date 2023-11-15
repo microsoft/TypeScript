@@ -1,6 +1,9 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineParseConfig,
 } from "./helpers";
 
@@ -8,7 +11,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
     function baselineCompilerOptions(subScenario: string, json: any, configFileName: string) {
         baselineCompilerOptionsJsonText(
             subScenario,
-            JSON.stringify(json, undefined, " "),
+            jsonToReadableText(json),
             configFileName,
             /*skipJson*/ false,
         );
@@ -36,7 +39,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                 jsonText,
                 configFileName,
                 basePath: "/apath",
-                baselineParsed: (baseline, parsed) => baseline.push("CompilerOptions::", JSON.stringify(parsed.options, undefined, " ")),
+                baselineParsed: (baseline, parsed) => baseline.push("CompilerOptions::", jsonToReadableText(parsed.options)),
             }],
             skipJson,
         });

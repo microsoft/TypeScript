@@ -1,5 +1,5 @@
 currentDirectory:: c:/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [e:/myproject/src/app.js]
 import React from 'react';
@@ -33,7 +33,14 @@ import * as PropTypes from 'prop-types';
 
 
 //// [e:/myproject/package.json]
-{"name":"test","version":"0.1.0","dependencies":{"react":"^16.12.0","react-router-dom":"^5.1.2"}}
+{
+  "name": "test",
+  "version": "0.1.0",
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-router-dom": "^5.1.2"
+  }
+}
 
 //// [c:/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -49,22 +56,37 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [e:/myproject/node_modules/@types/react/package.json]
-{"name":"@types/react","version":"16.9.14"}
+{
+  "name": "@types/react",
+  "version": "16.9.14"
+}
 
 //// [e:/myproject/node_modules/react-router-dom/package.json]
-{"name":"react-router-dom","version":"5.1.2"}
+{
+  "name": "react-router-dom",
+  "version": "5.1.2"
+}
 
 //// [e:/myproject/node_modules/react-router-dom/index.js]
 export function foo() {}
 
 //// [e:/myproject/node_modules/@types/prop-types/package.json]
-{"name":"@types/prop-types","version":"15.7.3"}
+{
+  "name": "@types/prop-types",
+  "version": "15.7.3"
+}
 
 //// [c:/typescript/node_modules/@types/react-router-dom/package.json]
-{"name":"@types/react-router-dom","version":"5.1.2"}
+{
+  "name": "@types/react-router-dom",
+  "version": "5.1.2"
+}
 
 //// [c:/typescript/node_modules/@types/react/package.json]
-{"name":"@types/react","version":"16.9.14"}
+{
+  "name": "@types/react",
+  "version": "16.9.14"
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -175,16 +197,19 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with c:/type
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with c:/typescript/node_modules/types-registry/index.json :: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with c:/typescript/node_modules/types-registry/index.json :: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [c:/typescript/package.json]
 { "private": true }
 
 //// [c:/typescript/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
+
+Timeout callback:: count: 1
+2: /dev/null/inferredProject1*FailedLookupInvalidation *new*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -208,12 +233,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "e:/myproject/src",
-      "cachePath": "c:/typescript",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path 'c:/typescript', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/typescript'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -258,6 +279,31 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typings": [],
       "unresolvedImports": [],
       "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/package.json 250 undefined WatchType: package.json file
@@ -637,3 +683,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 0
+2: /dev/null/inferredProject1*FailedLookupInvalidation *deleted*

@@ -1,11 +1,15 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/a.ts]
 export let x = 1
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"out":"/a/out.js"}}
+{
+  "compilerOptions": {
+    "out": "/a/out.js"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -137,12 +141,12 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 1,
-              "offset": 21
+              "line": 3,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 26
+              "line": 3,
+              "offset": 10
             },
             "text": "Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '\"ignoreDeprecations\": \"5.0\"' to silence this error.\n  Use 'outFile' instead.",
             "code": 5101,
@@ -192,6 +196,10 @@ Before running Timeout callback:: count: 2
 export let y = 1
 
 
+Timeout callback:: count: 2
+1: /users/username/projects/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -228,7 +236,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/a.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/a.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /users/username/projects/project/a.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -241,7 +250,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-3: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -261,6 +269,9 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 1
+3: checkOne *new*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /users/username/projects/project/b.ts 1:: WatchInfo: /users/username/projects/project/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -272,6 +283,11 @@ Before running Timeout callback:: count: 3
 //// [/users/username/projects/project/b.ts]
 export let x = 11
 
+
+Timeout callback:: count: 3
+3: checkOne
+4: /users/username/projects/project/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -310,7 +326,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/a.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/a.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /users/username/projects/project/a.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -323,4 +340,8 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-6: checkOne
+
+Timeout callback:: count: 1
+6: checkOne *new*
+
+Immedidate callback:: count: 0

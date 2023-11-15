@@ -19,13 +19,20 @@ declare const console: { log(msg: any): void; };
 export function __assign(...args: any[]): any;
 
 //// [/users/username/projects/project/node_modules/tslib/package.json]
-{"name":"tslib","version":"0.0.1"}
+{
+  "name": "tslib",
+  "version": "0.0.1"
+}
 
 //// [/users/username/projects/project/index.tsx]
 export const x = {...{}};
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"importHelpers":true}}
+{
+  "compilerOptions": {
+    "importHelpers": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -37,23 +44,14 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"importHelpers":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/tslib/index.d.ts
-/users/username/projects/project/index.tsx
+//// [/users/username/projects/project/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+var tslib_1 = require("tslib");
+exports.x = tslib_1.__assign({});
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/tslib/index.d.ts
-/users/username/projects/project/index.tsx
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/node_modules/tslib/index.d.ts (used version)
-/users/username/projects/project/index.tsx (used version)
 
 PolledWatches::
 /users/username/projects/node_modules/@types: *new*
@@ -79,16 +77,31 @@ FsWatchesRecursive::
 /users/username/projects/project/node_modules: *new*
   {}
 
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "importHelpers": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/tslib/index.d.ts
+/users/username/projects/project/index.tsx
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/tslib/index.d.ts
+/users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/tslib/index.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-var tslib_1 = require("tslib");
-exports.x = tslib_1.__assign({});
-
-
 
 Change::
 
@@ -133,20 +146,7 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"importHelpers":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.tsx
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.tsx
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/index.tsx (used version)
+//// [/users/username/projects/project/index.js] file written with same contents
 
 PolledWatches::
 /users/username/projects/node_modules: *new*
@@ -170,6 +170,25 @@ FsWatchesRecursive::
 /users/username/projects/project/node_modules: *new*
   {}
 
-exitCode:: ExitStatus.undefined
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "importHelpers": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/index.tsx
 
-//// [/users/username/projects/project/index.js] file written with same contents
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
+exitCode:: ExitStatus.undefined

@@ -17,7 +17,12 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/Project/tsconfig.json]
-{"include":[".","./**/*.json"]}
+{
+  "include": [
+    ".",
+    "./**/*.json"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p .
@@ -29,20 +34,13 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/Project/file1.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/Project/file1.ts
+//// [/user/username/projects/myproject/Project/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/Project/file1.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/project/file1.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -64,15 +62,28 @@ FsWatchesRecursive::
 /user/username/projects/myproject/project: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/Project/file1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject/Project",
+  "configFilePath": "/user/username/projects/myproject/Project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/Project/file1.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/Project/file1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/project/file1.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/Project/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
 
 Change:: Write file2
 
@@ -81,8 +92,12 @@ Input::
 export const y = 10;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -92,19 +107,13 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/Project/file1.ts","/user/username/projects/myproject/Project/file2.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/Project/file1.ts
-/user/username/projects/myproject/Project/file2.ts
+//// [/user/username/projects/myproject/Project/file2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+exports.y = 10;
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/Project/file2.ts
 
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/project/file2.ts (computed .d.ts)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -128,12 +137,26 @@ FsWatchesRecursive::
 /user/username/projects/myproject/project:
   {}
 
+
+Program root files: [
+  "/user/username/projects/myproject/Project/file1.ts",
+  "/user/username/projects/myproject/Project/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject/Project",
+  "configFilePath": "/user/username/projects/myproject/Project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/Project/file1.ts
+/user/username/projects/myproject/Project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/Project/file2.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/project/file2.ts (computed .d.ts)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/Project/file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
-
-

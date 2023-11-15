@@ -1,6 +1,6 @@
 import {
     createLoggerWithInMemoryLogs,
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "../../../../harness/tsserverLogger";
 import {
     createWatchUtils,
@@ -10,7 +10,6 @@ import * as ts from "../../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createSession,
     createSessionWithCustomEventHandler,
     openFilesForSession,
     TestSession,
@@ -32,7 +31,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
     }
 
     function createTestServerHostWithCustomWatch(
-        logger: Logger,
+        logger: LoggerWithInMemoryLogs,
     ) {
         const idToClose = new Map<number, () => void>();
         const host = logger.host as TestServerHostWithCustomWatch;
@@ -89,8 +88,8 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
     function updateFileOnHost(session: TestSession, file: string, log: string) {
         // Change b.ts
         session.logger.log(log);
-        session.testhost.writeFile(file, session.testhost.readFile("/user/username/projects/myproject/a.ts")!);
-        session.testhost.runQueuedTimeoutCallbacks();
+        session.host.writeFile(file, session.host.readFile("/user/username/projects/myproject/a.ts")!);
+        session.host.runQueuedTimeoutCallbacks();
     }
 
     function addFile(session: TestSession, path: string) {
@@ -102,7 +101,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
                 arguments: { id: data.id, path, eventType: "create" },
             })
         );
-        session.testhost.runQueuedTimeoutCallbacks();
+        session.host.runQueuedTimeoutCallbacks();
     }
 
     function changeFile(session: TestSession, path: string) {
@@ -114,7 +113,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
                 arguments: { id: data.id, path, eventType: "update" },
             })
         );
-        session.testhost.runQueuedTimeoutCallbacks();
+        session.host.runQueuedTimeoutCallbacks();
     }
 
     function setup() {
@@ -131,7 +130,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
 
     it("canUseWatchEvents", () => {
         const { host, logger } = setup();
-        const session = createSessionWithCustomEventHandler(host, { canUseWatchEvents: true, logger }, handleWatchEvents);
+        const session = createSessionWithCustomEventHandler({ host, canUseWatchEvents: true, logger }, handleWatchEvents);
         openFilesForSession(["/user/username/projects/myproject/a.ts"], session);
 
         // Directory watcher
@@ -166,7 +165,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
 
     it("canUseWatchEvents without canUseEvents", () => {
         const { host, logger } = setup();
-        const session = createSession(host, { canUseEvents: false, logger });
+        const session = new TestSession({ host, canUseEvents: false, canUseWatchEvents: true, logger });
         openFilesForSession(["/user/username/projects/myproject/a.ts"], session);
 
         // Directory watcher

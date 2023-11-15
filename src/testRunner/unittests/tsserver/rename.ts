@@ -1,12 +1,9 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -19,7 +16,7 @@ describe("unittests:: tsserver:: rename", () => {
         const bTs: File = { path: "/b.ts", content: 'import { a } from "./a";' };
 
         const host = createServerHost([aTs, bTs]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([bTs], session);
 
         // rename fails with allowRenameOfImportPath disabled
@@ -57,7 +54,7 @@ describe("unittests:: tsserver:: rename", () => {
     it("works with prefixText and suffixText when enabled", () => {
         const aTs: File = { path: "/a.ts", content: "const x = 0; const o = { x };" };
         const host = createServerHost([aTs]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
         // rename with prefixText and suffixText disabled
@@ -96,7 +93,7 @@ describe("unittests:: tsserver:: rename", () => {
         const bTs: File = { path: "/b.ts", content: `import aTest from "./a"; function test() { return aTest(); }` };
 
         const host = createServerHost([aTs, bTs]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([bTs], session);
 
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
@@ -114,7 +111,7 @@ describe("unittests:: tsserver:: rename", () => {
         const aTs: File = { path: "/a.ts", content: "const x = 1; export { x };" };
         const bTs: File = { path: "/b.ts", content: `import { x } from "./a"; const y = x + 1;` };
         const host = createServerHost([aTs, bTs]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
 
         // rename from file with prefixText and suffixText enabled

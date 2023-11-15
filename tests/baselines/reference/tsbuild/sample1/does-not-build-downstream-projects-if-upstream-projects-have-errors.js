@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,31 +15,29 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/core/anotherModule.ts]
+//// [/user/username/projects/sample1/core/anotherModule.ts]
 export const World = "hello";
 
-
-//// [/src/core/index.ts]
+//// [/user/username/projects/sample1/core/index.ts]
 export const someString: string = "HELLO WORLD";
 export function leftPad(s: string, n: number) { return s + n; }
 export function multiply(a: number, b: number) { return a * b; }
 
 
-//// [/src/core/some_decl.d.ts]
+//// [/user/username/projects/sample1/core/some_decl.d.ts]
 declare const dts: any;
 
-
-//// [/src/core/tsconfig.json]
+//// [/user/username/projects/sample1/core/tsconfig.json]
 {
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "declarationMap": true,
-        "skipDefaultLibCheck": true
-    }
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipDefaultLibCheck": true
+  }
 }
 
-//// [/src/logic/index.ts]
+//// [/user/username/projects/sample1/logic/index.ts]
 import * as c from '../core/index';
 export function getSecondsInDay() {
     return c.muitply();
@@ -48,22 +46,23 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
-//// [/src/logic/tsconfig.json]
+//// [/user/username/projects/sample1/logic/tsconfig.json]
 {
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "sourceMap": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipDefaultLibCheck": true
-    },
-    "references": [
-        { "path": "../core" }
-    ]
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
 }
 
-
-//// [/src/tests/index.ts]
+//// [/user/username/projects/sample1/tests/index.ts]
 import * as c from '../core/index';
 import * as logic from '../logic/index';
 
@@ -74,65 +73,52 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
-//// [/src/tests/tsconfig.json]
+//// [/user/username/projects/sample1/tests/tsconfig.json]
 {
-    "references": [
-        { "path": "../core" },
-        { "path": "../logic" }
-    ],
-    "files": ["index.ts"],
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipDefaultLibCheck": true
-    }
-}
-
-//// [/src/ui/index.ts]
-import * as logic from '../logic';
-
-export function run() {
-    console.log(logic.getSecondsInDay());
-}
-
-
-//// [/src/ui/tsconfig.json]
-{
-    "compilerOptions": {
-        "skipDefaultLibCheck": true
+  "references": [
+    {
+      "path": "../core"
     },
-    "references": [
-        { "path": "../logic/index" }
-    ]
+    {
+      "path": "../logic"
+    }
+  ],
+  "files": [
+    "index.ts"
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true
+  }
 }
-
 
 
 
 Output::
-/lib/tsc --b /src/tests --verbose
-[[90m12:00:07 AM[0m] Projects in this build: 
-    * src/core/tsconfig.json
-    * src/logic/tsconfig.json
-    * src/tests/tsconfig.json
+/a/lib/tsc --b tests --verbose
+[[90m12:00:23 AM[0m] Projects in this build: 
+    * core/tsconfig.json
+    * logic/tsconfig.json
+    * tests/tsconfig.json
 
-[[90m12:00:08 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:24 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:09 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:25 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:00:19 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:35 AM[0m] Project 'logic/tsconfig.json' is out of date because output file 'logic/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/logic/tsconfig.json'...
+[[90m12:00:36 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-[96msrc/logic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/src/core/index")'.
+[96mlogic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/user/username/projects/sample1/core/index")'.
 
 [7m3[0m     return c.muitply();
 [7m [0m [91m             ~~~~~~~[0m
 
-[[90m12:00:24 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
+[[90m12:00:40 AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'logic' has errors
 
-[[90m12:00:25 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
+[[90m12:00:41 AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/logic' has errors
 
 
 Found 1 error.
@@ -140,30 +126,30 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
-//// [/src/core/anotherModule.d.ts]
+//// [/user/username/projects/sample1/core/anotherModule.d.ts]
 export declare const World = "hello";
 //# sourceMappingURL=anotherModule.d.ts.map
 
-//// [/src/core/anotherModule.d.ts.map]
+//// [/user/username/projects/sample1/core/anotherModule.d.ts.map]
 {"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,UAAU,CAAC"}
 
-//// [/src/core/anotherModule.js]
+//// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.World = void 0;
 exports.World = "hello";
 
 
-//// [/src/core/index.d.ts]
+//// [/user/username/projects/sample1/core/index.d.ts]
 export declare const someString: string;
 export declare function leftPad(s: string, n: number): string;
 export declare function multiply(a: number, b: number): number;
 //# sourceMappingURL=index.d.ts.map
 
-//// [/src/core/index.d.ts.map]
+//// [/user/username/projects/sample1/core/index.d.ts.map]
 {"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,UAAU,EAAE,MAAsB,CAAC;AAChD,wBAAgB,OAAO,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB;AAC/D,wBAAgB,QAAQ,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB"}
 
-//// [/src/core/index.js]
+//// [/user/username/projects/sample1/core/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.multiply = exports.leftPad = exports.someString = void 0;
@@ -174,20 +160,20 @@ function multiply(a, b) { return a * b; }
 exports.multiply = multiply;
 
 
-//// [/src/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"},{"version":"-9253692965-declare const dts: any;\r\n","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+//// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
-//// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileNames": [
-      "../../lib/lib.d.ts",
+      "../../../../../a/lib/lib.d.ts",
       "./anothermodule.ts",
       "./index.ts",
       "./some_decl.d.ts"
     ],
     "fileInfos": {
-      "../../lib/lib.d.ts": {
+      "../../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
           "affectsGlobalScope": true
@@ -198,27 +184,27 @@ exports.multiply = multiply;
       },
       "./anothermodule.ts": {
         "original": {
-          "version": "-2676574883-export const World = \"hello\";\r\n",
+          "version": "-3090574810-export const World = \"hello\";",
           "signature": "-9234818176-export declare const World = \"hello\";\n"
         },
-        "version": "-2676574883-export const World = \"hello\";\r\n",
+        "version": "-3090574810-export const World = \"hello\";",
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
       "./index.ts": {
         "original": {
-          "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
+          "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
           "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
         },
-        "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
+        "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
         "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
       },
       "./some_decl.d.ts": {
         "original": {
-          "version": "-9253692965-declare const dts: any;\r\n",
+          "version": "-7959511260-declare const dts: any;",
           "affectsGlobalScope": true
         },
-        "version": "-9253692965-declare const dts: any;\r\n",
-        "signature": "-9253692965-declare const dts: any;\r\n",
+        "version": "-7959511260-declare const dts: any;",
+        "signature": "-7959511260-declare const dts: any;",
         "affectsGlobalScope": true
       }
     },
@@ -244,7 +230,7 @@ exports.multiply = multiply;
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
+      "../../../../../a/lib/lib.d.ts",
       "./anothermodule.ts",
       "./index.ts",
       "./some_decl.d.ts"
@@ -252,17 +238,17 @@ exports.multiply = multiply;
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1477
+  "size": 1474
 }
 
-//// [/src/logic/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","-9234818176-export declare const World = \"hello\";\n","-6409874073-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.muitply();\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"],"root":[4],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,[4,[{"file":"./index.ts","start":87,"length":7,"code":2339,"category":1,"messageText":"Property 'muitply' does not exist on type 'typeof import(\"/src/core/index\")'."}]]],"affectedFilesPendingEmit":[4],"emitSignatures":[4]},"version":"FakeTSVersion"}
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","-9234818176-export declare const World = \"hello\";\n","-11192027815-import * as c from '../core/index';\nexport function getSecondsInDay() {\n    return c.muitply();\n}\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\n"],"root":[4],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,[4,[{"file":"./index.ts","start":85,"length":7,"code":2339,"category":1,"messageText":"Property 'muitply' does not exist on type 'typeof import(\"/user/username/projects/sample1/core/index\")'."}]]],"affectedFilesPendingEmit":[4],"emitSignatures":[4]},"version":"FakeTSVersion"}
 
-//// [/src/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileNames": [
-      "../../lib/lib.d.ts",
+      "../../../../../a/lib/lib.d.ts",
       "../core/index.d.ts",
       "../core/anothermodule.d.ts",
       "./index.ts"
@@ -274,7 +260,7 @@ exports.multiply = multiply;
       ]
     ],
     "fileInfos": {
-      "../../lib/lib.d.ts": {
+      "../../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
           "affectsGlobalScope": true
@@ -292,8 +278,8 @@ exports.multiply = multiply;
         "signature": "-9234818176-export declare const World = \"hello\";\n"
       },
       "./index.ts": {
-        "version": "-6409874073-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.muitply();\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
-        "signature": "-6409874073-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.muitply();\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"
+        "version": "-11192027815-import * as c from '../core/index';\nexport function getSecondsInDay() {\n    return c.muitply();\n}\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\n",
+        "signature": "-11192027815-import * as c from '../core/index';\nexport function getSecondsInDay() {\n    return c.muitply();\n}\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\n"
       }
     },
     "root": [
@@ -321,7 +307,7 @@ exports.multiply = multiply;
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
+      "../../../../../a/lib/lib.d.ts",
       "../core/anothermodule.d.ts",
       "../core/index.d.ts",
       [
@@ -329,11 +315,11 @@ exports.multiply = multiply;
         [
           {
             "file": "./index.ts",
-            "start": 87,
+            "start": 85,
             "length": 7,
             "code": 2339,
             "category": 1,
-            "messageText": "Property 'muitply' does not exist on type 'typeof import(\"/src/core/index\")'."
+            "messageText": "Property 'muitply' does not exist on type 'typeof import(\"/user/username/projects/sample1/core/index\")'."
           }
         ]
       ]
@@ -349,7 +335,7 @@ exports.multiply = multiply;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1509
+  "size": 1536
 }
 
 
@@ -359,26 +345,26 @@ Input::
 
 
 Output::
-/lib/tsc --b /src/tests --verbose
-[[90m12:00:26 AM[0m] Projects in this build: 
-    * src/core/tsconfig.json
-    * src/logic/tsconfig.json
-    * src/tests/tsconfig.json
+/a/lib/tsc --b tests --verbose
+[[90m12:00:42 AM[0m] Projects in this build: 
+    * core/tsconfig.json
+    * logic/tsconfig.json
+    * tests/tsconfig.json
 
-[[90m12:00:27 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
+[[90m12:00:43 AM[0m] Project 'core/tsconfig.json' is up to date because newest input 'core/anotherModule.ts' is older than output 'core/tsconfig.tsbuildinfo'
 
-[[90m12:00:28 AM[0m] Project 'src/logic/tsconfig.json' is out of date because buildinfo file 'src/logic/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90m12:00:44 AM[0m] Project 'logic/tsconfig.json' is out of date because buildinfo file 'logic/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:29 AM[0m] Building project '/src/logic/tsconfig.json'...
+[[90m12:00:45 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-[96msrc/logic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/src/core/index")'.
+[96mlogic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/user/username/projects/sample1/core/index")'.
 
 [7m3[0m     return c.muitply();
 [7m [0m [91m             ~~~~~~~[0m
 
-[[90m12:00:30 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
+[[90m12:00:46 AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'logic' has errors
 
-[[90m12:00:31 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
+[[90m12:00:47 AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/logic' has errors
 
 
 Found 1 error.

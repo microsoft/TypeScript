@@ -6920,7 +6920,8 @@ namespace Parser {
             if (
                 token() === SyntaxKind.VarKeyword || token() === SyntaxKind.LetKeyword || token() === SyntaxKind.ConstKeyword ||
                 token() === SyntaxKind.UsingKeyword && lookAhead(nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLineDisallowOf) ||
-                token() === SyntaxKind.AwaitKeyword && lookAhead(nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLineDisallowOf)
+                // this one is meant to allow of
+                token() === SyntaxKind.AwaitKeyword && lookAhead(nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLine)
             ) {
                 initializer = parseVariableDeclarationList(/*inForStatementInitializer*/ true);
             }
@@ -7336,10 +7337,6 @@ namespace Parser {
         return lookAhead(nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine);
     }
 
-    function nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLineDisallowOf() {
-        return nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLine(/*disallowOf*/ true);
-    }
-
     function nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLine(disallowOf?: boolean) {
         if (nextToken() === SyntaxKind.UsingKeyword) {
             return nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine(disallowOf);
@@ -7527,6 +7524,11 @@ namespace Parser {
     function nextTokenIsStringLiteral() {
         return nextToken() === SyntaxKind.StringLiteral;
     }
+
+    function nextTokenIsFromKeyword() {
+        return nextToken() === SyntaxKind.FromKeyword;
+    }
+
     function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
         nextToken();
         return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token() === SyntaxKind.StringLiteral);
@@ -8359,8 +8361,8 @@ namespace Parser {
 
         let isTypeOnly = false;
         if (
-            token() !== SyntaxKind.FromKeyword &&
             identifier?.escapedText === "type" &&
+            (token() !== SyntaxKind.FromKeyword || isIdentifier() && lookAhead(nextTokenIsFromKeyword)) &&
             (isIdentifier() || tokenAfterImportDefinitelyProducesImportDeclaration())
         ) {
             isTypeOnly = true;

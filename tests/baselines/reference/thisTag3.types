@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsdoc/thisTag3.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef {{fn(a: string): void}} T
+ */
+
+class C {
+>C : C
+
+    /**
+     * @this {T}
+     * @param {string} a
+     */
+    p = (a) => this.fn("" + a);
+>p : (this: T, a: string) => any
+>(a) => this.fn("" + a) : (this: T, a: string) => any
+>a : string
+>this.fn("" + a) : any
+>this.fn : any
+>this : this
+>fn : any
+>"" + a : string
+>"" : ""
+>a : string
+}
+

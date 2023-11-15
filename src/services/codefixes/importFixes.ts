@@ -163,6 +163,16 @@ const errorCodes: readonly number[] = [
     Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here.code,
     Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer.code,
     Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_1_or_later.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_include_dom.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha_and_then_add_jest_or_mocha_to_the_types_field_in_your_tsconfig.code,
+    Diagnostics.Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig.code,
+    Diagnostics.Cannot_find_namespace_0_Did_you_mean_1.code,
 ];
 
 registerCodeFix({
@@ -389,6 +399,7 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
                 namedImports && arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
                 namespaceLikeImport,
                 compilerOptions,
+                preferences,
             );
             newDeclarations = combine(newDeclarations, declarations);
         });
@@ -1348,6 +1359,7 @@ function codeActionForFixWorker(
                     namedImports,
                     namespaceLikeImport,
                     program.getCompilerOptions(),
+                    preferences,
                 ),
                 /*blankLineBetween*/ true,
                 preferences,
@@ -1505,7 +1517,7 @@ function doAddExistingFix(
         const newSpecifiers = stableSort(
             namedImports.map(namedImport =>
                 factory.createImportSpecifier(
-                    (!clause.isTypeOnly || promoteFromTypeOnly) && needsTypeOnly(namedImport),
+                    (!clause.isTypeOnly || promoteFromTypeOnly) && shouldUseTypeOnly(namedImport, preferences),
                     /*propertyName*/ undefined,
                     factory.createIdentifier(namedImport.name),
                 )
@@ -1604,6 +1616,10 @@ function needsTypeOnly({ addAsTypeOnly }: { addAsTypeOnly: AddAsTypeOnly; }): bo
     return addAsTypeOnly === AddAsTypeOnly.Required;
 }
 
+function shouldUseTypeOnly(info: { addAsTypeOnly: AddAsTypeOnly; }, preferences: UserPreferences): boolean {
+    return needsTypeOnly(info) || !!preferences.preferTypeOnlyAutoImports && info.addAsTypeOnly !== AddAsTypeOnly.NotAllowed;
+}
+
 function getNewImports(
     moduleSpecifier: string,
     quotePreference: QuotePreference,
@@ -1611,6 +1627,7 @@ function getNewImports(
     namedImports: readonly Import[] | undefined,
     namespaceLikeImport: Import & { importKind: ImportKind.CommonJS | ImportKind.Namespace; } | undefined,
     compilerOptions: CompilerOptions,
+    preferences: UserPreferences,
 ): AnyImportSyntax | readonly AnyImportSyntax[] {
     const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
     let statements: AnyImportSyntax | readonly AnyImportSyntax[] | undefined;
@@ -1618,18 +1635,18 @@ function getNewImports(
         // `verbatimModuleSyntax` should prefer top-level `import type` -
         // even though it's not an error, it would add unnecessary runtime emit.
         const topLevelTypeOnly = (!defaultImport || needsTypeOnly(defaultImport)) && every(namedImports, needsTypeOnly) ||
-            compilerOptions.verbatimModuleSyntax &&
+            (compilerOptions.verbatimModuleSyntax || preferences.preferTypeOnlyAutoImports) &&
                 defaultImport?.addAsTypeOnly !== AddAsTypeOnly.NotAllowed &&
                 !some(namedImports, i => i.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
         statements = combine(
             statements,
             makeImport(
                 defaultImport && factory.createIdentifier(defaultImport.name),
-                namedImports?.map(({ addAsTypeOnly, name }) =>
+                namedImports?.map(namedImport =>
                     factory.createImportSpecifier(
-                        !topLevelTypeOnly && addAsTypeOnly === AddAsTypeOnly.Required,
+                        !topLevelTypeOnly && shouldUseTypeOnly(namedImport, preferences),
                         /*propertyName*/ undefined,
-                        factory.createIdentifier(name),
+                        factory.createIdentifier(namedImport.name),
                     )
                 ),
                 moduleSpecifier,
@@ -1643,14 +1660,14 @@ function getNewImports(
         const declaration = namespaceLikeImport.importKind === ImportKind.CommonJS
             ? factory.createImportEqualsDeclaration(
                 /*modifiers*/ undefined,
-                needsTypeOnly(namespaceLikeImport),
+                shouldUseTypeOnly(namespaceLikeImport, preferences),
                 factory.createIdentifier(namespaceLikeImport.name),
                 factory.createExternalModuleReference(quotedModuleSpecifier),
             )
             : factory.createImportDeclaration(
                 /*modifiers*/ undefined,
                 factory.createImportClause(
-                    needsTypeOnly(namespaceLikeImport),
+                    shouldUseTypeOnly(namespaceLikeImport, preferences),
                     /*name*/ undefined,
                     factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name)),
                 ),

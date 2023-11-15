@@ -1,24 +1,45 @@
 currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/home/src/projects/project/packages/package-a/package.json]
 {
- "name": "package-a",
- "version": "1.0.0",
- "type": "module",
- "main": "build/index.js",
- "exports": {
-  ".": "./build/index.js",
-  "./package.json": "./package.json",
-  "./*": [
-   "./build/*/index.js",
-   "./build/*.js"
-  ]
- }
+  "name": "package-a",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./package.json": "./package.json",
+    "./*": [
+      "./build/*/index.js",
+      "./build/*.js"
+    ]
+  }
 }
 
 //// [/home/src/projects/project/packages/package-a/tsconfig.json]
-{"compilerOptions":{"allowSyntheticDefaultImports":true,"baseUrl":"./","composite":true,"declarationMap":true,"esModuleInterop":true,"lib":["es2021"],"module":"esnext","moduleResolution":"bundler","outDir":"build","rootDir":"./src","target":"ES2021","traceResolution":true,"tsBuildInfoFile":"./build/tsconfig.tsbuildinfo"},"include":["./src/**/*.ts"]}
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "composite": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es2021"
+    ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "outDir": "build",
+    "rootDir": "./src",
+    "target": "ES2021",
+    "traceResolution": true,
+    "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo"
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
 
 //// [/home/src/projects/project/packages/package-a/src/index.ts]
 export * from "./subfolder";
@@ -28,22 +49,48 @@ export const FOO = "bar";
 
 //// [/home/src/projects/project/packages/package-b/package.json]
 {
- "name": "package-b",
- "version": "1.0.0",
- "type": "module",
- "main": "build/index.js",
- "exports": {
-  ".": "./build/index.js",
-  "./package.json": "./package.json",
-  "./*": [
-   "./build/*/index.js",
-   "./build/*.js"
-  ]
- }
+  "name": "package-b",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./package.json": "./package.json",
+    "./*": [
+      "./build/*/index.js",
+      "./build/*.js"
+    ]
+  }
 }
 
 //// [/home/src/projects/project/packages/package-b/tsconfig.json]
-{"compilerOptions":{"allowSyntheticDefaultImports":true,"baseUrl":"./","composite":true,"declarationMap":true,"esModuleInterop":true,"lib":["es2021"],"module":"esnext","moduleResolution":"bundler","outDir":"build","rootDir":"./src","target":"ES2021","traceResolution":true,"tsBuildInfoFile":"./build/tsconfig.tsbuildinfo"},"include":["./src/**/*.ts"],"references":[{"path":"../package-a"}]}
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "composite": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es2021"
+    ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "outDir": "build",
+    "rootDir": "./src",
+    "target": "ES2021",
+    "traceResolution": true,
+    "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo"
+  },
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "../package-a"
+    }
+  ]
+}
 
 //// [/home/src/projects/project/packages/package-b/src/index.ts]
 import { FOO } from "package-a";
@@ -424,6 +471,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -439,6 +489,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+1: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
@@ -453,7 +506,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -533,6 +588,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 1
+2: checkOne *new*
 
 Before running Timeout callback:: count: 1
 2: checkOne
@@ -663,6 +721,9 @@ FsWatchesRecursive *deleted*::
 /home/src/projects/project/packages/package-a:
   {}
 
+Immedidate callback:: count: 1
+3: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 3: semanticCheck
 
@@ -691,7 +752,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-4: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 4: suggestionCheck
@@ -771,6 +834,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 1
+3: checkOne *new*
 
 Before running Timeout callback:: count: 1
 3: checkOne
@@ -905,6 +971,9 @@ FsWatchesRecursive::
 /home/src/projects/project/packages/package-b/src:
   {}
 
+Immedidate callback:: count: 1
+5: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 5: semanticCheck
 
@@ -919,7 +988,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-6: suggestionCheck
+
+Immedidate callback:: count: 1
+6: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 6: suggestionCheck

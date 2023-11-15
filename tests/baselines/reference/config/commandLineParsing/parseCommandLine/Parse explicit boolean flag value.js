@@ -1,7 +1,7 @@
 --strictNullChecks false 0.ts
 CompilerOptions::
 {
- "strictNullChecks": false
+  "strictNullChecks": false
 }
 WatchOptions::
 

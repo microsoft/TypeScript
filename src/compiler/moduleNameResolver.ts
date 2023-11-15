@@ -585,10 +585,8 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
     if (resolutionMode === ModuleKind.ESNext && (ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext)) {
         features |= NodeResolutionFeatures.EsmMode;
     }
-    // true: "import" / false: "require" / undefined: default based on settings
-    const useImportCondition = resolutionMode === ModuleKind.ESNext || (resolutionMode !== undefined ? false : undefined);
     const conditions = (features & NodeResolutionFeatures.Exports)
-        ? getConditions(options, useImportCondition)
+        ? getConditions(options, resolutionMode)
         : [];
     const diagnostics: Diagnostic[] = [];
     const moduleResolutionState: ModuleResolutionState = {
@@ -744,16 +742,13 @@ function getNodeResolutionFeatures(options: CompilerOptions) {
     return features;
 }
 
-/**
- * @param overrideResolutionModeAttribute
- * @internal
- */
-export function getConditions(options: CompilerOptions, esmMode?: boolean) {
+/** @internal */
+export function getConditions(options: CompilerOptions, resolutionMode?: ResolutionMode) {
     const moduleResolution = getEmitModuleResolutionKind(options);
-    if (esmMode === undefined) {
+    if (resolutionMode === undefined) {
         if (moduleResolution === ModuleResolutionKind.Bundler) {
             // bundler always uses `import` unless explicitly overridden
-            esmMode ??= moduleResolution === ModuleResolutionKind.Bundler;
+            resolutionMode = ModuleKind.ESNext;
         }
         else if (moduleResolution === ModuleResolutionKind.Node10) {
             // node10 does not support package.json imports/exports without
@@ -764,7 +759,7 @@ export function getConditions(options: CompilerOptions, esmMode?: boolean) {
     }
     // conditions are only used by the node16/nodenext/bundler resolvers - there's no priority order in the list,
     // it's essentially a set (priority is determined by object insertion order in the object we look at).
-    const conditions = esmMode
+    const conditions = resolutionMode === ModuleKind.ESNext
         ? ["import"]
         : ["require"];
     if (!options.noDtsResolution) {
@@ -1439,13 +1434,13 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
                 result = nodeNextModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
                 break;
             case ModuleResolutionKind.Node10:
-                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode ? getConditions(compilerOptions, resolutionMode === ModuleKind.ESNext) : undefined);
+                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode ? getConditions(compilerOptions, resolutionMode) : undefined);
                 break;
             case ModuleResolutionKind.Classic:
                 result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                 break;
             case ModuleResolutionKind.Bundler:
-                result = bundlerModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode ? getConditions(compilerOptions, resolutionMode === ModuleKind.ESNext) : undefined);
+                result = bundlerModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode ? getConditions(compilerOptions, resolutionMode) : undefined);
                 break;
             default:
                 return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
@@ -1813,7 +1808,7 @@ function nodeModuleNameResolverWorker(
         compilerOptions,
         moduleResolution === ModuleResolutionKind.Bundler || moduleResolution === ModuleResolutionKind.Node10
             ? undefined
-            : !!(features & NodeResolutionFeatures.EsmMode),
+            : (features & NodeResolutionFeatures.EsmMode) ? ModuleKind.ESNext : ModuleKind.CommonJS,
     );
 
     const diagnostics: Diagnostic[] = [];
@@ -2225,7 +2220,7 @@ export function getEntrypointsFromPackageJsonInfo(
 
     if (features & NodeResolutionFeatures.Exports && packageJsonInfo.contents.packageJsonContent.exports) {
         const conditionSets = deduplicate(
-            [getConditions(options, /*esmMode*/ true), getConditions(options, /*esmMode*/ false)],
+            [getConditions(options, ModuleKind.ESNext), getConditions(options, ModuleKind.CommonJS)],
             arrayIsEqualTo,
         );
         for (const conditions of conditionSets) {

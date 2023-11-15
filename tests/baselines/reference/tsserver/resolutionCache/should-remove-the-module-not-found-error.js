@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/file1.ts]
 import * as T from './moduleFile'; T.bar();
@@ -110,12 +110,17 @@ Before running Timeout callback:: count: 1
 export function bar() { };
 
 
+Timeout callback:: count: 1
+1: /dev/null/inferredProject1*FailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*FailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-2: /dev/null/inferredProject1*
-3: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+2: /dev/null/inferredProject1* *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Before request
 

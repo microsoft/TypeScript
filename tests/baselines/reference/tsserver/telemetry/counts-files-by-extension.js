@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/src/ts.ts]
 
@@ -26,7 +26,14 @@ Before request
 
 
 //// [/tsconfig.json]
-{"compilerOptions":{"allowJs":true},"include":["src"]}
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "include": [
+    "src"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

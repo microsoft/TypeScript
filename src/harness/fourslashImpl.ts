@@ -6,7 +6,7 @@ import * as Utils from "./_namespaces/Utils";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
 import {
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "./tsserverLogger";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
@@ -259,7 +259,7 @@ export class TestState {
 
     private inputFiles = new Map<string, string>(); // Map between inputFile's fileName and its content for easily looking up when resolving references
 
-    private logger: Logger | undefined;
+    private logger: LoggerWithInMemoryLogs | undefined;
 
     private static getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[] | undefined) {
         let result = "";
@@ -519,7 +519,7 @@ export class TestState {
         if (this.logger) {
             Harness.Baseline.runBaseline(
                 `tsserver/fourslashServer/${ts.getBaseFileName(this.originalInputFileName).replace(".ts", ".js")}`,
-                this.logger.logs!.join("\n"),
+                this.logger.logs.join("\n"),
             );
         }
     }
@@ -3347,12 +3347,16 @@ export class TestState {
         this.verifyRangeIs(expectedText, includeWhiteSpace);
     }
 
-    public verifyCodeFixAll({ fixId, fixAllDescription, newFileContent, commands: expectedCommands }: FourSlashInterface.VerifyCodeFixAllOptions): void {
-        const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName), a => a.fixId === fixId);
+    public verifyCodeFixAll({ fixId, fixAllDescription, newFileContent, commands: expectedCommands, preferences }: FourSlashInterface.VerifyCodeFixAllOptions): void {
+        if (this.testType === FourSlashTestType.Server && preferences) {
+            this.configure(preferences);
+        }
+
+        const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName, /*errorCode*/ undefined, preferences), a => a.fixId === fixId);
         ts.Debug.assert(fixWithId !== undefined, "No available code fix has the expected id. Fix All is not available if there is only one potentially fixable diagnostic present.", () => `Expected '${fixId}'. Available actions:\n${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId || "no fix id"})`).join("\n")}`);
         ts.Debug.assertEqual(fixWithId.fixAllDescription, fixAllDescription);
 
-        const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
+        const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, preferences || ts.emptyOptions);
         assert.deepEqual<readonly {}[] | undefined>(commands, expectedCommands);
         this.verifyNewContent({ newFileContent }, changes);
     }
