@@ -93,23 +93,9 @@ Change:: emulate access
 
 Input::
 
-Output::
-FileWatcher:: Triggered with /user/username/projects/myproject/main.ts 1:: WatchInfo: /user/username/projects/myproject/main.ts 250 undefined Source file
-Scheduling update
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/main.ts 1:: WatchInfo: /user/username/projects/myproject/main.ts 250 undefined Source file
-
-
-Timeout callback:: count: 1
-1: timerToUpdateProgram *new*
-
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
+Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
-Output::
-Synchronizing program
-
-
 
 
 exitCode:: ExitStatus.undefined
@@ -128,10 +114,10 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/mai
 
 
 Timeout callback:: count: 1
-2: timerToUpdateProgram *new*
+1: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
+1: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::

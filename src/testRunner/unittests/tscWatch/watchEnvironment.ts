@@ -704,6 +704,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         },
                         {
                             currentDirectory: "/user/username/projects/myproject",
+                            fsWatchWithTimestamp,
                         },
                     ),
                 edits: [
