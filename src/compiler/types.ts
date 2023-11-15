@@ -6059,7 +6059,7 @@ export interface SerializedTypeEntry {
     node: TypeNode;
     truncating?: boolean;
     addedLength: number;
-    trackedSymbols: readonly TrackedSymbol[] | undefined;
+    trackedSymbols: ReadonlyMap<string, TrackedSymbol> | undefined;
 }
 
 // dprint-ignore

@@ -6924,7 +6924,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const cachedResult = links?.serializedTypes?.get(key);
                 if (cachedResult) {
-                    if (context.trackedSymbols !== cachedResult.trackedSymbols) {
+                    if (cachedResult.trackedSymbols !== context.trackedSymbols) {
                         // TODO:: check if we instead store late painted statements associated with this?
                         cachedResult.trackedSymbols?.forEach(
                             ([symbol, enclosingDeclaration, meaning]) =>
@@ -50490,7 +50490,7 @@ interface NodeBuilderContext {
     // State
     encounteredError: boolean;
     reportedDiagnostic: boolean;
-    trackedSymbols: TrackedSymbol[] | undefined;
+    trackedSymbols: Map<string, TrackedSymbol> | undefined;
     visitedTypes: Set<number> | undefined;
     symbolDepth: Map<string, number> | undefined;
     inferTypeParameters: TypeParameter[] | undefined;
@@ -50532,7 +50532,13 @@ class SymbolTrackerImpl implements SymbolTracker {
                 return true;
             }
             // Skip recording type parameters as they dont contribute to late painted statements
-            if (!(symbol.flags & SymbolFlags.TypeParameter)) (this.context.trackedSymbols ??= []).push([symbol, enclosingDeclaration, meaning]);
+            if (!(symbol.flags & SymbolFlags.TypeParameter)) {
+                this.context.trackedSymbols ??= new Map();
+                const key = `${getSymbolId(symbol)}|${enclosingDeclaration ? getNodeId(enclosingDeclaration) : ""}|${meaning}`;
+                if (!this.context.trackedSymbols.has(key)) {
+                    this.context.trackedSymbols.set(key, [symbol, enclosingDeclaration, meaning]);
+                }
+            }
         }
         return false;
     }
