@@ -6924,15 +6924,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const cachedResult = links?.serializedTypes?.get(key);
                 if (cachedResult) {
-                    // TODO:: check if we instead store late painted statements associated with this?
-                    cachedResult.trackedSymbols?.forEach(
-                        ([symbol, enclosingDeclaration, meaning]) =>
-                            context.tracker.trackSymbol(
-                                symbol,
-                                enclosingDeclaration,
-                                meaning,
-                            ),
-                    );
+                    if (context.trackedSymbols !== cachedResult.trackedSymbols) {
+                        // TODO:: check if we instead store late painted statements associated with this?
+                        cachedResult.trackedSymbols?.forEach(
+                            ([symbol, enclosingDeclaration, meaning]) =>
+                                context.tracker.trackSymbol(
+                                    symbol,
+                                    enclosingDeclaration,
+                                    meaning,
+                                ),
+                        );
+                    }
                     if (cachedResult.truncating) {
                         context.truncating = true;
                     }
