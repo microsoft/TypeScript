@@ -6331,14 +6331,14 @@ namespace Parser {
         const posLessThan = getNodePos();
         const type = parseType();
 
-        // <Type />: special case for a JSX element in a .ts file and avoid reporting a second error on the name
+        // <Type />: specialized diagnostic for a JSX element in a .ts file - and skip some excess reporting
         if (token() === SyntaxKind.SlashToken && scanner.scan() === SyntaxKind.GreaterThanToken) {
             nextToken();
             parseErrorAt(posLessThan - 1, getNodePos(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_to_change_the_file_extension_to_tsx, tokenToString(SyntaxKind.GreaterThanToken));
-            return finishNode(factory.createTypeAssertion(type, factory.createIdentifier("")), pos);
+        } else {
+            parseExpected(SyntaxKind.GreaterThanToken);
         }
 
-        parseExpected(SyntaxKind.GreaterThanToken);
         const expression = parseSimpleUnaryExpression();
         return finishNode(factory.createTypeAssertion(type, expression), pos);
     }

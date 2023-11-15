@@ -13,11 +13,9 @@ export const _ = () => <span
 >() => <span/> : () => span
 ><span/> : span
 
-
+/>;
 > : any
 
-export const _ = () => <span
-/>;
 console.log("after");
 >console.log("after") : void
 >console.log : (...data: any[]) => void
