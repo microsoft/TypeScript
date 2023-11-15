@@ -44,7 +44,9 @@ import {
     getModuleSpecifierEndingPreference,
     getNodeModulePathParts,
     getNormalizedAbsolutePath,
+    getOutputDeclarationFileNameWorker,
     getOutputExtension,
+    getOutputJSFileNameWorker,
     getOwnKeys,
     getPackageJsonTypesVersionsPaths,
     getPackageNameFromTypesPackageName,
@@ -59,6 +61,7 @@ import {
     hasJSFileExtension,
     hasTSFileExtension,
     hostGetCanonicalFileName,
+    hostUsesCaseSensitiveFileNames,
     Identifier,
     isAmbientModule,
     isApplicableVersionedTypesKey,
@@ -847,36 +850,12 @@ const enum MatchingMode {
     Pattern,
 }
 
-function getOutputPath(targetFilePath: string, options: CompilerOptions, commonSourceDirectory: string) {
-    return changeExtension(
-        options.outDir ?
-            resolvePath(
-                options.outDir,
-                getRelativePathFromDirectory(commonSourceDirectory, targetFilePath, /*ignoreCase*/ false),
-            ) :
-            targetFilePath,
-        getOutputExtension(targetFilePath, options),
-    );
-}
-
-function getOutputDeclarationPath(targetFilePath: string, options: CompilerOptions, commonSourceDirectory: string) {
-    const declarationDir = options.declarationDir || options.outDir;
-    return changeExtension(
-        declarationDir ?
-            resolvePath(
-                declarationDir,
-                getRelativePathFromDirectory(commonSourceDirectory, targetFilePath, /*ignoreCase*/ false),
-            ) :
-            targetFilePath,
-        getDeclarationEmitExtensionForPath(targetFilePath),
-    );
-}
-
 function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: ModuleSpecifierResolutionHost, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[], mode: MatchingMode, isImports: boolean): { moduleFileToTry: string; } | undefined {
     if (typeof exports === "string") {
-        const commonSourceDirectory = host.getCommonSourceDirectory();
-        const outputFile = isImports && getOutputPath(targetFilePath, options, commonSourceDirectory);
-        const declarationFile = isImports && getOutputDeclarationPath(targetFilePath, options, commonSourceDirectory);
+        const ignoreCase = !hostUsesCaseSensitiveFileNames(host);
+        const getCommonSourceDirectory = () => host.getCommonSourceDirectory();
+        const outputFile = isImports && getOutputJSFileNameWorker(targetFilePath, options, ignoreCase, getCommonSourceDirectory);
+        const declarationFile = isImports && getOutputDeclarationFileNameWorker(targetFilePath, options, ignoreCase, getCommonSourceDirectory);
 
         const pathOrPattern = getNormalizedAbsolutePath(combinePaths(packageDirectory, exports), /*currentDirectory*/ undefined);
         const extensionSwappedTarget = hasTSFileExtension(targetFilePath) ? removeFileExtension(targetFilePath) + tryGetJSExtensionForFile(targetFilePath, options) : undefined;
