@@ -3,10 +3,11 @@ import cp from "child_process";
 
 /**
  * @param {[string, string[]][]} tasks
- * @param {cp.SpawnSyncOptions} opts
+ * @param {cp.SpawnSyncOptions} [opts]
  * @returns {string}
  */
-export function runSequence(tasks, opts = { timeout: 100000, shell: true }) {
+export function runSequence(tasks, opts) {
+    opts = { timeout: 100000, shell: true, ...opts}
     let lastResult;
     for (const task of tasks) {
         console.log(`${task[0]} ${task[1].join(" ")}`);

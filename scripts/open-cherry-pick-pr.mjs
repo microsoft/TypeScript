@@ -84,7 +84,7 @@ ${logText.trim()}`;
     runSequence([
         ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
         ["git", ["push", "--set-upstream", "fork", branchName, "-f"]], // push the branch
-    ]);
+    ], { timeout: 1000000 });
 
     const r = await gh.pulls.create({
         owner: "Microsoft",
