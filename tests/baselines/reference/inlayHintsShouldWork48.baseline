@@ -1,8 +1,0 @@
-const x = foo(1)
-       ^
-{
-  "text": ": 1",
-  "position": 55,
-  "kind": "Type",
-  "whitespaceBefore": true
-}

@@ -1,18 +1,17 @@
-import * as Harness from "../../_namespaces/Harness";
+import {
+    createWatchUtils,
+} from "../../../harness/watchUtils";
 import {
     arrayFrom,
     clear,
     clone,
     combinePaths,
     compareStringsCaseSensitive,
-    contains,
     createGetCanonicalFileName,
-    createMultiMap,
     createSystemWatchFunctions,
     Debug,
     directorySeparator,
     FileSystemEntryKind,
-    FileWatcher,
     FileWatcherCallback,
     FileWatcherEventKind,
     filterMutate,
@@ -44,7 +43,12 @@ import {
     sys,
     toPath,
 } from "../../_namespaces/ts";
-import { timeIncrements } from "../../_namespaces/vfs";
+import {
+    typingsInstaller,
+} from "../../_namespaces/ts.server";
+import {
+    timeIncrements,
+} from "../../_namespaces/vfs";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",
@@ -58,7 +62,7 @@ interface Number { toExponential: any; }
 interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }`
+interface Array<T> { length: number; [n: number]: T; }`,
 };
 
 function getExecutingFilePathFromLibFile(): string {
@@ -75,6 +79,7 @@ export interface TestServerHostCreationParameters {
     runWithoutRecursiveWatches?: boolean;
     runWithFallbackPolling?: boolean;
     inodeWatching?: boolean;
+    fsWatchWithTimestamp?: boolean;
 }
 
 export function createWatchedSystem(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
@@ -107,7 +112,7 @@ export interface SymLink {
 
 export type FileOrFolderOrSymLink = File | Folder | SymLink;
 export interface FileOrFolderOrSymLinkMap {
-    [path: string]: string | Omit<FileOrFolderOrSymLink, "path">;
+    [path: string]: string | Omit<File, "path"> | Omit<SymLink, "path"> | undefined;
 }
 export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
     return isString((fileOrFolderOrSymLink as File).content);
@@ -161,6 +166,12 @@ function invokeWatcherCallbacks<T>(callbacks: readonly T[] | undefined, invokeCa
     }
 }
 
+export interface StateLogger {
+    log(s: string): void;
+    logs: string[];
+}
+
+const exitMessage = "System Exit";
 interface CallbackData {
     cb: TimeOutCallback;
     args: any[];
@@ -168,10 +179,13 @@ interface CallbackData {
     time: number;
 }
 class Callbacks {
-    readonly map: CallbackData[] = [];
+    readonly map = new Map<number, CallbackData>();
     private nextId = 1;
+    invoke: (invokeKey?: number) => void = invokeKey => this.invokeWorker(invokeKey);
+    private hasChanges = false;
+    private serializedKeys = new Map<number, any>();
 
-    constructor(private host: TestServerHost, readonly callbackType: string) {
+    constructor(private host: TestServerHost, readonly callbackType: string, private readonly swallowExitException?: boolean) {
     }
 
     getNextId() {
@@ -181,27 +195,42 @@ class Callbacks {
     register(cb: TimeOutCallback, args: any[], ms?: number) {
         const timeoutId = this.nextId;
         this.nextId++;
-        this.map[timeoutId] = { cb, args, ms, time: this.host.getTime() };
+        this.map.set(timeoutId, { cb, args, ms, time: this.host.getTime() });
+        this.hasChanges = true;
         return timeoutId;
     }
 
     unregister(id: any) {
         if (typeof id === "number") {
-            delete this.map[id];
+            this.hasChanges = this.map.delete(id) || this.hasChanges;
         }
     }
 
-    log() {
+    log(logChanges?: boolean) {
         const details: string[] = [];
-        for (const timeoutId in this.map) {
-            const { args } = this.map[Number(timeoutId)];
-            details.push(`${timeoutId}: ${args[0]}`);
+        this.map.forEach(({ args }, timeoutId) => {
+            details.push(`${timeoutId}: ${args[0]}${!logChanges || this.serializedKeys.has(timeoutId) ? "" : " *new*"}`);
+            if (logChanges) this.serializedKeys.set(timeoutId, args[0]);
+        });
+        const deleted: string[] = [];
+        if (logChanges && this.serializedKeys.size !== this.map.size) {
+            this.serializedKeys.forEach((value, key) => {
+                if (this.map.has(key)) return;
+                deleted.push(`${key}: ${value} *deleted*`);
+                this.serializedKeys.delete(key);
+            });
         }
-        return `${this.callbackType} callback:: count: ${details.length}` + (details.length ? "\r\n" + details.join("\r\n") : "");
+        return `${this.callbackType} callback:: count: ${this.map.size}` +
+            (deleted.length ? "\r\n" + deleted.join("\r\n") : "") +
+            (details.length ? "\r\n" + details.join("\r\n") : "");
     }
 
     private invokeCallback(timeoutId: number) {
-        const { cb, args, ms, time } = this.map[timeoutId];
+        const data = this.map.get(timeoutId);
+        if (!data) return;
+        const { cb, args, ms, time } = data;
+        this.map.delete(timeoutId);
+        this.serializedKeys.delete(timeoutId);
         if (ms !== undefined) {
             const newTime = ms + time;
             if (this.host.getTime() < newTime) {
@@ -209,17 +238,43 @@ class Callbacks {
             }
         }
         cb(...args);
-        delete this.map[timeoutId];
     }
 
-    invoke(invokeKey?: number) {
-        if (invokeKey) return this.invokeCallback(invokeKey);
+    invokeWorker(invokeKey?: number) {
+        try {
+            if (invokeKey) return this.invokeCallback(invokeKey);
 
-        // Note: invoking a callback may result in new callbacks been queued,
-        // so do not clear the entire callback list regardless. Only remove the
-        // ones we have invoked.
-        for (const key in this.map) {
-            this.invokeCallback(Number(key));
+            // Note: invoking a callback may result in new callbacks been queued,
+            // so do not clear the entire callback list regardless. Only remove the
+            // ones we have invoked.
+            const keys = arrayFrom(this.map.keys());
+            for (const key of keys) {
+                this.invokeCallback(key);
+            }
+        }
+        catch (e) {
+            if (this.swallowExitException && e.message === exitMessage) {
+                return;
+            }
+            throw e;
+        }
+    }
+
+    switchToBaseliningInvoke(logger: StateLogger, serializeOutputOrder: SerializeOutputOrder) {
+        this.invoke = invokeKey => {
+            logger.log(`Before running ${this.log()}`);
+            this.host.serializeState(logger.logs, serializeOutputOrder);
+            if (invokeKey !== undefined) logger.log(`Invoking ${this.callbackType} callback:: timeoutId:: ${invokeKey}:: ${this.map.get(invokeKey)!.args[0]}`);
+            this.invokeWorker(invokeKey);
+            logger.log(`After running ${this.callbackType} callback:: count: ${this.map.size}`);
+            this.host.serializeState(logger.logs, serializeOutputOrder);
+        };
+    }
+
+    serialize(baseline: string[]) {
+        if (this.hasChanges) {
+            baseline.push(this.log(/*logChanges*/ true), "");
+            this.hasChanges = false;
         }
     }
 }
@@ -258,7 +313,7 @@ export enum Tsc_WatchFile {
 export enum Tsc_WatchDirectory {
     WatchFile = "RecursiveDirectoryUsingFsWatchFile",
     NonRecursiveWatchDirectory = "RecursiveDirectoryUsingNonRecursiveWatchDirectory",
-    DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling"
+    DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling",
 }
 
 export interface TestServerHostOptions {
@@ -270,6 +325,18 @@ export interface TestServerHostOptions {
     environmentVariables?: Map<string, string>;
 }
 
+export type PendingInstallCallback = (
+    pendingInstallInfo: string,
+    installedTypingsOrSuccess: string[] | string | boolean,
+    typingFiles: readonly File[],
+    onRequestCompleted: typingsInstaller.RequestCompletedAction,
+) => void;
+
+export enum SerializeOutputOrder {
+    None,
+    BeforeDiff,
+    AfterDiff,
+}
 export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
     args: string[] = [];
 
@@ -278,14 +345,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     private fs = new Map<Path, FSEntry>();
     private time = timeIncrements;
     getCanonicalFileName: (s: string) => string;
-    private toPath: (f: string) => Path;
-    readonly timeoutCallbacks = new Callbacks(this, "Timeout");
+    toPath: (f: string) => Path;
+    readonly timeoutCallbacks = new Callbacks(this, "Timeout", /*swallowExitException*/ true);
     readonly immediateCallbacks = new Callbacks(this, "Immedidate");
+    readonly pendingInstalls = new Callbacks(this, "PendingInstalls");
     readonly screenClears: number[] = [];
 
-    readonly watchedFiles = createMultiMap<Path, TestFileWatcher>();
-    readonly fsWatches = createMultiMap<Path, TestFsWatcher>();
-    readonly fsWatchesRecursive = createMultiMap<Path, TestFsWatcher>();
+    readonly watchUtils = createWatchUtils<TestFileWatcher, TestFsWatcher, Path>("PolledWatches", "FsWatches");
     runWithFallbackPolling: boolean;
     public readonly useCaseSensitiveFileNames: boolean;
     public readonly newLine: string;
@@ -303,11 +369,18 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     constructor(
         fileOrFolderorSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
         {
-            useCaseSensitiveFileNames, executingFilePath, currentDirectory,
-            newLine, windowsStyleRoot, environmentVariables,
-            runWithoutRecursiveWatches, runWithFallbackPolling,
+            useCaseSensitiveFileNames,
+            executingFilePath,
+            currentDirectory,
+            newLine,
+            windowsStyleRoot,
+            environmentVariables,
+            runWithoutRecursiveWatches,
+            runWithFallbackPolling,
             inodeWatching,
-        }: TestServerHostCreationParameters = {}) {
+            fsWatchWithTimestamp,
+        }: TestServerHostCreationParameters = {},
+    ) {
         this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
         this.newLine = newLine || "\n";
         this.windowsStyleRoot = windowsStyleRoot;
@@ -343,6 +416,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             tscWatchFile,
             tscWatchDirectory,
             inodeWatching: !!this.inodeWatching,
+            fsWatchWithTimestamp,
             sysLog: s => this.write(s + this.newLine),
         });
         this.watchFile = watchFile;
@@ -395,10 +469,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     private reloadFS(fileOrFolderOrSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[]) {
         Debug.assert(this.fs.size === 0);
         if (isArray(fileOrFolderOrSymLinkList)) {
-            fileOrFolderOrSymLinkList.forEach(f => this.ensureFileOrFolder(!this.windowsStyleRoot ?
-                f :
-                { ...f, path: this.getHostSpecificPath(f.path) }
-            ));
+            fileOrFolderOrSymLinkList.forEach(f =>
+                this.ensureFileOrFolder(
+                    !this.windowsStyleRoot ?
+                        f :
+                        { ...f, path: this.getHostSpecificPath(f.path) },
+                )
+            );
         }
         else {
             for (const key in fileOrFolderOrSymLinkList) {
@@ -612,26 +689,10 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.removeFileOrFolder(currentEntry);
     }
 
-    private hasWatchChanges?: boolean;
-    private createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): FileWatcher {
-        this.hasWatchChanges = true;
-        map.add(path, callback);
-        let closed = false;
-        return {
-            close: () => {
-                Debug.assert(!closed);
-                map.remove(path, callback);
-                this.hasWatchChanges = true;
-                closed = true;
-            }
-        };
-    }
-
     private watchFileWorker(fileName: string, cb: FileWatcherCallback, pollingInterval: PollingInterval) {
-        return this.createWatcher(
-            this.watchedFiles,
+        return this.watchUtils.pollingWatch(
             this.toFullPath(fileName),
-            { cb, pollingInterval }
+            { cb, pollingInterval },
         );
     }
 
@@ -644,20 +705,20 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         const path = this.toFullPath(fileOrDirectory);
         // Error if the path does not exist
         if (this.inodeWatching && !this.inodes?.has(path)) throw new Error();
-        const result = this.createWatcher(
-            recursive ? this.fsWatchesRecursive : this.fsWatches,
+        const result = this.watchUtils.fsWatch(
             path,
+            recursive,
             {
                 cb,
-                inode: this.inodes?.get(path)
-            }
+                inode: this.inodes?.get(path),
+            },
         ) as FsWatchWorkerWatcher;
         result.on = noop;
         return result;
     }
 
     invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, modifiedTime: Date | undefined) {
-        invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb }) => cb(fileFullPath, eventKind, modifiedTime));
+        invokeWatcherCallbacks(this.watchUtils.pollingWatches.get(this.toPath(fileFullPath)), ({ cb }) => cb(fileFullPath, eventKind, modifiedTime));
     }
 
     private fsWatchCallback(map: MultiMap<Path, TestFsWatcher>, fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, entryFullPath: string | undefined, useTildeSuffix: boolean | undefined) {
@@ -666,18 +727,18 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         invokeWatcherCallbacks(map.get(path), ({ cb, inode }) => {
             // TODO::
             if (this.inodeWatching && inode !== undefined && inode !== currentInode) return;
-            let relativeFileName = (entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : "");
+            let relativeFileName = entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : "";
             if (useTildeSuffix) relativeFileName = (relativeFileName ? relativeFileName : getBaseFileName(fullPath)) + "~";
             cb(eventName, relativeFileName, modifiedTime);
         });
     }
 
     invokeFsWatchesCallbacks(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {
-        this.fsWatchCallback(this.fsWatches, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
+        this.fsWatchCallback(this.watchUtils.fsWatches, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
     }
 
     invokeFsWatchesRecursiveCallbacks(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {
-        this.fsWatchCallback(this.fsWatchesRecursive, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
+        this.fsWatchCallback(this.watchUtils.fsWatchesRecursive, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
     }
 
     private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
@@ -708,7 +769,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return {
             path: this.toPath(fullPath),
             fullPath,
-            modifiedTime: this.now()
+            modifiedTime: this.now(),
         };
     }
 
@@ -823,12 +884,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
-        return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
+        return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, dir => {
             const directories: string[] = [];
             const files: string[] = [];
             const folder = this.getRealFolder(this.toPath(dir));
             if (folder) {
-                folder.entries.forEach((entry) => {
+                folder.entries.forEach(entry => {
                     if (this.isFsFolder(entry)) {
                         directories.push(getBaseFileName(entry.fullPath));
                     }
@@ -870,15 +931,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     runQueuedTimeoutCallbacks(timeoutId?: number) {
-        try {
-            this.timeoutCallbacks.invoke(timeoutId);
-        }
-        catch (e) {
-            if (e.message === this.exitMessage) {
-                return;
-            }
-            throw e;
-        }
+        this.timeoutCallbacks.invoke(timeoutId);
     }
 
     runQueuedImmediateCallbacks() {
@@ -891,6 +944,14 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     clearImmediate(timeoutId: any): void {
         this.immediateCallbacks.unregister(timeoutId);
+    }
+
+    scheduleInstall(cb: TimeOutCallback, ...args: any[]) {
+        this.pendingInstalls.register(cb, args);
+    }
+
+    runPendingInstalls() {
+        this.pendingInstalls.invoke();
     }
 
     createDirectory(directoryName: string): void {
@@ -954,6 +1015,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     serializeOutput(baseline: string[]) {
         const output = this.getOutput();
+        if (!this.output.length && !this.screenClears.length) return;
         let start = 0;
         baseline.push("Output::");
         for (const screenClear of this.screenClears) {
@@ -966,43 +1028,46 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.clearOutput();
     }
 
-    snap(): Map<Path, FSEntry> {
-        const result = new Map<Path, FSEntry>();
+    private snap() {
+        this.serializedDiff = new Map<Path, FSEntry>();
         this.fs.forEach((value, key) => {
             const cloneValue = clone(value);
             if (isFsFolder(cloneValue)) {
                 cloneValue.entries = cloneValue.entries.map(clone) as SortedArray<FSEntry>;
             }
-            result.set(key, cloneValue);
+            this.serializedDiff.set(key, cloneValue);
         });
+    }
 
-        return result;
+    serializeState(baseline: string[], serializeOutput: SerializeOutputOrder) {
+        if (serializeOutput === SerializeOutputOrder.BeforeDiff) this.serializeOutput(baseline);
+        this.diff(baseline);
+        if (serializeOutput === SerializeOutputOrder.AfterDiff) this.serializeOutput(baseline);
+        this.serializeWatches(baseline);
+        this.timeoutCallbacks.serialize(baseline);
+        this.immediateCallbacks.serialize(baseline);
+        this.pendingInstalls.serialize(baseline);
     }
 
     writtenFiles?: Map<Path, number>;
-    diff(baseline: string[], base = new Map<Path, FSEntry>()) {
+    private serializedDiff = new Map<Path, FSEntry>();
+    diff(baseline: string[]) {
         this.fs.forEach((newFsEntry, path) => {
-            diffFsEntry(baseline, base.get(path), newFsEntry, this.inodes?.get(path), this.writtenFiles);
+            diffFsEntry(baseline, this.serializedDiff.get(path), newFsEntry, this.inodes?.get(path), this.writtenFiles);
         });
-        base.forEach((oldFsEntry, path) => {
+        this.serializedDiff.forEach((oldFsEntry, path) => {
             const newFsEntry = this.fs.get(path);
             if (!newFsEntry) {
                 diffFsEntry(baseline, oldFsEntry, newFsEntry, this.inodes?.get(path), this.writtenFiles);
             }
         });
         baseline.push("");
+        this.snap();
+        this.writtenFiles?.clear();
     }
 
-    private serializedWatchedFiles: Map<string, TestFileWatcher[]> | undefined;
-    private serializedFsWatches: Map<string, TestFsWatcher[]> | undefined;
-    private serializedFsWatchesRecursive: Map<string, TestFsWatcher[]> | undefined;
-    serializeWatches(baseline: string[] = []) {
-        if (!this.hasWatchChanges) return baseline;
-        this.serializedWatchedFiles = serializeMultiMap(baseline, "PolledWatches", this.watchedFiles, this.serializedWatchedFiles);
-        this.serializedFsWatches = serializeMultiMap(baseline, "FsWatches", this.fsWatches, this.serializedFsWatches);
-        this.serializedFsWatchesRecursive = serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, this.serializedFsWatchesRecursive);
-        this.hasWatchChanges = false;
-        return baseline;
+    serializeWatches(baseline?: string[]) {
+        return this.watchUtils.serializeWatches(baseline);
     }
 
     realpath(s: string): string {
@@ -1023,14 +1088,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return fsEntry?.fullPath || realFullPath;
     }
 
-    readonly exitMessage = "System Exit";
     exitCode: number | undefined;
     readonly resolvePath = (s: string) => s;
     readonly getExecutingFilePath = () => this.executingFilePath;
     readonly getCurrentDirectory = () => this.currentDirectory;
     exit(exitCode?: number) {
         this.exitCode = exitCode;
-        throw new Error(this.exitMessage);
+        throw new Error(exitMessage);
     }
     getEnvironmentVariable(name: string) {
         return this.environmentVariables && this.environmentVariables.get(name) || "";
@@ -1104,56 +1168,6 @@ function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsE
     }
 }
 
-function serializeMultiMap<T>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, serialized: Map<string, T[]> | undefined) {
-    let hasChange = diffMap(baseline, caption, multiMap, serialized, /*deleted*/ false);
-    hasChange = diffMap(baseline, caption, serialized, multiMap, /*deleted*/ true) || hasChange;
-    if (hasChange) {
-        serialized = new Map();
-        multiMap.forEach((value, key) => serialized!.set(key, new Array(...value)));
-    }
-    return serialized;
-}
-
-function diffMap<T>(
-    baseline: string[],
-    caption: string,
-    map: Map<string, T[]> | undefined,
-    old: Map<string, T[]> | undefined,
-    deleted: boolean
-) {
-    let captionAdded = false;
-    let baselineChanged = false;
-    let hasChange = false;
-    if (map) {
-        for (const key of arrayFrom(map.keys()).sort(compareStringsCaseSensitive)) {
-            const existing = old?.get(key);
-            let addedKey = false;
-            const values = map.get(key)!;
-            for (const value of values) {
-                const hasExisting = contains(existing, value);
-                if (deleted && hasExisting) continue;
-                if (!hasExisting) hasChange = true;
-                if (!addedKey) {
-                    addBaseline(`${key}:${deleted || existing ? "" : " *new*"}`);
-                    addedKey = true;
-                }
-                addBaseline(`  ${JSON.stringify(value)}${deleted || hasExisting || !existing ? "" : " *new*"}`);
-            }
-        }
-    }
-    if (baselineChanged) baseline.push("");
-    return hasChange;
-
-    function addBaseline(s: string) {
-        if (!captionAdded) {
-            baseline.push(`${caption}${deleted ? " *deleted*" : ""}::`);
-            captionAdded = true;
-        }
-        baseline.push(s);
-        baselineChanged = true;
-    }
-}
-
 function baselineOutputs(baseline: string[], output: readonly string[], start: number, end = output.length) {
     let baselinedOutput: string[] | undefined;
     for (let i = start; i < end; i++) {
@@ -1175,15 +1189,4 @@ export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
         host.writtenFiles.set(path, (host.writtenFiles.get(path) || 0) + 1);
     };
     return host;
-}
-
-export function getTsBuildProjectFilePath(project: string, file: string) {
-    return `/user/username/projects/${project}/${file}`;
-}
-
-export function getTsBuildProjectFile(project: string, file: string): File {
-    return {
-        path: getTsBuildProjectFilePath(project, file),
-        content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
-    };
 }

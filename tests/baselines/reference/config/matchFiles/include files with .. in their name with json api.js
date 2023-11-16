@@ -1,11 +1,11 @@
 config:
 {
- "include": [
-  "c:/ext/b/a..b.ts"
- ],
- "exclude": [
-  "**"
- ]
+  "include": [
+    "c:/ext/b/a..b.ts"
+  ],
+  "exclude": [
+    "**"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -81,28 +81,28 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/ext/b/a..b.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "c:/ext/b/a..b.ts"
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/ext/b/a..b.ts"
   ],
-  "exclude": [
-   "**"
-  ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "c:/ext/b/a..b.ts"
+    ],
+    "exclude": [
+      "**"
+    ],
+    "compileOnSave": false
+  },
+  "wildcardDirectories": {},
   "compileOnSave": false
- },
- "wildcardDirectories": {},
- "compileOnSave": false
 }
 Errors::
 

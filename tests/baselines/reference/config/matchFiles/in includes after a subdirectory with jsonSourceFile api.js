@@ -1,8 +1,8 @@
 config:
 {
- "include": [
-  "**/y/../*"
- ]
+  "include": [
+    "**/y/../*"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -78,27 +78,27 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "**/y/../*"
-  ]
- },
- "wildcardDirectories": {},
- "compileOnSave": false
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "**/y/../*"
+    ]
+  },
+  "wildcardDirectories": {},
+  "compileOnSave": false
 }
 Errors::
-[96mtsconfig.json[0m:[93m3[0m:[93m3[0m - [91merror[0m[90m TS5065: [0mFile specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/y/../*'.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5065: [0mFile specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/y/../*'.
 
-[7m3[0m   "**/y/../*"
-[7m [0m [91m  ~~~~~~~~~~~[0m
+[7m3[0m     "**/y/../*"
+[7m [0m [91m    ~~~~~~~~~~~[0m
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file 'c:/dev/tsconfig.json'. Specified 'include' paths were '["**/y/../*"]' and 'exclude' paths were '[]'.
 

@@ -1,7 +1,19 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/project/tsconfig.json]
-{"compilerOptions":{"types":[]},"files":["app.ts"],"references":[{"path":"./lib"}]}
+{
+  "compilerOptions": {
+    "types": []
+  },
+  "files": [
+    "app.ts"
+  ],
+  "references": [
+    {
+      "path": "./lib"
+    }
+  ]
+}
 
 //// [/user/username/projects/project/app.ts]
 import { one } from './lib';
@@ -9,10 +21,23 @@ console.log(one);
 
 
 //// [/user/username/projects/project/lib/tsconfig.json]
-{"compilerOptions":{"composite":true,"types":[]},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "types": []
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 //// [/user/username/projects/project/lib/tsconfig.base.json]
-{"compilerOptions":{"composite":true,"types":[]}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "types": []
+  }
+}
 
 //// [/user/username/projects/project/lib/index.ts]
 export const one = 1;
@@ -59,8 +84,36 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/project/
 
 
 
-Program root files: ["/user/username/projects/project/app.ts"]
-Program options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
+//// [/user/username/projects/project/app.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var lib_1 = require("./lib");
+console.log(lib_1.one);
+
+
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/project/app.ts: *new*
+  {}
+/user/username/projects/project/lib/index.d.ts: *new*
+  {}
+/user/username/projects/project/lib/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/project/app.ts"
+]
+Program options: {
+  "types": [],
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -77,44 +130,36 @@ Shape signatures in builder refreshed for::
 /user/username/projects/project/lib/index.d.ts (used version)
 /user/username/projects/project/app.ts (used version)
 
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/project/app.ts: *new*
-  {}
-/user/username/projects/project/lib/index.d.ts: *new*
-  {}
-/user/username/projects/project/lib/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/project/app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var lib_1 = require("./lib");
-console.log(lib_1.one);
-
-
 
 Change:: Modify lib tsconfig
 
 Input::
 //// [/user/username/projects/project/lib/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/project/lib/tsconfig.json 1:: WatchInfo: /user/username/projects/project/lib/tsconfig.json 2000 undefined Config file of referened project
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/project/lib/tsconfig.json 1:: WatchInfo: /user/username/projects/project/lib/tsconfig.json 2000 undefined Config file of referened project
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 Loading config file: /user/username/projects/project/lib/tsconfig.json
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
@@ -127,8 +172,16 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/user/username/projects/project/app.ts"]
-Program options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/project/app.ts"
+]
+Program options: {
+  "types": [],
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -140,4 +193,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

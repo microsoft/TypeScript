@@ -45,6 +45,6 @@ ruleTester.run("debug-assert", rule, {
                 { messageId: "secondArgumentDebugAssertError" },
                 { messageId: "thirdArgumentDebugAssertError" },
             ],
-        }
+        },
     ],
 });

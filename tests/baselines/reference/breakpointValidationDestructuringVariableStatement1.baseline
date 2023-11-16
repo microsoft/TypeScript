@@ -1,0 +1,228 @@
+// === breakpoints ===
+
+1  >interface Robot {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (0 to 17)  SpanInfo: undefined
+--------------------------------
+2  >    name: string;
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (18 to 35)  SpanInfo: undefined
+--------------------------------
+3  >    skill: string;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (36 to 54)  SpanInfo: undefined
+--------------------------------
+4  >}
+
+    ~~                                            => Pos: (55 to 56)  SpanInfo: undefined
+--------------------------------
+5  >declare var console: {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (57 to 79)  SpanInfo: undefined
+--------------------------------
+6  >    log(msg: string): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (80 to 107)  SpanInfo: undefined
+--------------------------------
+7  >}
+
+    ~~                                            => Pos: (108 to 109)  SpanInfo: undefined
+--------------------------------
+8  >var hello = "hello";
+
+    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (110 to 130)  SpanInfo: {"start":110,"length":19}
+    >var hello = "hello"
+    >:=> (line 8, col 0) to (line 8, col 19)
+--------------------------------
+9  >var robotA: Robot = { name: "mower", skill: "mowing" };
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (131 to 186)  SpanInfo: {"start":131,"length":54}
+    >var robotA: Robot = { name: "mower", skill: "mowing" }
+    >:=> (line 9, col 0) to (line 9, col 54)
+--------------------------------
+10 >var robotB: Robot = { name: "trimmer", skill: "trimming" };
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (187 to 246)  SpanInfo: {"start":187,"length":58}
+    >var robotB: Robot = { name: "trimmer", skill: "trimming" }
+    >:=> (line 10, col 0) to (line 10, col 58)
+--------------------------------
+11 >var a: string, { name: nameA } = robotA;
+
+    ~~~~~~~~~~~~~~                                => Pos: (247 to 260)  SpanInfo: undefined
+11 >var a: string, { name: nameA } = robotA;
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (261 to 287)  SpanInfo: {"start":264,"length":11}
+    >name: nameA
+    >:=> (line 11, col 17) to (line 11, col 28)
+--------------------------------
+12 >var b: string, { name: nameB, skill: skillB } = robotB;
+
+    ~~~~~~~~~~~~~~                                => Pos: (288 to 301)  SpanInfo: undefined
+12 >var b: string, { name: nameB, skill: skillB } = robotB;
+
+                  ~~~~~~~~~~~~~~~                 => Pos: (302 to 316)  SpanInfo: {"start":305,"length":11}
+    >name: nameB
+    >:=> (line 12, col 17) to (line 12, col 28)
+12 >var b: string, { name: nameB, skill: skillB } = robotB;
+
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (317 to 343)  SpanInfo: {"start":318,"length":13}
+    >skill: skillB
+    >:=> (line 12, col 30) to (line 12, col 43)
+--------------------------------
+13 >var c: string, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" };
+
+    ~~~~~~~~~~~~~~                                => Pos: (344 to 357)  SpanInfo: undefined
+13 >var c: string, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" };
+
+                  ~~~~~~~~~~~~~~~                 => Pos: (358 to 372)  SpanInfo: {"start":361,"length":11}
+    >name: nameC
+    >:=> (line 13, col 17) to (line 13, col 28)
+13 >var c: string, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" };
+
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (373 to 434)  SpanInfo: {"start":374,"length":13}
+    >skill: skillC
+    >:=> (line 13, col 30) to (line 13, col 43)
+--------------------------------
+14 >
+
+    ~                                             => Pos: (435 to 435)  SpanInfo: undefined
+--------------------------------
+15 >var { name: nameA } = robotA, a = hello;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (436 to 464)  SpanInfo: {"start":442,"length":11}
+    >name: nameA
+    >:=> (line 15, col 6) to (line 15, col 17)
+15 >var { name: nameA } = robotA, a = hello;
+
+                                 ~~~~~~~~~~~~     => Pos: (465 to 476)  SpanInfo: {"start":466,"length":9}
+    >a = hello
+    >:=> (line 15, col 30) to (line 15, col 39)
+--------------------------------
+16 >var { name: nameB, skill: skillB } = robotB, b = " hello";
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (477 to 494)  SpanInfo: {"start":483,"length":11}
+    >name: nameB
+    >:=> (line 16, col 6) to (line 16, col 17)
+16 >var { name: nameB, skill: skillB } = robotB, b = " hello";
+
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (495 to 520)  SpanInfo: {"start":496,"length":13}
+    >skill: skillB
+    >:=> (line 16, col 19) to (line 16, col 32)
+16 >var { name: nameB, skill: skillB } = robotB, b = " hello";
+
+                                                ~~~~~~~~~~~~~~~=> Pos: (521 to 535)  SpanInfo: {"start":522,"length":12}
+    >b = " hello"
+    >:=> (line 16, col 45) to (line 16, col 57)
+--------------------------------
+17 >var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c = hello;
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (536 to 553)  SpanInfo: {"start":542,"length":11}
+    >name: nameC
+    >:=> (line 17, col 6) to (line 17, col 17)
+17 >var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c = hello;
+
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (554 to 614)  SpanInfo: {"start":555,"length":13}
+    >skill: skillC
+    >:=> (line 17, col 19) to (line 17, col 32)
+17 >var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c = hello;
+
+                                                                                   ~~~~~~~~~~~~=> Pos: (615 to 626)  SpanInfo: {"start":616,"length":9}
+    >c = hello
+    >:=> (line 17, col 80) to (line 17, col 89)
+--------------------------------
+18 >
+
+    ~                                             => Pos: (627 to 627)  SpanInfo: undefined
+--------------------------------
+19 >var a = hello, { name: nameA } = robotA, a1= "hello";
+
+    ~~~~~~~~~~~~~~                                => Pos: (628 to 641)  SpanInfo: {"start":628,"length":13}
+    >var a = hello
+    >:=> (line 19, col 0) to (line 19, col 13)
+19 >var a = hello, { name: nameA } = robotA, a1= "hello";
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (642 to 667)  SpanInfo: {"start":645,"length":11}
+    >name: nameA
+    >:=> (line 19, col 17) to (line 19, col 28)
+19 >var a = hello, { name: nameA } = robotA, a1= "hello";
+
+                                            ~~~~~~~~~~~~~~=> Pos: (668 to 681)  SpanInfo: {"start":669,"length":11}
+    >a1= "hello"
+    >:=> (line 19, col 41) to (line 19, col 52)
+--------------------------------
+20 >var b = hello, { name: nameB, skill: skillB } = robotB, b1 = "hello";
+
+    ~~~~~~~~~~~~~~                                => Pos: (682 to 695)  SpanInfo: {"start":682,"length":13}
+    >var b = hello
+    >:=> (line 20, col 0) to (line 20, col 13)
+20 >var b = hello, { name: nameB, skill: skillB } = robotB, b1 = "hello";
+
+                  ~~~~~~~~~~~~~~~                 => Pos: (696 to 710)  SpanInfo: {"start":699,"length":11}
+    >name: nameB
+    >:=> (line 20, col 17) to (line 20, col 28)
+20 >var b = hello, { name: nameB, skill: skillB } = robotB, b1 = "hello";
+
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (711 to 736)  SpanInfo: {"start":712,"length":13}
+    >skill: skillB
+    >:=> (line 20, col 30) to (line 20, col 43)
+20 >var b = hello, { name: nameB, skill: skillB } = robotB, b1 = "hello";
+
+                                                           ~~~~~~~~~~~~~~~=> Pos: (737 to 751)  SpanInfo: {"start":738,"length":12}
+    >b1 = "hello"
+    >:=> (line 20, col 56) to (line 20, col 68)
+--------------------------------
+21 >var c = hello, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c1 = hello;
+
+    ~~~~~~~~~~~~~~                                => Pos: (752 to 765)  SpanInfo: {"start":752,"length":13}
+    >var c = hello
+    >:=> (line 21, col 0) to (line 21, col 13)
+21 >var c = hello, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c1 = hello;
+
+                  ~~~~~~~~~~~~~~~                 => Pos: (766 to 780)  SpanInfo: {"start":769,"length":11}
+    >name: nameC
+    >:=> (line 21, col 17) to (line 21, col 28)
+21 >var c = hello, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c1 = hello;
+
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (781 to 841)  SpanInfo: {"start":782,"length":13}
+    >skill: skillC
+    >:=> (line 21, col 30) to (line 21, col 43)
+21 >var c = hello, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c1 = hello;
+
+                                                                                              ~~~~~~~~~~~~~=> Pos: (842 to 854)  SpanInfo: {"start":843,"length":10}
+    >c1 = hello
+    >:=> (line 21, col 91) to (line 21, col 101)
+--------------------------------
+22 >if (nameA == nameB) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~                        => Pos: (855 to 876)  SpanInfo: {"start":855,"length":19}
+    >if (nameA == nameB)
+    >:=> (line 22, col 0) to (line 22, col 19)
+--------------------------------
+23 >    console.log(skillB);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (877 to 901)  SpanInfo: {"start":881,"length":19}
+    >console.log(skillB)
+    >:=> (line 23, col 4) to (line 23, col 23)
+--------------------------------
+24 >}
+
+    ~~                                            => Pos: (902 to 903)  SpanInfo: {"start":881,"length":19}
+    >console.log(skillB)
+    >:=> (line 23, col 4) to (line 23, col 23)
+--------------------------------
+25 >else {
+
+    ~~~~~~~                                       => Pos: (904 to 910)  SpanInfo: {"start":915,"length":18}
+    >console.log(nameC)
+    >:=> (line 26, col 4) to (line 26, col 22)
+--------------------------------
+26 >    console.log(nameC);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (911 to 934)  SpanInfo: {"start":915,"length":18}
+    >console.log(nameC)
+    >:=> (line 26, col 4) to (line 26, col 22)
+--------------------------------
+27 >}
+    ~                                             => Pos: (935 to 935)  SpanInfo: {"start":915,"length":18}
+    >console.log(nameC)
+    >:=> (line 26, col 4) to (line 26, col 22)

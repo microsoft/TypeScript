@@ -1,7 +1,12 @@
 currentDirectory:: /Users/name/projects/lib-boilerplate useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/lib-boilerplate/package.json]
-{"name":"lib-boilerplate","version":"0.0.2","type":"module","exports":"./src/index.ts"}
+{
+  "name": "lib-boilerplate",
+  "version": "0.0.2",
+  "type": "module",
+  "exports": "./src/index.ts"
+}
 
 //// [/Users/name/projects/lib-boilerplate/src/index.ts]
 export function thing(): void {}
@@ -12,7 +17,14 @@ import { thing } from 'lib-boilerplate'
 
 
 //// [/Users/name/projects/lib-boilerplate/tsconfig.json]
-{"compilerOptions":{"module":"node16","target":"es2021","forceConsistentCasingInFileNames":true,"traceResolution":true}}
+{
+  "compilerOptions": {
+    "module": "node16",
+    "target": "es2021",
+    "forceConsistentCasingInFileNames": true,
+    "traceResolution": true
+  }
+}
 
 //// [/a/lib/lib.es2021.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -62,23 +74,14 @@ test/basic.spec.ts
 
 
 
-Program root files: ["/Users/name/projects/lib-boilerplate/src/index.ts","/Users/name/projects/lib-boilerplate/test/basic.spec.ts"]
-Program options: {"module":100,"target":8,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/lib-boilerplate/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.es2021.full.d.ts
-/Users/name/projects/lib-boilerplate/src/index.ts
-/Users/name/projects/lib-boilerplate/test/basic.spec.ts
+//// [/Users/name/projects/lib-boilerplate/src/index.js]
+export function thing() { }
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2021.full.d.ts
-/Users/name/projects/lib-boilerplate/src/index.ts
-/Users/name/projects/lib-boilerplate/test/basic.spec.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.es2021.full.d.ts (used version)
-/users/name/projects/lib-boilerplate/src/index.ts (used version)
-/users/name/projects/lib-boilerplate/test/basic.spec.ts (used version)
+//// [/Users/name/projects/lib-boilerplate/test/basic.spec.js]
+export {};
+
+
 
 PolledWatches::
 /users/name/projects/lib-boilerplate/node_modules/@types: *new*
@@ -108,13 +111,33 @@ FsWatchesRecursive::
 /users/name/projects/lib-boilerplate/test: *new*
   {}
 
+Program root files: [
+  "/Users/name/projects/lib-boilerplate/src/index.ts",
+  "/Users/name/projects/lib-boilerplate/test/basic.spec.ts"
+]
+Program options: {
+  "module": 100,
+  "target": 8,
+  "forceConsistentCasingInFileNames": true,
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "configFilePath": "/Users/name/projects/lib-boilerplate/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.es2021.full.d.ts
+/Users/name/projects/lib-boilerplate/src/index.ts
+/Users/name/projects/lib-boilerplate/test/basic.spec.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.es2021.full.d.ts
+/Users/name/projects/lib-boilerplate/src/index.ts
+/Users/name/projects/lib-boilerplate/test/basic.spec.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.es2021.full.d.ts (used version)
+/users/name/projects/lib-boilerplate/src/index.ts (used version)
+/users/name/projects/lib-boilerplate/test/basic.spec.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/Users/name/projects/lib-boilerplate/src/index.js]
-export function thing() { }
-
-
-//// [/Users/name/projects/lib-boilerplate/test/basic.spec.js]
-export {};
-
-

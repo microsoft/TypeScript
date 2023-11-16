@@ -1,8 +1,8 @@
 --clean --verbose
 buildOptions::
 {
- "clean": true,
- "verbose": true
+  "clean": true,
+  "verbose": true
 }
 WatchOptions::
 

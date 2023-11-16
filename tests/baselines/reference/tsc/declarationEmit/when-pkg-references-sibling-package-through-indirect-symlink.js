@@ -19,7 +19,12 @@ export declare class MetadataAccessor<T, D extends IdType = IdType> {
 }
 
 //// [/user/username/projects/myproject/pkg1/package.json]
-{"name":"@raymondfeng/pkg1","version":"1.0.0","main":"dist/index.js","typings":"dist/index.d.ts"}
+{
+  "name": "@raymondfeng/pkg1",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts"
+}
 
 //// [/user/username/projects/myproject/pkg2/dist/index.d.ts]
 export * from './types';
@@ -28,7 +33,12 @@ export * from './types';
 export {MetadataAccessor} from '@raymondfeng/pkg1';
 
 //// [/user/username/projects/myproject/pkg2/package.json]
-{"name":"@raymondfeng/pkg2","version":"1.0.0","main":"dist/index.js","typings":"dist/index.d.ts"}
+{
+  "name": "@raymondfeng/pkg2",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts"
+}
 
 //// [/user/username/projects/myproject/pkg3/src/index.ts]
 export * from './keys';
@@ -38,7 +48,17 @@ import {MetadataAccessor} from "@raymondfeng/pkg2";
 export const ADMIN = MetadataAccessor.create<boolean>('1');
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.json]
-{"compilerOptions":{"outDir":"dist","rootDir":"src","target":"es5","module":"commonjs","strict":true,"esModuleInterop":true,"declaration":true}}
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true
+  }
+}
 
 //// [/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1] symlink(/user/username/projects/myproject/pkg1)
 //// [/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2] symlink(/user/username/projects/myproject/pkg2)
@@ -83,20 +103,6 @@ Found 1 error in pkg3/src/keys.ts[90m:2[0m
 
 
 
-Program root files: ["/user/username/projects/myproject/pkg3/src/index.ts","/user/username/projects/myproject/pkg3/src/keys.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/pkg3/dist","rootDir":"/user/username/projects/myproject/pkg3/src","target":1,"module":1,"strict":true,"esModuleInterop":true,"declaration":true,"project":"/user/username/projects/myproject/pkg3","explainFiles":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/pkg1/dist/types.d.ts
-/user/username/projects/myproject/pkg1/dist/index.d.ts
-/user/username/projects/myproject/pkg2/dist/types.d.ts
-/user/username/projects/myproject/pkg2/dist/index.d.ts
-/user/username/projects/myproject/pkg3/src/keys.ts
-/user/username/projects/myproject/pkg3/src/index.ts
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
 //// [/user/username/projects/myproject/pkg3/dist/keys.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -129,3 +135,31 @@ __exportStar(require("./keys"), exports);
 export * from './keys';
 
 
+
+Program root files: [
+  "/user/username/projects/myproject/pkg3/src/index.ts",
+  "/user/username/projects/myproject/pkg3/src/keys.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/pkg3/dist",
+  "rootDir": "/user/username/projects/myproject/pkg3/src",
+  "target": 1,
+  "module": 1,
+  "strict": true,
+  "esModuleInterop": true,
+  "declaration": true,
+  "project": "/user/username/projects/myproject/pkg3",
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/pkg3/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg1/dist/types.d.ts
+/user/username/projects/myproject/pkg1/dist/index.d.ts
+/user/username/projects/myproject/pkg2/dist/types.d.ts
+/user/username/projects/myproject/pkg2/dist/index.d.ts
+/user/username/projects/myproject/pkg3/src/keys.ts
+/user/username/projects/myproject/pkg3/src/index.ts
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
