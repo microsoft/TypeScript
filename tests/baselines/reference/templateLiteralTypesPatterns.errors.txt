@@ -376,9 +376,9 @@ templateLiteralTypesPatterns.ts(211,5): error TS2345: Argument of type '"abcTest
     }
     
     // repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
-    function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
+    function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string}Downcast` & {}) {}
     conversionTest("testDowncast");
-    function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
+    function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | {} & `${string}Downcast`) {}
     conversionTest2("testDowncast");
     
     function foo(str: `${`a${string}` & `${string}a`}Test`) {}
