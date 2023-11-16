@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // issue: https://github.com/microsoft/TypeScript/issues/54729
-// Tests that `isCompletionListBlocker` is true at position 1, but false after a newline.
+// Tests that `isCompletionListBlocker` returns true at position 1, ans returns false after a newline.
 
 ////let foo /*1*/
 /////*2*/
