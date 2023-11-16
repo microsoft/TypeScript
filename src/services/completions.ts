@@ -4728,7 +4728,7 @@ function getCompletionData(
             case SyntaxKind.SetKeyword:
                 return !isFromObjectTypeDeclaration(contextToken);
 
-            case SyntaxKind.Identifier:
+            case SyntaxKind.Identifier: {
                 if (containingNodeKind === SyntaxKind.ImportSpecifier &&
                     contextToken === (parent as ImportSpecifier).name &&
                     (contextToken as Identifier).text === "type"
@@ -4736,7 +4736,14 @@ function getCompletionData(
                     // import { type | }
                     return false;
                 }
+                const ancestorVariableDeclarationLike = findAncestor(contextToken.parent, isVariableDeclaration);
+                if (ancestorVariableDeclarationLike && isInDifferentLineThanContextToken(contextToken, position)) {
+                    // let a
+                    // |
+                    return false;
+                }
                 break;
+            }
 
             case SyntaxKind.ClassKeyword:
             case SyntaxKind.EnumKeyword:
@@ -4833,9 +4840,7 @@ function getCompletionData(
             && !isJsxAttribute(contextToken.parent)
             // Don't block completions if we're in `class C /**/`, `interface I /**/` or `<T /**/>` , because we're *past* the end of the identifier and might want to complete `extends`.
             // If `contextToken !== previousToken`, this is `class C ex/**/`, `interface I ex/**/` or `<T ex/**/>`.
-            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent) || isTypeParameterDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end))
-            // TODO: add comment
-            && !isInDifferentLineThanContextToken(contextToken, position);
+            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent) || isTypeParameterDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
     }
 
     function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {
