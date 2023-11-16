@@ -4736,8 +4736,10 @@ function getCompletionData(
                     // import { type | }
                     return false;
                 }
-                const ancestorVariableDeclaration = findAncestor(contextToken.parent, isVariableDeclaration);
-                if (ancestorVariableDeclaration && isInDifferentLineThanContextToken(contextToken, position)) {
+                const ancestorVariableDeclaration = findAncestor(
+                    contextToken.parent, isVariableDeclaration);
+                if (ancestorVariableDeclaration
+                    && isInDifferentLineThanContextToken(contextToken, position)) {
                     // let a
                     // |
                     return false;
