@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/sub/a.ts]
 export const a = 10;
@@ -238,16 +238,15 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/proje
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
-Timeout callback:: count: 2
-3: /users/username/projects/project/tsconfig.json
-4: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+Before request
 //// [/users/username/projects/project/a.ts]
 export const a = 10;
 
 //// [/users/username/projects/project/sub/a.ts] deleted
 
-Before request
+Timeout callback:: count: 2
+3: /users/username/projects/project/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -274,9 +273,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 2
-5: /users/username/projects/project/tsconfig.json
-6: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+3: /users/username/projects/project/tsconfig.json *deleted*
+4: *ensureProjectForOpenFiles* *deleted*
+5: /users/username/projects/project/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Before request
 
@@ -350,7 +350,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/b.ts Projec
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/a.ts ProjectRootPath: /users/username/projects/project
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/b.ts,/users/username/projects/project/a.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/b.ts,/users/username/projects/project/a.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -392,9 +392,8 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 2
-7: /users/username/projects/project/tsconfig.json
-8: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+7: /users/username/projects/project/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Before request
 
@@ -544,7 +543,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/b.ts Projec
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/sub/a.ts ProjectRootPath: /users/username/projects/project
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/b.ts,/users/username/projects/project/sub/a.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/b.ts,/users/username/projects/project/sub/a.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -571,16 +570,15 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/proje
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/sub/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
-Timeout callback:: count: 2
-13: /users/username/projects/project/tsconfig.json
-14: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+Before request
 //// [/users/username/projects/project/sub/a.ts]
 export const a = 10;
 
 //// [/users/username/projects/project/a.ts] deleted
 
-Before request
+Timeout callback:: count: 2
+13: /users/username/projects/project/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -600,6 +598,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+13: /users/username/projects/project/tsconfig.json
+14: *ensureProjectForOpenFiles*
+15: checkOne *new*
 
 Before running Timeout callback:: count: 3
 13: /users/username/projects/project/tsconfig.json
@@ -639,8 +642,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 2
-13: /users/username/projects/project/tsconfig.json
-14: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -670,6 +671,9 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Immedidate callback:: count: 1
+1: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
@@ -684,7 +688,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -700,6 +706,11 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 0
+
+Timeout callback:: count: 3
+13: /users/username/projects/project/tsconfig.json
+14: *ensureProjectForOpenFiles*
+16: checkOne *new*
 
 Before running Timeout callback:: count: 3
 13: /users/username/projects/project/tsconfig.json
@@ -718,8 +729,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 2
-13: /users/username/projects/project/tsconfig.json
-14: *ensureProjectForOpenFiles*
+
+Immedidate callback:: count: 1
+3: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -735,7 +747,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-4: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 4: suggestionCheck

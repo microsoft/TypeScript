@@ -74,34 +74,14 @@ test/basic.spec.ts
 
 
 
-Program root files: [
-  "/Users/name/projects/lib-boilerplate/src/index.ts",
-  "/Users/name/projects/lib-boilerplate/test/basic.spec.ts"
-]
-Program options: {
-  "module": 100,
-  "target": 8,
-  "forceConsistentCasingInFileNames": true,
-  "traceResolution": true,
-  "watch": true,
-  "explainFiles": true,
-  "configFilePath": "/Users/name/projects/lib-boilerplate/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.es2021.full.d.ts
-/Users/name/projects/lib-boilerplate/src/index.ts
-/Users/name/projects/lib-boilerplate/test/basic.spec.ts
+//// [/Users/name/projects/lib-boilerplate/src/index.js]
+export function thing() { }
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2021.full.d.ts
-/Users/name/projects/lib-boilerplate/src/index.ts
-/Users/name/projects/lib-boilerplate/test/basic.spec.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.es2021.full.d.ts (used version)
-/users/name/projects/lib-boilerplate/src/index.ts (used version)
-/users/name/projects/lib-boilerplate/test/basic.spec.ts (used version)
+//// [/Users/name/projects/lib-boilerplate/test/basic.spec.js]
+export {};
+
+
 
 PolledWatches::
 /users/name/projects/lib-boilerplate/node_modules/@types: *new*
@@ -131,13 +111,33 @@ FsWatchesRecursive::
 /users/name/projects/lib-boilerplate/test: *new*
   {}
 
+Program root files: [
+  "/Users/name/projects/lib-boilerplate/src/index.ts",
+  "/Users/name/projects/lib-boilerplate/test/basic.spec.ts"
+]
+Program options: {
+  "module": 100,
+  "target": 8,
+  "forceConsistentCasingInFileNames": true,
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "configFilePath": "/Users/name/projects/lib-boilerplate/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.es2021.full.d.ts
+/Users/name/projects/lib-boilerplate/src/index.ts
+/Users/name/projects/lib-boilerplate/test/basic.spec.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.es2021.full.d.ts
+/Users/name/projects/lib-boilerplate/src/index.ts
+/Users/name/projects/lib-boilerplate/test/basic.spec.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.es2021.full.d.ts (used version)
+/users/name/projects/lib-boilerplate/src/index.ts (used version)
+/users/name/projects/lib-boilerplate/test/basic.spec.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/Users/name/projects/lib-boilerplate/src/index.js]
-export function thing() { }
-
-
-//// [/Users/name/projects/lib-boilerplate/test/basic.spec.js]
-export {};
-
-

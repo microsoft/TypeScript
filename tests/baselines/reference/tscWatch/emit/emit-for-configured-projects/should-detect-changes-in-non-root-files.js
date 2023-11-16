@@ -45,6 +45,33 @@ Output::
 
 
 
+//// [/a/b/moduleFile1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+exports.y = 10;
+
+
+
+FsWatches::
+/a/b/file1consumer1.ts: *new*
+  {}
+/a/b/modulefile1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
 Program root files: [
   "/a/b/file1Consumer1.ts"
 ]
@@ -69,34 +96,7 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile1.ts (used version)
 /a/b/file1consumer1.ts (used version)
 
-FsWatches::
-/a/b/file1consumer1.ts: *new*
-  {}
-/a/b/modulefile1.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
-
-
-//// [/a/b/file1Consumer1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
-
-
 
 Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
 
@@ -105,8 +105,12 @@ Input::
 export var T: number;export function Foo() { };
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -114,6 +118,18 @@ Output::
 
 [[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/a/b/moduleFile1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js] file written with same contents
 
 
 Program root files: [
@@ -140,17 +156,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = exports.T = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
-
-
-//// [/a/b/file1Consumer1.js] file written with same contents
-
 Change:: change file1 internal, and verify only file1 is affected
 
 Input::
@@ -158,14 +163,30 @@ Input::
 export var T: number;export function Foo() { };var T1: number;
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/a/b/moduleFile1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+var T1;
+
 
 
 
@@ -190,14 +211,3 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile1.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = exports.T = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
-var T1;
-
-

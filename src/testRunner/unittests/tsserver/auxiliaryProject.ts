@@ -1,6 +1,3 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     dedent,
@@ -10,9 +7,9 @@ import {
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -35,12 +32,11 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
             content: `export class B {}`,
         };
         const host = createServerHost([aTs, bDts, bJs]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
-        const projectService = session.getProjectService();
+        const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
         // Open file is in inferred project
-        const inferredProject = projectService.inferredProjects[0];
+        const inferredProject = session.getProjectService().inferredProjects[0];
 
         // getNoDtsResolutionProject will create an AuxiliaryProject with a.ts and b.js
         session.executeCommandSeq<ts.server.protocol.FindSourceDefinitionRequest>({
@@ -53,7 +49,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
         // The AuxiliaryProject should never be the default project for anything, so
         // the ScriptInfo should still report being an orphan, and getting its default
         // project should throw.
-        const bJsScriptInfo = ts.Debug.checkDefined(projectService.getScriptInfo(bJs.path));
+        const bJsScriptInfo = ts.Debug.checkDefined(session.getProjectService().getScriptInfo(bJs.path));
         assert(bJsScriptInfo.isOrphan());
         assert(bJsScriptInfo.isContainedByBackgroundProject());
         assert.deepEqual(bJsScriptInfo.containingProjects, [auxProject]);
@@ -106,7 +102,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
             [indexFile.path]: indexFile.content,
             [libFile.path]: libFile.content,
         });
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([indexFile], session);
         session.executeCommandSeq<ts.server.protocol.FindSourceDefinitionRequest>({
             command: ts.server.protocol.CommandTypes.FindSourceDefinition,
@@ -165,7 +161,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
             [indexFile.path]: indexFile.content,
             [libFile.path]: libFile.content,
         });
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([indexFile], session);
         session.executeCommandSeq<ts.server.protocol.FindSourceDefinitionRequest>({
             command: ts.server.protocol.CommandTypes.FindSourceDefinition,

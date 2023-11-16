@@ -815,28 +815,6 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         emitBuildInfo(bundleBuildInfo, buildInfoPath);
         tracing?.pop();
 
-        if (!emitSkipped && emittedFilesList) {
-            if (!emitOnly) {
-                if (jsFilePath) {
-                    emittedFilesList.push(jsFilePath);
-                }
-                if (sourceMapFilePath) {
-                    emittedFilesList.push(sourceMapFilePath);
-                }
-                if (buildInfoPath) {
-                    emittedFilesList.push(buildInfoPath);
-                }
-            }
-            if (emitOnly !== EmitOnly.Js) {
-                if (declarationFilePath) {
-                    emittedFilesList.push(declarationFilePath);
-                }
-                if (declarationMapPath) {
-                    emittedFilesList.push(declarationMapPath);
-                }
-            }
-        }
-
         function relativeToBuildInfo(path: string) {
             return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory!, path, host.getCanonicalFileName));
         }
@@ -852,6 +830,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         const buildInfo = host.getBuildInfo(bundle) || createBuildInfo(/*program*/ undefined, bundle);
         // Pass buildinfo as additional data to avoid having to reparse
         writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
+        emittedFilesList?.push(buildInfoPath);
     }
 
     function emitJsFileOrBundle(
@@ -903,6 +882,13 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         // Clean up emit nodes on parse tree
         transform.dispose();
         if (bundleBuildInfo) bundleBuildInfo.js = printer.bundleFileInfo;
+
+        if (emittedFilesList) {
+            emittedFilesList.push(jsFilePath);
+            if (sourceMapFilePath) {
+                emittedFilesList.push(sourceMapFilePath);
+            }
+        }
     }
 
     function emitDeclarationFileOrBundle(
@@ -932,35 +918,35 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             }
         }
 
-        const printerOptions: PrinterOptions = {
-            removeComments: compilerOptions.removeComments,
-            newLine: compilerOptions.newLine,
-            noEmitHelpers: true,
-            module: compilerOptions.module,
-            target: compilerOptions.target,
-            sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
-            inlineSourceMap: compilerOptions.inlineSourceMap,
-            extendedDiagnostics: compilerOptions.extendedDiagnostics,
-            onlyPrintJsDocStyle: true,
-            omitBraceSourceMapPositions: true,
-            writeBundleFileInfo: !!bundleBuildInfo,
-            recordInternalSection: !!bundleBuildInfo,
-            relativeToBuildInfo,
-        };
-
-        const declarationPrinter = createPrinter(printerOptions, {
-            // resolver hooks
-            hasGlobalName: resolver.hasGlobalName,
-
-            // transform hooks
-            onEmitNode: declarationTransform.emitNodeWithNotification,
-            isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
-            substituteNode: declarationTransform.substituteNode,
-        });
         const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
         emitSkipped = emitSkipped || declBlocked;
         if (!declBlocked || forceDtsEmit) {
             Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
+            const printerOptions: PrinterOptions = {
+                removeComments: compilerOptions.removeComments,
+                newLine: compilerOptions.newLine,
+                noEmitHelpers: true,
+                module: compilerOptions.module,
+                target: compilerOptions.target,
+                sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
+                inlineSourceMap: compilerOptions.inlineSourceMap,
+                extendedDiagnostics: compilerOptions.extendedDiagnostics,
+                onlyPrintJsDocStyle: true,
+                omitBraceSourceMapPositions: true,
+                writeBundleFileInfo: !!bundleBuildInfo,
+                recordInternalSection: !!bundleBuildInfo,
+                relativeToBuildInfo,
+            };
+
+            const declarationPrinter = createPrinter(printerOptions, {
+                // resolver hooks
+                hasGlobalName: resolver.hasGlobalName,
+
+                // transform hooks
+                onEmitNode: declarationTransform.emitNodeWithNotification,
+                isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
+                substituteNode: declarationTransform.substituteNode,
+            });
             printSourceFileOrBundle(
                 declarationFilePath,
                 declarationMapPath,
@@ -974,9 +960,15 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
                     // Explicitly do not passthru either `inline` option
                 },
             );
+            if (emittedFilesList) {
+                emittedFilesList.push(declarationFilePath);
+                if (declarationMapPath) {
+                    emittedFilesList.push(declarationMapPath);
+                }
+            }
+            if (bundleBuildInfo) bundleBuildInfo.dts = declarationPrinter.bundleFileInfo;
         }
         declarationTransform.dispose();
-        if (bundleBuildInfo) bundleBuildInfo.dts = declarationPrinter.bundleFileInfo;
     }
 
     function collectLinkedAliases(node: Node) {

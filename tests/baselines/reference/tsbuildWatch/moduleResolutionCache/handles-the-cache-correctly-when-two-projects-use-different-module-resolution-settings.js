@@ -95,93 +95,6 @@ Output::
 
 
 
-Program root files: [
-  "/user/username/projects/myproject/project1/index.ts"
-]
-Program options: {
-  "composite": true,
-  "types": [
-    "foo",
-    "bar"
-  ],
-  "watch": true,
-  "configFilePath": "/user/username/projects/myproject/project1/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/project1/node_modules/file/index.d.ts
-/user/username/projects/myproject/project1/index.ts
-/user/username/projects/myproject/node_modules/@types/foo/index.d.ts
-/user/username/projects/myproject/node_modules/@types/bar/index.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/project1/node_modules/file/index.d.ts
-/user/username/projects/myproject/project1/index.ts
-/user/username/projects/myproject/node_modules/@types/foo/index.d.ts
-/user/username/projects/myproject/node_modules/@types/bar/index.d.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/project1/node_modules/file/index.d.ts (used version)
-/user/username/projects/myproject/project1/index.ts (computed .d.ts during emit)
-/user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
-/user/username/projects/myproject/node_modules/@types/bar/index.d.ts (used version)
-
-Program root files: [
-  "/user/username/projects/myproject/project2/index.ts"
-]
-Program options: {
-  "composite": true,
-  "types": [
-    "foo"
-  ],
-  "moduleResolution": 1,
-  "watch": true,
-  "configFilePath": "/user/username/projects/myproject/project2/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/project2/file.d.ts
-/user/username/projects/myproject/project2/index.ts
-/user/username/projects/myproject/node_modules/@types/foo/index.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/project2/file.d.ts
-/user/username/projects/myproject/project2/index.ts
-/user/username/projects/myproject/node_modules/@types/foo/index.d.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/project2/file.d.ts (used version)
-/user/username/projects/myproject/project2/index.ts (computed .d.ts during emit)
-/user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types/bar/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/foo/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/project1/node_modules/file/package.json: *new*
-  {"pollingInterval":2000}
-
-FsWatches::
-/user/username/projects/myproject/project1/index.ts: *new*
-  {}
-/user/username/projects/myproject/project1/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/project2/index.ts: *new*
-  {}
-/user/username/projects/myproject/project2/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/project1/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -349,27 +262,25 @@ export {};
 }
 
 
-Change:: Append text
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types/bar/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types/foo/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/project1/node_modules/file/package.json: *new*
+  {"pollingInterval":2000}
 
-Input::
-//// [/user/username/projects/myproject/project1/index.ts]
-import { foo } from "file";const bar = 10;
-
-
-Before running Timeout callback:: count: 1
-1: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:19 AM[0m] Project 'project1/tsconfig.json' is out of date because output 'project1/tsconfig.tsbuildinfo' is older than input 'project1/index.ts'
-
-[[90m12:01:20 AM[0m] Building project '/user/username/projects/myproject/project1/tsconfig.json'...
-
-[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
-
-
+FsWatches::
+/user/username/projects/myproject/project1/index.ts: *new*
+  {}
+/user/username/projects/myproject/project1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/project2/index.ts: *new*
+  {}
+/user/username/projects/myproject/project2/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 Program root files: [
   "/user/username/projects/myproject/project1/index.ts"
@@ -392,12 +303,77 @@ Program files::
 /user/username/projects/myproject/node_modules/@types/bar/index.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/project1/node_modules/file/index.d.ts
 /user/username/projects/myproject/project1/index.ts
+/user/username/projects/myproject/node_modules/@types/foo/index.d.ts
+/user/username/projects/myproject/node_modules/@types/bar/index.d.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/project1/index.ts (computed .d.ts)
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/project1/node_modules/file/index.d.ts (used version)
+/user/username/projects/myproject/project1/index.ts (computed .d.ts during emit)
+/user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
+/user/username/projects/myproject/node_modules/@types/bar/index.d.ts (used version)
+
+Program root files: [
+  "/user/username/projects/myproject/project2/index.ts"
+]
+Program options: {
+  "composite": true,
+  "types": [
+    "foo"
+  ],
+  "moduleResolution": 1,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/project2/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/project2/file.d.ts
+/user/username/projects/myproject/project2/index.ts
+/user/username/projects/myproject/node_modules/@types/foo/index.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/project2/file.d.ts
+/user/username/projects/myproject/project2/index.ts
+/user/username/projects/myproject/node_modules/@types/foo/index.d.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/project2/file.d.ts (used version)
+/user/username/projects/myproject/project2/index.ts (computed .d.ts during emit)
+/user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
+
+Change:: Append text
+
+Input::
+//// [/user/username/projects/myproject/project1/index.ts]
+import { foo } from "file";const bar = 10;
+
+
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:19 AM[0m] Project 'project1/tsconfig.json' is out of date because output 'project1/tsconfig.tsbuildinfo' is older than input 'project1/index.ts'
+
+[[90m12:01:20 AM[0m] Building project '/user/username/projects/myproject/project1/tsconfig.json'...
+
+[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 //// [/user/username/projects/myproject/project1/index.js]
 "use strict";
@@ -482,3 +458,32 @@ var bar = 10;
   "size": 1035
 }
 
+
+
+Program root files: [
+  "/user/username/projects/myproject/project1/index.ts"
+]
+Program options: {
+  "composite": true,
+  "types": [
+    "foo",
+    "bar"
+  ],
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/project1/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/project1/node_modules/file/index.d.ts
+/user/username/projects/myproject/project1/index.ts
+/user/username/projects/myproject/node_modules/@types/foo/index.d.ts
+/user/username/projects/myproject/node_modules/@types/bar/index.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/project1/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/project1/index.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

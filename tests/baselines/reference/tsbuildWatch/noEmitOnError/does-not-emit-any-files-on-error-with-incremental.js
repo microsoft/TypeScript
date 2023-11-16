@@ -63,45 +63,6 @@ Output::
 
 
 
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
-  "watch": true,
-  "incremental": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-FsWatches::
-/user/username/projects/noemitonerror/shared/types/db.ts: *new*
-  {}
-/user/username/projects/noemitonerror/src/main.ts: *new*
-  {}
-/user/username/projects/noemitonerror/src/other.ts: *new*
-  {}
-/user/username/projects/noemitonerror/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","signature":false},{"version":"-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n","signature":false},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","signature":false}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"changeFileSet":[1,2,3,4]},"version":"FakeTSVersion"}
 
@@ -186,13 +147,56 @@ exitCode:: ExitStatus.undefined
 }
 
 
+FsWatches::
+/user/username/projects/noemitonerror/shared/types/db.ts: *new*
+  {}
+/user/username/projects/noemitonerror/src/main.ts: *new*
+  {}
+/user/username/projects/noemitonerror/src/other.ts: *new*
+  {}
+/user/username/projects/noemitonerror/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/noemitonerror: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "noEmitOnError": true,
+  "watch": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -208,6 +212,8 @@ Output::
 [7m [0m [91m~[0m
 
 [[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
+
+
 
 
 
@@ -236,7 +242,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: Fix Syntax error
 
 Input::
@@ -247,8 +252,12 @@ const a = {
 };
 
 
+Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -261,39 +270,6 @@ Output::
 [[90m12:01:18 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
-  "watch": true,
-  "incremental": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/noemitonerror/shared/types/db.ts (used version)
-/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
-/user/username/projects/noemitonerror/src/other.ts (computed .d.ts)
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5014788164-export interface A {\n    name: string;\n}\n",{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-3531856636-export {};\n"},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
@@ -397,33 +373,6 @@ console.log("hi");
 
 
 
-Change:: Semantic Error
-
-Input::
-//// [/user/username/projects/noEmitOnError/src/main.ts]
-import { A } from "../shared/types/db";
-const a: string = 10;
-
-
-Before running Timeout callback:: count: 1
-3: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:23 AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
-
-[[90m12:01:24 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
-[96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m2[0m const a: string = 10;
-[7m [0m [91m      ~[0m
-
-[[90m12:01:32 AM[0m] Found 1 error. Watching for file changes.
-
-
 
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -445,12 +394,50 @@ Program files::
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
 
 Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/noemitonerror/shared/types/db.ts (used version)
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
+/user/username/projects/noemitonerror/src/other.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
+
+Change:: Semantic Error
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts]
+import { A } from "../shared/types/db";
+const a: string = 10;
+
+
+Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:23 AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
+
+[[90m12:01:24 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+
+[96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
+
+[7m2[0m const a: string = 10;
+[7m [0m [91m      ~[0m
+
+[[90m12:01:32 AM[0m] Found 1 error. Watching for file changes.
+
+
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5014788164-export interface A {\n    name: string;\n}\n",{"version":"-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","signature":"-3531856636-export {};\n"},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"../src/main.ts","start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]],4],"affectedFilesPendingEmit":[3]},"version":"FakeTSVersion"}
@@ -553,13 +540,45 @@ exitCode:: ExitStatus.undefined
 }
 
 
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "noEmitOnError": true,
+  "watch": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/noEmitOnError/src/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 4: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -575,6 +594,8 @@ Output::
 [7m [0m [91m      ~[0m
 
 [[90m12:01:40 AM[0m] Found 1 error. Watching for file changes.
+
+
 
 
 
@@ -603,7 +624,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: Fix Semantic Error
 
 Input::
@@ -612,8 +632,12 @@ import { A } from "../shared/types/db";
 const a: string = "hello";
 
 
+Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 5: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -626,33 +650,6 @@ Output::
 [[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: [
-  "/user/username/projects/noEmitOnError/shared/types/db.ts",
-  "/user/username/projects/noEmitOnError/src/main.ts",
-  "/user/username/projects/noEmitOnError/src/other.ts"
-]
-Program options: {
-  "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
-  "watch": true,
-  "incremental": true,
-  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/noEmitOnError/src/main.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5014788164-export interface A {\n    name: string;\n}\n",{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","signature":"-3531856636-export {};\n"},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
@@ -743,13 +740,45 @@ var a = "hello";
 
 
 
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "noEmitOnError": true,
+  "watch": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/noEmitOnError/src/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
+Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 6: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -763,6 +792,7 @@ Output::
 
 
 
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file changed its modified time
+
+
+exitCode:: ExitStatus.undefined

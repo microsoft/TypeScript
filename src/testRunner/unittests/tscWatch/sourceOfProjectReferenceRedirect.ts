@@ -32,7 +32,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
     }
 
     function verifyWatch({ files, config, subScenario }: VerifyWatchInput, alreadyBuilt: boolean) {
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(
+        const { sys, baseline, cb, getPrograms } = createBaseline(
             createWatchedSystem(files),
             alreadyBuilt ? (sys, originalRead) => {
                 solutionBuildWithBaseline(sys, [config], originalRead);
@@ -52,7 +52,6 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             commandLineArgs: ["--w", "--p", config],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             watchOrSolution: watch,
             useSourceOfProjectReferenceRedirect: ts.returnTrue,

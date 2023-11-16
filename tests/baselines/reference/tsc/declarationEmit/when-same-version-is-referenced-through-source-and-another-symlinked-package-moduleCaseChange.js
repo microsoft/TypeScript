@@ -162,29 +162,6 @@ plugin-one/index.ts
   Matched by default include pattern '**/*'
 
 
-Program root files: [
-  "/user/username/projects/myproject/plugin-one/action.ts",
-  "/user/username/projects/myproject/plugin-one/index.ts"
-]
-Program options: {
-  "target": 1,
-  "declaration": true,
-  "traceResolution": true,
-  "project": "/user/username/projects/myproject/plugin-one",
-  "explainFiles": true,
-  "configFilePath": "/user/username/projects/myproject/plugin-one/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
-/user/username/projects/myproject/plugin-one/action.ts
-/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts
-/user/username/projects/myProject/plugin-two/index.d.ts
-/user/username/projects/myproject/plugin-one/index.ts
-
-exitCode:: ExitStatus.Success
-
 //// [/user/username/projects/myproject/plugin-one/action.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -212,3 +189,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 export {};
 
 
+
+Program root files: [
+  "/user/username/projects/myproject/plugin-one/action.ts",
+  "/user/username/projects/myproject/plugin-one/index.ts"
+]
+Program options: {
+  "target": 1,
+  "declaration": true,
+  "traceResolution": true,
+  "project": "/user/username/projects/myproject/plugin-one",
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/plugin-one/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
+/user/username/projects/myproject/plugin-one/action.ts
+/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts
+/user/username/projects/myProject/plugin-two/index.d.ts
+/user/username/projects/myproject/plugin-one/index.ts
+
+exitCode:: ExitStatus.Success

@@ -1131,9 +1131,10 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private projectsUpdatedInBackgroundEvent(openFiles: string[]): void {
-        this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
+        this.projectService.logger.info(`got projects updated in background ${openFiles}`);
         if (openFiles.length) {
             if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
+                this.projectService.logger.info(`Queueing diagnostics update for ${openFiles}`);
                 // For now only queue error checking for open files. We can change this to include non open files as well
                 this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, /*requireOpen*/ true));
             }
@@ -1193,7 +1194,7 @@ export class Session<TMessage = string> implements EventSender {
     public send(msg: protocol.Message) {
         if (msg.type === "event" && !this.canUseEvents) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                this.logger.info(`Session does not support events: ignored event: ${stringifyIndented(msg)}`);
             }
             return;
         }

@@ -54,6 +54,41 @@ Output::
 
 
 
+//// [/a/b/output/common.js]
+var Main;
+(function (Main) {
+    function fooBar() { }
+    Main.fooBar = fooBar;
+})(Main || (Main = {}));
+var main;
+(function (main) {
+    var file4;
+    (function (file4) {
+        function foo(a) { }
+        file4.foo = foo;
+    })(file4 = main.file4 || (main.file4 = {}));
+})(main || (main = {}));
+
+
+
+PolledWatches::
+/a/b/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/dependencies/file2.d.ts: *new*
+  {}
+/a/b/output/anotherdependency/file1.d.ts: *new*
+  {}
+/a/b/project/src/main.ts: *new*
+  {}
+/a/b/project/src/main2.ts: *new*
+  {}
+/a/b/project/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
 Program root files: [
   "/a/b/output/AnotherDependency/file1.d.ts",
   "/a/b/dependencies/file2.d.ts",
@@ -79,39 +114,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/a/b/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/dependencies/file2.d.ts: *new*
-  {}
-/a/b/output/anotherdependency/file1.d.ts: *new*
-  {}
-/a/b/project/src/main.ts: *new*
-  {}
-/a/b/project/src/main2.ts: *new*
-  {}
-/a/b/project/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/output/common.js]
-var Main;
-(function (Main) {
-    function fooBar() { }
-    Main.fooBar = fooBar;
-})(Main || (Main = {}));
-var main;
-(function (main) {
-    var file4;
-    (function (file4) {
-        function foo(a) { }
-        file4.foo = foo;
-    })(file4 = main.file4 || (main.file4 = {}));
-})(main || (main = {}));
-
-

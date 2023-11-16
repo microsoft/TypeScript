@@ -1,14 +1,12 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
+    closeFilesForSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -69,8 +67,8 @@ describe("unittests:: tsserver:: exportMapCache", () => {
     });
 
     it("invalidates the cache when files are deleted", () => {
-        const { host, projectService, exportMapCache, session } = setup();
-        projectService.closeClientFile(aTs.path);
+        const { host, exportMapCache, session } = setup();
+        closeFilesForSession([aTs], session);
         host.deleteFile(aTs.path);
         host.runQueuedTimeoutCallbacks();
         assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
@@ -162,8 +160,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             }`,
         };
         const host = createServerHost([utilsTs, classesTs, tsconfig]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
-        const projectService = session.getProjectService();
+        const session = new TestSession(host);
         openFilesForSession([classesTs], session);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -187,7 +184,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             },
         });
 
-        const project = projectService.configuredProjects.get(tsconfig.path)!;
+        const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;
         const exportMapCache = project.getCachedExportInfoMap();
         assert.ok(exportMapCache.isUsableByFile(classesTs.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
@@ -233,13 +230,12 @@ describe("unittests:: tsserver:: exportMapCache", () => {
 
 function setup() {
     const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType]);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    const session = new TestSession(host);
     openFilesForSession([aTs, bTs], session);
-    const projectService = session.getProjectService();
-    const project = projectService.configuredProjects.get(tsconfig.path)!;
+    const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;
     triggerCompletions();
     const checker = project.getLanguageService().getProgram()!.getTypeChecker();
-    return { host, project, projectService, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
+    return { host, project, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
 
     function triggerCompletions() {
         const requestLocation: ts.server.protocol.FileLocationRequestArgs = {

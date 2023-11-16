@@ -36,6 +36,46 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/logger.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.logger = void 0;
+var logger = /** @class */ (function () {
+    function logger() {
+    }
+    return logger;
+}());
+exports.logger = logger;
+
+
+//// [/user/username/projects/myproject/another.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var logger_1 = require("./logger");
+new logger_1.logger();
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/another.ts: *new*
+  {}
+/user/username/projects/myproject/logger.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/another.ts",
   "/user/username/projects/myproject/logger.ts"
@@ -62,55 +102,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/logger.ts (used version)
 /user/username/projects/myproject/another.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/another.ts: *new*
-  {}
-/user/username/projects/myproject/logger.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/logger.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.logger = void 0;
-var logger = /** @class */ (function () {
-    function logger() {
-    }
-    return logger;
-}());
-exports.logger = logger;
-
-
-//// [/user/username/projects/myproject/another.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var logger_1 = require("./logger");
-new logger_1.logger();
-
-
 
 Change:: Change name of file from logger to Logger
 
 Input::
 //// [/user/username/projects/myproject/Logger.ts] file was renamed from file /user/username/projects/myproject/logger.ts
 
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -125,6 +129,8 @@ Output::
 [7m [0m [91m                       ~~~~~~~~~~[0m
 
 [[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
+
+
 
 
 
@@ -149,4 +155,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

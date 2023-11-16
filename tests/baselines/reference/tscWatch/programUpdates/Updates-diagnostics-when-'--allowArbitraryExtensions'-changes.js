@@ -44,6 +44,22 @@ Output::
 
 
 
+//// [/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/b.d.css.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
 Program root files: [
   "/a.ts"
 ]
@@ -69,23 +85,7 @@ Shape signatures in builder refreshed for::
 /b.d.css.ts (used version)
 /a.ts (used version)
 
-FsWatches::
-/a.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-/b.d.css.ts: *new*
-  {}
-/tsconfig.json: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: Disable  allowArbitraryExtensions
 
@@ -101,8 +101,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -115,6 +119,21 @@ Output::
 
 [[90m12:00:25 AM[0m] Found 1 error. Watching for file changes.
 
+
+
+//// [/a.js] file written with same contents
+
+FsWatches::
+/a.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/b.d.css.ts:
+  {}
 
 
 Program root files: [
@@ -137,21 +156,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a.ts (computed .d.ts)
 
-FsWatches::
-/a.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/b.d.css.ts:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a.js] file written with same contents
 
 Change:: Enable  allowArbitraryExtensions
 
@@ -167,8 +172,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -181,6 +190,19 @@ Output::
 
 [[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
 
+
+
+//// [/a.js] file written with same contents
+
+FsWatches::
+/a.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/b.d.css.ts: *new*
+  {}
+/tsconfig.json:
+  {}
 
 
 Program root files: [
@@ -207,16 +229,4 @@ Shape signatures in builder refreshed for::
 /b.d.css.ts (used version)
 /a.ts (computed .d.ts)
 
-FsWatches::
-/a.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/b.d.css.ts: *new*
-  {}
-/tsconfig.json:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a.js] file written with same contents

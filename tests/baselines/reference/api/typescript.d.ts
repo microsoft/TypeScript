@@ -49,9 +49,11 @@ declare namespace ts {
             readonly fileName: Path;
             readonly packageName: string;
             readonly projectRootPath: Path;
+            readonly id: number;
         }
         interface PackageInstalledResponse extends ProjectResponse {
             readonly kind: ActionPackageInstalled;
+            readonly id: number;
             readonly success: boolean;
             readonly message: string;
         }
@@ -4132,7 +4134,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.3";
+    const versionMajorMinor = "5.4";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -6887,6 +6889,7 @@ declare namespace ts {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
+        GenerateNamesForShadowedTypeParams = 4,
         UseStructuralFallback = 8,
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,
@@ -6906,7 +6909,7 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        NodeBuilderFlagsMask = 848330091,
+        NodeBuilderFlagsMask = 848330095,
     }
     enum SymbolFormatFlags {
         None = 0,
@@ -7048,6 +7051,7 @@ declare namespace ts {
         ExportEquals = "export=",
         Default = "default",
         This = "this",
+        InstantiationExpression = "__instantiationExpression",
     }
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.

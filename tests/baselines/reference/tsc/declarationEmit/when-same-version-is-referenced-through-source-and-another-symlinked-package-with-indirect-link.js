@@ -175,6 +175,25 @@ plugin-one/index.ts
   Matched by default include pattern '**/*'
 
 
+//// [/user/username/projects/myproject/plugin-one/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.actions = void 0;
+var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
+var action = (0, typescript_fsa_1.actionCreatorFactory)("somekey");
+var featureOne = action("feature-one");
+exports.actions = { featureOne: featureOne };
+
+
+//// [/user/username/projects/myproject/plugin-one/index.d.ts]
+export declare const actions: {
+    featureOne: import("typescript-fsa").ActionCreator<{
+        route: string;
+    }>;
+};
+
+
+
 Program root files: [
   "/user/username/projects/myproject/plugin-one/index.ts"
 ]
@@ -195,22 +214,3 @@ Program files::
 /user/username/projects/myproject/plugin-one/index.ts
 
 exitCode:: ExitStatus.Success
-
-//// [/user/username/projects/myproject/plugin-one/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.actions = void 0;
-var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
-var action = (0, typescript_fsa_1.actionCreatorFactory)("somekey");
-var featureOne = action("feature-one");
-exports.actions = { featureOne: featureOne };
-
-
-//// [/user/username/projects/myproject/plugin-one/index.d.ts]
-export declare const actions: {
-    featureOne: import("typescript-fsa").ActionCreator<{
-        route: string;
-    }>;
-};
-
-

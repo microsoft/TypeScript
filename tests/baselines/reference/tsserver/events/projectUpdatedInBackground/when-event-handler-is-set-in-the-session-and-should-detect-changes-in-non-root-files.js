@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;
@@ -261,12 +261,21 @@ FsWatches::
 /users/username/projects/project/tsconfig.json:
   {}
 
+Timeout callback:: count: 3
+4: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+5: /users/username/projects/project/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-7: /users/username/projects/project/tsconfig.json
-8: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+5: /users/username/projects/project/tsconfig.json *deleted*
+6: *ensureProjectForOpenFiles* *deleted*
+7: /users/username/projects/project/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 7: /users/username/projects/project/tsconfig.json
@@ -361,6 +370,10 @@ Before running Timeout callback:: count: 2
 //// [/users/username/projects/project/moduleFile1.ts]
 export function Foo() { };var T1: number;
 
+
+Timeout callback:: count: 2
+9: /users/username/projects/project/tsconfig.json *new*
+10: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json

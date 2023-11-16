@@ -35,7 +35,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     });
 
     it("verify building references watches only those projects", () => {
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(getSysForSampleProjectReferences());
+        const { sys, baseline, cb, getPrograms } = createBaseline(getSysForSampleProjectReferences());
         const host = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
         const solutionBuilder = ts.createSolutionBuilderWithWatch(host, ["tests"], { watch: true });
         solutionBuilder.buildReferences("tests");
@@ -45,7 +45,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
             commandLineArgs: ["--b", "--w"],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             watchOrSolution: solutionBuilder,
         });

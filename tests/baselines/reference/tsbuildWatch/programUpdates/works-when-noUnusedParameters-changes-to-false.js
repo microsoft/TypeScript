@@ -38,6 +38,17 @@ Output::
 
 
 
+
+FsWatches::
+/user/username/projects/myproject/index.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/index.ts"
 ]
@@ -59,18 +70,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-FsWatches::
-/user/username/projects/myproject/index.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: Change tsconfig to set noUnusedParameters to false
 
@@ -83,14 +83,24 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/user/username/projects/myproject/index.js]
+var fn = function (a, b) { return b; };
+
 
 
 
@@ -114,8 +124,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/index.js]
-var fn = function (a, b) { return b; };
-
-

@@ -59,6 +59,58 @@ b.ts
 
 
 
+//// [/user/username/projects/myproject/XY.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
+exports.a = 1;
+exports.b = 2;
+
+
+//// [/user/username/projects/myproject/link.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
+exports.a = 1;
+exports.b = 2;
+
+
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var yX_1 = require("./yX");
+var link_1 = require("./link");
+yX_1.a;
+link_1.b;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/yx: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/link.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/xy.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/XY.ts",
   "/user/username/projects/myproject/b.ts",
@@ -90,59 +142,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/link.ts (used version)
 /user/username/projects/myproject/b.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/yx: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject: *new*
-  {}
-/user/username/projects/myproject/b.ts: *new*
-  {}
-/user/username/projects/myproject/link.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/xy.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/XY.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = exports.a = void 0;
-exports.a = 1;
-exports.b = 2;
-
-
-//// [/user/username/projects/myproject/link.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = exports.a = void 0;
-exports.a = 1;
-exports.b = 2;
-
-
-//// [/user/username/projects/myproject/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var yX_1 = require("./yX");
-var link_1 = require("./link");
-yX_1.a;
-link_1.b;
-
-
 
 Change:: Prepend a line to moduleA
 
@@ -155,8 +155,12 @@ export const b = 2;
 
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -177,6 +181,17 @@ link.ts
 b.ts
   Matched by default include pattern '**/*'
 [[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/user/username/projects/myproject/XY.js]
+"use strict";
+// some comment
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
+exports.a = 1;
+exports.b = 2;
+
 
 
 
@@ -206,13 +221,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/xy.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/XY.js]
-"use strict";
-// some comment
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = exports.a = void 0;
-exports.a = 1;
-exports.b = 2;
-
-

@@ -37,36 +37,6 @@ import classNames from "classnames"; classNames().foo;
 Output::
 
 
-Program root files: [
-  "/users/username/projects/project/src/index.ts",
-  "/users/username/projects/project/src/types/classnames.d.ts"
-]
-Program options: {
-  "module": 1,
-  "incremental": true,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/classnames/index.d.ts
-/users/username/projects/project/src/index.ts
-/users/username/projects/project/src/types/classnames.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/classnames/index.d.ts
-/users/username/projects/project/src/index.ts
-/users/username/projects/project/src/types/classnames.d.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/node_modules/classnames/index.d.ts (used version)
-/users/username/projects/project/src/index.ts (used version)
-/users/username/projects/project/src/types/classnames.d.ts (used version)
-
-exitCode:: ExitStatus.Success
-
 //// [/users/username/projects/project/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -161,24 +131,6 @@ var classnames_1 = require("classnames");
 }
 
 
-Change::
-
-Input::
-//// [/users/username/projects/project/src/types/classnames.d.ts]
-export {}; declare module "classnames" { interface Result {} }
-
-
-Output::
-[96msrc/index.ts[0m:[93m1[0m:[93m51[0m - [91merror[0m[90m TS2339: [0mProperty 'foo' does not exist on type 'Result'.
-
-[7m1[0m import classNames from "classnames"; classNames().foo;
-[7m [0m [91m                                                  ~~~[0m
-
-
-Found 1 error in src/index.ts[90m:1[0m
-
-
-
 Program root files: [
   "/users/username/projects/project/src/index.ts",
   "/users/username/projects/project/src/types/classnames.d.ts"
@@ -196,14 +148,36 @@ Program files::
 /users/username/projects/project/src/types/classnames.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/classnames/index.d.ts
 /users/username/projects/project/src/index.ts
 /users/username/projects/project/src/types/classnames.d.ts
 
 Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/classnames/index.d.ts (used version)
+/users/username/projects/project/src/index.ts (used version)
 /users/username/projects/project/src/types/classnames.d.ts (used version)
-/users/username/projects/project/src/index.ts (computed .d.ts)
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
+
+Change::
+
+Input::
+//// [/users/username/projects/project/src/types/classnames.d.ts]
+export {}; declare module "classnames" { interface Result {} }
+
+
+Output::
+[96msrc/index.ts[0m:[93m1[0m:[93m51[0m - [91merror[0m[90m TS2339: [0mProperty 'foo' does not exist on type 'Result'.
+
+[7m1[0m import classNames from "classnames"; classNames().foo;
+[7m [0m [91m                                                  ~~~[0m
+
+
+Found 1 error in src/index.ts[90m:1[0m
+
+
 
 //// [/users/username/projects/project/src/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -304,3 +278,29 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
   "size": 1250
 }
 
+
+Program root files: [
+  "/users/username/projects/project/src/index.ts",
+  "/users/username/projects/project/src/types/classnames.d.ts"
+]
+Program options: {
+  "module": 1,
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/classnames/index.d.ts
+/users/username/projects/project/src/index.ts
+/users/username/projects/project/src/types/classnames.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/src/index.ts
+/users/username/projects/project/src/types/classnames.d.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/src/types/classnames.d.ts (used version)
+/users/username/projects/project/src/index.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
