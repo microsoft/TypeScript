@@ -501,29 +501,6 @@ Info seq  [hh:mm:ss:mss] response:
             ]
           },
           {
-            "file": "C:/temp/test/project1/index.ts",
-            "locs": [
-              {
-                "start": {
-                  "line": 1,
-                  "offset": 17
-                },
-                "end": {
-                  "line": 1,
-                  "offset": 23
-                },
-                "contextStart": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "contextEnd": {
-                  "line": 2,
-                  "offset": 2
-                }
-              }
-            ]
-          },
-          {
             "file": "c:/temp/test/project2/index.ts",
             "locs": [
               {
