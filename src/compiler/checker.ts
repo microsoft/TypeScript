@@ -6949,6 +6949,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.symbolDepth!.set(id, depth + 1);
                 }
                 context.visitedTypes.add(typeId);
+                const prevTrackedSymbols = context.trackedSymbols;
+                context.trackedSymbols = undefined;
                 const startLength = context.approximateLength;
                 const result = transform(type);
                 const addedLength = context.approximateLength - startLength;
@@ -6964,6 +6966,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (id) {
                     context.symbolDepth!.set(id, depth!);
                 }
+                context.trackedSymbols = prevTrackedSymbols;
                 return result;
 
                 function deepCloneOrReuseNode<T extends Node>(node: T): T {
