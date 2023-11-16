@@ -7,7 +7,7 @@ import cp from "child_process";
  * @returns {string}
  */
 export function runSequence(tasks, opts) {
-    opts = { timeout: 100000, shell: true, ...opts}
+    opts = { timeout: 100000, shell: true, ...opts };
     let lastResult;
     for (const task of tasks) {
         console.log(`${task[0]} ${task[1].join(" ")}`);
