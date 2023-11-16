@@ -3,11 +3,11 @@
 === circularMultipleAssignmentDeclaration.js ===
 ns.next = ns.next || { shared: {} };
 >ns.next = ns.next || { shared: {} } : any
->ns.next : any
+>ns.next : error
 >ns : typeof ns
 >next : any
 >ns.next || { shared: {} } : any
->ns.next : any
+>ns.next : error
 >ns : typeof ns
 >next : any
 >{ shared: {} } : { shared: {}; }
@@ -16,7 +16,7 @@ ns.next = ns.next || { shared: {} };
 
 ns.next.shared.mymethod = {};
 >ns.next.shared.mymethod = {} : {}
->ns.next.shared.mymethod : any
+>ns.next.shared.mymethod : error
 >ns.next.shared : any
 >ns.next : any
 >ns : typeof ns

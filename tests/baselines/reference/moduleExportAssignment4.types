@@ -3,7 +3,7 @@
 === async.js ===
 exports.default = { m: 1, a: 1 }
 >exports.default = { m: 1, a: 1 } : { m: number; a: number; }
->exports.default : any
+>exports.default : error
 >exports : any
 >default : any
 >{ m: 1, a: 1 } : { m: number; a: number; }
@@ -17,7 +17,7 @@ module.exports = exports['default'];
 >module.exports : error
 >module : { exports: any; }
 >exports : any
->exports['default'] : any
->exports : any
+>exports['default'] : error
+>exports : error
 >'default' : "default"
 

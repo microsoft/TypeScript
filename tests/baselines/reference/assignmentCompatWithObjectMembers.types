@@ -189,16 +189,16 @@ module ObjectTypes {
 >b : { foo: any; }
 
     var a2 = { foo: a2 };
->a2 : any
+>a2 : error
 >{ foo: a2 } : { foo: any; }
->foo : any
->a2 : any
+>foo : error
+>a2 : error
 
     var b2 = { foo: b2 };
->b2 : any
+>b2 : error
 >{ foo: b2 } : { foo: any; }
->foo : any
->b2 : any
+>foo : error
+>b2 : error
 
     s = t;
 >s = t : T
@@ -216,9 +216,9 @@ module ObjectTypes {
 >s2 : S2
 
     s = a2;
->s = a2 : any
+>s = a2 : error
 >s : S
->a2 : any
+>a2 : error
 
     s2 = t2;
 >s2 = t2 : T2
@@ -241,9 +241,9 @@ module ObjectTypes {
 >b : { foo: any; }
 
     s2 = a2;
->s2 = a2 : any
+>s2 = a2 : error
 >s2 : S2
->a2 : any
+>a2 : error
 
     a = b;
 >a = b : { foo: any; }
@@ -266,33 +266,33 @@ module ObjectTypes {
 >s2 : S2
 
     a = a2;
->a = a2 : any
+>a = a2 : error
 >a : { foo: any; }
->a2 : any
+>a2 : error
 
     a2 = b2;
->a2 = b2 : any
->a2 : any
->b2 : any
+>a2 = b2 : error
+>a2 : error
+>b2 : error
 
     b2 = a2;
->b2 = a2 : any
->b2 : any
->a2 : any
+>b2 = a2 : error
+>b2 : error
+>a2 : error
 
     a2 = b;
 >a2 = b : { foo: any; }
->a2 : any
+>a2 : error
 >b : { foo: any; }
 
     a2 = t2;
 >a2 = t2 : T2
->a2 : any
+>a2 : error
 >t2 : T2
 
     a2 = t;
 >a2 = t : T
->a2 : any
+>a2 : error
 >t : T
 
 }

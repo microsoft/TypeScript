@@ -11,7 +11,7 @@ function foo() {
 >module : { exports: { (o: any): any; methods: () => void; }; }
 >exports : { (o: any): any; methods: () => void; }
 >exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
->exports : any
+>exports : error
 >function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
 >o : any
 
@@ -39,7 +39,7 @@ function foo() {
     }
     exports.methods = m;
 >exports.methods = m : () => void
->exports.methods : any
+>exports.methods : error
 >exports : any
 >methods : any
 >m : () => void

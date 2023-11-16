@@ -8,8 +8,8 @@ module Foo {
 >Foo : typeof Foo
 
 	export var x = foo0.x;
->x : any
->foo0.x : any
+>x : error
+>foo0.x : error
 >foo0 : typeof foo0
 >x : any
 }
@@ -24,8 +24,8 @@ module Foo {
 >Foo : typeof Foo
 
 	export var x = foo1.x;
->x : any
->foo1.x : any
+>x : error
+>foo1.x : error
 >foo1 : typeof foo1
 >x : any
 }
@@ -40,8 +40,8 @@ module Foo {
 >Foo : typeof Foo
 
 	export var x = foo2.x;
->x : any
->foo2.x : any
+>x : error
+>foo2.x : error
 >foo2 : typeof foo2
 >x : any
 }

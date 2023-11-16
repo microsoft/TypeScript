@@ -6,7 +6,7 @@ function f() {}
 
 f[Symbol.iterator] = function() {}
 >f[Symbol.iterator] = function() {} : () => void
->f[Symbol.iterator] : any
+>f[Symbol.iterator] : error
 >f : typeof f
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor

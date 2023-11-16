@@ -3,9 +3,9 @@
 === recursiveInitializer.ts ===
 // number unless otherwise specified
 var n1 = n1++;
->n1 : any
+>n1 : error
 >n1++ : number
->n1 : any
+>n1 : error
 
 var n2: number = n2 + n2;
 >n2 : number
@@ -14,23 +14,23 @@ var n2: number = n2 + n2;
 >n2 : number
 
 var n3 /* any */ = n3 + n3;
->n3 : any
->n3 + n3 : any
->n3 : any
->n3 : any
+>n3 : error
+>n3 + n3 : error
+>n3 : error
+>n3 : error
 
 // string unless otherwise specified
 var s1 = s1 + '';
->s1 : any
+>s1 : error
 >s1 + '' : string
->s1 : any
+>s1 : error
 >'' : ""
 
 var s2 /* any */ = s2 + s2;
->s2 : any
->s2 + s2 : any
->s2 : any
->s2 : any
+>s2 : error
+>s2 + s2 : error
+>s2 : error
+>s2 : error
 
 var s3 : string = s3 + s3;
 >s3 : string
@@ -39,44 +39,44 @@ var s3 : string = s3 + s3;
 >s3 : string
 
 var s4 = '' + s4;
->s4 : any
+>s4 : error
 >'' + s4 : string
 >'' : ""
->s4 : any
+>s4 : error
 
 // boolean unless otherwise specified
 var b1 = !b1;
->b1 : any
+>b1 : error
 >!b1 : boolean
->b1 : any
+>b1 : error
 
 var b2 = !!b2;
->b2 : any
+>b2 : error
 >!!b2 : boolean
 >!b2 : boolean
->b2 : any
+>b2 : error
 
 var b3 = !b3 || b3; // expected boolean here. actually 'any'
->b3 : any
+>b3 : error
 >!b3 || b3 : any
 >!b3 : boolean
->b3 : any
->b3 : any
+>b3 : error
+>b3 : error
 
 var b4 = (!b4) && b4; // expected boolean here. actually 'any'
->b4 : any
+>b4 : error
 >(!b4) && b4 : any
 >(!b4) : boolean
 >!b4 : boolean
->b4 : any
->b4 : any
+>b4 : error
+>b4 : error
 
 // (x:string) => any
 var f = (x: string) => f(x);
 >f : (x: string) => any
 >(x: string) => f(x) : (x: string) => any
 >x : string
->f(x) : any
+>f(x) : error
 >f : (x: string) => any
 >x : string
 

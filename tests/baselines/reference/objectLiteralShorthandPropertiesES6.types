@@ -24,7 +24,7 @@ var x2 = {
 }
 
 var x3 = {
->x3 : any
+>x3 : error
 >{    a: 0,    b,    c,    d() { },    x3,    parent: x3} : { a: number; b: any; c: any; d(): void; x3: any; parent: any; }
 
     a: 0,
@@ -41,11 +41,11 @@ var x3 = {
 >d : () => void
 
     x3,
->x3 : any
+>x3 : error
 
     parent: x3
->parent : any
->x3 : any
+>parent : error
+>x3 : error
 
 };
 

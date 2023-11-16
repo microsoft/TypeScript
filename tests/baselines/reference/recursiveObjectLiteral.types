@@ -2,8 +2,8 @@
 
 === recursiveObjectLiteral.ts ===
 var a = { f: a };
->a : any
+>a : error
 >{ f: a } : { f: any; }
->f : any
->a : any
+>f : error
+>a : error
 

@@ -7315,7 +7315,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (propertySymbol.flags & SymbolFlags.Accessor) {
                 const writeType = getWriteTypeOfSymbol(propertySymbol);
-                if (propertyType !== writeType && !isErrorType(propertyType) && !isErrorType(writeType)) {
+                if (propertyType !== writeType) {
                     const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor)!;
                     const getterSignature = getSignatureFromDeclaration(getterDeclaration);
                     typeElements.push(
@@ -11769,7 +11769,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (getter && noImplicitAny) {
                     error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
                 }
-                type = anyType;
+                type = errorType;
             }
             links.type = type;
         }
@@ -11790,7 +11790,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (getAnnotatedAccessorTypeNode(setter)) {
                     error(setter, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
                 }
-                writeType = anyType;
+                writeType = errorType;
             }
             // Absent an explicit setter type annotation we use the read type of the accessor.
             links.writeType = writeType || getTypeOfAccessors(symbol);
@@ -11886,8 +11886,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : errorType;
 
             if (!popTypeResolution()) {
-                reportCircularityError(exportSymbol ?? symbol);
-                return links.type = errorType;
+                return links.type = reportCircularityError(exportSymbol ?? symbol);
             }
         }
         return links.type;
@@ -11925,7 +11924,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Circularities could also result from parameters in function expressions that end up
         // having themselves as contextual types following type argument inference. In those cases
         // we have already reported an implicit any error so we don't report anything here.
-        return anyType;
+        return errorType;
     }
 
     function getTypeOfSymbolWithDeferredType(symbol: Symbol) {
@@ -15328,7 +15327,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                 }
-                type = anyType;
+                type = errorType;
             }
             signature.resolvedReturnType = type;
         }
