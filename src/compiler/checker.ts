@@ -7315,7 +7315,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (propertySymbol.flags & SymbolFlags.Accessor) {
                 const writeType = getWriteTypeOfSymbol(propertySymbol);
-                if (propertyType !== writeType) {
+                if (propertyType !== writeType && !isErrorType(propertyType) && !isErrorType(writeType)) {
                     const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor)!;
                     const getterSignature = getSignatureFromDeclaration(getterDeclaration);
                     typeElements.push(
