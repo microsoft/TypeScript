@@ -1971,8 +1971,14 @@ namespace Parser {
 
         // If we parsed this as an external module, it may contain top-level await
         if (!isDeclarationFile && isExternalModule(sourceFile) && sourceFile.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait) {
+            const oldSourceFile = sourceFile;
             sourceFile = reparseTopLevelAwait(sourceFile);
-            setFields(sourceFile);
+            if (sourceFile !== oldSourceFile) {
+                setFields(sourceFile);
+                // While we are parsing the file, we dont want to use the prev source file as original node anywhere
+                // as it wont have information that gets set on the source file later by program (like paths, computed imports etc)
+                sourceFile.original = undefined;
+            }
         }
 
         return sourceFile;
