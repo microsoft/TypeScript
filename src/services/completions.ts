@@ -4066,6 +4066,7 @@ function getCompletionData(
 
         return sourceFile.getLineEndOfPosition(contextToken.getEnd()) < position;
     }
+
     function isCompletionListBlocker(contextToken: Node): boolean {
         const start = timestamp();
         const result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
