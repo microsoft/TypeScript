@@ -4062,7 +4062,8 @@ function getCompletionData(
         return scope;
     }
 
-    function isInDifferentLineWithContextToken(contextToken: Node, position: number): boolean {
+    function isInDifferentLineThanContextToken(contextToken: Node, position: number): boolean {
+
         return sourceFile.getLineEndOfPosition(contextToken.getEnd()) < position;
     }
     function isCompletionListBlocker(contextToken: Node): boolean {
