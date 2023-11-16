@@ -17012,7 +17012,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (includes & (TypeFlags.Enum | TypeFlags.Literal | TypeFlags.UniqueESSymbol | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
                 removeRedundantLiteralTypes(typeSet, includes, !!(unionReduction & UnionReduction.Subtype));
             }
-            if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
+            if (unionReduction === UnionReduction.Subtype && (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral)) {
                 removeStringLiteralsMatchedByTemplateLiterals(typeSet);
             }
             if (unionReduction === UnionReduction.Subtype) {

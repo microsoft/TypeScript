@@ -599,5 +599,5 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 // Repro from #52685
 
 type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
->Boom : `a${string}` | Lowercase<string> | "def"
+>Boom : "abc" | `a${string}` | Lowercase<string> | "def"
 

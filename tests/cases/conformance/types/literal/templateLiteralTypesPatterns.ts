@@ -168,9 +168,12 @@ var aa: '0' & `${number}`;
 
 // Remove string literals from unions with matching template literals
 
-let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
-let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
-let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
+declare let t1: `foo${string}` | 'foo1' | '1foo';
+let c1 = true ? t1 : t1;  // `foo${string}` | '1foo'
+declare let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';
+let c2 = true ? t2 : t2;  // `foo${string}` | '1foo' | 'xfoo'
+declare let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;
+let c3 = true ? t3 : t3;  // `foo${string}` | xfoo' | `${number}foo`
 
 var bb: `${number}`;
 var bb: `${number}` | '0';

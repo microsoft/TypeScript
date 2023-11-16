@@ -55,10 +55,11 @@ templateLiteralTypesPatterns.ts(129,9): error TS2345: Argument of type '"1.1e-10
 templateLiteralTypesPatterns.ts(140,1): error TS2322: Type '`a${string}`' is not assignable to type '`a${number}`'.
 templateLiteralTypesPatterns.ts(141,1): error TS2322: Type '"bno"' is not assignable to type '`a${any}`'.
 templateLiteralTypesPatterns.ts(160,7): error TS2322: Type '"anything"' is not assignable to type '`${number} ${number}`'.
-templateLiteralTypesPatterns.ts(211,5): error TS2345: Argument of type '"abcTest"' is not assignable to parameter of type '`${`a${string}` & `${string}a`}Test`'.
+templateLiteralTypesPatterns.ts(178,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'bb' must be of type '`${number}`', but here has type '`${number}` | "0"'.
+templateLiteralTypesPatterns.ts(214,5): error TS2345: Argument of type '"abcTest"' is not assignable to parameter of type '`${`a${string}` & `${string}a`}Test`'.
 
 
-==== templateLiteralTypesPatterns.ts (58 errors) ====
+==== templateLiteralTypesPatterns.ts (59 errors) ====
     type RequiresLeadingSlash = `/${string}`;
     
     // ok
@@ -342,12 +343,18 @@ templateLiteralTypesPatterns.ts(211,5): error TS2345: Argument of type '"abcTest
     
     // Remove string literals from unions with matching template literals
     
-    let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
-    let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
-    let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
+    declare let t1: `foo${string}` | 'foo1' | '1foo';
+    let c1 = true ? t1 : t1;  // `foo${string}` | '1foo'
+    declare let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';
+    let c2 = true ? t2 : t2;  // `foo${string}` | '1foo' | 'xfoo'
+    declare let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;
+    let c3 = true ? t3 : t3;  // `foo${string}` | xfoo' | `${number}foo`
     
     var bb: `${number}`;
     var bb: `${number}` | '0';
+        ~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'bb' must be of type '`${number}`', but here has type '`${number}` | "0"'.
+!!! related TS6203 templateLiteralTypesPatterns.ts:177:5: 'bb' was also declared here.
     
     // Normalize `${string}` to just string
     
