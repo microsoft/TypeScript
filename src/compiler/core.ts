@@ -2404,7 +2404,7 @@ export function endsWith(str: string, suffix: string, ignoreCase?: boolean): boo
     const expectedPos = str.length - suffix.length;
     return expectedPos >= 0 && (
         ignoreCase
-            ? equateStringsCaseInsensitive(str.slice(-suffix.length), suffix)
+            ? equateStringsCaseInsensitive(str.slice(expectedPos), suffix)
             : str.indexOf(suffix, expectedPos) === expectedPos
     );
 }
