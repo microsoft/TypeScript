@@ -654,6 +654,24 @@ conversionTest2("testDowncast");
 >conversionTest2 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)) => void
 >"testDowncast" : "testDowncast"
 
+function conversionTest3(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
+>conversionTest3 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) => void
+>groupName : "downcast" | `${string & {}}Downcast`
+
+conversionTest3("testDowncast");
+>conversionTest3("testDowncast") : void
+>conversionTest3 : (groupName: "downcast" | `${string & {}}Downcast`) => void
+>"testDowncast" : "testDowncast"
+
+function conversionTest4(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
+>conversionTest4 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) => void
+>groupName : "downcast" | `${{} & string}Downcast`
+
+conversionTest4("testDowncast");
+>conversionTest4("testDowncast") : void
+>conversionTest4 : (groupName: "downcast" | `${{} & string}Downcast`) => void
+>"testDowncast" : "testDowncast"
+
 function foo(str: `${`a${string}` & `${string}a`}Test`) {}
 >foo : (str: `${`a${string}` & `${string}a`}Test`) => void
 >str : `${`a${string}` & `${string}a`}Test`
