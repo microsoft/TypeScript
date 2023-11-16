@@ -882,19 +882,19 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
                 const starPos = pathOrPattern.indexOf("*");
                 const leadingSlice = pathOrPattern.slice(0, starPos);
                 const trailingSlice = pathOrPattern.slice(starPos + 1);
-                if (extensionSwappedTarget && startsWith(extensionSwappedTarget, leadingSlice) && endsWith(extensionSwappedTarget, trailingSlice)) {
+                if (extensionSwappedTarget && startsWith(extensionSwappedTarget, leadingSlice, ignoreCase) && endsWith(extensionSwappedTarget, trailingSlice, ignoreCase)) {
                     const starReplacement = extensionSwappedTarget.slice(leadingSlice.length, extensionSwappedTarget.length - trailingSlice.length);
                     return { moduleFileToTry: packageName.replace("*", starReplacement) };
                 }
-                if (startsWith(targetFilePath, leadingSlice) && endsWith(targetFilePath, trailingSlice)) {
+                if (startsWith(targetFilePath, leadingSlice, ignoreCase) && endsWith(targetFilePath, trailingSlice, ignoreCase)) {
                     const starReplacement = targetFilePath.slice(leadingSlice.length, targetFilePath.length - trailingSlice.length);
                     return { moduleFileToTry: packageName.replace("*", starReplacement) };
                 }
-                if (outputFile && startsWith(outputFile, leadingSlice) && endsWith(outputFile, trailingSlice)) {
+                if (outputFile && startsWith(outputFile, leadingSlice, ignoreCase) && endsWith(outputFile, trailingSlice, ignoreCase)) {
                     const starReplacement = outputFile.slice(leadingSlice.length, outputFile.length - trailingSlice.length);
                     return { moduleFileToTry: packageName.replace("*", starReplacement) };
                 }
-                if (declarationFile && startsWith(declarationFile, leadingSlice) && endsWith(declarationFile, trailingSlice)) {
+                if (declarationFile && startsWith(declarationFile, leadingSlice, ignoreCase) && endsWith(declarationFile, trailingSlice, ignoreCase)) {
                     const starReplacement = declarationFile.slice(leadingSlice.length, declarationFile.length - trailingSlice.length);
                     return { moduleFileToTry: packageName.replace("*", starReplacement) };
                 }
