@@ -638,20 +638,20 @@ export abstract class BB {
 // repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
 function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
 >conversionTest : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) => void
->groupName : `${string & {}}Downcast` | "downcast" | "dataDowncast" | "editingDowncast"
+>groupName : `${string & {}}Downcast` | "downcast"
 
 conversionTest("testDowncast");
 >conversionTest("testDowncast") : void
->conversionTest : (groupName: `${string & {}}Downcast` | "downcast" | "dataDowncast" | "editingDowncast") => void
+>conversionTest : (groupName: `${string & {}}Downcast` | "downcast") => void
 >"testDowncast" : "testDowncast"
 
 function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
 >conversionTest2 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) => void
->groupName : "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`
+>groupName : "downcast" | `${{} & string}Downcast`
 
 conversionTest2("testDowncast");
 >conversionTest2("testDowncast") : void
->conversionTest2 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) => void
+>conversionTest2 : (groupName: "downcast" | `${{} & string}Downcast`) => void
 >"testDowncast" : "testDowncast"
 
 function foo(str: `${`a${string}` & `${string}a`}Test`) {}
