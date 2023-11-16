@@ -4162,16 +4162,10 @@ function getCompletionData(
         return scope;
     }
 
-    function isInDifferentLineThanContextToken(contextToken: Node, position: number): boolean {
-
-        return sourceFile.getLineEndOfPosition(contextToken.getEnd()) < position;
-    }
-
     function isCompletionListBlocker(contextToken: Node): boolean {
         const start = timestamp();
         const result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
-            // GH#54729 ignore this case when current position is in a newline
-            (isSolelyIdentifierDefinitionLocation(contextToken) && !isInDifferentLineWithContextToken(contextToken, position)) ||
+            isSolelyIdentifierDefinitionLocation(contextToken) ||
             isDotOfNumericLiteral(contextToken) ||
             isInJsxText(contextToken) ||
             isBigIntLiteral(contextToken);
@@ -4663,6 +4657,10 @@ function getCompletionData(
         return undefined;
     }
 
+    function isInDifferentLineThanContextToken(contextToken: Node, position: number): boolean {
+        return sourceFile.getLineEndOfPosition(contextToken.getEnd()) < position;
+    }
+
     /**
      * @returns true if we are certain that the currently edited location must define a new location; false otherwise.
      */
@@ -4835,7 +4833,9 @@ function getCompletionData(
             && !isJsxAttribute(contextToken.parent)
             // Don't block completions if we're in `class C /**/`, `interface I /**/` or `<T /**/>` , because we're *past* the end of the identifier and might want to complete `extends`.
             // If `contextToken !== previousToken`, this is `class C ex/**/`, `interface I ex/**/` or `<T ex/**/>`.
-            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent) || isTypeParameterDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
+            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent) || isTypeParameterDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end))
+            // TODO: add comment
+            && !isInDifferentLineThanContextToken(contextToken, position);
     }
 
     function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {
