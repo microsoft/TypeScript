@@ -46,6 +46,11 @@ export interface TypingsInstallerWorkerProcess {
     send<T extends TypingInstallerRequestUnion>(rq: T): void;
 }
 
+interface PackageInstallPromise {
+    resolve(value: ApplyCodeActionCommandResult): void;
+    reject(reason: unknown): void;
+}
+
 /** @internal */
 export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
     protected installer!: TypingsInstallerWorkerProcess;
@@ -63,10 +68,8 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
     // It would be preferable to base our limit on the amount of space left in the
     // buffer, but we have yet to find a way to retrieve that value.
     private static readonly requestDelayMillis = 100;
-    private packageInstalledPromise: {
-        resolve(value: ApplyCodeActionCommandResult): void;
-        reject(reason: unknown): void;
-    } | undefined;
+    private packageInstalledPromise: Map<number, PackageInstallPromise> | undefined;
+    private packageInstallId = 0;
 
     constructor(
         protected readonly telemetryEnabled: boolean,
@@ -92,11 +95,13 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
     }
 
     installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
-        this.installer.send<InstallPackageRequest>({ kind: "installPackage", ...options });
-        Debug.assert(this.packageInstalledPromise === undefined);
-        return new Promise<ApplyCodeActionCommandResult>((resolve, reject) => {
-            this.packageInstalledPromise = { resolve, reject };
+        this.packageInstallId++;
+        const request: InstallPackageRequest = { kind: "installPackage", ...options, id: this.packageInstallId };
+        const promise = new Promise<ApplyCodeActionCommandResult>((resolve, reject) => {
+            (this.packageInstalledPromise ??= new Map()).set(this.packageInstallId, { resolve, reject });
         });
+        this.installer.send(request);
+        return promise;
     }
 
     attach(projectService: ProjectService) {
@@ -136,15 +141,15 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
                 this.typesRegistryCache = new Map(Object.entries(response.typesRegistry));
                 break;
             case ActionPackageInstalled: {
-                const { success, message } = response;
-                if (success) {
-                    this.packageInstalledPromise!.resolve({ successMessage: message });
+                const promise = this.packageInstalledPromise?.get(response.id);
+                Debug.assertIsDefined(promise, "Should find the promise for package install");
+                this.packageInstalledPromise?.delete(response.id);
+                if (response.success) {
+                    promise.resolve({ successMessage: response.message });
                 }
                 else {
-                    this.packageInstalledPromise!.reject(message);
+                    promise.reject(response.message);
                 }
-                this.packageInstalledPromise = undefined;
-
                 this.projectService.updateTypingsForProject(response);
 
                 // The behavior is the same as for setTypings, so send the same event.
