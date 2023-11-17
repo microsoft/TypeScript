@@ -1868,7 +1868,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const nodeLinks = getNodeLinks(node);
                 cachedResolvedSignatures.push([nodeLinks, nodeLinks.resolvedSignature] as const);
                 nodeLinks.resolvedSignature = undefined;
-                if (isFunctionLike(node)) {
+                if (isFunctionExpressionOrArrowFunction(node)) {
                     const symbolLinks = getSymbolLinks(getSymbolOfDeclaration(node));
                     const type = symbolLinks.type;
                     cachedTypes.push([symbolLinks, type] as const);
@@ -6949,6 +6949,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.symbolDepth!.set(id, depth + 1);
                 }
                 context.visitedTypes.add(typeId);
+                const prevTrackedSymbols = context.trackedSymbols;
+                context.trackedSymbols = undefined;
                 const startLength = context.approximateLength;
                 const result = transform(type);
                 const addedLength = context.approximateLength - startLength;
@@ -6964,6 +6966,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (id) {
                     context.symbolDepth!.set(id, depth!);
                 }
+                context.trackedSymbols = prevTrackedSymbols;
                 return result;
 
                 function deepCloneOrReuseNode<T extends Node>(node: T): T {
@@ -7312,7 +7315,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (propertySymbol.flags & SymbolFlags.Accessor) {
                 const writeType = getWriteTypeOfSymbol(propertySymbol);
-                if (propertyType !== writeType) {
+                if (propertyType !== writeType && !isErrorType(propertyType) && !isErrorType(writeType)) {
                     const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor)!;
                     const getterSignature = getSignatureFromDeclaration(getterDeclaration);
                     typeElements.push(
@@ -8328,7 +8331,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return factory.createStringLiteral(name, !!singleQuote);
                     }
                     if (isNumericLiteralName(name) && startsWith(name, "-")) {
-                        return factory.createComputedPropertyName(factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(+name))));
+                        return factory.createComputedPropertyName(factory.createNumericLiteral(+name));
                     }
                     return createPropertyNameNodeForIdentifierOrLiteral(name, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed, isMethod);
                 }
@@ -39006,14 +39009,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return hasSkipDirectInferenceFlag(node) ?
                     blockedStringType :
                     getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
-            case SyntaxKind.NumericLiteral: {
+            case SyntaxKind.NumericLiteral:
                 checkGrammarNumericLiteral(node as NumericLiteral);
-                const value = +(node as NumericLiteral).text;
-                if (!isFinite(value)) {
-                    return numberType;
-                }
-                return getFreshTypeOfLiteralType(getNumberLiteralType(value));
-            }
+                return getFreshTypeOfLiteralType(getNumberLiteralType(+(node as NumericLiteral).text));
             case SyntaxKind.BigIntLiteral:
                 checkGrammarBigIntLiteral(node as BigIntLiteral);
                 return getFreshTypeOfLiteralType(getBigIntLiteralType({
@@ -45427,6 +45425,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
                 error(node, message, symbolToString(symbol));
             }
+            else if (node.kind !== SyntaxKind.ExportSpecifier) {
+                // Look at 'compilerOptions.isolatedModules' and not 'getIsolatedModules(...)' (which considers 'verbatimModuleSyntax')
+                // here because 'verbatimModuleSyntax' will already have an error for importing a type without 'import type'.
+                const appearsValueyToTranspiler = compilerOptions.isolatedModules && !findAncestor(node, isTypeOnlyImportOrExportDeclaration);
+                if (appearsValueyToTranspiler && symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+                    error(
+                        node,
+                        Diagnostics.Import_0_conflicts_with_local_value_so_must_be_declared_with_a_type_only_import_when_isolatedModules_is_enabled,
+                        symbolToString(symbol),
+                        isolatedModulesLikeFlagName,
+                    );
+                }
+            }
 
             if (
                 getIsolatedModules(compilerOptions)
@@ -47609,7 +47620,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));
         if (target === unknownSymbol) {
-            return true;
+            return !excludeTypeOnlyValues || !getTypeOnlyAliasDeclaration(symbol);
         }
         // const enums and modules that contain only const enums are not considered values from the emit perspective
         // unless 'preserveConstEnums' option is set to true
@@ -47975,9 +47986,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (enumResult) return enumResult;
         const literalValue = (type as LiteralType).value;
         return typeof literalValue === "object" ? factory.createBigIntLiteral(literalValue) :
-            typeof literalValue === "string" ? factory.createStringLiteral(literalValue) :
-            literalValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(literalValue))) :
-            factory.createNumericLiteral(literalValue);
+            typeof literalValue === "number" ? factory.createNumericLiteral(literalValue) :
+            factory.createStringLiteral(literalValue);
     }
 
     function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker) {

@@ -79,6 +79,7 @@ export interface TestServerHostCreationParameters {
     runWithoutRecursiveWatches?: boolean;
     runWithFallbackPolling?: boolean;
     inodeWatching?: boolean;
+    fsWatchWithTimestamp?: boolean;
 }
 
 export function createWatchedSystem(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
@@ -377,6 +378,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             runWithoutRecursiveWatches,
             runWithFallbackPolling,
             inodeWatching,
+            fsWatchWithTimestamp,
         }: TestServerHostCreationParameters = {},
     ) {
         this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
@@ -414,6 +416,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             tscWatchFile,
             tscWatchDirectory,
             inodeWatching: !!this.inodeWatching,
+            fsWatchWithTimestamp,
             sysLog: s => this.write(s + this.newLine),
         });
         this.watchFile = watchFile;

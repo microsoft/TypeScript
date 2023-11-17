@@ -102,6 +102,7 @@ import {
         const localReact: File = {
             path: `${localAtTypes}/react/index.d.ts`,
             content: `import * as PropTypes from 'prop-types';
+export class Component {}
 `,
         };
         const localReactRouterDomPackage: File = {
@@ -128,6 +129,8 @@ import {
     | string
     | ((props: any, context?: any) => any)
     | (new (props: any, context?: any) => any);
+
+export const PropTypes = {};
 `,
         };
 
@@ -191,6 +194,10 @@ export interface BrowserRouterProps {
                 includeInsertTextCompletions: true,
             },
         });
-        baselineTsserverLogs("completions", "works when files are included from two different drives of windows", session);
+        baselineTsserverLogs(
+            "completions",
+            "works when files are included from two different drives of windows",
+            session,
+        );
     });
 });
