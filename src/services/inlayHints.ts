@@ -53,6 +53,7 @@ import {
     isIdentifierText,
     isImportTypeNode,
     isIndexedAccessTypeNode,
+    isIndexSignatureDeclaration,
     isInferTypeNode,
     isInfinityOrNaNString,
     isIntersectionTypeNode,
@@ -738,6 +739,17 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     if (node.questionToken) {
                         parts.push({ text: "?" });
                     }
+                    if (node.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(node.type);
+                    }
+                    break;
+                case SyntaxKind.IndexSignature:
+                    Debug.assertNode(node, isIndexSignatureDeclaration);
+                    Debug.assertEqual(node.parameters.length, 1);
+                    parts.push({ text: "[" });
+                    visitForDisplayParts(node.parameters[0]);
+                    parts.push({ text: "]" });
                     if (node.type) {
                         parts.push({ text: ": " });
                         visitForDisplayParts(node.type);
