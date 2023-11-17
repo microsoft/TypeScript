@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/spreadIndexSignature.ts] ////
+
+=== spreadIndexSignature.ts ===
+declare const strings: Record<string, string>;
+>strings : Record<string, string>
+
+declare const symbols: Record<symbol, string>;
+>symbols : Record<symbol, string>
+
+const o1 = { a: 1, ...strings };
+>o1 : { [x: string]: string | number; a: number; }
+>{ a: 1, ...strings } : { [x: string]: string | number; a: number; }
+>a : number
+>1 : 1
+>strings : Record<string, string>
+
+const o2 = { [Symbol.iterator]: 1, ...strings };
+>o2 : { [x: string]: string; [Symbol.iterator]: number; }
+>{ [Symbol.iterator]: 1, ...strings } : { [x: string]: string; [Symbol.iterator]: number; }
+>[Symbol.iterator] : number
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>1 : 1
+>strings : Record<string, string>
+
+const o3 = { [Symbol.iterator]: 1, ...symbols };
+>o3 : { [x: symbol]: string | number; [Symbol.iterator]: number; }
+>{ [Symbol.iterator]: 1, ...symbols } : { [x: symbol]: string | number; [Symbol.iterator]: number; }
+>[Symbol.iterator] : number
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>1 : 1
+>symbols : Record<symbol, string>
+

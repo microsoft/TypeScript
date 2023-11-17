@@ -13435,6 +13435,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return emptyArray;
     }
 
+    function getSpreadIndexInfos(left: Type, right: Type): IndexInfo[] {
+        const rightInfos = getIndexInfosOfType(right);
+        if (!rightInfos.length) return emptyArray;
+        const leftInfos = getIndexInfosOfType(left);
+        const leftProperties = getPropertiesOfType(left);
+        const result: IndexInfo[] = [];
+        for (const rightInfo of rightInfos) {
+            const indexType = rightInfo.keyType;
+            const leftInfo = findIndexInfo(leftInfos, indexType);
+            const types = leftInfo ? [leftInfo.type, rightInfo.type] : [rightInfo.type];
+            for (const prop of leftProperties) {
+                if (isApplicableIndexType(getNameTypeOfPropertyName(prop.escapedName), indexType)) {
+                    types.push(getTypeOfSymbol(prop));
+                }
+            }
+            result.push(createIndexInfo(indexType, getUnionType(types), leftInfo && leftInfo.isReadonly || rightInfo.isReadonly));
+        }
+        return result;
+    }
+
     function resolveUnionTypeMembers(type: UnionType) {
         // The members and properties collections are empty for union types. To get all properties of a union
         // type use getPropertiesOfType (only the language service uses this).
@@ -14888,7 +14908,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getApplicableIndexInfoForName(type: Type, name: __String): IndexInfo | undefined {
-        return getApplicableIndexInfo(type, isLateBoundName(name) ? esSymbolType : getStringLiteralType(unescapeLeadingUnderscores(name)));
+        return getApplicableIndexInfo(type, getNameTypeOfPropertyName(name));
+    }
+
+    function getNameTypeOfPropertyName(name: __String): Type {
+        return isLateBoundName(name) ? esSymbolType : getStringLiteralType(unescapeLeadingUnderscores(name));
     }
 
     // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
@@ -18793,7 +18817,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const members = createSymbolTable();
         const skippedPrivateMembers = new Set<__String>();
-        const indexInfos = left === emptyObjectType ? getIndexInfosOfType(right) : getUnionIndexInfos([left, right]);
+        const indexInfos = left === emptyObjectType ? getIndexInfosOfType(right) : getSpreadIndexInfos(left, right);
 
         for (const rightProp of getPropertiesOfType(right)) {
             if (getDeclarationModifierFlagsFromSymbol(rightProp) & (ModifierFlags.Private | ModifierFlags.Protected)) {
