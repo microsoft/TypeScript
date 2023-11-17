@@ -1,4 +1,5 @@
 ﻿// @declaration: true
+// @isolatedDeclarationFixedDiffReason: Syntactically invalid.
 class C1 {
     constructor(public [x, y, z]: string[]) {
     }

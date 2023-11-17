@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: Can't fix computed properties]] ////
 
 //// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts] ////
 

@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: TODO Nested access to expando function.]] ////
 
 //// [tests/cases/compiler/contextualReturnTypeOfIIFE2.ts] ////
 

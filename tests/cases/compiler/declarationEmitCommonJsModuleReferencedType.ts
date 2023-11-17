@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
 // @filename: r/node_modules/foo/node_modules/nested/index.d.ts
 export interface NestedProps {}
 // @filename: r/node_modules/foo/other/index.d.ts

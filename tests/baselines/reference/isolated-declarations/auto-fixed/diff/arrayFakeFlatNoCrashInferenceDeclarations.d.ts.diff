@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: Semantically invalid, already has a cyclic error type]] ////
 
 //// [tests/cases/compiler/arrayFakeFlatNoCrashInferenceDeclarations.ts] ////
 

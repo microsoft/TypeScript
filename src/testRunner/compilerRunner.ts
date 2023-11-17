@@ -579,6 +579,9 @@ class IsolatedDeclarationTest extends CompilerTestBase {
     protected get baselinePath() {
         return "isolated-declarations/original";
     }
+    protected get diffReason() {
+        return this.harnessSettings.isolatedDeclarationDiffReason;
+    }
     verifyDteOutput() {
         if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
         Compiler.doDeclarationBaseline(
@@ -640,7 +643,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             ts.concatenate(this.tscIsolatedDeclarationsErrors, this.tscNonIsolatedDeclarationsErrors),
             this.allFiles,
             this.options.pretty,
-            this.harnessSettings.isolatedDeclarationDiffReason,
+            this.diffReason,
         );
     }
 
@@ -656,7 +659,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             this.tscDtsFiles,
             this.tscDtsMapFiles,
             this.allFiles,
-            this.harnessSettings.isolatedDeclarationDiffReason,
+            this.diffReason,
         );
     }
 }
@@ -740,5 +743,9 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
 
     protected override get baselinePath() {
         return "isolated-declarations/auto-fixed";
+    }
+
+    protected override get diffReason() {
+        return this.harnessSettings.isolatedDeclarationFixedDiffReason;
     }
 }

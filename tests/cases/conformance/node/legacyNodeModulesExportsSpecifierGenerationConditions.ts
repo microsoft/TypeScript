@@ -2,6 +2,8 @@
 // @lib: es2020
 // @declaration: true
 // @filename: index.ts
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
+
 export const a = async () => (await import("inner")).x();
 // @filename: node_modules/inner/index.d.ts
 export { x } from "./other.js";

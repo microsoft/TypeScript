@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: Fixing enum values is not supported]] ////
 
 //// [tests/cases/conformance/enums/enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts] ////
 

@@ -752,6 +752,7 @@ import {
     isValidESSymbolDeclaration,
     isValidTypeOnlyAliasUseSite,
     isValueSignatureDeclaration,
+    isVarConst,
     isVariableDeclaration,
     isVariableDeclarationInitializedToBareOrAccessedRequire,
     isVariableDeclarationInVariableStatement,
@@ -8358,7 +8359,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                     if (context.flags & NodeBuilderFlags.WriteComputedProps) {
                         const nameExpression = symbol.valueDeclaration && getNameOfDeclaration(symbol.valueDeclaration);
-                        if (nameExpression && isLateBindableName(nameExpression)) {
+                        if (nameExpression && isLateBindableName(nameExpression) && isComputedPropertyName(nameExpression)) {
                             return nameExpression;
                         }
                     }
@@ -47510,15 +47511,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!declaration) {
             return false;
         }
+        let symbol: Symbol;
         if (isVariableDeclaration(declaration)) {
-            if (declaration.type) {
+            if (declaration.type || !isVarConst(declaration)) {
                 return false;
             }
             if (!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
                 return false;
             }
+            symbol = getSymbolOfDeclaration(declaration.initializer);
         }
-        const symbol = getSymbolOfDeclaration(declaration);
+        else {
+            symbol = getSymbolOfDeclaration(declaration);
+        }
         if (!symbol || !(symbol.flags & SymbolFlags.Function | SymbolFlags.Variable)) {
             return false;
         }

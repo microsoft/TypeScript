@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: Syntactically invalid.]] ////
 
 //// [tests/cases/compiler/declarationEmitDestructuringParameterProperties.ts] ////
 

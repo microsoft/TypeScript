@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: TODO Add support for nested namespace access for enums]] ////
 
 //// [tests/cases/compiler/constEnums.ts] ////
 

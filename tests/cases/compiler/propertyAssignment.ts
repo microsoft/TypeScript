@@ -1,3 +1,4 @@
+// @isolatedDeclarationDiffReason: Syntactically invalid.
 
 
 var foo1: { new ():any; }   

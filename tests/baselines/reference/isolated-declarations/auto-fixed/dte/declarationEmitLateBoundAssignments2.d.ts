@@ -45,7 +45,10 @@ export const arrow: {
 } = () => {}
 arrow["B"] = 'bar'
 
-export const arrow2 = (): void => {}
+export const arrow2: {
+    (): void
+    C: number
+} = () => {}
 arrow2[c] = 100
 
 export const arrow3: {
@@ -54,7 +57,10 @@ export const arrow3: {
 } = () => {}
 arrow3[77] = 0
 
-export const arrow4 = (): void => {}
+export const arrow4: {
+    (): void
+    1: number
+} = () => {}
 arrow4[num] = 0
 
 export const arrow5: {
@@ -63,7 +69,10 @@ export const arrow5: {
 } = () => {}
 arrow5["101"] = 0
 
-export const arrow6 = (): void => {}
+export const arrow6: {
+    (): void
+    "10": number
+} = () => {}
 arrow6[numStr] = 0
 
 export const arrow7: {
@@ -72,7 +81,10 @@ export const arrow7: {
 } = () => {}
 arrow7["qwe rty"] = 0
 
-export const arrow8 = (): void => {}
+export const arrow8: {
+    (): void
+    "foo bar": number
+} = () => {}
 arrow8[withWhitespace] = 0
 
 export const arrow9: {
@@ -81,7 +93,10 @@ export const arrow9: {
 } = () => {}
 arrow9["🤪"] = 0
 
-export const arrow10 = (): void => {}
+export const arrow10: {
+    (): void
+    "🤷‍♂️": number
+} = () => {}
 arrow10[emoji] = 0
 
 
@@ -104,27 +119,42 @@ export declare const arrow: {
     (): void;
     B: string;
 };
-export declare const arrow2: invalid;
+export declare const arrow2: {
+    (): void;
+    C: number;
+};
 export declare const arrow3: {
     (): void;
     77: number;
 };
-export declare const arrow4: invalid;
+export declare const arrow4: {
+    (): void;
+    1: number;
+};
 export declare const arrow5: {
     (): void;
     "101": number;
 };
-export declare const arrow6: invalid;
+export declare const arrow6: {
+    (): void;
+    "10": number;
+};
 export declare const arrow7: {
     (): void;
     "qwe rty": number;
 };
-export declare const arrow8: invalid;
+export declare const arrow8: {
+    (): void;
+    "foo bar": number;
+};
 export declare const arrow9: {
     (): void;
     "🤪": number;
 };
-export declare const arrow10: invalid;
+export declare const arrow10: {
+    (): void;
+    "🤷‍♂️": number;
+};
 //# sourceMappingURL=declarationEmitLateBoundAssignments2.d.ts.map
 
 /// [Errors] ////
@@ -139,19 +169,9 @@ declarationEmitLateBoundAssignments2.ts(27,17): error TS9009: Assigning properti
 declarationEmitLateBoundAssignments2.ts(30,17): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 declarationEmitLateBoundAssignments2.ts(33,17): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 declarationEmitLateBoundAssignments2.ts(36,17): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-declarationEmitLateBoundAssignments2.ts(45,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitLateBoundAssignments2.ts(45,14): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-declarationEmitLateBoundAssignments2.ts(54,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitLateBoundAssignments2.ts(54,14): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-declarationEmitLateBoundAssignments2.ts(63,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitLateBoundAssignments2.ts(63,14): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-declarationEmitLateBoundAssignments2.ts(72,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitLateBoundAssignments2.ts(72,14): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-declarationEmitLateBoundAssignments2.ts(81,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitLateBoundAssignments2.ts(81,14): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 
 
-==== declarationEmitLateBoundAssignments2.ts (20 errors) ====
+==== declarationEmitLateBoundAssignments2.ts (10 errors) ====
     // https://github.com/microsoft/TypeScript/issues/54811
     
     const c = "C"
@@ -216,11 +236,10 @@ declarationEmitLateBoundAssignments2.ts(81,14): error TS9009: Assigning properti
     } = () => {}
     arrow["B"] = 'bar'
     
-    export const arrow2 = (): void => {}
-                 ~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                 ~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    export const arrow2: {
+        (): void
+        C: number
+    } = () => {}
     arrow2[c] = 100
     
     export const arrow3: {
@@ -229,11 +248,10 @@ declarationEmitLateBoundAssignments2.ts(81,14): error TS9009: Assigning properti
     } = () => {}
     arrow3[77] = 0
     
-    export const arrow4 = (): void => {}
-                 ~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                 ~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    export const arrow4: {
+        (): void
+        1: number
+    } = () => {}
     arrow4[num] = 0
     
     export const arrow5: {
@@ -242,11 +260,10 @@ declarationEmitLateBoundAssignments2.ts(81,14): error TS9009: Assigning properti
     } = () => {}
     arrow5["101"] = 0
     
-    export const arrow6 = (): void => {}
-                 ~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                 ~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    export const arrow6: {
+        (): void
+        "10": number
+    } = () => {}
     arrow6[numStr] = 0
     
     export const arrow7: {
@@ -255,11 +272,10 @@ declarationEmitLateBoundAssignments2.ts(81,14): error TS9009: Assigning properti
     } = () => {}
     arrow7["qwe rty"] = 0
     
-    export const arrow8 = (): void => {}
-                 ~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                 ~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    export const arrow8: {
+        (): void
+        "foo bar": number
+    } = () => {}
     arrow8[withWhitespace] = 0
     
     export const arrow9: {
@@ -268,10 +284,9 @@ declarationEmitLateBoundAssignments2.ts(81,14): error TS9009: Assigning properti
     } = () => {}
     arrow9["🤪"] = 0
     
-    export const arrow10 = (): void => {}
-                 ~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                 ~~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    export const arrow10: {
+        (): void
+        "🤷‍♂️": number
+    } = () => {}
     arrow10[emoji] = 0
     

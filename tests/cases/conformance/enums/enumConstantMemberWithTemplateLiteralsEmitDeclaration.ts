@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Fixing enum values is not supported
 enum T1 {
     a = `1`
 }

@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Function declarations are not fixed
 // @target: es6
 export function foo() {}
 foo.bar = 12;

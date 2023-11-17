@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: Invalid computed property can only be detected by TSC]] ////
 
 //// [tests/cases/compiler/giant.ts] ////
 

@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: TODO: Files in node modules are not fixed. Should we?]] ////
 
 //// [tests/cases/compiler/moduleResolutionWithSuffixes_one_externalTSModule.ts] ////
 

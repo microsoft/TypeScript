@@ -1,5 +1,6 @@
 // @useCaseSensitiveFilenames: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
 // @filename: /p1/node_modules/typescript-fsa/src/impl.d.ts
 export function getA(): A;
 export enum A {

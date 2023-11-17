@@ -1,3 +1,4 @@
+// @isolatedDeclarationDiffReason: TODO Add support for nested namespace access for enums
 const enum Enum1 {
    A0 = 100,
 }

@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
 // @filename: /p1/node_modules/csv-parse/lib/index.d.ts
 export function bar(): number;
 // @filename: /p1/node_modules/csv-parse/package.json

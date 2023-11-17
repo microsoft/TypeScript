@@ -234,8 +234,6 @@ export function createLocalInferenceResolver({
         return invalid(getAccessor ?? setAccessor!);
     }
     function localInference(node: Node, inferenceFlags: NarrowBehavior = NarrowBehavior.None): LocalTypeInfo {
-        // Bail if node has parse errors, we're just adding noise
-        if (hasParseError(node)) return invalid(node);
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
                 return localInference((node as ParenthesizedExpression).expression, inferenceFlags & NarrowBehavior.NotKeepLiterals);
@@ -387,7 +385,7 @@ export function createLocalInferenceResolver({
         let replaceWithInvalid = false;
         for (let propIndex = 0, length = objectLiteral.properties.length; propIndex < length; propIndex++) {
             const prop = objectLiteral.properties[propIndex];
-            if (hasParseError(prop)) return invalid(prop);
+            if (hasParseError(prop)) continue;
 
             if (isShorthandPropertyAssignment(prop)) {
                 reportIsolatedDeclarationError(prop);
@@ -400,7 +398,7 @@ export function createLocalInferenceResolver({
                 continue;
             }
 
-            if (hasParseError(prop.name)) return invalid(prop.name);
+            if (hasParseError(prop.name)) continue;
 
             if (isPrivateIdentifier(prop.name)) {
                 // Not valid in object literals but the compiler will complain about this, we just ignore it here.

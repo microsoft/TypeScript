@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: GH#55571]] ////
 
 //// [tests/cases/conformance/internalModules/moduleDeclarations/reExportAliasMakesInstantiated.ts] ////
 

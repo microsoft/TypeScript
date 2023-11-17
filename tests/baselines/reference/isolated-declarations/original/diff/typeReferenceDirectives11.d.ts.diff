@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: TSC adds type reference directives.]] ////
 
 //// [tests/cases/compiler/typeReferenceDirectives11.ts] ////
 

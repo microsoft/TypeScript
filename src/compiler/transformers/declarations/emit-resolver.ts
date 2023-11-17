@@ -19,8 +19,6 @@ import {
     findAncestor,
     FunctionDeclaration,
     FunctionLikeDeclaration,
-    getCombinedModifierFlags,
-    getCombinedNodeFlags,
     getFirstIdentifier,
     getNameOfDeclaration,
     getParseTreeNode,
@@ -37,6 +35,7 @@ import {
     isBigIntLiteral,
     isBinaryExpression,
     isBindingElement,
+    isDeclarationReadonly,
     isElementAccessExpression,
     isEntityNameExpression,
     isEnumDeclaration,
@@ -48,10 +47,10 @@ import {
     isGetAccessor,
     isGetAccessorDeclaration,
     isIdentifier,
+    isInfinityOrNaNString,
     isInJSFile,
     isLateVisibilityPaintedStatement,
     isNumericLiteral,
-    isParameterPropertyDeclaration,
     isPartOfTypeNode,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
@@ -60,6 +59,7 @@ import {
     isStringLiteralLike,
     isTemplateExpression,
     isThisIdentifier,
+    isVarConst,
     isVariableDeclaration,
     isVariableStatement,
     LateBoundDeclaration,
@@ -72,6 +72,7 @@ import {
     nodeIsPresent,
     NoSubstitutionTemplateLiteral,
     ParameterDeclaration,
+    parsePseudoBigInt,
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
@@ -84,7 +85,6 @@ import {
     SymbolVisibilityResult,
     SyntaxKind,
     VariableDeclaration,
-    VariableDeclarationList,
 } from "../../_namespaces/ts";
 import {
     bindSourceFileForDeclarationEmit,
@@ -137,6 +137,12 @@ export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEm
             return undefined;
         },
         evaluateEntityNameExpression(expr, location) {
+            if (
+                isIdentifier(expr) && isInfinityOrNaNString(expr.escapedText) &&
+                (resolveName(location ?? expr.parent, expr.escapedText, SymbolFlags.Value) === undefined)
+            ) {
+                return +(expr.escapedText);
+            }
             // We only resolve names in the current enum declaration
             if (!location || !isEnumDeclaration(location)) return undefined;
             if (isIdentifier(expr)) {
@@ -174,10 +180,10 @@ export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEm
     }
     function clonePrimitiveLiteralValue(node: Expression): Expression {
         if (isNumericLiteral(node)) {
-            return factory.createNumericLiteral(node.text, node.numericLiteralFlags);
+            return factory.createNumericLiteral(node.text);
         }
         if (isBigIntLiteral(node)) {
-            return factory.createBigIntLiteral(node.text);
+            return factory.createBigIntLiteral({ negative: false, base10Value: parsePseudoBigInt(node.text) });
         }
         if (isStringLiteralLike(node)) {
             return factory.createStringLiteral(node.text);
@@ -198,6 +204,10 @@ export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEm
             );
         }
         if (isTemplateExpression(node)) {
+            const evaluatedValue = evaluate(node);
+            if (evaluatedValue !== undefined) {
+                return factory.createStringLiteral(evaluatedValue);
+            }
             return factory.createTemplateExpression(
                 factory.createTemplateHead(node.head.text, node.head.rawText, node.head.templateFlags),
                 node.templateSpans.map(t =>
@@ -312,7 +322,7 @@ export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEm
             return false;
         }
         if (isVariableDeclaration(declaration)) {
-            if (declaration.type) {
+            if (declaration.type || !isVarConst(declaration)) {
                 return false;
             }
             if (!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
@@ -492,15 +502,6 @@ export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEm
             return false;
         },
     };
-
-    function isDeclarationReadonly(declaration: Declaration): boolean {
-        return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration, declaration.parent));
-    }
-
-    /** @internal */
-    function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
-        return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
-    }
 
     function isDeclarationVisible(node: Node): boolean {
         if (node) {

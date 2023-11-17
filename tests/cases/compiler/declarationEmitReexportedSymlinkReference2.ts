@@ -1,4 +1,5 @@
 // @filename: monorepo/pkg1/dist/index.d.ts
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
 export * from './types';
 // @filename: monorepo/pkg1/dist/types.d.ts
 export declare type A = {

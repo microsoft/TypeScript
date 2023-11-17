@@ -1,3 +1,4 @@
+// @isolatedDeclarationDiffReason: TSC detects forward ref which is not allowed and so enum value is undefined, which is also the way we detect isolated declaration errors.
 enum E1 {
     // illegal case
     // forward reference to the element of the same enum

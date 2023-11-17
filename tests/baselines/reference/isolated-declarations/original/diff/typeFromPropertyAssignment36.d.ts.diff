@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: TODO Need to fix DTE looking recursively for assigned members.]] ////
 
 //// [tests/cases/conformance/salsa/typeFromPropertyAssignment36.ts] ////
 

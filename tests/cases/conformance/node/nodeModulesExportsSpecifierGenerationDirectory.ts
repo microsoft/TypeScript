@@ -1,5 +1,6 @@
 // @module: node16,nodenext
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO Seems to be missing enough semantic info to fix
 // @filename: index.ts
 // esm format file
 import { Thing } from "inner/other";

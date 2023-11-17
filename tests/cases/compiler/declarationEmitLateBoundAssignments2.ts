@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @target: es6
+// @isolatedDeclarationFixedDiffReason: Function declarations are not fixed
 
 // https://github.com/microsoft/TypeScript/issues/54811
 

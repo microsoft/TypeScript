@@ -1,5 +1,6 @@
 //@module: amd
 // @declaration: true
+// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 
 /*
     Prefixes

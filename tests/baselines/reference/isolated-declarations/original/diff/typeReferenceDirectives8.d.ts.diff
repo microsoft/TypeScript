@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: Requires adding a type reference directive that only TSC can detect]] ////
 
 //// [tests/cases/compiler/typeReferenceDirectives8.ts] ////
 
