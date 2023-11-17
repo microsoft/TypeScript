@@ -196,7 +196,7 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/A/src: *new*
   {}
-/user/username/projects/myproject/packages/b/src: *new*
+/user/username/projects/myproject/packages/B/src: *new*
   {}
 
 Program root files: [

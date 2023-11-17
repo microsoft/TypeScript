@@ -65,7 +65,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/a/rootfolder/project/scripts: *new*
+/a/rootFolder/project/Scripts: *new*
   {}
 
 Program root files: [

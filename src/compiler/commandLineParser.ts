@@ -3771,7 +3771,7 @@ function specToDiagnostic(spec: CompilerOptionsValue, disallowTrailingRecursion?
 /**
  * Gets directories in a set of include patterns that should be watched for changes.
  */
-function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExcludeSpecs: exclude }: ConfigFileSpecs, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
+function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExcludeSpecs: exclude }: ConfigFileSpecs, basePath: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
     // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
     // of the pattern:
     //
@@ -3784,23 +3784,26 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
     //
     //  /a/b/*      - Watch /a/b directly to catch any new file
     //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
-    const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
+    const rawExcludeRegex = getRegularExpressionForWildcard(exclude, basePath, "exclude");
     const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
     const wildcardDirectories: MapLike<WatchDirectoryFlags> = {};
+    const wildCardKeyToPath = new Map<CanonicalKey, string>();
     if (include !== undefined) {
-        const recursiveKeys: string[] = [];
+        const recursiveKeys: CanonicalKey[] = [];
         for (const file of include) {
-            const spec = normalizePath(combinePaths(path, file));
+            const spec = normalizePath(combinePaths(basePath, file));
             if (excludeRegex && excludeRegex.test(spec)) {
                 continue;
             }
 
             const match = getWildcardDirectoryFromSpec(spec, useCaseSensitiveFileNames);
             if (match) {
-                const { key, flags } = match;
-                const existingFlags = wildcardDirectories[key];
+                const { key, path, flags } = match;
+                const existingPath = wildCardKeyToPath.get(key);
+                const existingFlags = existingPath !== undefined ? wildcardDirectories[existingPath] : undefined;
                 if (existingFlags === undefined || existingFlags < flags) {
-                    wildcardDirectories[key] = flags;
+                    wildcardDirectories[existingPath !== undefined ? existingPath : path] = flags;
+                    if (existingPath === undefined) wildCardKeyToPath.set(key, path);
                     if (flags === WatchDirectoryFlags.Recursive) {
                         recursiveKeys.push(key);
                     }
@@ -3809,11 +3812,12 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
         }
 
         // Remove any subpaths under an existing recursively watched directory.
-        for (const key in wildcardDirectories) {
-            if (hasProperty(wildcardDirectories, key)) {
+        for (const path in wildcardDirectories) {
+            if (hasProperty(wildcardDirectories, path)) {
                 for (const recursiveKey of recursiveKeys) {
-                    if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                        delete wildcardDirectories[key];
+                    const key = toCanonicalKey(path, useCaseSensitiveFileNames);
+                    if (key !== recursiveKey && containsPath(recursiveKey, key, basePath, !useCaseSensitiveFileNames)) {
+                        delete wildcardDirectories[path];
                     }
                 }
             }
@@ -3823,7 +3827,12 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
     return wildcardDirectories;
 }
 
-function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: string; flags: WatchDirectoryFlags; } | undefined {
+type CanonicalKey = string & { __canonicalKey: never; };
+function toCanonicalKey(path: string, useCaseSensitiveFileNames: boolean): CanonicalKey {
+    return (useCaseSensitiveFileNames ? path : toFileNameLowerCase(path)) as CanonicalKey;
+}
+
+function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: CanonicalKey; path: string; flags: WatchDirectoryFlags; } | undefined {
     const match = wildcardDirectoryPattern.exec(spec);
     if (match) {
         // We check this with a few `indexOf` calls because 3 `indexOf`/`lastIndexOf` calls is
@@ -3834,15 +3843,18 @@ function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: b
         const starWildcardIndex = spec.indexOf("*");
         const lastDirectorySeperatorIndex = spec.lastIndexOf(directorySeparator);
         return {
-            key: useCaseSensitiveFileNames ? match[0] : toFileNameLowerCase(match[0]),
+            key: toCanonicalKey(match[0], useCaseSensitiveFileNames),
+            path: match[0],
             flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeperatorIndex)
                     || (starWildcardIndex !== -1 && starWildcardIndex < lastDirectorySeperatorIndex)
                 ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None,
         };
     }
     if (isImplicitGlob(spec.substring(spec.lastIndexOf(directorySeparator) + 1))) {
+        const path = removeTrailingDirectorySeparator(spec);
         return {
-            key: removeTrailingDirectorySeparator(useCaseSensitiveFileNames ? spec : toFileNameLowerCase(spec)),
+            key: toCanonicalKey(path, useCaseSensitiveFileNames),
+            path,
             flags: WatchDirectoryFlags.Recursive,
         };
     }

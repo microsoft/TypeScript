@@ -87,7 +87,7 @@ FsWatches::
 FsWatchesRecursive::
 /a/b/projects/myProject/node_modules: *new*
   {}
-/a/b/projects/myproject/src: *new*
+/a/b/projects/myProject/src: *new*
   {}
 
 Program root files: [

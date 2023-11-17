@@ -117,8 +117,8 @@ Info seq  [hh:mm:ss:mss] Config: /Users/someuser/work/applications/frontend/tsco
   "configFilePath": "/Users/someuser/work/applications/frontend/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/types 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
@@ -300,13 +300,13 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/users/someuser/work/applications/frontend/src: *new*
+/Users/someuser/work/applications/frontend/src: *new*
   {}
 
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/someuser/work/applications/frontend/src/app/utils/Cookie.ts :: WatchInfo: /users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts :: WatchInfo: /Users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/someuser/work/applications/frontend/src/app/utils/Cookie.ts :: WatchInfo: /users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts :: WatchInfo: /Users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 2
 1: /Users/someuser/work/applications/frontend/tsconfig.json
 2: *ensureProjectForOpenFiles*
@@ -388,7 +388,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/users/someuser/work/applications/frontend/src:
+/Users/someuser/work/applications/frontend/src:
   {}
 
 Info seq  [hh:mm:ss:mss] fileExists:: [
@@ -463,7 +463,7 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/users/someuser/work/applications/frontend/src:
+/Users/someuser/work/applications/frontend/src:
   {}
 
 Info seq  [hh:mm:ss:mss] fileExists:: []

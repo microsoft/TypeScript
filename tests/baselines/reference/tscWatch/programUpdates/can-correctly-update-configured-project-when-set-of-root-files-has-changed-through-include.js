@@ -59,7 +59,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/project: *new*
+/user/username/projects/myproject/Project: *new*
   {}
 
 Program root files: [
@@ -134,7 +134,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/project:
+/user/username/projects/myproject/Project:
   {}
 
 

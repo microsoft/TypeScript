@@ -58,8 +58,8 @@ Info seq  [hh:mm:ss:mss] Config: /Volumes/git/projects/project/tsconfig.json : {
   "configFilePath": "/Volumes/git/projects/project/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /volumes/git/projects/project 1 undefined Config: /Volumes/git/projects/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /volumes/git/projects/project 1 undefined Config: /Volumes/git/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/project 1 undefined Config: /Volumes/git/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/project 1 undefined Config: /Volumes/git/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/node_modules/@types 1 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Type roots
@@ -169,12 +169,55 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/volumes/git/projects/project: *new*
+/Volumes/git/projects/project: *new*
   {}
 
-Before running Timeout callback:: count: 0
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /Volumes/git/projects/project/Bar.ts :: WatchInfo: /Volumes/git/projects/project 1 undefined Config: /Volumes/git/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /Volumes/git/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /Volumes/git/projects/project/Bar.ts :: WatchInfo: /Volumes/git/projects/project 1 undefined Config: /Volumes/git/projects/project/tsconfig.json WatchType: Wild card directory
+Before running Timeout callback:: count: 2
+1: /Volumes/git/projects/project/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/Volumes/git/projects/project/Bar.ts]
 export const bar = "bar";
 
 
+Timeout callback:: count: 2
+1: /Volumes/git/projects/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
+Info seq  [hh:mm:ss:mss] Running: /Volumes/git/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Volumes/git/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Volumes/git/projects/project/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Same program as before
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/Volumes/git/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /Volumes/git/projects/project/foo.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /Volumes/git/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/Volumes/git/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /Volumes/git/projects/project/foo.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /Volumes/git/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /Volumes/git/projects/project/foo.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/Volumes/git/projects/project/foo.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
