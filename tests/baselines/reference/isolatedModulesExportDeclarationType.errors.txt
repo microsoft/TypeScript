@@ -26,3 +26,8 @@
                    ~
 !!! error TS1292: 'T' resolves to a type and must be marked type-only in this file before re-exporting when 'isolatedModules' is enabled. Consider using 'export type { T as default }'.
     
+==== /test4.ts (0 errors) ====
+    // @ts-expect-error
+    import unresolved from "./doesntexist";
+    export default unresolved;
+    

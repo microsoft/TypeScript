@@ -17,6 +17,11 @@ export default T; // Transpiler could assume the alias resolves to a value?
 import { T } from "./type";
 export default T; // Error
 
+//// [test4.ts]
+// @ts-expect-error
+import unresolved from "./doesntexist";
+export default unresolved;
+
 
 //// [type.js]
 "use strict";
@@ -32,3 +37,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [test3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+//// [test4.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+// @ts-expect-error
+var doesntexist_1 = require("./doesntexist");
+exports.default = doesntexist_1.default;

@@ -45864,6 +45864,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isIllegalExportDefaultInCJS && getIsolatedModules(compilerOptions) && !(sym.flags & SymbolFlags.Value)) {
                     if (
                         sym.flags & SymbolFlags.Alias
+                        && resolveAlias(sym) !== unknownSymbol
                         && getSymbolFlags(sym, /*excludeTypeOnlyMeanings*/ false, /*excludeLocalMeanings*/ true) & SymbolFlags.Type
                         && (!typeOnlyDeclaration || getSourceFileOfNode(typeOnlyDeclaration) !== getSourceFileOfNode(node))
                     ) {

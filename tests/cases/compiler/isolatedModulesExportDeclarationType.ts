@@ -17,3 +17,8 @@ export default T; // Transpiler could assume the alias resolves to a value?
 // @Filename: /test3.ts
 import { T } from "./type";
 export default T; // Error
+
+// @Filename: /test4.ts
+// @ts-expect-error
+import unresolved from "./doesntexist";
+export default unresolved;
