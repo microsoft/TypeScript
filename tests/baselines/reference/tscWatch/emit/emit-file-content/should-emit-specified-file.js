@@ -35,6 +35,46 @@ Output::
 
 
 
+//// [/a/b/f1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
+function Foo() { return 10; }
+exports.Foo = Foo;
+
+
+//// [/a/b/f2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+var f1_1 = require("./f1");
+exports.y = (0, f1_1.Foo)();
+
+
+//// [/a/b/f3.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var f2_1 = require("./f2");
+var x = f2_1.y;
+
+
+
+FsWatches::
+/a/b/f1.ts: *new*
+  {}
+/a/b/f2.ts: *new*
+  {}
+/a/b/f3.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
 Program root files: [
   "/a/b/f1.ts",
   "/a/b/f2.ts",
@@ -64,47 +104,7 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (used version)
 /a/b/f3.ts (used version)
 
-FsWatches::
-/a/b/f1.ts: *new*
-  {}
-/a/b/f2.ts: *new*
-  {}
-/a/b/f3.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/f1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { return 10; }
-exports.Foo = Foo;
-
-
-//// [/a/b/f2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-var f1_1 = require("./f1");
-exports.y = (0, f1_1.Foo)();
-
-
-//// [/a/b/f3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var f2_1 = require("./f2");
-var x = f2_1.y;
-
-
 
 Change:: Append content to f1
 
@@ -113,8 +113,12 @@ Input::
 export function Foo() { return 10; }export function foo2() { return 2; }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -122,6 +126,20 @@ Output::
 
 [[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/a/b/f1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo2 = exports.Foo = void 0;
+function Foo() { return 10; }
+exports.Foo = Foo;
+function foo2() { return 2; }
+exports.foo2 = foo2;
+
+
+//// [/a/b/f2.js] file written with same contents
+//// [/a/b/f3.js] file written with same contents
 
 
 Program root files: [
@@ -153,19 +171,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/f1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo2 = exports.Foo = void 0;
-function Foo() { return 10; }
-exports.Foo = Foo;
-function foo2() { return 2; }
-exports.foo2 = foo2;
-
-
-//// [/a/b/f2.js] file written with same contents
-//// [/a/b/f3.js] file written with same contents
-
 Change:: Again Append content to f1
 
 Input::
@@ -173,8 +178,12 @@ Input::
 export function Foo() { return 10; }export function foo2() { return 2; }export function fooN() { return 2; }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -182,6 +191,21 @@ Output::
 
 [[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/a/b/f1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fooN = exports.foo2 = exports.Foo = void 0;
+function Foo() { return 10; }
+exports.Foo = Foo;
+function foo2() { return 2; }
+exports.foo2 = foo2;
+function fooN() { return 2; }
+exports.fooN = fooN;
+
+
+//// [/a/b/f2.js] file written with same contents
 
 
 Program root files: [
@@ -210,17 +234,3 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/f1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fooN = exports.foo2 = exports.Foo = void 0;
-function Foo() { return 10; }
-exports.Foo = Foo;
-function foo2() { return 2; }
-exports.foo2 = foo2;
-function fooN() { return 2; }
-exports.fooN = fooN;
-
-
-//// [/a/b/f2.js] file written with same contents

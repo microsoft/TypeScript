@@ -52,6 +52,42 @@ project/b.ts
 
 
 
+//// [c:/project/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
+exports.a = 1;
+exports.b = 2;
+
+
+//// [c:/project/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var a_1 = require("C://project/a");
+var a_2 = require("c://project/a");
+a_1.a;
+a_2.b;
+
+
+
+PolledWatches::
+c:/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+c:/a/lib/lib.d.ts: *new*
+  {}
+c:/project/a.ts: *new*
+  {}
+c:/project/b.ts: *new*
+  {}
+c:/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+c:/project: *new*
+  {}
+
 Program root files: [
   "c:/project/a.ts",
   "c:/project/b.ts"
@@ -79,43 +115,7 @@ c:/a/lib/lib.d.ts (used version)
 c:/project/a.ts (used version)
 c:/project/b.ts (used version)
 
-PolledWatches::
-c:/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-c:/a/lib/lib.d.ts: *new*
-  {}
-c:/project/a.ts: *new*
-  {}
-c:/project/b.ts: *new*
-  {}
-c:/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-c:/project: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [c:/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = exports.a = void 0;
-exports.a = 1;
-exports.b = 2;
-
-
-//// [c:/project/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("C://project/a");
-var a_2 = require("c://project/a");
-a_1.a;
-a_2.b;
-
-
 
 Change:: Prepend a line to moduleA
 
@@ -128,8 +128,12 @@ export const b = 2;
 
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -145,6 +149,18 @@ project/b.ts
   Matched by default include pattern '**/*'
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [c:/project/a.js]
+"use strict";
+// some comment
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
+exports.a = 1;
+exports.b = 2;
+
+
+//// [c:/project/b.js] file written with same contents
 
 
 Program root files: [
@@ -173,14 +189,3 @@ c:/project/a.ts (computed .d.ts)
 c:/project/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [c:/project/a.js]
-"use strict";
-// some comment
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = exports.a = void 0;
-exports.a = 1;
-exports.b = 2;
-
-
-//// [c:/project/b.js] file written with same contents

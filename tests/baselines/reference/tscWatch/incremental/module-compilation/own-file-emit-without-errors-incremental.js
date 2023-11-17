@@ -32,33 +32,6 @@ export const y = 20;
 Output::
 
 
-Program root files: [
-  "/users/username/projects/project/file1.ts",
-  "/users/username/projects/project/file2.ts"
-]
-Program options: {
-  "incremental": true,
-  "module": 2,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/file1.ts (used version)
-/users/username/projects/project/file2.ts (used version)
-
-exitCode:: ExitStatus.Success
-
 //// [/users/username/projects/project/file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
@@ -133,16 +106,6 @@ define(["require", "exports"], function (require, exports) {
 }
 
 
-Change::
-
-Input::
-//// [/users/username/projects/project/file2.ts]
-export const z = 10;
-
-
-Output::
-
-
 Program root files: [
   "/users/username/projects/project/file1.ts",
   "/users/username/projects/project/file2.ts"
@@ -159,12 +122,26 @@ Program files::
 /users/username/projects/project/file2.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
 
 Shape signatures in builder refreshed for::
-/users/username/projects/project/file2.ts (computed .d.ts)
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/file1.ts (used version)
+/users/username/projects/project/file2.ts (used version)
 
 exitCode:: ExitStatus.Success
+
+Change::
+
+Input::
+//// [/users/username/projects/project/file2.ts]
+export const z = 10;
+
+
+Output::
+
 
 //// [/users/username/projects/project/file2.js]
 define(["require", "exports"], function (require, exports) {
@@ -234,3 +211,26 @@ define(["require", "exports"], function (require, exports) {
   "size": 778
 }
 
+
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "module": 2,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/file2.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/file2.ts (computed .d.ts)
+
+exitCode:: ExitStatus.Success

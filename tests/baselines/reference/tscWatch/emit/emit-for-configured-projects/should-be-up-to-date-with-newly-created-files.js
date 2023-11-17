@@ -41,6 +41,59 @@ Output::
 
 
 
+//// [/a/b/moduleFile1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+exports.y = 10;
+
+
+//// [/a/b/file1Consumer2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var z = 10;
+
+
+//// [/a/b/globalFile3.js]
+
+
+//// [/a/b/moduleFile2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo4 = void 0;
+exports.Foo4 = 10;
+
+
+
+FsWatches::
+/a/b/file1consumer1.ts: *new*
+  {}
+/a/b/file1consumer2.ts: *new*
+  {}
+/a/b/globalfile3.ts: *new*
+  {}
+/a/b/modulefile1.ts: *new*
+  {}
+/a/b/modulefile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
 Program root files: [
   "/a/b/file1Consumer1.ts",
   "/a/b/file1Consumer2.ts",
@@ -78,60 +131,7 @@ Shape signatures in builder refreshed for::
 /a/b/globalfile3.ts (used version)
 /a/b/modulefile2.ts (used version)
 
-FsWatches::
-/a/b/file1consumer1.ts: *new*
-  {}
-/a/b/file1consumer2.ts: *new*
-  {}
-/a/b/globalfile3.ts: *new*
-  {}
-/a/b/modulefile1.ts: *new*
-  {}
-/a/b/modulefile2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
-
-
-//// [/a/b/file1Consumer1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
-
-
-//// [/a/b/file1Consumer2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var z = 10;
-
-
-//// [/a/b/globalFile3.js]
-
-
-//// [/a/b/moduleFile2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo4 = void 0;
-exports.Foo4 = 10;
-
-
 
 Change:: change moduleFile1 shape and create file1Consumer3
 
@@ -143,8 +143,12 @@ export var T: number;export function Foo() { };
 import {Foo} from "./moduleFile1"; let y = Foo();
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -152,6 +156,48 @@ Output::
 
 [[90m12:00:52 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/a/b/moduleFile1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/file1Consumer2.js] file written with same contents
+//// [/a/b/file1Consumer3.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var moduleFile1_1 = require("./moduleFile1");
+var y = (0, moduleFile1_1.Foo)();
+
+
+
+FsWatches::
+/a/b/file1consumer1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/file1consumer3.ts: *new*
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
 
 
 Program root files: [
@@ -189,45 +235,4 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer2.ts (computed .d.ts)
 /a/b/file1consumer1.ts (computed .d.ts)
 
-FsWatches::
-/a/b/file1consumer1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/file1consumer3.ts: *new*
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = exports.T = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
-
-
-//// [/a/b/file1Consumer1.js] file written with same contents
-//// [/a/b/file1Consumer2.js] file written with same contents
-//// [/a/b/file1Consumer3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var moduleFile1_1 = require("./moduleFile1");
-var y = (0, moduleFile1_1.Foo)();
-
-

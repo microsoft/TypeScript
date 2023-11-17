@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;
@@ -283,12 +283,21 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 3
+10: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+13: /users/username/projects/project/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-15: /users/username/projects/project/tsconfig.json
-16: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+13: /users/username/projects/project/tsconfig.json *deleted*
+14: *ensureProjectForOpenFiles* *deleted*
+15: /users/username/projects/project/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
 
 Before request
 
@@ -418,6 +427,10 @@ Before running Timeout callback:: count: 2
 export var T: number;export function Foo() { };
 
 
+Timeout callback:: count: 2
+17: /users/username/projects/project/tsconfig.json *new*
+18: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -497,6 +510,10 @@ Before running Timeout callback:: count: 2
 //// [/users/username/projects/project/moduleFile1.ts]
 export var T: number;export var T2: string;export function Foo() { };
 
+
+Timeout callback:: count: 2
+19: /users/username/projects/project/tsconfig.json *new*
+20: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -609,6 +626,10 @@ Before running Timeout callback:: count: 2
 //// [/users/username/projects/project/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
+
+Timeout callback:: count: 2
+21: /users/username/projects/project/tsconfig.json *new*
+22: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json

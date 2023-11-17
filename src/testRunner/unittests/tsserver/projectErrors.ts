@@ -1,6 +1,3 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
@@ -9,11 +6,10 @@ import {
     appendAllScriptInfos,
     baselineTsserverLogs,
     closeFilesForSession,
-    createProjectService,
-    createSession,
     openExternalProjectForSession,
     openFilesForSession,
     setCompilerOptionsForInferredProjectsRequestForSession,
+    TestSession,
     TestSessionRequest,
     toExternalFiles,
     verifyGetErrRequest,
@@ -37,7 +33,7 @@ describe("unittests:: tsserver:: projectErrors::", () => {
             content: "",
         };
         const host = createServerHost([file1, libFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         const projectFileName = "/a/b/test.csproj";
         const compilerOptionsRequest: TestSessionRequest<ts.server.protocol.CompilerOptionsDiagnosticsRequest> = {
             command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
@@ -82,7 +78,7 @@ describe("unittests:: tsserver:: projectErrors::", () => {
             content: jsonToReadableText({ files: [file1, file2].map(f => ts.getBaseFileName(f.path)) }),
         };
         const host = createServerHost([file1, config, libFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1], session);
         const compilerOptionsRequest: TestSessionRequest<ts.server.protocol.CompilerOptionsDiagnosticsRequest> = {
             command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
@@ -114,7 +110,7 @@ describe("unittests:: tsserver:: projectErrors::", () => {
             content: correctConfig.content.substr(1),
         };
         const host = createServerHost([file1, file2, corruptedConfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         openFilesForSession([file1], session);
         {
@@ -166,7 +162,7 @@ describe("unittests:: tsserver:: projectErrors::", () => {
             content: correctConfig.content.substr(1),
         };
         const host = createServerHost([file1, file2, correctConfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         openFilesForSession([file1], session);
         {
@@ -212,9 +208,9 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
             content: "{",
         };
         const host = createServerHost([file1, corruptedConfig]);
-        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        projectService.openClientFile(file1.path);
-        baselineTsserverLogs("projectErrors", "document is not contained in project", projectService);
+        const session = new TestSession(host);
+        openFilesForSession([file1], session);
+        baselineTsserverLogs("projectErrors", "document is not contained in project", session);
     });
 
     describe("when opening new file that doesnt exist on disk yet", () => {
@@ -229,7 +225,7 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
                 content: "class c { }",
             };
             const host = createServerHost([libFile, fileInRoot, fileInProjectRoot]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host), useInferredProjectPerProjectRoot: true });
+            const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
 
             const untitledFile = "untitled:Untitled-1";
             const refPathNotFound1 = "../../../../../../typings/@epic/Core.d.ts";
@@ -276,7 +272,7 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
             content: jsonToReadableText({ compilerOptions: { module: "none", targer: "es5" }, exclude: ["node_modules"] }),
         };
         const host = createServerHost([app, foo, configFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
@@ -297,7 +293,7 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
             content: "let x: number = false;",
         };
         const host = createServerHost([file, libFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
             command: ts.server.protocol.CommandTypes.Geterr,
             arguments: {
@@ -325,7 +321,7 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
         };
         const files = [libFile, app, serverUtilities, backendTest];
         const host = createServerHost(files);
-        const session = createSession(host, { useInferredProjectPerProjectRoot: true, canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
         openFilesForSession([{ file: app, projectRootPath: "/user/username/projects/myproject" }], session);
         openFilesForSession([{ file: backendTest, projectRootPath: "/user/username/projects/myproject" }], session);
         verifyGetErrRequest({ session, files: [backendTest.path, app.path] });
@@ -363,7 +359,7 @@ declare module '@custom/plugin' {
         };
         const files = [libFile, aFile, config, plugin, pluginProposed];
         const host = createServerHost(files);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aFile], session);
 
         verifyGetErrRequest({ session, files: [aFile] });
@@ -421,7 +417,7 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
                 }`,
         };
         const host = createServerHost([file, libFile, configFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file has errors", session);
     });
@@ -438,7 +434,7 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
                 }`,
         };
         const host = createServerHost([file, libFile, configFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file doesnt have errors", session);
     });
@@ -456,7 +452,7 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         };
 
         const host = createServerHost([file, libFile, configFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file], session);
 
         configFile.content = `{
@@ -499,7 +495,7 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
                 }`,
         };
         const host = createServerHost([file, libFile, configFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file2], session);
         openFilesForSession([file], session);
         // We generate only if project is created when opening file from the project
@@ -522,7 +518,7 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
                 }`,
         };
         const host = createServerHost([file, libFile, configFile]);
-        const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, suppressDiagnosticEvents: true });
         openFilesForSession([file], session);
         baselineTsserverLogs("projectErrors", "configFileDiagnostic events are not generated when the config file has errors but suppressDiagnosticEvents is true", session);
     });
@@ -548,7 +544,7 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         };
 
         const host = createServerHost([file, file2, file3, libFile, configFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file2], session);
         openFilesForSession([file], session);
         // We generate only if project is created when opening file from the project
@@ -571,7 +567,7 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         };
 
         const host = createServerHost([file, libFile, configFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("projectErrors", "configFileDiagnostic events contains the project reference errors", session);
     });
@@ -584,7 +580,7 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
             content: "function test1() { }",
         };
         const host = createServerHost([f1, libFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([f1], session);
 
         const projectService = session.getProjectService();
@@ -594,7 +590,7 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
             arguments: { projectFileName },
         });
 
-        setCompilerOptionsForInferredProjectsRequestForSession({ module: ts.ModuleKind.CommonJS }, session);
+        setCompilerOptionsForInferredProjectsRequestForSession({ module: ts.server.protocol.ModuleKind.CommonJS }, session);
         session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
             command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             arguments: { projectFileName },
@@ -608,7 +604,7 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
             content: "function test1() { }",
         };
         const host = createServerHost([f1, libFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         const projectFileName = "/a/b/project.csproj";
         const externalFiles = toExternalFiles([f1.path]);
         openExternalProjectForSession({
@@ -625,7 +621,7 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
         openExternalProjectForSession({
             projectFileName,
             rootFiles: externalFiles,
-            options: { module: ts.ModuleKind.CommonJS },
+            options: { module: ts.server.protocol.ModuleKind.CommonJS },
         }, session);
         session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
             command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
@@ -658,7 +654,7 @@ describe("unittests:: tsserver:: projectErrors:: reports Options Diagnostic loca
             content: configFileContentWithComment,
         };
         const host = createServerHost([file, libFile, configFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file], session);
 
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
@@ -683,7 +679,7 @@ describe("unittests:: tsserver:: projectErrors:: with config file change", () =>
         const tsconfig: File = { path: "/tsconfig.json", content: options(/*allowUnusedLabels*/ true) };
 
         const host = createServerHost([aTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
         host.modifyFile(tsconfig.path, options(/*allowUnusedLabels*/ false));
@@ -722,7 +718,7 @@ console.log(blabla);`,
         };
 
         const host = createServerHost([test, blabla, libFile, tsconfig]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([test], session);
         return { host, session, test, blabla, tsconfig };
     }
@@ -761,7 +757,7 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
         };
         const projectFiles = [main, libFile, config];
         const host = createServerHost(projectFiles);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([{ file: main, projectRootPath: "/user/username/projects/myproject" }], session);
         verifyGetErrRequest({ session, files: [main] });
 
@@ -804,9 +800,6 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
             if (npmInstallComplete || timeoutDuringPartialInstallation) {
                 host.runQueuedTimeoutCallbacks(); // Invalidation of failed lookups
                 host.runQueuedTimeoutCallbacks(); // Actual update
-            }
-            else {
-                session.testhost.logTimeoutQueueLength();
             }
             verifyGetErrRequest({ session, files: [main], existingTimeouts: !npmInstallComplete && !timeoutDuringPartialInstallation });
         }

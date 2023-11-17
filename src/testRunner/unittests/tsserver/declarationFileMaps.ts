@@ -1,6 +1,3 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
@@ -8,7 +5,6 @@ import {
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     TestSession,
@@ -108,7 +104,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     function makeSampleProjects(addUserTsConfig?: boolean, keepAllFiles?: boolean) {
         const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         checkDeclarationFiles(aTs, session);
         checkDeclarationFiles(bTs, session);
@@ -285,7 +281,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         };
 
         const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         checkDeclarationFiles(aTs, session);
         openFilesForSession([bTs], session);
 
@@ -387,7 +383,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         };
 
         const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
             command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
@@ -409,7 +405,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
             content: jsonToReadableText(aDtsInlinedSources),
         };
         const host = createServerHost([aTs, aDtsMapInlinedSources, aDts, bTs, bDtsMap, bDts, userTs, dummyFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         openFilesForSession([userTs], session);
         // If config file then userConfig project and bConfig project since it is referenced

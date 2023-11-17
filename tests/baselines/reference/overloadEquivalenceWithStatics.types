@@ -5,15 +5,15 @@ class A1<T> {
 >A1 : A1<T>
 
 static B<S>(v: A1<S>): A1<S>; // 1 
->B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
+>B : { <S>(v: A1<S>): A1<S>; <S_1>(v: S_1): A1<S_1>; }
 >v : A1<S>
 
 static B<S>(v: S): A1<S>; // 2 : Error Duplicate signature
->B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
+>B : { <S_1>(v: A1<S_1>): A1<S_1>; <S>(v: S): A1<S>; }
 >v : S
 
 static B<S>(v: any): A1<S> {
->B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
+>B : { <S_1>(v: A1<S_1>): A1<S_1>; <S_2>(v: S_2): A1<S_2>; }
 >v : any
 
 return null;

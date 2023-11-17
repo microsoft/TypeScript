@@ -271,6 +271,55 @@ project1/file2.ts
 
 
 
+//// [/home/src/projects/project1/file.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.file = void 0;
+exports.file = 10;
+
+
+//// [/home/src/projects/project1/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = "type1";
+
+
+//// [/home/src/projects/project1/file2.js]
+/// <reference lib="webworker"/>
+/// <reference lib="scripthost"/>
+/// <reference lib="es5"/>
+
+
+
+PolledWatches::
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/lib/lib.dom.d.ts: *new*
+  {}
+/home/src/lib/lib.es5.d.ts: *new*
+  {}
+/home/src/lib/lib.scripthost.d.ts: *new*
+  {}
+/home/src/lib/lib.webworker.d.ts: *new*
+  {}
+/home/src/projects/project1/core.d.ts: *new*
+  {}
+/home/src/projects/project1/file.ts: *new*
+  {}
+/home/src/projects/project1/file2.ts: *new*
+  {}
+/home/src/projects/project1/index.ts: *new*
+  {}
+/home/src/projects/project1/utils.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/node_modules: *new*
+  {}
+
 Program root files: [
   "project1/core.d.ts",
   "project1/utils.d.ts",
@@ -322,56 +371,7 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/index.ts (used version)
 /home/src/projects/project1/file2.ts (used version)
 
-PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/lib/lib.dom.d.ts: *new*
-  {}
-/home/src/lib/lib.es5.d.ts: *new*
-  {}
-/home/src/lib/lib.scripthost.d.ts: *new*
-  {}
-/home/src/lib/lib.webworker.d.ts: *new*
-  {}
-/home/src/projects/project1/core.d.ts: *new*
-  {}
-/home/src/projects/project1/file.ts: *new*
-  {}
-/home/src/projects/project1/file2.ts: *new*
-  {}
-/home/src/projects/project1/index.ts: *new*
-  {}
-/home/src/projects/project1/utils.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/node_modules: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/home/src/projects/project1/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.file = void 0;
-exports.file = 10;
-
-
-//// [/home/src/projects/project1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "type1";
-
-
-//// [/home/src/projects/project1/file2.js]
-/// <reference lib="webworker"/>
-/// <reference lib="scripthost"/>
-/// <reference lib="es5"/>
-
-
 
 Change:: write redirect file dom
 
@@ -380,13 +380,6 @@ Input::
 interface DOMInterface { }
 
 
-Before running Timeout callback:: count: 1
-2: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-3: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -394,7 +387,28 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+2: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+2: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:25 AM[0m] File change detected. Starting incremental compilation...
 
@@ -440,6 +454,43 @@ project1/file2.ts
   Root file specified for compilation
 [[90m12:01:35 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/home/src/projects/project1/file.js] file written with same contents
+//// [/home/src/projects/project1/index.js] file written with same contents
+//// [/home/src/projects/project1/file2.js] file written with same contents
+
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/lib/lib.es5.d.ts:
+  {}
+/home/src/lib/lib.scripthost.d.ts:
+  {}
+/home/src/lib/lib.webworker.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
+  {}
+/home/src/projects/project1/core.d.ts:
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/utils.d.ts:
+  {}
+
+FsWatches *deleted*::
+/home/src/lib/lib.dom.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/node_modules:
+  {}
 
 
 Program root files: [
@@ -492,43 +543,7 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/index.ts (computed .d.ts)
 /home/src/projects/project1/file2.ts (computed .d.ts)
 
-PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/lib/lib.es5.d.ts:
-  {}
-/home/src/lib/lib.scripthost.d.ts:
-  {}
-/home/src/lib/lib.webworker.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
-  {}
-/home/src/projects/project1/core.d.ts:
-  {}
-/home/src/projects/project1/file.ts:
-  {}
-/home/src/projects/project1/file2.ts:
-  {}
-/home/src/projects/project1/index.ts:
-  {}
-/home/src/projects/project1/utils.d.ts:
-  {}
-
-FsWatches *deleted*::
-/home/src/lib/lib.dom.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/node_modules:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/home/src/projects/project1/file.js] file written with same contents
-//// [/home/src/projects/project1/index.js] file written with same contents
-//// [/home/src/projects/project1/file2.js] file written with same contents
 
 Change:: edit index
 
@@ -537,13 +552,20 @@ Input::
 export const x = "type1";export const xyz = 10;
 
 
-Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with project1/index.ts 1:: WatchInfo: project1/index.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with project1/index.ts 1:: WatchInfo: project1/index.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
 
@@ -574,6 +596,16 @@ project1/index.ts
 project1/file2.ts
   Root file specified for compilation
 [[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/home/src/projects/project1/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.xyz = exports.x = void 0;
+exports.x = "type1";
+exports.xyz = 10;
+
 
 
 
@@ -614,27 +646,25 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/home/src/projects/project1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.xyz = exports.x = void 0;
-exports.x = "type1";
-exports.xyz = 10;
-
-
-
 Change:: delete core
 
 Input::
 //// [/home/src/projects/project1/core.d.ts] deleted
 
-Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with project1/core.d.ts 2:: WatchInfo: project1/core.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with project1/core.d.ts 2:: WatchInfo: project1/core.d.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+5: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:45 AM[0m] File change detected. Starting incremental compilation...
 
@@ -672,37 +702,6 @@ project1/file2.ts
 
 
 
-Program root files: [
-  "project1/core.d.ts",
-  "project1/utils.d.ts",
-  "project1/file.ts",
-  "project1/index.ts",
-  "project1/file2.ts"
-]
-Program options: {
-  "watch": true,
-  "lib": [
-    "lib.es5.d.ts",
-    "lib.dom.d.ts"
-  ],
-  "traceResolution": true,
-  "explainFiles": true,
-  "extendedDiagnostics": true
-}
-Program structureReused: Not
-Program files::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.webworker.d.ts
-/home/src/lib/lib.scripthost.d.ts
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
-project1/utils.d.ts
-project1/file.ts
-project1/index.ts
-project1/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 PolledWatches::
 /home/src/projects/node_modules/@types:
@@ -736,18 +735,46 @@ FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
 
-exitCode:: ExitStatus.undefined
 
+Program root files: [
+  "project1/core.d.ts",
+  "project1/utils.d.ts",
+  "project1/file.ts",
+  "project1/index.ts",
+  "project1/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true
+}
+Program structureReused: Not
+Program files::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.webworker.d.ts
+/home/src/lib/lib.scripthost.d.ts
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+project1/utils.d.ts
+project1/file.ts
+project1/index.ts
+project1/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
 
 Change:: delete redirect file dom
 
 Input::
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
 
-Before running Timeout callback:: count: 2
-6: timerToUpdateProgram
-7: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 Scheduling update
@@ -755,6 +782,18 @@ Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/node_modules/@type
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 2
+6: timerToUpdateProgram *new*
+7: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 2
+6: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:48 AM[0m] File change detected. Starting incremental compilation...
 
@@ -821,6 +860,46 @@ project1/file2.ts
 
 
 
+//// [/home/src/projects/project1/file.js] file written with same contents
+//// [/home/src/projects/project1/index.js] file written with same contents
+//// [/home/src/projects/project1/file2.js] file written with same contents
+
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project1/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/lib/lib.dom.d.ts: *new*
+  {}
+/home/src/lib/lib.es5.d.ts:
+  {}
+/home/src/lib/lib.scripthost.d.ts:
+  {}
+/home/src/lib/lib.webworker.d.ts:
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/utils.d.ts:
+  {}
+
+FsWatches *deleted*::
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/node_modules:
+  {}
+
+Timeout callback:: count: 0
+7: timerToInvalidateFailedLookupResolutions *deleted*
+
+
 Program root files: [
   "project1/core.d.ts",
   "project1/utils.d.ts",
@@ -860,43 +939,7 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/index.ts (computed .d.ts)
 /home/src/projects/project1/file2.ts (computed .d.ts)
 
-PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project1/core.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/lib/lib.dom.d.ts: *new*
-  {}
-/home/src/lib/lib.es5.d.ts:
-  {}
-/home/src/lib/lib.scripthost.d.ts:
-  {}
-/home/src/lib/lib.webworker.d.ts:
-  {}
-/home/src/projects/project1/file.ts:
-  {}
-/home/src/projects/project1/file2.ts:
-  {}
-/home/src/projects/project1/index.ts:
-  {}
-/home/src/projects/project1/utils.d.ts:
-  {}
-
-FsWatches *deleted*::
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/node_modules:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/home/src/projects/project1/file.js] file written with same contents
-//// [/home/src/projects/project1/index.js] file written with same contents
-//// [/home/src/projects/project1/file2.js] file written with same contents
 
 Change:: write redirect file webworker
 
@@ -905,13 +948,6 @@ Input::
 interface WebworkerInterface { }
 
 
-Before running Timeout callback:: count: 1
-9: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-10: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-10: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -919,7 +955,28 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+9: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+9: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+10: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:02:03 AM[0m] File change detected. Starting incremental compilation...
 
@@ -969,6 +1026,43 @@ project1/file2.ts
 
 
 
+//// [/home/src/projects/project1/file.js] file written with same contents
+//// [/home/src/projects/project1/index.js] file written with same contents
+//// [/home/src/projects/project1/file2.js] file written with same contents
+
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project1/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/lib/lib.dom.d.ts:
+  {}
+/home/src/lib/lib.es5.d.ts:
+  {}
+/home/src/lib/lib.scripthost.d.ts:
+  {}
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts: *new*
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/utils.d.ts:
+  {}
+
+FsWatches *deleted*::
+/home/src/lib/lib.webworker.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/node_modules:
+  {}
+
+
 Program root files: [
   "project1/core.d.ts",
   "project1/utils.d.ts",
@@ -1008,53 +1102,13 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/index.ts (computed .d.ts)
 /home/src/projects/project1/file2.ts (computed .d.ts)
 
-PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project1/core.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/lib/lib.dom.d.ts:
-  {}
-/home/src/lib/lib.es5.d.ts:
-  {}
-/home/src/lib/lib.scripthost.d.ts:
-  {}
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts: *new*
-  {}
-/home/src/projects/project1/file.ts:
-  {}
-/home/src/projects/project1/file2.ts:
-  {}
-/home/src/projects/project1/index.ts:
-  {}
-/home/src/projects/project1/utils.d.ts:
-  {}
-
-FsWatches *deleted*::
-/home/src/lib/lib.webworker.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/node_modules:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/home/src/projects/project1/file.js] file written with same contents
-//// [/home/src/projects/project1/index.js] file written with same contents
-//// [/home/src/projects/project1/file2.js] file written with same contents
 
 Change:: delete redirect file webworker
 
 Input::
 //// [/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts] deleted
 
-Before running Timeout callback:: count: 2
-11: timerToUpdateProgram
-12: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
 Scheduling update
@@ -1062,6 +1116,18 @@ Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/node_modules/@type
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 2
+11: timerToUpdateProgram *new*
+12: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 2
+11: timerToUpdateProgram
+12: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:02:16 AM[0m] File change detected. Starting incremental compilation...
 
@@ -1128,6 +1194,46 @@ project1/file2.ts
 
 
 
+//// [/home/src/projects/project1/file.js] file written with same contents
+//// [/home/src/projects/project1/index.js] file written with same contents
+//// [/home/src/projects/project1/file2.js] file written with same contents
+
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project1/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/lib/lib.dom.d.ts:
+  {}
+/home/src/lib/lib.es5.d.ts:
+  {}
+/home/src/lib/lib.scripthost.d.ts:
+  {}
+/home/src/lib/lib.webworker.d.ts: *new*
+  {}
+/home/src/projects/project1/file.ts:
+  {}
+/home/src/projects/project1/file2.ts:
+  {}
+/home/src/projects/project1/index.ts:
+  {}
+/home/src/projects/project1/utils.d.ts:
+  {}
+
+FsWatches *deleted*::
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/node_modules:
+  {}
+
+Timeout callback:: count: 0
+12: timerToInvalidateFailedLookupResolutions *deleted*
+
+
 Program root files: [
   "project1/core.d.ts",
   "project1/utils.d.ts",
@@ -1167,40 +1273,4 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/index.ts (computed .d.ts)
 /home/src/projects/project1/file2.ts (computed .d.ts)
 
-PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project1/core.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/lib/lib.dom.d.ts:
-  {}
-/home/src/lib/lib.es5.d.ts:
-  {}
-/home/src/lib/lib.scripthost.d.ts:
-  {}
-/home/src/lib/lib.webworker.d.ts: *new*
-  {}
-/home/src/projects/project1/file.ts:
-  {}
-/home/src/projects/project1/file2.ts:
-  {}
-/home/src/projects/project1/index.ts:
-  {}
-/home/src/projects/project1/utils.d.ts:
-  {}
-
-FsWatches *deleted*::
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/node_modules:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/home/src/projects/project1/file.js] file written with same contents
-//// [/home/src/projects/project1/index.js] file written with same contents
-//// [/home/src/projects/project1/file2.js] file written with same contents

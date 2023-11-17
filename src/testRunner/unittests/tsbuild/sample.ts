@@ -34,7 +34,7 @@ import {
 import {
     changeToHostTrackingWrittenFiles,
     libFile,
-    TestServerHost,
+    SerializeOutputOrder,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
@@ -317,7 +317,6 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
 
         it("building using getNextInvalidatedProject", () => {
             const baseline: string[] = [];
-            let oldSnap: ReturnType<TestServerHost["snap"]> | undefined;
             const system = changeToHostTrackingWrittenFiles(
                 fakes.patchHostForBuildInfoReadWrite(
                     getSysForSampleProjectReferences(),
@@ -327,7 +326,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             const host = createSolutionBuilderHostForBaseline(system);
             const builder = ts.createSolutionBuilder(host, ["tests"], {});
             baseline.push("Input::");
-            baselineState();
+            system.serializeState(baseline, SerializeOutputOrder.BeforeDiff);
             verifyBuildNextResult(); // core
             verifyBuildNextResult(); // logic
             verifyBuildNextResult(); // tests
@@ -338,14 +337,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 const project = builder.getNextInvalidatedProject();
                 const result = project && project.done();
                 baseline.push(`Project Result:: ${jsonToReadableText({ project: project?.project, result })}`);
-                baselineState();
-            }
-
-            function baselineState() {
-                system.serializeOutput(baseline);
-                system.diff(baseline, oldSnap);
-                system.writtenFiles.clear();
-                oldSnap = system.snap();
+                system.serializeState(baseline, SerializeOutputOrder.BeforeDiff);
             }
         });
 
@@ -376,7 +368,6 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
     describe("project invalidation", () => {
         it("invalidates projects correctly", () => {
             const baseline: string[] = [];
-            let oldSnap: ReturnType<TestServerHost["snap"]> | undefined;
             const system = changeToHostTrackingWrittenFiles(
                 fakes.patchHostForBuildInfoReadWrite(
                     getSysForSampleProjectReferences(),
@@ -414,10 +405,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
 
             function baselineState(heading: string) {
                 baseline.push(heading);
-                system.serializeOutput(baseline);
-                system.diff(baseline, oldSnap);
-                system.writtenFiles.clear();
-                oldSnap = system.snap();
+                system.serializeState(baseline, SerializeOutputOrder.BeforeDiff);
             }
         });
     });

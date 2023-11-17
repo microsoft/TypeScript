@@ -1,7 +1,4 @@
 import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import {
     jsonToReadableText,
 } from "../helpers";
 import {
@@ -9,14 +6,14 @@ import {
 } from "../helpers/libraryResolution";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 
 describe("unittests:: tsserver:: libraryResolution", () => {
     it("with config", () => {
         const host = getServerHostForLibResolution();
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project1/index.ts"], session);
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
         host.runQueuedTimeoutCallbacks();
@@ -61,7 +58,7 @@ describe("unittests:: tsserver:: libraryResolution", () => {
     });
     it("with config with redirection", () => {
         const host = getServerHostForLibResolution(/*libRedirection*/ true);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project1/index.ts"], session);
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts");
         host.runQueuedTimeoutCallbacks();

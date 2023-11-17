@@ -7496,6 +7496,11 @@ namespace Parser {
     function nextTokenIsStringLiteral() {
         return nextToken() === SyntaxKind.StringLiteral;
     }
+
+    function nextTokenIsFromKeyword() {
+        return nextToken() === SyntaxKind.FromKeyword;
+    }
+
     function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
         nextToken();
         return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token() === SyntaxKind.StringLiteral);
@@ -8328,8 +8333,8 @@ namespace Parser {
 
         let isTypeOnly = false;
         if (
-            token() !== SyntaxKind.FromKeyword &&
             identifier?.escapedText === "type" &&
+            (token() !== SyntaxKind.FromKeyword || isIdentifier() && lookAhead(nextTokenIsFromKeyword)) &&
             (isIdentifier() || tokenAfterImportDefinitelyProducesImportDeclaration())
         ) {
             isTypeOnly = true;

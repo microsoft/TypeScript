@@ -30,6 +30,24 @@ Output::
 
 
 
+//// [/a/b/f1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+FsWatches::
+/a/b/f1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
 Program root files: [
   "/a/b/f1.ts"
 ]
@@ -51,25 +69,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/f1.ts (used version)
 
-FsWatches::
-/a/b/f1.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/f1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: change `module` to 'none'
 
@@ -82,8 +82,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -96,6 +100,9 @@ Output::
 
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
+
+
+//// [/a/b/f1.js] file written with same contents
 
 
 Program root files: [
@@ -121,5 +128,3 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (used version)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/f1.js] file written with same contents

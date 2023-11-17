@@ -41,6 +41,27 @@ sysLog:: /a/lib/lib.d.ts:: Changing to watchFile
 sysLog:: /a/b:: Changing to watchFile
 
 
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+
+
+PolledWatches::
+/a/b: *new*
+  {"pollingInterval":500}
+/a/b/commonfile1.ts: *new*
+  {"pollingInterval":250}
+/a/b/commonfile2.ts: *new*
+  {"pollingInterval":250}
+/a/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":250}
+
 Program root files: [
   "/a/b/commonFile1.ts",
   "/a/b/commonFile2.ts"
@@ -66,25 +87,4 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-PolledWatches::
-/a/b: *new*
-  {"pollingInterval":500}
-/a/b/commonfile1.ts: *new*
-  {"pollingInterval":250}
-/a/b/commonfile2.ts: *new*
-  {"pollingInterval":250}
-/a/b/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":250}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-
