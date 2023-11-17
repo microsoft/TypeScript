@@ -6829,6 +6829,7 @@ declare namespace ts {
          * is `never`. Instead, use `type.flags & TypeFlags.Never`.
          */
         getNeverType(): Type;
+        isTypeAssignableTo(source: Type, target: Type): boolean;
         /**
          * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
          * This function will _not_ return true if passed a type which
