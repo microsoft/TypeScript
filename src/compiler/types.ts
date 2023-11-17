@@ -5158,6 +5158,19 @@ export interface TypeChecker {
     /** @internal */ getPromiseLikeType(): Type;
     /** @internal */ getAsyncIterableType(): Type | undefined;
 
+    /**
+     * Returns true if the "source" type is assignable to the "target" type.
+     *
+     * ```ts
+     * declare const abcLiteral: ts.Type; // Type of "abc"
+     * declare const stringType: ts.Type; // Type of string
+     *
+     * isTypeAssignableTo(abcLiteral, abcLiteral); // true; "abc" is assignable to "abc"
+     * isTypeAssignableTo(abcLiteral, stringType); // true; "abc" is assignable to string
+     * isTypeAssignableTo(stringType, abcLiteral); // false; string is not assignable to "abc"
+     * isTypeAssignableTo(stringType, stringType); // true; string is assignable to string
+     * ```
+     */
     isTypeAssignableTo(source: Type, target: Type): boolean;
     /** @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], indexInfos: IndexInfo[]): Type;
     /** @internal */ createSignature(

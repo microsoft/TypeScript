@@ -6829,6 +6829,19 @@ declare namespace ts {
          * is `never`. Instead, use `type.flags & TypeFlags.Never`.
          */
         getNeverType(): Type;
+        /**
+         * Returns true if the "source" type is assignable to the "target" type.
+         *
+         * ```ts
+         * declare const abcLiteral: ts.Type; // Type of "abc"
+         * declare const stringType: ts.Type; // Type of string
+         *
+         * isTypeAssignableTo(abcLiteral, abcLiteral); // true; "abc" is assignable to "abc"
+         * isTypeAssignableTo(abcLiteral, stringType); // true; "abc" is assignable to string
+         * isTypeAssignableTo(stringType, abcLiteral); // false; string is not assignable to "abc"
+         * isTypeAssignableTo(stringType, stringType); // true; string is assignable to string
+         * ```
+         */
         isTypeAssignableTo(source: Type, target: Type): boolean;
         /**
          * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
