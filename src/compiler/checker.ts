@@ -47581,7 +47581,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));
         if (target === unknownSymbol) {
-            return true;
+            return !excludeTypeOnlyValues || !getTypeOnlyAliasDeclaration(symbol);
         }
         // const enums and modules that contain only const enums are not considered values from the emit perspective
         // unless 'preserveConstEnums' option is set to true
