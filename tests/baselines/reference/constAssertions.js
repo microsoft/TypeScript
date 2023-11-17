@@ -258,6 +258,7 @@ declare let o2: {
     readonly d: () => void;
 };
 declare let o3: {
+    readonly [x: string]: 10 | 1 | 2 | 3 | 20 | (() => void) | 4;
     readonly a: 1;
     readonly b: 2;
     readonly c: 3;

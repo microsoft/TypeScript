@@ -202,9 +202,9 @@ let o2 = { a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const;
 >4 : 4
 
 let o3 = { ...o1, ...o2 } as const;
->o3 : { readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; readonly x: 10; readonly y: 20; }
->{ ...o1, ...o2 } as const : { readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; readonly x: 10; readonly y: 20; }
->{ ...o1, ...o2 } : { readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; readonly x: 10; readonly y: 20; }
+>o3 : { readonly [x: string]: 10 | 1 | 2 | 3 | 20 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; readonly x: 10; readonly y: 20; }
+>{ ...o1, ...o2 } as const : { readonly [x: string]: 10 | 1 | 2 | 3 | 20 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; readonly x: 10; readonly y: 20; }
+>{ ...o1, ...o2 } : { readonly [x: string]: 10 | 1 | 2 | 3 | 20 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; readonly x: 10; readonly y: 20; }
 >o1 : { readonly x: 10; readonly y: 20; }
 >o2 : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
 

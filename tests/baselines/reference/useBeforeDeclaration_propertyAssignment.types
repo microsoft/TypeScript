@@ -5,8 +5,8 @@ export class C {
 >C : C
 
     public a =  { b: this.b, ...this.c, [this.b]: `${this.c}`};
->a : { c: number; b: number; }
->{ b: this.b, ...this.c, [this.b]: `${this.c}`} : { c: number; b: number; }
+>a : { [x: number]: string; c: number; b: number; }
+>{ b: this.b, ...this.c, [this.b]: `${this.c}`} : { [x: number]: string; c: number; b: number; }
 >b : number
 >this.b : number
 >this : this
