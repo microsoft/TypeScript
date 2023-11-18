@@ -43,7 +43,7 @@ jobs:
           git add package-lock.json
           git add --force ./lib
 
-          if git diff --exit-code --name-only; then
+          if git diff --staged --exit-code --name-only; then
             echo "No change."
           else
             npm test
