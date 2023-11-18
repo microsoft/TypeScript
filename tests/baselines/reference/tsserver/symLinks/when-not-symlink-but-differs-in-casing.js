@@ -298,7 +298,7 @@ c:/temp/node_modules/@types:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/jsconfig.json:
   {"pollingInterval":2000}
-c:/temp/replay/axios-src/lib/core/axiosheaders.js: *new*
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js: *new*
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/jsconfig.json:
   {"pollingInterval":2000}
@@ -332,11 +332,11 @@ c:/temp/replay/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
+C:/temp/replay/axios-src/node_modules/follow-redirects/package.json: *new*
+  {}
 c:/temp/replay/axios-src/lib/core: *new*
   {}
 c:/temp/replay/axios-src/lib/core/settle.js: *new*
-  {}
-c:/temp/replay/axios-src/node_modules/follow-redirects/package.json: *new*
   {}
 c:/temp/replay/axios-src/package.json:
   {}
@@ -468,7 +468,7 @@ c:/temp/node_modules/@types:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/jsconfig.json:
   {"pollingInterval":2000}
-c:/temp/replay/axios-src/lib/core/axiosheaders.js:
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/jsconfig.json:
   {"pollingInterval":2000}
@@ -502,13 +502,13 @@ c:/temp/replay/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
+C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
+  {}
 c:/temp/replay/axios-src/lib/core:
   {}
-c:/temp/replay/axios-src/lib/core/axiosheaders.js: *new*
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js: *new*
   {}
 c:/temp/replay/axios-src/lib/core/settle.js:
-  {}
-c:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
   {}
 c:/temp/replay/axios-src/package.json:
   {}
@@ -575,7 +575,7 @@ c:/temp/node_modules/@types:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/jsconfig.json:
   {"pollingInterval":2000}
-c:/temp/replay/axios-src/lib/core/axiosheaders.js:
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/jsconfig.json:
   {"pollingInterval":2000}
@@ -609,11 +609,11 @@ c:/temp/replay/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
+C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
+  {}
 c:/temp/replay/axios-src/lib/core:
   {}
-c:/temp/replay/axios-src/lib/core/axiosheaders.js:
-  {}
-c:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js:
   {}
 c:/temp/replay/axios-src/package.json:
   {}

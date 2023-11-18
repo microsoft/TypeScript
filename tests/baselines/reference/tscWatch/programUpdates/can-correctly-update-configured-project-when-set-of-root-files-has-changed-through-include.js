@@ -43,9 +43,9 @@ exports.x = 10;
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/myproject/Project/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/project/node_modules/@types: *new*
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -53,9 +53,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/project/file1.ts: *new*
+/user/username/projects/myproject/Project/file1.ts: *new*
   {}
-/user/username/projects/myproject/project/tsconfig.json: *new*
+/user/username/projects/myproject/Project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -116,9 +116,9 @@ exports.y = 10;
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/Project/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/project/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -126,11 +126,11 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/project/file1.ts:
+/user/username/projects/myproject/Project/file1.ts:
   {}
-/user/username/projects/myproject/project/file2.ts: *new*
+/user/username/projects/myproject/Project/file2.ts: *new*
   {}
-/user/username/projects/myproject/project/tsconfig.json:
+/user/username/projects/myproject/Project/tsconfig.json:
   {}
 
 FsWatchesRecursive::

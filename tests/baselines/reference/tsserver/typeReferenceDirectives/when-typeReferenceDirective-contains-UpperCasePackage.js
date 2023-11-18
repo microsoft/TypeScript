@@ -208,7 +208,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/lib/@app/lib/index.d.ts: *new*
   {}
-/user/username/projects/myproject/lib/@types/uppercasepackage/index.d.ts: *new*
+/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts: *new*
   {}
 /user/username/projects/myproject/test/tsconfig.json: *new*
   {}

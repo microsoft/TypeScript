@@ -51,17 +51,17 @@ var z = 10;
 
 
 PolledWatches::
-/a/rootfolder/project/node_modules/@types: *new*
+/a/rootFolder/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/a/rootfolder/project/scripts/javascript.js: *new*
+/a/rootFolder/project/Scripts/Javascript.js: *new*
   {}
-/a/rootfolder/project/scripts/typescript.ts: *new*
+/a/rootFolder/project/Scripts/TypeScript.ts: *new*
   {}
-/a/rootfolder/project/tsconfig.json: *new*
+/a/rootFolder/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

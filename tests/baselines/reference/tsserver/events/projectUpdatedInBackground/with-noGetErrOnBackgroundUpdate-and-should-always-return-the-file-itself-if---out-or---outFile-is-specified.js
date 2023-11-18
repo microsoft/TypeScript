@@ -389,13 +389,13 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/users/username/projects/project/file1consumer2.ts: *new*
+/users/username/projects/project/file1Consumer2.ts: *new*
   {}
-/users/username/projects/project/globalfile3.ts: *new*
+/users/username/projects/project/globalFile3.ts: *new*
   {}
-/users/username/projects/project/modulefile1.ts: *new*
+/users/username/projects/project/moduleFile1.ts: *new*
   {}
-/users/username/projects/project/modulefile2.ts: *new*
+/users/username/projects/project/moduleFile2.ts: *new*
   {}
 /users/username/projects/project/tsconfig.json:
   {}

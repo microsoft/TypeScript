@@ -286,17 +286,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/someuser/work/applications/frontend/node_modules: *new*
+/Users/someuser/work/applications/frontend/node_modules: *new*
   {"pollingInterval":500}
-/users/someuser/work/applications/frontend/types: *new*
+/Users/someuser/work/applications/frontend/types: *new*
   {"pollingInterval":500}
 
 FsWatches::
+/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts: *new*
+  {}
+/Users/someuser/work/applications/frontend/tsconfig.json: *new*
+  {}
 /a/lib/lib.es2016.full.d.ts: *new*
-  {}
-/users/someuser/work/applications/frontend/src/app/redux/configurestore.ts: *new*
-  {}
-/users/someuser/work/applications/frontend/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -372,19 +372,19 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/users/someuser/work/applications/frontend/node_modules:
+/Users/someuser/work/applications/frontend/node_modules:
   {"pollingInterval":500}
-/users/someuser/work/applications/frontend/types:
+/Users/someuser/work/applications/frontend/types:
   {"pollingInterval":500}
 
 FsWatches::
+/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts:
+  {}
+/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts: *new*
+  {}
+/Users/someuser/work/applications/frontend/tsconfig.json:
+  {}
 /a/lib/lib.es2016.full.d.ts:
-  {}
-/users/someuser/work/applications/frontend/src/app/redux/configurestore.ts:
-  {}
-/users/someuser/work/applications/frontend/src/app/utils/cookie.ts: *new*
-  {}
-/users/someuser/work/applications/frontend/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -445,21 +445,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/someuser/work/applications/frontend/node_modules:
+/Users/someuser/work/applications/frontend/node_modules:
   {"pollingInterval":500}
-/users/someuser/work/applications/frontend/types:
+/Users/someuser/work/applications/frontend/types:
   {"pollingInterval":500}
 
 FsWatches::
+/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts:
+  {}
+/Users/someuser/work/applications/frontend/tsconfig.json:
+  {}
 /a/lib/lib.es2016.full.d.ts:
-  {}
-/users/someuser/work/applications/frontend/src/app/redux/configurestore.ts:
-  {}
-/users/someuser/work/applications/frontend/tsconfig.json:
   {}
 
 FsWatches *deleted*::
-/users/someuser/work/applications/frontend/src/app/utils/cookie.ts:
+/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts:
   {}
 
 FsWatchesRecursive::

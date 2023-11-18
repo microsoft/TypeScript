@@ -146,19 +146,19 @@ export declare function thing(): void;
 
 
 PolledWatches::
-/users/name/projects/node_modules/@types: *new*
+/Users/name/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/name/projects/web/node_modules/@types: *new*
+/Users/name/projects/web/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
+/Users/name/projects/web/index.ts: *new*
+  {}
+/Users/name/projects/web/package.json: *new*
+  {}
+/Users/name/projects/web/tsconfig.json: *new*
+  {}
 /a/lib/lib.esnext.full.d.ts: *new*
-  {}
-/users/name/projects/web/index.ts: *new*
-  {}
-/users/name/projects/web/package.json: *new*
-  {}
-/users/name/projects/web/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

@@ -219,7 +219,7 @@ c:/temp/test/project1/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/a/lib/lib.d.ts: *new*
+C:/a/lib/lib.d.ts: *new*
   {}
 c:/temp/test/project1/package.json: *new*
   {}
@@ -554,7 +554,7 @@ c:/temp/test/project2/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/a/lib/lib.d.ts:
+C:/a/lib/lib.d.ts:
   {}
 c:/temp/test/project1/package.json:
   {}

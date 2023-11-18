@@ -173,7 +173,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/logger.ts: *new*
+/user/username/projects/myproject/Logger.ts: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
   {}

@@ -312,9 +312,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/users/username/projects/project/filewithimports.ts: *new*
+/users/username/projects/project/fileWithImports.ts: *new*
   {}
-/users/username/projects/project/filewithtyperefs.ts: *new*
+/users/username/projects/project/fileWithTypeRefs.ts: *new*
   {}
 /users/username/projects/project/node_modules/pkg0/index.d.ts: *new*
   {}
@@ -591,9 +591,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/users/username/projects/project/filewithimports.ts:
+/users/username/projects/project/fileWithImports.ts:
   {}
-/users/username/projects/project/filewithtyperefs.ts:
+/users/username/projects/project/fileWithTypeRefs.ts:
   {}
 /users/username/projects/project/node_modules/pkg0/index.d.ts:
   {}
@@ -874,9 +874,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/users/username/projects/project/filewithimports.ts:
+/users/username/projects/project/fileWithImports.ts:
   {}
-/users/username/projects/project/filewithtyperefs.ts:
+/users/username/projects/project/fileWithTypeRefs.ts:
   {}
 /users/username/projects/project/node_modules/pkg0/index.d.ts:
   {}

@@ -65,7 +65,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/tsconfig.json: *new*
+/A/B/tsconfig.json: *new*
   {}
 
 Before request
@@ -222,5 +222,5 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/A/B/tsconfig.json:
   {}

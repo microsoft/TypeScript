@@ -164,7 +164,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/file1consumer1.ts: *new*
+/a/b/file1Consumer1.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}

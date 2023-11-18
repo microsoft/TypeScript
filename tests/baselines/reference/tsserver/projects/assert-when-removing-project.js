@@ -71,7 +71,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 50
 Before request
 
 FsWatches::
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {}
 /a/lib/lib.d.ts:
   {}

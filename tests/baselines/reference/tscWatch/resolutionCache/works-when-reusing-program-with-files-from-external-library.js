@@ -61,11 +61,11 @@ module11("hello");
 
 
 PolledWatches::
-/a/b/projects/myproject/node_modules/@types: *new*
+/a/b/projects/myProject/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/myproject/src/node_modules: *new*
+/a/b/projects/myProject/src/node_modules: *new*
   {"pollingInterval":500}
-/a/b/projects/myproject/src/node_modules/@types: *new*
+/a/b/projects/myProject/src/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/b/projects/node_modules: *new*
   {"pollingInterval":500}
@@ -73,19 +73,19 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/projects/myproject/node_modules/module1/index.js: *new*
+/a/b/projects/myProject/node_modules/module1/index.js: *new*
   {}
-/a/b/projects/myproject/src/file1.ts: *new*
+/a/b/projects/myProject/src/file1.ts: *new*
   {}
-/a/b/projects/myproject/src/file2.ts: *new*
+/a/b/projects/myProject/src/file2.ts: *new*
   {}
-/a/b/projects/myproject/src/tsconfig.json: *new*
+/a/b/projects/myProject/src/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b/projects/myproject/node_modules: *new*
+/a/b/projects/myProject/node_modules: *new*
   {}
 /a/b/projects/myproject/src: *new*
   {}

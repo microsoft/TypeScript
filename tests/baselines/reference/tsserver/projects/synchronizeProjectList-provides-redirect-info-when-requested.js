@@ -178,7 +178,7 @@ After request
 PolledWatches::
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/project/a/node_modules/@types: *new*
+/users/username/projects/project/A/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -186,7 +186,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/users/username/projects/project/a/tsconfig.json: *new*
+/users/username/projects/project/A/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -347,9 +347,9 @@ After request
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/a/node_modules/@types:
+/users/username/projects/project/A/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/b/node_modules/@types: *new*
+/users/username/projects/project/B/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -357,9 +357,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/users/username/projects/project/a/tsconfig.json:
+/users/username/projects/project/A/tsconfig.json:
   {}
-/users/username/projects/project/b/tsconfig.json: *new*
+/users/username/projects/project/B/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

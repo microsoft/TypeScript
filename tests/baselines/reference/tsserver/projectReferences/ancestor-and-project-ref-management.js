@@ -536,7 +536,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types: *new*
+/user/username/projects/container/compositeExec/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/container/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -546,7 +546,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/container/compositeexec/tsconfig.json: *new*
+/user/username/projects/container/compositeExec/tsconfig.json: *new*
   {}
 /user/username/projects/container/lib/index.ts: *new*
   {}
@@ -612,7 +612,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
+/user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
@@ -628,7 +628,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/container/compositeexec/tsconfig.json:
+/user/username/projects/container/compositeExec/tsconfig.json:
   {}
 /user/username/projects/container/lib/index.ts:
   {}
@@ -1039,7 +1039,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
+/user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -1059,7 +1059,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/container/compositeexec/tsconfig.json:
+/user/username/projects/container/compositeExec/tsconfig.json:
   {}
 /user/username/projects/container/exec/index.ts: *new*
   {}
@@ -1101,7 +1101,7 @@ Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/container/composite
 Before request
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
+/user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
@@ -1123,7 +1123,7 @@ PolledWatches *deleted*::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/container/compositeexec/tsconfig.json:
+/user/username/projects/container/compositeExec/tsconfig.json:
   {}
 /user/username/projects/container/exec/index.ts:
   {}
@@ -1187,7 +1187,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
+/user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
@@ -1207,7 +1207,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/container/compositeexec/tsconfig.json:
+/user/username/projects/container/compositeExec/tsconfig.json:
   {}
 /user/username/projects/container/exec/index.ts:
   {}
@@ -1275,7 +1275,7 @@ Info seq  [hh:mm:ss:mss] Open files:
 Before request
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types:
+/user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
@@ -1297,9 +1297,9 @@ PolledWatches *deleted*::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/container/compositeexec/index.ts: *new*
+/user/username/projects/container/compositeExec/index.ts: *new*
   {}
-/user/username/projects/container/compositeexec/tsconfig.json:
+/user/username/projects/container/compositeExec/tsconfig.json:
   {}
 /user/username/projects/container/exec/index.ts:
   {}
@@ -1436,7 +1436,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 PolledWatches *deleted*::
-/user/username/projects/container/compositeexec/node_modules/@types:
+/user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
@@ -1450,9 +1450,9 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/container/compositeexec/index.ts:
+/user/username/projects/container/compositeExec/index.ts:
   {}
-/user/username/projects/container/compositeexec/tsconfig.json:
+/user/username/projects/container/compositeExec/tsconfig.json:
   {}
 /user/username/projects/container/exec/index.ts:
   {}

@@ -74,7 +74,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/someuser/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types: *new*
+/user/someuser/projects/someFolder/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
