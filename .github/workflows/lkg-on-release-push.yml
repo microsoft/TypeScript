@@ -1,0 +1,54 @@
+name: Update LKG on release branch push
+
+on:
+  push:
+    branches:
+      - 'release-*'
+    branches-ignore:
+      - 'release-[0-4].*' # Predates hereby
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
+
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+        with:
+          node-version: 16
+      - run: |
+          npm --version
+          # corepack enable npm
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
+
+      - name: Update LKG and push
+        run: |
+          npm ci
+          npm install # update package-lock.json to ensure package.json version changes are included
+          npx hereby LKG
+          git add package-lock.json
+          git add --force ./lib
+
+          if git diff --exit-code --name-only; then
+            echo "No change."
+          else
+            npm test
+            git config user.email "typescriptbot@microsoft.com"
+            git config user.name "TypeScript Bot"
+            git commit -m 'Update LKG'
+            git push
+          fi
