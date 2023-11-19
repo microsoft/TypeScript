@@ -17696,7 +17696,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function addSpans(texts: readonly string[], types: readonly Type[]): boolean {
             for (let i = 0; i < types.length; i++) {
-                const t = types[i];
+                const t = stripObjectTypeTags(types[i]);
                 if (t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) {
                     text += getTemplateStringForType(t) || "";
                     text += texts[i + 1];
@@ -17717,6 +17717,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return true;
         }
+    }
+
+    function stripObjectTypeTags(type: Type) {
+        if (type.flags & TypeFlags.Intersection) {
+            const nonObjectTypes = filter((type as IntersectionType).types, t => !(t.flags & TypeFlags.Object));
+            if (nonObjectTypes !== (type as IntersectionType).types) {
+                return getIntersectionType(nonObjectTypes);
+            }
+        }
+        return type;
     }
 
     function getTemplateStringForType(type: Type) {
@@ -18052,26 +18062,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isPatternLiteralPlaceholderType(type: Type): boolean {
-        if (type.flags & TypeFlags.Intersection) {
-            // Return true if the intersection consists of one or more placeholders and zero or
-            // more object type tags.
-            let seenPlaceholder = false;
-            for (const t of (type as IntersectionType).types) {
-                if (t.flags & (TypeFlags.Literal | TypeFlags.Nullable) || isPatternLiteralPlaceholderType(t)) {
-                    seenPlaceholder = true;
-                }
-                else if (!(t.flags & TypeFlags.Object)) {
-                    return false;
-                }
-            }
-            return seenPlaceholder;
-        }
-        return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type);
+        return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt) ||
+            isPatternLiteralType(type) ||
+            type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, isPatternLiteralType));
     }
 
     function isPatternLiteralType(type: Type) {
         // A pattern literal type is a template literal or a string mapping type that contains only
-        // non-generic pattern literal placeholders.
+        // non-generic pattern literal placeholders. Assumptions are made elsewhere that pattern literal
+        // contain no generics. For example, pattern literal types can be key types in index signatures.
         return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType) ||
             !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type);
     }
