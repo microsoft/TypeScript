@@ -23,6 +23,7 @@ import {
     getRefactorContextSpan,
     getRenameLocation,
     getTokenAtPosition,
+    getTouchingToken,
     getUniqueName,
     ignoreSourceNewlines,
     isArray,
@@ -173,14 +174,9 @@ type ExtractInfo = TypeAliasInfo | InterfaceInfo;
 function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): ExtractInfo | RefactorErrorInfo | undefined {
     const { file, startPosition } = context;
     const isJS = isSourceFileJS(file);
-    const current = getTokenAtPosition(file, startPosition);
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
-    const cursorRequest = range.pos === range.end && considerEmptySpans;
-    const overlappingRange = nodeOverlapsWithStartEnd(current, file, range.pos, range.end);
-
-    const firstType = findAncestor(current, node =>
-        node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
-        (cursorRequest || overlappingRange));
+    const isCursorRequest = range.pos === range.end && considerEmptySpans;
+    const firstType = getFirstTypeAt(file, startPosition, range, isCursorRequest);
     if (!firstType || !isTypeNode(firstType)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
 
     const checker = context.program.getTypeChecker();
@@ -207,6 +203,24 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
 
     const typeElements = flattenTypeLiteralNodeReference(checker, selection);
     return { isJS, selection, enclosingNode, typeParameters, typeElements };
+}
+
+function getFirstTypeAt(file: SourceFile, startPosition: number, range: TextRange, isCursorRequest: boolean): Node | undefined {
+    const currentNodes = [
+        () => getTokenAtPosition(file, startPosition),
+        () => getTouchingToken(file, startPosition, () => true),
+    ];
+    for (const f of currentNodes) {
+        const current = f();
+        const overlappingRange = nodeOverlapsWithStartEnd(current, file, range.pos, range.end);
+        const firstType = findAncestor(current, node =>
+            node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
+            (isCursorRequest || overlappingRange));
+        if (firstType) {
+            return firstType;
+        }
+    }
+    return undefined;
 }
 
 function flattenTypeLiteralNodeReference(checker: TypeChecker, selection: TypeNode | TypeNode[] | undefined): readonly TypeElement[] | undefined {
