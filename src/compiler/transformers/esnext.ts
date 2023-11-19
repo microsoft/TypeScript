@@ -14,6 +14,7 @@ import {
     ExportAssignment,
     ExportSpecifier,
     Expression,
+    firstOrUndefined,
     ForOfStatement,
     ForStatement,
     GeneratedIdentifierFlags,
@@ -302,9 +303,9 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             // before handing the shallow transformation back to the visitor for an in-depth transformation.
             const forInitializer = node.initializer;
             Debug.assertNode(forInitializer, isUsingVariableDeclarationList);
-            Debug.assert(forInitializer.declarations.length === 1, "ForInitializer may only have one declaration");
+            Debug.assert(forInitializer.declarations.length <= 1, "ForInitializer may only have one declaration");
 
-            const forDecl = forInitializer.declarations[0];
+            const forDecl = firstOrUndefined(forInitializer.declarations) || factory.createVariableDeclaration(factory.createUniqueName("x"));
             Debug.assert(!forDecl.initializer, "ForInitializer may not have an initializer");
 
             const isAwaitUsing = getUsingKindOfVariableDeclarationList(forInitializer) === UsingKind.Async;
