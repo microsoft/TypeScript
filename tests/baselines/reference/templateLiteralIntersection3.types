@@ -24,19 +24,19 @@ options1[`foo/${path}`] = false;
 >options1[`foo/${path}`] = false : false
 >options1[`foo/${path}`] : boolean
 >options1 : { prop: number; } & { [k: string]: boolean; }
->`foo/${path}` : `foo/${Path}`
+>`foo/${path}` : `foo/${string}`
 >path : Path
 >false : false
 
 
 // Lowercase<`foo/${Path}`> => `foo/${Lowercase<Path>}`
 declare const lowercasePath: Lowercase<`foo/${Path}`>;
->lowercasePath : `foo/${Lowercase<`${Path}`>}`
+>lowercasePath : `foo/${Lowercase<string>}`
 
 options1[lowercasePath] = false;
 >options1[lowercasePath] = false : false
 >options1[lowercasePath] : boolean
 >options1 : { prop: number; } & { [k: string]: boolean; }
->lowercasePath : `foo/${Lowercase<`${Path}`>}`
+>lowercasePath : `foo/${Lowercase<string>}`
 >false : false
 

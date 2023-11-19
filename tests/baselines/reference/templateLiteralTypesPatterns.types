@@ -656,20 +656,20 @@ conversionTest2("testDowncast");
 
 function conversionTest3(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
 >conversionTest3 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) => void
->groupName : "downcast" | `${string & {}}Downcast`
+>groupName : `${string}Downcast` | "downcast"
 
 conversionTest3("testDowncast");
 >conversionTest3("testDowncast") : void
->conversionTest3 : (groupName: "downcast" | `${string & {}}Downcast`) => void
+>conversionTest3 : (groupName: `${string}Downcast` | "downcast") => void
 >"testDowncast" : "testDowncast"
 
 function conversionTest4(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
 >conversionTest4 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) => void
->groupName : "downcast" | `${{} & string}Downcast`
+>groupName : `${string}Downcast` | "downcast"
 
 conversionTest4("testDowncast");
 >conversionTest4("testDowncast") : void
->conversionTest4 : (groupName: "downcast" | `${{} & string}Downcast`) => void
+>conversionTest4 : (groupName: `${string}Downcast` | "downcast") => void
 >"testDowncast" : "testDowncast"
 
 function foo(str: `${`a${string}` & `${string}a`}Test`) {}

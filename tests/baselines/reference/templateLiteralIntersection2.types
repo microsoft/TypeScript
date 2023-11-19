@@ -6,15 +6,15 @@ type Path = string & { _pathBrand: any };
 >_pathBrand : any
 
 type JoinedPath = `${Path}/${Path}`;
->JoinedPath : `${Path}/${Path}`
+>JoinedPath : `${string}/${string}`
 
 declare function joinedPath(p: JoinedPath): void;
 >joinedPath : (p: JoinedPath) => void
->p : `${Path}/${Path}`
+>p : `${string}/${string}`
 
 joinedPath("foo/bar");
 >joinedPath("foo/bar") : void
->joinedPath : (p: `${Path}/${Path}`) => void
+>joinedPath : (p: `${string}/${string}`) => void
 >"foo/bar" : "foo/bar"
 
 declare const somePath: Path;
@@ -22,8 +22,8 @@ declare const somePath: Path;
 
 joinedPath(`${somePath}/${somePath}`);
 >joinedPath(`${somePath}/${somePath}`) : void
->joinedPath : (p: `${Path}/${Path}`) => void
->`${somePath}/${somePath}` : `${Path}/${Path}`
+>joinedPath : (p: `${string}/${string}`) => void
+>`${somePath}/${somePath}` : `${string}/${string}`
 >somePath : Path
 >somePath : Path
 
