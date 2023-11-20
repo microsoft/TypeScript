@@ -7284,6 +7284,7 @@ export enum ModuleKind {
 
 export enum ModuleFormatDetectionKind {
     None = 0,
+    Bundler = 1,
     Node16 = 100,
     NodeNext = 199,
 }

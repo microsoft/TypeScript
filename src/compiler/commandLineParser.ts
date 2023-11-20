@@ -1156,9 +1156,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         name: "moduleFormatDetection",
         type: new Map(Object.entries({
             none: ModuleFormatDetectionKind.None,
+            bundler: ModuleFormatDetectionKind.Bundler,
             node16: ModuleFormatDetectionKind.Node16,
             nodenext: ModuleFormatDetectionKind.NodeNext,
         })),
+        affectsModuleResolution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_how_files_are_determined_to_be_ECMAScript_modules_or_CommonJS_modules,
         defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_none_otherwise,

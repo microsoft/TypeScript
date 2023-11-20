@@ -128,6 +128,7 @@ import {
     getLineStarts,
     getMatchedFileSpec,
     getMatchedIncludeSpec,
+    getModuleFormatDetectionKind,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
     getNormalizedAbsolutePathWithoutRoot,
@@ -225,6 +226,7 @@ import {
     ModifierLike,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleFormatDetectionKind,
     ModuleKind,
     ModuleResolutionCache,
     ModuleResolutionHost,
@@ -1326,23 +1328,28 @@ export function getImpliedNodeFormatForFileWorker(
     host: ModuleResolutionHost,
     options: CompilerOptions,
 ) {
-    switch (getEmitModuleResolutionKind(options)) {
-        case ModuleResolutionKind.Node16:
-        case ModuleResolutionKind.NodeNext:
+    const formatDetection = getModuleFormatDetectionKind(options);
+    switch (formatDetection) {
+        case ModuleFormatDetectionKind.Bundler:
+        case ModuleFormatDetectionKind.Node16:
+        case ModuleFormatDetectionKind.NodeNext:
+            const defaultFormat = formatDetection === ModuleFormatDetectionKind.Bundler ? undefined : ModuleKind.CommonJS;
             return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
                 fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
-                fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :
+                fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson(defaultFormat) :
                 undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
         default:
             return undefined;
     }
-    function lookupFromPackageJson(): Partial<CreateSourceFileOptions> {
+    function lookupFromPackageJson(defaultFormat: ResolutionMode): Partial<CreateSourceFileOptions> {
         const state = getTemporaryModuleResolutionState(packageJsonInfoCache, host, options);
         const packageJsonLocations: string[] = [];
         state.failedLookupLocations = packageJsonLocations;
         state.affectingLocations = packageJsonLocations;
         const packageJsonScope = getPackageScopeForPath(fileName, state);
-        const impliedNodeFormat = packageJsonScope?.contents.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
+        const impliedNodeFormat = packageJsonScope?.contents.packageJsonContent.type === "module" ? ModuleKind.ESNext :
+            packageJsonScope?.contents.packageJsonContent.type === "commonjs" ? ModuleKind.CommonJS :
+            defaultFormat;
         return { impliedNodeFormat, packageJsonLocations, packageJsonScope };
     }
 }
