@@ -6335,11 +6335,10 @@ namespace Parser {
         if (token() === SyntaxKind.SlashToken && scanner.scan() === SyntaxKind.GreaterThanToken) {
             nextToken();
             parseErrorAt(posLessThan - 1, getNodePos(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_for_the_file_extension_to_be_tsx, tokenToString(SyntaxKind.GreaterThanToken));
-        }
-        else {
-            parseExpected(SyntaxKind.GreaterThanToken);
+            return finishNode(factory.createTypeAssertion(type, createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false)), pos);
         }
 
+        parseExpected(SyntaxKind.GreaterThanToken);
         const expression = parseSimpleUnaryExpression();
         return finishNode(factory.createTypeAssertion(type, expression), pos);
     }
