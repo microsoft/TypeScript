@@ -1658,7 +1658,7 @@ export class ProjectService {
                 const fsResult = config.cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 if (
                     getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
-                    (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
+                    (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectory))
                 ) {
                     const file = this.getNormalizedAbsolutePath(fileOrDirectory);
                     this.logger.info(`Config: ${configFileName} Detected new package.json: ${file}`);
@@ -2666,7 +2666,7 @@ export class ProjectService {
             config!.watchedDirectoriesStale = false;
             updateWatchingWildcardDirectories(
                 config!.watchedDirectories ||= new Map(),
-                new Map(Object.entries(config!.parsedCommandLine!.wildcardDirectories!)),
+                config!.parsedCommandLine!.wildcardDirectories,
                 // Create new directory watcher
                 (directory, flags) => this.watchWildcardDirectory(directory, flags, configFileName, config!),
             );
@@ -2759,7 +2759,7 @@ export class ProjectService {
             projectRootFilesMap.forEach((value, path) => {
                 if (!newRootScriptInfoMap.has(path)) {
                     if (value.info) {
-                        project.removeFile(value.info, project.fileExists(path), /*detachFromProject*/ true);
+                        project.removeFile(value.info, project.fileExists(value.info.fileName), /*detachFromProject*/ true);
                     }
                     else {
                         projectRootFilesMap.delete(path);
@@ -3145,7 +3145,7 @@ export class ProjectService {
     }
 
     private getModifiedTime(info: ScriptInfo) {
-        return (this.host.getModifiedTime!(info.path) || missingFileModifiedTime).getTime();
+        return (this.host.getModifiedTime!(info.fileName) || missingFileModifiedTime).getTime();
     }
 
     private refreshScriptInfo(info: ScriptInfo) {

@@ -393,17 +393,13 @@ FsWatchesRecursive::
 
 Info seq  [hh:mm:ss:mss] fileExists:: [
   {
-    "key": "/users/someuser/work/applications/frontend/src/app/utils/cookie.ts",
-    "count": 1
-  },
-  {
     "key": "/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts",
-    "count": 1
+    "count": 2
   }
 ]
 Info seq  [hh:mm:ss:mss] directoryExists:: [
   {
-    "key": "/users/someuser/work/applications/frontend/src/app/utils/cookie.ts",
+    "key": "/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts",
     "count": 1
   }
 ]

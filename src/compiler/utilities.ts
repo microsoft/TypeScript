@@ -7829,9 +7829,12 @@ export function clearMap<K, T>(map: { forEach: Map<K, T>["forEach"]; clear: Map<
 }
 
 /** @internal */
-export interface MutateMapSkippingNewValuesOptions<K, T, U> {
+export interface MutateMapSkippingNewValuesDelete<K, T> {
     onDeleteValue(existingValue: T, key: K): void;
+}
 
+/** @internal */
+export interface MutateMapSkippingNewValuesOptions<K, T, U> extends MutateMapSkippingNewValuesDelete<K, T> {
     /**
      * If present this is called with the key when there is value for that key both in new map as well as existing map provided
      * Caller can then decide to update or remove this key.
@@ -7846,30 +7849,48 @@ export interface MutateMapSkippingNewValuesOptions<K, T, U> {
  *
  * @internal
  */
+export function mutateMapSkippingNewValues<K, T>(
+    map: Map<K, T>,
+    newMap: ReadonlySet<K> | undefined,
+    options: MutateMapSkippingNewValuesDelete<K, T>,
+): void;
+/** @internal */
 export function mutateMapSkippingNewValues<K, T, U>(
     map: Map<K, T>,
-    newMap: ReadonlyMap<K, U>,
+    newMap: ReadonlyMap<K, U> | undefined,
+    options: MutateMapSkippingNewValuesOptions<K, T, U>,
+): void;
+export function mutateMapSkippingNewValues<K, T, U>(
+    map: Map<K, T>,
+    newMap: ReadonlyMap<K, U> | ReadonlySet<K> | undefined,
     options: MutateMapSkippingNewValuesOptions<K, T, U>,
 ) {
     const { onDeleteValue, onExistingValue } = options;
     // Needs update
     map.forEach((existingValue, key) => {
-        const valueInNewMap = newMap.get(key);
         // Not present any more in new map, remove it
-        if (valueInNewMap === undefined) {
+        if (!newMap?.has(key)) {
             map.delete(key);
             onDeleteValue(existingValue, key);
         }
         // If present notify about existing values
         else if (onExistingValue) {
-            onExistingValue(existingValue, valueInNewMap, key);
+            onExistingValue(existingValue, (newMap as Map<K, U>).get?.(key)!, key);
         }
     });
 }
 
 /** @internal */
-export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOptions<K, T, U> {
+export interface MutateMapOptionsCreate<K, T, U> {
     createNewValue(key: K, valueInNewMap: U): T;
+}
+
+/** @internal */
+export interface MutateMapWithNewSetOptions<K, T> extends MutateMapSkippingNewValuesDelete<K, T>, MutateMapOptionsCreate<K, T, K> {
+}
+
+/** @internal */
+export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOptions<K, T, U>, MutateMapOptionsCreate<K, T, U> {
 }
 
 /**
@@ -7877,16 +7898,19 @@ export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOpt
  *
  * @internal
  */
-export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U>, options: MutateMapOptions<K, T, U>) {
+export function mutateMap<K, T>(map: Map<K, T>, newMap: ReadonlySet<K> | undefined, options: MutateMapWithNewSetOptions<K, T>): void;
+/** @internal */
+export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U> | undefined, options: MutateMapOptions<K, T, U>): void;
+export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U> | ReadonlySet<K> | undefined, options: MutateMapOptions<K, T, U>) {
     // Needs update
-    mutateMapSkippingNewValues(map, newMap, options);
+    mutateMapSkippingNewValues(map, newMap as ReadonlyMap<K, U>, options);
 
     const { createNewValue } = options;
     // Add new values that are not already present
-    newMap.forEach((valueInNewMap, key) => {
+    newMap?.forEach((valueInNewMap, key) => {
         if (!map.has(key)) {
             // New values
-            map.set(key, createNewValue(key, valueInNewMap));
+            map.set(key, createNewValue(key, valueInNewMap as U & K));
         }
     });
 }

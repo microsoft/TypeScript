@@ -44,7 +44,7 @@ var x = y;
 
 
 PolledWatches::
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -82,7 +82,7 @@ let y = 1
 
 
 PolledWatches *deleted*::
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {"pollingInterval":500}
 
 FsWatches::

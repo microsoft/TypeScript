@@ -53,7 +53,7 @@ var x = 1;
 
 
 PolledWatches::
-/a/b/commonfile3.ts: *new*
+/a/b/commonFile3.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::

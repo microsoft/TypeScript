@@ -7,8 +7,9 @@ import {
     jsonToReadableText,
 } from "./helpers";
 
-function verifyMissingFilePaths(missingPaths: readonly ts.Path[], expected: readonly string[]) {
-    assert.isDefined(missingPaths);
+function verifyMissingFilePaths(missing: ReturnType<ts.Program["getMissingFilePaths"]>, expected: readonly string[]) {
+    assert.isDefined(missing);
+    const missingPaths = ts.arrayFrom(missing.keys());
     const map = new Set(expected);
     for (const missing of missingPaths) {
         const value = map.has(missing);
@@ -82,8 +83,8 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
     it("normalizes file paths", () => {
         const program0 = ts.createProgram(["./nonexistent.ts", "./NONEXISTENT.ts"], options, testCompilerHost);
         const program1 = ts.createProgram(["./NONEXISTENT.ts", "./nonexistent.ts"], options, testCompilerHost);
-        const missing0 = program0.getMissingFilePaths();
-        const missing1 = program1.getMissingFilePaths();
+        const missing0 = ts.arrayFrom(program0.getMissingFilePaths().keys());
+        const missing1 = ts.arrayFrom(program1.getMissingFilePaths().keys());
         assert.equal(missing0.length, 1);
         assert.deepEqual(missing0, missing1);
     });
@@ -138,7 +139,7 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
 
         const program = ts.createProgram(["test.ts"], { module: ts.ModuleKind.ES2015 }, host);
         assert(program.getSourceFiles().length === 1, "expected 'getSourceFiles' length to be 1");
-        assert(program.getMissingFilePaths().length === 0, "expected 'getMissingFilePaths' length to be 0");
+        assert(program.getMissingFilePaths().size === 0, "expected 'getMissingFilePaths' length to be 0");
         assert((program.getFileProcessingDiagnostics()?.length || 0) === 0, "expected 'getFileProcessingDiagnostics' length to be 0");
     });
 });

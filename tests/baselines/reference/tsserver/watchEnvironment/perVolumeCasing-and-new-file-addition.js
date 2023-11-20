@@ -188,13 +188,28 @@ Timeout callback:: count: 2
 2: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /Volumes/git/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/Bar.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Volumes/git/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Volumes/git/projects/project/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Same program as before
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Volumes/git/projects/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/Volumes/git/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/Volumes/git/projects/project/foo.ts SVC-1-0 "export const foo = \"foo\";"
+	/Volumes/git/projects/project/Bar.ts Text-1 "export const bar = \"bar\";"
+
+
+	../../../../a/lib/lib.d.ts
+	  Default library for target 'es5'
+	foo.ts
+	  Matched by default include pattern '**/*'
+	Bar.ts
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/Volumes/git/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -202,7 +217,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /Volumes/git/projects/project/foo.ts Project
 Info seq  [hh:mm:ss:mss] 		Projects: /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/Volumes/git/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -221,3 +236,23 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+PolledWatches::
+/Volumes/git/projects/node_modules/@types:
+  {"pollingInterval":500}
+/Volumes/git/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/Volumes/git/projects/project/Bar.ts: *new*
+  {}
+/Volumes/git/projects/project/package.json:
+  {}
+/Volumes/git/projects/project/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/Volumes/git/projects/project:
+  {}

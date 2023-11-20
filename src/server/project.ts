@@ -1574,7 +1574,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 this.program,
                 this.missingFilesMap || (this.missingFilesMap = new Map()),
                 // Watch the missing files
-                missingFilePath => this.addMissingFileWatcher(missingFilePath),
+                (missingFilePath, missingFileName) => this.addMissingFileWatcher(missingFilePath, missingFileName),
             );
 
             if (this.generatedFilesMap) {
@@ -1699,14 +1699,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
     }
 
-    private addMissingFileWatcher(missingFilePath: Path): FileWatcher {
+    private addMissingFileWatcher(missingFilePath: Path, missingFileName: string): FileWatcher {
         if (isConfiguredProject(this)) {
             // If this file is referenced config file, we are already watching it, no need to watch again
             const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(missingFilePath as string as NormalizedPath);
             if (configFileExistenceInfo?.config?.projects.has(this.canonicalConfigFilePath)) return noopFileWatcher;
         }
         const fileWatcher = this.projectService.watchFactory.watchFile(
-            missingFilePath,
+            getNormalizedAbsolutePath(missingFileName, this.currentDirectory),
             (fileName, eventKind) => {
                 if (isConfiguredProject(this)) {
                     this.getCachedDirectoryStructureHost().addOrDeleteFile(fileName, missingFilePath, eventKind);
