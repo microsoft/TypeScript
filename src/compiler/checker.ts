@@ -45846,12 +45846,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const id = node.expression as Identifier;
             const sym = getExportSymbolOfValueSymbolIfExported(resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node));
             if (sym) {
+                const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value);
                 markAliasReferenced(sym, id);
                 // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                 if (getSymbolFlags(sym) & SymbolFlags.Value) {
                     // However if it is a value, we need to check it's being used correctly
                     checkExpressionCached(id);
-                    if (!isIllegalExportDefaultInCJS && !(node.flags & NodeFlags.Ambient) && compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
+                    if (!isIllegalExportDefaultInCJS && !(node.flags & NodeFlags.Ambient) && compilerOptions.verbatimModuleSyntax && typeOnlyDeclaration) {
                         error(
                             id,
                             node.isExportEquals
@@ -45869,6 +45870,44 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             : Diagnostics.An_export_default_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type,
                         idText(id),
                     );
+                }
+
+                if (!isIllegalExportDefaultInCJS && getIsolatedModules(compilerOptions) && !(sym.flags & SymbolFlags.Value)) {
+                    if (
+                        sym.flags & SymbolFlags.Alias
+                        && resolveAlias(sym) !== unknownSymbol
+                        && getSymbolFlags(sym, /*excludeTypeOnlyMeanings*/ false, /*excludeLocalMeanings*/ true) & SymbolFlags.Type
+                        && (!typeOnlyDeclaration || getSourceFileOfNode(typeOnlyDeclaration) !== getSourceFileOfNode(node))
+                    ) {
+                        // import { SomeType } from "./someModule";
+                        // export default SomeType; OR
+                        // export = SomeType;
+                        error(
+                            id,
+                            node.isExportEquals ?
+                                Diagnostics._0_resolves_to_a_type_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_import_type_where_0_is_imported
+                                : Diagnostics._0_resolves_to_a_type_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_export_type_0_as_default,
+                            idText(id),
+                            isolatedModulesLikeFlagName,
+                        );
+                    }
+                    else if (typeOnlyDeclaration && getSourceFileOfNode(typeOnlyDeclaration) !== getSourceFileOfNode(node)) {
+                        // import { SomeTypeOnlyValue } from "./someModule";
+                        // export default SomeTypeOnlyValue; OR
+                        // export = SomeTypeOnlyValue;
+                        addTypeOnlyDeclarationRelatedInfo(
+                            error(
+                                id,
+                                node.isExportEquals ?
+                                    Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_import_type_where_0_is_imported
+                                    : Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_export_type_0_as_default,
+                                idText(id),
+                                isolatedModulesLikeFlagName,
+                            ),
+                            typeOnlyDeclaration,
+                            idText(id),
+                        );
+                    }
                 }
             }
             else {
@@ -47558,7 +47597,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 );
             case SyntaxKind.ExportAssignment:
                 return (node as ExportAssignment).expression && (node as ExportAssignment).expression.kind === SyntaxKind.Identifier ?
-                    isAliasResolvedToValue(getSymbolOfDeclaration(node as ExportAssignment)) :
+                    isAliasResolvedToValue(getSymbolOfDeclaration(node as ExportAssignment), /*excludeTypeOnlyValues*/ true) :
                     true;
         }
         return false;

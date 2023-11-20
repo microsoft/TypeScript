@@ -18,3 +18,17 @@ declare const a: A;
 new A();
 >A : Symbol(A, Decl(b.ts, 0, 8))
 
+=== /c.ts ===
+import type { A } from './a';
+>A : Symbol(A, Decl(c.ts, 0, 13))
+
+export = A;
+>A : Symbol(A, Decl(c.ts, 0, 13))
+
+=== /d.ts ===
+import { A } from './a';
+>A : Symbol(A, Decl(d.ts, 0, 8))
+
+export = A;
+>A : Symbol(A, Decl(d.ts, 0, 8))
+

@@ -9,6 +9,13 @@ import { A } from './a';
 declare const a: A;
 new A();
 
+//// [c.ts]
+import type { A } from './a';
+export = A;
+
+//// [d.ts]
+import { A } from './a';
+export = A;
 
 //// [a.js]
 "use strict";
@@ -22,3 +29,9 @@ var A = /** @class */ (function () {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 new A();
+//// [c.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+//// [d.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
