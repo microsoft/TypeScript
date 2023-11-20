@@ -104,7 +104,6 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
     if (sourceMap) {
         if (!writer.isAtStartOfLine()) writer.writeLine();
         writer.writeComment(sourceMap.sourceMappingURL);
-        writer.writeLine();
     }
 
     return {
