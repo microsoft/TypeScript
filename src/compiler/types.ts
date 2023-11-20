@@ -858,7 +858,7 @@ export const enum ModifierFlags {
     Protected =          1 << 2,  // Property/Method
     Readonly =           1 << 3,  // Property/Method
     Override =           1 << 4,  // Override method.
-    
+
     // Syntactic-only modifiers
     Export =             1 << 5,  // Declarations
     Abstract =           1 << 6,  // Class/Method/ConstructSignature
@@ -7157,6 +7157,8 @@ export interface CompilerOptions {
     mapRoot?: string;
     maxNodeModuleJsDepth?: number;
     module?: ModuleKind;
+    moduleFormatDetection?: ModuleFormatDetectionKind;
+    moduleFormatInterop?: ModuleFormatInteropKind;
     moduleResolution?: ModuleResolutionKind;
     moduleSuffixes?: string[];
     moduleDetection?: ModuleDetectionKind;
@@ -7276,6 +7278,20 @@ export enum ModuleKind {
     ESNext = 99,
 
     // Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
+    Node16 = 100,
+    NodeNext = 199,
+}
+
+export enum ModuleFormatDetectionKind {
+    None = 0,
+    Node16 = 100,
+    NodeNext = 199,
+}
+
+export enum ModuleFormatInteropKind {
+    Babel = 1,
+    BundlerNode = 2,
+
     Node16 = 100,
     NodeNext = 199,
 }

@@ -6215,6 +6215,14 @@
         "category": "Message",
         "code": 6804
     },
+    "Specify how files are determined to be ECMAScript modules or CommonJS modules.": {
+        "category": "Message",
+        "code": 6805
+    },
+    "Specify the target runtime's rules for ESM-CommonJS interoperation.": {
+        "category": "Message",
+        "code": 6806
+    },
 
     "one of:": {
         "category": "Message",
@@ -6343,6 +6351,14 @@
     "List of file name suffixes to search when resolving a module.": {
         "category": "Error",
         "code": 6931
+    },
+    "'node16' when 'module' is 'node16'; 'nodenext' when 'module' is 'nodenext'; 'none' otherwise.": {
+        "category": "Message",
+        "code": 6932
+    },
+    "'node16' when 'module' is 'node16'; 'nodenext' when 'module' is 'nodenext'; 'babel' otherwise.": {
+        "category": "Message",
+        "code": 6933
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

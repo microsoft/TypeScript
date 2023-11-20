@@ -399,6 +399,8 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleDetectionKind,
+    ModuleFormatDetectionKind,
+    ModuleFormatInteropKind,
     ModuleKind,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
@@ -8589,6 +8591,36 @@ export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
         }
     }
     return moduleResolution;
+}
+
+/** @internal */
+export function getModuleFormatDetectionKind(compilerOptions: CompilerOptions): ModuleFormatDetectionKind {
+    if (compilerOptions.moduleFormatDetection !== undefined) {
+        return compilerOptions.moduleFormatDetection;
+    }
+    switch (getEmitModuleKind(compilerOptions)) {
+        case ModuleKind.Node16:
+            return ModuleFormatDetectionKind.Node16;
+        case ModuleKind.NodeNext:
+            return ModuleFormatDetectionKind.NodeNext;
+        default:
+            return ModuleFormatDetectionKind.None;
+    }
+}
+
+/** @internal */
+export function getModuleFormatInteropKind(compilerOptions: CompilerOptions): ModuleFormatInteropKind {
+    if (compilerOptions.moduleFormatInterop !== undefined) {
+        return compilerOptions.moduleFormatInterop;
+    }
+    switch (getEmitModuleKind(compilerOptions)) {
+        case ModuleKind.Node16:
+            return ModuleFormatInteropKind.Node16;
+        case ModuleKind.NodeNext:
+            return ModuleFormatInteropKind.NodeNext;
+        default:
+            return ModuleFormatInteropKind.Babel;
+    }
 }
 
 /** @internal */
