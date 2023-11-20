@@ -6334,7 +6334,7 @@ namespace Parser {
         // <Type />: specialized diagnostic for a JSX element in a .ts file - and skip some excess reporting
         if (token() === SyntaxKind.SlashToken && scanner.scan() === SyntaxKind.GreaterThanToken) {
             nextToken();
-            parseErrorAt(posLessThan - 1, getNodePos(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_to_change_the_file_extension_to_tsx, tokenToString(SyntaxKind.GreaterThanToken));
+            parseErrorAt(posLessThan - 1, getNodePos(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_for_the_file_extension_to_be_tsx, tokenToString(SyntaxKind.GreaterThanToken));
         }
         else {
             parseExpected(SyntaxKind.GreaterThanToken);
@@ -6626,7 +6626,7 @@ namespace Parser {
                                 break;
                             }
                         }
-                        parseErrorAt(previousNode.type.pos - 1, scanner.getTokenStart(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_to_change_the_file_extension_to_tsx, tokenToString(SyntaxKind.GreaterThanToken));
+                        parseErrorAt(previousNode.type.pos - 1, scanner.getTokenStart(), Diagnostics.JSX_tags_are_not_permitted_in_ts_files_Did_you_mean_for_the_file_extension_to_be_tsx, tokenToString(SyntaxKind.GreaterThanToken));
                         return identifier;
                     }
                 }
