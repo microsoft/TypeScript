@@ -6235,6 +6235,10 @@
         "category": "Message",
         "code": 6804
     },
+    "Specify the target runtime's rules for ESM-CommonJS interoperation.": {
+        "category": "Message",
+        "code": 6805
+    },
 
     "one of:": {
         "category": "Message",
@@ -6363,6 +6367,10 @@
     "List of file name suffixes to search when resolving a module.": {
         "category": "Error",
         "code": 6931
+    },
+    "'node16' when 'module' is 'node16'; 'nodenext' when 'module' is 'nodenext'; 'bundler' otherwise.": {
+        "category": "Message",
+        "code": 6932
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

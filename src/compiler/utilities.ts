@@ -402,6 +402,8 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleDetectionKind,
+    ModuleFormatDetectionKind,
+    ModuleFormatInteropKind,
     ModuleKind,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
@@ -8657,6 +8659,22 @@ export const computedOptions = createComputedCompilerOptions({
             return compilerOptions.moduleDetection ||
                 (computedOptions.module.computeValue(compilerOptions) === ModuleKind.Node16 ||
                         computedOptions.module.computeValue(compilerOptions) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
+        },
+    },
+    moduleFormatInterop: {
+        dependencies: ["module", "target"],
+        computeValue: (compilerOptions): ModuleFormatInteropKind => {
+            if (compilerOptions.moduleFormatInterop !== undefined) {
+                return compilerOptions.moduleFormatInterop;
+            }
+            switch (computedOptions.module.computeValue(compilerOptions)) {
+                case ModuleKind.Node16:
+                    return ModuleFormatInteropKind.Node16;
+                case ModuleKind.NodeNext:
+                    return ModuleFormatInteropKind.NodeNext;
+                default:
+                    return ModuleFormatInteropKind.Bundler;
+            }
         },
     },
     isolatedModules: {

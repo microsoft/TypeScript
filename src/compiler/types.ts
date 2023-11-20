@@ -7174,6 +7174,7 @@ export interface CompilerOptions {
     mapRoot?: string;
     maxNodeModuleJsDepth?: number;
     module?: ModuleKind;
+    moduleFormatInterop?: ModuleFormatInteropKind;
     moduleResolution?: ModuleResolutionKind;
     moduleSuffixes?: string[];
     moduleDetection?: ModuleDetectionKind;
@@ -7293,6 +7294,14 @@ export enum ModuleKind {
     ESNext = 99,
 
     // Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
+    Node16 = 100,
+    NodeNext = 199,
+}
+
+export enum ModuleFormatInteropKind {
+    Bundler = 1,
+    BundlerNode = 2,
+
     Node16 = 100,
     NodeNext = 199,
 }

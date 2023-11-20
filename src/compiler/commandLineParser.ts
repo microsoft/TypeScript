@@ -82,6 +82,7 @@ import {
     mapIterator,
     MapLike,
     ModuleDetectionKind,
+    ModuleFormatInteropKind,
     ModuleKind,
     ModuleResolutionKind,
     NewLineKind,
@@ -1153,6 +1154,18 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Conditions_to_set_in_addition_to_the_resolver_specific_defaults_when_resolving_imports,
+    },
+    {
+        name: "moduleFormatInterop",
+        type: new Map(Object.entries({
+            babel: ModuleFormatInteropKind.Bundler,
+            bundlernode: ModuleFormatInteropKind.BundlerNode,
+            node16: ModuleFormatInteropKind.Node16,
+            nodenext: ModuleFormatInteropKind.NodeNext,
+        })),
+        category: Diagnostics.Modules,
+        description: Diagnostics.Specify_the_target_runtime_s_rules_for_ESM_CommonJS_interoperation,
+        defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_bundler_otherwise,
     },
 
     // Source Maps
