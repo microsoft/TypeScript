@@ -51,7 +51,7 @@
         "tests/**",
         "internal/**",
         "**/*.generated.*",
-        "scripts/*.d.*",
+        "scripts/*.d.*"
     ],
     // Note: if adding new languages, make sure settings.template.json is updated too.
     "plugins": [

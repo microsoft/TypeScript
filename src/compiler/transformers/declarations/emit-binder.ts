@@ -2,6 +2,7 @@ import {
     forEachChild,
     getImpliedNodeFormatForFile,
     getModuleInstanceState,
+    getNodeId,
     isBlock,
     isClassDeclaration,
     isConditionalTypeNode,
@@ -28,9 +29,6 @@ import {
     Symbol,
     toPath,
 } from "../../_namespaces/ts";
-import {
-    getNodeId,
-} from "../../checker";
 import {
     Debug,
 } from "../../debug";
