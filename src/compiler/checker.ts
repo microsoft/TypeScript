@@ -4047,9 +4047,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean, usage: Expression) {
         const usageMode = file && getModuleFormatInteropKind(compilerOptions) !== ModuleFormatInteropKind.Babel && getUsageModeForExpression(usage);
+        // fallthrough on cjs usages so we imply defaults for interop'd imports, too
         if (usageMode === ModuleKind.ESNext) {
             return isESMFormatImportImportingCommonjsFormatFile(usageMode, file!.impliedNodeFormat);
-            // fallthrough on cjs usages so we imply defaults for interop'd imports, too
         }
         if (!allowSyntheticDefaultImports) {
             return false;

@@ -1,0 +1,26 @@
+/index.ts(2,5): error TS2339: Property 'toLowerCase' does not exist on type 'typeof import("/node_modules/dep/index")'.
+
+
+==== /node_modules/dep/package.json (0 errors) ====
+    {
+        "name": "dep",
+        "version": "1.0.0",
+        "main": "index.js"
+    }
+    
+==== /node_modules/dep/index.d.ts (0 errors) ====
+    declare const _default: string;
+    export default _default;
+    
+==== /package.json (0 errors) ====
+    {
+      "type": "module"
+    }
+    
+==== /index.ts (1 errors) ====
+    import dep from "dep";
+    dep.toLowerCase(); // Error
+        ~~~~~~~~~~~
+!!! error TS2339: Property 'toLowerCase' does not exist on type 'typeof import("/node_modules/dep/index")'.
+    dep.default.toLowerCase(); // Ok
+    

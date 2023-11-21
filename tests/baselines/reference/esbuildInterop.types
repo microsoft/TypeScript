@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/module/esbuildInterop.ts] ////
+
+=== /node_modules/dep/index.d.ts ===
+declare const _default: string;
+>_default : string
+
+export default _default;
+>_default : string
+
+=== /index.ts ===
+import dep from "dep";
+>dep : typeof dep
+
+dep.toLowerCase(); // Error
+>dep.toLowerCase() : any
+>dep.toLowerCase : any
+>dep : typeof dep
+>toLowerCase : any
+
+dep.default.toLowerCase(); // Ok
+>dep.default.toLowerCase() : string
+>dep.default.toLowerCase : () => string
+>dep.default : string
+>dep : typeof dep
+>default : string
+>toLowerCase : () => string
+
