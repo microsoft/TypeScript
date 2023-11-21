@@ -62,6 +62,8 @@ jobs:
 
             const title = `🤖 Pick PR #${PR} (${pr.data.title.substring(0, 35)}${pr.data.title.length > 35 ? "..." : ""}) into ${TARGET_BRANCH}`;
 
+            await exec.exec("git", ["config", "user.email", "typescriptbot@microsoft.com"]);
+            await exec.exec("git", ["config", "user.name", "TypeScript Bot"]);
             await exec.exec("git", ["switch", "--detach", `origin/${TARGET_BRANCH}`]);
             await exec.exec("git", ["switch", "-c", pickBranch]);
             await exec.exec("git", ["cherry-pick", pr.data.merge_commit_sha]);
