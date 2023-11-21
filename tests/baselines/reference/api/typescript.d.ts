@@ -6020,9 +6020,11 @@ declare namespace ts {
     /** @deprecated */
     type AssertionKey = ImportAttributeName;
     /** @deprecated */
-    type AssertEntry = ImportAttribute;
+    interface AssertEntry extends ImportAttribute {
+    }
     /** @deprecated */
-    type AssertClause = ImportAttributes;
+    interface AssertClause extends ImportAttributes {
+    }
     type ImportAttributeName = Identifier | StringLiteral;
     interface ImportAttribute extends Node {
         readonly kind: SyntaxKind.ImportAttribute;
