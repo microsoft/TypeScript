@@ -1,18 +1,19 @@
 name: Create cherry pick PR
 
 on:
+  repository_dispatch:
+    types: [create-cherry-pick-pr]
   workflow_dispatch:
     inputs:
-      # TODO: Make sure these names work for the triggerer
       pr:
         description: PR number to cherry-pick
         required: true
         type: number
-      targetBranch:
+      target_branch:
         description: Target branch to cherry-pick to
         required: true
         type: string
-      requestingUser:
+      requesting_user:
         description: User who requested the cherry-pick
         required: true
         type: string
@@ -40,9 +41,9 @@ jobs:
 
       - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
-          PR: ${{ inputs.pr }}
-          TARGET_BRANCH: ${{ inputs.targetBranch }}
-          REQUESTING_USER: ${{ inputs.requestingUser }}
+          PR: ${{ inputs.pr || github.event.client_payload.pr }}
+          TARGET_BRANCH: ${{ inputs.target_branch || github.event.client_payload.target_branch }}
+          REQUESTING_USER: ${{ inputs.requesting_user || github.event.client_payload.requesting_user }}
         with:
           retries: 3
           github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
@@ -122,7 +123,7 @@ jobs:
           gh pr comment "$PR" --repo ${{ github.repository }} --body "$MESSAGE"
         if: ${{ failure() }}
         env:
-          PR: ${{ inputs.pr }}
-          TARGET_BRANCH: ${{ inputs.targetBranch }}
-          REQUESTING_USER: ${{ inputs.requestingUser }}
+          PR: ${{ inputs.pr || github.event.client_payload.pr }}
+          TARGET_BRANCH: ${{ inputs.target_branch || github.event.client_payload.target_branch }}
+          REQUESTING_USER: ${{ inputs.requesting_user || github.event.client_payload.requesting_user }}
           GH_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
