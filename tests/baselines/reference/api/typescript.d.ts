@@ -4889,7 +4889,6 @@ declare namespace ts {
     type HasExpressionInitializer = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | EnumMember;
     type HasDecorators = ParameterDeclaration | PropertyDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ClassExpression | ClassDeclaration;
     type HasModifiers = TypeParameterDeclaration | ParameterDeclaration | ConstructorTypeNode | PropertySignature | PropertyDeclaration | MethodSignature | MethodDeclaration | ConstructorDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | IndexSignatureDeclaration | FunctionExpression | ArrowFunction | ClassExpression | VariableStatement | FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | ExportAssignment | ExportDeclaration;
-    type HasInferredType = FunctionDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | BindingElement | ConstructSignatureDeclaration | VariableDeclaration | MethodSignature | CallSignatureDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
     interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
         readonly hasTrailingComma: boolean;
     }
@@ -7904,6 +7903,19 @@ declare namespace ts {
         All = 15,
         ExcludeJSDocTypeAssertion = 16,
     }
+    interface TranspileDeclarationsOutput {
+        declaration: string;
+        declarationPath: string;
+        declarationMap: string | undefined;
+        declarationMapPath: string | undefined;
+        diagnostics: Diagnostic[];
+    }
+    interface TranspileDeclarationsOptions {
+        compilerOptions: CompilerOptions;
+        commonSourceDirectory?: string;
+        currentDirectory?: string;
+        useCaseSensitiveFileNames?: boolean;
+    }
     type ImmediatelyInvokedFunctionExpression = CallExpression & {
         readonly expression: FunctionExpression;
     };
@@ -9844,14 +9856,7 @@ declare namespace ts {
      * @param context A lexical environment context for the visitor.
      */
     function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
-    function createEmitDeclarationHost(options: CompilerOptions, sys: System, commonSourceDirectory?: string): IsolatedEmitHost;
-    function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedEmitHost): {
-        declaration: string;
-        declarationPath: string;
-        declarationMap: string | undefined;
-        declarationMapPath: string | undefined;
-        diagnostics: Diagnostic[];
-    };
+    function transpileDeclaration(sourceFile: SourceFile, transpileOptions: TranspileDeclarationsOptions): TranspileDeclarationsOutput;
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
     function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
@@ -10579,7 +10584,7 @@ declare namespace ts {
         getLinkedEditingRangeAtPosition(fileName: string, position: number): LinkedEditingInfo | undefined;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences, withDiagnostics?: Diagnostic[]): readonly CodeFixAction[];
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;

@@ -756,7 +756,7 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<NodeId, SourceFile>) {
-        if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
+        if (isolatedDeclarations || noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
         forEach(sourceFile.referencedFiles, f => {
             const elem = host.getSourceFileFromReference(sourceFile, f);
             if (elem) {
@@ -767,6 +767,7 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<string, boolean>) {
+        if (isolatedDeclarations) return ret;
         forEach(sourceFile.libReferenceDirectives, ref => {
             const lib = host.getLibFileFromReference(ref);
             if (lib) {

@@ -92,7 +92,6 @@ import {
     EmitDeclarationSymbol,
 } from "./emit-binder";
 import {
-    IsolatedEmitHost,
     IsolatedEmitResolver,
     MemberKey,
 } from "./types";
@@ -110,8 +109,8 @@ const knownFunctionMembers = new Set([
 ]);
 
 /** @internal */
-export function createEmitDeclarationResolver(file: SourceFile, host: IsolatedEmitHost): IsolatedEmitResolver {
-    const { getNodeLinks, resolveMemberKey, resolveName } = bindSourceFileForDeclarationEmit(file, host);
+export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitResolver {
+    const { getNodeLinks, resolveMemberKey, resolveName } = bindSourceFileForDeclarationEmit(file);
 
     function getEnumValueFromName(name: PropertyName | NoSubstitutionTemplateLiteral, location: EnumDeclaration) {
         const enumKey = getMemberKey(name);

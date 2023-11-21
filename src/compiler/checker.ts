@@ -50396,7 +50396,7 @@ function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHo
         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
         fileExists: fileName => host.fileExists(fileName),
         getFileIncludeReasons: () => host.getFileIncludeReasons(),
-        readFile: host.readFile ? (fileName => host.readFile!(fileName)) : undefined,
+        readFile: fileName => host.readFile(fileName),
     };
 }
 

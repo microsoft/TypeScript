@@ -1,6 +1,5 @@
 import {
     forEachChild,
-    getImpliedNodeFormatForFile,
     getModuleInstanceState,
     getNodeId,
     isBlock,
@@ -27,7 +26,6 @@ import {
     isVariableStatement,
     ModuleInstanceState,
     Symbol,
-    toPath,
 } from "../../_namespaces/ts";
 import {
     Debug,
@@ -38,7 +36,6 @@ import {
     BindingPattern,
     ClassDeclaration,
     ClassElement,
-    CompilerOptions,
     Declaration,
     EnumDeclaration,
     EnumMember,
@@ -57,9 +54,7 @@ import {
     VariableDeclaration,
 } from "../../types";
 import {
-    getSetExternalModuleIndicator,
     hasSyntacticModifier,
-    hostGetCanonicalFileName,
     isEnumConst,
 } from "../../utilities";
 import {
@@ -67,7 +62,6 @@ import {
     isBindingPattern,
 } from "../../utilitiesPublic";
 import {
-    IsolatedEmitHost,
     MemberKey,
 } from "./types";
 import {
@@ -139,8 +133,7 @@ const syntaxKindToSymbolMap = {
 } as const satisfies Partial<Record<SyntaxKind, SymbolRegistrationFlags | Record<string, SymbolRegistrationFlags>>>;
 
 /** @internal */
-export function bindSourceFileForDeclarationEmit(file: SourceFile, host: IsolatedEmitHost) {
-    const options: CompilerOptions = host.getCompilerOptions();
+export function bindSourceFileForDeclarationEmit(file: SourceFile) {
     const nodeLinks: EmitDeclarationNodeLinks[] = [];
     function tryGetNodeLinks(node: Node): EmitDeclarationNodeLinks | undefined {
         const id = (node as any).id;
@@ -151,14 +144,6 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile, host: Isolate
         const nodeId = getNodeId(node);
         return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
     }
-    const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
-    setExternalModuleIndicator(file);
-    file.impliedNodeFormat = getImpliedNodeFormatForFile(
-        toPath(file.fileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host)),
-        /*packageJsonInfoCache*/ undefined,
-        host,
-        options,
-    );
 
     bind();
 
