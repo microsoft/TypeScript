@@ -17493,30 +17493,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return constraintType;
         }
         const keyTypes: Type[] = [];
-        if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
-            // We have a { [P in keyof T]: X }
-
-            // `getApparentType` on the T in a generic mapped type can trigger a circularity
-            // (conditionals and `infer` types create a circular dependency in the constraint resolution)
-            // so we only eagerly manifest the keys if the constraint is nongeneric
-            if (!isGenericIndexType(constraintType)) {
-                const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
-                forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, TypeFlags.StringOrNumberLiteralOrUnique, !!(indexFlags & IndexFlags.StringsOnly), addMemberForKeyType);
-            }
-            else {
-                // we have a generic index and a homomorphic mapping (but a distributive key remapping) - we need to defer the whole `keyof whatever` for later
-                // since it's not safe to resolve the shape of modifier type
+        // Calling getApparentType on the `T` of a `keyof T` in the constraint type of a generic mapped type can
+        // trigger a circularity. For example, `T extends { [P in keyof T & string as Captitalize<P>]: any }` is
+        // a circular definition. For this reason, we only eagerly manifest the keys if the constraint is non-generic.
+        if (isGenericIndexType(constraintType)) {
+            if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
+                // We have a generic index and a homomorphic mapping (but a distributive key remapping) - we need to defer
+                // the whole `keyof whatever` for later since it's not safe to resolve the shape of modifier type.
                 return getIndexTypeForGenericType(type, indexFlags);
             }
+            // Include the generic component in the resulting type.
+            forEachType(constraintType, addMemberForKeyType);
+        }
+        else if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
+            const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
+            forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, TypeFlags.StringOrNumberLiteralOrUnique, !!(indexFlags & IndexFlags.StringsOnly), addMemberForKeyType);
         }
         else {
             forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
         }
-        if (isGenericIndexType(constraintType)) { // include the generic component in the resulting type
-            forEachType(constraintType, addMemberForKeyType);
-        }
-        // we had to pick apart the constraintType to potentially map/filter it - compare the final resulting list with the original constraintType,
-        // so we can return the union that preserves aliases/origin data if possible
+        // We had to pick apart the constraintType to potentially map/filter it - compare the final resulting list with the
+        // original constraintType, so we can return the union that preserves aliases/origin data if possible.
         const result = indexFlags & IndexFlags.NoIndexSignatures ? filterType(getUnionType(keyTypes), t => !(t.flags & (TypeFlags.Any | TypeFlags.String))) : getUnionType(keyTypes);
         if (result.flags & TypeFlags.Union && constraintType.flags & TypeFlags.Union && getTypeListId((result as UnionType).types) === getTypeListId((constraintType as UnionType).types)) {
             return constraintType;
