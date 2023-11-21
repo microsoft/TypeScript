@@ -1569,7 +1569,7 @@ export class TestState {
                 details.push({ location: contextSpanEnd, locationMarker: "|>", span, type: "contextEnd" });
             }
 
-            if (additionalSpan && ts.documentSpansEqual(additionalSpan, span)) {
+            if (additionalSpan && ts.documentSpansEqual(additionalSpan, span, this.languageServiceAdapterHost.useCaseSensitiveFileNames())) {
                 // This span is same as text span
                 groupedSpanForAdditionalSpan = span;
             }
