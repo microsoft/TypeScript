@@ -858,7 +858,7 @@ export const enum ModifierFlags {
     Protected =          1 << 2,  // Property/Method
     Readonly =           1 << 3,  // Property/Method
     Override =           1 << 4,  // Override method.
-    
+
     // Syntactic-only modifiers
     Export =             1 << 5,  // Declarations
     Abstract =           1 << 6,  // Class/Method/ConstructSignature
@@ -3663,10 +3663,10 @@ export interface ImportClause extends NamedDeclaration {
 export type AssertionKey = ImportAttributeName;
 
 /** @deprecated */
-export type AssertEntry = ImportAttribute;
+export interface AssertEntry extends ImportAttribute {}
 
 /** @deprecated */
-export type AssertClause = ImportAttributes;
+export interface AssertClause extends ImportAttributes {}
 
 export type ImportAttributeName = Identifier | StringLiteral;
 
