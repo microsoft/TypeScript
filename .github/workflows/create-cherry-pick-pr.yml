@@ -51,30 +51,33 @@ jobs:
           github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
           script: |
             const { PR, TARGET_BRANCH, REQUESTING_USER } = process.env;
+
             const pr = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: +PR,
             });
 
-            if (!pr.merge_commit_sha) throw new Error("No merge commit sha found");
+            if (!pr.data.merge_commit_sha) throw new Error("No merge commit sha found");
 
             const pickBranch = `cherry-pick/${PR}/${TARGET_BRANCH}`;
 
-            await exec.exec('git', ['switch', '--detach', TARGET_BRANCH]);
-            await exec.exec('git', ['switch', '-c', pickBranch]);
-            await exec.exec('git', ['cherry-pick', pr.merge_commit_sha]);
-            await exec.exec('git', ['push', '--force', '--set-upstream', 'origin', pickBranch]);
+            const title = `🤖 Pick PR #${PR} (${pr.data.title.substring(0, 35)}${pr.data.title.length > 35 ? "..." : ""}) into ${TARGET_BRANCH}`;
 
-            const matchingPulls = await github.rest.pulls.list({
+            await exec.exec("git", ["switch", "--detach", TARGET_BRANCH]);
+            await exec.exec("git", ["switch", "-c", pickBranch]);
+            await exec.exec("git", ["cherry-pick", pr.data.merge_commit_sha]);
+            await exec.exec("git", ["push", "--force", "--set-upstream", "origin", pickBranch]);
+
+            const existingPulls = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head: `${context.repo.owner}:${pickBranch}`,
             });
 
-            const title = `🤖 Pick PR #${PR} (${pr.title.substring(0, 35)}${pr.title.length > 35 ? "..." : ""}) into ${TARGET_BRANCH}`;
+            if (existingPulls.data.length === 0) {
+              console.log(`No existing PRs found for ${pickBranch}`);
 
-            if (matchingPulls.data.length === 0) {
               const body = `This cherry-pick was triggered by a request on #${PR}.\n\nPlease review the diff and merge if no changes are unexpected.`;
 
               const newPr = await github.rest.pulls.create({
@@ -96,7 +99,8 @@ jobs:
               });
             }
             else {
-              const existing = matchingPulls.data[0];
+              const existing = existingPulls.data[0];
+              console.log(`Found existing PR #${existing.number} for ${pickBranch}`);
 
               await github.rest.pulls.update({
                 owner: context.repo.owner,
