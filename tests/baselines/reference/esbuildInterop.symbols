@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/module/esbuildInterop.ts] ////
+
+=== /node_modules/dep/index.d.ts ===
+declare const _default: string;
+>_default : Symbol(_default, Decl(index.d.ts, 0, 13))
+
+export default _default;
+>_default : Symbol(_default, Decl(index.d.ts, 0, 13))
+
+=== /index.ts ===
+import dep from "dep";
+>dep : Symbol(dep, Decl(index.ts, 0, 6))
+
+dep.toLowerCase(); // Error
+>dep : Symbol(dep, Decl(index.ts, 0, 6))
+
+dep.default.toLowerCase(); // Ok
+>dep.default.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>dep.default : Symbol(dep.default, Decl(index.d.ts, 0, 31))
+>dep : Symbol(dep, Decl(index.ts, 0, 6))
+>default : Symbol(dep.default, Decl(index.d.ts, 0, 31))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
