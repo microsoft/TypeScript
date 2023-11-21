@@ -71,11 +71,10 @@ jobs:
               repo: context.repo.repo,
               head: `${context.repo.owner}:${pickBranch}`,
             });
-            let [existing] = matchingPulls; // TODO(jakebailey): what is the type of this thing?
 
-            const title = `🤖 Pick PR #${PR} (${inputPR.title.substring(0, 35)}${inputPR.title.length > 35 ? "..." : ""}) into ${TARGET_BRANCH}`;
+            const title = `🤖 Pick PR #${PR} (${pr.title.substring(0, 35)}${pr.title.length > 35 ? "..." : ""}) into ${TARGET_BRANCH}`;
 
-            if (existing.data.length === 0) {
+            if (matchingPulls.data.length === 0) {
               const body = `This cherry-pick was triggered by a request on #${PR}.\n\nPlease review the diff and merge if no changes are unexpected.`;
 
               const newPr = await github.rest.pulls.create({
@@ -97,10 +96,12 @@ jobs:
               });
             }
             else {
+              const existing = matchingPulls.data[0];
+
               await github.rest.pulls.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                pull_number: existing.data[0].number,
+                pull_number: existing.number,
                 title,
               });
 
@@ -108,7 +109,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: +PR,
-                body: `Hey @${REQUESTING_USER}, I've updated #${existing.data[0].number} for you.`,
+                body: `Hey @${REQUESTING_USER}, I've updated #${existing.number} for you.`,
               });
             }
 
