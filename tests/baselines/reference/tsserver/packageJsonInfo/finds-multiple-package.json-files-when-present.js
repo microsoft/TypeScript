@@ -409,3 +409,37 @@ Timeout callback:: count: 2
 8: *ensureProjectForOpenFiles* *deleted*
 9: /tsconfig.json *new*
 10: *ensureProjectForOpenFiles* *new*
+
+getPackageJsonsVisibleToFile:: /a.ts undefined
+
+getPackageJsonsVisibleToFile:: /a.ts undefined:: Result:: [
+  {
+    "dependencies": {},
+    "devDependencies": {},
+    "optionalDependencies": {},
+    "peerDependencies": {},
+    "parseable": true,
+    "fileName": "/package.json"
+  }
+]
+
+getPackageJsonsVisibleToFile:: /src/b.ts undefined
+
+getPackageJsonsVisibleToFile:: /src/b.ts undefined:: Result:: [
+  {
+    "dependencies": {},
+    "devDependencies": {},
+    "optionalDependencies": {},
+    "peerDependencies": {},
+    "parseable": true,
+    "fileName": "/src/package.json"
+  },
+  {
+    "dependencies": {},
+    "devDependencies": {},
+    "optionalDependencies": {},
+    "peerDependencies": {},
+    "parseable": true,
+    "fileName": "/package.json"
+  }
+]
