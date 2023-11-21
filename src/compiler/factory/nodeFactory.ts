@@ -510,7 +510,6 @@ export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
  * @internal
  */
 export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNodeFactory): NodeFactory {
-    const update = flags & NodeFactoryFlags.NoOriginalNode ? updateWithoutOriginal : updateWithOriginal;
     const setOriginal = flags & NodeFactoryFlags.NoOriginalNode ? identity : setOriginalNode;
 
     // Lazily load the parenthesizer, node converters, and some factory methods until they are used.
@@ -7213,21 +7212,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         }
         return variableDeclaration;
     }
-}
 
-function updateWithoutOriginal<T extends Node>(updated: Mutable<T>, original: T): T {
-    if (updated !== original) {
-        setTextRange(updated, original);
+    function update<T extends Node>(updated: Mutable<T>, original: T): T {
+        if (updated !== original) {
+            setOriginal(updated, original);
+            setTextRange(updated, original);
+        }
+        return updated;
     }
-    return updated;
-}
-
-function updateWithOriginal<T extends Node>(updated: Mutable<T>, original: T): T {
-    if (updated !== original) {
-        setOriginalNode(updated, original);
-        setTextRange(updated, original);
-    }
-    return updated;
 }
 
 function getDefaultTagNameForKind(kind: JSDocTag["kind"]): string {
