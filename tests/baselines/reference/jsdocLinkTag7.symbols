@@ -7,14 +7,20 @@ class Foo {
     /**
      * {@linkcode this.a}
      * {@linkcode this.#c}
+     *
+     * {@link this.a}
+     * {@link this.#c}
+     *
+     * {@linkplain this.a}
+     * {@linkplain this.#c}
      */
     a() { }
 >a : Symbol(Foo.a, Decl(a.js, 0, 11))
 
     b() { }
->b : Symbol(Foo.b, Decl(a.js, 5, 11))
+>b : Symbol(Foo.b, Decl(a.js, 11, 11))
 
     #c() { }
->#c : Symbol(Foo.#c, Decl(a.js, 6, 11))
+>#c : Symbol(Foo.#c, Decl(a.js, 12, 11))
 }
 
