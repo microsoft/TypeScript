@@ -1,9 +1,6 @@
 name: Create cherry pick PR
 
 on:
-  push:
-    branches:
-      - orta-twoslash-repros
   workflow_dispatch:
     inputs:
       # TODO: Make sure these names work for the triggerer
