@@ -432,7 +432,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
 
-    jsDocParsingMode?: JSDocParsingMode;
+    jsDocParsingMode?: JSDocParsingMode | undefined;
 }
 
 /** @internal */

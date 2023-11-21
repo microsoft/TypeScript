@@ -1,7 +1,3 @@
-typescript.d.ts(3289,24): error TS2420: Class 'Project' incorrectly implements interface 'LanguageServiceHost'.
-  Types of property 'jsDocParsingMode' are incompatible.
-    Type 'JSDocParsingMode | undefined' is not assignable to type 'JSDocParsingMode'.
-      Type 'undefined' is not assignable to type 'JSDocParsingMode'.
 typescript.internal.d.ts(3913,24): error TS2420: Class 'Project' incorrectly implements interface 'LanguageServiceHost'.
   Types of property 'createHash' are incompatible.
     Type '((data: string) => string) | undefined' is not assignable to type '(data: string) => string'.
