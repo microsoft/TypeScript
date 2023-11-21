@@ -2,7 +2,7 @@
 // @noImplicitAny: true
 // @strictNullChecks: true
 // @lib: es2018
-// @exactOptionalPropertyTypes: true, false
+// @exactOptionalPropertyTypes: true
 
 // @filename: node_modules/typescript/package.json
 {
