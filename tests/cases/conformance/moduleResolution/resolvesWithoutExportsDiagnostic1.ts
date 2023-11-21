@@ -1,3 +1,4 @@
+// @module: nodenext
 // @moduleResolution: bundler,node16
 // @strict: true
 // @noTypesAndSymbols: true

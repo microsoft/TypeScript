@@ -101,6 +101,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
                         compilerOptions: {
+                            module: "nodenext",
                             moduleResolution: "nodenext",
                             outDir: "./dist",
                             declaration: true,
@@ -135,7 +136,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                         export function thing(): void {}
                     `,
                 },
-                libFile,
+                {
+                    path: `/a/lib/lib.esnext.full.d.ts`,
+                    content: libFile.content,
+                },
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [{
@@ -316,7 +320,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
-                        compilerOptions: { moduleResolution: "node16" },
+                        compilerOptions: { module: "node16", moduleResolution: "node16" },
                     }),
                 },
                 {
@@ -367,7 +371,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
                     content: `export interface ImportInterface {}`,
                 },
-                libFile,
+                {
+                    path: `/a/lib/lib.es2022.full.d.ts`,
+                    content: libFile.content,
+                },
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [
@@ -387,7 +394,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
-                        compilerOptions: { moduleResolution: "node16" },
+                        compilerOptions: { module: "node16", moduleResolution: "node16" },
                     }),
                 },
                 {
@@ -438,7 +445,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
                     content: `export interface ImportInterface {}`,
                 },
-                libFile,
+                {
+                    path: `/a/lib/lib.es2022.full.d.ts`,
+                    content: libFile.content,
+                },
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [
@@ -458,7 +468,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
-                        compilerOptions: { moduleResolution: "node16" },
+                        compilerOptions: { module: "node16", moduleResolution: "node16" },
                     }),
                 },
                 {
@@ -528,7 +538,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts`,
                     content: `export const x = 10;`,
                 },
-                libFile,
+                {
+                    path: `/a/lib/lib.es2022.full.d.ts`,
+                    content: libFile.content,
+                },
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [

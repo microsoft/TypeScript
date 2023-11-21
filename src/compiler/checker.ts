@@ -323,6 +323,7 @@ import {
     getMembersOfDeclaration,
     getModeForUsageLocation,
     getModifiers,
+    getModuleFormatInteropKind,
     getModuleInstanceState,
     getNameFromIndexInfo,
     getNameOfDeclaration,
@@ -838,6 +839,7 @@ import {
     modifierToFlag,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleFormatInteropKind,
     ModuleInstanceState,
     ModuleKind,
     ModuleResolutionKind,
@@ -4035,7 +4037,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isESMFormatImportImportingCommonjsFormatFile(usageMode: ResolutionMode, targetMode: ResolutionMode) {
-        return usageMode === ModuleKind.ESNext && targetMode === ModuleKind.CommonJS;
+        return usageMode === ModuleKind.ESNext && targetMode !== ModuleKind.ESNext;
     }
 
     function isOnlyImportedAsDefault(usage: Expression) {
@@ -4044,12 +4046,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean, usage: Expression) {
-        const usageMode = file && getUsageModeForExpression(usage);
-        if (file && usageMode !== undefined) {
-            const result = isESMFormatImportImportingCommonjsFormatFile(usageMode, file.impliedNodeFormat);
-            if (usageMode === ModuleKind.ESNext || result) {
-                return result;
-            }
+        const usageMode = file && getModuleFormatInteropKind(compilerOptions) !== ModuleFormatInteropKind.Babel && getUsageModeForExpression(usage);
+        if (usageMode === ModuleKind.ESNext) {
+            return isESMFormatImportImportingCommonjsFormatFile(usageMode, file!.impliedNodeFormat);
             // fallthrough on cjs usages so we imply defaults for interop'd imports, too
         }
         if (!allowSyntheticDefaultImports) {

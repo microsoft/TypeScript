@@ -7522,6 +7522,8 @@ declare namespace ts {
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
+        moduleFormatDetection?: ModuleFormatDetectionKind;
+        moduleFormatInterop?: ModuleFormatInteropKind;
         moduleResolution?: ModuleResolutionKind;
         moduleSuffixes?: string[];
         moduleDetection?: ModuleDetectionKind;
@@ -7614,6 +7616,18 @@ declare namespace ts {
         ES2020 = 6,
         ES2022 = 7,
         ESNext = 99,
+        Node16 = 100,
+        NodeNext = 199,
+    }
+    enum ModuleFormatDetectionKind {
+        None = 0,
+        Bundler = 1,
+        Node16 = 100,
+        NodeNext = 199,
+    }
+    enum ModuleFormatInteropKind {
+        Babel = 1,
+        BundlerNode = 2,
         Node16 = 100,
         NodeNext = 199,
     }

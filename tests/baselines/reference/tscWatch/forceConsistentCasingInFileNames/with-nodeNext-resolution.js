@@ -51,21 +51,15 @@ Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] Starting compilation in watch mode...
 
+======== Resolving module 'yargs' from '/Users/name/projects/web/src/bin.ts'. ========
+Explicitly specified module resolution kind: 'NodeNext'.
+Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/Users/name/projects/web/src/package.json' does not exist.
 File '/Users/name/projects/web/package.json' does not exist.
 File '/Users/name/projects/package.json' does not exist.
 File '/Users/name/package.json' does not exist.
 File '/Users/package.json' does not exist.
 File '/package.json' does not exist.
-======== Resolving module 'yargs' from '/Users/name/projects/web/src/bin.ts'. ========
-Explicitly specified module resolution kind: 'NodeNext'.
-Resolving in CJS mode with conditions 'require', 'types', 'node'.
-File '/Users/name/projects/web/src/package.json' does not exist according to earlier cached lookups.
-File '/Users/name/projects/web/package.json' does not exist according to earlier cached lookups.
-File '/Users/name/projects/package.json' does not exist according to earlier cached lookups.
-File '/Users/name/package.json' does not exist according to earlier cached lookups.
-File '/Users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'yargs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/Users/name/projects/web/src/node_modules' does not exist, skipping all lookups in it.
@@ -86,7 +80,6 @@ Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Module name 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12'. ========
-File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
 ======== Resolving type reference directive 'yargs', containing file '/Users/name/projects/web/__inferred type names__.ts', root directory '/Users/name/projects/web/node_modules/@types,/Users/name/projects/node_modules/@types,/Users/name/node_modules/@types,/Users/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/Users/name/projects/web/node_modules/@types, /Users/name/projects/node_modules/@types, /Users/name/node_modules/@types, /Users/node_modules/@types, /node_modules/@types'.
 File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
@@ -97,9 +90,6 @@ File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists ac
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Type reference directive 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12', primary: true. ========
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 
 ../../../../a/lib/lib.d.ts
@@ -107,10 +97,8 @@ File '/package.json' does not exist according to earlier cached lookups.
 node_modules/@types/yargs/index.d.ts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.ts@17.0.12'
   Entry point for implicit type library 'yargs' with packageId 'yargs/index.d.ts@17.0.12'
-  File is CommonJS module because 'node_modules/@types/yargs/package.json' does not have field "type"
 src/bin.ts
   Matched by default include pattern '**/*'
-  File is CommonJS module because 'package.json' was not found
 [[90m12:00:38 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -124,12 +112,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /users/name/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/name/projects/package.json: *new*
-  {"pollingInterval":2000}
-/users/name/projects/web/package.json: *new*
-  {"pollingInterval":2000}
-/users/name/projects/web/src/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*

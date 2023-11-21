@@ -3,6 +3,7 @@
 // @Filename: /tsconfig.json
 ////{
 ////  "compilerOptions": {
+////    "module": "Node16",
 ////    "moduleResolution": "Node16",
 ////  }
 ////}

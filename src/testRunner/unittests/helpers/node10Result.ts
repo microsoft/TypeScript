@@ -81,6 +81,7 @@ export function getFsContentsForNode10Result(): FsContents {
         `,
         "/home/src/projects/project/tsconfig.json": jsonToReadableText({
             compilerOptions: {
+                module: "node16",
                 moduleResolution: "node16",
                 traceResolution: true,
                 incremental: true,
@@ -89,6 +90,6 @@ export function getFsContentsForNode10Result(): FsContents {
             },
             files: ["index.mts"],
         }),
-        [libFile.path]: libFile.content,
+        "/lib/lib.es2022.full.d.ts": libFile.content,
     };
 }
