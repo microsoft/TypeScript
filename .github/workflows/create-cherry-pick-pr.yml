@@ -91,6 +91,8 @@ jobs:
               action = "created";
             }
 
+            // TODO(jakebailey): make comment
+
       - run: |
           MERGE_COMMIT=$(gh pr view $PR --repo ${{ github.repository }} --json 'mergeCommit' --jq '.mergeCommit.oid')
           PICK_BRANCH="cherry-pick/$PR/$TARGET_BRANCH"
