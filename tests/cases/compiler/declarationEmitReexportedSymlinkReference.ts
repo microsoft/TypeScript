@@ -1,3 +1,4 @@
+// @isolatedDeclarationFixedDiffReason: TODO: is not auto fixed, should be fixed.
 // @filename: monorepo/pkg1/dist/index.d.ts
 export * from './types';
 // @filename: monorepo/pkg1/dist/types.d.ts

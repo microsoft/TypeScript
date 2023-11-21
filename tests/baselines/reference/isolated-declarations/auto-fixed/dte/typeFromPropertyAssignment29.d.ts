@@ -74,7 +74,7 @@ namespace Ns {
 }
 
 // Should not work in Typescript -- must be const
-var ExpandoExpr2: (n: number) => string = function (n: number) {
+var ExpandoExpr2 = function (n: number): string {
     return n.toString();
 }
 ExpandoExpr2.prop = 2
@@ -262,7 +262,7 @@ typeFromPropertyAssignment29.ts(101,50): error TS2339: Property 'm' does not exi
     }
     
     // Should not work in Typescript -- must be const
-    var ExpandoExpr2: (n: number) => string = function (n: number) {
+    var ExpandoExpr2 = function (n: number): string {
         return n.toString();
     }
     ExpandoExpr2.prop = 2

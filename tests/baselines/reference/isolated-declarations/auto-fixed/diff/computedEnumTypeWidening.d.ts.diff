@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: Enums are not fixed]] ////
 
 //// [tests/cases/compiler/computedEnumTypeWidening.ts] ////
 

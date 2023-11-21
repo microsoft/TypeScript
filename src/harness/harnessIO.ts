@@ -359,7 +359,7 @@ export namespace Compiler {
                 if (value === undefined) {
                     throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
                 }
-                if (name === "typeScriptVersion" || name === "isolatedDeclarationDiffReason") {
+                if (name === "typeScriptVersion" || name === "isolatedDeclarationDiffReason" || name === "isolatedDeclarationFixedDiffReason") {
                     continue;
                 }
                 const option = getCommandLineOption(name);
@@ -1094,6 +1094,10 @@ export namespace Compiler {
         fullDiff += Diff.createTwoFilesPatch("TSC", "DTE", tscContent, dteContent, "declarations", "declarations");
 
         Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts.diff`), fullDiff);
+
+        if (reason === undefined) {
+            throw new Error("The test is not equivalent between TSC and DTE. Please provide an isolatedDeclarationDiffReason/isolatedDeclarationFixedDiffReason setting in the test if this is intentional");
+        }
     }
     function declarationContent(declarationFiles: readonly TestFile[], tsSources: readonly TestFile[], errors: readonly ts.Diagnostic[], prettyErrors?: boolean) {
         let dtsCode = "";

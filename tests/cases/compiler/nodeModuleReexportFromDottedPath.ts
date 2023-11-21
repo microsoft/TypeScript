@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
 
 // @Filename: /node_modules/.prisma/client/index.d.ts
 export interface PrismaClientOptions {

@@ -1,6 +1,7 @@
 // @target: es6
 // @module: commonjs
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
 // @filename: node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts
 interface Statics {
     "$$whatever": string;

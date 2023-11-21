@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: Function declarations are not fixed]] ////
 
 //// [tests/cases/compiler/declarationEmitDefaultExportWithStaticAssignment.ts] ////
 

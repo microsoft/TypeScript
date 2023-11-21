@@ -4,6 +4,7 @@
 // @traceResolution: true
 // @types: lib
 // @out: output.js
+// @isolatedDeclarationDiffReason: TSC adds type reference directives.
 
 // @currentDirectory: /
 

@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Function declarations are not fixed
 // @filename: foo.ts
 export class Foo {}
 

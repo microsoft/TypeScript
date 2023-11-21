@@ -2,6 +2,7 @@
 // @target: esnext
 // @module: commonjs
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
 // @filename: node_modules/ext/package.json
 {
     "name": "ext",

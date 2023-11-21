@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: Invalid computed property can only be detected by TSC]] ////
 
 //// [tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName1.ts] ////
 

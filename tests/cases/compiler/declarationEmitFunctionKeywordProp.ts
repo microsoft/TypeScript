@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Function declarations are not fixed
 function foo() {}
 foo.null = true;
 

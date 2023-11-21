@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Declarations types can't be named so can't be fixed
 
 class C1 {
     x: this;

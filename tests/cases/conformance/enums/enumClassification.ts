@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Fixing enum values is not supported
 
 // An enum type where each member has no initializer or an initializer that specififes
 // a numeric literal, a string literal, or a single identifier naming another member in

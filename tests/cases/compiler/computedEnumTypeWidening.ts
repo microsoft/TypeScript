@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Enums are not fixed
 
 declare function computed(x: number): number;
 

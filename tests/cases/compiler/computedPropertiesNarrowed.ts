@@ -1,6 +1,7 @@
 // @target: es2015
 // @isolatedDeclarations: true
 // @declaration: true
+// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 
 const x: 0 | 1 = Math.random()? 0: 1;
 declare function assert(n: number): asserts n is 1;

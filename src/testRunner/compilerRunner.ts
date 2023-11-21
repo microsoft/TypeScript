@@ -569,15 +569,17 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             });
     }
     private static dteDiagnosticErrors = new Set([
-        ts.Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit.code,
-        ts.Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit.code,
         ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,
         ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit.code,
-        ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code,
         ts.Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
+        ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code,
+        ts.Diagnostics.To_use_heritage_clauses_in_class_expressions_with_isolatedDeclarations_you_need_explicit_type_annotation_on_the_variable.code,
     ]);
     protected get baselinePath() {
         return "isolated-declarations/original";
+    }
+    protected get diffReason() {
+        return this.harnessSettings.isolatedDeclarationDiffReason;
     }
     verifyDteOutput() {
         if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
@@ -640,7 +642,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             ts.concatenate(this.tscIsolatedDeclarationsErrors, this.tscNonIsolatedDeclarationsErrors),
             this.allFiles,
             this.options.pretty,
-            this.harnessSettings.isolatedDeclarationDiffReason,
+            this.diffReason,
         );
     }
 
@@ -656,7 +658,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             this.tscDtsFiles,
             this.tscDtsMapFiles,
             this.allFiles,
-            this.harnessSettings.isolatedDeclarationDiffReason,
+            this.diffReason,
         );
     }
 }
@@ -685,8 +687,10 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         const hash = ts.sys.createHash!(env.testCaseContent.sourceCode);
         const fixedTest = existingTransformedTest && TestCaseParser.makeUnitsFromTest(existingTransformedTest, compilerEnvironment.fileName);
         let transformSucceeded = false;
+        let hasReferenceDirectiveErrors = false;
         if (fixedTest && fixedTest.settings.hash === hash) {
             transformSucceeded = fixedTest.settings.succeeded !== "false";
+            hasReferenceDirectiveErrors = fixedTest.settings.hasReferenceDirectiveErrors !== "false";
             if (transformSucceeded) {
                 env.allFiles = env.allFiles.map(f => {
                     const testUnit = fixedTest.testUnitData.find(t => t.name === f.unitName);
@@ -701,13 +705,15 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         else {
             const fixerOptions = ts.cloneCompilerOptions(env.compilerOptions);
             fixerOptions.isolatedDeclarations = true;
-            transformSucceeded = fixTestFiles(env.fileSystem, env.programFileNames, fixerOptions);
+            const fixResults = fixTestFiles(env.fileSystem, env.programFileNames, fixerOptions);
             let cachedTest = "// @hash: " + hash + "\n";
-
-            if (!transformSucceeded) {
+            if (!fixResults.success) {
+                transformSucceeded = false;
                 cachedTest += "// @succeeded: false\n";
             }
             else {
+                hasReferenceDirectiveErrors = fixResults.unfixedDiagnostics.some(d => FixedIsolatedDeclarationTest.referenceDirectiveErrors.has(d.code));
+                cachedTest += "// @hasReferenceDirectiveErrors: " + hasReferenceDirectiveErrors + "\n";
                 for (const file of env.allFiles) {
                     cachedTest += "\n// @fileName: " + file.unitName + "\n";
                     const content = env.fileSystem.readFileSync(file.unitName, "utf-8");
@@ -717,20 +723,23 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
             }
             IO.writeFile(autoFixCacheTest, cachedTest);
         }
-        if (!transformSucceeded) {
+        if (!transformSucceeded || hasReferenceDirectiveErrors) {
             return undefined;
         }
         env.fileSystem.makeReadonly();
         env.fileSystem = env.fileSystem.shadow();
         return env;
     }
+    private static referenceDirectiveErrors = new Set([
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit.code,
+        ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code,
+    ]);
     constructor(compilerEnvironment: CompilerTestEnvironment) {
         super(compilerEnvironment);
 
         // Suppress diff for tests with reference directives.
         if (
-            this.dteDiagnostics.every(d => d.code === ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code)
-            && this.tscIsolatedDeclarationsErrors
+            this.dteDiagnostics.some(d => d.code === ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code)
         ) {
             this.isOutputMapEquivalent = true;
             this.isDiagnosticEquivalent = true;
@@ -740,5 +749,9 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
 
     protected override get baselinePath() {
         return "isolated-declarations/auto-fixed";
+    }
+
+    protected override get diffReason() {
+        return this.harnessSettings.isolatedDeclarationFixedDiffReason;
     }
 }

@@ -45,7 +45,10 @@ export const arrow: {
 } = () => {}
 arrow["B"] = 'bar'
 
-export const arrow2 = (): void => {}
+export const arrow2: {
+    (): void
+    C: number
+} = () => {}
 arrow2[c] = 100
 
 export const arrow3: {
@@ -54,7 +57,10 @@ export const arrow3: {
 } = () => {}
 arrow3[77] = 0
 
-export const arrow4 = (): void => {}
+export const arrow4: {
+    (): void
+    1: number
+} = () => {}
 arrow4[num] = 0
 
 export const arrow5: {
@@ -63,7 +69,10 @@ export const arrow5: {
 } = () => {}
 arrow5["101"] = 0
 
-export const arrow6 = (): void => {}
+export const arrow6: {
+    (): void
+    "10": number
+} = () => {}
 arrow6[numStr] = 0
 
 export const arrow7: {
@@ -72,7 +81,10 @@ export const arrow7: {
 } = () => {}
 arrow7["qwe rty"] = 0
 
-export const arrow8 = (): void => {}
+export const arrow8: {
+    (): void
+    "foo bar": number
+} = () => {}
 arrow8[withWhitespace] = 0
 
 export const arrow9: {
@@ -81,7 +93,10 @@ export const arrow9: {
 } = () => {}
 arrow9["🤪"] = 0
 
-export const arrow10 = (): void => {}
+export const arrow10: {
+    (): void
+    "🤷‍♂️": number
+} = () => {}
 arrow10[emoji] = 0
 
 
@@ -152,6 +167,6 @@ export declare const arrow9: {
 };
 export declare const arrow10: {
     (): void;
-    "\uD83E\uDD37\u200D\u2642\uFE0F": number;
+    "🤷‍♂️": number;
 };
 //# sourceMappingURL=declarationEmitLateBoundAssignments2.d.ts.map

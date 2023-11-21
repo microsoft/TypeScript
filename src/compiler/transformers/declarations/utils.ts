@@ -5,7 +5,6 @@ import {
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
-    isStringLiteral,
     isStringLiteralLike,
 } from "../../_namespaces/ts";
 import {
@@ -42,7 +41,7 @@ export function getMemberKey(name: string | PropertyName | NoSubstitutionTemplat
     if (isComputedPropertyName(name)) {
         let computedName = name.expression;
 
-        if (isStringLiteral(computedName)) {
+        if (isStringLiteralLike(computedName)) {
             return ("I:" + computedName.text);
         }
         if (isNumericLiteral(computedName)) {

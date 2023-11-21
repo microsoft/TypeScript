@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: TSC adds import for augmentation, DTE can't know about the augmentation.]] ////
 
 //// [tests/cases/compiler/declarationEmitForModuleImportingModuleAugmentationRetainsImport.ts] ////
 

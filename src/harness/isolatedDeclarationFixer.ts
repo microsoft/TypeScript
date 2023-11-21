@@ -3,11 +3,11 @@ import * as vfs from "./_namespaces/vfs";
 import * as fake from "./fakesHosts";
 
 export const isolatedDeclarationsErrors = new Set([
-    9007,
-    9008,
-    9009,
-    9010,
-    9011,
+    ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,
+    ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit.code,
+    ts.Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
+    ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code,
+    ts.Diagnostics.To_use_heritage_clauses_in_class_expressions_with_isolatedDeclarations_you_need_explicit_type_annotation_on_the_variable.code,
 ]);
 
 export function fixTestFiles(
@@ -67,67 +67,70 @@ export function fixProjectInternal(
         host.getCurrentDirectory(),
     );
     const service = ts.createLanguageService(host, documentRegistry);
-    const program = service.getProgram()!;
-
-    const files = program.getSourceFiles();
-    if (files.some(f => f.parseDiagnostics.length !== 0)) {
-        return false;
-    }
-    const defaultFormatOptions = ts.getDefaultFormatCodeSettings();
-
-    for (const file of files) {
-        if (file.fileName.endsWith(".d.ts")) continue;
-
-        let diagnostics = getIsolatedDeclarationsErrors(file.fileName);
-
-        if (diagnostics.length === 0) continue;
-        let lastFixedDiagnostic: ts.Diagnostic | undefined;
-        let stuckCount = 0;
-        let skipCount = 0;
-        while (diagnostics.length > skipCount) {
-            const diag = diagnostics[diagnostics.length - 1 - skipCount];
-            // Ensure we break out of a unfixable loop
-            if (lastFixedDiagnostic?.start === diag.start) {
-                stuckCount++;
-            }
-            else {
-                stuckCount = 0;
-            }
-            if (stuckCount === 3) {
-                return false;
-            }
-            const fixes = service.getCodeFixesAtPosition(file.fileName, diag.start, diag.start + diag.length, [diag.code], defaultFormatOptions, userPreferences);
-            if (fixes.length === 0) {
-                skipCount++;
-                continue;
-            }
-            const fix = fixes[0];
-            const changedFiles: {
-                file: string;
-                old: VersionedScriptSnapshot;
-                new: VersionedScriptSnapshot;
-            }[] = [];
-
-            for (const fileChanges of fix.changes) {
-                const snapshot = snapShotRegistry.getSnapshot(fileChanges.fileName)!;
-                const newSnapShot = applyChangesSnapShot(snapshot, fileChanges.textChanges);
-                snapShotRegistry.setSnapshot(fileChanges.fileName, newSnapShot);
-                changedFiles.push({
-                    file: fileChanges.fileName,
-                    new: newSnapShot,
-                    old: snapshot,
-                });
-            }
-            lastFixedDiagnostic = diag;
-            diagnostics = getIsolatedDeclarationsErrors(file.fileName);
+    try {
+        const program = service.getProgram()!;
+        const files = program.getSourceFiles();
+        if (files.some(f => f.parseDiagnostics.length !== 0)) {
+            return { success: false } as const;
         }
+        const defaultFormatOptions = ts.getDefaultFormatCodeSettings();
+
+        for (const file of files) {
+            if (file.fileName.endsWith(".d.ts")) continue;
+
+            let diagnostics = getIsolatedDeclarationsErrors(file.fileName);
+
+            if (diagnostics.length === 0) continue;
+            let lastFixedDiagnostic: ts.Diagnostic | undefined;
+            let stuckCount = 0;
+            let skipCount = 0;
+            while (diagnostics.length > skipCount) {
+                const diag = diagnostics[diagnostics.length - 1 - skipCount];
+                // Ensure we break out of a unfixable loop
+                if (lastFixedDiagnostic?.start === diag.start) {
+                    stuckCount++;
+                }
+                else {
+                    stuckCount = 0;
+                }
+                if (stuckCount === 3) {
+                    return { success: false } as const;
+                }
+                const fixes = service.getCodeFixesAtPosition(file.fileName, diag.start, diag.start + diag.length, [diag.code], defaultFormatOptions, userPreferences);
+                if (fixes.length === 0) {
+                    skipCount++;
+                    continue;
+                }
+                const fix = fixes[0];
+                const changedFiles: {
+                    file: string;
+                    old: VersionedScriptSnapshot;
+                    new: VersionedScriptSnapshot;
+                }[] = [];
+
+                for (const fileChanges of fix.changes) {
+                    const snapshot = snapShotRegistry.getSnapshot(fileChanges.fileName)!;
+                    const newSnapShot = applyChangesSnapShot(snapshot, fileChanges.textChanges);
+                    snapShotRegistry.setSnapshot(fileChanges.fileName, newSnapShot);
+                    changedFiles.push({
+                        file: fileChanges.fileName,
+                        new: newSnapShot,
+                        old: snapshot,
+                    });
+                }
+                lastFixedDiagnostic = diag;
+                diagnostics = getIsolatedDeclarationsErrors(file.fileName);
+            }
+        }
+        return { success: true, unfixedDiagnostics: getIsolatedDeclarationsErrors() } as const;
     }
-    service.dispose();
-    return true;
-    function getIsolatedDeclarationsErrors(fileName: string) {
+    finally {
+        service.dispose();
+    }
+    function getIsolatedDeclarationsErrors(fileName?: string) {
         const program = service.getProgram();
         if (!program) return [];
-        const sourceFile = program.getSourceFile(fileName);
+        const sourceFile = fileName === undefined ? undefined : program.getSourceFile(fileName);
         return program.getDeclarationDiagnostics(sourceFile).filter(d => fixableErrors.has(d.code)) ?? [];
     }
 }

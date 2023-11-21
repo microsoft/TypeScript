@@ -1,4 +1,4 @@
-// [[Reason: undefined]] ////
+// [[Reason: TSC preserves import due to augmentation]] ////
 
 //// [tests/cases/compiler/declarationEmitHasTypesRefOnNamespaceUse.ts] ////
 

@@ -1,6 +1,7 @@
 // @declaration: true
 // @useCaseSensitiveFileNames: false
 // @noImplicitReferences: true
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
 // @filename: Folder/monorepo/package-a/index.d.ts
 export declare const styles: import("styled-components").InterpolationValue[];
 

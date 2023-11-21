@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Fixing enum values is not supported
 
 // Repro from #31771
 

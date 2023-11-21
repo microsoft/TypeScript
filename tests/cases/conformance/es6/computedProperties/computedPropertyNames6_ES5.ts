@@ -1,4 +1,5 @@
 // @target: es5
+// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 var p1: number | string;
 var p2: number | number[];
 var p3: string | boolean;

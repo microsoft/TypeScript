@@ -1,4 +1,5 @@
 // moduleSuffixes has one entry and there's a matching package with TS files.
+// @isolatedDeclarationDiffReason: TODO: Files in node modules are not fixed. Should we?
 // @fullEmitPaths: true
 // @filename: /tsconfig.json
 {
