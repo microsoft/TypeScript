@@ -1,0 +1,56 @@
+typescript.d.ts(3289,24): error TS2420: Class 'Project' incorrectly implements interface 'LanguageServiceHost'.
+  Types of property 'jsDocParsingMode' are incompatible.
+    Type 'JSDocParsingMode | undefined' is not assignable to type 'JSDocParsingMode'.
+      Type 'undefined' is not assignable to type 'JSDocParsingMode'.
+typescript.internal.d.ts(3913,24): error TS2420: Class 'Project' incorrectly implements interface 'LanguageServiceHost'.
+  Types of property 'createHash' are incompatible.
+    Type '((data: string) => string) | undefined' is not assignable to type '(data: string) => string'.
+      Type 'undefined' is not assignable to type '(data: string) => string'.
+typescript.internal.d.ts(12703,15): error TS2430: Interface 'CommandLineOptionOfStringType' incorrectly extends interface 'CommandLineOptionBase'.
+  Types of property 'defaultValueDescription' are incompatible.
+    Type 'string | DiagnosticMessage | undefined' is not assignable to type 'string | number | boolean | DiagnosticMessage'.
+      Type 'undefined' is not assignable to type 'string | number | boolean | DiagnosticMessage'.
+typescript.internal.d.ts(12708,15): error TS2430: Interface 'CommandLineOptionOfNumberType' incorrectly extends interface 'CommandLineOptionBase'.
+  Types of property 'defaultValueDescription' are incompatible.
+    Type 'number | DiagnosticMessage | undefined' is not assignable to type 'string | number | boolean | DiagnosticMessage'.
+      Type 'undefined' is not assignable to type 'string | number | boolean | DiagnosticMessage'.
+typescript.internal.d.ts(12713,15): error TS2430: Interface 'CommandLineOptionOfBooleanType' incorrectly extends interface 'CommandLineOptionBase'.
+  Types of property 'defaultValueDescription' are incompatible.
+    Type 'boolean | DiagnosticMessage | undefined' is not assignable to type 'string | number | boolean | DiagnosticMessage'.
+      Type 'undefined' is not assignable to type 'string | number | boolean | DiagnosticMessage'.
+typescript.internal.d.ts(12718,15): error TS2430: Interface 'CommandLineOptionOfCustomType' incorrectly extends interface 'CommandLineOptionBase'.
+  Types of property 'defaultValueDescription' are incompatible.
+    Type 'string | number | DiagnosticMessage | undefined' is not assignable to type 'string | number | boolean | DiagnosticMessage'.
+      Type 'undefined' is not assignable to type 'string | number | boolean | DiagnosticMessage'.
+
+
+==== index.ts (0 errors) ====
+    import ts = require("typescript");
+    import tsInternal = require("typescript-internal");
+    import tsserverlibrary = require("tsserverlibrary");
+    import tsserverlibraryInternal = require("tsserverlibrary-internal");
+    
+==== node_modules/typescript/package.json (0 errors) ====
+    {
+        "name": "typescript",
+        "types": "/.ts/typescript.d.ts"
+    }
+    
+==== node_modules/typescript-internal/package.json (0 errors) ====
+    {
+        "name": "typescript-internal",
+        "types": "/.ts/typescript.internal.d.ts"
+    }
+    
+==== node_modules/tsserverlibrary/package.json (0 errors) ====
+    {
+        "name": "tsserverlibrary",
+        "types": "/.ts/tsserverlibrary.d.ts"
+    }
+    
+==== node_modules/tsserverlibrary-internal/package.json (0 errors) ====
+    {
+        "name": "tsserverlibrary-internal",
+        "types": "/.ts/tsserverlibrary.internal.d.ts"
+    }
+    

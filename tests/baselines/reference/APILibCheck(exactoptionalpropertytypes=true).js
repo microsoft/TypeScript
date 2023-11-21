@@ -1,35 +1,36 @@
-// @module: commonjs
-// @noImplicitAny: true
-// @strictNullChecks: true
-// @lib: es2018
-// @exactOptionalPropertyTypes: true, false
+//// [tests/cases/compiler/APILibCheck.ts] ////
 
-// @filename: node_modules/typescript/package.json
+//// [package.json]
 {
     "name": "typescript",
     "types": "/.ts/typescript.d.ts"
 }
 
-// @filename: node_modules/typescript-internal/package.json
+//// [package.json]
 {
     "name": "typescript-internal",
     "types": "/.ts/typescript.internal.d.ts"
 }
 
-// @filename: node_modules/tsserverlibrary/package.json
+//// [package.json]
 {
     "name": "tsserverlibrary",
     "types": "/.ts/tsserverlibrary.d.ts"
 }
 
-// @filename: node_modules/tsserverlibrary-internal/package.json
+//// [package.json]
 {
     "name": "tsserverlibrary-internal",
     "types": "/.ts/tsserverlibrary.internal.d.ts"
 }
 
-// @filename: index.ts
+//// [index.ts]
 import ts = require("typescript");
 import tsInternal = require("typescript-internal");
 import tsserverlibrary = require("tsserverlibrary");
 import tsserverlibraryInternal = require("tsserverlibrary-internal");
+
+
+//// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
