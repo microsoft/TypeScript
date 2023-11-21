@@ -6154,6 +6154,8 @@ export const enum TypeFlags {
     IncludesInstantiable = Substitution,
     /** @internal */
     NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
+    /** @internal */
+    NotStringLiteral = ~(StringLiteral | EnumLiteral | TemplateLiteral | StringMapping)
 }
 
 export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -6307,6 +6309,7 @@ export const enum ObjectFlags {
     /** @internal */
     IsUnknownLikeUnion = 1 << 26, // Union of null, undefined, and empty object type
     /** @internal */
+    StringLiteralUnion = 1 << 27, // Union of only string and template literals
 
     // Flags that require TypeFlags.Intersection
     /** @internal */
