@@ -16794,6 +16794,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!(flags & TypeFlags.Never)) {
             includes |= flags & TypeFlags.IncludesMask;
             if (flags & TypeFlags.Instantiable) includes |= TypeFlags.IncludesInstantiable;
+            if (flags & TypeFlags.Intersection && getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) includes |= TypeFlags.IncludesConstrainedTypeVariable;
             if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
             if (!strictNullChecks && flags & TypeFlags.Nullable) {
                 if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
@@ -16938,6 +16939,49 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function removeConstrainedTypeVariables(types: Type[]) {
+        const typeVariables: TypeVariable[] = [];
+        // First collect a list of the type variables occurring in constraining intersections.
+        for (const type of types) {
+            if (getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
+                const index = (type as IntersectionType).types[0].flags & TypeFlags.TypeVariable ? 0 : 1;
+                pushIfUnique(typeVariables, (type as IntersectionType).types[index]);
+            }
+        }
+        // For each type variable, check if the constraining intersections for that type variable fully
+        // cover the constraint of the type variable; if so, remove the constraining intersections and
+        // substitute the type variable.
+        for (const typeVariable of typeVariables) {
+            const primitives: Type[] = [];
+            // First collect the primitive types from the constraining intersections.
+            for (const type of types) {
+                if (getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
+                    const index = (type as IntersectionType).types[0].flags & TypeFlags.TypeVariable ? 0 : 1;
+                    if ((type as IntersectionType).types[index] === typeVariable) {
+                        insertType(primitives, (type as IntersectionType).types[1 - index]);
+                    }
+                }
+            }
+            // If every constituent in the type variable's constraint is covered by an intersection of the type
+            // variable and that constituent, remove those intersections and substitute the type variable.
+            const constraint = getBaseConstraintOfType(typeVariable)!;
+            if (everyType(constraint, t => containsType(primitives, t))) {
+                let i = types.length;
+                while (i > 0) {
+                    i--;
+                    const type = types[i];
+                    if (getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
+                        const index = (type as IntersectionType).types[0].flags & TypeFlags.TypeVariable ? 0 : 1;
+                        if ((type as IntersectionType).types[index] === typeVariable && containsType(primitives, (type as IntersectionType).types[1 - index])) {
+                            orderedRemoveItemAt(types, i);
+                        }
+                    }
+                }
+                insertType(types, typeVariable);
+            }
+        }
+    }
+
     function isNamedUnionType(type: Type) {
         return !!(type.flags & TypeFlags.Union && (type.aliasSymbol || (type as UnionType).origin));
     }
@@ -17011,6 +17055,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
                 removeStringLiteralsMatchedByTemplateLiterals(typeSet);
+            }
+            if (includes & TypeFlags.IncludesConstrainedTypeVariable) {
+                removeConstrainedTypeVariables(typeSet);
             }
             if (unionReduction === UnionReduction.Subtype) {
                 typeSet = removeSubtypes(typeSet, !!(includes & TypeFlags.Object));
@@ -17276,9 +17323,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function createIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
+    function createIntersectionType(types: Type[], objectFlags: ObjectFlags, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
         const result = createType(TypeFlags.Intersection) as IntersectionType;
-        result.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
+        result.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
         result.types = types;
         result.aliasSymbol = aliasSymbol;
         result.aliasTypeArguments = aliasTypeArguments;
@@ -17299,6 +17346,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeMembershipMap = new Map<string, Type>();
         const includes = addTypesToIntersection(typeMembershipMap, 0 as TypeFlags, types);
         const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
+        let objectFlags = ObjectFlags.None;
         // An intersection type is considered empty if it contains
         // the type never, or
         // more than one unit type or,
@@ -17350,6 +17398,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (typeSet.length === 1) {
             return typeSet[0];
         }
+        if (typeSet.length === 2) {
+            const typeVarIndex = typeSet[0].flags & TypeFlags.TypeVariable ? 0 : 1;
+            const typeVariable = typeSet[typeVarIndex];
+            const primitiveType = typeSet[1 - typeVarIndex];
+            if (typeVariable.flags & TypeFlags.TypeVariable && (primitiveType.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive) || includes & TypeFlags.IncludesEmptyObject)) {
+                // We have an intersection T & P or P & T, where T is a type variable and P is a primitive type, the object type, or {}.
+                const constraint = getBaseConstraintOfType(typeVariable);
+                // Check that T's constraint is similarly composed of primitive types, the object type, or {}.
+                if (constraint && everyType(constraint, t => !!(t.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive)) || isEmptyAnonymousObjectType(t))) {
+                    // If T's constraint is a subtype of P, simply return T. For example, given `T extends "a" | "b"`,
+                    // the intersection `T & string` reduces to just T.
+                    if (isTypeStrictSubtypeOf(constraint, primitiveType)) {
+                        return typeVariable;
+                    }
+                    if (!(constraint.flags & TypeFlags.Union && someType(constraint, c => isTypeStrictSubtypeOf(c, primitiveType)))) {
+                        // No constituent of T's constraint is a subtype of P. If P is also not a subtype of T's constraint,
+                        // then the constraint and P are unrelated, and the intersection reduces to never. For example, given
+                        // `T extends "a" | "b"`, the intersection `T & number` reduces to never.
+                        if (!isTypeStrictSubtypeOf(primitiveType, constraint)) {
+                            return neverType;
+                        }
+                    }
+                    // Some constituent of T's constraint is a subtype of P, or P is a subtype of T's constraint. Thus,
+                    // the intersection further constrains the type variable. For example, given `T extends string | number`,
+                    // the intersection `T & "a"` is marked as a constrained type variable. Likewise, given `T extends "a" | 1`,
+                    // the intersection `T & number` is marked as a constrained type variable.
+                    objectFlags = ObjectFlags.IsConstrainedTypeVariable;
+                }
+            }
+        }
         const id = getTypeListId(typeSet) + getAliasId(aliasSymbol, aliasTypeArguments);
         let result = intersectionTypes.get(id);
         if (!result) {
@@ -17385,7 +17463,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else {
-                result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
+                result = createIntersectionType(typeSet, objectFlags, aliasSymbol, aliasTypeArguments);
             }
             intersectionTypes.set(id, result);
         }
