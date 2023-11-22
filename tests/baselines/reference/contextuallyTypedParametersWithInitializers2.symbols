@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/contextuallyTypedParametersWithInitializers2.ts] ////
+
+=== contextuallyTypedParametersWithInitializers2.ts ===
+declare function test1<
+>test1 : Symbol(test1, Decl(contextuallyTypedParametersWithInitializers2.ts, 0, 0))
+
+  TContext,
+>TContext : Symbol(TContext, Decl(contextuallyTypedParametersWithInitializers2.ts, 0, 23))
+
+  TMethods extends Record<string, (ctx: TContext, ...args: never[]) => unknown>,
+>TMethods : Symbol(TMethods, Decl(contextuallyTypedParametersWithInitializers2.ts, 1, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ctx : Symbol(ctx, Decl(contextuallyTypedParametersWithInitializers2.ts, 2, 35))
+>TContext : Symbol(TContext, Decl(contextuallyTypedParametersWithInitializers2.ts, 0, 23))
+>args : Symbol(args, Decl(contextuallyTypedParametersWithInitializers2.ts, 2, 49))
+
+>(context: TContext, methods: TMethods): void;
+>context : Symbol(context, Decl(contextuallyTypedParametersWithInitializers2.ts, 3, 2))
+>TContext : Symbol(TContext, Decl(contextuallyTypedParametersWithInitializers2.ts, 0, 23))
+>methods : Symbol(methods, Decl(contextuallyTypedParametersWithInitializers2.ts, 3, 20))
+>TMethods : Symbol(TMethods, Decl(contextuallyTypedParametersWithInitializers2.ts, 1, 11))
+
+test1(
+>test1 : Symbol(test1, Decl(contextuallyTypedParametersWithInitializers2.ts, 0, 0))
+  {
+    count: 0,
+>count : Symbol(count, Decl(contextuallyTypedParametersWithInitializers2.ts, 6, 3))
+
+  },
+  {
+    checkLimit: (ctx, max = 500) => {},
+>checkLimit : Symbol(checkLimit, Decl(contextuallyTypedParametersWithInitializers2.ts, 9, 3))
+>ctx : Symbol(ctx, Decl(contextuallyTypedParametersWithInitializers2.ts, 10, 17))
+>max : Symbol(max, Decl(contextuallyTypedParametersWithInitializers2.ts, 10, 21))
+
+    hasAccess: (ctx, user: { name: string }) => {},
+>hasAccess : Symbol(hasAccess, Decl(contextuallyTypedParametersWithInitializers2.ts, 10, 39))
+>ctx : Symbol(ctx, Decl(contextuallyTypedParametersWithInitializers2.ts, 11, 16))
+>user : Symbol(user, Decl(contextuallyTypedParametersWithInitializers2.ts, 11, 20))
+>name : Symbol(name, Decl(contextuallyTypedParametersWithInitializers2.ts, 11, 28))
+
+  },
+);
+
+declare const num: number;
+>num : Symbol(num, Decl(contextuallyTypedParametersWithInitializers2.ts, 15, 13))
+
+const test2: (arg: 1 | 2) => void = (arg = num) => {};
+>test2 : Symbol(test2, Decl(contextuallyTypedParametersWithInitializers2.ts, 16, 5))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersWithInitializers2.ts, 16, 14))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersWithInitializers2.ts, 16, 37))
+>num : Symbol(num, Decl(contextuallyTypedParametersWithInitializers2.ts, 15, 13))
+
+const test3: (arg: number) => void = (arg = 1) => {};
+>test3 : Symbol(test3, Decl(contextuallyTypedParametersWithInitializers2.ts, 18, 5))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersWithInitializers2.ts, 18, 14))
+>arg : Symbol(arg, Decl(contextuallyTypedParametersWithInitializers2.ts, 18, 38))
+

@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts] ////
+//// [tests/cases/compiler/contextuallyTypedParametersWithInitializers1.ts] ////
 
-//// [contextuallyTypedParametersWithInitializers.ts]
+//// [contextuallyTypedParametersWithInitializers1.ts]
 declare function id1<T>(input: T): T;
 declare function id2<T extends (x: any) => any>(input: T): T;
 declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
@@ -86,7 +86,7 @@ const fz1 = (debug = true) => false;
 const fz2: Function = (debug = true) => false;
 
 
-//// [contextuallyTypedParametersWithInitializers.js]
+//// [contextuallyTypedParametersWithInitializers1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.executeSomething = void 0;
@@ -234,5 +234,5 @@ var fz2 = function (debug) {
 };
 
 
-//// [contextuallyTypedParametersWithInitializers.d.ts]
+//// [contextuallyTypedParametersWithInitializers1.d.ts]
 export declare function executeSomething(): Promise<string>;

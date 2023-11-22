@@ -36065,8 +36065,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const declaration = parameter.valueDeclaration as ParameterDeclaration;
             if (!getEffectiveTypeAnnotationNode(declaration)) {
                 let type = tryGetTypeAtPosition(context, i);
-                if (type && type.flags & TypeFlags.Never && declaration.initializer) {
-                    type = widenTypeInferredFromInitializer(declaration, checkDeclarationInitializer(declaration, CheckMode.Normal));
+                if (type && declaration.initializer) {
+                    const initializerType = widenTypeInferredFromInitializer(declaration, checkDeclarationInitializer(declaration, CheckMode.Normal));
+                    if (!isTypeAssignableTo(initializerType, type) && isTypeAssignableTo(type, initializerType)) {
+                        type = initializerType;
+                    }
                 }
                 assignParameterType(parameter, type);
             }

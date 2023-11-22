@@ -15,3 +15,8 @@ test1(
     hasAccess: (ctx, user: { name: string }) => {},
   },
 );
+
+declare const num: number;
+const test2: (arg: 1 | 2) => void = (arg = num) => {};
+
+const test3: (arg: number) => void = (arg = 1) => {};
