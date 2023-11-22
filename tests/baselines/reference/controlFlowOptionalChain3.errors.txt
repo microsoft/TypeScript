@@ -1,0 +1,40 @@
+controlFlowOptionalChain3.tsx(30,8): error TS18048: 'foo' is possibly 'undefined'.
+
+
+==== controlFlowOptionalChain3.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    
+    // https://github.com/microsoft/TypeScript/issues/56482
+    
+    import React from "react";
+    
+    interface Foo {
+      bar: boolean;
+    }
+    
+    function test1(foo: Foo | undefined) {
+      if (foo?.bar === false) {
+        foo;
+      }
+      foo;
+    }
+    
+    function test2(foo: Foo | undefined) {
+      if (foo?.bar === false) {
+        foo;
+      } else {
+        foo;
+      }
+    }
+    
+    function Test3({ foo }: { foo: Foo | undefined }) {
+      return (
+        <div>
+          {foo?.bar === false && "foo"}
+          {foo.bar ? "true" : "false"}
+           ~~~
+!!! error TS18048: 'foo' is possibly 'undefined'.
+        </div>
+      );
+    }
+    

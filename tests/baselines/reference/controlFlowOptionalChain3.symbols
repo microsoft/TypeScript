@@ -1,48 +1,79 @@
-//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain3.ts] ////
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain3.tsx] ////
 
-=== controlFlowOptionalChain3.ts ===
+=== controlFlowOptionalChain3.tsx ===
+/// <reference path="react16.d.ts" />
+
 // https://github.com/microsoft/TypeScript/issues/56482
 
+import React from "react";
+>React : Symbol(React, Decl(controlFlowOptionalChain3.tsx, 4, 6))
+
 interface Foo {
->Foo : Symbol(Foo, Decl(controlFlowOptionalChain3.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(controlFlowOptionalChain3.tsx, 4, 26))
 
   bar: boolean;
->bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.ts, 2, 15))
+>bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 }
 
 function test1(foo: Foo | undefined) {
->test1 : Symbol(test1, Decl(controlFlowOptionalChain3.ts, 4, 1))
->foo : Symbol(foo, Decl(controlFlowOptionalChain3.ts, 6, 15))
->Foo : Symbol(Foo, Decl(controlFlowOptionalChain3.ts, 0, 0))
+>test1 : Symbol(test1, Decl(controlFlowOptionalChain3.tsx, 8, 1))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 10, 15))
+>Foo : Symbol(Foo, Decl(controlFlowOptionalChain3.tsx, 4, 26))
 
   if (foo?.bar === false) {
->foo?.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.ts, 2, 15))
->foo : Symbol(foo, Decl(controlFlowOptionalChain3.ts, 6, 15))
->bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.ts, 2, 15))
+>foo?.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 10, 15))
+>bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 
     foo;
->foo : Symbol(foo, Decl(controlFlowOptionalChain3.ts, 6, 15))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 10, 15))
   }
   foo;
->foo : Symbol(foo, Decl(controlFlowOptionalChain3.ts, 6, 15))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 10, 15))
 }
 
 function test2(foo: Foo | undefined) {
->test2 : Symbol(test2, Decl(controlFlowOptionalChain3.ts, 11, 1))
->foo : Symbol(foo, Decl(controlFlowOptionalChain3.ts, 13, 15))
->Foo : Symbol(Foo, Decl(controlFlowOptionalChain3.ts, 0, 0))
+>test2 : Symbol(test2, Decl(controlFlowOptionalChain3.tsx, 15, 1))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 17, 15))
+>Foo : Symbol(Foo, Decl(controlFlowOptionalChain3.tsx, 4, 26))
 
   if (foo?.bar === false) {
->foo?.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.ts, 2, 15))
->foo : Symbol(foo, Decl(controlFlowOptionalChain3.ts, 13, 15))
->bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.ts, 2, 15))
+>foo?.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 17, 15))
+>bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 
     foo;
->foo : Symbol(foo, Decl(controlFlowOptionalChain3.ts, 13, 15))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 17, 15))
 
   } else {
     foo;
->foo : Symbol(foo, Decl(controlFlowOptionalChain3.ts, 13, 15))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 17, 15))
   }
+}
+
+function Test3({ foo }: { foo: Foo | undefined }) {
+>Test3 : Symbol(Test3, Decl(controlFlowOptionalChain3.tsx, 23, 1))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 25, 16))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 25, 25))
+>Foo : Symbol(Foo, Decl(controlFlowOptionalChain3.tsx, 4, 26))
+
+  return (
+    <div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+      {foo?.bar === false && "foo"}
+>foo?.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 25, 16))
+>bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+
+      {foo.bar ? "true" : "false"}
+>foo.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+>foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 25, 16))
+>bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
+
+    </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+  );
 }
 

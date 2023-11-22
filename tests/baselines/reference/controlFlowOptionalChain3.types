@@ -1,7 +1,12 @@
-//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain3.ts] ////
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain3.tsx] ////
 
-=== controlFlowOptionalChain3.ts ===
+=== controlFlowOptionalChain3.tsx ===
+/// <reference path="react16.d.ts" />
+
 // https://github.com/microsoft/TypeScript/issues/56482
+
+import React from "react";
+>React : typeof React
 
 interface Foo {
   bar: boolean;
@@ -44,5 +49,40 @@ function test2(foo: Foo | undefined) {
     foo;
 >foo : Foo | undefined
   }
+}
+
+function Test3({ foo }: { foo: Foo | undefined }) {
+>Test3 : ({ foo }: { foo: Foo | undefined; }) => JSX.Element
+>foo : Foo | undefined
+>foo : Foo | undefined
+
+  return (
+>(    <div>      {foo?.bar === false && "foo"}      {foo.bar ? "true" : "false"}    </div>  ) : JSX.Element
+
+    <div>
+><div>      {foo?.bar === false && "foo"}      {foo.bar ? "true" : "false"}    </div> : JSX.Element
+>div : any
+
+      {foo?.bar === false && "foo"}
+>foo?.bar === false && "foo" : false | "foo"
+>foo?.bar === false : boolean
+>foo?.bar : boolean | undefined
+>foo : Foo | undefined
+>bar : boolean | undefined
+>false : false
+>"foo" : "foo"
+
+      {foo.bar ? "true" : "false"}
+>foo.bar ? "true" : "false" : "false" | "true"
+>foo.bar : boolean
+>foo : Foo | undefined
+>bar : boolean
+>"true" : "true"
+>"false" : "false"
+
+    </div>
+>div : any
+
+  );
 }
 
