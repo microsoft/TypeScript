@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importInTypePosition.ts ===
+//// [tests/cases/compiler/importInTypePosition.ts] ////
+
+=== importInTypePosition.ts ===
 module A {
 >A : Symbol(A, Decl(importInTypePosition.ts, 0, 0))
 

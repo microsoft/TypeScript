@@ -1,13 +1,13 @@
-tests/cases/compiler/interfacedeclWithIndexerErrors.ts(12,5): error TS2411: Property 'p2' of type 'string' is not assignable to 'string' index type '() => string'.
-tests/cases/compiler/interfacedeclWithIndexerErrors.ts(14,5): error TS2411: Property 'p4' of type 'number' is not assignable to 'string' index type '() => string'.
-tests/cases/compiler/interfacedeclWithIndexerErrors.ts(15,5): error TS2411: Property 'p5' of type '(s: number) => string' is not assignable to 'string' index type '() => string'.
-tests/cases/compiler/interfacedeclWithIndexerErrors.ts(19,5): error TS2411: Property 'f3' of type '(a: string) => number' is not assignable to 'string' index type '() => string'.
-tests/cases/compiler/interfacedeclWithIndexerErrors.ts(20,5): error TS2411: Property 'f4' of type '(s: number) => string' is not assignable to 'string' index type '() => string'.
-tests/cases/compiler/interfacedeclWithIndexerErrors.ts(44,21): error TS2840: An interface cannot extend a primitive type like 'number'; an interface can only extend named types and classes
-tests/cases/compiler/interfacedeclWithIndexerErrors.ts(48,18): error TS2693: 'string' only refers to a type, but is being used as a value here.
+interfacedeclWithIndexerErrors.ts(12,5): error TS2411: Property 'p2' of type 'string' is not assignable to 'string' index type '() => string'.
+interfacedeclWithIndexerErrors.ts(14,5): error TS2411: Property 'p4' of type 'number' is not assignable to 'string' index type '() => string'.
+interfacedeclWithIndexerErrors.ts(15,5): error TS2411: Property 'p5' of type '(s: number) => string' is not assignable to 'string' index type '() => string'.
+interfacedeclWithIndexerErrors.ts(19,5): error TS2411: Property 'f3' of type '(a: string) => number' is not assignable to 'string' index type '() => string'.
+interfacedeclWithIndexerErrors.ts(20,5): error TS2411: Property 'f4' of type '(s: number) => string' is not assignable to 'string' index type '() => string'.
+interfacedeclWithIndexerErrors.ts(44,21): error TS2840: An interface cannot extend a primitive type like 'number'. It can only extend other named object types.
+interfacedeclWithIndexerErrors.ts(48,18): error TS2693: 'string' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/compiler/interfacedeclWithIndexerErrors.ts (7 errors) ====
+==== interfacedeclWithIndexerErrors.ts (7 errors) ====
     interface a0 {
         (): string;
         (a, b, c?: string): number;
@@ -63,7 +63,7 @@ tests/cases/compiler/interfacedeclWithIndexerErrors.ts(48,18): error TS2693: 'st
     
     interface e extends number {
                         ~~~~~~
-!!! error TS2840: An interface cannot extend a primitive type like 'number'; an interface can only extend named types and classes
+!!! error TS2840: An interface cannot extend a primitive type like 'number'. It can only extend other named object types.
     }
     
     interface f {

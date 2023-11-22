@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitShadowingInferNotRenamed.ts] ////
+
 //// [declarationEmitShadowingInferNotRenamed.ts]
 // Any instance type
 type Client = string

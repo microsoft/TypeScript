@@ -1,18 +1,18 @@
-tests/cases/conformance/salsa/main.js(2,13): error TS2339: Property 'foo' does not exist on type 'Alias'.
-tests/cases/conformance/salsa/main.js(3,13): error TS2339: Property 'func' does not exist on type 'Alias'.
-tests/cases/conformance/salsa/main.js(3,38): error TS2339: Property '_func' does not exist on type 'Alias'.
-tests/cases/conformance/salsa/main.js(6,9): error TS2339: Property 'foo' does not exist on type 'Alias'.
-tests/cases/conformance/salsa/main.js(7,9): error TS2339: Property 'func' does not exist on type 'Alias'.
-tests/cases/conformance/salsa/main.js(8,9): error TS2339: Property 'def' does not exist on type 'Alias'.
+main.js(2,13): error TS2339: Property 'foo' does not exist on type 'Alias'.
+main.js(3,13): error TS2339: Property 'func' does not exist on type 'Alias'.
+main.js(3,38): error TS2339: Property '_func' does not exist on type 'Alias'.
+main.js(6,9): error TS2339: Property 'foo' does not exist on type 'Alias'.
+main.js(7,9): error TS2339: Property 'func' does not exist on type 'Alias'.
+main.js(8,9): error TS2339: Property 'def' does not exist on type 'Alias'.
 
 
-==== tests/cases/conformance/salsa/mod1.js (0 errors) ====
+==== mod1.js (0 errors) ====
     class Alias {
         bar() { return 1 }
     }
     module.exports = Alias;
     
-==== tests/cases/conformance/salsa/main.js (6 errors) ====
+==== main.js (6 errors) ====
     import A from './mod1'
     A.prototype.foo = 0
                 ~~~

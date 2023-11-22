@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instantiateContextuallyTypedGenericThis.ts ===
+//// [tests/cases/compiler/instantiateContextuallyTypedGenericThis.ts] ////
+
+=== instantiateContextuallyTypedGenericThis.ts ===
 interface JQuery {
 >JQuery : Symbol(JQuery, Decl(instantiateContextuallyTypedGenericThis.ts, 0, 0))
 

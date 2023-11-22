@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures5.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures5.ts] ////
+
+=== subtypingWithConstructSignatures5.ts ===
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // same as subtypingWithConstructSignatures2 just with an extra level of indirection in the inheritance chain
 
@@ -181,7 +183,7 @@ interface I extends B {
 >y : T
 
     a14: new <T, U>(x: { a: T; b: U }) => T; // ok
->a14 : new <T, U>(x: { a: T; b: U; }) => T
+>a14 : new <T, U>(x: {    a: T;    b: U;}) => T
 >x : { a: T; b: U; }
 >a : T
 >b : U

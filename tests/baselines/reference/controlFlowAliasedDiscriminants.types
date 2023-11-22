@@ -1,0 +1,378 @@
+//// [tests/cases/compiler/controlFlowAliasedDiscriminants.ts] ////
+
+=== controlFlowAliasedDiscriminants.ts ===
+type UseQueryResult<T> = {
+>UseQueryResult : UseQueryResult<T>
+
+    isSuccess: false;
+>isSuccess : false
+>false : false
+
+    data: undefined;
+>data : undefined
+
+} | {
+    isSuccess: true;
+>isSuccess : true
+>true : true
+
+    data: T
+>data : T
+
+};
+
+function useQuery(): UseQueryResult<number> {
+>useQuery : () => UseQueryResult<number>
+
+    return {
+>{        isSuccess: false,        data: undefined,    } : { isSuccess: false; data: undefined; }
+
+        isSuccess: false,
+>isSuccess : false
+>false : false
+
+        data: undefined,
+>data : undefined
+>undefined : undefined
+
+    };
+}
+
+const { data: data1, isSuccess: isSuccess1 } = useQuery();
+>data : any
+>data1 : number | undefined
+>isSuccess : any
+>isSuccess1 : boolean
+>useQuery() : UseQueryResult<number>
+>useQuery : () => UseQueryResult<number>
+
+const { data: data2, isSuccess: isSuccess2 } = useQuery();
+>data : any
+>data2 : number | undefined
+>isSuccess : any
+>isSuccess2 : boolean
+>useQuery() : UseQueryResult<number>
+>useQuery : () => UseQueryResult<number>
+
+const { data: data3, isSuccess: isSuccess3 } = useQuery();
+>data : any
+>data3 : number | undefined
+>isSuccess : any
+>isSuccess3 : boolean
+>useQuery() : UseQueryResult<number>
+>useQuery : () => UseQueryResult<number>
+
+if (isSuccess1 && isSuccess2 && isSuccess3) {
+>isSuccess1 && isSuccess2 && isSuccess3 : boolean
+>isSuccess1 && isSuccess2 : boolean
+>isSuccess1 : boolean
+>isSuccess2 : boolean
+>isSuccess3 : boolean
+
+    data1.toExponential();  // should ok
+>data1.toExponential() : string
+>data1.toExponential : (fractionDigits?: number | undefined) => string
+>data1 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+    data2.toExponential();  // should ok
+>data2.toExponential() : string
+>data2.toExponential : (fractionDigits?: number | undefined) => string
+>data2 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+    data3.toExponential();  // should ok
+>data3.toExponential() : string
+>data3.toExponential : (fractionDigits?: number | undefined) => string
+>data3 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+}
+
+const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
+>areSuccess : boolean
+>isSuccess1 && isSuccess2 && isSuccess3 : boolean
+>isSuccess1 && isSuccess2 : boolean
+>isSuccess1 : boolean
+>isSuccess2 : boolean
+>isSuccess3 : boolean
+
+if (areSuccess) {
+>areSuccess : boolean
+
+    data1.toExponential();  // should ok
+>data1.toExponential() : string
+>data1.toExponential : (fractionDigits?: number | undefined) => string
+>data1 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+    data2.toExponential();  // should ok
+>data2.toExponential() : string
+>data2.toExponential : (fractionDigits?: number | undefined) => string
+>data2 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+    data3.toExponential();  // should ok
+>data3.toExponential() : string
+>data3.toExponential : (fractionDigits?: number | undefined) => string
+>data3 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+}
+
+{
+    let { data: data1, isSuccess: isSuccess1 } = useQuery();
+>data : any
+>data1 : number | undefined
+>isSuccess : any
+>isSuccess1 : boolean
+>useQuery() : UseQueryResult<number>
+>useQuery : () => UseQueryResult<number>
+
+    let { data: data2, isSuccess: isSuccess2 } = useQuery();
+>data : any
+>data2 : number | undefined
+>isSuccess : any
+>isSuccess2 : boolean
+>useQuery() : UseQueryResult<number>
+>useQuery : () => UseQueryResult<number>
+
+    const { data: data3, isSuccess: isSuccess3 } = useQuery();
+>data : any
+>data3 : number | undefined
+>isSuccess : any
+>isSuccess3 : boolean
+>useQuery() : UseQueryResult<number>
+>useQuery : () => UseQueryResult<number>
+
+    const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
+>areSuccess : boolean
+>isSuccess1 && isSuccess2 && isSuccess3 : boolean
+>isSuccess1 && isSuccess2 : boolean
+>isSuccess1 : boolean
+>isSuccess2 : boolean
+>isSuccess3 : boolean
+
+    if (areSuccess) {
+>areSuccess : boolean
+
+        data1.toExponential();  // should error
+>data1.toExponential() : string
+>data1.toExponential : (fractionDigits?: number | undefined) => string
+>data1 : number | undefined
+>toExponential : (fractionDigits?: number | undefined) => string
+
+        data2.toExponential();  // should error
+>data2.toExponential() : string
+>data2.toExponential : (fractionDigits?: number | undefined) => string
+>data2 : number | undefined
+>toExponential : (fractionDigits?: number | undefined) => string
+
+        data3.toExponential();  // should ok
+>data3.toExponential() : string
+>data3.toExponential : (fractionDigits?: number | undefined) => string
+>data3 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+    }
+}
+
+declare function getArrayResult(): [true, number] | [false, undefined];
+>getArrayResult : () => [true, number] | [false, undefined]
+>true : true
+>false : false
+{
+    const [foo1, bar1] = getArrayResult();
+>foo1 : boolean
+>bar1 : number | undefined
+>getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult : () => [true, number] | [false, undefined]
+
+    const [foo2, bar2] = getArrayResult();
+>foo2 : boolean
+>bar2 : number | undefined
+>getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult : () => [true, number] | [false, undefined]
+
+    const [foo3, bar3] = getArrayResult();
+>foo3 : boolean
+>bar3 : number | undefined
+>getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult : () => [true, number] | [false, undefined]
+
+    const arrayAllSuccess = foo1 && foo2 && foo3;
+>arrayAllSuccess : boolean
+>foo1 && foo2 && foo3 : boolean
+>foo1 && foo2 : boolean
+>foo1 : boolean
+>foo2 : boolean
+>foo3 : boolean
+
+    if (arrayAllSuccess) {
+>arrayAllSuccess : boolean
+
+        bar1.toExponential();  // should ok
+>bar1.toExponential() : string
+>bar1.toExponential : (fractionDigits?: number | undefined) => string
+>bar1 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+        bar2.toExponential();  // should ok
+>bar2.toExponential() : string
+>bar2.toExponential : (fractionDigits?: number | undefined) => string
+>bar2 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+        bar3.toExponential();  // should ok
+>bar3.toExponential() : string
+>bar3.toExponential : (fractionDigits?: number | undefined) => string
+>bar3 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+    }
+}
+
+{
+    const [foo1, bar1] = getArrayResult();
+>foo1 : boolean
+>bar1 : number | undefined
+>getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult : () => [true, number] | [false, undefined]
+
+    let [foo2, bar2] = getArrayResult();
+>foo2 : boolean
+>bar2 : number | undefined
+>getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult : () => [true, number] | [false, undefined]
+
+    let [foo3, bar3] = getArrayResult();
+>foo3 : boolean
+>bar3 : number | undefined
+>getArrayResult() : [true, number] | [false, undefined]
+>getArrayResult : () => [true, number] | [false, undefined]
+
+    const arrayAllSuccess = foo1 && foo2 && foo3;
+>arrayAllSuccess : boolean
+>foo1 && foo2 && foo3 : boolean
+>foo1 && foo2 : boolean
+>foo1 : boolean
+>foo2 : boolean
+>foo3 : boolean
+
+    if (arrayAllSuccess) {
+>arrayAllSuccess : boolean
+
+        bar1.toExponential();   // should ok
+>bar1.toExponential() : string
+>bar1.toExponential : (fractionDigits?: number | undefined) => string
+>bar1 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+        bar2.toExponential();   // should error
+>bar2.toExponential() : string
+>bar2.toExponential : (fractionDigits?: number | undefined) => string
+>bar2 : number | undefined
+>toExponential : (fractionDigits?: number | undefined) => string
+
+        bar3.toExponential();   // should error
+>bar3.toExponential() : string
+>bar3.toExponential : (fractionDigits?: number | undefined) => string
+>bar3 : number | undefined
+>toExponential : (fractionDigits?: number | undefined) => string
+    }
+}
+
+type Nested = {
+>Nested : { type: 'string'; resp: {    data: string;}; } | { type: 'number'; resp: {    data: number;}; }
+
+    type: 'string';
+>type : "string"
+
+    resp: {
+>resp : { data: string; }
+
+        data: string
+>data : string
+    }
+} | {
+    type: 'number';
+>type : "number"
+
+    resp: {
+>resp : { data: number; }
+
+        data: number;
+>data : number
+    }
+}
+
+{
+    let resp!: Nested;
+>resp : Nested
+
+    const { resp: { data }, type } = resp;
+>resp : any
+>data : string | number
+>type : "string" | "number"
+>resp : Nested
+
+    if (type === 'string') {
+>type === 'string' : boolean
+>type : "string" | "number"
+>'string' : "string"
+
+        data satisfies string;
+>data satisfies string : string | number
+>data : string | number
+    }
+    if (resp.type === 'string') {
+>resp.type === 'string' : boolean
+>resp.type : "string" | "number"
+>resp : Nested
+>type : "string" | "number"
+>'string' : "string"
+
+        resp.resp.data satisfies string;
+>resp.resp.data satisfies string : string
+>resp.resp.data : string
+>resp.resp : { data: string; }
+>resp : { type: "string"; resp: { data: string; }; }
+>resp : { data: string; }
+>data : string
+    }    
+}
+
+{
+   
+    let resp!: Nested;
+>resp : Nested
+
+    const { resp: { data: dataAlias }, type } = resp;
+>resp : any
+>data : any
+>dataAlias : string | number
+>type : "string" | "number"
+>resp : Nested
+
+    if (type === 'string') {
+>type === 'string' : boolean
+>type : "string" | "number"
+>'string' : "string"
+
+        dataAlias satisfies string;
+>dataAlias satisfies string : string | number
+>dataAlias : string | number
+    }
+    if (resp.type === 'string') {
+>resp.type === 'string' : boolean
+>resp.type : "string" | "number"
+>resp : Nested
+>type : "string" | "number"
+>'string' : "string"
+
+        resp.resp.data satisfies string;
+>resp.resp.data satisfies string : string
+>resp.resp.data : string
+>resp.resp : { data: string; }
+>resp : { type: "string"; resp: { data: string; }; }
+>resp : { data: string; }
+>data : string
+    }    
+}
+

@@ -2,8 +2,6 @@ import * as FourSlash from "./_namespaces/FourSlash";
 import {
     CompilerBaselineRunner,
     CompilerTestType,
-    DefinitelyTypedRunner,
-    DockerfileRunner,
     FourSlashRunner,
     GeneratedFourslashRunner,
     IO,
@@ -12,12 +10,9 @@ import {
     setLightMode,
     setShardId,
     setShards,
-    Test262BaselineRunner,
     TestRunnerKind,
-    UserCodeRunner,
 } from "./_namespaces/Harness";
 import * as project from "./_namespaces/project";
-import * as RWC from "./_namespaces/RWC";
 import * as ts from "./_namespaces/ts";
 import * as vpath from "./_namespaces/vpath";
 
@@ -57,7 +52,7 @@ function tryGetConfig(args: string[]) {
     const prefix = "--config=";
     const configPath = ts.forEach(args, arg => arg.lastIndexOf(prefix, 0) === 0 && arg.substr(prefix.length));
     // strip leading and trailing quotes from the path (necessary on Windows since shell does not do it automatically)
-    return configPath && configPath.replace(/(^[\"'])|([\"']$)/g, "");
+    return configPath && configPath.replace(/(^["'])|(["']$)/g, "");
 }
 
 export function createRunner(kind: TestRunnerKind): RunnerBase {
@@ -68,24 +63,10 @@ export function createRunner(kind: TestRunnerKind): RunnerBase {
             return new CompilerBaselineRunner(CompilerTestType.Regressions);
         case "fourslash":
             return new FourSlashRunner(FourSlash.FourSlashTestType.Native);
-        case "fourslash-shims":
-            return new FourSlashRunner(FourSlash.FourSlashTestType.Shims);
-        case "fourslash-shims-pp":
-            return new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess);
         case "fourslash-server":
             return new FourSlashRunner(FourSlash.FourSlashTestType.Server);
         case "project":
             return new project.ProjectRunner();
-        case "rwc":
-            return new RWC.RWCRunner();
-        case "test262":
-            return new Test262BaselineRunner();
-        case "user":
-            return new UserCodeRunner();
-        case "dt":
-            return new DefinitelyTypedRunner();
-        case "docker":
-            return new DockerfileRunner();
     }
     return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -96,12 +77,11 @@ const mytestconfigFileName = "mytest.config";
 const testconfigFileName = "test.config";
 
 const customConfig = tryGetConfig(IO.args());
-const testConfigContent =
-    customConfig && IO.fileExists(customConfig)
-        ? IO.readFile(customConfig)!
-        : IO.fileExists(mytestconfigFileName)
-            ? IO.readFile(mytestconfigFileName)!
-            : IO.fileExists(testconfigFileName) ? IO.readFile(testconfigFileName)! : "";
+const testConfigContent = customConfig && IO.fileExists(customConfig)
+    ? IO.readFile(customConfig)!
+    : IO.fileExists(mytestconfigFileName)
+    ? IO.readFile(mytestconfigFileName)!
+    : IO.fileExists(testconfigFileName) ? IO.readFile(testconfigFileName)! : "";
 
 export let taskConfigsFolder: string;
 export let workerCount: number;
@@ -177,7 +157,7 @@ function handleTestConfig() {
         const runnerConfig = testConfig.runners || testConfig.test;
         if (runnerConfig && runnerConfig.length > 0) {
             if (testConfig.runners) {
-                runUnitTests = runnerConfig.indexOf("unittest") !== -1;
+                runUnitTests = runnerConfig.includes("unittest");
             }
             for (const option of runnerConfig) {
                 if (!option) {
@@ -205,32 +185,12 @@ function handleTestConfig() {
                     case "fourslash":
                         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
                         break;
-                    case "fourslash-shims":
-                        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Shims));
-                        break;
-                    case "fourslash-shims-pp":
-                        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
-                        break;
                     case "fourslash-server":
                         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
                         break;
                     case "fourslash-generated":
                         runners.push(new GeneratedFourslashRunner(FourSlash.FourSlashTestType.Native));
                         break;
-                    case "rwc":
-                        runners.push(new RWC.RWCRunner());
-                        break;
-                    case "test262":
-                        runners.push(new Test262BaselineRunner());
-                        break;
-                    case "user":
-                        runners.push(new UserCodeRunner());
-                        break;
-                    case "dt":
-                        runners.push(new DefinitelyTypedRunner());
-                        break;
-                    case "docker":
-                        runners.push(new DockerfileRunner());
                         break;
                 }
             }
@@ -246,16 +206,8 @@ function handleTestConfig() {
 
         // language services
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
-        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Shims));
-        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
-
-        // CRON-only tests
-        if (process.env.TRAVIS_EVENT_TYPE === "cron") {
-            runners.push(new UserCodeRunner());
-            runners.push(new DockerfileRunner());
-        }
     }
     if (runUnitTests === undefined) {
         runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
@@ -267,7 +219,7 @@ function beginTests() {
     ts.Debug.loggingHost = {
         log(_level, s) {
             console.log(s || "");
-        }
+        },
     };
 
     if (ts.Debug.isDebugging) {

@@ -8,11 +8,7 @@
 ////    x.f/*1*/oo
 ////}
 
-goTo.marker("1");
-verify.occurrencesAtPositionCount(2);
-
+verify.baselineDocumentHighlights("1");
 goTo.marker("0");
 edit.insert("\n");
-
-goTo.marker("1");
-verify.occurrencesAtPositionCount(2);
+verify.baselineDocumentHighlights("1");

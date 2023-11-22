@@ -1,8 +1,18 @@
+currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
+//// [/user/username/projects/noEmitOnError/tsconfig.json]
+{
+  "compilerOptions": {
+    "outDir": "./dev-build",
+    "noEmitOnError": true
+  }
+}
+
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
     name: string;
 }
+
 
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
@@ -10,17 +20,10 @@ const a = {
     lastName: 'sdsd'
 ;
 
+
 //// [/user/username/projects/noEmitOnError/src/other.ts]
 console.log("hi");
 export { }
-
-//// [/user/username/projects/noEmitOnError/tsconfig.json]
-{
-    "compilerOptions": {
-        "outDir": "./dev-build",
-        "noEmitOnError": true
-    }
-}
 
 
 //// [/a/lib/lib.d.ts]
@@ -53,8 +56,42 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/noemitonerror/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts: *new*
+  {}
+/user/username/projects/noemitonerror/src/main.ts: *new*
+  {}
+/user/username/projects/noemitonerror/src/other.ts: *new*
+  {}
+/user/username/projects/noemitonerror/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/noemitonerror: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "noEmitOnError": true,
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -74,58 +111,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (used version)
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
-Output::
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
 
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
+After running Timeout callback:: count: 0
 
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Fix Syntax error
 
@@ -137,6 +139,13 @@ const a = {
 };
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
@@ -144,43 +153,6 @@ Output::
 [[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/noEmitOnError/src/main.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
 "use strict";
@@ -216,6 +188,35 @@ export {};
 
 
 
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "noEmitOnError": true,
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/noEmitOnError/src/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Semantic Error
 
 Input::
@@ -224,6 +225,13 @@ import { A } from "../shared/types/db";
 const a: string = 10;
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
@@ -237,8 +245,21 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "noEmitOnError": true,
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -252,58 +273,23 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
-Output::
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
 
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
+After running Timeout callback:: count: 0
 
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Fix Semantic Error
 
@@ -313,6 +299,13 @@ import { A } from "../shared/types/db";
 const a: string = "hello";
 
 
+Timeout callback:: count: 1
+5: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:15 AM[0m] File change detected. Starting incremental compilation...
@@ -321,8 +314,28 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var a = "hello";
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "noEmitOnError": true,
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -336,62 +349,20 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var a = "hello";
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts] file written with same contents
 
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
-Output::
+Timeout callback:: count: 1
+6: timerToUpdateProgram *new*
 
-PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"pollingInterval":500}
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
 
-FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {}
-/user/username/projects/noemitonerror/src/main.ts:
-  {}
-/user/username/projects/noemitonerror/src/other.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
+After running Timeout callback:: count: 0
 
-FsWatchesRecursive::
-/user/username/projects/noemitonerror:
-  {}
 
 exitCode:: ExitStatus.undefined
-

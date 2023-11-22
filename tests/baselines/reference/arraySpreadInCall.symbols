@@ -1,0 +1,117 @@
+//// [tests/cases/conformance/es6/spread/arraySpreadInCall.ts] ////
+
+=== arraySpreadInCall.ts ===
+declare function f1(a: number, b: number, c: number, d: number, e: number, f: number): void;
+>f1 : Symbol(f1, Decl(arraySpreadInCall.ts, 0, 0))
+>a : Symbol(a, Decl(arraySpreadInCall.ts, 0, 20))
+>b : Symbol(b, Decl(arraySpreadInCall.ts, 0, 30))
+>c : Symbol(c, Decl(arraySpreadInCall.ts, 0, 41))
+>d : Symbol(d, Decl(arraySpreadInCall.ts, 0, 52))
+>e : Symbol(e, Decl(arraySpreadInCall.ts, 0, 63))
+>f : Symbol(f, Decl(arraySpreadInCall.ts, 0, 74))
+
+f1(1, 2, 3, 4, ...[5, 6]);
+>f1 : Symbol(f1, Decl(arraySpreadInCall.ts, 0, 0))
+
+f1(...[1], 2, 3, 4, 5, 6);
+>f1 : Symbol(f1, Decl(arraySpreadInCall.ts, 0, 0))
+
+f1(1, 2, ...[3, 4], 5, 6);
+>f1 : Symbol(f1, Decl(arraySpreadInCall.ts, 0, 0))
+
+f1(1, 2, ...[3], 4, ...[5, 6]);
+>f1 : Symbol(f1, Decl(arraySpreadInCall.ts, 0, 0))
+
+f1(...[1, 2], ...[3, 4], ...[5, 6]);
+>f1 : Symbol(f1, Decl(arraySpreadInCall.ts, 0, 0))
+
+f1(...(([1, 2])), ...(((([3, 4])))), ...([5, 6]));
+>f1 : Symbol(f1, Decl(arraySpreadInCall.ts, 0, 0))
+
+declare function f2<T extends unknown[]>(...args: T): T;
+>f2 : Symbol(f2, Decl(arraySpreadInCall.ts, 6, 50))
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 8, 20))
+>args : Symbol(args, Decl(arraySpreadInCall.ts, 8, 41))
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 8, 20))
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 8, 20))
+
+const x21 = f2(...[1, 'foo'])
+>x21 : Symbol(x21, Decl(arraySpreadInCall.ts, 9, 5))
+>f2 : Symbol(f2, Decl(arraySpreadInCall.ts, 6, 50))
+
+const x22 = f2(true, ...[1, 'foo'])
+>x22 : Symbol(x22, Decl(arraySpreadInCall.ts, 10, 5))
+>f2 : Symbol(f2, Decl(arraySpreadInCall.ts, 6, 50))
+
+const x23 = f2(...([1, 'foo']))
+>x23 : Symbol(x23, Decl(arraySpreadInCall.ts, 11, 5))
+>f2 : Symbol(f2, Decl(arraySpreadInCall.ts, 6, 50))
+
+const x24 = f2(true, ...([1, 'foo']))
+>x24 : Symbol(x24, Decl(arraySpreadInCall.ts, 12, 5))
+>f2 : Symbol(f2, Decl(arraySpreadInCall.ts, 6, 50))
+
+declare function f3<T extends readonly unknown[]>(...args: T): T;
+>f3 : Symbol(f3, Decl(arraySpreadInCall.ts, 12, 37))
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 14, 20))
+>args : Symbol(args, Decl(arraySpreadInCall.ts, 14, 50))
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 14, 20))
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 14, 20))
+
+const x31 = f3(...[1, 'foo'])
+>x31 : Symbol(x31, Decl(arraySpreadInCall.ts, 15, 5))
+>f3 : Symbol(f3, Decl(arraySpreadInCall.ts, 12, 37))
+
+const x32 = f3(true, ...[1, 'foo'])
+>x32 : Symbol(x32, Decl(arraySpreadInCall.ts, 16, 5))
+>f3 : Symbol(f3, Decl(arraySpreadInCall.ts, 12, 37))
+
+const x33 = f3(...([1, 'foo']))
+>x33 : Symbol(x33, Decl(arraySpreadInCall.ts, 17, 5))
+>f3 : Symbol(f3, Decl(arraySpreadInCall.ts, 12, 37))
+
+const x34 = f3(true, ...([1, 'foo']))
+>x34 : Symbol(x34, Decl(arraySpreadInCall.ts, 18, 5))
+>f3 : Symbol(f3, Decl(arraySpreadInCall.ts, 12, 37))
+
+declare function f4<const T extends readonly unknown[]>(...args: T): T;
+>f4 : Symbol(f4, Decl(arraySpreadInCall.ts, 18, 37))
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 20, 20))
+>args : Symbol(args, Decl(arraySpreadInCall.ts, 20, 56))
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 20, 20))
+>T : Symbol(T, Decl(arraySpreadInCall.ts, 20, 20))
+
+const x41 = f4(...[1, 'foo'])
+>x41 : Symbol(x41, Decl(arraySpreadInCall.ts, 21, 5))
+>f4 : Symbol(f4, Decl(arraySpreadInCall.ts, 18, 37))
+
+const x42 = f4(true, ...[1, 'foo'])
+>x42 : Symbol(x42, Decl(arraySpreadInCall.ts, 22, 5))
+>f4 : Symbol(f4, Decl(arraySpreadInCall.ts, 18, 37))
+
+const x43 = f4(...([1, 'foo']))
+>x43 : Symbol(x43, Decl(arraySpreadInCall.ts, 23, 5))
+>f4 : Symbol(f4, Decl(arraySpreadInCall.ts, 18, 37))
+
+const x44 = f4(true, ...([1, 'foo']))
+>x44 : Symbol(x44, Decl(arraySpreadInCall.ts, 24, 5))
+>f4 : Symbol(f4, Decl(arraySpreadInCall.ts, 18, 37))
+
+// dicovered in #52845#issuecomment-1459132562
+interface IAction {
+>IAction : Symbol(IAction, Decl(arraySpreadInCall.ts, 24, 37))
+
+    run(event?: unknown): unknown;
+>run : Symbol(IAction.run, Decl(arraySpreadInCall.ts, 27, 19))
+>event : Symbol(event, Decl(arraySpreadInCall.ts, 28, 8))
+}
+declare const action: IAction
+>action : Symbol(action, Decl(arraySpreadInCall.ts, 30, 13))
+>IAction : Symbol(IAction, Decl(arraySpreadInCall.ts, 24, 37))
+
+action.run(...[100, 'foo']) // error
+>action.run : Symbol(IAction.run, Decl(arraySpreadInCall.ts, 27, 19))
+>action : Symbol(action, Decl(arraySpreadInCall.ts, 30, 13))
+>run : Symbol(IAction.run, Decl(arraySpreadInCall.ts, 27, 19))
+
+

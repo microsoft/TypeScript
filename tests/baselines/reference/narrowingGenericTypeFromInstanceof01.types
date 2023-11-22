@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts ===
+//// [tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts] ////
+
+=== narrowingGenericTypeFromInstanceof01.ts ===
 class A<T> {
 >A : A<T>
 
@@ -29,7 +31,7 @@ function test<T>(x: A<T> | B<T>) {
 
         acceptA(x);
 >acceptA(x) : void
->acceptA : <T>(a: A<T>) => void
+>acceptA : <T_1>(a: A<T_1>) => void
 >x : B<T>
     }
 
@@ -40,7 +42,7 @@ function test<T>(x: A<T> | B<T>) {
 
         acceptA(x);
 >acceptA(x) : void
->acceptA : <T>(a: A<T>) => void
+>acceptA : <T_1>(a: A<T_1>) => void
 >x : A<T>
     }
 
@@ -51,7 +53,7 @@ function test<T>(x: A<T> | B<T>) {
 
         acceptB(x);
 >acceptB(x) : void
->acceptB : <T>(b: B<T>) => void
+>acceptB : <T_1>(b: B<T_1>) => void
 >x : B<T>
     }
 
@@ -62,7 +64,7 @@ function test<T>(x: A<T> | B<T>) {
 
         acceptB(x);
 >acceptB(x) : void
->acceptB : <T>(b: B<T>) => void
+>acceptB : <T_1>(b: B<T_1>) => void
 >x : B<T>
     }
 }

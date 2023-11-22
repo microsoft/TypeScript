@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures2.ts] ////
+
+=== subtypingWithConstructSignatures2.ts ===
 // checking subtype relations for function types as it relates to contextual signature instantiation
 
 class Base { foo: string; }
@@ -641,7 +643,7 @@ var r13b = [r13arg2, r13arg1];
 >r13arg1 : new <T extends Derived[]>(x: Base[], y: T) => T
 
 var r14arg1: new <T>(x: { a: T; b: T }) => T;
->r14arg1 : new <T>(x: { a: T; b: T; }) => T
+>r14arg1 : new <T>(x: {    a: T;    b: T;}) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T

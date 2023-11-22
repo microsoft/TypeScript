@@ -10,5 +10,5 @@
 // @Filename: c.ts
 ////import { f } from "./a";
 
-verify.baselineFindAllReferences('def', 'deg')
-verify.goToDefinition("ref", "def");
+verify.baselineFindAllReferences('def', 'deg');
+verify.baselineGoToDefinition("ref");

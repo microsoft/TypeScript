@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -28,7 +29,16 @@ export function fooBar(): string;
 export function temp(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"exclude":["node_modules"],"watchOptions":{"excludeDirectories":["node_modules"]}}
+{
+  "exclude": [
+    "node_modules"
+  ],
+  "watchOptions": {
+    "excludeDirectories": [
+      "node_modules"
+    ]
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -40,8 +50,43 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/src/main.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var bar_1 = require("bar");
+(0, bar_1.foo)();
+
+
+
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
+  {}
+/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/src/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/src/main.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -61,62 +106,12 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
 /user/username/projects/myproject/src/main.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/main.ts:
-  {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var bar_1 = require("bar");
-(0, bar_1.foo)();
-
-
 
 Change:: delete fooBar
 
 Input::
 //// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] deleted
 
-Output::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/main.ts:
-  {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
-

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-asyncFunctionForOfStatements.ts] ////
+
 //// [es5-asyncFunctionForOfStatements.ts]
 declare var x, y, z, a, b, c;
 

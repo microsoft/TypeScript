@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts] ////
+
+=== subtypesOfTypeParameterWithConstraints2.ts ===
 // checking whether other types are subtypes of type parameters with constraints
 
 function f1<T extends U, U>(x: T, y: U) {
@@ -175,13 +177,11 @@ function f4<T extends Number>(x: T) {
 >true ? x : null : T
 >true : true
 >x : T
->null : null
 
     var r0 = true ? null : x; // ok
 >r0 : T
 >true ? null : x : T
 >true : true
->null : null
 >x : T
 
     var u: typeof undefined;
@@ -349,20 +349,20 @@ function f12<T extends <U>(x: U) => U>(x: T) {
 >x : T
 
     var r8 = true ? <T>(x: T) => { return x } : x; // ok
->r8 : <T>(x: T) => T
->true ? <T>(x: T) => { return x } : x : <T>(x: T) => T
+>r8 : <T_1>(x: T_1) => T_1
+>true ? <T>(x: T) => { return x } : x : <T_1>(x: T_1) => T_1
 >true : true
-><T>(x: T) => { return x } : <T>(x: T) => T
+><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 >x : T
 >x : T
 >x : T
 
     var r8b = true ? x : <T>(x: T) => { return x }; // ok, type parameters not identical across declarations
->r8b : <T>(x: T) => T
->true ? x : <T>(x: T) => { return x } : <T>(x: T) => T
+>r8b : <T_1>(x: T_1) => T_1
+>true ? x : <T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 >true : true
 >x : T
-><T>(x: T) => { return x } : <T>(x: T) => T
+><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 >x : T
 >x : T
 }

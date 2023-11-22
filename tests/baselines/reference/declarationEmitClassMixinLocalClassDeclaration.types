@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitClassMixinLocalClassDeclaration.ts ===
+//// [tests/cases/compiler/declarationEmitClassMixinLocalClassDeclaration.ts] ////
+
+=== declarationEmitClassMixinLocalClassDeclaration.ts ===
 export type AnyFunction<Result = any> = (...input: any[]) => Result
 >AnyFunction : AnyFunction<Result>
 >input : any[]
@@ -19,7 +21,6 @@ type MixinHelperFunc = <A extends AnyConstructor, T>(required: [A], arg: T) => T
 export const Mixin: MixinHelperFunc = null as any
 >Mixin : MixinHelperFunc
 >null as any : any
->null : null
 
 
 export class Base {}

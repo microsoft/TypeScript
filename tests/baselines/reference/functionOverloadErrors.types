@@ -1,4 +1,6 @@
-=== tests/cases/conformance/functions/functionOverloadErrors.ts ===
+//// [tests/cases/conformance/functions/functionOverloadErrors.ts] ////
+
+=== functionOverloadErrors.ts ===
 //Function overload signature with initializer
 function fn1(x = 3);
 >fn1 : (x?: number) => any
@@ -44,7 +46,6 @@ function fn3(): any {
 >fn3 : { (x: string): string; (y: string): number; }
 
     return null;
->null : null
 }
 
 //Function overload with rest param and another with only an optional parameter
@@ -126,13 +127,13 @@ interface List<T> {
 >parents : List<List<T>>
 }
 function fn12<T extends List<List<any>>>();
->fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
+>fn12 : { <T extends List<List<any>>>(): any; <T_1 extends List<any>>(): any; }
 
 function fn12<T extends List<any>>();
->fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
+>fn12 : { <T_1 extends List<List<any>>>(): any; <T extends List<any>>(): any; }
 
 function fn12() { }
->fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
+>fn12 : { <T extends List<List<any>>>(): any; <T_1 extends List<any>>(): any; }
 
 //Function overloads that differ by accessibility
 class cls {
@@ -237,13 +238,13 @@ function fn14() {
 
 //Function overloads where return types are different infinitely recursive type reference
 function fn15<T extends List<List<any>>>(): T;
->fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
+>fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }
 
 function fn15<T extends List<any>>(): T;
->fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
+>fn15 : { <T_1 extends List<List<any>>>(): T_1; <T extends List<any>>(): T; }
 
 function fn15() {
->fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
+>fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }
 
     return undefined;
 >undefined : undefined

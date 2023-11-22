@@ -1,4 +1,6 @@
-=== tests/cases/compiler/correlatedUnions.ts ===
+//// [tests/cases/compiler/correlatedUnions.ts] ////
+
+=== correlatedUnions.ts ===
 // Various repros from #30581
 
 type RecordMap = { n: number, s: string, b: boolean };
@@ -352,9 +354,9 @@ function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
 
         document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
 >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
->document.addEventListener : { <K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
 >document : Document
->addEventListener : { <K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
 >event.name : K
 >event : Ev<K>
 >name : K
@@ -795,8 +797,8 @@ type MappedFromOriginal = SameKeys<Original>;
 >MappedFromOriginal : SameKeys<Original>
 
 const getStringAndNumberFromOriginalAndMapped = <
->getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
-><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
+>getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
+><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
 
   K extends KeyOfOriginal,
   N extends NestedKeyOfOriginalFor<K>
@@ -828,3 +830,73 @@ const getStringAndNumberFromOriginalAndMapped = <
 >nestedKey : N
 
 };
+
+// repro from #31675
+interface Config {
+  string: string;
+>string : string
+
+  number: number;
+>number : number
+}
+
+function getConfigOrDefault<T extends keyof Config>(
+>getConfigOrDefault : <T extends keyof Config>(userConfig: Partial<Config>, key: T, defaultValue: Config[T]) => Config[T]
+
+  userConfig: Partial<Config>,
+>userConfig : Partial<Config>
+
+  key: T,
+>key : T
+
+  defaultValue: Config[T]
+>defaultValue : Config[T]
+
+): Config[T] {
+  const userValue = userConfig[key]; 
+>userValue : Partial<Config>[T]
+>userConfig[key] : Partial<Config>[T]
+>userConfig : Partial<Config>
+>key : T
+
+  const assertedCheck = userValue ? userValue! : defaultValue;
+>assertedCheck : Config[T]
+>userValue ? userValue! : defaultValue : Config[T]
+>userValue : Partial<Config>[T]
+>userValue! : NonNullable<Partial<Config>[T]>
+>userValue : NonNullable<Partial<Config>[T]>
+>defaultValue : Config[T]
+
+  return assertedCheck;
+>assertedCheck : Config[T]
+}
+
+// repro from #47523
+
+type Foo1 = {
+>Foo1 : { x: number; y: string; }
+
+  x: number;
+>x : number
+
+  y: string;
+>y : string
+
+};
+
+function getValueConcrete<K extends keyof Foo1>(
+>getValueConcrete : <K extends keyof Foo1>(o: Partial<Foo1>, k: K) => Foo1[K] | undefined
+
+  o: Partial<Foo1>,
+>o : Partial<Foo1>
+
+  k: K
+>k : K
+
+): Foo1[K] | undefined {
+  return o[k];
+>o[k] : Partial<Foo1>[K]
+>o : Partial<Foo1>
+>k : K
+}
+

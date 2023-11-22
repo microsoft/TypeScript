@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMap-LineBreaks.ts ===
+//// [tests/cases/compiler/sourceMap-LineBreaks.ts] ////
+
+=== sourceMap-LineBreaks.ts ===
 var endsWithlineSeparator = 10; 
 >endsWithlineSeparator : Symbol(endsWithlineSeparator, Decl(sourceMap-LineBreaks.ts, 0, 3))
 

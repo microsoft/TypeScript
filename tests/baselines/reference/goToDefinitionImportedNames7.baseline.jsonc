@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|class [|Class|] {
+//     private f;
+// }|>
+// export default Class;
+
+// === /tests/cases/fourslash/b.ts ===
+// import /*GOTO DEF*/[|defaultExport|] from "./a";
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "Class",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

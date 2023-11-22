@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralIndexerErrors.ts] ////
+
 //// [objectLiteralIndexerErrors.ts]
 interface A {
     x: number;

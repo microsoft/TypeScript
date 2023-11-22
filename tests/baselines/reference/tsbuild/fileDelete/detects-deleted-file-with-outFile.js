@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -27,7 +28,13 @@ export function child2() {
 
 
 //// [/src/child/tsconfig.json]
-{"compilerOptions":{"composite":true,"outFile":"../childResult.js","module":"amd"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outFile": "../childResult.js",
+    "module": "amd"
+  }
+}
 
 //// [/src/main/main.ts]
 import { child } from "child";
@@ -37,7 +44,18 @@ export function main() {
 
 
 //// [/src/main/tsconfig.json]
-{"compilerOptions":{"composite":true,"outFile":"../mainResult.js","module":"amd"},"references":[{"path":"../child"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outFile": "../mainResult.js",
+    "module": "amd"
+  },
+  "references": [
+    {
+      "path": "../child"
+    }
+  ]
+}
 
 
 
@@ -77,6 +95,7 @@ File '/src/child.d.ts' does not exist.
 File '/child.ts' does not exist.
 File '/child.tsx' does not exist.
 File '/child.d.ts' does not exist.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
 Directory '/src/main/node_modules' does not exist, skipping all lookups in it.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.

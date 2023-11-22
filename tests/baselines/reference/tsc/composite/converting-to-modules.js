@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -18,7 +19,12 @@ declare const console: { log(msg: any): void; };
 const x = 10;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true}}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  }
+}
 
 
 
@@ -91,7 +97,12 @@ var x = 10;
 Change:: convert to modules
 Input::
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"module":"es2015","composite":true}}
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "composite": true
+  }
+}
 
 
 

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -37,44 +38,6 @@ Output::
 
 
 
-Program root files: ["/a/b/moduleFile1.ts","/a/b/referenceFile1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/referenceFile1.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/referenceFile1.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/modulefile1.ts (used version)
-/a/b/referencefile1.ts (used version)
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/referencefile1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -93,11 +56,59 @@ exports.x = Foo();
 
 
 
+FsWatches::
+/a/b/modulefile1.ts: *new*
+  {}
+/a/b/referencefile1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Program root files: [
+  "/a/b/moduleFile1.ts",
+  "/a/b/referenceFile1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/referenceFile1.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/referenceFile1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/modulefile1.ts (used version)
+/a/b/referencefile1.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: delete moduleFile1
 
 Input::
 //// [/a/b/moduleFile1.ts] deleted
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
@@ -116,8 +127,37 @@ Output::
 
 
 
-Program root files: ["/a/b/referenceFile1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/referenceFile1.js] file written with same contents
+
+PolledWatches::
+/a/b/modulefile1.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/referencefile1.ts:
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/modulefile1.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
+
+Program root files: [
+  "/a/b/referenceFile1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -129,24 +169,4 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/modulefile1.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/referencefile1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/referenceFile1.js] file written with same contents

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInGenericStaticMembers.ts ===
+//// [tests/cases/compiler/thisInGenericStaticMembers.ts] ////
+
+=== thisInGenericStaticMembers.ts ===
 // this.call in static generic method not resolved correctly
 
 class A {
@@ -19,9 +21,9 @@ class A {
 
         return this.one<T>(source, 42);
 >this.one<T>(source, 42) : T
->this.one : <T>(source: T, value: number) => T
+>this.one : <T_1>(source: T_1, value: number) => T_1
 >this : typeof A
->one : <T>(source: T, value: number) => T
+>one : <T_1>(source: T_1, value: number) => T_1
 >source : T
 >42 : 42
     }

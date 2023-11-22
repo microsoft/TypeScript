@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsUndefined.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsUndefined.ts] ////
+
+=== comparisonOperatorWithOneOperandIsUndefined.ts ===
 var x: typeof undefined;
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >undefined : Symbol(undefined)

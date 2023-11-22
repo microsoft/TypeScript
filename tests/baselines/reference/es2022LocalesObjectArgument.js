@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2022/es2022LocalesObjectArgument.ts] ////
+
 //// [es2022LocalesObjectArgument.ts]
 const enUS = new Intl.Locale("en-US");
 const deDE = new Intl.Locale("de-DE");

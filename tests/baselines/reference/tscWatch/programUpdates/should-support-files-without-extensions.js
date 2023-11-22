@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/compile]
 let x = 1
@@ -25,8 +26,23 @@ Output::
 
 
 
-Program root files: ["/a/compile"]
-Program options: {"allowNonTsExtensions":true}
+//// [/a/compile.js]
+var x = 1;
+
+
+
+FsWatches::
+/a/compile: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/compile"
+]
+Program options: {
+  "allowNonTsExtensions": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -40,19 +56,4 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/compile (used version)
 
-PolledWatches::
-
-FsWatches::
-/a/compile:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/compile.js]
-var x = 1;
-
-

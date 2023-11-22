@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatOnNew.ts ===
+//// [tests/cases/compiler/assignmentCompatOnNew.ts] ////
+
+=== assignmentCompatOnNew.ts ===
 class Foo{};
 >Foo : Symbol(Foo, Decl(assignmentCompatOnNew.ts, 0, 0))
 

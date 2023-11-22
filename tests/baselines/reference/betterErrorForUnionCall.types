@@ -1,4 +1,6 @@
-=== tests/cases/compiler/betterErrorForUnionCall.ts ===
+//// [tests/cases/compiler/betterErrorForUnionCall.ts] ////
+
+=== betterErrorForUnionCall.ts ===
 declare const union: { a: string } | { b: string }
 >union : { a: string; } | { b: string; }
 >a : string
@@ -20,12 +22,12 @@ fnUnion("");
 >"" : ""
 
 declare const fnUnion2: (<T extends number>(a: T) => void) | (<T>(a: string) => void)
->fnUnion2 : (<T extends number>(a: T) => void) | (<T>(a: string) => void)
+>fnUnion2 : (<T extends number>(a: T) => void) | (<T_1>(a: string) => void)
 >a : T
 >a : string
 
 fnUnion2("");
 >fnUnion2("") : any
->fnUnion2 : (<T extends number>(a: T) => void) | (<T>(a: string) => void)
+>fnUnion2 : (<T extends number>(a: T) => void) | (<T_1>(a: string) => void)
 >"" : ""
 

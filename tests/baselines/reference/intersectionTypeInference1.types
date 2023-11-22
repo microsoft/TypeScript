@@ -1,4 +1,6 @@
-=== tests/cases/compiler/intersectionTypeInference1.ts ===
+//// [tests/cases/compiler/intersectionTypeInference1.ts] ////
+
+=== intersectionTypeInference1.ts ===
 // Repro from #8801
 
 function alert(s: string) {}
@@ -17,8 +19,8 @@ const parameterFn = (props:{store:string}) => alert(props.store)
 >store : string
 
 const brokenFunction = <OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o
->brokenFunction : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
-><OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
+>brokenFunction : <OwnProps>(f: (p: {    dispatch: number;} & OwnProps) => void) => (o: OwnProps) => OwnProps
+><OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o : <OwnProps>(f: (p: {    dispatch: number;} & OwnProps) => void) => (o: OwnProps) => OwnProps
 >f : (p: {    dispatch: number;} & OwnProps) => void
 >p : { dispatch: number; } & OwnProps
 >dispatch : number

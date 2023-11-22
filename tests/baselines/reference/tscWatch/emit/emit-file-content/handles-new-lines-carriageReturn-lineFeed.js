@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/app.ts]
 var x = 1;
@@ -26,8 +27,24 @@ Output::
 
 
 
-Program root files: ["/a/app.ts"]
-Program options: {"watch":true}
+//// [/a/app.js]
+var x = 1;
+var y = 2;
+
+
+
+FsWatches::
+/a/app.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/app.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -41,23 +58,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/app.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-/a/app.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/app.js]
-var x = 1;
-var y = 2;
-
-
 
 Change:: Append a line
 
@@ -68,6 +69,13 @@ var y = 2;
 var z = 3;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
@@ -76,8 +84,20 @@ Output::
 
 
 
-Program root files: ["/a/app.ts"]
-Program options: {"watch":true}
+//// [/a/app.js]
+var x = 1;
+var y = 2;
+var z = 3;
+
+
+
+
+Program root files: [
+  "/a/app.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -90,21 +110,4 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/app.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/a/app.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/app.js]
-var x = 1;
-var y = 2;
-var z = 3;
-
-

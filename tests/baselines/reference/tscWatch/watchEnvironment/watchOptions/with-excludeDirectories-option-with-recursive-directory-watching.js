@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -28,7 +29,16 @@ export function fooBar(): string;
 export function temp(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"exclude":["node_modules"],"watchOptions":{"excludeDirectories":["**/temp"]}}
+{
+  "exclude": [
+    "node_modules"
+  ],
+  "watchOptions": {
+    "excludeDirectories": [
+      "**/temp"
+    ]
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -40,8 +50,50 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/src/main.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var bar_1 = require("bar");
+(0, bar_1.foo)();
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/node_modules: *new*
+  {}
+/user/username/projects/myproject/node_modules/bar: *new*
+  {}
+/user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
+  {}
+/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
+/user/username/projects/myproject/src/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+Timeout callback:: count: 1
+1: timerToUpdateChildWatches *new*
+
+Program root files: [
+  "/user/username/projects/myproject/src/main.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -61,76 +113,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
 /user/username/projects/myproject/src/main.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/main.ts:
-  {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/bar:
-  {}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var bar_1 = require("bar");
-(0, bar_1.foo)();
-
-
 
 Change:: Directory watch updates because of main.js creation
 
 Input::
 
-Output::
+Before running Timeout callback:: count: 1
+1: timerToUpdateChildWatches
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
+After running Timeout callback:: count: 0
 
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/main.ts:
-  {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/bar:
-  {}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: add new folder to temp
 
@@ -139,33 +134,5 @@ Input::
 export function temp(): string;
 
 
-Output::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/main.ts:
-  {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/bar:
-  {}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
-

@@ -1,5 +1,4 @@
 declare namespace Intl {
-
     // http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Determining-Plural-Categories
     type LDMLPluralRule = "zero" | "one" | "two" | "few" | "many" | "other";
     type PluralRuleType = "cardinal" | "ordinal";
@@ -31,10 +30,9 @@ declare namespace Intl {
     }
 
     interface PluralRulesConstructor {
-        new(locales?: string | string[], options?: PluralRulesOptions): PluralRules;
+        new (locales?: string | string[], options?: PluralRulesOptions): PluralRules;
         (locales?: string | string[], options?: PluralRulesOptions): PluralRules;
-
-        supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit" }): string[];
+        supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
     }
 
     const PluralRules: PluralRulesConstructor;

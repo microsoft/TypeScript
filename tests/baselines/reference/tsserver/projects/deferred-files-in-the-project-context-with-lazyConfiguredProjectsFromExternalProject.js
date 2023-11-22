@@ -1,15 +1,5 @@
-Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [00:00:10.000] request:
-    {
-      "command": "configure",
-      "arguments": {
-        "preferences": {
-          "lazyConfiguredProjectsFromExternalProject": true
-        }
-      },
-      "seq": 1,
-      "type": "request"
-    }
+currentDirectory:: / useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a.deferred]
 const a = 1;
@@ -21,27 +11,34 @@ const b = 1;
 
 
 
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-Info 2    [00:00:11.000] response:
-    {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-Info 3    [00:00:12.000] response:
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "preferences": {
+          "lazyConfiguredProjectsFromExternalProject": true
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
-Info 4    [00:00:13.000] request:
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "configure",
       "arguments": {
@@ -56,35 +53,29 @@ Info 4    [00:00:13.000] request:
       "seq": 2,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-Info 5    [00:00:14.000] reload projects.
-Info 6    [00:00:15.000] Before ensureProjectForOpenFiles:
-Info 7    [00:00:16.000] Open files: 
-Info 7    [00:00:17.000] After ensureProjectForOpenFiles:
-Info 8    [00:00:18.000] Open files: 
-Info 8    [00:00:19.000] Host file extension mappings updated
-Info 9    [00:00:20.000] response:
-    {"seq":0,"type":"response","command":"configure","request_seq":2,"success":true}
-After request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-Info 10   [00:00:21.000] response:
+Info seq  [hh:mm:ss:mss] reload projects.
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] Host file extension mappings updated
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 2,
+      "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
-Info 11   [00:00:22.000] request:
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
@@ -105,34 +96,32 @@ Info 11   [00:00:22.000] request:
       "seq": 3,
       "type": "request"
     }
-Before request
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-Info 12   [00:00:23.000] Creating configuration project /tsconfig.json
-Info 13   [00:00:24.000] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-After request
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-Info 14   [00:00:25.000] response:
+Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
     }
-Info 15   [00:00:26.000] Calling ensureInferredProjectsUpToDate_TestOnly
-Info 16   [00:00:27.000] Loading configured project /tsconfig.json
-Info 17   [00:00:28.000] Config: /tsconfig.json : {
+After request
+
+FsWatches::
+/tsconfig.json: *new*
+  {}
+
+Info seq  [hh:mm:ss:mss] Calling ensureInferredProjectsUpToDate_TestOnly
+Info seq  [hh:mm:ss:mss] Loading configured project /tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/tsconfig.json",
+        "reason": "Creating configured project in external project: /proj1"
+      }
+    }
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/a.deferred"
  ],
@@ -140,30 +129,137 @@ Info 17   [00:00:28.000] Config: /tsconfig.json : {
   "configFilePath": "/tsconfig.json"
  }
 }
-Info 18   [00:00:29.000] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 19   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info 20   [00:00:31.000] Starting updateGraphWorker: Project: /tsconfig.json
-Info 21   [00:00:32.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info 22   [00:00:33.000] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 23   [00:00:34.000] Project '/tsconfig.json' (Configured)
-Info 24   [00:00:35.000] 	Files (1)
-	/a.deferred
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+	/a.deferred Text-1 ""
 
 
 	a.deferred
 	  Matched by default include pattern '**/*'
 
-Info 25   [00:00:36.000] -----------------------------------------------
-Info 26   [00:00:37.000] Before ensureProjectForOpenFiles:
-Info 27   [00:00:38.000] Project '/tsconfig.json' (Configured)
-Info 27   [00:00:39.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 0,
+            "tsSize": 0,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 1,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/tsconfig.json",
+        "configFile": "/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 27   [00:00:40.000] -----------------------------------------------
-Info 27   [00:00:41.000] Open files: 
-Info 27   [00:00:42.000] After ensureProjectForOpenFiles:
-Info 28   [00:00:43.000] Project '/tsconfig.json' (Configured)
-Info 28   [00:00:44.000] 	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
-Info 28   [00:00:45.000] -----------------------------------------------
-Info 28   [00:00:46.000] Open files: 
-Info 28   [00:00:47.000] Has allowNonTsExtension: true
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] Has allowNonTsExtension: true

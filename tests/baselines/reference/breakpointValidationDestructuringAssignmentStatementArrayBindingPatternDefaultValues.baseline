@@ -1,0 +1,354 @@
+// === breakpoints ===
+
+1  >declare var console: {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (0 to 22)  SpanInfo: undefined
+--------------------------------
+2  >    log(msg: any): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (23 to 47)  SpanInfo: undefined
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (48 to 49)  SpanInfo: undefined
+--------------------------------
+4  >type Robot = [number, string, string];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       => Pos: (50 to 88)  SpanInfo: undefined
+--------------------------------
+5  >type MultiSkilledRobot = [string, string[]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ => Pos: (89 to 133)  SpanInfo: undefined
+--------------------------------
+6  >
+
+    ~                                             => Pos: (134 to 134)  SpanInfo: undefined
+--------------------------------
+7  >var robotA: Robot = [1, "mower", "mowing"];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (135 to 178)  SpanInfo: {"start":135,"length":42}
+    >var robotA: Robot = [1, "mower", "mowing"]
+    >:=> (line 7, col 0) to (line 7, col 42)
+--------------------------------
+8  >var robotB: Robot = [2, "trimmer", "trimming"];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (179 to 226)  SpanInfo: {"start":179,"length":46}
+    >var robotB: Robot = [2, "trimmer", "trimming"]
+    >:=> (line 8, col 0) to (line 8, col 46)
+--------------------------------
+9  >var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (227 to 290)  SpanInfo: {"start":227,"length":62}
+    >var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]]
+    >:=> (line 9, col 0) to (line 9, col 62)
+--------------------------------
+10 >var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (291 to 364)  SpanInfo: {"start":291,"length":72}
+    >var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]]
+    >:=> (line 10, col 0) to (line 10, col 72)
+--------------------------------
+11 >
+
+    ~                                             => Pos: (365 to 365)  SpanInfo: undefined
+--------------------------------
+12 >let nameA: string, numberB: number, nameB: string, skillB: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (366 to 432)  SpanInfo: undefined
+--------------------------------
+13 >let robotAInfo: (number | string)[];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~         => Pos: (433 to 469)  SpanInfo: undefined
+--------------------------------
+14 >
+
+    ~                                             => Pos: (470 to 470)  SpanInfo: undefined
+--------------------------------
+15 >let multiSkillB: string[], nameMB: string, primarySkillB: string, secondarySkillB: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (471 to 561)  SpanInfo: undefined
+--------------------------------
+16 >let multiRobotAInfo: (string | string[])[];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (562 to 605)  SpanInfo: undefined
+--------------------------------
+17 >
+
+    ~                                             => Pos: (606 to 606)  SpanInfo: undefined
+--------------------------------
+18 >[, nameA = "helloNoName"] = robotA;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          => Pos: (607 to 642)  SpanInfo: {"start":610,"length":21}
+    >nameA = "helloNoName"
+    >:=> (line 18, col 3) to (line 18, col 24)
+--------------------------------
+19 >[, nameB = "helloNoName"] = getRobotB();
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (643 to 683)  SpanInfo: {"start":646,"length":21}
+    >nameB = "helloNoName"
+    >:=> (line 19, col 3) to (line 19, col 24)
+--------------------------------
+20 >[, nameB = "helloNoName"] = [2, "trimmer", "trimming"];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (684 to 739)  SpanInfo: {"start":687,"length":21}
+    >nameB = "helloNoName"
+    >:=> (line 20, col 3) to (line 20, col 24)
+--------------------------------
+21 >[, multiSkillB = []] = multiRobotB;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          => Pos: (740 to 775)  SpanInfo: {"start":743,"length":16}
+    >multiSkillB = []
+    >:=> (line 21, col 3) to (line 21, col 19)
+--------------------------------
+22 >[, multiSkillB = []] = getMultiRobotB();
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (776 to 816)  SpanInfo: {"start":779,"length":16}
+    >multiSkillB = []
+    >:=> (line 22, col 3) to (line 22, col 19)
+--------------------------------
+23 >[, multiSkillB = []] = ["roomba", ["vacuum", "mopping"]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (817 to 874)  SpanInfo: {"start":820,"length":16}
+    >multiSkillB = []
+    >:=> (line 23, col 3) to (line 23, col 19)
+--------------------------------
+24 >
+
+    ~                                             => Pos: (875 to 875)  SpanInfo: undefined
+--------------------------------
+25 >[numberB = -1] = robotB;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (876 to 900)  SpanInfo: {"start":877,"length":12}
+    >numberB = -1
+    >:=> (line 25, col 1) to (line 25, col 13)
+--------------------------------
+26 >[numberB = -1] = getRobotB();
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (901 to 930)  SpanInfo: {"start":902,"length":12}
+    >numberB = -1
+    >:=> (line 26, col 1) to (line 26, col 13)
+--------------------------------
+27 >[numberB = -1] = [2, "trimmer", "trimming"];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ => Pos: (931 to 975)  SpanInfo: {"start":932,"length":12}
+    >numberB = -1
+    >:=> (line 27, col 1) to (line 27, col 13)
+--------------------------------
+28 >[nameMB = "helloNoName"] = multiRobotB;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (976 to 1015)  SpanInfo: {"start":977,"length":22}
+    >nameMB = "helloNoName"
+    >:=> (line 28, col 1) to (line 28, col 23)
+--------------------------------
+29 >[nameMB = "helloNoName"] = getMultiRobotB();
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ => Pos: (1016 to 1060)  SpanInfo: {"start":1017,"length":22}
+    >nameMB = "helloNoName"
+    >:=> (line 29, col 1) to (line 29, col 23)
+--------------------------------
+30 >[nameMB = "helloNoName"] = ["trimmer", ["trimming", "edging"]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1061 to 1124)  SpanInfo: {"start":1062,"length":22}
+    >nameMB = "helloNoName"
+    >:=> (line 30, col 1) to (line 30, col 23)
+--------------------------------
+31 >
+
+    ~                                             => Pos: (1125 to 1125)  SpanInfo: undefined
+--------------------------------
+32 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = robotB;
+
+    ~~~~~~~~~~~~~~                                => Pos: (1126 to 1139)  SpanInfo: {"start":1127,"length":12}
+    >numberB = -1
+    >:=> (line 32, col 1) to (line 32, col 13)
+32 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = robotB;
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~         => Pos: (1140 to 1162)  SpanInfo: {"start":1141,"length":21}
+    >nameB = "helloNoName"
+    >:=> (line 32, col 15) to (line 32, col 36)
+32 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = robotB;
+
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1163 to 1193)  SpanInfo: {"start":1164,"length":18}
+    >skillB = "noSkill"
+    >:=> (line 32, col 38) to (line 32, col 56)
+--------------------------------
+33 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = getRobotB();
+
+    ~~~~~~~~~~~~~~                                => Pos: (1194 to 1207)  SpanInfo: {"start":1195,"length":12}
+    >numberB = -1
+    >:=> (line 33, col 1) to (line 33, col 13)
+33 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = getRobotB();
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~         => Pos: (1208 to 1230)  SpanInfo: {"start":1209,"length":21}
+    >nameB = "helloNoName"
+    >:=> (line 33, col 15) to (line 33, col 36)
+33 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = getRobotB();
+
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1231 to 1266)  SpanInfo: {"start":1232,"length":18}
+    >skillB = "noSkill"
+    >:=> (line 33, col 38) to (line 33, col 56)
+--------------------------------
+34 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = [2, "trimmer", "trimming"];
+
+    ~~~~~~~~~~~~~~                                => Pos: (1267 to 1280)  SpanInfo: {"start":1268,"length":12}
+    >numberB = -1
+    >:=> (line 34, col 1) to (line 34, col 13)
+34 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = [2, "trimmer", "trimming"];
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~         => Pos: (1281 to 1303)  SpanInfo: {"start":1282,"length":21}
+    >nameB = "helloNoName"
+    >:=> (line 34, col 15) to (line 34, col 36)
+34 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = [2, "trimmer", "trimming"];
+
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1304 to 1354)  SpanInfo: {"start":1305,"length":18}
+    >skillB = "noSkill"
+    >:=> (line 34, col 38) to (line 34, col 56)
+--------------------------------
+35 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = multiRobotB;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1355 to 1378)  SpanInfo: {"start":1356,"length":22}
+    >nameMB = "helloNoName"
+    >:=> (line 35, col 1) to (line 35, col 23)
+35 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = multiRobotB;
+
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1379 to 1406)  SpanInfo: {"start":1381,"length":25}
+    >primarySkillB = "noSkill"
+    >:=> (line 35, col 26) to (line 35, col 51)
+35 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = multiRobotB;
+
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1407 to 1440)  SpanInfo: {"start":1408,"length":27}
+    >secondarySkillB = "noSkill"
+    >:=> (line 35, col 53) to (line 35, col 80)
+35 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = multiRobotB;
+
+                                                                                          ~~~~~~~~~~~~~~~~~=> Pos: (1441 to 1457)  SpanInfo: {"start":1380,"length":61}
+    >[primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
+    >:=> (line 35, col 25) to (line 35, col 86)
+--------------------------------
+36 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = getMultiRobotB();
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1458 to 1481)  SpanInfo: {"start":1459,"length":22}
+    >nameMB = "helloNoName"
+    >:=> (line 36, col 1) to (line 36, col 23)
+36 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = getMultiRobotB();
+
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1482 to 1509)  SpanInfo: {"start":1484,"length":25}
+    >primarySkillB = "noSkill"
+    >:=> (line 36, col 26) to (line 36, col 51)
+36 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = getMultiRobotB();
+
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1510 to 1543)  SpanInfo: {"start":1511,"length":27}
+    >secondarySkillB = "noSkill"
+    >:=> (line 36, col 53) to (line 36, col 80)
+36 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = getMultiRobotB();
+
+                                                                                          ~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1544 to 1565)  SpanInfo: {"start":1483,"length":61}
+    >[primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
+    >:=> (line 36, col 25) to (line 36, col 86)
+--------------------------------
+37 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] =
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1566 to 1589)  SpanInfo: {"start":1567,"length":22}
+    >nameMB = "helloNoName"
+    >:=> (line 37, col 1) to (line 37, col 23)
+37 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] =
+
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1590 to 1617)  SpanInfo: {"start":1592,"length":25}
+    >primarySkillB = "noSkill"
+    >:=> (line 37, col 26) to (line 37, col 51)
+37 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] =
+
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1618 to 1651)  SpanInfo: {"start":1619,"length":27}
+    >secondarySkillB = "noSkill"
+    >:=> (line 37, col 53) to (line 37, col 80)
+37 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] =
+
+                                                                                          ~~~~=> Pos: (1652 to 1655)  SpanInfo: {"start":1591,"length":61}
+    >[primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
+    >:=> (line 37, col 25) to (line 37, col 86)
+--------------------------------
+38 >    ["trimmer", ["trimming", "edging"]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (1656 to 1696)  SpanInfo: {"start":1591,"length":61}
+    >[primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
+    >:=> (line 37, col 25) to (line 37, col 86)
+--------------------------------
+39 >
+
+    ~                                             => Pos: (1697 to 1697)  SpanInfo: undefined
+--------------------------------
+40 >[numberB = -1, ...robotAInfo] = robotB;
+
+    ~~~~~~~~~~~~~~                                => Pos: (1698 to 1711)  SpanInfo: {"start":1699,"length":12}
+    >numberB = -1
+    >:=> (line 40, col 1) to (line 40, col 13)
+40 >[numberB = -1, ...robotAInfo] = robotB;
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (1712 to 1737)  SpanInfo: {"start":1713,"length":13}
+    >...robotAInfo
+    >:=> (line 40, col 15) to (line 40, col 28)
+--------------------------------
+41 >[numberB = -1, ...robotAInfo] = getRobotB();
+
+    ~~~~~~~~~~~~~~                                => Pos: (1738 to 1751)  SpanInfo: {"start":1739,"length":12}
+    >numberB = -1
+    >:=> (line 41, col 1) to (line 41, col 13)
+41 >[numberB = -1, ...robotAInfo] = getRobotB();
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ => Pos: (1752 to 1782)  SpanInfo: {"start":1753,"length":13}
+    >...robotAInfo
+    >:=> (line 41, col 15) to (line 41, col 28)
+--------------------------------
+42 >[numberB = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"];
+
+    ~~~~~~~~~~~~~~                                => Pos: (1783 to 1796)  SpanInfo: {"start":1784,"length":12}
+    >numberB = -1
+    >:=> (line 42, col 1) to (line 42, col 13)
+42 >[numberB = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"];
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1797 to 1849)  SpanInfo: {"start":1798,"length":13}
+    >...robotAInfo
+    >:=> (line 42, col 15) to (line 42, col 28)
+--------------------------------
+43 >
+
+    ~                                             => Pos: (1850 to 1850)  SpanInfo: undefined
+--------------------------------
+44 >function getRobotB() {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (1851 to 1873)  SpanInfo: {"start":1878,"length":13}
+    >return robotB
+    >:=> (line 45, col 4) to (line 45, col 17)
+--------------------------------
+45 >    return robotB;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (1874 to 1892)  SpanInfo: {"start":1878,"length":13}
+    >return robotB
+    >:=> (line 45, col 4) to (line 45, col 17)
+--------------------------------
+46 >}
+
+    ~~                                            => Pos: (1893 to 1894)  SpanInfo: {"start":1893,"length":1}
+    >}
+    >:=> (line 46, col 0) to (line 46, col 1)
+--------------------------------
+47 >
+
+    ~                                             => Pos: (1895 to 1895)  SpanInfo: undefined
+--------------------------------
+48 >function getMultiRobotB() {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (1896 to 1923)  SpanInfo: {"start":1928,"length":18}
+    >return multiRobotB
+    >:=> (line 49, col 4) to (line 49, col 22)
+--------------------------------
+49 >    return multiRobotB;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1924 to 1947)  SpanInfo: {"start":1928,"length":18}
+    >return multiRobotB
+    >:=> (line 49, col 4) to (line 49, col 22)
+--------------------------------
+50 >}
+    ~                                             => Pos: (1948 to 1948)  SpanInfo: {"start":1948,"length":1}
+    >}
+    >:=> (line 50, col 0) to (line 50, col 1)

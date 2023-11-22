@@ -1,3 +1,4 @@
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -21,7 +22,11 @@ declare namespace Config { const value: string;}
 console.log(Config.value);
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true}}
+{
+  "compilerOptions": {
+    "incremental": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -32,44 +37,6 @@ Output::
 [[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/users/username/projects/project/globals.d.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/globals.d.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/globals.d.ts
-/users/username/projects/project/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/globals.d.ts (used version)
-/users/username/projects/project/index.ts (used version)
-
-PolledWatches::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
-/users/username/projects/project/globals.d.ts:
-  {}
-/users/username/projects/project/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/index.js]
 console.log(Config.value);
@@ -138,10 +105,77 @@ console.log(Config.value);
 }
 
 
+PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/globals.d.ts: *new*
+  {}
+/users/username/projects/project/index.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/globals.d.ts",
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/globals.d.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/globals.d.ts
+/users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/globals.d.ts (used version)
+/users/username/projects/project/index.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change::
 
 Input::
 //// [/users/username/projects/project/globals.d.ts] deleted
+
+PolledWatches *deleted*::
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches *deleted*::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/globals.d.ts:
+  {}
+/users/username/projects/project/index.ts:
+  {}
+/users/username/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive *deleted*::
+/users/username/projects/project:
+  {}
 
 Output::
 >> Screen clear
@@ -155,38 +189,6 @@ Output::
 [[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/index.ts (computed .d.ts)
-
-PolledWatches::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
-/users/username/projects/project/index.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -249,3 +251,43 @@ exitCode:: ExitStatus.undefined
   "size": 891
 }
 
+
+PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/index.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/index.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

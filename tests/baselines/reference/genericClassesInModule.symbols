@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericClassesInModule.ts ===
+//// [tests/cases/compiler/genericClassesInModule.ts] ////
+
+=== genericClassesInModule.ts ===
 module Foo {
 >Foo : Symbol(Foo, Decl(genericClassesInModule.ts, 0, 0))
 

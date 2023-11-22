@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts] ////
+
+=== parserRealSource4.ts ===
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 
@@ -392,7 +394,6 @@ module TypeScript {
             else {
                 return (null);
 >(null) : null
->null : null
             }
         }
     }
@@ -771,7 +772,6 @@ module TypeScript {
 >this : this
 >table : any
 >i : number
->null : null
             }
         }
 
@@ -817,7 +817,6 @@ module TypeScript {
 >val : number
 >current != null : boolean
 >current : HashEntry
->null : null
 >current = current.next : HashEntry
 >current : HashEntry
 >current.next : HashEntry
@@ -894,11 +893,9 @@ module TypeScript {
 
             var result = null;
 >result : any
->null : null
 
             var prevEntry: HashEntry = null;
 >prevEntry : HashEntry
->null : null
 
             for (current = this.table[val]; current != null ; current = current.next) {
 >current = this.table[val] : any
@@ -910,7 +907,6 @@ module TypeScript {
 >val : number
 >current != null : boolean
 >current : HashEntry
->null : null
 >current = current.next : HashEntry
 >current : HashEntry
 >current.next : HashEntry
@@ -1015,7 +1011,6 @@ module TypeScript {
 >val : number
 >current != null : boolean
 >current : HashEntry
->null : null
 >current = current.next : HashEntry
 >current : HashEntry
 >current.next : HashEntry
@@ -1041,7 +1036,6 @@ module TypeScript {
             }
             return (null);
 >(null) : null
->null : null
         }
     }
 
@@ -1120,7 +1114,6 @@ module TypeScript {
                 }
             }
             return null;
->null : null
         }
 
         public add(key, data): boolean {

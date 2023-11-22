@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportSameNameFuncVar.ts] ////
+
 //// [exportSameNameFuncVar.ts]
 export var a = 10;
 export function a() {

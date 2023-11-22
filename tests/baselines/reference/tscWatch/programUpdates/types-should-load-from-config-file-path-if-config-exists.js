@@ -1,9 +1,16 @@
+currentDirectory:: /a/c useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/app.ts]
 let x = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"types":["node"],"typeRoots":[]}}
+{
+  "compilerOptions": {
+    "types": [
+      "node"
+    ]
+  }
+}
 
 //// [/a/b/node_modules/@types/node/index.d.ts]
 declare var process: any
@@ -31,8 +38,36 @@ Output::
 
 
 
-Program root files: ["/a/b/app.ts"]
-Program options: {"types":["node"],"typeRoots":[],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/app.js]
+var x = 1;
+
+
+
+FsWatches::
+/a/b/app.ts: *new*
+  {}
+/a/b/node_modules/@types/node/index.d.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Program root files: [
+  "/a/b/app.ts"
+]
+Program options: {
+  "types": [
+    "node"
+  ],
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -49,27 +84,4 @@ Shape signatures in builder refreshed for::
 /a/b/app.ts (used version)
 /a/b/node_modules/@types/node/index.d.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/app.ts:
-  {}
-/a/b/node_modules/@types/node/index.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/node_modules:
-  {}
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/app.js]
-var x = 1;
-
-

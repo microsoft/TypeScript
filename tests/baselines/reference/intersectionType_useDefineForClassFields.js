@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionType_useDefineForClassFields.ts] ////
+
 //// [intersectionType_useDefineForClassFields.ts]
 type Foo<T> = {
     [k in keyof T & string]: any

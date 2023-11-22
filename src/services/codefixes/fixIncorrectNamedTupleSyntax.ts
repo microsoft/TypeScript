@@ -19,7 +19,7 @@ import {
 const fixId = "fixIncorrectNamedTupleSyntax";
 const errorCodes = [
     Diagnostics.A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_colon_rather_than_after_the_type.code,
-    Diagnostics.A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type.code
+    Diagnostics.A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type.code,
 ];
 
 registerCodeFix({
@@ -30,7 +30,7 @@ registerCodeFix({
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, namedTupleMember));
         return [createCodeFixAction(fixId, changes, Diagnostics.Move_labeled_tuple_element_modifiers_to_labels, fixId, Diagnostics.Move_labeled_tuple_element_modifiers_to_labels)];
     },
-    fixIds: [fixId]
+    fixIds: [fixId],
 });
 
 function getNamedTupleMember(sourceFile: SourceFile, pos: number) {
@@ -58,7 +58,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, na
         namedTupleMember.dotDotDotToken || (sawRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined),
         namedTupleMember.name,
         namedTupleMember.questionToken || (sawOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined),
-        unwrappedType
+        unwrappedType,
     );
     if (updated === namedTupleMember) {
         return;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedExcessPropertyChecking.ts] ////
+
 //// [nestedExcessPropertyChecking.ts]
 type A1 = { x: { a?: string } };
 type B1 = { x: { b?: string } };
@@ -63,6 +65,31 @@ const response: Query = {
     },
 };
 
+// Repro from #53412
+
+type BaseItem = {
+    id: number;
+}
+type ExtendedItem = BaseItem & {
+    description: string | null
+};
+  
+type BaseValue = {
+    // there are other fields
+    items: BaseItem[];
+}
+type ExtendedValue = BaseValue & {
+    // there are other fields
+    items: ExtendedItem[];
+}
+
+const TEST_VALUE: ExtendedValue = {
+    items: [
+        {id: 1, description: null},
+        {id: 2, description: 'wigglytubble'},
+    ]
+};
+
 
 //// [nestedExcessPropertyChecking.js]
 "use strict";
@@ -87,4 +114,10 @@ var response = {
             dark: 3,
         },
     },
+};
+var TEST_VALUE = {
+    items: [
+        { id: 1, description: null },
+        { id: 2, description: 'wigglytubble' },
+    ]
 };

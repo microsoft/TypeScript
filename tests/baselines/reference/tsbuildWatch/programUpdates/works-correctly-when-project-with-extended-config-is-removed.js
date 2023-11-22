@@ -1,3 +1,4 @@
+currentDirectory:: /a/b useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -13,13 +14,36 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/tsconfig.json]
-{"references":[{"path":"./project1.tsconfig.json"},{"path":"./project2.tsconfig.json"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./project1.tsconfig.json"
+    },
+    {
+      "path": "./project2.tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 //// [/a/b/alpha.tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/a/b/project1.tsconfig.json]
-{"extends":"./alpha.tsconfig.json","compilerOptions":{"composite":true},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+{
+  "extends": "./alpha.tsconfig.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "/a/b/commonFile1.ts",
+    "/a/b/commonFile2.ts"
+  ]
+}
 
 //// [/a/b/commonFile1.ts]
 let x = 1
@@ -28,10 +52,22 @@ let x = 1
 let y = 1
 
 //// [/a/b/bravo.tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/a/b/project2.tsconfig.json]
-{"extends":"./bravo.tsconfig.json","compilerOptions":{"composite":true},"files":["/a/b/other.ts"]}
+{
+  "extends": "./bravo.tsconfig.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "/a/b/other.ts"
+  ]
+}
 
 //// [/a/b/other.ts]
 let z = 0;
@@ -58,63 +94,6 @@ Output::
 [[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/commonfile1.ts (computed .d.ts during emit)
-/a/b/commonfile2.ts (computed .d.ts during emit)
-
-Program root files: ["/a/b/other.ts"]
-Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/other.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/other.ts (computed .d.ts during emit)
-
-PolledWatches::
-
-FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
-/a/b/alpha.tsconfig.json:
-  {}
-/a/b/commonfile1.ts:
-  {}
-/a/b/commonfile2.ts:
-  {}
-/a/b/project2.tsconfig.json:
-  {}
-/a/b/bravo.tsconfig.json:
-  {}
-/a/b/other.ts:
-  {}
-/a/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js]
 "use strict";
@@ -266,13 +245,95 @@ declare let z: number;
 }
 
 
+FsWatches::
+/a/b/alpha.tsconfig.json: *new*
+  {}
+/a/b/bravo.tsconfig.json: *new*
+  {}
+/a/b/commonfile1.ts: *new*
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
+/a/b/other.ts: *new*
+  {}
+/a/b/project1.tsconfig.json: *new*
+  {}
+/a/b/project2.tsconfig.json: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "strict": true,
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project1.tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/commonfile1.ts (computed .d.ts during emit)
+/a/b/commonfile2.ts (computed .d.ts during emit)
+
+Program root files: [
+  "/a/b/other.ts"
+]
+Program options: {
+  "strict": true,
+  "composite": true,
+  "watch": true,
+  "configFilePath": "/a/b/project2.tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/other.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/other.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Remove project2 from base config
 
 Input::
 //// [/a/b/tsconfig.json]
-{"references":[{"path":"./project1.tsconfig.json"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./project1.tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
@@ -281,21 +342,26 @@ Output::
 
 
 
-PolledWatches::
 
 FsWatches::
-/a/b/project1.tsconfig.json:
-  {}
 /a/b/alpha.tsconfig.json:
   {}
 /a/b/commonfile1.ts:
   {}
 /a/b/commonfile2.ts:
   {}
+/a/b/project1.tsconfig.json:
+  {}
 /a/b/tsconfig.json:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/a/b/bravo.tsconfig.json:
+  {}
+/a/b/other.ts:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+
 
 exitCode:: ExitStatus.undefined
-

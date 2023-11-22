@@ -1,5 +1,4 @@
 declare namespace Intl {
-
     /**
      * An object with some or all properties of the `Intl.Segmenter` constructor `options` parameter.
      *
@@ -72,7 +71,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter).
          */
-        new(locales?: LocalesArgument, options?: SegmenterOptions): Segmenter;
+        new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter;
 
         /**
          * Returns an array containing those of the provided locales that are supported without having to fall back to the runtime's default locale.
@@ -88,4 +87,13 @@ declare namespace Intl {
          */
         supportedLocalesOf(locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">): UnicodeBCP47LocaleIdentifier[];
     };
+
+    /**
+     * Returns a sorted array of the supported collation, calendar, currency, numbering system, timezones, and units by the implementation.
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/supportedValuesOf)
+     *
+     * @param key A string indicating the category of values to return.
+     * @returns A sorted array of the supported values.
+     */
+    function supportedValuesOf(key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"): string[];
 }

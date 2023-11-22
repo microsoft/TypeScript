@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyParametersInAmbientFunctions.ts ===
+//// [tests/cases/compiler/noImplicitAnyParametersInAmbientFunctions.ts] ////
+
+=== noImplicitAnyParametersInAmbientFunctions.ts ===
 // No implicit-'any' errors.
 declare function d_f1(): void;
 >d_f1 : Symbol(d_f1, Decl(noImplicitAnyParametersInAmbientFunctions.ts, 0, 0))

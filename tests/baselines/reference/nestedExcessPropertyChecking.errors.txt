@@ -1,14 +1,14 @@
-tests/cases/compiler/nestedExcessPropertyChecking.ts(6,7): error TS2322: Type 'C1' is not assignable to type 'A1 & B1'.
+nestedExcessPropertyChecking.ts(6,7): error TS2322: Type 'C1' is not assignable to type 'A1 & B1'.
   Types of property 'x' are incompatible.
     Type '{ c: string; }' has no properties in common with type '{ a?: string | undefined; } & { b?: string | undefined; }'.
-tests/cases/compiler/nestedExcessPropertyChecking.ts(13,7): error TS2559: Type 'C2' has no properties in common with type 'A2 & B2'.
-tests/cases/compiler/nestedExcessPropertyChecking.ts(17,5): error TS2559: Type 'E' has no properties in common with type '{ nope?: any; }'.
-tests/cases/compiler/nestedExcessPropertyChecking.ts(18,5): error TS2559: Type '"A"' has no properties in common with type '{ nope?: any; }'.
-tests/cases/compiler/nestedExcessPropertyChecking.ts(30,22): error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
-tests/cases/compiler/nestedExcessPropertyChecking.ts(40,9): error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
+nestedExcessPropertyChecking.ts(13,7): error TS2559: Type 'C2' has no properties in common with type 'A2 & B2'.
+nestedExcessPropertyChecking.ts(17,5): error TS2559: Type 'E' has no properties in common with type '{ nope?: any; }'.
+nestedExcessPropertyChecking.ts(18,5): error TS2559: Type '"A"' has no properties in common with type '{ nope?: any; }'.
+nestedExcessPropertyChecking.ts(30,22): error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
+nestedExcessPropertyChecking.ts(40,9): error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
 
 
-==== tests/cases/compiler/nestedExcessPropertyChecking.ts (6 errors) ====
+==== nestedExcessPropertyChecking.ts (6 errors) ====
     type A1 = { x: { a?: string } };
     type B1 = { x: { b?: string } };
     
@@ -51,7 +51,7 @@ tests/cases/compiler/nestedExcessPropertyChecking.ts(40,9): error TS2559: Type '
     }>} = { variables: { overrides: false } };  // Error
                          ~~~~~~~~~
 !!! error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
-!!! related TS6500 tests/cases/compiler/nestedExcessPropertyChecking.ts:27:5: The expected type comes from property 'overrides' which is declared here on type '{ overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>'
+!!! related TS6500 nestedExcessPropertyChecking.ts:27:5: The expected type comes from property 'overrides' which is declared here on type '{ overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>'
     
     
     interface Unrelated { _?: any }
@@ -64,7 +64,7 @@ tests/cases/compiler/nestedExcessPropertyChecking.ts(40,9): error TS2559: Type '
             overrides: false  // Error
             ~~~~~~~~~
 !!! error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
-!!! related TS6500 tests/cases/compiler/nestedExcessPropertyChecking.ts:35:24: The expected type comes from property 'overrides' which is declared here on type 'VariablesA & VariablesB'
+!!! related TS6500 nestedExcessPropertyChecking.ts:35:24: The expected type comes from property 'overrides' which is declared here on type 'VariablesA & VariablesB'
         }
     };
     
@@ -87,5 +87,30 @@ tests/cases/compiler/nestedExcessPropertyChecking.ts(40,9): error TS2559: Type '
                 dark: 3,
             },
         },
+    };
+    
+    // Repro from #53412
+    
+    type BaseItem = {
+        id: number;
+    }
+    type ExtendedItem = BaseItem & {
+        description: string | null
+    };
+      
+    type BaseValue = {
+        // there are other fields
+        items: BaseItem[];
+    }
+    type ExtendedValue = BaseValue & {
+        // there are other fields
+        items: ExtendedItem[];
+    }
+    
+    const TEST_VALUE: ExtendedValue = {
+        items: [
+            {id: 1, description: null},
+            {id: 2, description: 'wigglytubble'},
+        ]
     };
     

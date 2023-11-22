@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExpressionWithResolutionOfNamespaceOfSameName01.ts ===
+//// [tests/cases/compiler/classExpressionWithResolutionOfNamespaceOfSameName01.ts] ////
+
+=== classExpressionWithResolutionOfNamespaceOfSameName01.ts ===
 namespace C {
 >C : Symbol(C, Decl(classExpressionWithResolutionOfNamespaceOfSameName01.ts, 0, 0))
 

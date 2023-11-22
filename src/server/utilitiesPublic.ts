@@ -16,7 +16,7 @@ export enum LogLevel {
     terse,
     normal,
     requestTime,
-    verbose
+    verbose,
 }
 
 export const emptyArray: SortedReadonlyArray<never> = createSortedArray<never>();
@@ -31,6 +31,7 @@ export interface Logger {
     endGroup(): void;
     msg(s: string, type?: Msg): void;
     getLogFileName(): string | undefined;
+    /** @internal*/ isTestLogger?: boolean;
 }
 
 // TODO: Use a const enum (https://github.com/Microsoft/TypeScript/issues/16804)
@@ -45,12 +46,11 @@ export function createInstallTypingsRequest(project: Project, typeAcquisition: T
         projectName: project.getProjectName(),
         fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
         compilerOptions: project.getCompilationSettings(),
-        watchOptions: project.projectService.getWatchOptions(project),
         typeAcquisition,
         unresolvedImports,
         projectRootPath: project.getCurrentDirectory() as Path,
         cachePath,
-        kind: "discover"
+        kind: "discover",
     };
 }
 
@@ -66,7 +66,7 @@ export namespace Errors {
     }
 }
 
-export type NormalizedPath = string & { __normalizedPathTag: any };
+export type NormalizedPath = string & { __normalizedPathTag: any; };
 
 export function toNormalizedPath(fileName: string): NormalizedPath {
     return normalizePath(fileName) as NormalizedPath;
@@ -102,7 +102,7 @@ export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
         },
         remove(path) {
             map.delete(path);
-        }
+        },
     };
 }
 

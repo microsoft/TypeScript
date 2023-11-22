@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsFileFunctionOverloads2.js ===
+//// [tests/cases/compiler/jsFileFunctionOverloads2.ts] ////
+
+=== jsFileFunctionOverloads2.js ===
 // Also works if all @overload tags are combined in one comment.
 /**
  * @overload
@@ -56,7 +58,7 @@ function flatMap(array, iterable = identity) {
 >flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; <T, U>(array: T[][]): T[]; }
 >array : unknown[]
 >iterable : (x: unknown) => unknown
->identity : <T>(x: T) => T
+>identity : <T_1>(x: T_1) => T_1
 
   /** @type {unknown[]} */
   const result = [];

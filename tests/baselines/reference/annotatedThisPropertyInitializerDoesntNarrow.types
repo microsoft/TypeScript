@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/Compilation.js ===
+//// [tests/cases/conformance/salsa/annotatedThisPropertyInitializerDoesntNarrow.ts] ////
+
+=== Compilation.js ===
 // from webpack/lib/Compilation.js and filed at #26427
 /** @param {{ [s: string]: number }} map */
 function mappy(map) {}

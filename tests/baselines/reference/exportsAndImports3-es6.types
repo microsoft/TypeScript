@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/t1.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImports3-es6.ts] ////
+
+=== t1.ts ===
 export var v = 1;
 >v : number
 >1 : 1
@@ -67,22 +69,22 @@ export { v as v1, f as f1, C as C1, I as I1, E as E1, D as D1, M as M1, N as N1,
 >a : any
 >a1 : any
 
-=== tests/cases/conformance/es6/modules/t2.ts ===
+=== t2.ts ===
 export { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N, T1 as T, a1 as a } from "./t1";
 >v1 : number
 >v : number
 >f1 : () => void
 >f : () => void
->C1 : typeof import("tests/cases/conformance/es6/modules/t1").C
->C : typeof import("tests/cases/conformance/es6/modules/t1").C
+>C1 : typeof import("t1").C
+>C : typeof import("t1").C
 >I1 : any
 >I : any
->E1 : typeof import("tests/cases/conformance/es6/modules/t1").E
->E : typeof import("tests/cases/conformance/es6/modules/t1").E
->D1 : typeof import("tests/cases/conformance/es6/modules/t1").D
->D : typeof import("tests/cases/conformance/es6/modules/t1").D
->M1 : typeof import("tests/cases/conformance/es6/modules/t1").M
->M : typeof import("tests/cases/conformance/es6/modules/t1").M
+>E1 : typeof import("t1").E
+>E : typeof import("t1").E
+>D1 : typeof import("t1").D
+>D : typeof import("t1").D
+>M1 : typeof import("t1").M
+>M : typeof import("t1").M
 >N1 : any
 >N : any
 >T1 : any
@@ -90,7 +92,7 @@ export { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N,
 >a1 : any
 >a : any
 
-=== tests/cases/conformance/es6/modules/t3.ts ===
+=== t3.ts ===
 import { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N, T1 as T, a1 as a } from "./t1";
 >v1 : number
 >v : number

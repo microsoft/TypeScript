@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -15,13 +16,33 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 //// [/src/packages/pkg1.tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"]},"files":["./pkg1_index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ]
+  },
+  "files": [
+    "./pkg1_index.ts"
+  ]
+}
 
 //// [/src/packages/pkg1_index.ts]
 export const theNum: TheNum = "type1";
 
 //// [/src/packages/pkg2.tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot2"]},"files":["./pkg2_index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot2"
+    ]
+  },
+  "files": [
+    "./pkg2_index.ts"
+  ]
+}
 
 //// [/src/packages/pkg2_index.ts]
 export const theNum: TheNum2 = "type2";
@@ -46,6 +67,7 @@ Output::
 
 ======== Resolving type reference directive 'sometype', containing file '/src/packages/__inferred type names__.ts', root directory '/src/packages/typeroot1'. ========
 Resolving with primary search path '/src/packages/typeroot1'.
+File '/src/packages/typeroot1/sometype.d.ts' does not exist.
 File '/src/packages/typeroot1/sometype/package.json' does not exist.
 File '/src/packages/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/packages/typeroot1/sometype/index.d.ts', result '/src/packages/typeroot1/sometype/index.d.ts'.
@@ -56,6 +78,7 @@ Resolving real path for '/src/packages/typeroot1/sometype/index.d.ts', result '/
 
 ======== Resolving type reference directive 'sometype', containing file '/src/packages/__inferred type names__.ts', root directory '/src/packages/typeroot2'. ========
 Resolving with primary search path '/src/packages/typeroot2'.
+File '/src/packages/typeroot2/sometype.d.ts' does not exist.
 File '/src/packages/typeroot2/sometype/package.json' does not exist.
 File '/src/packages/typeroot2/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/packages/typeroot2/sometype/index.d.ts', result '/src/packages/typeroot2/sometype/index.d.ts'.

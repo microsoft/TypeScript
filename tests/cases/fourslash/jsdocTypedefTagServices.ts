@@ -21,9 +21,7 @@ const desc = `type Product = {
 const [r0Def, ...ranges] = test.ranges();
 verify.quickInfoAt("use", desc, "Doc comment");
 
-verify.goToDefinition("use", "def");
-
-verify.rangesAreOccurrences(/*isWriteAccesss*/ undefined, ranges);
-verify.rangesAreDocumentHighlights(ranges);
 verify.baselineFindAllReferences("use", "def");
-verify.rangesAreRenameLocations(ranges);
+verify.baselineRename(ranges);
+verify.baselineDocumentHighlights(ranges);
+verify.baselineGoToDefinition("use");

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments4.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments4.ts] ////
+
+=== genericCallWithFunctionTypedArguments4.ts ===
 // No inference is made from function typed arguments which have multiple call signatures
 
 class C { foo: string }
@@ -38,7 +40,7 @@ var r = foo4(a); // T is {} (candidates boolean and string), U is {} (candidates
 >a : { new (x: boolean): C; new (x: string): D; }
 
 var b: {
->b : { new <T>(x: boolean): T; new <T>(x: T): any; }
+>b : { new <T>(x: boolean): T; new <T_1>(x: T_1): any; }
 
     new<T>(x: boolean): T;
 >x : boolean
@@ -51,5 +53,5 @@ var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates a
 >r2 : any
 >foo4(b) : any
 >foo4 : <T, U>(cb: new (x: T) => U) => U
->b : { new <T>(x: boolean): T; new <T>(x: T): any; }
+>b : { new <T>(x: boolean): T; new <T_1>(x: T_1): any; }
 

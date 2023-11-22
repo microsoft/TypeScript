@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts] ////
+
+=== assignmentCompatWithConstructSignatures3.ts ===
 // checking assignment compatibility relations for function types. All of these are valid.
 
 class Base { foo: string; }
@@ -353,7 +355,7 @@ b13 = a13; // ok
 >a13 : new (x: Base[], y: Derived[]) => Derived[]
 
 var b14: new <T>(x: { a: T; b: T }) => T; 
->b14 : new <T>(x: { a: T; b: T; }) => T
+>b14 : new <T>(x: {    a: T;    b: T;}) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T

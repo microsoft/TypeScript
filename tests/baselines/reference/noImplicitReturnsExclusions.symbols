@@ -1,0 +1,239 @@
+//// [tests/cases/compiler/noImplicitReturnsExclusions.ts] ////
+
+=== noImplicitReturnsExclusions.ts ===
+// Functions with a return type of any, undefined, or a type that includes void are excluded
+// from --noImplicitReturns checks.
+
+function f1(b: boolean): undefined {
+>f1 : Symbol(f1, Decl(noImplicitReturnsExclusions.ts, 0, 0))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 3, 12))
+
+    if (b) return undefined;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 3, 12))
+>undefined : Symbol(undefined)
+}
+
+function f2(b: boolean): void {
+>f2 : Symbol(f2, Decl(noImplicitReturnsExclusions.ts, 5, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 7, 12))
+
+    if (b) return undefined;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 7, 12))
+>undefined : Symbol(undefined)
+}
+
+function f3(b: boolean): any {
+>f3 : Symbol(f3, Decl(noImplicitReturnsExclusions.ts, 9, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 11, 12))
+
+    if (b) return undefined;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 11, 12))
+>undefined : Symbol(undefined)
+}
+
+function f4(b: boolean): string | undefined {  // Error
+>f4 : Symbol(f4, Decl(noImplicitReturnsExclusions.ts, 13, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 15, 12))
+
+    if (b) return undefined;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 15, 12))
+>undefined : Symbol(undefined)
+}
+
+function f5(b: boolean): string | void {
+>f5 : Symbol(f5, Decl(noImplicitReturnsExclusions.ts, 17, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 19, 12))
+
+    if (b) return undefined;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 19, 12))
+>undefined : Symbol(undefined)
+}
+
+function f6(b: boolean): unknown {  // Error
+>f6 : Symbol(f6, Decl(noImplicitReturnsExclusions.ts, 21, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 23, 12))
+
+    if (b) return undefined;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 23, 12))
+>undefined : Symbol(undefined)
+}
+
+function f10(b: boolean) {
+>f10 : Symbol(f10, Decl(noImplicitReturnsExclusions.ts, 25, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 27, 13))
+
+    if (b) return;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 27, 13))
+}
+
+function f11(b: boolean) {
+>f11 : Symbol(f11, Decl(noImplicitReturnsExclusions.ts, 29, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 31, 13))
+
+    if (b) return undefined;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 31, 13))
+>undefined : Symbol(undefined)
+}
+
+function f12(b: boolean) {
+>f12 : Symbol(f12, Decl(noImplicitReturnsExclusions.ts, 33, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 35, 13))
+
+    if (b) return undefined as any;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 35, 13))
+>undefined : Symbol(undefined)
+}
+
+function f13(b: boolean) {  // Error
+>f13 : Symbol(f13, Decl(noImplicitReturnsExclusions.ts, 37, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 39, 13))
+
+    if (b) return undefined as unknown;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 39, 13))
+>undefined : Symbol(undefined)
+}
+
+function f14(b: boolean) {  // Error
+>f14 : Symbol(f14, Decl(noImplicitReturnsExclusions.ts, 41, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 43, 13))
+
+    if (b) return 42;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 43, 13))
+}
+
+function f15(b: boolean) {  // Error
+>f15 : Symbol(f15, Decl(noImplicitReturnsExclusions.ts, 45, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 47, 13))
+
+    if (b) return 42;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 47, 13))
+
+    if (b) return undefined;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 47, 13))
+>undefined : Symbol(undefined)
+}
+
+function f16(b: boolean) {  // Error
+>f16 : Symbol(f16, Decl(noImplicitReturnsExclusions.ts, 50, 1))
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 52, 13))
+
+    if (b) return 42;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 52, 13))
+
+    if (b) return;
+>b : Symbol(b, Decl(noImplicitReturnsExclusions.ts, 52, 13))
+}
+
+declare class HistoryItem {
+>HistoryItem : Symbol(HistoryItem, Decl(noImplicitReturnsExclusions.ts, 55, 1))
+
+  input: {
+>input : Symbol(HistoryItem.input, Decl(noImplicitReturnsExclusions.ts, 57, 27))
+
+    location: {
+>location : Symbol(location, Decl(noImplicitReturnsExclusions.ts, 58, 10))
+
+      uri: string;
+>uri : Symbol(uri, Decl(noImplicitReturnsExclusions.ts, 59, 15))
+
+    };
+  };
+}
+
+interface Thenable<T> {
+>Thenable : Symbol(Thenable, Decl(noImplicitReturnsExclusions.ts, 63, 1))
+>T : Symbol(T, Decl(noImplicitReturnsExclusions.ts, 65, 19))
+
+  then<TResult>(
+>then : Symbol(Thenable.then, Decl(noImplicitReturnsExclusions.ts, 65, 23), Decl(noImplicitReturnsExclusions.ts, 69, 23))
+>TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 66, 7))
+
+    onfulfilled?: (value: T) => TResult | Thenable<TResult>,
+>onfulfilled : Symbol(onfulfilled, Decl(noImplicitReturnsExclusions.ts, 66, 16))
+>value : Symbol(value, Decl(noImplicitReturnsExclusions.ts, 67, 19))
+>T : Symbol(T, Decl(noImplicitReturnsExclusions.ts, 65, 19))
+>TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 66, 7))
+>Thenable : Symbol(Thenable, Decl(noImplicitReturnsExclusions.ts, 63, 1))
+>TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 66, 7))
+
+    onrejected?: (reason: any) => TResult | Thenable<TResult>
+>onrejected : Symbol(onrejected, Decl(noImplicitReturnsExclusions.ts, 67, 60))
+>reason : Symbol(reason, Decl(noImplicitReturnsExclusions.ts, 68, 18))
+>TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 66, 7))
+>Thenable : Symbol(Thenable, Decl(noImplicitReturnsExclusions.ts, 63, 1))
+>TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 66, 7))
+
+  ): Thenable<TResult>;
+>Thenable : Symbol(Thenable, Decl(noImplicitReturnsExclusions.ts, 63, 1))
+>TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 66, 7))
+
+  then<TResult>(
+>then : Symbol(Thenable.then, Decl(noImplicitReturnsExclusions.ts, 65, 23), Decl(noImplicitReturnsExclusions.ts, 69, 23))
+>TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 70, 7))
+
+    onfulfilled?: (value: T) => TResult | Thenable<TResult>,
+>onfulfilled : Symbol(onfulfilled, Decl(noImplicitReturnsExclusions.ts, 70, 16))
+>value : Symbol(value, Decl(noImplicitReturnsExclusions.ts, 71, 19))
+>T : Symbol(T, Decl(noImplicitReturnsExclusions.ts, 65, 19))
+>TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 70, 7))
+>Thenable : Symbol(Thenable, Decl(noImplicitReturnsExclusions.ts, 63, 1))
+>TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 70, 7))
+
+    onrejected?: (reason: any) => void
+>onrejected : Symbol(onrejected, Decl(noImplicitReturnsExclusions.ts, 71, 60))
+>reason : Symbol(reason, Decl(noImplicitReturnsExclusions.ts, 72, 18))
+
+  ): Thenable<TResult>;
+>Thenable : Symbol(Thenable, Decl(noImplicitReturnsExclusions.ts, 63, 1))
+>TResult : Symbol(TResult, Decl(noImplicitReturnsExclusions.ts, 70, 7))
+}
+
+export declare function executeCommand<T = unknown>(
+>executeCommand : Symbol(executeCommand, Decl(noImplicitReturnsExclusions.ts, 74, 1))
+>T : Symbol(T, Decl(noImplicitReturnsExclusions.ts, 76, 39))
+
+  command: string,
+>command : Symbol(command, Decl(noImplicitReturnsExclusions.ts, 76, 52))
+
+  ...rest: any[]
+>rest : Symbol(rest, Decl(noImplicitReturnsExclusions.ts, 77, 18))
+
+): Thenable<T>;
+>Thenable : Symbol(Thenable, Decl(noImplicitReturnsExclusions.ts, 63, 1))
+>T : Symbol(T, Decl(noImplicitReturnsExclusions.ts, 76, 39))
+
+export declare function registerCommand(
+>registerCommand : Symbol(registerCommand, Decl(noImplicitReturnsExclusions.ts, 79, 15))
+
+  command: string,
+>command : Symbol(command, Decl(noImplicitReturnsExclusions.ts, 81, 40))
+
+  callback: (...args: any[]) => any,
+>callback : Symbol(callback, Decl(noImplicitReturnsExclusions.ts, 82, 18))
+>args : Symbol(args, Decl(noImplicitReturnsExclusions.ts, 83, 13))
+
+  thisArg?: any
+>thisArg : Symbol(thisArg, Decl(noImplicitReturnsExclusions.ts, 83, 36))
+
+): void;
+
+registerCommand("_references-view.showHistoryItem", async (item) => { // Error, contextual return type of Promise<unknown>
+>registerCommand : Symbol(registerCommand, Decl(noImplicitReturnsExclusions.ts, 79, 15))
+>item : Symbol(item, Decl(noImplicitReturnsExclusions.ts, 87, 59))
+
+  if (item instanceof HistoryItem) {
+>item : Symbol(item, Decl(noImplicitReturnsExclusions.ts, 87, 59))
+>HistoryItem : Symbol(HistoryItem, Decl(noImplicitReturnsExclusions.ts, 55, 1))
+
+    return executeCommand("vscode.open", item.input.location.uri);
+>executeCommand : Symbol(executeCommand, Decl(noImplicitReturnsExclusions.ts, 74, 1))
+>item.input.location.uri : Symbol(uri, Decl(noImplicitReturnsExclusions.ts, 59, 15))
+>item.input.location : Symbol(location, Decl(noImplicitReturnsExclusions.ts, 58, 10))
+>item.input : Symbol(HistoryItem.input, Decl(noImplicitReturnsExclusions.ts, 57, 27))
+>item : Symbol(item, Decl(noImplicitReturnsExclusions.ts, 87, 59))
+>input : Symbol(HistoryItem.input, Decl(noImplicitReturnsExclusions.ts, 57, 27))
+>location : Symbol(location, Decl(noImplicitReturnsExclusions.ts, 58, 10))
+>uri : Symbol(uri, Decl(noImplicitReturnsExclusions.ts, 59, 15))
+  }
+});
+

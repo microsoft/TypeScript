@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/conn.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefAndImportTypes.ts] ////
+
+=== conn.js ===
 /**
  * @typedef {string | number} Whatever
  */
@@ -22,7 +24,7 @@ module.exports = Conn;
 >exports : typeof Conn
 >Conn : typeof Conn
 
-=== tests/cases/conformance/jsdoc/declarations/usage.js ===
+=== usage.js ===
 /**
  * @typedef {import("./conn")} Conn
  */
@@ -34,7 +36,7 @@ class Wrap {
      * @param {Conn} c
      */
     constructor(c) {
->c : import("tests/cases/conformance/jsdoc/declarations/conn")
+>c : import("conn")
 
         this.connItem = c.item;
 >this.connItem = c.item : number
@@ -42,15 +44,15 @@ class Wrap {
 >this : this
 >connItem : any
 >c.item : number
->c : import("tests/cases/conformance/jsdoc/declarations/conn")
+>c : import("conn")
 >item : number
 
         /** @type {import("./conn").Whatever} */
         this.another = "";
 >this.another = "" : ""
->this.another : import("tests/cases/conformance/jsdoc/declarations/conn").Whatever
+>this.another : import("conn").Whatever
 >this : this
->another : import("tests/cases/conformance/jsdoc/declarations/conn").Whatever
+>another : import("conn").Whatever
 >"" : ""
     }
 }

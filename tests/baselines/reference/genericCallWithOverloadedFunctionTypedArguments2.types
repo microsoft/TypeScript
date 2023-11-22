@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts] ////
+
+=== genericCallWithOverloadedFunctionTypedArguments2.ts ===
 // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
 // Inferences are made quadratic-pairwise to and from these overload sets
 
@@ -97,7 +99,7 @@ module GenericParameter {
 >x : T
 
     var a: { <T>(x: T): number; <T>(x: number): T; }
->a : { <T>(x: T): number; <T>(x: number): T; }
+>a : { <T>(x: T): number; <T_1>(x: number): T_1; }
 >x : T
 >x : number
 
@@ -106,5 +108,5 @@ module GenericParameter {
 >foo7(1, a) : { (x: unknown): string; (x: unknown, y?: unknown): string; }
 >foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
 >1 : 1
->a : { <T>(x: T): number; <T>(x: number): T; }
+>a : { <T>(x: T): number; <T_1>(x: number): T_1; }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/divergentAccessorsTypes1.ts] ////
+
 //// [divergentAccessorsTypes1.ts]
 class Test1 {
     get foo(): string { return "" }

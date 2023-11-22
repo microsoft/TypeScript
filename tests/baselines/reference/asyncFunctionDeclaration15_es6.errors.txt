@@ -1,15 +1,15 @@
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(6,23): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{}>'?
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(6,23): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(7,23): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<any>'?
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(8,23): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<number>'?
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(8,23): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(9,23): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(10,23): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(17,16): error TS1058: The return type of an async function must either be a valid promise or must not contain a callable 'then' member.
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts(23,25): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
+asyncFunctionDeclaration15_es6.ts(6,23): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{}>'?
+asyncFunctionDeclaration15_es6.ts(6,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+asyncFunctionDeclaration15_es6.ts(7,23): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<any>'?
+asyncFunctionDeclaration15_es6.ts(8,23): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<number>'?
+asyncFunctionDeclaration15_es6.ts(8,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+asyncFunctionDeclaration15_es6.ts(9,23): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
+asyncFunctionDeclaration15_es6.ts(10,23): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
+asyncFunctionDeclaration15_es6.ts(17,16): error TS1058: The return type of an async function must either be a valid promise or must not contain a callable 'then' member.
+asyncFunctionDeclaration15_es6.ts(23,25): error TS1320: Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.
 
 
-==== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts (9 errors) ====
+==== asyncFunctionDeclaration15_es6.ts (9 errors) ====
     declare class Thenable { then(): void; }
     declare let a: any;
     declare let obj: { then: string; };
@@ -19,7 +19,7 @@ tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration1
                           ~~~
 !!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{}>'?
                           ~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
     async function fn3(): any { } // error
                           ~~~
 !!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<any>'?
@@ -27,7 +27,7 @@ tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration1
                           ~~~~~~
 !!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<number>'?
                           ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
     async function fn5(): PromiseLike<void> { } // error
                           ~~~~~~~~~~~~~~~~~
 !!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?

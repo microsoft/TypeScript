@@ -20,6 +20,7 @@ import {
     getSetExternalModuleIndicator,
     hasProperty,
     isString,
+    JSDocParsingMode,
     MapLike,
     normalizePath,
     optionDeclarations,
@@ -42,6 +43,12 @@ export interface TranspileOutput {
     diagnostics?: Diagnostic[];
     sourceMapText?: string;
 }
+
+const optionsRedundantWithVerbatimModuleSyntax = new Set([
+    "isolatedModules",
+    "preserveValueImports",
+    "importsNotUsedAsValues",
+]);
 
 /*
  * This function will compile source text from 'input' argument using specified compiler options.
@@ -66,6 +73,11 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     }
 
     for (const option of transpileOptionValueCompilerOptions) {
+        // Do not set redundant config options if `verbatimModuleSyntax` was supplied.
+        if (options.verbatimModuleSyntax && optionsRedundantWithVerbatimModuleSyntax.has(option.name)) {
+            continue;
+        }
+
         options[option.name] = option.transpileOptionValue;
     }
 
@@ -78,7 +90,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     const newLine = getNewLineCharacter(options);
     // Create a compilerHost object to allow the compiler to read and write files
     const compilerHost: CompilerHost = {
-        getSourceFile: (fileName) => fileName === normalizePath(inputFileName) ? sourceFile : undefined,
+        getSourceFile: fileName => fileName === normalizePath(inputFileName) ? sourceFile : undefined,
         writeFile: (name, text) => {
             if (fileExtensionIs(name, ".map")) {
                 Debug.assertEqual(sourceMapText, undefined, "Unexpected multiple source map outputs, file:", name);
@@ -97,7 +109,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
         fileExists: (fileName): boolean => fileName === inputFileName,
         readFile: () => "",
         directoryExists: () => true,
-        getDirectories: () => []
+        getDirectories: () => [],
     };
 
     // if jsx is specified then treat file as .tsx
@@ -107,9 +119,10 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
         input,
         {
             languageVersion: getEmitScriptTarget(options),
-            impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*cache*/ undefined, compilerHost, options),
-            setExternalModuleIndicator: getSetExternalModuleIndicator(options)
-        }
+            impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*packageJsonInfoCache*/ undefined, compilerHost, options),
+            setExternalModuleIndicator: getSetExternalModuleIndicator(options),
+            jsDocParsingMode: JSDocParsingMode.ParseNone,
+        },
     );
     if (transpileOptions.moduleName) {
         sourceFile.moduleName = transpileOptions.moduleName;

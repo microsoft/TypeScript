@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeErrors2.ts] ////
+
 //// [mappedTypeErrors2.ts]
 // Repros from #17238
 

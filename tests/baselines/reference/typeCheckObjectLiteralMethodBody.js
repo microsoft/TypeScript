@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeCheckObjectLiteralMethodBody.ts] ////
+
 //// [typeCheckObjectLiteralMethodBody.ts]
 var foo = { bar() { return undefined } };
 

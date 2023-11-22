@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportEqualsModule_A.ts ===
+//// [tests/cases/compiler/exportAssignmentError.ts] ////
+
+=== exportEqualsModule_A.ts ===
 module M {
 >M : Symbol(M, Decl(exportEqualsModule_A.ts, 0, 0))
 

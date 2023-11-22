@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorExperimentalDecorators.ts] ////
+
 //// [autoAccessorExperimentalDecorators.ts]
 declare var dec: (target: any, key: PropertyKey, desc: PropertyDescriptor) => void;
 
@@ -43,8 +45,8 @@ class C1 {
     }
     get a() { return __classPrivateFieldGet(this, _C1_a_accessor_storage, "f"); }
     set a(value) { __classPrivateFieldSet(this, _C1_a_accessor_storage, value, "f"); }
-    static get b() { return __classPrivateFieldGet(this, _a, "f", _C1_b_accessor_storage); }
-    static set b(value) { __classPrivateFieldSet(this, _a, value, "f", _C1_b_accessor_storage); }
+    static get b() { return __classPrivateFieldGet(_a, _a, "f", _C1_b_accessor_storage); }
+    static set b(value) { __classPrivateFieldSet(_a, _a, value, "f", _C1_b_accessor_storage); }
 }
 _a = C1, _C1_a_accessor_storage = new WeakMap();
 _C1_b_accessor_storage = { value: void 0 };
@@ -60,5 +62,5 @@ class C2 {
         _C2_a_1_accessor_storage.set(this, void 0);
     }
 }
-_b = C2, _C2_instances = new WeakSet(), _C2_a_1_accessor_storage = new WeakMap(), _C2_a_get = function _C2_a_get() { return __classPrivateFieldGet(this, _C2_a_1_accessor_storage, "f"); }, _C2_a_set = function _C2_a_set(value) { __classPrivateFieldSet(this, _C2_a_1_accessor_storage, value, "f"); }, _C2_b_get = function _C2_b_get() { return __classPrivateFieldGet(this, _b, "f", _C2_b_1_accessor_storage); }, _C2_b_set = function _C2_b_set(value) { __classPrivateFieldSet(this, _b, value, "f", _C2_b_1_accessor_storage); };
+_b = C2, _C2_instances = new WeakSet(), _C2_a_1_accessor_storage = new WeakMap(), _C2_a_get = function _C2_a_get() { return __classPrivateFieldGet(this, _C2_a_1_accessor_storage, "f"); }, _C2_a_set = function _C2_a_set(value) { __classPrivateFieldSet(this, _C2_a_1_accessor_storage, value, "f"); }, _C2_b_get = function _C2_b_get() { return __classPrivateFieldGet(_b, _b, "f", _C2_b_1_accessor_storage); }, _C2_b_set = function _C2_b_set(value) { __classPrivateFieldSet(_b, _b, value, "f", _C2_b_1_accessor_storage); };
 _C2_b_1_accessor_storage = { value: void 0 };

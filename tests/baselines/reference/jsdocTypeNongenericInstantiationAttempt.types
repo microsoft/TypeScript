@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/jsdocTypeNongenericInstantiationAttempt.ts] ////
+
+=== index.js ===
 /**
  * @param {<T>(m: Boolean<T>) => string} somebody
  */
@@ -12,7 +14,7 @@ function sayHello(somebody) {
 >somebody : <T>(m: boolean) => string
 }
 
-=== tests/cases/compiler/index2.js ===
+=== index2.js ===
 /**
  * @param {<T>(m: Void<T>) => string} somebody
  */
@@ -27,7 +29,7 @@ function sayHello2(somebody) {
 }
 
 
-=== tests/cases/compiler/index3.js ===
+=== index3.js ===
 /**
  * @param {<T>(m: Undefined<T>) => string} somebody
  */
@@ -42,7 +44,7 @@ function sayHello3(somebody) {
 }
 
 
-=== tests/cases/compiler/index4.js ===
+=== index4.js ===
 /**
  * @param {<T>(m: Function<T>) => string} somebody
  */
@@ -57,7 +59,7 @@ function sayHello4(somebody) {
 }
 
 
-=== tests/cases/compiler/index5.js ===
+=== index5.js ===
 /**
  * @param {<T>(m: String<T>) => string} somebody
  */
@@ -72,7 +74,7 @@ function sayHello5(somebody) {
 }
 
 
-=== tests/cases/compiler/index6.js ===
+=== index6.js ===
 /**
  * @param {<T>(m: Number<T>) => string} somebody
  */
@@ -87,7 +89,7 @@ function sayHello6(somebody) {
 }
 
 
-=== tests/cases/compiler/index7.js ===
+=== index7.js ===
 /**
  * @param {<T>(m: Object<T>) => string} somebody
  */
@@ -101,7 +103,7 @@ function sayHello7(somebody) {
 >somebody : <T>(m: any) => string
 }
 
-=== tests/cases/compiler/index8.js ===
+=== index8.js ===
 function fn() {}
 >fn : () => void
 

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -40,59 +41,6 @@ Output::
 
 
 
-Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/modulefile1.ts (used version)
-/a/b/file1consumer1.ts (used version)
-/a/b/file1consumer2.ts (used version)
-/a/b/globalfile3.ts (used version)
-/a/b/modulefile2.ts (used version)
-
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -126,6 +74,65 @@ exports.Foo4 = 10;
 
 
 
+FsWatches::
+/a/b/file1consumer1.ts: *new*
+  {}
+/a/b/file1consumer2.ts: *new*
+  {}
+/a/b/globalfile3.ts: *new*
+  {}
+/a/b/modulefile1.ts: *new*
+  {}
+/a/b/modulefile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Program root files: [
+  "/a/b/file1Consumer1.ts",
+  "/a/b/file1Consumer2.ts",
+  "/a/b/globalFile3.ts",
+  "/a/b/moduleFile1.ts",
+  "/a/b/moduleFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/file1Consumer1.ts
+/a/b/file1Consumer2.ts
+/a/b/globalFile3.ts
+/a/b/moduleFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/file1Consumer1.ts
+/a/b/file1Consumer2.ts
+/a/b/globalFile3.ts
+/a/b/moduleFile2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/modulefile1.ts (used version)
+/a/b/file1consumer1.ts (used version)
+/a/b/file1consumer2.ts (used version)
+/a/b/globalfile3.ts (used version)
+/a/b/modulefile2.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: change shape of global file
 
 Input::
@@ -133,6 +140,13 @@ Input::
 interface GlobalFoo { age: number }var T2: string;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
@@ -141,8 +155,28 @@ Output::
 
 
 
-Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/moduleFile1.js] file written with same contents
+//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/file1Consumer2.js] file written with same contents
+//// [/a/b/globalFile3.js]
+var T2;
+
+
+//// [/a/b/moduleFile2.js] file written with same contents
+
+
+Program root files: [
+  "/a/b/file1Consumer1.ts",
+  "/a/b/file1Consumer2.ts",
+  "/a/b/globalFile3.ts",
+  "/a/b/moduleFile1.ts",
+  "/a/b/moduleFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -167,37 +201,4 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer2.ts (computed .d.ts)
 /a/b/modulefile2.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/file1consumer1.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/file1consumer2.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/moduleFile1.js] file written with same contents
-//// [/a/b/file1Consumer1.js] file written with same contents
-//// [/a/b/file1Consumer2.js] file written with same contents
-//// [/a/b/globalFile3.js]
-var T2;
-
-
-//// [/a/b/moduleFile2.js] file written with same contents

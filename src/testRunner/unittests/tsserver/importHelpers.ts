@@ -1,22 +1,30 @@
-import { createServerHost } from "../virtualFileSystemWithWatch";
 import {
-    createProjectService,
+    baselineTsserverLogs,
+    openExternalProjectForSession,
+    TestSession,
     toExternalFile,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
-describe("unittests:: tsserver:: import helpers", () => {
+describe("unittests:: tsserver:: importHelpers", () => {
     it("should not crash in tsserver", () => {
         const f1 = {
             path: "/a/app.ts",
-            content: "export async function foo() { return 100; }"
+            content: "export async function foo() { return 100; }",
         };
         const tslib = {
             path: "/a/node_modules/tslib/index.d.ts",
-            content: ""
+            content: "",
         };
         const host = createServerHost([f1, tslib]);
-        const service = createProjectService(host);
-        service.openExternalProject({ projectFileName: "p", rootFiles: [toExternalFile(f1.path)], options: { importHelpers: true } });
-        service.checkNumberOfProjects({ externalProjects: 1 });
+        const session = new TestSession(host);
+        openExternalProjectForSession({
+            projectFileName: "p",
+            rootFiles: [toExternalFile(f1.path)],
+            options: { importHelpers: true },
+        }, session);
+        baselineTsserverLogs("importHelpers", "should not crash in tsserver", session);
     });
 });

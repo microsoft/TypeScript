@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/a.ts]
 let x = 1
@@ -6,7 +7,11 @@ let x = 1
 let y = 1
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"outFile":"/a/out.js"}}
+{
+  "compilerOptions": {
+    "outFile": "/a/out.js"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -31,8 +36,37 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+//// [/a/out.js]
+var x = 1;
+var y = 1;
+
+
+
+FsWatches::
+/a/a.ts: *new*
+  {}
+/a/b.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/a/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a: *new*
+  {}
+
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/a.ts
@@ -43,31 +77,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/a/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/out.js]
-var x = 1;
-var y = 1;
-
-
 
 Change:: Make change in the file
 
@@ -76,6 +86,13 @@ Input::
 let x = 11
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
@@ -84,8 +101,24 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+//// [/a/out.js]
+var x = 11;
+var y = 1;
+
+
+
+
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/a.ts
@@ -96,31 +129,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/a/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/out.js]
-var x = 11;
-var y = 1;
-
-
 
 Change:: Make change in the file again
 
@@ -129,6 +138,13 @@ Input::
 let xy = 11
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
@@ -137,8 +153,24 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+//// [/a/out.js]
+var xy = 11;
+var y = 1;
+
+
+
+
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/a.ts
@@ -149,28 +181,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/a.ts:
-  {}
-/a/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/out.js]
-var xy = 11;
-var y = 1;
-
-

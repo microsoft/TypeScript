@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMap-Comments.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMap-Comments.js
+emittedFile:sourceMap-Comments.js
 sourceFile:sourceMap-Comments.ts
 -------------------------------------------------------------------
 >>>var sas;
@@ -173,27 +173,29 @@ sourceFile:sourceMap-Comments.ts
 2 >                ^^^^^^^^
 3 >                        ^
 4 >                         ^^
-5 >                           ^->
+5 >                           ^
 1->
   >            
 2 >                switch (
 3 >                        f
 4 >                         ) 
+5 >                           {
 1->Emitted(10, 17) Source(5, 13) + SourceIndex(0)
 2 >Emitted(10, 25) Source(5, 21) + SourceIndex(0)
 3 >Emitted(10, 26) Source(5, 22) + SourceIndex(0)
 4 >Emitted(10, 28) Source(5, 24) + SourceIndex(0)
+5 >Emitted(10, 29) Source(5, 25) + SourceIndex(0)
 ---
 >>>                    case 1:
-1->^^^^^^^^^^^^^^^^^^^^
+1 >^^^^^^^^^^^^^^^^^^^^
 2 >                    ^^^^^
 3 >                         ^
 4 >                          ^^^^^->
-1->{
+1 >
   >                
 2 >                    case 
 3 >                         1
-1->Emitted(11, 21) Source(6, 17) + SourceIndex(0)
+1 >Emitted(11, 21) Source(6, 17) + SourceIndex(0)
 2 >Emitted(11, 26) Source(6, 22) + SourceIndex(0)
 3 >Emitted(11, 27) Source(6, 23) + SourceIndex(0)
 ---
@@ -279,10 +281,13 @@ sourceFile:sourceMap-Comments.ts
 2 >Emitted(19, 31) Source(14, 27) + SourceIndex(0)
 ---
 >>>                }
-1 >^^^^^^^^^^^^^^^^^
+1 >^^^^^^^^^^^^^^^^
+2 >                ^
 1 >
-  >            }
-1 >Emitted(20, 18) Source(15, 14) + SourceIndex(0)
+  >            
+2 >                }
+1 >Emitted(20, 17) Source(15, 13) + SourceIndex(0)
+2 >Emitted(20, 18) Source(15, 14) + SourceIndex(0)
 ---
 >>>            };
 1 >^^^^^^^^^^^^

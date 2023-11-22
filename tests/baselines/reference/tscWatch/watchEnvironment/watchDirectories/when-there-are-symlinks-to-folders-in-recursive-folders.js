@@ -1,3 +1,4 @@
+currentDirectory:: /home/user/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -43,6 +44,7 @@ FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 u
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
 File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
@@ -61,14 +63,62 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
 [[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 
 
-Program root files: ["/home/user/projects/myproject/src/file.ts"]
-Program options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
+//// [/home/user/projects/myproject/src/file.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+PolledWatches::
+/home/user/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/user/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/home/user/projects/myproject: *new*
+  {}
+/home/user/projects/myproject/node_modules: *new*
+  {}
+/home/user/projects/myproject/node_modules/reala: *new*
+  {}
+/home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
+  {}
+/home/user/projects/myproject/node_modules/reala/node_modules: *new*
+  {}
+/home/user/projects/myproject/node_modules/realb: *new*
+  {}
+/home/user/projects/myproject/node_modules/realb/node_modules: *new*
+  {}
+/home/user/projects/myproject/src: *new*
+  {}
+/home/user/projects/myproject/src/file.ts: *new*
+  {}
+/home/user/projects/myproject/tsconfig.json: *new*
+  {}
+
+Timeout callback:: count: 1
+1: timerToUpdateChildWatches *new*
+
+Program root files: [
+  "/home/user/projects/myproject/src/file.ts"
+]
+Program options: {
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "watch": true,
+  "configFilePath": "/home/user/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -85,40 +135,4 @@ Shape signatures in builder refreshed for::
 /home/user/projects/myproject/node_modules/reala/index.d.ts (used version)
 /home/user/projects/myproject/src/file.ts (used version)
 
-PolledWatches::
-/home/user/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/user/projects/myproject/tsconfig.json:
-  {}
-/home/user/projects/myproject/src/file.ts:
-  {}
-/home/user/projects/myproject/node_modules/reala/index.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/home/user/projects/myproject/src:
-  {}
-/home/user/projects/myproject/node_modules:
-  {}
-/home/user/projects/myproject/node_modules/reala:
-  {}
-/home/user/projects/myproject/node_modules/reala/node_modules:
-  {}
-/home/user/projects/myproject/node_modules/realb:
-  {}
-/home/user/projects/myproject/node_modules/realb/node_modules:
-  {}
-/home/user/projects/myproject:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/home/user/projects/myproject/src/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-

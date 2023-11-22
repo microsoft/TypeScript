@@ -1,0 +1,1677 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/signatureHelpAfterParameter.ts ===
+// type Type = (a, b, c) => void
+// const a: Type = (a, b) => {}
+//                   ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                      ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, **b: any**, c: any): void
+// | ----------------------------------------------------------------------
+// const b: Type = function (a, b) {}
+//                            ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                               ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, **b: any**, c: any): void
+// | ----------------------------------------------------------------------
+// const c: Type = ({ a: { b }} = { }, [b], ...c) => {}
+//                    ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                          ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                             ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                                   ^
+// | ----------------------------------------------------------------------
+// | Type(**a: any**, b: any, c: any): void
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, **b: any**, c: any): void
+// | ----------------------------------------------------------------------
+//                                        ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, **b: any**, c: any): void
+// | ----------------------------------------------------------------------
+//                                             ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, b: any, **c: any**): void
+// | ----------------------------------------------------------------------
+//                                              ^
+// | ----------------------------------------------------------------------
+// | Type(a: any, b: any, **c: any**): void
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 48,
+      "name": "1"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 47,
+        "length": 4
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 51,
+      "name": "2"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 47,
+        "length": 4
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 86,
+      "name": "3"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 85,
+        "length": 4
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 89,
+      "name": "4"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 85,
+        "length": 4
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 113,
+      "name": "5"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 111,
+        "length": 28
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 119,
+      "name": "6"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 111,
+        "length": 28
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 122,
+      "name": "7"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 111,
+        "length": 28
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 128,
+      "name": "8"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 111,
+        "length": 28
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 132,
+      "name": "9"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 111,
+        "length": 28
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 133,
+      "name": "10"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 111,
+        "length": 28
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 138,
+      "name": "11"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 111,
+        "length": 28
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpAfterParameter.ts",
+      "position": 139,
+      "name": "12"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Type",
+              "kind": "aliasName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "c",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "c",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 111,
+        "length": 28
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  }
+]

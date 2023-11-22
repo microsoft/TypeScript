@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 import {B} from './b';
@@ -43,49 +44,6 @@ Output::
 [[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"watch":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/c.ts (computed .d.ts during emit)
-/user/username/projects/myproject/b.ts (computed .d.ts during emit)
-/user/username/projects/myproject/a.ts (computed .d.ts during emit)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/user/username/projects/myproject/c.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
@@ -235,6 +193,60 @@ export {};
 }
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/c.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts"
+]
+Program options: {
+  "watch": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Rename property d to d2 of class C to initialize signatures
 
 Input::
@@ -245,6 +257,13 @@ export class C
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
@@ -257,47 +276,6 @@ Output::
 [[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"watch":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/c.ts (computed .d.ts)
-/user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/a.ts (computed .d.ts during emit)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/user/username/projects/myproject/c.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
@@ -429,26 +407,18 @@ export declare class C {
 }
 
 
-Change:: Rename property d2 to d of class C to revert back to original text
 
-Input::
-//// [/user/username/projects/myproject/c.ts]
-export class C
-{
-    d = 1;
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts"
+]
+Program options: {
+  "watch": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
-
-
-Output::
->> Screen clear
-[[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"watch":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -466,27 +436,32 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (computed .d.ts)
 /user/username/projects/myproject/a.ts (computed .d.ts during emit)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/user/username/projects/myproject/c.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
+
+Change:: Rename property d2 to d of class C to revert back to original text
+
+Input::
+//// [/user/username/projects/myproject/c.ts]
+export class C
+{
+    d = 1;
+}
+
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
@@ -606,31 +581,18 @@ export declare class C {
 }
 
 
-Change:: Rename property d to d2 of class C
 
-Input::
-//// [/user/username/projects/myproject/c.ts]
-export class C
-{
-    d2 = 1;
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts"
+]
+Program options: {
+  "watch": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
-
-
-Output::
->> Screen clear
-[[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
-
-[96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
-
-[7m4[0m console.log(b.c.d);
-[7m [0m [91m                ~[0m
-
-[[90m12:01:57 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"watch":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -648,27 +610,37 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (computed .d.ts)
 /user/username/projects/myproject/a.ts (computed .d.ts during emit)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/user/username/projects/myproject/c.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
+
+Change:: Rename property d to d2 of class C
+
+Input::
+//// [/user/username/projects/myproject/c.ts]
+export class C
+{
+    d2 = 1;
+}
+
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
+
+[96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
+
+[7m4[0m console.log(b.c.d);
+[7m [0m [91m                ~[0m
+
+[[90m12:01:57 AM[0m] Found 1 error. Watching for file changes.
+
+
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
@@ -799,3 +771,34 @@ export declare class C {
   "size": 1284
 }
 
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts"
+]
+Program options: {
+  "watch": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/c.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined

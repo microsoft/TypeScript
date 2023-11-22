@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesSynchronousCallErrors.ts] ////
+
+=== subfolder/index.ts ===
 // cjs format file
 import {h} from "../index.js";
 >h : Symbol(h, Decl(index.ts, 1, 8))
@@ -27,7 +29,7 @@ export async function f() {
     h();
 >h : Symbol(h, Decl(index.ts, 1, 8))
 }
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 // esm format file
 import {h as _h} from "./index.js";
 >h : Symbol(h, Decl(index.ts, 4, 46))

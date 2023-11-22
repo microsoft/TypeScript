@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/file.ts]
 function one() {}
@@ -30,8 +31,29 @@ Output::
 
 
 
-Program root files: ["/a/b/file.ts"]
-Program options: {"watch":true,"noUnusedLocals":true}
+//// [/a/b/file.js]
+function one() { }
+function two() {
+    return function three() {
+        one();
+    };
+}
+
+
+
+FsWatches::
+/a/b/file.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/b/file.ts"
+]
+Program options: {
+  "watch": true,
+  "noUnusedLocals": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -45,27 +67,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/file.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-/a/b/file.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/file.js]
-function one() { }
-function two() {
-    return function three() {
-        one();
-    };
-}
-
-
 
 Change:: Change file to module
 
@@ -79,6 +81,13 @@ export function two() {
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
@@ -86,31 +95,6 @@ Output::
 [[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/a/b/file.ts"]
-Program options: {"watch":true,"noUnusedLocals":true}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/a/b/file.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/b/file.ts
-
-Shape signatures in builder refreshed for::
-/a/b/file.ts (computed .d.ts)
-
-PolledWatches::
-
-FsWatches::
-/a/b/file.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.undefined
 
 //// [/a/b/file.js]
 "use strict";
@@ -125,3 +109,24 @@ function two() {
 exports.two = two;
 
 
+
+
+Program root files: [
+  "/a/b/file.ts"
+]
+Program options: {
+  "watch": true,
+  "noUnusedLocals": true
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/a/b/file.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/b/file.ts
+
+Shape signatures in builder refreshed for::
+/a/b/file.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

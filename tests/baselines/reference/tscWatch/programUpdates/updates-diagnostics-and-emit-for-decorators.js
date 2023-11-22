@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -23,7 +24,12 @@ export class A {
 export class B {}
 
 //// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error"}}
+{
+  "compilerOptions": {
+    "target": "es6",
+    "importsNotUsedAsValues": "error"
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -31,48 +37,15 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96mtsconfig.json[0m:[93m1[0m:[93m36[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
 
-[7m1[0m {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error"}}
-[7m [0m [91m                                   ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m4[0m     "importsNotUsedAsValues": "error"
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"importsNotUsedAsValues":2,"watch":true,"configFilePath":"/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/b.ts (used version)
-/a.ts (used version)
-/a/lib/lib.d.ts (used version)
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a.ts:
-  {}
-/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/b.js]
 export class B {
@@ -97,10 +70,10 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
             if (result === null || typeof result !== "object") throw new TypeError("Object expected");
             if (_ = accept(result.get)) descriptor.get = _;
             if (_ = accept(result.set)) descriptor.set = _;
-            if (_ = accept(result.init)) initializers.push(_);
+            if (_ = accept(result.init)) initializers.unshift(_);
         }
         else if (_ = accept(result)) {
-            if (kind === "field") initializers.push(_);
+            if (kind === "field") initializers.unshift(_);
             else descriptor[key] = _;
         }
     }
@@ -119,7 +92,7 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 import './b';
-export let A = (() => {
+let A = (() => {
     let _classDecorators = [((_) => { })];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -129,39 +102,44 @@ export let A = (() => {
     };
     __setFunctionName(_classThis, "A");
     (() => {
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
         A = _classThis = _classDescriptor.value;
+        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis, _classExtraInitializers);
     })();
     return A = _classThis;
 })();
+export { A };
 
 
 
-Change:: Enable experimentalDecorators
+FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/b.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
 
-Input::
-//// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true}}
+FsWatchesRecursive::
+/: *new*
+  {}
 
-
-Output::
->> Screen clear
-[[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
-
-[96mtsconfig.json[0m:[93m1[0m:[93m36[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'verbatimModuleSyntax' instead.
-
-[7m1[0m {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true}}
-[7m [0m [91m                                   ~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-[[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"watch":true,"configFilePath":"/tsconfig.json"}
-Program structureReused: Completely
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "importsNotUsedAsValues": 2,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
+Program structureReused: Not
 Program files::
 /b.ts
 /a.ts
@@ -169,25 +147,46 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
-No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a.ts:
-  {}
-/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
+Shape signatures in builder refreshed for::
+/b.ts (used version)
+/a.ts (used version)
+/a/lib/lib.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
+
+Change:: Enable experimentalDecorators
+
+Input::
+//// [/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es6",
+    "importsNotUsedAsValues": "error",
+    "experimentalDecorators": true
+  }
+}
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
+
+[7m4[0m     "importsNotUsedAsValues": "error",
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
+
+
 
 //// [/b.js] file written with same contents
 //// [/a.js]
@@ -208,29 +207,19 @@ export { A };
 
 
 
-Change:: Enable emitDecoratorMetadata
 
-Input::
-//// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true,"emitDecoratorMetadata":true}}
-
-
-Output::
->> Screen clear
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
-
-[96mtsconfig.json[0m:[93m1[0m:[93m36[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'verbatimModuleSyntax' instead.
-
-[7m1[0m {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true,"emitDecoratorMetadata":true}}
-[7m [0m [91m                                   ~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"emitDecoratorMetadata":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "importsNotUsedAsValues": 2,
+  "experimentalDecorators": true,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /b.ts
@@ -241,23 +230,42 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-
-FsWatches::
-/tsconfig.json:
-  {}
-/a.ts:
-  {}
-/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-
 exitCode:: ExitStatus.undefined
+
+Change:: Enable emitDecoratorMetadata
+
+Input::
+//// [/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es6",
+    "importsNotUsedAsValues": "error",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}
+
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
+
+[7m4[0m     "importsNotUsedAsValues": "error",
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
+
+
 
 //// [/b.js] file written with same contents
 //// [/a.js]
@@ -281,3 +289,29 @@ A = __decorate([
 export { A };
 
 
+
+
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "importsNotUsedAsValues": 2,
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/b.ts
+/a.ts
+/a/lib/lib.d.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

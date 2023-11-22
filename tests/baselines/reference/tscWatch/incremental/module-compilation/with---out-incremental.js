@@ -1,3 +1,4 @@
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -19,32 +20,18 @@ export const x = 10;
 export const y = 20;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"module":"amd","outFile":"out.js"}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "module": "amd",
+    "outFile": "out.js"
+  }
+}
 
 
 /a/lib/tsc.js -i
 Output::
 
-
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"module":2,"outFile":"/users/username/projects/project/out.js","configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/out.js]
 define("file1", ["require", "exports"], function (require, exports) {
@@ -133,3 +120,25 @@ define("file2", ["require", "exports"], function (require, exports) {
 
 ======================================================================
 
+
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "module": 2,
+  "outFile": "/users/username/projects/project/out.js",
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success

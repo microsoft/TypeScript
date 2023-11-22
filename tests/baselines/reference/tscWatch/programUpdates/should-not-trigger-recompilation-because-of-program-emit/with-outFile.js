@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/file1.ts]
 export const c = 30;
@@ -19,7 +20,12 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"module":"amd","outFile":"build/outFile.js"}}
+{
+  "compilerOptions": {
+    "module": "amd",
+    "outFile": "build/outFile.js"
+  }
+}
 
 
 /a/lib/tsc.js -w -p /user/username/projects/myproject/tsconfig.json
@@ -30,40 +36,6 @@ Output::
 [[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts"]
-Program options: {"module":2,"outFile":"/user/username/projects/myproject/build/outFile.js","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/file1.ts
-/user/username/projects/myproject/src/file2.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file1.ts:
-  {}
-/user/username/projects/myproject/src/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/build/outFile.js]
 define("file1", ["require", "exports"], function (require, exports) {
@@ -81,34 +53,57 @@ define("src/file2", ["require", "exports"], function (require, exports) {
 
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/file1.ts: *new*
+  {}
+/user/username/projects/myproject/src/file2.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/file1.ts",
+  "/user/username/projects/myproject/src/file2.ts"
+]
+Program options: {
+  "module": 2,
+  "outFile": "/user/username/projects/myproject/build/outFile.js",
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/file1.ts
+/user/username/projects/myproject/src/file2.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
 Change:: No change
 
 Input::
 
-Output::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file1.ts:
-  {}
-/user/username/projects/myproject/src/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Add new file
 
@@ -117,6 +112,15 @@ Input::
 export const y = 10;
 
 
+Timeout callback:: count: 2
+1: timerToInvalidateFailedLookupResolutions *new*
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 2
+1: timerToInvalidateFailedLookupResolutions
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
@@ -124,43 +128,6 @@ Output::
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts","/user/username/projects/myproject/src/file3.ts"]
-Program options: {"module":2,"outFile":"/user/username/projects/myproject/build/outFile.js","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/file1.ts
-/user/username/projects/myproject/src/file2.ts
-/user/username/projects/myproject/src/file3.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/file1.ts:
-  {}
-/user/username/projects/myproject/src/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src/file3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-/user/username/projects/myproject:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/build/outFile.js]
 define("file1", ["require", "exports"], function (require, exports) {
@@ -184,33 +151,59 @@ define("src/file3", ["require", "exports"], function (require, exports) {
 
 
 
-Change:: No change
-
-Input::
-
-Output::
-
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/file1.ts:
   {}
 /user/username/projects/myproject/src/file2.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/src/file3.ts: *new*
   {}
-/user/username/projects/myproject/src/file3.ts:
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 /user/username/projects/myproject:
   {}
+/user/username/projects/myproject/src:
+  {}
+
+
+Program root files: [
+  "/user/username/projects/myproject/file1.ts",
+  "/user/username/projects/myproject/src/file2.ts",
+  "/user/username/projects/myproject/src/file3.ts"
+]
+Program options: {
+  "module": 2,
+  "outFile": "/user/username/projects/myproject/build/outFile.js",
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/file1.ts
+/user/username/projects/myproject/src/file2.ts
+/user/username/projects/myproject/src/file3.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
+Change:: No change
+
+Input::
+
+
+exitCode:: ExitStatus.undefined

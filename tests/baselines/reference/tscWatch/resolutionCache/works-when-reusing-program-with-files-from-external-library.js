@@ -1,3 +1,4 @@
+currentDirectory:: /a/b/projects/myProject/ useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/projects/myProject/src/file1.ts]
 import module1 = require("module1");
@@ -24,7 +25,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/projects/myProject/src/tsconfig.json]
-{"compilerOptions":{"allowJs":true,"rootDir":".","outDir":"../dist","moduleResolution":"node","maxNodeModuleJsDepth":1}}
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "rootDir": ".",
+    "outDir": "../dist",
+    "moduleResolution": "node",
+    "maxNodeModuleJsDepth": 1
+  }
+}
 
 
 /a/lib/tsc.js --w -p /a/b/projects/myProject/src
@@ -36,8 +45,65 @@ Output::
 
 
 
-Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
-Program options: {"allowJs":true,"rootDir":"/a/b/projects/myProject/src","outDir":"/a/b/projects/myProject/dist","moduleResolution":2,"maxNodeModuleJsDepth":1,"watch":true,"project":"/a/b/projects/myProject/src","configFilePath":"/a/b/projects/myProject/src/tsconfig.json"}
+//// [/a/b/projects/myProject/dist/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var module1 = require("module1");
+module1("hello");
+
+
+//// [/a/b/projects/myProject/dist/file2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var module11 = require("module1");
+module11("hello");
+
+
+
+PolledWatches::
+/a/b/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/myproject/src/node_modules: *new*
+  {"pollingInterval":500}
+/a/b/projects/myproject/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/node_modules: *new*
+  {"pollingInterval":500}
+/a/b/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/myproject/node_modules/module1/index.js: *new*
+  {}
+/a/b/projects/myproject/src/file1.ts: *new*
+  {}
+/a/b/projects/myproject/src/file2.ts: *new*
+  {}
+/a/b/projects/myproject/src/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/myproject/node_modules: *new*
+  {}
+/a/b/projects/myproject/src: *new*
+  {}
+
+Program root files: [
+  "/a/b/projects/myProject/src/file1.ts",
+  "/a/b/projects/myProject/src/file2.ts"
+]
+Program options: {
+  "allowJs": true,
+  "rootDir": "/a/b/projects/myProject/src",
+  "outDir": "/a/b/projects/myProject/dist",
+  "moduleResolution": 2,
+  "maxNodeModuleJsDepth": 1,
+  "watch": true,
+  "project": "/a/b/projects/myProject/src",
+  "configFilePath": "/a/b/projects/myProject/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -57,48 +123,7 @@ Shape signatures in builder refreshed for::
 /a/b/projects/myproject/src/file1.ts (used version)
 /a/b/projects/myproject/src/file2.ts (used version)
 
-PolledWatches::
-/a/b/projects/myproject/src/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/myproject/src/tsconfig.json:
-  {}
-/a/b/projects/myproject/src/file1.ts:
-  {}
-/a/b/projects/myproject/node_modules/module1/index.js:
-  {}
-/a/b/projects/myproject/src/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/myproject/node_modules:
-  {}
-/a/b/projects/myproject/src:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/projects/myProject/dist/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var module1 = require("module1");
-module1("hello");
-
-
-//// [/a/b/projects/myProject/dist/file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var module11 = require("module1");
-module11("hello");
-
-
 
 Change:: Add new line to file1
 
@@ -109,6 +134,13 @@ module1("hello");
 ;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
@@ -117,8 +149,30 @@ Output::
 
 
 
-Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
-Program options: {"allowJs":true,"rootDir":"/a/b/projects/myProject/src","outDir":"/a/b/projects/myProject/dist","moduleResolution":2,"maxNodeModuleJsDepth":1,"watch":true,"project":"/a/b/projects/myProject/src","configFilePath":"/a/b/projects/myProject/src/tsconfig.json"}
+//// [/a/b/projects/myProject/dist/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var module1 = require("module1");
+module1("hello");
+;
+
+
+
+
+Program root files: [
+  "/a/b/projects/myProject/src/file1.ts",
+  "/a/b/projects/myProject/src/file2.ts"
+]
+Program options: {
+  "allowJs": true,
+  "rootDir": "/a/b/projects/myProject/src",
+  "outDir": "/a/b/projects/myProject/dist",
+  "moduleResolution": 2,
+  "maxNodeModuleJsDepth": 1,
+  "watch": true,
+  "project": "/a/b/projects/myProject/src",
+  "configFilePath": "/a/b/projects/myProject/src/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -132,39 +186,4 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/projects/myproject/src/file1.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/projects/myproject/src/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/myproject/src/tsconfig.json:
-  {}
-/a/b/projects/myproject/src/file1.ts:
-  {}
-/a/b/projects/myproject/node_modules/module1/index.js:
-  {}
-/a/b/projects/myproject/src/file2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/myproject/node_modules:
-  {}
-/a/b/projects/myproject/src:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/projects/myProject/dist/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var module1 = require("module1");
-module1("hello");
-;
-
-

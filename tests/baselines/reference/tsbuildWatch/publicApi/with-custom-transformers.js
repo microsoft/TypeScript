@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -13,10 +14,24 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"references":[{"path":"./shared/tsconfig.json"},{"path":"./webpack/tsconfig.json"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./shared/tsconfig.json"
+    },
+    {
+      "path": "./webpack/tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 //// [/user/username/projects/myproject/shared/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/user/username/projects/myproject/shared/index.ts]
 export function f1() { }
@@ -26,7 +41,16 @@ export enum e { }
 export function f2() { } // trailing
 
 //// [/user/username/projects/myproject/webpack/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../shared/tsconfig.json"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../shared/tsconfig.json"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/webpack/index.ts]
 export function f2() { }
@@ -55,58 +79,6 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/shared/index.ts"]
-Program options: {"composite":true,"configFilePath":"/user/username/projects/myproject/shared/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/shared/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/shared/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/shared/index.ts (used version)
-
-Program root files: ["/user/username/projects/myproject/webpack/index.ts"]
-Program options: {"composite":true,"configFilePath":"/user/username/projects/myproject/webpack/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/webpack/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/webpack/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/webpack/index.ts (used version)
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/shared/tsconfig.json:
-  {}
-/user/username/projects/myproject/shared/index.ts:
-  {}
-/user/username/projects/myproject/webpack/tsconfig.json:
-  {}
-/user/username/projects/myproject/webpack/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/shared:
-  {}
-/user/username/projects/myproject/webpack:
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/shared/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -124,7 +96,7 @@ exports.c = c;
 //@after/user/username/projects/myproject/shared/tsconfig.json
 var e;
 (function (e) {
-})(e = exports.e || (exports.e = {}));
+})(e || (exports.e = e = {}));
 // leading
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
 function f2() { } // trailing
@@ -209,7 +181,7 @@ exports.c2 = c2;
 //@after/user/username/projects/myproject/webpack/tsconfig.json
 var e2;
 (function (e2) {
-})(e2 = exports.e2 || (exports.e2 = {}));
+})(e2 || (exports.e2 = e2 = {}));
 // leading
 /*@before/user/username/projects/myproject/webpack/tsconfig.json*/
 function f22() { } // trailing
@@ -278,6 +250,66 @@ export declare function f22(): void;
 }
 
 
+FsWatches::
+/user/username/projects/myproject/shared/index.ts: *new*
+  {}
+/user/username/projects/myproject/shared/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/webpack/index.ts: *new*
+  {}
+/user/username/projects/myproject/webpack/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/shared: *new*
+  {}
+/user/username/projects/myproject/webpack: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/shared/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/user/username/projects/myproject/shared/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/shared/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/shared/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/shared/index.ts (used version)
+
+Program root files: [
+  "/user/username/projects/myproject/webpack/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/user/username/projects/myproject/webpack/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/webpack/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/webpack/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/webpack/index.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: change to shared
 
 Input::
@@ -289,6 +321,13 @@ export enum e { }
 export function f2() { } // trailing
 
 
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 1
 Output::
 >> Screen clear
 [[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
@@ -297,61 +336,7 @@ Output::
 
 [[90m12:00:59 AM[0m] Building project '/user/username/projects/myproject/shared/tsconfig.json'...
 
-[[90m12:01:13 AM[0m] Project 'webpack/tsconfig.json' is out of date because output 'webpack/index.js' is older than input 'shared/tsconfig.json'
 
-[[90m12:01:14 AM[0m] Building project '/user/username/projects/myproject/webpack/tsconfig.json'...
-
-[[90m12:01:15 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/webpack/tsconfig.json'...
-
-[[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/shared/index.ts"]
-Program options: {"composite":true,"configFilePath":"/user/username/projects/myproject/shared/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/shared/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/shared/index.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/shared/index.ts (computed .d.ts)
-
-Program root files: ["/user/username/projects/myproject/webpack/index.ts"]
-Program options: {"composite":true,"configFilePath":"/user/username/projects/myproject/webpack/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/webpack/index.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
-
-PolledWatches::
-
-FsWatches::
-/user/username/projects/myproject/shared/tsconfig.json:
-  {}
-/user/username/projects/myproject/shared/index.ts:
-  {}
-/user/username/projects/myproject/webpack/tsconfig.json:
-  {}
-/user/username/projects/myproject/webpack/index.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/shared:
-  {}
-/user/username/projects/myproject/webpack:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/shared/index.js]
 "use strict";
@@ -373,7 +358,7 @@ exports.c = c;
 //@after/user/username/projects/myproject/shared/tsconfig.json
 var e;
 (function (e) {
-})(e = exports.e || (exports.e = {}));
+})(e || (exports.e = e = {}));
 // leading
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
 function f2() { } // trailing
@@ -440,4 +425,60 @@ export declare function f2(): void;
   "size": 1032
 }
 
+
+Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
+Output::
+[[90m12:01:13 AM[0m] Project 'webpack/tsconfig.json' is out of date because output 'webpack/index.js' is older than input 'shared/tsconfig.json'
+
+[[90m12:01:14 AM[0m] Building project '/user/username/projects/myproject/webpack/tsconfig.json'...
+
+[[90m12:01:15 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/webpack/tsconfig.json'...
+
+[[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
 //// [/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo] file changed its modified time
+
+
+Program root files: [
+  "/user/username/projects/myproject/shared/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/user/username/projects/myproject/shared/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/shared/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/shared/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/shared/index.ts (computed .d.ts)
+
+Program root files: [
+  "/user/username/projects/myproject/webpack/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/user/username/projects/myproject/webpack/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/webpack/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

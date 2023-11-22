@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts] ////
+
 //// [arrayTypeOfTypeOf.ts]
 // array type cannot use typeof.
 
