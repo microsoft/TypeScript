@@ -7090,16 +7090,7 @@ export enum PollingWatchKind {
     FixedChunkSize,
 }
 
-export interface ModuleOption {
-    preset?: ModuleKind;
-    formatDetection?: ModuleFormatDetectionKind;
-    formatInterop?: ModuleFormatInteropKind;
-    emit?: ModuleKind;
-}
-
-export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | NestedCompilerOption | PluginImport[] | ProjectReference[] | null | undefined;
-
-export type NestedCompilerOption = ModuleOption;
+export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
@@ -7165,7 +7156,9 @@ export interface CompilerOptions {
     locale?: string;
     mapRoot?: string;
     maxNodeModuleJsDepth?: number;
-    module?: ModuleKind | ModuleOption;
+    module?: ModuleKind;
+    moduleFormatDetection?: ModuleFormatDetectionKind;
+    moduleFormatInterop?: ModuleFormatInteropKind;
     moduleResolution?: ModuleResolutionKind;
     moduleSuffixes?: string[];
     moduleDetection?: ModuleDetectionKind;

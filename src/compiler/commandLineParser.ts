@@ -86,7 +86,6 @@ import {
     ModuleFormatInteropKind,
     ModuleKind,
     ModuleResolutionKind,
-    NestedCompilerOption,
     NewLineKind,
     Node,
     NodeArray,
@@ -610,9 +609,26 @@ const moduleSubOptionDeclarations: readonly CommandLineOption[] = [
 export const moduleOptionDeclaration: CommandLineOptionOfObjectOrShorthandType = {
     name: "module",
     shortName: "m",
+    // HEAD
     type: "objectOrShorthand",
     shorthandType: moduleKindMap,
     elementOptions: commandLineOptionsToMap(moduleSubOptionDeclarations),
+    //
+    type: new Map(Object.entries({
+        none: ModuleKind.None,
+        commonjs: ModuleKind.CommonJS,
+        amd: ModuleKind.AMD,
+        system: ModuleKind.System,
+        umd: ModuleKind.UMD,
+        es6: ModuleKind.ES2015,
+        es2015: ModuleKind.ES2015,
+        es2020: ModuleKind.ES2020,
+        es2022: ModuleKind.ES2022,
+        esnext: ModuleKind.ESNext,
+        node16: ModuleKind.Node16,
+        nodenext: ModuleKind.NodeNext,
+    })),
+    // parent of 19e60f1a19 (Fix showConfig)
     affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
@@ -691,7 +707,10 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     // Basic
     targetOptionDeclaration,
     moduleOptionDeclaration,
+    // HEAD
 
+    //
+    // parent of 19e60f1a19 (Fix showConfig)
     {
         name: "lib",
         type: "list",
@@ -1208,6 +1227,31 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Conditions_to_set_in_addition_to_the_resolver_specific_defaults_when_resolving_imports,
+    },
+    {
+        name: "moduleFormatDetection",
+        type: new Map(Object.entries({
+            none: ModuleFormatDetectionKind.None,
+            bundler: ModuleFormatDetectionKind.Bundler,
+            node16: ModuleFormatDetectionKind.Node16,
+            nodenext: ModuleFormatDetectionKind.NodeNext,
+        })),
+        affectsModuleResolution: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Specify_how_files_are_determined_to_be_ECMAScript_modules_or_CommonJS_modules,
+        defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_none_otherwise,
+    },
+    {
+        name: "moduleFormatInterop",
+        type: new Map(Object.entries({
+            babel: ModuleFormatInteropKind.Babel,
+            bundlernode: ModuleFormatInteropKind.BundlerNode,
+            node16: ModuleFormatInteropKind.Node16,
+            nodenext: ModuleFormatInteropKind.NodeNext,
+        })),
+        category: Diagnostics.Modules,
+        description: Diagnostics.Specify_the_target_runtime_s_rules_for_ESM_CommonJS_interoperation,
+        defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_babel_otherwise,
     },
 
     // Source Maps
@@ -1948,34 +1992,28 @@ function parseOptionValue(
             errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
         }
 
-        const dotIndex = opt.name.indexOf(".");
-        const [base = {}, name] = dotIndex > 0 ? [options[opt.name.substring(0, dotIndex)] as OptionsBase, opt.name.substring(dotIndex + 1)] : [options, opt.name];
-        if (dotIndex > 0) {
-            options[opt.name.substring(0, dotIndex)] = base;
-        }
-
         if (args[i] !== "null") {
             switch (opt.type) {
                 case "number":
-                    base[name] = validateJsonOptionValue(opt, parseInt(args[i]), errors);
+                    options[opt.name] = validateJsonOptionValue(opt, parseInt(args[i]), errors);
                     i++;
                     break;
                 case "boolean":
                     // boolean flag has optional value true, false, others
                     const optValue = args[i];
-                    base[name] = validateJsonOptionValue(opt, optValue !== "false", errors);
+                    options[opt.name] = validateJsonOptionValue(opt, optValue !== "false", errors);
                     // consume next argument as boolean flag value
                     if (optValue === "false" || optValue === "true") {
                         i++;
                     }
                     break;
                 case "string":
-                    base[name] = validateJsonOptionValue(opt, args[i] || "", errors);
+                    options[opt.name] = validateJsonOptionValue(opt, args[i] || "", errors);
                     i++;
                     break;
                 case "list":
                     const result = parseListTypeOption(opt, args[i], errors);
-                    base[name] = result || [];
+                    options[opt.name] = result || [];
                     if (result) {
                         i++;
                     }
@@ -1985,13 +2023,13 @@ function parseOptionValue(
                     break;
                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                 default:
-                    base[name] = parseCustomTypeOption(opt as CommandLineOptionOfCustomType, args[i], errors);
+                    options[opt.name] = parseCustomTypeOption(opt as CommandLineOptionOfCustomType, args[i], errors);
                     i++;
                     break;
             }
         }
         else {
-            base[name] = undefined;
+            options[opt.name] = undefined;
             i++;
         }
     }
@@ -2480,12 +2518,11 @@ export function convertToJson(
 }
 
 function getCompilerOptionValueTypeString(option: CommandLineOption): string {
-    const primaryType = (option.type === "listOrElement") ?
+    return (option.type === "listOrElement") ?
         `${getCompilerOptionValueTypeString(option.element)} or Array` :
         option.type === "list" ?
         "Array" :
         isString(option.type) ? option.type : "string";
-    return option.hasNestedVariant ? `${primaryType} or object` : primaryType;
 }
 
 function isCompilerOptionsValue(option: CommandLineOption | undefined, value: any): value is CompilerOptionsValue {
@@ -2640,29 +2677,23 @@ function serializeWatchOptions(options: WatchOptions) {
 
 function serializeOptionBaseObject(
     options: OptionsBase,
-    { optionsNameMap }: Pick<OptionsNameMap, "optionsNameMap">,
+    { optionsNameMap }: OptionsNameMap,
     pathOptions?: { configFilePath: string; useCaseSensitiveFileNames: boolean; },
-    containerName?: string,
 ): Map<string, CompilerOptionsValue> {
     const result = new Map<string, CompilerOptionsValue>();
     const getCanonicalFileName = pathOptions && createGetCanonicalFileName(pathOptions.useCaseSensitiveFileNames);
 
     for (const name in options) {
         if (hasProperty(options, name)) {
-            const fullOptionName = containerName ? `${containerName}.${name}` : name;
             // tsconfig only options cannot be specified via command line,
             // so we can assume that only types that can appear here string | number | boolean
-            if (optionsNameMap.has(fullOptionName) && (optionsNameMap.get(fullOptionName)!.category === Diagnostics.Command_line_Options || optionsNameMap.get(fullOptionName)!.category === Diagnostics.Output_Formatting)) {
+            if (optionsNameMap.has(name) && (optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options || optionsNameMap.get(name)!.category === Diagnostics.Output_Formatting)) {
                 continue;
             }
             const value = options[name] as CompilerOptionsValue;
-            const optionDefinition = optionsNameMap.get(fullOptionName.toLowerCase());
+            const optionDefinition = optionsNameMap.get(name.toLowerCase());
             if (optionDefinition) {
                 Debug.assert(optionDefinition.type !== "listOrElement");
-                if (optionDefinition.hasNestedVariant && value && typeof value === "object" && !isArray(value)) {
-                    result.set(name, optionMapToObject(serializeOptionBaseObject(value as OptionsBase, { optionsNameMap }, pathOptions, name)));
-                    continue;
-                }
                 const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
                 if (!customTypeMap) {
                     // There is no map associated with this compiler option then use the value as-is
@@ -3289,12 +3320,12 @@ function getExtendsConfigPathOrArray(
                 );
             }
             else {
-                convertJsonOption(extendsOptionDeclaration.element, value, basePath, errors, /*optionsNameMap*/ undefined, /*diagnostics*/ undefined, propertyAssignment, (valueExpression as ArrayLiteralExpression | undefined)?.elements[index], sourceFile);
+                convertJsonOption(extendsOptionDeclaration.element, value, basePath, errors, propertyAssignment, (valueExpression as ArrayLiteralExpression | undefined)?.elements[index], sourceFile);
             }
         }
     }
     else {
-        convertJsonOption(extendsOptionDeclaration, value, basePath, errors, /*optionsNameMap*/ undefined, /*diagnostics*/ undefined, propertyAssignment, valueExpression, sourceFile);
+        convertJsonOption(extendsOptionDeclaration, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
     }
     return extendedConfigPath;
 }
@@ -3337,7 +3368,7 @@ function parseOwnConfigOfJsonSourceFile(
         option: CommandLineOption | undefined,
     ) {
         // Ensure value is verified except for extends which is handled in its own way for error reporting
-        if (option && option !== extendsOptionDeclaration) value = convertJsonOption(option, value, basePath, errors, parentOption?.elementOptions, parentOption?.extraKeyDiagnostics, propertyAssignment, propertyAssignment.initializer, sourceFile);
+        if (option && option !== extendsOptionDeclaration) value = convertJsonOption(option, value, basePath, errors, propertyAssignment, propertyAssignment.initializer, sourceFile);
         if (parentOption?.name) {
             if (option) {
                 let currentOption;
@@ -3517,7 +3548,7 @@ function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, 
     for (const id in jsonOptions) {
         const opt = optionsNameMap.get(id);
         if (opt) {
-            (defaultOptions || (defaultOptions = {}))[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors, optionsNameMap, diagnostics);
+            (defaultOptions || (defaultOptions = {}))[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
         }
         else {
             errors.push(createUnknownOptionError(id, diagnostics));
@@ -3538,8 +3569,6 @@ export function convertJsonOption(
     value: any,
     basePath: string,
     errors: Diagnostic[],
-    optionsNameMap?: Map<string, CommandLineOption>,
-    diagnostics?: DidYouMeanOptionsDiagnostics,
     propertyAssignment?: PropertyAssignment,
     valueExpression?: Expression,
     sourceFile?: TsConfigSourceFile,
@@ -3556,28 +3585,13 @@ export function convertJsonOption(
         else if (optType === "listOrElement") {
             return isArray(value) ?
                 convertJsonOptionOfListType(opt, value, basePath, errors, propertyAssignment, valueExpression as ArrayLiteralExpression | undefined, sourceFile) :
-                convertJsonOption(opt.element, value, basePath, errors, optionsNameMap, diagnostics, propertyAssignment, valueExpression, sourceFile);
+                convertJsonOption(opt.element, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
         }
         else if (!isString(opt.type)) {
             return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors, valueExpression, sourceFile);
         }
         const validatedValue = validateJsonOptionValue(opt, value, errors, valueExpression, sourceFile);
         return isNullOrUndefined(validatedValue) ? validatedValue : normalizeNonListOptionValue(opt, basePath, validatedValue);
-    }
-    else if (opt.hasNestedVariant && value && typeof value === "object") {
-        Debug.assertIsDefined(optionsNameMap, "Argument 'optionsNameMap' is required for nested options");
-        Debug.assertIsDefined(diagnostics, "Argument 'diagnostics' is required for nested options");
-        const nestedOptionValue: NestedCompilerOption & { [option: string]: CompilerOptionsValue; } = {};
-        for (const nestedOptionName in value) {
-            const nestedOption = optionsNameMap.get(`${opt.name}.${nestedOptionName}`);
-            if (nestedOption) {
-                nestedOptionValue[nestedOptionName] = convertJsonOption(nestedOption, value[nestedOptionName], basePath, errors, optionsNameMap, diagnostics, propertyAssignment, valueExpression, sourceFile);
-            }
-            else {
-                errors.push(createUnknownOptionError(`${opt.name}.${nestedOptionName}`, diagnostics));
-            }
-        }
-        return nestedOptionValue;
     }
     else {
         errors.push(createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, Diagnostics.Compiler_option_0_requires_a_value_of_type_1, opt.name, getCompilerOptionValueTypeString(opt)));
@@ -3635,7 +3649,7 @@ function convertJsonOptionOfListType(
     valueExpression: ArrayLiteralExpression | undefined,
     sourceFile: TsConfigSourceFile | undefined,
 ): any[] {
-    return filter(map(values, (v, index) => convertJsonOption(option.element, v, basePath, errors, /*optionsNameMap*/ undefined, /*diagnostics*/ undefined, propertyAssignment, valueExpression?.elements[index], sourceFile)), v => option.listPreserveFalsyValues ? true : !!v);
+    return filter(map(values, (v, index) => convertJsonOption(option.element, v, basePath, errors, propertyAssignment, valueExpression?.elements[index], sourceFile)), v => option.listPreserveFalsyValues ? true : !!v);
 }
 
 /**
