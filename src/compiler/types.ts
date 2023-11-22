@@ -7425,8 +7425,7 @@ export interface CreateProgramOptions {
 /** @internal */
 export interface CommandLineOptionBase {
     name: string;
-    type: "string" | "number" | "boolean" | "object" | "list" | "listOrElement" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
-    hasNestedVariant?: boolean;                             // True for an option namee 'x' if another option named 'x.y' exists
+    type: "string" | "number" | "boolean" | "object" | "objectOrShorthand" | "list" | "listOrElement" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
     isFilePath?: boolean;                                   // True if option value is a path or fileName
     shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
     description?: DiagnosticMessage;                        // The message describing what the command line switch does.
@@ -7497,6 +7496,15 @@ export interface TsConfigOnlyOption extends CommandLineOptionBase {
     extraKeyDiagnostics?: DidYouMeanOptionsDiagnostics;
 }
 
+/** @interface */
+export interface CommandLineOptionOfObjectOrShorthandType extends CommandLineOptionBase {
+    type: "objectOrShorthand";
+    shorthandType: "string" | "number" | "boolean" | Map<string, number | string>;
+    defaultValueDescription?: string | number | boolean | DiagnosticMessage;
+    elementOptions: Map<string, CommandLineOption>;
+    extraKeyDiagnostics?: DidYouMeanOptionsDiagnostics;
+}
+
 /** @internal */
 export interface CommandLineOptionOfListType extends CommandLineOptionBase {
     type: "list" | "listOrElement";
@@ -7510,6 +7518,7 @@ export type CommandLineOption =
     | CommandLineOptionOfStringType
     | CommandLineOptionOfNumberType
     | CommandLineOptionOfBooleanType
+    | CommandLineOptionOfObjectOrShorthandType
     | TsConfigOnlyOption
     | CommandLineOptionOfListType;
 

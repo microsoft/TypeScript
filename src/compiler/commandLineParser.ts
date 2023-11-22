@@ -13,6 +13,7 @@ import {
     CommandLineOption,
     CommandLineOptionOfCustomType,
     CommandLineOptionOfListType,
+    CommandLineOptionOfObjectOrShorthandType,
     CompilerOptions,
     CompilerOptionsValue,
     ConfigFileSpecs,
@@ -555,12 +556,63 @@ const moduleKindMap = new Map(Object.entries({
     nodenext: ModuleKind.NodeNext,
 }));
 
+const moduleSubOptionDeclarations: readonly CommandLineOption[] = [
+    {
+        name: "preset",
+        type: moduleKindMap,
+        affectsSourceFile: true,
+        affectsBuildInfo: true,
+        affectsEmit: true,
+        affectsSemanticDiagnostics: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Specify_defaults_for_module_options_suited_for_common_runtimes_and_bundlers,
+        defaultValueDescription: undefined,
+    },
+    {
+        name: "formatDetection",
+        type: new Map(Object.entries({
+            none: ModuleFormatDetectionKind.None,
+            bundler: ModuleFormatDetectionKind.Bundler,
+            node16: ModuleFormatDetectionKind.Node16,
+            nodenext: ModuleFormatDetectionKind.NodeNext,
+        })),
+        affectsModuleResolution: true,
+        affectsSemanticDiagnostics: true,
+        affectsEmit: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Specify_how_files_are_determined_to_be_ECMAScript_modules_or_CommonJS_modules,
+        defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_none_otherwise,
+    },
+    {
+        name: "formatInterop",
+        type: new Map(Object.entries({
+            babel: ModuleFormatInteropKind.Babel,
+            bundlernode: ModuleFormatInteropKind.BundlerNode,
+            node16: ModuleFormatInteropKind.Node16,
+            nodenext: ModuleFormatInteropKind.NodeNext,
+        })),
+        affectsSemanticDiagnostics: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Specify_the_target_runtime_s_rules_for_ESM_CommonJS_interoperation,
+        defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_babel_otherwise,
+    },
+    {
+        name: "emit",
+        type: moduleKindMap,
+        affectsEmit: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Specify_what_module_code_is_generated,
+        defaultValueDescription: undefined,
+    },
+];
+
 /** @internal */
-export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
+export const moduleOptionDeclaration: CommandLineOptionOfObjectOrShorthandType = {
     name: "module",
     shortName: "m",
-    type: moduleKindMap,
-    hasNestedVariant: true,
+    type: "objectOrShorthand",
+    shorthandType: moduleKindMap,
+    elementOptions: commandLineOptionsToMap(moduleSubOptionDeclarations),
     affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
@@ -639,53 +691,6 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     // Basic
     targetOptionDeclaration,
     moduleOptionDeclaration,
-    {
-        name: "module.preset",
-        type: moduleKindMap,
-        affectsSourceFile: true,
-        affectsBuildInfo: true,
-        affectsEmit: true,
-        affectsSemanticDiagnostics: true,
-        category: Diagnostics.Modules,
-        description: Diagnostics.Specify_defaults_for_module_options_suited_for_common_runtimes_and_bundlers,
-        defaultValueDescription: undefined,
-    },
-    {
-        name: "module.formatDetection",
-        type: new Map(Object.entries({
-            none: ModuleFormatDetectionKind.None,
-            bundler: ModuleFormatDetectionKind.Bundler,
-            node16: ModuleFormatDetectionKind.Node16,
-            nodenext: ModuleFormatDetectionKind.NodeNext,
-        })),
-        affectsModuleResolution: true,
-        affectsSemanticDiagnostics: true,
-        affectsEmit: true,
-        category: Diagnostics.Modules,
-        description: Diagnostics.Specify_how_files_are_determined_to_be_ECMAScript_modules_or_CommonJS_modules,
-        defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_none_otherwise,
-    },
-    {
-        name: "module.formatInterop",
-        type: new Map(Object.entries({
-            babel: ModuleFormatInteropKind.Babel,
-            bundlernode: ModuleFormatInteropKind.BundlerNode,
-            node16: ModuleFormatInteropKind.Node16,
-            nodenext: ModuleFormatInteropKind.NodeNext,
-        })),
-        affectsSemanticDiagnostics: true,
-        category: Diagnostics.Modules,
-        description: Diagnostics.Specify_the_target_runtime_s_rules_for_ESM_CommonJS_interoperation,
-        defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_babel_otherwise,
-    },
-    {
-        name: "module.emit",
-        type: moduleKindMap,
-        affectsEmit: true,
-        category: Diagnostics.Modules,
-        description: Diagnostics.Specify_what_module_code_is_generated,
-        defaultValueDescription: undefined,
-    },
 
     {
         name: "lib",
