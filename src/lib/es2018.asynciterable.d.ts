@@ -20,6 +20,6 @@ interface AsyncIterable<T> {
     [Symbol.asyncIterator](): AsyncIterator<T>;
 }
 
-interface AsyncIterableIterator<T> extends AsyncIterator<T> {
-    [Symbol.asyncIterator](): AsyncIterableIterator<T>;
+interface AsyncIterableIterator<T, TReturn = any> extends AsyncIterator<T, TReturn> {
+    [Symbol.asyncIterator](): AsyncIterableIterator<T, TReturn>;
 }

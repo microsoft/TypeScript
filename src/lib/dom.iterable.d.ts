@@ -1,30 +1,30 @@
 /// <reference lib="dom" />
 
 interface DOMTokenList {
-    [Symbol.iterator](): IterableIterator<string>;
+    [Symbol.iterator](): IterableIterator<string, undefined>;
 }
 
 interface Headers {
-    [Symbol.iterator](): IterableIterator<[string, string]>;
+    [Symbol.iterator](): IterableIterator<[string, string], undefined>;
     /**
      * Returns an iterator allowing to go through all key/value pairs contained in this object.
      */
-    entries(): IterableIterator<[string, string]>;
+    entries(): IterableIterator<[string, string], undefined>;
     /**
      * Returns an iterator allowing to go through all keys f the key/value pairs contained in this object.
      */
-    keys(): IterableIterator<string>;
+    keys(): IterableIterator<string, undefined>;
     /**
      * Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
      */
-    values(): IterableIterator<string>;
+    values(): IterableIterator<string, undefined>;
 }
 
 interface NodeList {
     /**
      * Returns an array of key, value pairs for every entry in the list
      */
-    entries(): IterableIterator<[number, Node]>;
+    entries(): IterableIterator<[number, Node], undefined>;
     /**
      * Performs the specified action for each node in an list.
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
@@ -34,21 +34,21 @@ interface NodeList {
     /**
      * Returns an list of keys in the list
      */
-    keys(): IterableIterator<number>;
+    keys(): IterableIterator<number, undefined>;
 
     /**
      * Returns an list of values in the list
      */
-    values(): IterableIterator<Node>;
+    values(): IterableIterator<Node, undefined>;
 
-    [Symbol.iterator](): IterableIterator<Node>;
+    [Symbol.iterator](): IterableIterator<Node, undefined>;
 }
 
 interface NodeListOf<TNode extends Node> {
     /**
      * Returns an array of key, value pairs for every entry in the list
      */
-    entries(): IterableIterator<[number, TNode]>;
+    entries(): IterableIterator<[number, TNode], undefined>;
 
     /**
      * Performs the specified action for each node in an list.
@@ -59,55 +59,55 @@ interface NodeListOf<TNode extends Node> {
     /**
      * Returns an list of keys in the list
      */
-    keys(): IterableIterator<number>;
+    keys(): IterableIterator<number, undefined>;
     /**
      * Returns an list of values in the list
      */
-    values(): IterableIterator<TNode>;
+    values(): IterableIterator<TNode, undefined>;
 
-    [Symbol.iterator](): IterableIterator<TNode>;
+    [Symbol.iterator](): IterableIterator<TNode, undefined>;
 }
 
 interface HTMLCollectionBase {
-    [Symbol.iterator](): IterableIterator<Element>;
+    [Symbol.iterator](): IterableIterator<Element, undefined>;
 }
 
 interface HTMLCollectionOf<T extends Element> {
-    [Symbol.iterator](): IterableIterator<T>;
+    [Symbol.iterator](): IterableIterator<T, undefined>;
 }
 
 interface FormData {
     /**
      * Returns an array of key, value pairs for every entry in the list
      */
-    entries(): IterableIterator<[string, string | File]>;
+    entries(): IterableIterator<[string, string | File], undefined>;
     /**
      * Returns a list of keys in the list
      */
-    keys(): IterableIterator<string>;
+    keys(): IterableIterator<string, undefined>;
     /**
      * Returns a list of values in the list
      */
-    values(): IterableIterator<string | File>;
+    values(): IterableIterator<string | File, undefined>;
 
-    [Symbol.iterator](): IterableIterator<string | File>;
+    [Symbol.iterator](): IterableIterator<string | File, undefined>;
 }
 
 interface URLSearchParams {
     /**
      * Returns an array of key, value pairs for every entry in the search params
      */
-    entries(): IterableIterator<[string, string]>;
+    entries(): IterableIterator<[string, string], undefined>;
     /**
      * Returns a list of keys in the search params
      */
-    keys(): IterableIterator<string>;
+    keys(): IterableIterator<string, undefined>;
     /**
      * Returns a list of values in the search params
      */
-    values(): IterableIterator<string>;
+    values(): IterableIterator<string, undefined>;
     /**
      * iterate over key/value pairs
      */
-    [Symbol.iterator](): IterableIterator<[string, string]>;
+    [Symbol.iterator](): IterableIterator<[string, string], undefined>;
 }

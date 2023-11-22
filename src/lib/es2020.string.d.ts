@@ -6,5 +6,5 @@ interface String {
      * containing the results of that search.
      * @param regexp A variable name or string literal containing the regular expression pattern and flags.
      */
-    matchAll(regexp: RegExp): IterableIterator<RegExpMatchArray>;
+    matchAll(regexp: RegExp): IterableIterator<RegExpMatchArray, undefined>;
 }
