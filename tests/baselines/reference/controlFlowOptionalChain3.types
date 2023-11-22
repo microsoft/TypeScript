@@ -86,3 +86,25 @@ function Test3({ foo }: { foo: Foo | undefined }) {
   );
 }
 
+function test4(options?: { a?: boolean; b?: boolean }) {
+>test4 : (options?: {    a?: boolean;    b?: boolean;}) => void
+>options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
+>a : boolean | undefined
+>b : boolean | undefined
+
+  if (options?.a === false || options.b) {
+>options?.a === false || options.b : boolean | undefined
+>options?.a === false : boolean
+>options?.a : boolean | undefined
+>options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
+>a : boolean | undefined
+>false : false
+>options.b : boolean | undefined
+>options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
+>b : boolean | undefined
+
+    options;
+>options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
+  }
+}
+

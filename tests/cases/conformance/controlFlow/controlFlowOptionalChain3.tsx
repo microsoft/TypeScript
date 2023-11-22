@@ -36,3 +36,9 @@ function Test3({ foo }: { foo: Foo | undefined }) {
     </div>
   );
 }
+
+function test4(options?: { a?: boolean; b?: boolean }) {
+  if (options?.a === false || options.b) {
+    options;
+  }
+}
