@@ -66,7 +66,7 @@ jobs:
             await exec.exec("git", ["config", "user.name", "TypeScript Bot"]);
             await exec.exec("git", ["switch", "--detach", `origin/${TARGET_BRANCH}`]);
             await exec.exec("git", ["switch", "-c", pickBranch]);
-            await exec.exec("git", ["cherry-pick", pr.data.merge_commit_sha]);
+            await exec.exec("git", ["cherry-pick", "-m", "-1", pr.data.merge_commit_sha]);
             await exec.exec("git", ["push", "--force", "--set-upstream", "origin", pickBranch]);
 
             const existingPulls = await github.rest.pulls.list({
