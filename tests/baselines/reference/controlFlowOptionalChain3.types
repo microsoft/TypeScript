@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain3.ts] ////
+
+=== controlFlowOptionalChain3.ts ===
+// https://github.com/microsoft/TypeScript/issues/56482
+
+interface Foo {
+  bar: boolean;
+>bar : boolean
+}
+
+function test1(foo: Foo | undefined) {
+>test1 : (foo: Foo | undefined) => void
+>foo : Foo | undefined
+
+  if (foo?.bar === false) {
+>foo?.bar === false : boolean
+>foo?.bar : boolean | undefined
+>foo : Foo | undefined
+>bar : boolean | undefined
+>false : false
+
+    foo;
+>foo : Foo
+  }
+  foo;
+>foo : Foo | undefined
+}
+
+function test2(foo: Foo | undefined) {
+>test2 : (foo: Foo | undefined) => void
+>foo : Foo | undefined
+
+  if (foo?.bar === false) {
+>foo?.bar === false : boolean
+>foo?.bar : boolean | undefined
+>foo : Foo | undefined
+>bar : boolean | undefined
+>false : false
+
+    foo;
+>foo : Foo
+
+  } else {
+    foo;
+>foo : Foo | undefined
+  }
+}
+
