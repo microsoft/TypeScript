@@ -27930,10 +27930,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (isMatchingConstructorReference(right)) {
                         return narrowTypeByConstructor(type, operator, left, assumeTrue);
                     }
-                    if (isBooleanLiteral(right)) {
+                    if (isBooleanLiteral(right) && !isAccessExpression(left)) {
                         return narrowTypeByBooleanComparison(type, left, right, operator, assumeTrue);
                     }
-                    if (isBooleanLiteral(left)) {
+                    if (isBooleanLiteral(left) && !isAccessExpression(right)) {
                         return narrowTypeByBooleanComparison(type, right, left, operator, assumeTrue);
                     }
                     break;
