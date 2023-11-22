@@ -6223,6 +6223,10 @@
         "category": "Message",
         "code": 6806
     },
+    "Specify defaults for module options suited for common runtimes and bundlers.": {
+        "category": "Message",
+        "code": 6807
+    },
 
     "one of:": {
         "category": "Message",

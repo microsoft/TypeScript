@@ -7090,7 +7090,16 @@ export enum PollingWatchKind {
     FixedChunkSize,
 }
 
-export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+export interface ModuleOption {
+    preset?: ModuleKind;
+    formatDetection?: ModuleFormatDetectionKind;
+    formatInterop?: ModuleFormatInteropKind;
+    emit?: ModuleKind;
+}
+
+export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | NestedCompilerOption | PluginImport[] | ProjectReference[] | null | undefined;
+
+export type NestedCompilerOption = ModuleOption;
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
@@ -7156,9 +7165,7 @@ export interface CompilerOptions {
     locale?: string;
     mapRoot?: string;
     maxNodeModuleJsDepth?: number;
-    module?: ModuleKind;
-    moduleFormatDetection?: ModuleFormatDetectionKind;
-    moduleFormatInterop?: ModuleFormatInteropKind;
+    module?: ModuleKind | ModuleOption;
     moduleResolution?: ModuleResolutionKind;
     moduleSuffixes?: string[];
     moduleDetection?: ModuleDetectionKind;
@@ -7419,6 +7426,7 @@ export interface CreateProgramOptions {
 export interface CommandLineOptionBase {
     name: string;
     type: "string" | "number" | "boolean" | "object" | "list" | "listOrElement" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
+    hasNestedVariant?: boolean;                             // True for an option namee 'x' if another option named 'x.y' exists
     isFilePath?: boolean;                                   // True if option value is a path or fileName
     shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
     description?: DiagnosticMessage;                        // The message describing what the command line switch does.
@@ -7497,7 +7505,13 @@ export interface CommandLineOptionOfListType extends CommandLineOptionBase {
 }
 
 /** @internal */
-export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption | CommandLineOptionOfListType;
+export type CommandLineOption =
+    | CommandLineOptionOfCustomType
+    | CommandLineOptionOfStringType
+    | CommandLineOptionOfNumberType
+    | CommandLineOptionOfBooleanType
+    | TsConfigOnlyOption
+    | CommandLineOptionOfListType;
 
 // dprint-ignore
 /** @internal */
