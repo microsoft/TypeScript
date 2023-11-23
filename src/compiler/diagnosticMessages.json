@@ -6722,7 +6722,7 @@
         "category": "Error",
         "code": 9010
     },
-    "To use heritage clauses in class expressions with --isolatedDeclarations, you need explicit type annotation on the variable.": {
+    "Declaration emit for class expressions are not supported with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9011
     },

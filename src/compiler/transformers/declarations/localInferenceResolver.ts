@@ -8,11 +8,9 @@ import {
 import {
     isClassExpression,
     isComputedPropertyName,
-    isConstructorDeclaration,
     isExportAssignment,
     isGetAccessorDeclaration,
     isIdentifier,
-    isIndexSignatureDeclaration,
     isInterfaceDeclaration,
     isLiteralTypeNode,
     isMethodDeclaration,
@@ -50,21 +48,19 @@ import {
     ArrowFunction,
     AsExpression,
     ClassExpression,
+    DiagnosticMessage,
     EntityNameOrEntityNameExpression,
     ExportAssignment,
     Expression,
     FunctionExpression,
     GetAccessorDeclaration,
     HasInferredType,
-    HasModifiers,
     Identifier,
     KeywordTypeSyntaxKind,
     LanguageVariant,
     LiteralExpression,
     MethodDeclaration,
     MethodSignature,
-    Modifier,
-    ModifierLike,
     Node,
     NodeArray,
     NodeFlags,
@@ -87,7 +83,6 @@ import {
 } from "../../types";
 import {
     createDiagnosticForNode,
-    createDiagnosticForRange,
     isEntityNameExpression,
 } from "../../utilities";
 import {
@@ -113,7 +108,6 @@ enum LocalTypeInfoFlags {
     None = 0,
     Invalid = 1 << 1,
 }
-const propertyLikeModifiers = new Set<SyntaxKind>([SyntaxKind.ReadonlyKeyword, SyntaxKind.PublicKeyword]);
 
 interface LocalInferenceResolver {
     makeInvalidType(): Node;
@@ -167,12 +161,12 @@ export function createLocalInferenceResolver({
     function hasParseError(node: Node) {
         return !!(node.flags & NodeFlags.ThisNodeHasError);
     }
-    function reportIsolatedDeclarationError(node: Node) {
+    function reportIsolatedDeclarationError(node: Node, diagMessage: DiagnosticMessage = Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit) {
         // Do not report errors on nodes with other errors.
         if (hasParseError(node)) return;
         const message = createDiagnosticForNode(
             node,
-            Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit,
+            diagMessage,
         );
         context.addDiagnostic(message);
     }
@@ -362,14 +356,12 @@ export function createLocalInferenceResolver({
                 return regular(factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType), node, inheritedArrayTypeFlags);
             case SyntaxKind.ObjectLiteralExpression:
                 return getTypeForObjectLiteralExpression(node as ObjectLiteralExpression, inferenceFlags);
-            case SyntaxKind.ClassExpression:
-                return getClassExpressionTypeNode(node as ClassExpression);
         }
 
         return invalid(node);
     }
-    function invalid(sourceNode: Node): LocalTypeInfo {
-        reportIsolatedDeclarationError(sourceNode);
+    function invalid(sourceNode: Node, diagMessage = Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit): LocalTypeInfo {
+        reportIsolatedDeclarationError(sourceNode, diagMessage);
         return { typeNode: makeInvalidType(), flags: LocalTypeInfoFlags.Invalid, sourceNode };
     }
     function regular(typeNode: TypeNode, sourceNode: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
@@ -537,137 +529,6 @@ export function createLocalInferenceResolver({
                     accessorType.typeNode,
                 ),
             };
-        }
-    }
-
-    function getClassExpressionTypeNode(node: ClassExpression): LocalTypeInfo {
-        let invalid = false;
-        const staticMembers: TypeElement[] = [];
-        const nonStaticMembers: TypeElement[] = [];
-        const constructorParameters: ParameterDeclaration[] = [];
-
-        if (node.heritageClauses && node.heritageClauses.length > 0) {
-            context.addDiagnostic({
-                ...createDiagnosticForNode(node, Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit),
-                relatedInformation: [
-                    createDiagnosticForRange(
-                        currentSourceFile,
-                        {
-                            pos: node.heritageClauses[0].pos,
-                            end: node.heritageClauses[node.heritageClauses.length - 1].end,
-                        },
-                        Diagnostics.To_use_heritage_clauses_in_class_expressions_with_isolatedDeclarations_you_need_explicit_type_annotation_on_the_variable,
-                    ),
-                ],
-            });
-            invalid = true;
-        }
-
-        for (const member of node.members) {
-            if (isConstructorDeclaration(member)) {
-                for (const parameter of member.parameters) {
-                    const type = localInferenceFromInitializer(parameter, parameter.type);
-                    if (!type) {
-                        invalid = true;
-                        continue;
-                    }
-                    // TODO: See what happens on private modifiers.
-                    if (parameter.modifiers?.some(modifier => propertyLikeModifiers.has(modifier.kind))) {
-                        nonStaticMembers.push(factory.createPropertySignature(
-                            keepReadonlyKeyword(parameter.modifiers),
-                            parameter.name as Identifier,
-                            parameter.questionToken,
-                            type,
-                        ));
-                    }
-                    constructorParameters.push(factory.createParameterDeclaration(
-                        /*modifiers*/ undefined,
-                        parameter.dotDotDotToken,
-                        parameter.name,
-                        parameter.questionToken,
-                        type,
-                        parameter.initializer,
-                    ));
-                }
-            }
-            else if (isMethodDeclaration(member)) {
-                const { method, flags } = handleMethodDeclaration(member, member.name, NarrowBehavior.None);
-                if (flags & LocalTypeInfoFlags.Invalid) {
-                    invalid = true;
-                    continue;
-                }
-                if (hasStaticModifier(member)) {
-                    staticMembers.push(method);
-                }
-                else {
-                    nonStaticMembers.push(method);
-                }
-            }
-            else if (isGetAccessorDeclaration(member) || isSetAccessorDeclaration(member)) {
-                const accessorType = handleAccessors(member, node, member.name, getMemberKey(member));
-                if (accessorType && accessorType.flags !== LocalTypeInfoFlags.None) {
-                    nonStaticMembers.push(accessorType.type);
-                }
-                else {
-                    invalid = true;
-                    continue;
-                }
-            }
-            else if (isIndexSignatureDeclaration(member)) {
-                nonStaticMembers.push(member);
-            }
-            else if (isPropertyDeclaration(member)) {
-                const name = isPrivateIdentifier(member.name) ?
-                    // imitating the behavior from utilities.ts : getSymbolNameForPrivateIdentifier, but as we don't have
-                    // a Symbol & SymbolId in hand, we use NodeId of the declaration instead as an approximiation and to provide uniqueness.
-                    // TODO: This seems to have a high collision possibilitiy than the vanilla implementation as we have much less
-                    // ids for nodes in DTE.
-                    factory.createStringLiteral(`__#${node.parent.id}@${member.name.escapedText}`) :
-                    member.name;
-                const type = localInferenceFromInitializer(member, member.type);
-                if (!type) {
-                    invalid = true;
-                    continue;
-                }
-                const propertySignature = factory.createPropertySignature(
-                    keepReadonlyKeyword(member.modifiers),
-                    name,
-                    member.questionToken,
-                    type,
-                );
-                if (hasStaticModifier(member)) {
-                    staticMembers.push(propertySignature);
-                }
-                else {
-                    nonStaticMembers.push(propertySignature);
-                }
-            }
-        }
-
-        if (invalid) {
-            return { typeNode: makeInvalidType(), flags: LocalTypeInfoFlags.Invalid, sourceNode: node };
-        }
-        else {
-            const constructorSignature = factory.createConstructSignature(
-                node.typeParameters,
-                constructorParameters,
-                factory.createTypeLiteralNode(nonStaticMembers),
-            );
-            const typeNode = factory.createTypeLiteralNode([constructorSignature, ...staticMembers]);
-            return { typeNode, flags: LocalTypeInfoFlags.None, sourceNode: node };
-        }
-    }
-
-    function hasStaticModifier(node: HasModifiers) {
-        return node.modifiers?.some(modifier => modifier.kind === SyntaxKind.StaticKeyword);
-    }
-
-    function keepReadonlyKeyword(modifiers?: NodeArray<ModifierLike>): Modifier[] {
-        if (modifiers?.some(modifier => modifier.kind === SyntaxKind.ReadonlyKeyword)) {
-            return [factory.createModifier(SyntaxKind.ReadonlyKeyword)];
-        }
-        else {
-            return [];
         }
     }
 
@@ -893,12 +754,15 @@ export function createLocalInferenceResolver({
             localType = localInference(node.expression, NarrowBehavior.KeepLiterals);
         }
         else if (isVariableDeclaration(node) && node.initializer) {
-            if (isVariableDeclaration(node) && resolver.isExpandoFunction(node)) {
+            if (resolver.isExpandoFunction(node)) {
                 context.addDiagnostic(createDiagnosticForNode(
                     node,
                     Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
                 ));
                 localType = invalid(node);
+            }
+            else if (isClassExpression(node.initializer)) {
+                localType = invalid(node.initializer, Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations)
             }
             else {
                 localType = localInference(node.initializer, node.parent.flags & NodeFlags.Const ? NarrowBehavior.KeepLiterals : NarrowBehavior.None);
