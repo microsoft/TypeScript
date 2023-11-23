@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
 /**
  * comment1
  * @param p 

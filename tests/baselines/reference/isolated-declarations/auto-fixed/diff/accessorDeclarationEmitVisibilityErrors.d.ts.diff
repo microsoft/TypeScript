@@ -1,0 +1,19 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/accessorDeclarationEmitVisibilityErrors.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,11 @@
+ 
++
++//// [accessorDeclarationEmitVisibilityErrors.d.ts]
++export declare class Q {
++    set bet(arg: DoesNotExist);
++}
++//# sourceMappingURL=accessorDeclarationEmitVisibilityErrors.d.ts.map
+ /// [Errors] ////
+ 
+ accessorDeclarationEmitVisibilityErrors.ts(2,18): error TS2304: Cannot find name 'DoesNotExist'.
+ accessorDeclarationEmitVisibilityErrors.ts(2,18): error TS4106: Parameter 'arg' of accessor has or is using private name 'DoesNotExist'.

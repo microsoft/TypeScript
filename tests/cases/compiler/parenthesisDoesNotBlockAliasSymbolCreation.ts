@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
 
 export type InvalidKeys<K extends string|number|symbol> = { [P in K]? : never };
 export type InvalidKeys2<K extends string|number|symbol> = (

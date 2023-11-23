@@ -1,0 +1,22 @@
+// [[Reason: Printing differences]] ////
+
+//// [tests/cases/compiler/declarationEmitPropertyNumericStringKey.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -5,11 +5,11 @@
+     readonly "404": "not found";
+ };
+ declare const hundredStr = "100";
+ declare const obj: {
+-    "100": string;
++    [hundredStr]: string;
+ };
+ declare const hundredNum = 100;
+ declare const obj2: {
+-    100: string;
++    [hundredNum]: string;
+ };
+ //# sourceMappingURL=declarationEmitPropertyNumericStringKey.d.ts.map
+\ No newline at end of file

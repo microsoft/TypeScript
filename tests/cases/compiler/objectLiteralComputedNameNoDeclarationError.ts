@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Printing differences
 const Foo = {
     BANANA: 'banana' as 'banana',
 }

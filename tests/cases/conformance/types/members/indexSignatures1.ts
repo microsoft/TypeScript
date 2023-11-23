@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @target: esnext
+// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
 
 // Symbol index signature checking
 
@@ -10,7 +11,7 @@ function gg3(x: { [key: string]: string }, y: { [key: symbol]: string }, z: { [s
     x = z;
     y = z;  // Error
 }
-
+
 // Overlapping index signatures
 
 function gg1(x: { [key: `a${string}`]: string, [key: `${string}a`]: string }, y: { [key: `a${string}a`]: string }) {

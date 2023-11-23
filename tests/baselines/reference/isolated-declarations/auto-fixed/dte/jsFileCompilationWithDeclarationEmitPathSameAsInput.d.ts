@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/jsFileCompilationWithDeclarationEmitPathSameAsInput.ts] ////
+
+//// [a.ts]
+class c {
+}
+
+//// [a.d.ts]
+declare function isC(): boolean;
+
+/// [Declarations] ////
+
+
+
+//// [a.d.ts]
+declare class c {
+}
+//# sourceMappingURL=a.d.ts.map
+/// [Errors] ////
+
+error TS5055: Cannot write file 'a.d.ts' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+
+
+!!! error TS5055: Cannot write file 'a.d.ts' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+==== a.ts (0 errors) ====
+    class c {
+    }
+    
+==== a.d.ts (0 errors) ====
+    declare function isC(): boolean;

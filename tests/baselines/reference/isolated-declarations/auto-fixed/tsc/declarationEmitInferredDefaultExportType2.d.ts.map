@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/declarationEmitInferredDefaultExportType2.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitInferredDefaultExportType2.d.ts]
+declare const _default: {
+    foo: readonly [];
+    bar: any;
+    baz: any;
+};
+export = _default;
+//# sourceMappingURL=declarationEmitInferredDefaultExportType2.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [declarationEmitInferredDefaultExportType2.d.ts.map]
+{"version":3,"file":"declarationEmitInferredDefaultExportType2.d.ts","sourceRoot":"","sources":["declarationEmitInferredDefaultExportType2.ts"],"names":[],"mappings":";;;;;AACA,kBAIC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCBfZGVmYXVsdDogew0KICAgIGZvbzogcmVhZG9ubHkgW107DQogICAgYmFyOiBhbnk7DQogICAgYmF6OiBhbnk7DQp9Ow0KZXhwb3J0ID0gX2RlZmF1bHQ7DQovLyMgc291cmNlTWFwcGluZ1VSTD1kZWNsYXJhdGlvbkVtaXRJbmZlcnJlZERlZmF1bHRFeHBvcnRUeXBlMi5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0SW5mZXJyZWREZWZhdWx0RXhwb3J0VHlwZTIuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImRlY2xhcmF0aW9uRW1pdEluZmVycmVkRGVmYXVsdEV4cG9ydFR5cGUyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7O0FBQ0Esa0JBSUMifQ==,Ly8gdGVzdC50cwpleHBvcnQgPSB7CiAgZm9vOiBbXSBhcyBjb25zdCwKICBiYXI6IHVuZGVmaW5lZCwKICBiYXo6IG51bGwKfQ==
+

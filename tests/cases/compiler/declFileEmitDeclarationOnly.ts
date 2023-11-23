@@ -1,5 +1,6 @@
 // @declaration: true
 // @emitDeclarationOnly: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 // @filename: helloworld.ts
 const Log = {

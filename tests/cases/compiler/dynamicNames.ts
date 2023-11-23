@@ -2,6 +2,7 @@
 // @lib: esnext
 // @module: commonjs
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Printing differences
 // @filename: module.ts
 export const c0 = "a";
 export const c1 = 1;

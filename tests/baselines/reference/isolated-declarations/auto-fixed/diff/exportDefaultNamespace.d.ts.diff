@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,9 +1,20 @@
+@@ -1,9 +1,19 @@
  
  
  //// [exportDefaultNamespace.d.ts]
@@ -18,7 +18,6 @@
 \ No newline at end of file
 +export default function someFunc(): string;
 +//# sourceMappingURL=exportDefaultNamespace.d.ts.map
-+
 +/// [Errors] ////
 +
 +exportDefaultNamespace.ts(1,25): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

@@ -1,5 +1,6 @@
 // @declaration: true
 // @filename: thingB.ts
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 export interface ThingB { }
 // @filename: things.ts
 export * from "./thingB";

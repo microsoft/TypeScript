@@ -20,11 +20,9 @@ interface I {
 export declare function f(): I;
 export {};
 //# sourceMappingURL=a.d.ts.map
-
 //// [b.d.ts]
 export declare function q(): void;
 //# sourceMappingURL=b.d.ts.map
-
 /// [Errors] ////
 
 b.ts(3,17): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

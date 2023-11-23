@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/declarationEmitBindingPatterns.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitBindingPatterns.d.ts]
+declare const k: ({ x: z }: {
+    x?: string;
+}) => void;
+declare var a: any;
+declare function f({}?: any, []?: any, { p: {} }?: any): void;
+//# sourceMappingURL=declarationEmitBindingPatterns.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [declarationEmitBindingPatterns.d.ts.map]
+{"version":3,"file":"declarationEmitBindingPatterns.d.ts","sourceRoot":"","sources":["declarationEmitBindingPatterns.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,aAAkB;IACjB,CAAC,CAAC,EAAE,MAAM,CAAC;CACd,KAAG,IAAW,CAAA;AAEnB,QAAA,IAAI,CAAC,EAAE,GAAG,CAAC;AACX,iBAAS,CAAC,CAAC,EAAE,GAAE,GAAO,EAAE,EAAE,GAAE,GAAO,EAAE,EAAE,CAAC,EAAE,EAAM,EAAC,GAAE,GAAO,GAAG,IAAI,CAChE"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCBrOiAoeyB4OiB6IH06IHsNCiAgICB4Pzogc3RyaW5nOw0KfSkgPT4gdm9pZDsNCmRlY2xhcmUgdmFyIGE6IGFueTsNCmRlY2xhcmUgZnVuY3Rpb24gZih7fT86IGFueSwgW10/OiBhbnksIHsgcDoge30gfT86IGFueSk6IHZvaWQ7DQovLyMgc291cmNlTWFwcGluZ1VSTD1kZWNsYXJhdGlvbkVtaXRCaW5kaW5nUGF0dGVybnMuZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0QmluZGluZ1BhdHRlcm5zLmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJkZWNsYXJhdGlvbkVtaXRCaW5kaW5nUGF0dGVybnMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsUUFBQSxNQUFNLENBQUMsYUFBa0I7SUFDakIsQ0FBQyxDQUFDLEVBQUUsTUFBTSxDQUFDO0NBQ2QsS0FBRyxJQUFXLENBQUE7QUFFbkIsUUFBQSxJQUFJLENBQUMsRUFBRSxHQUFHLENBQUM7QUFDWCxpQkFBUyxDQUFDLENBQUMsRUFBRSxHQUFFLEdBQU8sRUFBRSxFQUFFLEdBQUUsR0FBTyxFQUFFLEVBQUUsQ0FBQyxFQUFFLEVBQU0sRUFBQyxHQUFFLEdBQU8sR0FBRyxJQUFJLENBQ2hFIn0=,Y29uc3QgayA9ICh7eDogeiA9ICd5J306IHsKICAgICAgICB4Pzogc3RyaW5nOwogICAgfSk6IHZvaWQgPT4geyB9Cgp2YXIgYTogYW55OwpmdW5jdGlvbiBmKHt9OiBhbnkgPSBhLCBbXTogYW55ID0gYSwgeyBwOiB7fSA9IGF9OiBhbnkgPSBhKTogdm9pZCB7Cn0=
+

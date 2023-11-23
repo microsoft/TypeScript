@@ -1,0 +1,20 @@
+// [[Reason: Printing differences]] ////
+
+//// [tests/cases/compiler/declarationEmitComputedNameConstEnumAlias.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -6,9 +6,10 @@
+ }
+ export default EnumExample;
+ //# sourceMappingURL=EnumExample.d.ts.map
+ //// [index.d.ts]
++import EnumExample from './EnumExample';
+ declare const _default: {
+-    TEST: {};
++    [EnumExample.TEST]: {};
+ };
+ export default _default;
+ //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file

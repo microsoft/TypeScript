@@ -1,0 +1,18 @@
+// [[Reason: Printing differences]] ////
+
+//// [tests/cases/compiler/correlatedUnions.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -166,9 +166,9 @@
+         [K2 in keyof T[K]]: number;
+     };
+ };
+ type MappedFromOriginal = SameKeys<Original>;
+-declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]];
++declare const getStringAndNumberFromOriginalAndMapped: <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]];
+ interface Config {
+     string: string;
+     number: number;
+ }

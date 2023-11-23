@@ -71,7 +71,6 @@ declare enum e5 {
     "Weekend days" = 3
 }
 //# sourceMappingURL=declFileEnums.d.ts.map
-
 /// [Errors] ////
 
 declFileEnums.ts(15,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

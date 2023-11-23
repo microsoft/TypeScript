@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,7 +1,32 @@
+@@ -1,7 +1,31 @@
  
  
  //// [/index.d.ts]
@@ -16,7 +16,6 @@
 \ No newline at end of file
 -//# sourceMappingURL=index.d.ts.map
 +//# sourceMappingURL=index.d.ts.map
-+
 +/// [Errors] ////
 +
 +/index.ts(4,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/templateLiteralsInTypes.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [templateLiteralsInTypes.d.ts]
+declare const f: (hdr: string, val: number) => `${string}:\t${number}\r\n`;
+//# sourceMappingURL=templateLiteralsInTypes.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [templateLiteralsInTypes.d.ts.map]
+{"version":3,"file":"templateLiteralsInTypes.d.ts","sourceRoot":"","sources":["templateLiteralsInTypes.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,QAAS,MAAM,OAAO,MAAM,KAAG,GAAG,MAAM,MAAM,MAAM,MAA8D,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCBmOiAoaGRyOiBzdHJpbmcsIHZhbDogbnVtYmVyKSA9PiBgJHtzdHJpbmd9Olx0JHtudW1iZXJ9XHJcbmA7DQovLyMgc291cmNlTWFwcGluZ1VSTD10ZW1wbGF0ZUxpdGVyYWxzSW5UeXBlcy5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGVtcGxhdGVMaXRlcmFsc0luVHlwZXMuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbInRlbXBsYXRlTGl0ZXJhbHNJblR5cGVzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLFFBQUEsTUFBTSxDQUFDLFFBQVMsTUFBTSxPQUFPLE1BQU0sS0FBRyxHQUFHLE1BQU0sTUFBTSxNQUFNLE1BQThELENBQUMifQ==,Y29uc3QgZiA9IChoZHI6IHN0cmluZywgdmFsOiBudW1iZXIpOiBgJHtzdHJpbmd9Olx0JHtudW1iZXJ9XHJcbmAgPT4gYCR7aGRyfTpcdCR7dmFsfVxyXG5gIGFzIGAke3N0cmluZ306XHQke251bWJlcn1cclxuYDsKCmYoIngiKS5mb287Cg==
+

@@ -39,7 +39,6 @@ export * from "../other";
 export declare const va: invalid;
 export declare const va2: invalid;
 //# sourceMappingURL=main.d.ts.map
-
 /// [Errors] ////
 
 main.ts(4,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

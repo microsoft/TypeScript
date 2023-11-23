@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit9.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [symbolDeclarationEmit9.d.ts]
+declare var obj: {
+    [Symbol.isConcatSpreadable](): void;
+};
+//# sourceMappingURL=symbolDeclarationEmit9.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [symbolDeclarationEmit9.d.ts.map]
+{"version":3,"file":"symbolDeclarationEmit9.d.ts","sourceRoot":"","sources":["symbolDeclarationEmit9.ts"],"names":[],"mappings":"AAAA,QAAA,IAAI,GAAG;mCAC4B,IAAI;CACtC,CAAA"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSB2YXIgb2JqOiB7DQogICAgW1N5bWJvbC5pc0NvbmNhdFNwcmVhZGFibGVdKCk6IHZvaWQ7DQp9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9c3ltYm9sRGVjbGFyYXRpb25FbWl0OS5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3ltYm9sRGVjbGFyYXRpb25FbWl0OS5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsic3ltYm9sRGVjbGFyYXRpb25FbWl0OS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxRQUFBLElBQUksR0FBRzttQ0FDNEIsSUFBSTtDQUN0QyxDQUFBIn0=,dmFyIG9iaiA9IHsKICAgIFtTeW1ib2wuaXNDb25jYXRTcHJlYWRhYmxlXSgpOiB2b2lkIHsgfQp9
+

@@ -2,6 +2,7 @@
 // @declaration: true
 // @target: es2015
 // @lib: esnext, dom
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 type Action =
     | { kind: 'A', payload: number }

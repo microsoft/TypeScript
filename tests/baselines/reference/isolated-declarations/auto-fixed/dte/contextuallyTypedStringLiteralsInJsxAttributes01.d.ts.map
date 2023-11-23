@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [contextuallyTypedStringLiteralsInJsxAttributes01.d.ts]
+declare namespace JSX {
+    interface IntrinsicElements {
+        span: {};
+    }
+    interface Element {
+        something?: any;
+    }
+}
+declare const FooComponent: (props: {
+    foo: "A" | "B" | "C";
+}) => JSX.Element;
+//# sourceMappingURL=contextuallyTypedStringLiteralsInJsxAttributes01.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [contextuallyTypedStringLiteralsInJsxAttributes01.d.ts.map]
+{"version":3,"file":"contextuallyTypedStringLiteralsInJsxAttributes01.d.ts","sourceRoot":"","sources":["contextuallyTypedStringLiteralsInJsxAttributes01.tsx"],"names":[],"mappings":"AAAA,kBAAU,GAAG,CAAC;IACV,UAAiB,iBAAiB;QAC9B,IAAI,EAAE,EAAE,CAAC;KACZ;IACD,UAAiB,OAAO;QAC1B,SAAS,CAAC,EAAE,GAAG,CAAC;KACb;CACJ;AAED,QAAA,MAAM,YAAY,GAAI,KAAK,EAAE;IAAE,GAAG,EAAE,GAAG,GAAG,GAAG,GAAG,GAAG,CAAA;CAAE,KAAG,GAAG,CAAC,OAAmC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBuYW1lc3BhY2UgSlNYIHsNCiAgICBpbnRlcmZhY2UgSW50cmluc2ljRWxlbWVudHMgew0KICAgICAgICBzcGFuOiB7fTsNCiAgICB9DQogICAgaW50ZXJmYWNlIEVsZW1lbnQgew0KICAgICAgICBzb21ldGhpbmc/OiBhbnk7DQogICAgfQ0KfQ0KZGVjbGFyZSBjb25zdCBGb29Db21wb25lbnQ6IChwcm9wczogew0KICAgIGZvbzogIkEiIHwgIkIiIHwgIkMiOw0KfSkgPT4gSlNYLkVsZW1lbnQ7DQovLyMgc291cmNlTWFwcGluZ1VSTD1jb250ZXh0dWFsbHlUeXBlZFN0cmluZ0xpdGVyYWxzSW5Kc3hBdHRyaWJ1dGVzMDEuZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29udGV4dHVhbGx5VHlwZWRTdHJpbmdMaXRlcmFsc0luSnN4QXR0cmlidXRlczAxLmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJjb250ZXh0dWFsbHlUeXBlZFN0cmluZ0xpdGVyYWxzSW5Kc3hBdHRyaWJ1dGVzMDEudHN4Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGtCQUFVLEdBQUcsQ0FBQztJQUNWLFVBQWlCLGlCQUFpQjtRQUM5QixJQUFJLEVBQUUsRUFBRSxDQUFDO0tBQ1o7SUFDRCxVQUFpQixPQUFPO1FBQzFCLFNBQVMsQ0FBQyxFQUFFLEdBQUcsQ0FBQztLQUNiO0NBQ0o7QUFFRCxRQUFBLE1BQU0sWUFBWSxHQUFJLEtBQUssRUFBRTtJQUFFLEdBQUcsRUFBRSxHQUFHLEdBQUcsR0FBRyxHQUFHLEdBQUcsQ0FBQTtDQUFFLEtBQUcsR0FBRyxDQUFDLE9BQW1DLENBQUMifQ==,bmFtZXNwYWNlIEpTWCB7CiAgICBleHBvcnQgaW50ZXJmYWNlIEludHJpbnNpY0VsZW1lbnRzIHsKICAgICAgICBzcGFuOiB7fTsKICAgIH0KICAgIGV4cG9ydCBpbnRlcmZhY2UgRWxlbWVudCB7CgkJc29tZXRoaW5nPzogYW55OwogICAgfQp9Cgpjb25zdCBGb29Db21wb25lbnQgPSAocHJvcHM6IHsgZm9vOiAiQSIgfCAiQiIgfCAiQyIgfSk6IEpTWC5FbGVtZW50ID0+IDxzcGFuPntwcm9wcy5mb299PC9zcGFuPjsKCjxGb29Db21wb25lbnQgZm9vPXsiQSJ9IC8+Owo8Rm9vQ29tcG9uZW50IGZvbz0iQSIgICAvPjsKCjxGb29Db21wb25lbnQgZm9vPXsiZiJ9IC8+Owo8Rm9vQ29tcG9uZW50IGZvbz0iZiIgICAvPjs=
+

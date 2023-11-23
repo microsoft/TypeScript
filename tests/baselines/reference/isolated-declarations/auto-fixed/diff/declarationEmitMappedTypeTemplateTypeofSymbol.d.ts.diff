@@ -1,0 +1,20 @@
+// [[Reason: TODO File is not auto-fixed. Symbol is not imported.]] ////
+
+//// [tests/cases/compiler/declarationEmitMappedTypeTemplateTypeofSymbol.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -6,9 +6,11 @@
+     [x.timestampSymbol]: true;
+ };
+ //# sourceMappingURL=b.d.ts.map
+ //// [c.d.ts]
+-export declare const timestamp: {};
++export declare const timestamp: {
++    [timestampSymbol]: true;
++};
+ //# sourceMappingURL=c.d.ts.map
+ /// [Errors] ////
+ 
+ c.ts(4,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.

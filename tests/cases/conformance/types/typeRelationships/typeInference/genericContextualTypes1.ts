@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
 
 type Box<T> = { value: T };
 

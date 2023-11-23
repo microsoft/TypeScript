@@ -32,7 +32,6 @@ declare namespace M {
     export {};
 }
 //# sourceMappingURL=symbolDeclarationEmit12.d.ts.map
-
 /// [Errors] ////
 
 symbolDeclarationEmit12.ts(5,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

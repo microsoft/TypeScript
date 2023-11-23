@@ -1,5 +1,6 @@
 // @lib: es2015
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
 // @filename: Types.ts
 type Suit = 'Hearts' | 'Spades' | 'Clubs' | 'Diamonds';
 type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 'Jack' | 'Queen' | 'King';

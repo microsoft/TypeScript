@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion01.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [emptyTuplesTypeAssertion01.d.ts]
+declare let x: [];
+declare let y: undefined;
+//# sourceMappingURL=emptyTuplesTypeAssertion01.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [emptyTuplesTypeAssertion01.d.ts.map]
+{"version":3,"file":"emptyTuplesTypeAssertion01.d.ts","sourceRoot":"","sources":["emptyTuplesTypeAssertion01.ts"],"names":[],"mappings":"AAAA,QAAA,IAAI,CAAC,EAAI,EAAK,CAAC;AACf,QAAA,IAAI,CAAC,EAAE,SAAgB,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBsZXQgeDogW107DQpkZWNsYXJlIGxldCB5OiB1bmRlZmluZWQ7DQovLyMgc291cmNlTWFwcGluZ1VSTD1lbXB0eVR1cGxlc1R5cGVBc3NlcnRpb24wMS5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZW1wdHlUdXBsZXNUeXBlQXNzZXJ0aW9uMDEuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImVtcHR5VHVwbGVzVHlwZUFzc2VydGlvbjAxLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLFFBQUEsSUFBSSxDQUFDLEVBQUksRUFBSyxDQUFDO0FBQ2YsUUFBQSxJQUFJLENBQUMsRUFBRSxTQUFnQixDQUFDIn0=,bGV0IHggPSA8W10+W107CmxldCB5OiB1bmRlZmluZWQgPSB4WzBdOw==
+

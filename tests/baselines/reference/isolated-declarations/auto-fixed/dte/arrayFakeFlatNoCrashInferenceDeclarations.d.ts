@@ -31,7 +31,6 @@ type BadFlatArray<Arr, Depth extends number> = {
 declare function flat<A, D extends number = 1>(arr: A, depth?: D): BadFlatArray<A, D>[];
 declare function foo<T>(arr: T[], depth: number): invalid;
 //# sourceMappingURL=arrayFakeFlatNoCrashInferenceDeclarations.d.ts.map
-
 /// [Errors] ////
 
 arrayFakeFlatNoCrashInferenceDeclarations.ts(13,10): error TS5088: The inferred type of 'foo' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.

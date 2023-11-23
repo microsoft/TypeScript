@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,23 +1,27 @@
+@@ -1,23 +1,26 @@
  
  
  //// [/.src/main.d.ts]
@@ -13,7 +13,6 @@
 -export declare const vb: import("ext/other").B;
 +export declare const vb: invalid;
  //# sourceMappingURL=main.d.ts.map
-+
  /// [Errors] ////
  
  main.ts(1,10): error TS2305: Module '"ext"' has no exported member 'fa'.

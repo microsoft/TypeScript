@@ -1,0 +1,29 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/declarationEmitExpressionInExtends4.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,21 @@
+ 
++
++//// [declarationEmitExpressionInExtends4.d.ts]
++declare function getSomething(): {
++    new (): {};
++};
++declare const CBase: {
++    new (): {};
++};
++declare class C extends CBase {
++}
++declare const C2Base: any;
++declare class C2 extends C2Base {
++}
++declare class C3 extends SomeUndefinedFunction {
++}
++//# sourceMappingURL=declarationEmitExpressionInExtends4.d.ts.map
+ /// [Errors] ////
+ 
+ declarationEmitExpressionInExtends4.ts(14,21): error TS2304: Cannot find name 'SomeUndefinedFunction'.
+ declarationEmitExpressionInExtends4.ts(20,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.

@@ -2,6 +2,7 @@
 // @declaration: true
 // @module: amd
 // @outFile: out/datastore.bundle.js
+// @isolatedDeclarationFixedDiffReason: TSC adds type reference directives.
 // @filename: lib/lib.d.ts
 declare module "lib/result" {
     export type Result<E extends Error, T> = (E & Failure<E>) | (T & Success<T>);

@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/intrinsics.ts] ////
+
+//// [intrinsics.ts]
+var hasOwnProperty: hasOwnProperty; // Error
+
+module m1 {
+    export var __proto__: any;
+    interface __proto__ {}
+
+    class C<T extends { __proto__: __proto__ }> { }
+}
+
+__proto__ = 0; // Error, __proto__ not defined
+m1.__proto__ = 0;
+
+class Foo<__proto__> { }
+var foo: (__proto__: number) => void;
+
+/// [Declarations] ////
+
+
+
+//// [intrinsics.d.ts]
+declare var hasOwnProperty: hasOwnProperty;
+declare namespace m1 {
+    var __proto__: any;
+}
+declare class Foo<__proto__> {
+}
+declare var foo: (__proto__: number) => void;
+//# sourceMappingURL=intrinsics.d.ts.map
+/// [Errors] ////
+
+intrinsics.ts(1,21): error TS2749: 'hasOwnProperty' refers to a value, but is being used as a type here. Did you mean 'typeof hasOwnProperty'?
+intrinsics.ts(1,21): error TS4025: Exported variable 'hasOwnProperty' has or is using private name 'hasOwnProperty'.
+intrinsics.ts(10,1): error TS2304: Cannot find name '__proto__'.
+
+
+==== intrinsics.ts (3 errors) ====
+    var hasOwnProperty: hasOwnProperty; // Error
+                        ~~~~~~~~~~~~~~
+!!! error TS2749: 'hasOwnProperty' refers to a value, but is being used as a type here. Did you mean 'typeof hasOwnProperty'?
+                        ~~~~~~~~~~~~~~
+!!! error TS4025: Exported variable 'hasOwnProperty' has or is using private name 'hasOwnProperty'.
+    
+    module m1 {
+        export var __proto__: any;
+        interface __proto__ {}
+    
+        class C<T extends { __proto__: __proto__ }> { }
+    }
+    
+    __proto__ = 0; // Error, __proto__ not defined
+    ~~~~~~~~~
+!!! error TS2304: Cannot find name '__proto__'.
+    m1.__proto__ = 0;
+    
+    class Foo<__proto__> { }
+    var foo: (__proto__: number) => void;

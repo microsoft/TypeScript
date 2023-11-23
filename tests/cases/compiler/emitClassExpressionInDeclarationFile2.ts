@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Can't fix class expressions
 export var noPrivates = class {
     static getTags() { }
     tags() { }

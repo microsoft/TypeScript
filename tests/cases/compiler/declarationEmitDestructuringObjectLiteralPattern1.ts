@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
 
 var { } = { x: 5, y: "hello" };
 var { x4 } = { x4: 5, y4: "hello" };

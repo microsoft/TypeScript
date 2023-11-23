@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/declarationEmitDuplicateParameterDestructuring.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitDuplicateParameterDestructuring.d.ts]
+export declare const fn1: ({ prop: a, prop: b }: {
+    prop: number;
+}) => number;
+export declare const fn2: ({ prop: a }: {
+    prop: number;
+}, { prop: b }: {
+    prop: number;
+}) => number;
+//# sourceMappingURL=declarationEmitDuplicateParameterDestructuring.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [declarationEmitDuplicateParameterDestructuring.d.ts.map]
+{"version":3,"file":"declarationEmitDuplicateParameterDestructuring.d.ts","sourceRoot":"","sources":["declarationEmitDuplicateParameterDestructuring.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,GAAI,EAAE,IAAI,EAAE,CAAC,EAAE,IAAI,EAAE,CAAC,EAAE,EAAE;IAAE,IAAI,EAAE,MAAM,CAAA;CAAE,KAAG,MAAe,CAAC;AAE7E,eAAO,MAAM,GAAG,GAAI,EAAE,IAAI,EAAE,CAAC,EAAE,EAAE;IAAE,IAAI,EAAE,MAAM,CAAA;CAAE,EAAE,EAAE,IAAI,EAAE,CAAC,EAAE,EAAE;IAAE,IAAI,EAAE,MAAM,CAAA;CAAE,KAAG,MAAe,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgZm4xOiAoeyBwcm9wOiBhLCBwcm9wOiBiIH06IHsNCiAgICBwcm9wOiBudW1iZXI7DQp9KSA9PiBudW1iZXI7DQpleHBvcnQgZGVjbGFyZSBjb25zdCBmbjI6ICh7IHByb3A6IGEgfTogew0KICAgIHByb3A6IG51bWJlcjsNCn0sIHsgcHJvcDogYiB9OiB7DQogICAgcHJvcDogbnVtYmVyOw0KfSkgPT4gbnVtYmVyOw0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9ZGVjbGFyYXRpb25FbWl0RHVwbGljYXRlUGFyYW1ldGVyRGVzdHJ1Y3R1cmluZy5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0RHVwbGljYXRlUGFyYW1ldGVyRGVzdHJ1Y3R1cmluZy5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiZGVjbGFyYXRpb25FbWl0RHVwbGljYXRlUGFyYW1ldGVyRGVzdHJ1Y3R1cmluZy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxlQUFPLE1BQU0sR0FBRyxHQUFJLEVBQUUsSUFBSSxFQUFFLENBQUMsRUFBRSxJQUFJLEVBQUUsQ0FBQyxFQUFFLEVBQUU7SUFBRSxJQUFJLEVBQUUsTUFBTSxDQUFBO0NBQUUsS0FBRyxNQUFlLENBQUM7QUFFN0UsZUFBTyxNQUFNLEdBQUcsR0FBSSxFQUFFLElBQUksRUFBRSxDQUFDLEVBQUUsRUFBRTtJQUFFLElBQUksRUFBRSxNQUFNLENBQUE7Q0FBRSxFQUFFLEVBQUUsSUFBSSxFQUFFLENBQUMsRUFBRSxFQUFFO0lBQUUsSUFBSSxFQUFFLE1BQU0sQ0FBQTtDQUFFLEtBQUcsTUFBZSxDQUFDIn0=,ZXhwb3J0IGNvbnN0IGZuMSA9ICh7IHByb3A6IGEsIHByb3A6IGIgfTogeyBwcm9wOiBudW1iZXIgfSk6IG51bWJlciA9PiBhICsgYjsKCmV4cG9ydCBjb25zdCBmbjIgPSAoeyBwcm9wOiBhIH06IHsgcHJvcDogbnVtYmVyIH0sIHsgcHJvcDogYiB9OiB7IHByb3A6IG51bWJlciB9KTogbnVtYmVyID0+IGEgKyBiOwo=
+

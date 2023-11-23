@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Printing differences
 
 // https://github.com/microsoft/TypeScript/issues/55292
 

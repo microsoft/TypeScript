@@ -1,5 +1,6 @@
 // https://github.com/Microsoft/TypeScript/issues/8612
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 // @filename: ThingA.ts
 export class ThingA { } 
 

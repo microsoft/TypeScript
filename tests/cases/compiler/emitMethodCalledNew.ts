@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO: new is not correctly emitted.
 
 // https://github.com/microsoft/TypeScript/issues/55075
 

@@ -1,5 +1,6 @@
 // @target: es2015
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Aliases are preserved for binding patterns GH#55654
 // GH#37454, GH#41044
 
 type O = { a?: string; b: number; c: number; };

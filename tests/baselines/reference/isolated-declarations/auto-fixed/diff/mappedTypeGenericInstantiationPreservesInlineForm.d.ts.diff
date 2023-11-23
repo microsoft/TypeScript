@@ -1,0 +1,20 @@
+// [[Reason: Printing differences]] ////
+
+//// [tests/cases/compiler/mappedTypeGenericInstantiationPreservesInlineForm.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,8 +1,10 @@
+ 
+ 
+ //// [mappedTypeGenericInstantiationPreservesInlineForm.d.ts]
+-export declare const test1: <T = Record<string, never>>(schema: { [K in keyof Required<T>]: T[K]; }) => void;
++export declare const test1: <T = Record<string, never>>(schema: {
++    [K in keyof Required<T>]: T[K];
++}) => void;
+ export declare function test2<T = Record<string, never>>(schema: {
+     [K in keyof Required<T>]: T[K];
+ }): void;
+ //# sourceMappingURL=mappedTypeGenericInstantiationPreservesInlineForm.d.ts.map
+\ No newline at end of file

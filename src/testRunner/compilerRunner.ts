@@ -535,12 +535,14 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         this.dteDtsFiles = [...ts.mapDefinedIterator(dteResult.dts, ([, f]) => f.asTestFile())];
         this.dteDtsFiles.sort(fileCompare);
         this.dteDtsMapFiles = [...ts.mapDefinedIterator(dteResult.dtsMap, ([, f]) => f.asTestFile())];
+        this.dteDtsMapFiles.sort(fileCompare);
 
         // With force get JSON definition files we need to ignore
         this.tscDtsFiles = [...ts.mapDefinedIterator(tscResult.dts, ([name, f]) => name.endsWith(".d.json.ts") ? undefined : f.asTestFile())];
 
         this.tscDtsFiles.sort(fileCompare);
         this.tscDtsMapFiles = ts.mapDefined(this.tscDtsFiles, f => tscResult.maps.get(f.unitName + ".map")?.asTestFile());
+        this.tscDtsMapFiles.sort(fileCompare);
 
         const tscDiagnostics = ts.sortAndDeduplicateDiagnostics(this.result.diagnostics);
         this.tscNonIsolatedDeclarationsErrors = tscDiagnostics.filter(d => !IsolatedDeclarationTest.dteDiagnosticErrors.has(d.code));
@@ -686,7 +688,7 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         const existingTransformedTest = IO.readFile(autoFixCacheTest);
         const hash = ts.sys.createHash!(env.testCaseContent.sourceCode);
         const fixedTest = existingTransformedTest && TestCaseParser.makeUnitsFromTest(existingTransformedTest, compilerEnvironment.fileName);
-        let transformSucceeded = false;
+        let transformSucceeded = true;
         let hasReferenceDirectiveErrors = false;
         if (fixedTest && fixedTest.settings.hash === hash) {
             transformSucceeded = fixedTest.settings.succeeded !== "false";

@@ -1,4 +1,5 @@
 ﻿// @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
 
 export type Bar<X, Y> = () => [X, Y];
 export type Foo<Y> = Bar<any, Y>;

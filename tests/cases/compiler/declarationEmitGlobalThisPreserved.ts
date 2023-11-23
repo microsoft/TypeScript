@@ -1,5 +1,6 @@
 // @declaration: true
 // @emitDeclarationOnly: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 // Adding this makes tooltips fail too.
 // declare global {

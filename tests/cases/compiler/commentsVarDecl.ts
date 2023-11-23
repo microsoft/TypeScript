@@ -1,6 +1,7 @@
 // @target: ES5
 // @declaration: true
 // @removeComments: false
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 /** Variable comments*/
 var myVariable = 10; // This trailing Comment1

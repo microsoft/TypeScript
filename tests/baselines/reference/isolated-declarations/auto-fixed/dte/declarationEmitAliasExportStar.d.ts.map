@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/declarationEmitAliasExportStar.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [index.d.ts]
+import * as things from "./things";
+export declare const thing2: (param: things.ThingB) => any;
+//# sourceMappingURL=index.d.ts.map
+//// [thingB.d.ts]
+export interface ThingB {
+}
+//# sourceMappingURL=thingB.d.ts.map
+//// [things.d.ts]
+export * from "./thingB";
+//# sourceMappingURL=things.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [index.d.ts.map]
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,MAAM,UAAU,CAAC;AACnC,eAAO,MAAM,MAAM,GAAI,KAAK,EAAE,MAAM,CAAC,MAAM,KAAG,GAAW,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vdGhpbmdzIjsNCmV4cG9ydCBkZWNsYXJlIGNvbnN0IHRoaW5nMjogKHBhcmFtOiB0aGluZ3MuVGhpbmdCKSA9PiBhbnk7DQovLyMgc291cmNlTWFwcGluZ1VSTD1pbmRleC5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sS0FBSyxNQUFNLE1BQU0sVUFBVSxDQUFDO0FBQ25DLGVBQU8sTUFBTSxNQUFNLEdBQUksS0FBSyxFQUFFLE1BQU0sQ0FBQyxNQUFNLEtBQUcsR0FBVyxDQUFDIn0=,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vdGhpbmdzIjsKZXhwb3J0IGNvbnN0IHRoaW5nMiA9IChwYXJhbTogdGhpbmdzLlRoaW5nQik6IGFueSA9PiBudWxsOwo=
+
+
+//// [thingB.d.ts.map]
+{"version":3,"file":"thingB.d.ts","sourceRoot":"","sources":["thingB.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,MAAM;CAAI"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGludGVyZmFjZSBUaGluZ0Igew0KfQ0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9dGhpbmdCLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGhpbmdCLmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJ0aGluZ0IudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxXQUFXLE1BQU07Q0FBSSJ9,ZXhwb3J0IGludGVyZmFjZSBUaGluZ0IgeyB9
+
+
+//// [things.d.ts.map]
+{"version":3,"file":"things.d.ts","sourceRoot":"","sources":["things.ts"],"names":[],"mappings":"AAAA,cAAc,UAAU,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0ICogZnJvbSAiLi90aGluZ0IiOw0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9dGhpbmdzLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGhpbmdzLmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJ0aGluZ3MudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsY0FBYyxVQUFVLENBQUMifQ==,ZXhwb3J0ICogZnJvbSAiLi90aGluZ0IiOw==
+

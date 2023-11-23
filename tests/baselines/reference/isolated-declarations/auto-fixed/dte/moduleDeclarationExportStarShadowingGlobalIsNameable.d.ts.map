@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/moduleDeclarationExportStarShadowingGlobalIsNameable.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [index.d.ts]
+declare global {
+    interface Account {
+        someProp: number;
+    }
+    interface Acc {
+        someProp: number;
+    }
+}
+import * as model from "./model";
+export declare const func: (account: model.Account, acc2: model.Acc) => void;
+//# sourceMappingURL=index.d.ts.map
+//// [model/index.d.ts]
+export * from "./account";
+//# sourceMappingURL=index.d.ts.map
+//// [/.src/model/account.d.ts]
+export interface Account {
+    myAccNum: number;
+}
+interface Account2 {
+    myAccNum: number;
+}
+export { Account2 as Acc };
+//# sourceMappingURL=account.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [index.d.ts.map]
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,MAAM,CAAC;IACX,UAAU,OAAO;QACb,QAAQ,EAAE,MAAM,CAAC;KACpB;IACD,UAAU,GAAG;QACT,QAAQ,EAAE,MAAM,CAAC;KACpB;CACJ;AACD,OAAO,KAAK,KAAK,MAAM,SAAS,CAAC;AACjC,eAAO,MAAM,IAAI,GAAI,OAAO,EAAE,KAAK,CAAC,OAAO,EAAE,IAAI,EAAE,KAAK,CAAC,GAAG,KAAG,IAAU,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBnbG9iYWwgew0KICAgIGludGVyZmFjZSBBY2NvdW50IHsNCiAgICAgICAgc29tZVByb3A6IG51bWJlcjsNCiAgICB9DQogICAgaW50ZXJmYWNlIEFjYyB7DQogICAgICAgIHNvbWVQcm9wOiBudW1iZXI7DQogICAgfQ0KfQ0KaW1wb3J0ICogYXMgbW9kZWwgZnJvbSAiLi9tb2RlbCI7DQpleHBvcnQgZGVjbGFyZSBjb25zdCBmdW5jOiAoYWNjb3VudDogbW9kZWwuQWNjb3VudCwgYWNjMjogbW9kZWwuQWNjKSA9PiB2b2lkOw0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sQ0FBQyxNQUFNLENBQUM7SUFDWCxVQUFVLE9BQU87UUFDYixRQUFRLEVBQUUsTUFBTSxDQUFDO0tBQ3BCO0lBQ0QsVUFBVSxHQUFHO1FBQ1QsUUFBUSxFQUFFLE1BQU0sQ0FBQztLQUNwQjtDQUNKO0FBQ0QsT0FBTyxLQUFLLEtBQUssTUFBTSxTQUFTLENBQUM7QUFDakMsZUFBTyxNQUFNLElBQUksR0FBSSxPQUFPLEVBQUUsS0FBSyxDQUFDLE9BQU8sRUFBRSxJQUFJLEVBQUUsS0FBSyxDQUFDLEdBQUcsS0FBRyxJQUFVLENBQUMifQ==,ZXhwb3J0ICogZnJvbSAiLi9hY2NvdW50IjsK
+
+
+//// [model/index.d.ts.map]
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,cAAc,WAAW,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBnbG9iYWwgew0KICAgIGludGVyZmFjZSBBY2NvdW50IHsNCiAgICAgICAgc29tZVByb3A6IG51bWJlcjsNCiAgICB9DQogICAgaW50ZXJmYWNlIEFjYyB7DQogICAgICAgIHNvbWVQcm9wOiBudW1iZXI7DQogICAgfQ0KfQ0KaW1wb3J0ICogYXMgbW9kZWwgZnJvbSAiLi9tb2RlbCI7DQpleHBvcnQgZGVjbGFyZSBjb25zdCBmdW5jOiAoYWNjb3VudDogbW9kZWwuQWNjb3VudCwgYWNjMjogbW9kZWwuQWNjKSA9PiB2b2lkOw0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGNBQWMsV0FBVyxDQUFDIn0=,ZXhwb3J0ICogZnJvbSAiLi9hY2NvdW50IjsK
+
+
+//// [/.src/model/account.d.ts.map]
+{"version":3,"file":"account.d.ts","sourceRoot":"","sources":["account.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,OAAO;IACpB,QAAQ,EAAE,MAAM,CAAC;CACpB;AACD,UAAU,QAAQ;IACd,QAAQ,EAAE,MAAM,CAAC;CACpB;AACD,OAAO,EAAE,QAAQ,IAAI,GAAG,EAAE,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGludGVyZmFjZSBBY2NvdW50IHsNCiAgICBteUFjY051bTogbnVtYmVyOw0KfQ0KaW50ZXJmYWNlIEFjY291bnQyIHsNCiAgICBteUFjY051bTogbnVtYmVyOw0KfQ0KZXhwb3J0IHsgQWNjb3VudDIgYXMgQWNjIH07DQovLyMgc291cmNlTWFwcGluZ1VSTD1hY2NvdW50LmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWNjb3VudC5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYWNjb3VudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxNQUFNLFdBQVcsT0FBTztJQUNwQixRQUFRLEVBQUUsTUFBTSxDQUFDO0NBQ3BCO0FBQ0QsVUFBVSxRQUFRO0lBQ2QsUUFBUSxFQUFFLE1BQU0sQ0FBQztDQUNwQjtBQUNELE9BQU8sRUFBRSxRQUFRLElBQUksR0FBRyxFQUFFLENBQUMifQ==,ZXhwb3J0IGludGVyZmFjZSBBY2NvdW50IHsKICAgIG15QWNjTnVtOiBudW1iZXI7Cn0KaW50ZXJmYWNlIEFjY291bnQyIHsKICAgIG15QWNjTnVtOiBudW1iZXI7Cn0KZXhwb3J0IHsgQWNjb3VudDIgYXMgQWNjIH07Cg==
+

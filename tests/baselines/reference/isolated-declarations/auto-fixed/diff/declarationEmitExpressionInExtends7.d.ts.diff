@@ -1,0 +1,18 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/declarationEmitExpressionInExtends7.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,10 @@
+ 
++
++//// [declarationEmitExpressionInExtends7.d.ts]
++export default class extends SomeUndefinedFunction {
++}
++//# sourceMappingURL=declarationEmitExpressionInExtends7.d.ts.map
+ /// [Errors] ////
+ 
+ declarationEmitExpressionInExtends7.ts(1,30): error TS2304: Cannot find name 'SomeUndefinedFunction'.
+ declarationEmitExpressionInExtends7.ts(1,30): error TS4021: 'extends' clause of exported class has or is using private name 'SomeUndefinedFunction'.

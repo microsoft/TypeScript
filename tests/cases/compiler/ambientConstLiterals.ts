@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO: Printing differences. Seems avoidable.
 
 function f<T>(x: T): T {
     return x;

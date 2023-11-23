@@ -1,0 +1,24 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/hugeDeclarationOutputGetsTruncatedWithError.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,16 @@
+ 
++
++//// [hugeDeclarationOutputGetsTruncatedWithError.d.ts]
++type props = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
++type manyprops = `${props}${props}`;
++export declare const c: {
++    [K in manyprops]: {
++        [K2 in manyprops]: `${K}.${K2}`;
++    };
++};
++export {};
++//# sourceMappingURL=hugeDeclarationOutputGetsTruncatedWithError.d.ts.map
+ /// [Errors] ////
+ 
+ hugeDeclarationOutputGetsTruncatedWithError.ts(5,14): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+ 

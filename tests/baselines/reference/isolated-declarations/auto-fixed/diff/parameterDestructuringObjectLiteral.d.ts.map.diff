@@ -1,0 +1,16 @@
+// [[Reason: TODO: Sourcemap seems missaligned]] ////
+
+//// [tests/cases/compiler/parameterDestructuringObjectLiteral.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,6 +1,6 @@
+ 
+ //// [parameterDestructuringObjectLiteral.d.ts.map]
+-{"version":3,"file":"parameterDestructuringObjectLiteral.d.ts","sourceRoot":"","sources":["parameterDestructuringObjectLiteral.ts"],"names":[],"mappings":"AAEA,QAAA,MAAM,GAAG,YAAa;IAAE,OAAO,CAAC,EAAE,EAAE,CAAA;CAAE,KAAG,IAAW,CAAC;AAGrD,QAAA,MAAM,GAAG;cACS,EAAE;MACZ,IAAW,CAAC"}
++{"version":3,"file":"parameterDestructuringObjectLiteral.d.ts","sourceRoot":"","sources":["parameterDestructuringObjectLiteral.ts"],"names":[],"mappings":"AAEA,QAAA,MAAM,GAAG,GAAI,OAAO,EAAE;IAAE,OAAO,CAAC,EAAE,EAAE,CAAA;CAAE,KAAG,IAAW,CAAC;AAGrD,QAAA,MAAM,GAAG,GAAI,EAAE,OAAY,EAAE,EAAE;IACvB,OAAO,CAAC,EAAE,EAAE,CAAC;CAChB,KAAG,IAAW,CAAC"}
+ 
+-//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCBmbjE6IChvcHRpb25zOiB7DQogICAgaGVhZGVycz86IHt9Ow0KfSkgPT4gdm9pZDsNCmRlY2xhcmUgY29uc3QgZm4yOiAoeyBoZWFkZXJzIH06IHsNCiAgICBoZWFkZXJzPzoge307DQp9KSA9PiB2b2lkOw0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9cGFyYW1ldGVyRGVzdHJ1Y3R1cmluZ09iamVjdExpdGVyYWwuZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGFyYW1ldGVyRGVzdHJ1Y3R1cmluZ09iamVjdExpdGVyYWwuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbInBhcmFtZXRlckRlc3RydWN0dXJpbmdPYmplY3RMaXRlcmFsLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUVBLFFBQUEsTUFBTSxHQUFHLFlBQWE7SUFBRSxPQUFPLENBQUMsRUFBRSxFQUFFLENBQUE7Q0FBRSxLQUFHLElBQVcsQ0FBQztBQUdyRCxRQUFBLE1BQU0sR0FBRztjQUNTLEVBQUU7TUFDWixJQUFXLENBQUMifQ==,Ly8gUmVwcm8gZnJvbSAjMjI2NDQKCmNvbnN0IGZuMSA9IChvcHRpb25zOiB7IGhlYWRlcnM/OiB7fSB9KTogdm9pZCA9PiB7IH07CmZuMSh7IGhlYWRlcnM6IHsgZm9vOiAxIH0gfSk7Cgpjb25zdCBmbjIgPSAoeyBoZWFkZXJzID0ge30gfTogewogICAgICAgIGhlYWRlcnM/OiB7fTsKICAgIH0pOiB2b2lkID0+IHsgfTsKZm4yKHsgaGVhZGVyczogeyBmb286IDEgfSB9KTsK
++//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCBmbjE6IChvcHRpb25zOiB7DQogICAgaGVhZGVycz86IHt9Ow0KfSkgPT4gdm9pZDsNCmRlY2xhcmUgY29uc3QgZm4yOiAoeyBoZWFkZXJzIH06IHsNCiAgICBoZWFkZXJzPzoge307DQp9KSA9PiB2b2lkOw0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9cGFyYW1ldGVyRGVzdHJ1Y3R1cmluZ09iamVjdExpdGVyYWwuZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGFyYW1ldGVyRGVzdHJ1Y3R1cmluZ09iamVjdExpdGVyYWwuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbInBhcmFtZXRlckRlc3RydWN0dXJpbmdPYmplY3RMaXRlcmFsLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUVBLFFBQUEsTUFBTSxHQUFHLEdBQUksT0FBTyxFQUFFO0lBQUUsT0FBTyxDQUFDLEVBQUUsRUFBRSxDQUFBO0NBQUUsS0FBRyxJQUFXLENBQUM7QUFHckQsUUFBQSxNQUFNLEdBQUcsR0FBSSxFQUFFLE9BQVksRUFBRSxFQUFFO0lBQ3ZCLE9BQU8sQ0FBQyxFQUFFLEVBQUUsQ0FBQztDQUNoQixLQUFHLElBQVcsQ0FBQyJ9,Ly8gUmVwcm8gZnJvbSAjMjI2NDQKCmNvbnN0IGZuMSA9IChvcHRpb25zOiB7IGhlYWRlcnM/OiB7fSB9KTogdm9pZCA9PiB7IH07CmZuMSh7IGhlYWRlcnM6IHsgZm9vOiAxIH0gfSk7Cgpjb25zdCBmbjIgPSAoeyBoZWFkZXJzID0ge30gfTogewogICAgICAgIGhlYWRlcnM/OiB7fTsKICAgIH0pOiB2b2lkID0+IHsgfTsKZm4yKHsgaGVhZGVyczogeyBmb286IDEgfSB9KTsK
+ 

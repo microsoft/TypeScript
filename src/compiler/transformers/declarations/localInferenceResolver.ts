@@ -523,7 +523,7 @@ export function createLocalInferenceResolver({
             return {
                 flags: accessorType.flags,
                 type: factory.createPropertySignature(
-                    setAccessor ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : [],
+                    setAccessor === undefined ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : [],
                     name,
                     /*questionToken*/ undefined,
                     accessorType.typeNode,

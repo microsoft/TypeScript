@@ -2,6 +2,7 @@
 // @module: node16,nodenext
 // @declaration: true
 // @outDir: out
+// @isolatedDeclarationFixedDiffReason: TODO: Import type has different module attributes
 // @filename: /node_modules/pkg/package.json
 {
     "name": "pkg",

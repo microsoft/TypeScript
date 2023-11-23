@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 class RoyalGuard {
     isLeader(): this is LeadGuard {
         return this instanceof LeadGuard;

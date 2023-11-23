@@ -1,0 +1,16 @@
+// [[Reason: Printing differences]] ////
+
+//// [tests/cases/compiler/declarationEmitNoNonRequiredParens.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -6,6 +6,6 @@
+     B = 1,
+     C = 2
+ }
+ export type TestType = typeof Test;
+-export declare const bar: Test[];
++export declare const bar: TestType[Extract<keyof TestType, string>][];
+ //# sourceMappingURL=declarationEmitNoNonRequiredParens.d.ts.map
+\ No newline at end of file

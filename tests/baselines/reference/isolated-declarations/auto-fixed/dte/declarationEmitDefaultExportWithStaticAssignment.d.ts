@@ -40,27 +40,22 @@ C.B = B;
 export declare class Foo {
 }
 //# sourceMappingURL=foo.d.ts.map
-
 //// [index1.d.ts]
 export default function Example(): void;
 //# sourceMappingURL=index1.d.ts.map
-
 //// [index2.d.ts]
 import { Foo } from './foo';
 export { Foo };
 export default function Example(): void;
 //# sourceMappingURL=index2.d.ts.map
-
 //// [index3.d.ts]
 export declare class Bar {
 }
 export default function Example(): void;
 //# sourceMappingURL=index3.d.ts.map
-
 //// [index4.d.ts]
 export declare function C(): any;
 //# sourceMappingURL=index4.d.ts.map
-
 /// [Errors] ////
 
 index1.ts(2,25): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.

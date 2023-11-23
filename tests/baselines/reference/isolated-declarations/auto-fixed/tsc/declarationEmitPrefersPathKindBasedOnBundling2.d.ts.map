@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/declarationEmitPrefersPathKindBasedOnBundling2.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [src/lib/operators/scalar.d.ts]
+export interface Scalar {
+    (): string;
+    value: number;
+}
+export declare function scalar(value: string): Scalar;
+//# sourceMappingURL=scalar.d.ts.map
+//// [src/settings/spacing.d.ts]
+import { Scalar } from '../lib/operators/scalar';
+declare const _default: {
+    readonly xs: Scalar;
+};
+export default _default;
+//# sourceMappingURL=spacing.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [src/lib/operators/scalar.d.ts.map]
+{"version":3,"file":"scalar.d.ts","sourceRoot":"","sources":["scalar.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,MAAM;IACtB,IAAI,MAAM,CAAC;IACX,KAAK,EAAE,MAAM,CAAC;CACd;AAED,wBAAgB,MAAM,CAAC,KAAK,EAAE,MAAM,GAAG,MAAM,CAE5C"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGludGVyZmFjZSBTY2FsYXIgew0KICAgICgpOiBzdHJpbmc7DQogICAgdmFsdWU6IG51bWJlcjsNCn0NCmV4cG9ydCBkZWNsYXJlIGZ1bmN0aW9uIHNjYWxhcih2YWx1ZTogc3RyaW5nKTogU2NhbGFyOw0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9c2NhbGFyLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2NhbGFyLmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJzY2FsYXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxXQUFXLE1BQU07SUFDdEIsSUFBSSxNQUFNLENBQUM7SUFDWCxLQUFLLEVBQUUsTUFBTSxDQUFDO0NBQ2Q7QUFFRCx3QkFBZ0IsTUFBTSxDQUFDLEtBQUssRUFBRSxNQUFNLEdBQUcsTUFBTSxDQUU1QyJ9,ZXhwb3J0IGludGVyZmFjZSBTY2FsYXIgewoJKCk6IHN0cmluZzsKCXZhbHVlOiBudW1iZXI7Cn0KCmV4cG9ydCBmdW5jdGlvbiBzY2FsYXIodmFsdWU6IHN0cmluZyk6IFNjYWxhciB7CglyZXR1cm4gbnVsbCBhcyBhbnk7Cn0=
+
+
+//// [src/settings/spacing.d.ts.map]
+{"version":3,"file":"spacing.d.ts","sourceRoot":"","sources":["spacing.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAU,MAAM,yBAAyB,CAAC;;;;AAEzD,wBAIE"}
+
+//// https://sokra.github.io/source-map-visualization#base64,aW1wb3J0IHsgU2NhbGFyIH0gZnJvbSAnLi4vbGliL29wZXJhdG9ycy9zY2FsYXInOw0KZGVjbGFyZSBjb25zdCBfZGVmYXVsdDogew0KICAgIHJlYWRvbmx5IHhzOiBTY2FsYXI7DQp9Ow0KZXhwb3J0IGRlZmF1bHQgX2RlZmF1bHQ7DQovLyMgc291cmNlTWFwcGluZ1VSTD1zcGFjaW5nLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3BhY2luZy5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsic3BhY2luZy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLEVBQUUsTUFBTSxFQUFVLE1BQU0seUJBQXlCLENBQUM7Ozs7QUFFekQsd0JBSUUifQ==,aW1wb3J0IHsgU2NhbGFyLCBzY2FsYXIgfSBmcm9tICcuLi9saWIvb3BlcmF0b3JzL3NjYWxhcic7CgpleHBvcnQgZGVmYXVsdCB7CglnZXQgeHMoKTogU2NhbGFyIHsKCQlyZXR1cm4gc2NhbGFyKCIxNHB4Iik7Cgl9Cn07Cg==
+

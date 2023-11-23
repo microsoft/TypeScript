@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Semantically invalid. TSC does not emit .d.ts
 
 function getSomething() {
     return class D { }

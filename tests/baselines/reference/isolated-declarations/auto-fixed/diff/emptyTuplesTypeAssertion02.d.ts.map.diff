@@ -1,0 +1,16 @@
+// [[Reason: TODO: Sourcemap seems missaligned]] ////
+
+//// [tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion02.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,6 +1,6 @@
+ 
+ //// [emptyTuplesTypeAssertion02.d.ts.map]
+-{"version":3,"file":"emptyTuplesTypeAssertion02.d.ts","sourceRoot":"","sources":["emptyTuplesTypeAssertion02.ts"],"names":[],"mappings":"AAAA,QAAA,IAAI,CAAC,IAAW,CAAC;AACjB,QAAA,IAAI,CAAC,EAAE,SAAgB,CAAC"}
++{"version":3,"file":"emptyTuplesTypeAssertion02.d.ts","sourceRoot":"","sources":["emptyTuplesTypeAssertion02.ts"],"names":[],"mappings":"AAAA,QAAA,IAAI,CAAC,EAAS,EAAE,CAAC;AACjB,QAAA,IAAI,CAAC,EAAE,SAAgB,CAAC"}
+ 
+-//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBsZXQgeDogW107DQpkZWNsYXJlIGxldCB5OiB1bmRlZmluZWQ7DQovLyMgc291cmNlTWFwcGluZ1VSTD1lbXB0eVR1cGxlc1R5cGVBc3NlcnRpb24wMi5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZW1wdHlUdXBsZXNUeXBlQXNzZXJ0aW9uMDIuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImVtcHR5VHVwbGVzVHlwZUFzc2VydGlvbjAyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLFFBQUEsSUFBSSxDQUFDLElBQVcsQ0FBQztBQUNqQixRQUFBLElBQUksQ0FBQyxFQUFFLFNBQWdCLENBQUMifQ==,bGV0IHggPSBbXSBhcyBbXTsKbGV0IHk6IHVuZGVmaW5lZCA9IHhbMF07
++//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBsZXQgeDogW107DQpkZWNsYXJlIGxldCB5OiB1bmRlZmluZWQ7DQovLyMgc291cmNlTWFwcGluZ1VSTD1lbXB0eVR1cGxlc1R5cGVBc3NlcnRpb24wMi5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZW1wdHlUdXBsZXNUeXBlQXNzZXJ0aW9uMDIuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImVtcHR5VHVwbGVzVHlwZUFzc2VydGlvbjAyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLFFBQUEsSUFBSSxDQUFDLEVBQVMsRUFBRSxDQUFDO0FBQ2pCLFFBQUEsSUFBSSxDQUFDLEVBQUUsU0FBZ0IsQ0FBQyJ9,bGV0IHggPSBbXSBhcyBbXTsKbGV0IHk6IHVuZGVmaW5lZCA9IHhbMF07
+ 

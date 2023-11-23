@@ -1,0 +1,35 @@
+// [[Reason: Invalid computed property can only be detected by TSC]] ////
+
+//// [tests/cases/compiler/computedPropertiesNarrowed.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -4,10 +4,11 @@
+ declare const x: 0 | 1;
+ export declare let o: {
+     [x]: number;
+ };
++declare const y: 0;
+ export declare let o2: {
+-    0: number;
++    [y]: number;
+ };
+ export declare let o3: {
+     1: number;
+ };
+@@ -29,10 +30,13 @@
+ };
+ export declare let o7: {
+     1: number;
+ };
++declare let E: {
++    readonly A: 1;
++};
+ export declare const o8: {
+-    1: number;
++    [E.A]: number;
+ };
+ export declare const o9: {
+     0: number;
+ };

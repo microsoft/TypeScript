@@ -1170,6 +1170,8 @@ export namespace Compiler {
     ) {
         let code = "";
         code += "//// [" + header + "] ////\r\n\r\n";
+        code += "\r\n\r\n/// [Declarations] ////\r\n\r\n";
+        code += declarationContent(declarationFiles, tsSources, []);
         code += "\r\n\r\n/// [Declarations Maps] ////\r\n\r\n";
         code += declarationSourceMapContent(declarationFiles, declarationMapFiles, tsSources);
 

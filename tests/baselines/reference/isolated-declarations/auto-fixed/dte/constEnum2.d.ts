@@ -28,7 +28,6 @@ declare const enum D {
     g
 }
 //# sourceMappingURL=constEnum2.d.ts.map
-
 /// [Errors] ////
 
 constEnum2.ts(10,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

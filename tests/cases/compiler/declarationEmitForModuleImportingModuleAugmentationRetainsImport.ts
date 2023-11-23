@@ -1,5 +1,6 @@
 // @declaration: true
 // @isolatedDeclarationDiffReason: TSC adds import for augmentation, DTE can't know about the augmentation.
+// @isolatedDeclarationFixedDiffReason: TSC adds import for augmentation, DTE can't know about the augmentation.
 
 // @filename: child1.ts
 import { ParentThing } from './parent';

@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/optionalProperties01.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [optionalProperties01.d.ts]
+interface Foo {
+    required1: string;
+    required2: string;
+    optional?: string;
+}
+declare const foo1: Foo;
+declare const foo2: Foo;
+//# sourceMappingURL=optionalProperties01.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [optionalProperties01.d.ts.map]
+{"version":3,"file":"optionalProperties01.d.ts","sourceRoot":"","sources":["optionalProperties01.ts"],"names":[],"mappings":"AAAA,UAAU,GAAG;IACX,SAAS,EAAE,MAAM,CAAC;IAClB,SAAS,EAAE,MAAM,CAAC;IAClB,QAAQ,CAAC,EAAE,MAAM,CAAC;CACnB;AAED,QAAA,MAAM,IAAI,EAA6B,GAAG,CAAC;AAC3C,QAAA,MAAM,IAAI,EAA8C,GAAG,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,aW50ZXJmYWNlIEZvbyB7DQogICAgcmVxdWlyZWQxOiBzdHJpbmc7DQogICAgcmVxdWlyZWQyOiBzdHJpbmc7DQogICAgb3B0aW9uYWw/OiBzdHJpbmc7DQp9DQpkZWNsYXJlIGNvbnN0IGZvbzE6IEZvbzsNCmRlY2xhcmUgY29uc3QgZm9vMjogRm9vOw0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9b3B0aW9uYWxQcm9wZXJ0aWVzMDEuZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3B0aW9uYWxQcm9wZXJ0aWVzMDEuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIm9wdGlvbmFsUHJvcGVydGllczAxLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLFVBQVUsR0FBRztJQUNYLFNBQVMsRUFBRSxNQUFNLENBQUM7SUFDbEIsU0FBUyxFQUFFLE1BQU0sQ0FBQztJQUNsQixRQUFRLENBQUMsRUFBRSxNQUFNLENBQUM7Q0FDbkI7QUFFRCxRQUFBLE1BQU0sSUFBSSxFQUE2QixHQUFHLENBQUM7QUFDM0MsUUFBQSxNQUFNLElBQUksRUFBOEMsR0FBRyxDQUFDIn0=,aW50ZXJmYWNlIEZvbyB7CiAgcmVxdWlyZWQxOiBzdHJpbmc7CiAgcmVxdWlyZWQyOiBzdHJpbmc7CiAgb3B0aW9uYWw/OiBzdHJpbmc7Cn0KCmNvbnN0IGZvbzEgPSB7IHJlcXVpcmVkMTogImhlbGxvIiB9IGFzIEZvbzsKY29uc3QgZm9vMiA9IHsgcmVxdWlyZWQxOiAiaGVsbG8iLCBvcHRpb25hbDogImJhciIgfSBhcyBGb287Cg==
+

@@ -1,6 +1,7 @@
 // @target: ES5
 // @declaration: true
 // @removeComments: false
+// @isolatedDeclarationFixedDiffReason: Printing differences
 
 /** This comment should appear for foo*/
 function foo() {

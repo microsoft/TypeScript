@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/declarationEmitRecursiveConditionalAliasPreserved.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [a.d.ts]
+import { Power } from "./input";
+export declare const power: <Num extends number, PowerOf extends number>(num: Num, powerOf: PowerOf) => Power<Num, PowerOf>;
+//# sourceMappingURL=a.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [a.d.ts.map]
+{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["a.tsx"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,SAAS,CAAC;AAEhC,eAAO,MAAM,KAAK,GAAI,GAAG,SAAS,MAAM,EAAE,OAAO,SAAS,MAAM,EAC5D,GAAG,EAAE,GAAG,EACR,OAAO,EAAE,OAAO,KACjB,KAAK,CAAC,GAAG,EAAE,OAAO,CAA8B,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,aW1wb3J0IHsgUG93ZXIgfSBmcm9tICIuL2lucHV0IjsNCmV4cG9ydCBkZWNsYXJlIGNvbnN0IHBvd2VyOiA8TnVtIGV4dGVuZHMgbnVtYmVyLCBQb3dlck9mIGV4dGVuZHMgbnVtYmVyPihudW06IE51bSwgcG93ZXJPZjogUG93ZXJPZikgPT4gUG93ZXI8TnVtLCBQb3dlck9mPjsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWEuZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYS50c3giXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLEtBQUssRUFBRSxNQUFNLFNBQVMsQ0FBQztBQUVoQyxlQUFPLE1BQU0sS0FBSyxHQUFJLEdBQUcsU0FBUyxNQUFNLEVBQUUsT0FBTyxTQUFTLE1BQU0sRUFDNUQsR0FBRyxFQUFFLEdBQUcsRUFDUixPQUFPLEVBQUUsT0FBTyxLQUNqQixLQUFLLENBQUMsR0FBRyxFQUFFLE9BQU8sQ0FBOEIsQ0FBQyJ9,aW1wb3J0IHsgUG93ZXIgfSBmcm9tICIuL2lucHV0IjsKCmV4cG9ydCBjb25zdCBwb3dlciA9IDxOdW0gZXh0ZW5kcyBudW1iZXIsIFBvd2VyT2YgZXh0ZW5kcyBudW1iZXI+KAogICAgbnVtOiBOdW0sCiAgICBwb3dlck9mOiBQb3dlck9mCik6IFBvd2VyPE51bSwgUG93ZXJPZj4gPT4gKG51bSAqKiBwb3dlck9mKSBhcyBuZXZlcjs=
+

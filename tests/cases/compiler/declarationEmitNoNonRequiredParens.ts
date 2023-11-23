@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Printing differences
 export enum Test {
     A, B, C
 }

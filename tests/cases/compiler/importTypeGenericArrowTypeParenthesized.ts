@@ -1,5 +1,6 @@
 // @declaration: true
 // @filename: module.d.ts
+// @isolatedDeclarationFixedDiffReason: TSC adds type reference directives.
 declare module "module" {
     export interface Modifier<T> { }
 

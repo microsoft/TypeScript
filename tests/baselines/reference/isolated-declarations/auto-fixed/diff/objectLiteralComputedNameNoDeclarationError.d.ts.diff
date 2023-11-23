@@ -1,0 +1,21 @@
+// [[Reason: Printing differences]] ////
+
+//// [tests/cases/compiler/objectLiteralComputedNameNoDeclarationError.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,7 +1,11 @@
+ 
+ 
+ //// [objectLiteralComputedNameNoDeclarationError.d.ts]
++declare const Foo: {
++    BANANA: "banana";
++};
+ export declare const Baa: {
+-    banana: number;
++    [Foo.BANANA]: number;
+ };
++export {};
+ //# sourceMappingURL=objectLiteralComputedNameNoDeclarationError.d.ts.map
+\ No newline at end of file

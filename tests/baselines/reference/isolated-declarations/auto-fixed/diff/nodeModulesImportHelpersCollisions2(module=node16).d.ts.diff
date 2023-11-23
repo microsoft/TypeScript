@@ -1,0 +1,21 @@
+// [[Reason: TSC adds type reference directives.]] ////
+
+//// [tests/cases/conformance/node/nodeModulesImportHelpersCollisions2.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,13 +1,11 @@
+ 
+ 
+ //// [index.d.ts]
+-/// <reference path="types.d.ts" />
+ export * from "fs";
+ export * as fs from "fs";
+ //# sourceMappingURL=index.d.ts.map
+ //// [subfolder/index.d.ts]
+-/// <reference path="../types.d.ts" />
+ export * from "fs";
+ export * as fs from "fs";
+ //# sourceMappingURL=index.d.ts.map
+ /// [Errors] ////

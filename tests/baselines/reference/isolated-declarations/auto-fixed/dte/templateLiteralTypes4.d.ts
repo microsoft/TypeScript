@@ -467,7 +467,6 @@ declare function f2<T extends number>(s: `**${T}**`): T;
 declare function f3<T extends bigint>(s: `**${T}**`): T;
 declare function f4<T extends boolean>(s: `**${T}**`): T;
 //# sourceMappingURL=templateLiteralTypes4.d.ts.map
-
 /// [Errors] ////
 
 templateLiteralTypes4.ts(43,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

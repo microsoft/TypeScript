@@ -1,5 +1,6 @@
 // @strictNullChecks: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
 function f(addUndefined1 = "J", addUndefined2?: number) {
     return addUndefined1.length + (addUndefined2 || 0);
 }

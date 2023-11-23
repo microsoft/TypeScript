@@ -1,0 +1,19 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/declarationEmitIndexTypeNotFound.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,11 @@
+ 
++
++//// [declarationEmitIndexTypeNotFound.d.ts]
++export interface Test {
++    [index: TypeNotFound]: any;
++}
++//# sourceMappingURL=declarationEmitIndexTypeNotFound.d.ts.map
+ /// [Errors] ////
+ 
+ declarationEmitIndexTypeNotFound.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+ declarationEmitIndexTypeNotFound.ts(2,13): error TS2304: Cannot find name 'TypeNotFound'.

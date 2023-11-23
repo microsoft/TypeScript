@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @emitDeclarationOnly: true
+// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
 
 // same type accessors
 export const obj1 = {
