@@ -8292,6 +8292,19 @@ export interface NodeConverters {
     convertToAssignmentElementTarget(node: BindingOrAssignmentElementTarget): Expression;
 }
 
+export interface TranspileDeclarationsOutput {
+    declaration: string;
+    declarationPath: string;
+    declarationMap: string | undefined;
+    declarationMapPath: string | undefined;
+    diagnostics: Diagnostic[];
+}
+export interface TranspileDeclarationsOptions {
+    compilerOptions: CompilerOptions;
+    commonSourceDirectory?: string;
+    currentDirectory?: string;
+    useCaseSensitiveFileNames?: boolean;
+}
 /** @internal */
 export interface GeneratedNamePart {
     /** an additional prefix to insert before the text sourced from `node` */
@@ -9676,7 +9689,7 @@ export interface ModuleSpecifierResolutionHost {
     fileExists(path: string): boolean;
     getCurrentDirectory(): string;
     directoryExists?(path: string): boolean;
-    readFile?(path: string): string | undefined;
+    readFile(path: string): string | undefined;
     realpath?(path: string): string;
     getSymlinkCache?(): SymlinkCache;
     getModuleSpecifierCache?(): ModuleSpecifierCache;

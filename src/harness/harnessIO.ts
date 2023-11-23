@@ -12,6 +12,7 @@ import {
     createGetCanonicalFileName,
     mapDefined,
     transpileDeclaration,
+    TranspileDeclarationsOptions,
 } from "./_namespaces/ts";
 import * as Utils from "./_namespaces/Utils";
 import * as vfs from "./_namespaces/vfs";
@@ -658,7 +659,12 @@ export namespace Compiler {
             currentDirectory,
             getCanonicalFileName,
         );
-        const emitterHost = ts.createEmitDeclarationHost(options, new fakes.System(fs), commonSourceDirectory);
+        const transpileOptions: TranspileDeclarationsOptions = {
+            compilerOptions: options,
+            commonSourceDirectory,
+            currentDirectory: fs.cwd(),
+            useCaseSensitiveFileNames: fs.ignoreCase,
+        };
         const diagnostics: ts.Diagnostic[] = [];
 
         programFileNames.forEach(fileName => {
@@ -671,14 +677,13 @@ export namespace Compiler {
             if (!file) {
                 return;
             }
-
             const {
                 diagnostics: fileDiagnostics = [],
                 declaration,
                 declarationPath,
                 declarationMap,
                 declarationMapPath,
-            } = transpileDeclaration(file, emitterHost);
+            } = transpileDeclaration(file, transpileOptions);
             // Ensure file will be rebound.
             file.locals = undefined;
             dts.set(declarationPath, new documents.TextDocument(declarationPath, options.emitBOM ? Utils.addUTF8ByteOrderMark(declaration) : declaration));

@@ -2,46 +2,28 @@ import {
     AccessorDeclaration,
     AllAccessorDeclarations,
     AnyImportSyntax,
-    CompilerOptions,
     ComputedPropertyName,
     Declaration,
     ElementAccessExpression,
     EntityNameOrEntityNameExpression,
     EnumMember,
     Expression,
-    FileReference,
     FunctionDeclaration,
     ImportDeclaration,
     LateBoundDeclaration,
-    ModuleResolutionHost,
     Node,
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertySignature,
-    RedirectTargetsMap,
     ResolutionMode,
     SignatureDeclaration,
-    SourceFile,
     StringLiteralLike,
     Symbol,
     SymbolTracker,
     SymbolVisibilityResult,
     VariableDeclaration,
 } from "../../_namespaces/ts";
-
-/** @internal */
-export interface IsolatedEmitHost extends ModuleResolutionHost {
-    readonly redirectTargetsMap: RedirectTargetsMap;
-    getCommonSourceDirectory(): string;
-    getCompilerOptions(): CompilerOptions;
-    getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
-    getLibFileFromReference(ref: FileReference): SourceFile | undefined;
-    isSourceOfProjectReferenceRedirect(fileName: string): boolean;
-    getCanonicalFileName(p: string): string;
-    getCurrentDirectory(): string;
-    useCaseSensitiveFileNames?(): boolean;
-}
 
 /** @internal */
 export type MemberKey = string & {

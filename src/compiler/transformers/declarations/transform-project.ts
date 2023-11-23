@@ -10,7 +10,6 @@ import {
     Debug,
     Diagnostic,
     EmitHost,
-    EmitResolver,
     ensureTrailingDirectorySeparator,
     factory,
     getAreDeclarationMapsEnabled,
@@ -21,51 +20,64 @@ import {
     getRelativePathToDirectoryOrUrl,
     getRootLength,
     getSourceFilePathInNewDir,
-    IsolatedEmitHost,
-    noop,
     normalizePath,
     normalizeSlashes,
     PrinterOptions,
-    returnFalse,
-    returnUndefined,
     SourceFile,
     SourceMapGenerator,
     sys,
-    System,
     TransformationContext,
     transformDeclarations,
+    TranspileDeclarationsOptions,
+    TranspileDeclarationsOutput,
 } from "../../_namespaces/ts";
 
-export function createEmitDeclarationHost(options: CompilerOptions, sys: System, commonSourceDirectory = sys.getCurrentDirectory()): IsolatedEmitHost {
+function createEmitDeclarationHost(options: TranspileDeclarationsOptions): EmitHost {
+    const throws = () => Debug.fail("Function should not be called in isolated declarations emit");
     return {
-        redirectTargetsMap: new Map(),
-        directoryExists: sys.directoryExists.bind(sys),
-        fileExists: sys.fileExists.bind(sys),
-        getDirectories: sys.getDirectories.bind(sys),
-        readFile: sys.readFile.bind(sys),
-        realpath: sys.realpath?.bind(sys),
-        getCurrentDirectory: sys.getCurrentDirectory.bind(sys),
+        getCurrentDirectory: () => options.currentDirectory ?? ".",
         getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames),
-        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-        getCompilerOptions: () => options,
-        getCommonSourceDirectory: () => ensureTrailingDirectorySeparator(sys.resolvePath(commonSourceDirectory)),
-        trace: noop,
-        getLibFileFromReference: returnUndefined,
-        getSourceFileFromReference: returnUndefined,
-        isSourceOfProjectReferenceRedirect: returnFalse,
+        useCaseSensitiveFileNames: () => !!options.useCaseSensitiveFileNames,
+        getCompilerOptions: () => options.compilerOptions,
+        getCommonSourceDirectory: () => ensureTrailingDirectorySeparator(options.commonSourceDirectory ?? "."),
+        redirectTargetsMap: undefined!, // new Map(),
+        directoryExists: throws,
+        fileExists: throws,
+        readFile: throws,
+        realpath: throws,
+        getLibFileFromReference: throws,
+        getSourceFileFromReference: throws,
+        isSourceOfProjectReferenceRedirect: throws,
+
+        getSourceFiles: throws,
+        isEmitBlocked: throws,
+        getPrependNodes: throws,
+        writeFile: throws,
+        getBuildInfo: throws,
+        getSourceFile: throws,
+        getSourceFileByPath: throws,
+        getProjectReferenceRedirect: throws,
+        getFileIncludeReasons: throws,
+        isSourceFileFromExternalLibrary: throws,
+        getResolvedProjectReferenceToRedirect: throws,
     };
 }
 
-export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedEmitHost) {
-    const options: CompilerOptions = emitHost.getCompilerOptions();
-    const emitResolver = createEmitDeclarationResolver(sourceFile, emitHost);
+export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: TranspileDeclarationsOptions): TranspileDeclarationsOutput {
+    const compilerOptions: CompilerOptions = {
+        ...transpileOptions.compilerOptions,
+        isolatedDeclarations: true,
+        traceResolution: false,
+    };
+    const emitHost = createEmitDeclarationHost(transpileOptions);
+    const emitResolver = createEmitDeclarationResolver(sourceFile);
     const diagnostics: Diagnostic[] = [];
     const transformer = transformDeclarations({
         getEmitHost() {
-            return emitHost as never as EmitHost;
+            return emitHost;
         },
         getEmitResolver() {
-            return emitResolver as EmitResolver;
+            return emitResolver;
         },
         getCompilerOptions() {
             return emitHost.getCompilerOptions();
@@ -78,22 +90,22 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
     const result = transformer(sourceFile);
 
     const printer = createPrinter({
-        removeComments: options.removeComments,
-        newLine: options.newLine,
+        removeComments: compilerOptions.removeComments,
+        newLine: compilerOptions.newLine,
         noEmitHelpers: true,
-        module: options.module,
-        target: options.target,
-        sourceMap: options.declarationMap,
-        inlineSourceMap: options.inlineSourceMap,
-        extendedDiagnostics: options.extendedDiagnostics,
+        module: compilerOptions.module,
+        target: compilerOptions.target,
+        sourceMap: compilerOptions.declarationMap,
+        inlineSourceMap: compilerOptions.inlineSourceMap,
+        extendedDiagnostics: compilerOptions.extendedDiagnostics,
         onlyPrintJsDocStyle: true,
         omitBraceSourceMapPositions: true,
     } as PrinterOptions);
 
-    const writer = createTextWriter(getNewLineCharacter(options));
+    const writer = createTextWriter(getNewLineCharacter(compilerOptions));
     const declarationPath = getDeclarationEmitOutputFilePathWorker(
         sourceFile.fileName,
-        options,
+        compilerOptions,
         emitHost.getCurrentDirectory(),
         emitHost.getCommonSourceDirectory(),
         emitHost.getCanonicalFileName,
@@ -135,21 +147,21 @@ export function transpileDeclaration(sourceFile: SourceFile, emitHost: IsolatedE
 
     // logic replicated from emitter.ts
     function getSourceMapGenerator(declarationFilePath: string, declarationMapPath: string) {
-        if (!getAreDeclarationMapsEnabled(options)) return;
+        if (!getAreDeclarationMapsEnabled(compilerOptions)) return;
 
         const mapOptions = {
-            sourceRoot: options.sourceRoot,
-            mapRoot: options.mapRoot,
-            extendedDiagnostics: options.extendedDiagnostics,
+            sourceRoot: compilerOptions.sourceRoot,
+            mapRoot: compilerOptions.mapRoot,
+            extendedDiagnostics: compilerOptions.extendedDiagnostics,
             // Explicitly do not passthru either `inline` option
         };
 
-        const sourceRoot = normalizeSlashes(options.sourceRoot || "");
+        const sourceRoot = normalizeSlashes(compilerOptions.sourceRoot || "");
         const sourceMapGenerator = createSourceMapGenerator(
             emitHost,
             getBaseFileName(normalizeSlashes(declarationFilePath)),
             sourceRoot ? ensureTrailingDirectorySeparator(sourceRoot) : sourceRoot,
-            getSourceMapDirectory(options, declarationFilePath, sourceFile),
+            getSourceMapDirectory(compilerOptions, declarationFilePath, sourceFile),
             mapOptions,
         );
 
