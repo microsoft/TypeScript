@@ -18104,8 +18104,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
     }
 
-    function getSimplifiedType(type: Type, writing: boolean): Type {
-        return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(type as IndexedAccessType, writing) :
+    function getSimplifiedType(type: Type, writing: boolean, distributeIndexOverMappedType = false): Type {
+        return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(type as IndexedAccessType, writing, distributeIndexOverMappedType) :
             type.flags & TypeFlags.Conditional ? getSimplifiedConditionalType(type as ConditionalType, writing) :
             type;
     }
@@ -18132,8 +18132,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
     // the type itself if no transformation is possible. The writing flag indicates that the type is
     // the target of an assignment.
-    function getSimplifiedIndexedAccessType(type: IndexedAccessType, writing: boolean): Type {
-        const cache = writing ? "simplifiedForWriting" : "simplifiedForReading";
+    function getSimplifiedIndexedAccessType(type: IndexedAccessType, writing: boolean, distributeIndexOverMappedType: boolean): Type {
+        const cache = writing ? "simplifiedForWriting" : `simplifiedForReading${distributeIndexOverMappedType ? "D" : ""}` as const;
         if (type[cache]) {
             return type[cache] === circularConstraintType ? type : type[cache]!;
         }
@@ -18175,6 +18175,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For example, for an index access { [P in K]: Box<T[P]> }[X], we construct the type Box<T[X]>.
         if (isGenericMappedType(objectType)) {
             if (!getNameTypeFromMappedType(objectType) || isFilteringMappedType(objectType)) {
+                if (distributeIndexOverMappedType && !writing) {
+                    const indexConstraint = indexType.flags & TypeFlags.Instantiable && getBaseConstraintOfType(indexType);
+                    if (indexConstraint && indexConstraint.flags & TypeFlags.Union) {
+                        return type[cache] = getSimplifiedType(getIndexedAccessType(objectType, getIntersectionType([indexType, indexConstraint])), writing);
+                    }
+                }
+
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
         }
@@ -20838,7 +20845,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).node ? createTypeReference((type as TypeReference).target, getTypeArguments(type as TypeReference)) : getSingleBaseForNonAugmentingSubtype(type) || type :
                 type.flags & TypeFlags.UnionOrIntersection ? getNormalizedUnionOrIntersectionType(type as UnionOrIntersectionType, writing) :
                 type.flags & TypeFlags.Substitution ? writing ? (type as SubstitutionType).baseType : getSubstitutionIntersection(type as SubstitutionType) :
-                type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
+                type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing, /*distributeIndexOverMappedType*/ true) :
                 type;
             if (t === type) return t;
             type = t;

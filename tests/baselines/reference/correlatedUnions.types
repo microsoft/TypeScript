@@ -900,3 +900,87 @@ function getValueConcrete<K extends keyof Foo1>(
 >k : K
 }
 
+// https://github.com/microsoft/TypeScript/issues/54892
+type TableToRecord = {
+>TableToRecord : { a: {    a: number;}; b: {    b: string;}; c: {    c: string[];}; }
+
+  a: { a: number };
+>a : { a: number; }
+>a : number
+
+  b: { b: string };
+>b : { b: string; }
+>b : string
+
+  c: { c: string[] };
+>c : { c: string[]; }
+>c : string[]
+
+};
+type Table = keyof TableToRecord;
+>Table : keyof TableToRecord
+
+type Pointer<T extends Table = Table> = {
+>Pointer : Pointer<T>
+
+  [K in T]: { table: K; id: string };
+>table : K
+>id : string
+
+}[T];
+declare function something(pointer: Pointer): void;
+>something : (pointer: Pointer) => void
+>pointer : Pointer<keyof TableToRecord>
+
+function run<T extends Table>(pointer: Pointer<T>) {
+>run : <T extends keyof TableToRecord>(pointer: Pointer<T>) => void
+>pointer : Pointer<T>
+
+  const x = something(pointer);
+>x : void
+>something(pointer) : void
+>something : (pointer: Pointer<keyof TableToRecord>) => void
+>pointer : Pointer<T>
+}
+function run2<T extends Table>(pointer: Pointer<T & Table>) {
+>run2 : <T extends keyof TableToRecord>(pointer: Pointer<T & Table>) => void
+>pointer : Pointer<T & keyof TableToRecord>
+
+  const x = something(pointer);
+>x : void
+>something(pointer) : void
+>something : (pointer: Pointer<keyof TableToRecord>) => void
+>pointer : { table: T & "b"; id: string; } | { table: T & "a"; id: string; } | { table: T & "c"; id: string; }
+}
+function run3<T extends Exclude<Table, 'c'>>(pointer: Pointer<T>) {
+>run3 : <T extends "b" | "a">(pointer: Pointer<T>) => void
+>pointer : Pointer<T>
+
+  const x = something(pointer);
+>x : void
+>something(pointer) : void
+>something : (pointer: Pointer<keyof TableToRecord>) => void
+>pointer : Pointer<T>
+}
+type Table2 = keyof TableToRecord | 'd';
+>Table2 : keyof TableToRecord | "d"
+
+type Pointer2<T extends Table2 = Table2> = {
+>Pointer2 : Pointer2<T>
+
+  [K in T]: { table: K; id: string };
+>table : K
+>id : string
+
+}[T];
+function run4<T extends Table2>(pointer: Pointer2<T>) {
+>run4 : <T extends Table2>(pointer: Pointer2<T>) => void
+>pointer : Pointer2<T>
+
+  const x = something(pointer); // error
+>x : void
+>something(pointer) : void
+>something : (pointer: Pointer<keyof TableToRecord>) => void
+>pointer : Pointer2<T>
+}
+

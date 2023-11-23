@@ -8,17 +8,17 @@ mappedTypeRelationships.ts(20,5): error TS2536: Type 'keyof U' cannot be used to
 mappedTypeRelationships.ts(21,12): error TS2536: Type 'keyof U' cannot be used to index type 'T'.
 mappedTypeRelationships.ts(25,5): error TS2536: Type 'K' cannot be used to index type 'T'.
 mappedTypeRelationships.ts(26,12): error TS2536: Type 'K' cannot be used to index type 'T'.
-mappedTypeRelationships.ts(30,5): error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-  'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'T[keyof T] | undefined'.
-mappedTypeRelationships.ts(35,5): error TS2322: Type 'T[K] | undefined' is not assignable to type 'T[K]'.
-  'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'T[K] | undefined'.
-mappedTypeRelationships.ts(40,5): error TS2322: Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-  'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'U[keyof T] | undefined'.
+mappedTypeRelationships.ts(30,5): error TS2322: Type 'T[keyof T & string] | T[keyof T & number] | T[keyof T & symbol] | undefined' is not assignable to type 'T[keyof T]'.
+  'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'T[keyof T & string] | T[keyof T & number] | T[keyof T & symbol] | undefined'.
+mappedTypeRelationships.ts(35,5): error TS2322: Type 'T[K & string] | T[K & number] | T[K & symbol] | undefined' is not assignable to type 'T[K]'.
+  'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'T[K & string] | T[K & number] | T[K & symbol] | undefined'.
+mappedTypeRelationships.ts(40,5): error TS2322: Type 'U[keyof T & string] | U[keyof T & number] | U[keyof T & symbol] | undefined' is not assignable to type 'T[keyof T]'.
+  'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'U[keyof T & string] | U[keyof T & number] | U[keyof T & symbol] | undefined'.
 mappedTypeRelationships.ts(41,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[keyof T] | undefined'.
     Type 'T[string]' is not assignable to type 'U[keyof T] | undefined'.
-mappedTypeRelationships.ts(45,5): error TS2322: Type 'U[K] | undefined' is not assignable to type 'T[K]'.
-  'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'U[K] | undefined'.
+mappedTypeRelationships.ts(45,5): error TS2322: Type 'U[K & string] | U[K & number] | U[K & symbol] | undefined' is not assignable to type 'T[K]'.
+  'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'U[K & string] | U[K & number] | U[K & symbol] | undefined'.
 mappedTypeRelationships.ts(46,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
   Type 'T[keyof T]' is not assignable to type 'U[K] | undefined'.
     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[K] | undefined'.
@@ -123,24 +123,24 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
     function f10<T>(x: T, y: Partial<T>, k: keyof T) {
         x[k] = y[k];  // Error
         ~~~~
-!!! error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-!!! error TS2322:   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'T[keyof T] | undefined'.
+!!! error TS2322: Type 'T[keyof T & string] | T[keyof T & number] | T[keyof T & symbol] | undefined' is not assignable to type 'T[keyof T]'.
+!!! error TS2322:   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'T[keyof T & string] | T[keyof T & number] | T[keyof T & symbol] | undefined'.
         y[k] = x[k];
     }
     
     function f11<T, K extends keyof T>(x: T, y: Partial<T>, k: K) {
         x[k] = y[k];  // Error
         ~~~~
-!!! error TS2322: Type 'T[K] | undefined' is not assignable to type 'T[K]'.
-!!! error TS2322:   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'T[K] | undefined'.
+!!! error TS2322: Type 'T[K & string] | T[K & number] | T[K & symbol] | undefined' is not assignable to type 'T[K]'.
+!!! error TS2322:   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'T[K & string] | T[K & number] | T[K & symbol] | undefined'.
         y[k] = x[k];
     }
     
     function f12<T, U extends T>(x: T, y: Partial<U>, k: keyof T) {
         x[k] = y[k];  // Error
         ~~~~
-!!! error TS2322: Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-!!! error TS2322:   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'U[keyof T] | undefined'.
+!!! error TS2322: Type 'U[keyof T & string] | U[keyof T & number] | U[keyof T & symbol] | undefined' is not assignable to type 'T[keyof T]'.
+!!! error TS2322:   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'U[keyof T & string] | U[keyof T & number] | U[keyof T & symbol] | undefined'.
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
@@ -151,8 +151,8 @@ mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is n
     function f13<T, U extends T, K extends keyof T>(x: T, y: Partial<U>, k: K) {
         x[k] = y[k];  // Error
         ~~~~
-!!! error TS2322: Type 'U[K] | undefined' is not assignable to type 'T[K]'.
-!!! error TS2322:   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'U[K] | undefined'.
+!!! error TS2322: Type 'U[K & string] | U[K & number] | U[K & symbol] | undefined' is not assignable to type 'T[K]'.
+!!! error TS2322:   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'U[K & string] | U[K & number] | U[K & symbol] | undefined'.
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
