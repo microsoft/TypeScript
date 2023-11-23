@@ -18,7 +18,7 @@ function* g() {
 >Foo : typeof Foo
 
     yield* [new Baz];
->yield* [new Baz] : any
+>yield* [new Baz] : undefined
 >[new Baz] : Baz[]
 >new Baz : Baz
 >Baz : typeof Baz

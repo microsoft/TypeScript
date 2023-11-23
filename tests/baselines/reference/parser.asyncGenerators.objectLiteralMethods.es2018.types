@@ -188,7 +188,7 @@ const o16 = {
 >f : () => AsyncGenerator<any, void, undefined>
 
         yield * [];
->yield * [] : any
+>yield * [] : undefined
 >[] : undefined[]
     }
 };

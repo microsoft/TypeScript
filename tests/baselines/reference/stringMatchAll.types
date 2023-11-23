@@ -2,18 +2,18 @@
 
 === stringMatchAll.ts ===
 const matches = "matchAll".matchAll(/\w/g);
->matches : IterableIterator<RegExpMatchArray>
->"matchAll".matchAll(/\w/g) : IterableIterator<RegExpMatchArray>
->"matchAll".matchAll : (regexp: RegExp) => IterableIterator<RegExpMatchArray>
+>matches : BuiltInIterableIterator<RegExpMatchArray>
+>"matchAll".matchAll(/\w/g) : BuiltInIterableIterator<RegExpMatchArray>
+>"matchAll".matchAll : (regexp: RegExp) => BuiltInIterableIterator<RegExpMatchArray>
 >"matchAll" : "matchAll"
->matchAll : (regexp: RegExp) => IterableIterator<RegExpMatchArray>
+>matchAll : (regexp: RegExp) => BuiltInIterableIterator<RegExpMatchArray>
 >/\w/g : RegExp
 
 const array = [...matches];
 >array : RegExpMatchArray[]
 >[...matches] : RegExpMatchArray[]
 >...matches : RegExpMatchArray
->matches : IterableIterator<RegExpMatchArray>
+>matches : BuiltInIterableIterator<RegExpMatchArray>
 
 const { index, input } = array[0];
 >index : number

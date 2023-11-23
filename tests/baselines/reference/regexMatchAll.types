@@ -2,9 +2,9 @@
 
 === regexMatchAll.ts ===
 const matches = /\w/g[Symbol.matchAll]("matchAll");
->matches : IterableIterator<RegExpMatchArray>
->/\w/g[Symbol.matchAll]("matchAll") : IterableIterator<RegExpMatchArray>
->/\w/g[Symbol.matchAll] : (str: string) => IterableIterator<RegExpMatchArray>
+>matches : BuiltInIterableIterator<RegExpMatchArray>
+>/\w/g[Symbol.matchAll]("matchAll") : BuiltInIterableIterator<RegExpMatchArray>
+>/\w/g[Symbol.matchAll] : (str: string) => BuiltInIterableIterator<RegExpMatchArray>
 >/\w/g : RegExp
 >Symbol.matchAll : unique symbol
 >Symbol : SymbolConstructor
@@ -15,7 +15,7 @@ const array = [...matches];
 >array : RegExpMatchArray[]
 >[...matches] : RegExpMatchArray[]
 >...matches : RegExpMatchArray
->matches : IterableIterator<RegExpMatchArray>
+>matches : BuiltInIterableIterator<RegExpMatchArray>
 
 const { index, input } = array[0];
 >index : number
