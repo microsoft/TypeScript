@@ -7481,7 +7481,8 @@ declare namespace ts {
         DynamicPriority = 2,
         FixedChunkSize = 3,
     }
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+    type NestedCompilerOption = ModuleOptions;
+    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | NestedCompilerOption | PluginImport[] | ProjectReference[] | null | undefined;
     interface CompilerOptions {
         allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
@@ -7521,9 +7522,7 @@ declare namespace ts {
         locale?: string;
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
-        module?: ModuleKind;
-        moduleFormatDetection?: ModuleFormatDetectionKind;
-        moduleFormatInterop?: ModuleFormatInteropKind;
+        module?: ModuleKind | ModuleOptions;
         moduleResolution?: ModuleResolutionKind;
         moduleSuffixes?: string[];
         moduleDetection?: ModuleDetectionKind;
@@ -7630,6 +7629,13 @@ declare namespace ts {
         BundlerNode = 2,
         Node16 = 100,
         NodeNext = 199,
+    }
+    interface ModuleOptions {
+        preset?: ModuleKind;
+        formatDetection?: ModuleFormatDetectionKind;
+        formatInterop?: ModuleFormatInteropKind;
+        emit?: ModuleKind;
+        [option: string]: CompilerOptionsValue | undefined;
     }
     enum JsxEmit {
         None = 0,

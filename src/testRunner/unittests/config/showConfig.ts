@@ -128,7 +128,8 @@ describe("unittests:: config:: showConfig", () => {
         if (option.name === "project") return;
         let args: string[];
         let optionValue: object | undefined;
-        switch (option.type) {
+        const type = option.type === "objectOrShorthand" ? option.shorthandType : option.type;
+        switch (type) {
             case "boolean": {
                 if (option.isTSConfigOnly) {
                     args = ["-p", "tsconfig.json"];
@@ -179,7 +180,7 @@ describe("unittests:: config:: showConfig", () => {
                 break;
             }
             default: {
-                const val = ts.firstOrUndefinedIterator(option.type.keys());
+                const val = ts.firstOrUndefinedIterator(type.keys());
                 if (val === undefined) return ts.Debug.fail("Expected 'option.type' to have entries");
                 if (option.isTSConfigOnly) {
                     args = ["-p", "tsconfig.json"];

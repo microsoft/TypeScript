@@ -1,7 +1,7 @@
-// @module: esnext
 // @moduleResolution: bundler
-// @moduleFormatDetection: bundler
-// @moduleFormatInterop: bundlernode
+// @module.emit: esnext
+// @module.formatDetection: bundler
+// @module.formatInterop: bundlernode
 
 // @Filename: /node_modules/dep/package.json
 {

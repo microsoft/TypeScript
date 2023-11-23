@@ -332,16 +332,15 @@ export namespace Compiler {
         { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
     ];
 
-    let optionsIndex: Map<string, ts.CommandLineOption>;
+    let harnessOptionsMap: Map<string, ts.CommandLineOption>;
     function getCommandLineOption(name: string): ts.CommandLineOption | undefined {
-        if (!optionsIndex) {
-            optionsIndex = new Map<string, ts.CommandLineOption>();
-            const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
-            for (const option of optionDeclarations) {
-                optionsIndex.set(option.name.toLowerCase(), option);
+        if (!harnessOptionsMap) {
+            harnessOptionsMap = new Map<string, ts.CommandLineOption>();
+            for (const option of harnessOptionDeclarations) {
+                harnessOptionsMap.set(option.name.toLowerCase(), option);
             }
         }
-        return optionsIndex.get(name.toLowerCase());
+        return harnessOptionsMap.get(name.toLowerCase()) ?? ts.getOptionFromName(name);
     }
 
     export function setCompilerOptionsFromHarnessSetting(settings: TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -357,7 +356,13 @@ export namespace Compiler {
                 const option = getCommandLineOption(name);
                 if (option) {
                     const errors: ts.Diagnostic[] = [];
-                    options[option.name] = optionValue(option, value, errors);
+                    const parentOption = option.getParentOption?.();
+                    const [base, name] = parentOption ? [(options[parentOption.name] || {}) as ts.NestedCompilerOption, option.name] : [options, option.name];
+                    if (parentOption) {
+                        options[parentOption.name] = base as ts.NestedCompilerOption;
+                    }
+
+                    base[name] = optionValue(option, value, errors);
                     if (errors.length > 0) {
                         throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
                     }
@@ -1109,10 +1114,14 @@ let booleanVaryByStarSettingValues: Map<string, string | number> | undefined;
 function getVaryByStarSettingValues(varyBy: string): ReadonlyMap<string, string | number> | undefined {
     const option = ts.forEach(ts.optionDeclarations, decl => ts.equateStringsCaseInsensitive(decl.name, varyBy) ? decl : undefined);
     if (option) {
-        if (typeof option.type === "object") {
-            return option.type;
+        return getVaryByValuesByType(option.type === "objectOrShorthand" ? option.shorthandType : option.type);
+    }
+
+    function getVaryByValuesByType(type: ts.CommandLineOption["type"]) {
+        if (typeof type === "object") {
+            return type;
         }
-        if (option.type === "boolean") {
+        if (type === "boolean") {
             return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new Map(Object.entries({
                 true: 1,
                 false: 0,
@@ -1178,7 +1187,7 @@ export namespace TestCaseParser {
     }
 
     // Regex for parsing options in the format "@Alpha: Value of any sort"
-    const optionRegex = /^[/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm; // multiple matches on multiple lines
+    const optionRegex = /^[/]{2}\s*@([\w.]+)\s*:\s*([^\r\n]*)/gm; // multiple matches on multiple lines
     const linkRegex = /^[/]{2}\s*@link\s*:\s*([^\r\n]*)\s*->\s*([^\r\n]*)/gm; // multiple matches on multiple lines
 
     export function parseSymlinkFromTest(line: string, symlinks: vfs.FileSet | undefined, absoluteRootDir?: string) {

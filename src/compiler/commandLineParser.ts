@@ -53,6 +53,7 @@ import {
     getFileMatcherPatterns,
     getLocaleSpecificMessage,
     getNormalizedAbsolutePath,
+    getOwnKeys,
     getRegexFromPattern,
     getRegularExpressionForWildcard,
     getRegularExpressionsForWildcards,
@@ -85,7 +86,9 @@ import {
     ModuleFormatDetectionKind,
     ModuleFormatInteropKind,
     ModuleKind,
+    ModuleOptions,
     ModuleResolutionKind,
+    NestedCompilerOption,
     NewLineKind,
     Node,
     NodeArray,
@@ -566,6 +569,7 @@ const moduleSubOptionDeclarations: readonly CommandLineOption[] = [
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_defaults_for_module_options_suited_for_common_runtimes_and_bundlers,
         defaultValueDescription: undefined,
+        getParentOption: getModuleOptionDeclaration,
     },
     {
         name: "formatDetection",
@@ -581,6 +585,7 @@ const moduleSubOptionDeclarations: readonly CommandLineOption[] = [
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_how_files_are_determined_to_be_ECMAScript_modules_or_CommonJS_modules,
         defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_none_otherwise,
+        getParentOption: getModuleOptionDeclaration,
     },
     {
         name: "formatInterop",
@@ -594,6 +599,7 @@ const moduleSubOptionDeclarations: readonly CommandLineOption[] = [
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_the_target_runtime_s_rules_for_ESM_CommonJS_interoperation,
         defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_babel_otherwise,
+        getParentOption: getModuleOptionDeclaration,
     },
     {
         name: "emit",
@@ -602,33 +608,17 @@ const moduleSubOptionDeclarations: readonly CommandLineOption[] = [
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_what_module_code_is_generated,
         defaultValueDescription: undefined,
+        getParentOption: getModuleOptionDeclaration,
     },
 ];
 
 /** @internal */
-export const moduleOptionDeclaration: CommandLineOptionOfObjectOrShorthandType = {
+export const moduleOptionDeclaration = {
     name: "module",
     shortName: "m",
-    // HEAD
     type: "objectOrShorthand",
     shorthandType: moduleKindMap,
     elementOptions: commandLineOptionsToMap(moduleSubOptionDeclarations),
-    //
-    type: new Map(Object.entries({
-        none: ModuleKind.None,
-        commonjs: ModuleKind.CommonJS,
-        amd: ModuleKind.AMD,
-        system: ModuleKind.System,
-        umd: ModuleKind.UMD,
-        es6: ModuleKind.ES2015,
-        es2015: ModuleKind.ES2015,
-        es2020: ModuleKind.ES2020,
-        es2022: ModuleKind.ES2022,
-        esnext: ModuleKind.ESNext,
-        node16: ModuleKind.Node16,
-        nodenext: ModuleKind.NodeNext,
-    })),
-    // parent of 19e60f1a19 (Fix showConfig)
     affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
@@ -638,7 +628,11 @@ export const moduleOptionDeclaration: CommandLineOptionOfObjectOrShorthandType =
     category: Diagnostics.Modules,
     description: Diagnostics.Specify_what_module_code_is_generated,
     defaultValueDescription: undefined,
-};
+} satisfies CommandLineOptionOfObjectOrShorthandType;
+
+function getModuleOptionDeclaration() {
+    return moduleOptionDeclaration;
+}
 
 const commandOptionsWithoutBuild: CommandLineOption[] = [
     // CommandLine only options
@@ -1228,31 +1222,6 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Modules,
         description: Diagnostics.Conditions_to_set_in_addition_to_the_resolver_specific_defaults_when_resolving_imports,
     },
-    {
-        name: "moduleFormatDetection",
-        type: new Map(Object.entries({
-            none: ModuleFormatDetectionKind.None,
-            bundler: ModuleFormatDetectionKind.Bundler,
-            node16: ModuleFormatDetectionKind.Node16,
-            nodenext: ModuleFormatDetectionKind.NodeNext,
-        })),
-        affectsModuleResolution: true,
-        category: Diagnostics.Modules,
-        description: Diagnostics.Specify_how_files_are_determined_to_be_ECMAScript_modules_or_CommonJS_modules,
-        defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_none_otherwise,
-    },
-    {
-        name: "moduleFormatInterop",
-        type: new Map(Object.entries({
-            babel: ModuleFormatInteropKind.Babel,
-            bundlernode: ModuleFormatInteropKind.BundlerNode,
-            node16: ModuleFormatInteropKind.Node16,
-            nodenext: ModuleFormatInteropKind.NodeNext,
-        })),
-        category: Diagnostics.Modules,
-        description: Diagnostics.Specify_the_target_runtime_s_rules_for_ESM_CommonJS_interoperation,
-        defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_babel_otherwise,
-    },
 
     // Source Maps
     {
@@ -1770,9 +1739,15 @@ export function createOptionNameMap(optionDeclarations: readonly CommandLineOpti
     const optionsNameMap = new Map<string, CommandLineOption>();
     const shortOptionNames = new Map<string, string>();
     forEach(optionDeclarations, option => {
-        optionsNameMap.set(option.name.toLowerCase(), option);
+        const lowerCaseName = option.name.toLowerCase();
+        optionsNameMap.set(lowerCaseName, option);
         if (option.shortName) {
             shortOptionNames.set(option.shortName, option.name);
+        }
+        if (option.type === "objectOrShorthand") {
+            forEachEntry(option.elementOptions, (subOption, subOptionName) => {
+                optionsNameMap.set(`${lowerCaseName}.${subOptionName.toLowerCase()}`, subOption);
+            });
         }
     });
 
@@ -1806,14 +1781,15 @@ export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOpt
     return createDiagnosticForInvalidCustomType(opt, createCompilerDiagnostic);
 }
 
-function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, createDiagnostic: (message: DiagnosticMessage, ...args: DiagnosticArguments) => Diagnostic): Diagnostic {
-    const namesOfType = arrayFrom(opt.type.keys());
+function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType | CommandLineOptionOfObjectOrShorthandType & { shorthandType: CommandLineOptionOfCustomType["type"]; }, createDiagnostic: (message: DiagnosticMessage, ...args: DiagnosticArguments) => Diagnostic): Diagnostic {
+    const type = opt.type === "objectOrShorthand" ? opt.shorthandType : opt.type;
+    const namesOfType = arrayFrom(type.keys());
     const stringNames = (opt.deprecatedKeys ? namesOfType.filter(k => !opt.deprecatedKeys!.has(k)) : namesOfType).map(key => `'${key}'`).join(", ");
     return createDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, stringNames);
 }
 
 /** @internal */
-export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string | undefined, errors: Diagnostic[]) {
+export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType | CommandLineOptionOfObjectOrShorthandType & { shorthandType: CommandLineOptionOfCustomType["type"]; }, value: string | undefined, errors: Diagnostic[]) {
     return convertJsonOptionOfCustomType(opt, (value ?? "").trim(), errors);
 }
 
@@ -1992,44 +1968,51 @@ function parseOptionValue(
             errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
         }
 
+        const parentOption = opt.getParentOption?.();
+        const [base = {}, name] = parentOption ? [options[parentOption.name] as NestedCompilerOption, opt.name] : [options, opt.name];
+        if (parentOption) {
+            options[parentOption.name] = base as NestedCompilerOption;
+        }
+
         if (args[i] !== "null") {
-            switch (opt.type) {
+            switch (opt.type === "objectOrShorthand" ? opt.shorthandType : opt.type) {
                 case "number":
-                    options[opt.name] = validateJsonOptionValue(opt, parseInt(args[i]), errors);
+                    base[name] = validateJsonOptionValue(opt, parseInt(args[i]), errors);
                     i++;
                     break;
                 case "boolean":
                     // boolean flag has optional value true, false, others
                     const optValue = args[i];
-                    options[opt.name] = validateJsonOptionValue(opt, optValue !== "false", errors);
+                    base[name] = validateJsonOptionValue(opt, optValue !== "false", errors);
                     // consume next argument as boolean flag value
                     if (optValue === "false" || optValue === "true") {
                         i++;
                     }
                     break;
                 case "string":
-                    options[opt.name] = validateJsonOptionValue(opt, args[i] || "", errors);
+                    base[name] = validateJsonOptionValue(opt, args[i] || "", errors);
                     i++;
                     break;
                 case "list":
-                    const result = parseListTypeOption(opt, args[i], errors);
-                    options[opt.name] = result || [];
+                    const result = parseListTypeOption(opt as CommandLineOptionOfListType, args[i], errors);
+                    base[name] = result || [];
                     if (result) {
                         i++;
                     }
                     break;
+                case "object":
                 case "listOrElement":
-                    Debug.fail("listOrElement not supported here");
+                    Debug.fail("listOrElement, object, and objectOrShorthand not supported here");
                     break;
                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                 default:
-                    options[opt.name] = parseCustomTypeOption(opt as CommandLineOptionOfCustomType, args[i], errors);
+                    base[name] = parseCustomTypeOption(opt as CommandLineOptionOfCustomType | CommandLineOptionOfObjectOrShorthandType & { shorthandType: CommandLineOptionOfCustomType["type"]; }, args[i], errors);
                     i++;
                     break;
             }
         }
         else {
-            options[opt.name] = undefined;
+            base[name] = undefined;
             i++;
         }
     }
@@ -2528,16 +2511,23 @@ function getCompilerOptionValueTypeString(option: CommandLineOption): string {
 function isCompilerOptionsValue(option: CommandLineOption | undefined, value: any): value is CompilerOptionsValue {
     if (option) {
         if (isNullOrUndefined(value)) return !option.disallowNullOrUndefined; // All options are undefinable/nullable
-        if (option.type === "list") {
-            return isArray(value);
-        }
         if (option.type === "listOrElement") {
-            return isArray(value) || isCompilerOptionsValue(option.element, value);
+            return isCompilerOptionsValueWorker("list", value) || isCompilerOptionsValue(option.element, value);
         }
-        const expectedType = isString(option.type) ? option.type : "string";
-        return typeof value === expectedType;
+        if (option.type === "objectOrShorthand") {
+            return isCompilerOptionsValueWorker(option.shorthandType, value) || typeof value === "object";
+        }
+        return isCompilerOptionsValueWorker(option.type, value);
     }
     return false;
+}
+
+function isCompilerOptionsValueWorker(type: CommandLineOption["type"], value: any): value is CompilerOptionsValue {
+    if (type === "list") {
+        return isArray(value);
+    }
+    const expectedType = isString(type) ? type : "string";
+    return typeof value === expectedType;
 }
 
 /** @internal */
@@ -2648,6 +2638,8 @@ function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption
         case "list":
         case "listOrElement":
             return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
+        case "objectOrShorthand":
+            return typeof optionDefinition.shorthandType === "object" ? optionDefinition.shorthandType : undefined;
         default:
             return optionDefinition.type;
     }
@@ -3340,6 +3332,7 @@ function parseOwnConfigOfJsonSourceFile(
     const options = getDefaultCompilerOptions(configFileName);
     let typeAcquisition: TypeAcquisition | undefined;
     let watchOptions: WatchOptions | undefined;
+    let moduleOption: ModuleOptions | undefined;
     let extendedConfigPath: string | string[] | undefined;
     let rootCompilerOptions: PropertyName[] | undefined;
 
@@ -3364,7 +3357,7 @@ function parseOwnConfigOfJsonSourceFile(
         keyText: string,
         value: any,
         propertyAssignment: PropertyAssignment,
-        parentOption: TsConfigOnlyOption | undefined,
+        parentOption: TsConfigOnlyOption | CommandLineOptionOfObjectOrShorthandType | undefined,
         option: CommandLineOption | undefined,
     ) {
         // Ensure value is verified except for extends which is handled in its own way for error reporting
@@ -3375,6 +3368,7 @@ function parseOwnConfigOfJsonSourceFile(
                 if (parentOption === compilerOptionsDeclaration) currentOption = options;
                 else if (parentOption === watchOptionsDeclaration) currentOption = watchOptions ??= {};
                 else if (parentOption === typeAcquisitionDeclaration) currentOption = typeAcquisition ??= getDefaultTypeAcquisition(configFileName);
+                else if (parentOption === moduleOptionDeclaration) currentOption = moduleOption ??= {};
                 else Debug.fail("Unknown option");
                 currentOption[option.name] = value;
             }
@@ -3587,6 +3581,29 @@ export function convertJsonOption(
                 convertJsonOptionOfListType(opt, value, basePath, errors, propertyAssignment, valueExpression as ArrayLiteralExpression | undefined, sourceFile) :
                 convertJsonOption(opt.element, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
         }
+        else if (optType === "objectOrShorthand") {
+            if (!value || typeof value !== "object") {
+                if (!isString(opt.shorthandType)) {
+                    return convertJsonOptionOfCustomType(opt as CommandLineOptionOfObjectOrShorthandType & { shorthandType: CommandLineOptionOfCustomType["type"]; }, value as string, errors, valueExpression, sourceFile);
+                }
+                const validatedValue = validateJsonOptionValue(opt, value, errors, valueExpression, sourceFile);
+                return isNullOrUndefined(validatedValue) ? validatedValue : normalizeNonListOptionValue(opt, basePath, validatedValue);
+            }
+            else {
+                // const result: NestedCompilerOption = {};
+                // for (const id in value as NestedCompilerOption) {
+                //     const property = (value as NestedCompilerOption)[id];
+                //     const subOption = opt.elementOptions.get(id);
+                //     if (subOption) {
+                //         result[opt.name] = convertJsonOption(opt, property, basePath, errors, propertyAssignment, valueExpression, sourceFile);
+                //     }
+                //     else {
+                //         errors.push(createUnknownOptionError(id, opt.extraKeyDiagnostics, /*unknownOptionErrorText*/ undefined, propertyAssignment?.name, sourceFile));
+                //     }
+                // }
+                return {};
+            }
+        }
         else if (!isString(opt.type)) {
             return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors, valueExpression, sourceFile);
         }
@@ -3623,7 +3640,7 @@ function validateJsonOptionValue<T extends CompilerOptionsValue>(
 }
 
 function convertJsonOptionOfCustomType(
-    opt: CommandLineOptionOfCustomType,
+    opt: CommandLineOptionOfCustomType | CommandLineOptionOfObjectOrShorthandType & { shorthandType: CommandLineOptionOfCustomType["type"]; },
     value: string,
     errors: Diagnostic[],
     valueExpression?: Expression,
@@ -3631,7 +3648,8 @@ function convertJsonOptionOfCustomType(
 ) {
     if (isNullOrUndefined(value)) return undefined;
     const key = value.toLowerCase();
-    const val = opt.type.get(key);
+    const type = opt.type === "objectOrShorthand" ? opt.shorthandType : opt.type;
+    const val = type.get(key);
     if (val !== undefined) {
         return validateJsonOptionValue(opt, val, errors, valueExpression, sourceFile);
     }
@@ -4026,10 +4044,18 @@ export function convertCompilerOptionsForTelemetry(opts: CompilerOptions): Compi
 }
 
 function getOptionValueWithEmptyStrings(value: any, option: CommandLineOption): {} | undefined {
-    if (value === undefined) return value;
-    switch (option.type) {
+    // eslint-disable-next-line no-null/no-null
+    if (value === undefined || value === null) return value;
+    const type = option.type === "objectOrShorthand" && typeof value !== "object" ? option.shorthandType : option.type;
+    switch (type) {
         case "object": // "paths". Can't get any useful information from the value since we blank out strings, so just return "".
             return "";
+        case "objectOrShorthand":
+            return getOwnKeys(value).reduce((acc: any, key) => {
+                const subOption = (option as CommandLineOptionOfObjectOrShorthandType).elementOptions.get(key.toLowerCase());
+                acc[key] = subOption ? getOptionValueWithEmptyStrings(value[key], subOption) : "";
+                return acc;
+            }, {});
         case "string": // Could be any arbitrary string -- use empty string instead.
             return "";
         case "number": // Allow numbers, but be sure to check it's actually a number.
@@ -4037,13 +4063,13 @@ function getOptionValueWithEmptyStrings(value: any, option: CommandLineOption): 
         case "boolean":
             return typeof value === "boolean" ? value : "";
         case "listOrElement":
-            if (!isArray(value)) return getOptionValueWithEmptyStrings(value, option.element);
+            if (!isArray(value)) return getOptionValueWithEmptyStrings(value, (option as CommandLineOptionOfListType).element);
             // fall through to list
         case "list":
-            const elementType = option.element;
+            const elementType = (option as CommandLineOptionOfListType).element;
             return isArray(value) ? mapDefined(value, v => getOptionValueWithEmptyStrings(v, elementType)) : "";
         default:
-            return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
+            return forEachEntry(type, (optionEnumValue, optionStringValue) => {
                 if (optionEnumValue === value) {
                     return optionStringValue;
                 }
@@ -4052,7 +4078,8 @@ function getOptionValueWithEmptyStrings(value: any, option: CommandLineOption): 
 }
 
 function getDefaultValueForOption(option: CommandLineOption): {} {
-    switch (option.type) {
+    const type = option.type === "objectOrShorthand" ? option.shorthandType : option.type;
+    switch (type) {
         case "number":
             return 1;
         case "boolean":
@@ -4063,11 +4090,11 @@ function getDefaultValueForOption(option: CommandLineOption): {} {
         case "list":
             return [];
         case "listOrElement":
-            return getDefaultValueForOption(option.element);
+            return getDefaultValueForOption((option as CommandLineOptionOfListType).element);
         case "object":
             return {};
         default:
-            const value = firstOrUndefinedIterator(option.type.keys());
+            const value = firstOrUndefinedIterator((option as CommandLineOptionOfCustomType).type.keys());
             if (value !== undefined) return value;
             return Debug.fail("Expected 'option.type' to have entries.");
     }

@@ -8,6 +8,9 @@ import {
     CharacterCodes,
     combinePaths,
     CommandLineOption,
+    CommandLineOptionOfCustomType,
+    CommandLineOptionOfListType,
+    CommandLineOptionOfObjectOrShorthandType,
     compareStringsCaseInsensitive,
     CompilerOptions,
     contains,
@@ -377,15 +380,16 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
 
         function getPossibleValues(option: CommandLineOption) {
             let possibleValues: string;
-            switch (option.type) {
+            const type = option.type === "objectOrShorthand" ? option.shorthandType : option.type;
+            switch (type) {
                 case "string":
                 case "number":
                 case "boolean":
-                    possibleValues = option.type;
+                    possibleValues = type;
                     break;
                 case "list":
                 case "listOrElement":
-                    possibleValues = getPossibleValues(option.element);
+                    possibleValues = getPossibleValues((option as CommandLineOptionOfListType).element);
                     break;
                 case "object":
                     possibleValues = "";
@@ -394,8 +398,8 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     // Map<string, number | string>
                     // Group synonyms: es6/es2015
                     const inverted: { [value: string]: string[]; } = {};
-                    option.type.forEach((value, name) => {
-                        if (!option.deprecatedKeys?.has(name)) {
+                    type.forEach((value, name) => {
+                        if (!(option as CommandLineOptionOfCustomType | CommandLineOptionOfObjectOrShorthandType).deprecatedKeys?.has(name)) {
                             (inverted[value] ||= []).push(name);
                         }
                     });

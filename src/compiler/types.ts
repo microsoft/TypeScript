@@ -7090,7 +7090,8 @@ export enum PollingWatchKind {
     FixedChunkSize,
 }
 
-export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+export type NestedCompilerOption = ModuleOptions;
+export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | NestedCompilerOption | PluginImport[] | ProjectReference[] | null | undefined;
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
@@ -7156,9 +7157,7 @@ export interface CompilerOptions {
     locale?: string;
     mapRoot?: string;
     maxNodeModuleJsDepth?: number;
-    module?: ModuleKind;
-    moduleFormatDetection?: ModuleFormatDetectionKind;
-    moduleFormatInterop?: ModuleFormatInteropKind;
+    module?: ModuleKind | ModuleOptions;
     moduleResolution?: ModuleResolutionKind;
     moduleSuffixes?: string[];
     moduleDetection?: ModuleDetectionKind;
@@ -7295,6 +7294,14 @@ export enum ModuleFormatInteropKind {
 
     Node16 = 100,
     NodeNext = 199,
+}
+
+export interface ModuleOptions {
+    preset?: ModuleKind;
+    formatDetection?: ModuleFormatDetectionKind;
+    formatInterop?: ModuleFormatInteropKind;
+    emit?: ModuleKind;
+    [option: string]: CompilerOptionsValue | undefined;
 }
 
 export const enum JsxEmit {
@@ -7441,6 +7448,7 @@ export interface CommandLineOptionBase {
     transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
     extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     disallowNullOrUndefined?: true;                                    // If set option does not allow setting null
+    getParentOption?: () => CommandLineOptionOfObjectOrShorthandType;
 }
 
 /** @internal */
@@ -7489,13 +7497,14 @@ export interface TsConfigOnlyOption extends CommandLineOptionBase {
     extraKeyDiagnostics?: DidYouMeanOptionsDiagnostics;
 }
 
-/** @interface */
+/** @internal */
 export interface CommandLineOptionOfObjectOrShorthandType extends CommandLineOptionBase {
     type: "objectOrShorthand";
     shorthandType: "string" | "number" | "boolean" | Map<string, number | string>;
     defaultValueDescription?: string | number | boolean | DiagnosticMessage;
     elementOptions: Map<string, CommandLineOption>;
     extraKeyDiagnostics?: DidYouMeanOptionsDiagnostics;
+    deprecatedKeys?: Set<string>;
 }
 
 /** @internal */
