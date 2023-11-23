@@ -90,7 +90,7 @@ import {
     bindSourceFileForDeclarationEmit,
     EmitDeclarationNodeLinks,
     EmitDeclarationSymbol,
-} from "./emit-binder";
+} from "./emitBinder";
 import {
     IsolatedEmitResolver,
     MemberKey,
