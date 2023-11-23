@@ -1,5 +1,5 @@
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 // Repro from #22644
 

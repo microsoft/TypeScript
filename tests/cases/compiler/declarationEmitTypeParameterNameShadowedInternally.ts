@@ -1,6 +1,6 @@
 // @declaration: true
 // @skipLibCheck: false
-// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 export const foo = <T,>(x: T) => {
 	const inner = <T,>(y: T) => [x, y] as const;

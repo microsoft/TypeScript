@@ -688,7 +688,7 @@ export namespace Compiler {
             file.locals = undefined;
             dts.set(declarationPath, new documents.TextDocument(declarationPath, options.emitBOM ? Utils.addUTF8ByteOrderMark(declaration) : declaration));
             if (declarationMapPath && declarationMap) {
-                dtsMap.set(declarationMapPath, new documents.TextDocument(declarationMapPath, options.emitBOM ? Utils.addUTF8ByteOrderMark(declarationMap) : declarationMap));
+                dtsMap.set(declarationMapPath, new documents.TextDocument(declarationMapPath, declarationMap));
             }
             diagnostics.push(...fileDiagnostics);
         });

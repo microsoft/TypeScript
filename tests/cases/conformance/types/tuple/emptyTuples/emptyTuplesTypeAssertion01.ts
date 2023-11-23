@@ -1,5 +1,5 @@
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap seems miss-aligned
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 let x = <[]>[];
 let y = x[0];

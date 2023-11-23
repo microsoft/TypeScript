@@ -2,6 +2,59 @@
 
 
 
+/// [Declarations] ////
+
+
+
+//// [index.d.cts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.cts.map
+//// [index.d.mts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.mts.map
+//// [index.d.ts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.ts.map
+//// [subfolder/index.d.cts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.cts.map
+//// [subfolder/index.d.mts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.mts.map
+//// [subfolder/index.d.ts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.ts.map
+//// [subfolder2/another/index.d.cts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.cts.map
+//// [subfolder2/another/index.d.mts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.mts.map
+//// [subfolder2/another/index.d.ts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.ts.map
+//// [subfolder2/index.d.cts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.cts.map
+//// [subfolder2/index.d.mts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.mts.map
+//// [subfolder2/index.d.ts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.ts.map
+
 /// [Declarations Maps] ////
 
 

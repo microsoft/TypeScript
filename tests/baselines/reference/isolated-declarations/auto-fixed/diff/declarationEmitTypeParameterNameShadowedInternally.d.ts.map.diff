@@ -1,4 +1,4 @@
-// [[Reason: TODO: Sourcemap seems missaligned]] ////
+// [[Reason: Sourcemap is more detailed]] ////
 
 //// [tests/cases/compiler/declarationEmitTypeParameterNameShadowedInternally.ts] ////
 
