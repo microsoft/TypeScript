@@ -45,6 +45,7 @@ import {
     EnumDeclaration,
     ExportAssignment,
     ExportDeclaration,
+    Expression,
     ExpressionWithTypeArguments,
     factory,
     FileReference,
@@ -318,7 +319,7 @@ export function transformDeclarations(context: TransformationContext) {
     let refs: Map<NodeId, SourceFile>;
     let libs: Map<string, boolean>;
     let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
-    const { localInferenceResolver, isolatedDeclarations, host, resolver, symbolTracker } = createTransformerServices();
+    const { localInferenceResolver, isolatedDeclarations, host, resolver, symbolTracker, ensureNoInitializer } = createTransformerServices();
     const options = context.getCompilerOptions();
     const { noResolve, stripInternal } = options;
     return transformRoot;
@@ -328,13 +329,15 @@ export function transformDeclarations(context: TransformationContext) {
         resolver: IsolatedEmitResolver;
         localInferenceResolver: LocalInferenceResolver;
         host: undefined;
-        symbolTracker: SymbolTracker;
+        symbolTracker: undefined;
+        ensureNoInitializer: (node: CanHaveLiteralInitializer) => Expression | undefined;
     } | {
         isolatedDeclarations: false;
         resolver: EmitResolver;
         localInferenceResolver: undefined;
         host: EmitHost;
         symbolTracker: SymbolTracker;
+        ensureNoInitializer: (node: CanHaveLiteralInitializer) => Expression | undefined;
     } {
         const { isolatedDeclarations, resolver: localInferenceResolver } = createLocalInferenceResolver({
             ensureParameter,
@@ -349,51 +352,42 @@ export function transformDeclarations(context: TransformationContext) {
                 return checkEntityNameVisibility(name, container ?? enclosingDeclaration);
             },
         });
+
         if (isolatedDeclarations) {
-            const symbolTracker: SymbolTracker = {
-                trackSymbol,
-                reportInaccessibleThisError,
-                reportInaccessibleUniqueSymbolError,
-                reportCyclicStructureError,
-                reportPrivateInBaseOfClassExpression,
-                reportLikelyUnsafeImportRequiredError,
-                reportTruncationError,
-                trackReferencedAmbientModule,
-                trackExternalModuleSymbolOfImportTypeNode,
-                reportNonlocalAugmentation,
-                reportNonSerializableProperty,
-            };
+            const resolver: IsolatedEmitResolver = context.getEmitResolver();
+            // Ideally nothing should require the symbol tracker in isolated declarations mode.
+            // createLiteralConstValue is teh one exception
+            const emptySymbolTracker = {};
             return {
                 isolatedDeclarations,
-                resolver: context.getEmitResolver(),
+                resolver,
                 localInferenceResolver,
-                symbolTracker,
+                symbolTracker: undefined,
                 host: undefined,
+                ensureNoInitializer: (node: CanHaveLiteralInitializer) => {
+                    if (shouldPrintWithInitializer(node)) {
+                        return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, emptySymbolTracker); // TODO: Make safe
+                    }
+                    return undefined;
+                },
             };
         }
         else {
             const host = context.getEmitHost();
-            const symbolTracker: SymbolTracker = {
-                trackSymbol,
-                reportInaccessibleThisError,
-                reportInaccessibleUniqueSymbolError,
-                reportCyclicStructureError,
-                reportPrivateInBaseOfClassExpression,
-                reportLikelyUnsafeImportRequiredError,
-                reportTruncationError,
-                moduleResolverHost: host,
-                trackReferencedAmbientModule,
-                trackExternalModuleSymbolOfImportTypeNode,
-                reportNonlocalAugmentation,
-                reportNonSerializableProperty,
-            };
-
+            const resolver = context.getEmitResolver();
+            const symbolTracker: SymbolTracker = createSymbolTracker(resolver, host);
             return {
                 isolatedDeclarations,
                 localInferenceResolver,
-                resolver: context.getEmitResolver(),
+                resolver,
                 symbolTracker,
                 host,
+                ensureNoInitializer: (node: CanHaveLiteralInitializer) => {
+                    if (shouldPrintWithInitializer(node)) {
+                        return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
+                    }
+                    return undefined;
+                },
             };
         }
     }
@@ -512,83 +506,96 @@ export function transformDeclarations(context: TransformationContext) {
         }
         return false;
     }
-
-    function trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol) {
-        if (!isBundledEmit) {
-            (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
-        }
-    }
-
-    function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-        if (symbol.flags & SymbolFlags.TypeParameter) return false;
-        if (isolatedDeclarations) return false;
-        const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasToMarkVisible*/ true));
-        recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning), enclosingDeclaration ?? currentSourceFile);
-        return issuedDiagnostic;
-    }
-
-    function reportPrivateInBaseOfClassExpression(propertyName: string) {
-        if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(
-                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected, propertyName),
-            );
-        }
-    }
-
-    function errorDeclarationNameWithFallback() {
-        return errorNameNode ? declarationNameToString(errorNameNode) :
-            errorFallbackNode && getNameOfDeclaration(errorFallbackNode) ? declarationNameToString(getNameOfDeclaration(errorFallbackNode)) :
-            errorFallbackNode && isExportAssignment(errorFallbackNode) ? errorFallbackNode.isExportEquals ? "export=" : "default" :
-            "(Missing)"; // same fallback declarationNameToString uses when node is zero-width (ie, nameless)
-    }
-
-    function reportInaccessibleUniqueSymbolError() {
-        if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), "unique symbol"));
-        }
-    }
-
-    function reportCyclicStructureError() {
-        if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary, errorDeclarationNameWithFallback()));
-        }
-    }
-
-    function reportInaccessibleThisError() {
-        if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), "this"));
-        }
-    }
-
-    function reportLikelyUnsafeImportRequiredError(specifier: string) {
-        if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), specifier));
-        }
-    }
-
-    function reportTruncationError() {
-        if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed));
-        }
-    }
-
-    function reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, symbol: Symbol) {
-        const primaryDeclaration = parentSymbol.declarations?.find(d => getSourceFileOfNode(d) === containingFile);
-        const augmentingDeclarations = filter(symbol.declarations, d => getSourceFileOfNode(d) !== containingFile);
-        if (primaryDeclaration && augmentingDeclarations) {
-            for (const augmentations of augmentingDeclarations) {
-                context.addDiagnostic(addRelatedInfo(
-                    createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
-                    createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file),
-                ));
+    function createSymbolTracker(resolver: EmitResolver, host: EmitHost): SymbolTracker {
+        function trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol) {
+            if (!isBundledEmit) {
+                (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
             }
         }
-    }
 
-    function reportNonSerializableProperty(propertyName: string) {
-        if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
+        function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+            if (symbol.flags & SymbolFlags.TypeParameter) return false;
+            const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasToMarkVisible*/ true));
+            recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning), enclosingDeclaration ?? currentSourceFile);
+            return issuedDiagnostic;
         }
+        function reportPrivateInBaseOfClassExpression(propertyName: string) {
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(
+                    createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected, propertyName),
+                );
+            }
+        }
+
+        function errorDeclarationNameWithFallback() {
+            return errorNameNode ? declarationNameToString(errorNameNode) :
+                errorFallbackNode && getNameOfDeclaration(errorFallbackNode) ? declarationNameToString(getNameOfDeclaration(errorFallbackNode)) :
+                errorFallbackNode && isExportAssignment(errorFallbackNode) ? errorFallbackNode.isExportEquals ? "export=" : "default" :
+                "(Missing)"; // same fallback declarationNameToString uses when node is zero-width (ie, nameless)
+        }
+
+        function reportInaccessibleUniqueSymbolError() {
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), "unique symbol"));
+            }
+        }
+
+        function reportCyclicStructureError() {
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary, errorDeclarationNameWithFallback()));
+            }
+        }
+
+        function reportInaccessibleThisError() {
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), "this"));
+            }
+        }
+
+        function reportLikelyUnsafeImportRequiredError(specifier: string) {
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), specifier));
+            }
+        }
+
+        function reportTruncationError() {
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed));
+            }
+        }
+
+        function reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, symbol: Symbol) {
+            const primaryDeclaration = parentSymbol.declarations?.find(d => getSourceFileOfNode(d) === containingFile);
+            const augmentingDeclarations = filter(symbol.declarations, d => getSourceFileOfNode(d) !== containingFile);
+            if (primaryDeclaration && augmentingDeclarations) {
+                for (const augmentations of augmentingDeclarations) {
+                    context.addDiagnostic(addRelatedInfo(
+                        createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
+                        createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file),
+                    ));
+                }
+            }
+        }
+
+        function reportNonSerializableProperty(propertyName: string) {
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
+            }
+        }
+        return {
+            moduleResolverHost: host,
+            reportCyclicStructureError,
+            reportInaccessibleThisError,
+            reportInaccessibleUniqueSymbolError,
+            reportLikelyUnsafeImportRequiredError,
+            reportNonlocalAugmentation,
+            reportNonSerializableProperty,
+            reportPrivateInBaseOfClassExpression,
+            reportTruncationError,
+            trackExternalModuleSymbolOfImportTypeNode,
+            trackReferencedAmbientModule,
+            trackSymbol,
+        };
     }
 
     function transformDeclarationsForJS(sourceFile: SourceFile, bundled?: boolean) {
@@ -900,13 +907,6 @@ export function transformDeclarations(context: TransformationContext) {
 
     function shouldPrintWithInitializer(node: Node) {
         return canHaveLiteralInitializer(node) && resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safe
-    }
-
-    function ensureNoInitializer(node: CanHaveLiteralInitializer) {
-        if (shouldPrintWithInitializer(node)) {
-            return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
-        }
-        return undefined;
     }
 
     function ensureType(node: HasInferredType, type: TypeNode | undefined, ignorePrivate?: boolean): TypeNode | undefined {
