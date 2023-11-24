@@ -8746,7 +8746,9 @@ export type StrictOptionName =
 
 /** @internal */
 export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
-    return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
+    return compilerOptions[flag] === undefined
+        ? (compilerOptions.strict === undefined ? true : !!compilerOptions.strict)
+        : !!compilerOptions[flag];
 }
 
 /** @internal */
