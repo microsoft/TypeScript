@@ -1,7 +1,7 @@
 // @strictNullChecks: true
 // @noimplicitany: true
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: TODO: Sourcemap is more detailed. (needs more validation)
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 type Box<T> = {
     value: T;

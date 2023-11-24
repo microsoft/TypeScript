@@ -4,6 +4,7 @@ import {
     getNodeId,
     isBlock,
     isClassDeclaration,
+    isComputedPropertyName,
     isConditionalTypeNode,
     isConstructorDeclaration,
     isConstructSignatureDeclaration,
@@ -20,6 +21,10 @@ import {
     isModuleBlock,
     isModuleDeclaration,
     isNamedExports,
+    isNumericLiteral,
+    isPrefixUnaryExpression,
+    isPrivateIdentifier,
+    isPropertyAccessExpression,
     isSourceFile,
     isTypeAliasDeclaration,
     isVariableDeclaration,
@@ -36,6 +41,7 @@ import {
     BindingPattern,
     ClassDeclaration,
     ClassElement,
+    ComputedPropertyName,
     Declaration,
     EnumDeclaration,
     EnumMember,
@@ -45,7 +51,10 @@ import {
     ModuleDeclaration,
     Node,
     NodeArray,
+    NoSubstitutionTemplateLiteral,
+    ObjectLiteralElement,
     ParameterDeclaration,
+    PropertyName,
     SourceFile,
     SymbolFlags,
     SyntaxKind,
@@ -60,13 +69,11 @@ import {
 import {
     findAncestor,
     isBindingPattern,
+    isStringLiteralLike,
 } from "../../utilitiesPublic";
 import {
     MemberKey,
 } from "./types";
-import {
-    getMemberKey,
-} from "./utils";
 
 /** @internal */
 export interface EmitDeclarationNodeLinks {
@@ -152,7 +159,8 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         getNodeLinks,
         resolveName,
         resolveMemberKey,
-        getMemberNameFromElement,
+        getMemberKeyFromElement,
+        getMemberKey,
     };
 
     function resolveName(enclosingDeclaration: Node, escapedText: __String, meaning: SymbolFlags) {
@@ -456,7 +464,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                     addLocalAndExportDeclaration(getMemberKey(statement.name), statement, getSymbolFlagsForNode(statement), isExported);
                     withScope(statement, /*exports*/ undefined, () => {
                         statement.members.forEach(m => {
-                            addLocalOnlyDeclaration(getMemberNameFromElement(m), m, getSymbolFlagsForNode(m));
+                            addLocalOnlyDeclaration(getMemberKeyFromElement(m), m, getSymbolFlagsForNode(m));
                         });
                     });
                 }
@@ -491,7 +499,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                     });
                     withMembers(interfaceSymbol, () => {
                         interfaceDeclaration.members.forEach(m => {
-                            addLocalOnlyDeclaration(getMemberNameFromElement(m), m, getElementFlagsOrThrow(m));
+                            addLocalOnlyDeclaration(getMemberKeyFromElement(m), m, getElementFlagsOrThrow(m));
                             bindTypeExpressions(m);
                         });
                     });
@@ -508,7 +516,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                             if (hasSyntacticModifier(m, ModifierFlags.Static)) return;
                             if (m.kind === SyntaxKind.SemicolonClassElement || m.kind === SyntaxKind.ClassStaticBlockDeclaration) return;
 
-                            addLocalOnlyDeclaration(getMemberNameFromElement(m), m, getElementFlagsOrThrow(m));
+                            addLocalOnlyDeclaration(getMemberKeyFromElement(m), m, getElementFlagsOrThrow(m));
                             bindTypeExpressions(m);
                         });
                     });
@@ -520,7 +528,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                                 || m.kind === SyntaxKind.ClassStaticBlockDeclaration
                             ) return;
 
-                            addLocalOnlyDeclaration(getMemberNameFromElement(m), m, getElementFlagsOrThrow(m));
+                            addLocalOnlyDeclaration(getMemberKeyFromElement(m), m, getElementFlagsOrThrow(m));
                             bindTypeExpressions(m);
                         });
                     }, "exports");
@@ -534,7 +542,80 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
  * Gets the symbolic name for a member from its type.
  * @internal
  */
-export function getMemberNameFromElement(element: TypeElement | ClassElement | EnumMember): MemberKey | undefined {
+export function getMemberKey(name: string | Exclude<PropertyName, ComputedPropertyName> | NoSubstitutionTemplateLiteral): MemberKey;
+/**
+ * Gets the symbolic name for a member from its type.
+ * @internal
+ */
+export function getMemberKey(name: string | PropertyName | NoSubstitutionTemplateLiteral | undefined): MemberKey | undefined;
+export function getMemberKey(name: string | PropertyName | NoSubstitutionTemplateLiteral | undefined): string | undefined {
+    if (name === undefined) {
+        return undefined;
+    }
+    if (typeof name === "string") {
+        return ("I:" + name);
+    }
+    if (isPrivateIdentifier(name)) {
+        return ("P:" + name.escapedText);
+    }
+    if (isIdentifier(name)) {
+        return ("I:" + name.escapedText);
+    }
+    if (isStringLiteralLike(name)) {
+        return ("I:" + name.text);
+    }
+    if (isNumericLiteral(name)) {
+        return ("I:" + (+name.text));
+    }
+    if (isComputedPropertyName(name)) {
+        let computedName = name.expression;
+
+        if (isStringLiteralLike(computedName)) {
+            return ("I:" + computedName.text);
+        }
+        if (isNumericLiteral(computedName)) {
+            return ("I:" + (+computedName.text));
+        }
+        if (
+            isPrefixUnaryExpression(computedName)
+            && isNumericLiteral(computedName.operand)
+        ) {
+            if (computedName.operator === SyntaxKind.MinusToken) {
+                return ("I:" + (-computedName.operand.text));
+            }
+            else if (computedName.operator === SyntaxKind.PlusToken) {
+                return ("I:" + (-computedName.operand.text));
+            }
+            else {
+                return undefined;
+            }
+        }
+        let fullId = "C:";
+        // We only support dotted identifiers as property keys
+        while (true) {
+            if (isIdentifier(computedName)) {
+                fullId += computedName.escapedText;
+                break;
+            }
+            else if (isPropertyAccessExpression(computedName)) {
+                fullId += computedName.name.escapedText;
+                computedName = computedName.expression;
+            }
+            else {
+                // Can't compute a property key, bail
+                return undefined;
+            }
+        }
+        return fullId;
+    }
+    return undefined;
+}
+
+/**
+ * Gets the symbolic name for a member from its type.
+ * @internal
+ */
+export function getMemberKeyFromElement(element: ObjectLiteralElement | TypeElement | ClassElement | EnumMember): MemberKey | undefined {
     if (isConstructorDeclaration(element) || isConstructSignatureDeclaration(element)) {
         return "@constructor" as MemberKey;
     }

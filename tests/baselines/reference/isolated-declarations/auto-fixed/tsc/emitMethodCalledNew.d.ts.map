@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/emitMethodCalledNew.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [emitMethodCalledNew.d.ts]
+export declare const a: {
+    "new"(x: number): number;
+};
+export declare const b: {
+    "new"(x: number): number;
+};
+export declare const c: {
+    "new"(x: number): number;
+};
+//# sourceMappingURL=emitMethodCalledNew.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [emitMethodCalledNew.d.ts.map]
+{"version":3,"file":"emitMethodCalledNew.d.ts","sourceRoot":"","sources":["emitMethodCalledNew.ts"],"names":[],"mappings":"AAEA,eAAO,MAAM,CAAC;aACL,MAAM,GAAG,MAAM;CACvB,CAAA;AACD,eAAO,MAAM,CAAC;aACH,MAAM,GAAG,MAAM;CACzB,CAAA;AACD,eAAO,MAAM,CAAC;aACD,MAAM,GAAG,MAAM;CAC3B,CAAA"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgYTogew0KICAgICJuZXciKHg6IG51bWJlcik6IG51bWJlcjsNCn07DQpleHBvcnQgZGVjbGFyZSBjb25zdCBiOiB7DQogICAgIm5ldyIoeDogbnVtYmVyKTogbnVtYmVyOw0KfTsNCmV4cG9ydCBkZWNsYXJlIGNvbnN0IGM6IHsNCiAgICAibmV3Iih4OiBudW1iZXIpOiBudW1iZXI7DQp9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9ZW1pdE1ldGhvZENhbGxlZE5ldy5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZW1pdE1ldGhvZENhbGxlZE5ldy5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiZW1pdE1ldGhvZENhbGxlZE5ldy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFFQSxlQUFPLE1BQU0sQ0FBQzthQUNMLE1BQU0sR0FBRyxNQUFNO0NBQ3ZCLENBQUE7QUFDRCxlQUFPLE1BQU0sQ0FBQzthQUNILE1BQU0sR0FBRyxNQUFNO0NBQ3pCLENBQUE7QUFDRCxlQUFPLE1BQU0sQ0FBQzthQUNELE1BQU0sR0FBRyxNQUFNO0NBQzNCLENBQUEifQ==,Ly8gaHR0cHM6Ly9naXRodWIuY29tL21pY3Jvc29mdC9UeXBlU2NyaXB0L2lzc3Vlcy81NTA3NQoKZXhwb3J0IGNvbnN0IGEgPSB7CiAgbmV3KHg6IG51bWJlcik6IG51bWJlciB7IHJldHVybiB4ICsgMSB9Cn0KZXhwb3J0IGNvbnN0IGIgPSB7CiAgIm5ldyIoeDogbnVtYmVyKTogbnVtYmVyIHsgcmV0dXJuIHggKyAxIH0KfQpleHBvcnQgY29uc3QgYyA9IHsKICBbIm5ldyJdKHg6IG51bWJlcik6IG51bWJlciB7IHJldHVybiB4ICsgMSB9Cn0K
+

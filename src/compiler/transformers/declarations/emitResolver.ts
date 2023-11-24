@@ -90,14 +90,12 @@ import {
     bindSourceFileForDeclarationEmit,
     EmitDeclarationNodeLinks,
     EmitDeclarationSymbol,
+    getMemberKey,
 } from "./emitBinder";
 import {
     IsolatedEmitResolver,
     MemberKey,
 } from "./types";
-import {
-    getMemberKey,
-} from "./utils";
 
 const knownFunctionMembers = new Set([
     "I:apply",
