@@ -61,6 +61,7 @@ import {
     LiteralExpression,
     MethodDeclaration,
     MethodSignature,
+    ModifierFlags,
     Node,
     NodeArray,
     NodeFlags,
@@ -83,7 +84,9 @@ import {
 } from "../../types";
 import {
     createDiagnosticForNode,
+    hasSyntacticModifier,
     isEntityNameExpression,
+    isOptionalDeclaration,
 } from "../../utilities";
 import {
     isConstTypeReference,
@@ -745,8 +748,22 @@ export function createLocalInferenceResolver({
                 localType = invalid(node);
             }
 
-            if (node.initializer && !(localType.flags & LocalTypeInfoFlags.Invalid) && strictNullChecks && !resolver.isOptionalParameter(node)) {
-                localType.typeNode = addUndefinedInUnion(localType.typeNode);
+            if (strictNullChecks && !(localType.flags & LocalTypeInfoFlags.Invalid)) {
+                const isOptional = resolver.isOptionalParameter(node);
+                /**
+                 * If a parameter with a default value is not optional we need to add undefined
+                 * function x(o = "", v: string)
+                 */
+                if (node.initializer && !isOptional) {
+                    localType.typeNode = addUndefinedInUnion(localType.typeNode);
+                }
+                /**
+                 * Constructor properties that are optional must have | undefined included to work well with exactOptionalPropertyTypes
+                 * constructor(public x?: number) -> x?: number | undefined
+                 */
+                if (isOptional && !node.initializer && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
+                    localType.typeNode = addUndefinedInUnion(localType.typeNode);
+                }
             }
         }
         else if (type) {
@@ -764,7 +781,7 @@ export function createLocalInferenceResolver({
                 localType = invalid(node);
             }
             else if (isClassExpression(node.initializer)) {
-                localType = invalid(node.initializer, Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations)
+                localType = invalid(node.initializer, Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations);
             }
             else {
                 localType = localInference(node.initializer, node.parent.flags & NodeFlags.Const ? NarrowBehavior.KeepLiterals : NarrowBehavior.None);
@@ -772,6 +789,9 @@ export function createLocalInferenceResolver({
         }
         else if (isPropertyDeclaration(node) && node.initializer) {
             localType = localInference(node.initializer);
+            if (isOptionalDeclaration(node)) {
+                localType.typeNode = addUndefinedInUnion(localType.typeNode);
+            }
         }
         else if (isInterfaceDeclaration(node.parent) || isTypeLiteralNode(node.parent)) {
             return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
