@@ -10520,6 +10520,23 @@ export function getDeclarationContainer(node: Node): Node {
 }
 
 /** @internal */
+export function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
+    switch (node.kind) {
+        case SyntaxKind.ImportEqualsDeclaration:
+            return node as ImportEqualsDeclaration;
+        case SyntaxKind.ImportClause:
+            return (node as ImportClause).parent;
+        case SyntaxKind.NamespaceImport:
+            return (node as NamespaceImport).parent.parent;
+        case SyntaxKind.ImportSpecifier:
+            return (node as ImportSpecifier).parent.parent.parent;
+        default:
+            return undefined;
+    }
+}
+
+
+/** @internal */
 export function isGlobalSourceFile(node: Node) {
     return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(node as SourceFile);
 }

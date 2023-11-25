@@ -1,5 +1,4 @@
 import {
-    AnyImportSyntax,
     appendIfUnique,
     ComputedPropertyName,
     createEvaluator,
@@ -19,6 +18,7 @@ import {
     findAncestor,
     FunctionDeclaration,
     FunctionLikeDeclaration,
+    getAnyImportSyntax,
     getFirstIdentifier,
     getNameOfDeclaration,
     getParseTreeNode,
@@ -27,11 +27,7 @@ import {
     hasProperty,
     hasSyntacticModifier,
     Identifier,
-    ImportClause,
-    ImportEqualsDeclaration,
-    ImportSpecifier,
     isAccessor,
-    isArrowFunction,
     isBigIntLiteral,
     isBinaryExpression,
     isBindingElement,
@@ -42,7 +38,7 @@ import {
     isEnumMember,
     isExpressionStatement,
     isFunctionDeclaration,
-    isFunctionExpression,
+    isFunctionExpressionOrArrowFunction,
     isFunctionLike,
     isGetAccessor,
     isGetAccessorDeclaration,
@@ -54,6 +50,7 @@ import {
     isPartOfTypeNode,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
+    isPropertyName,
     isSetAccessor,
     isSetAccessorDeclaration,
     isStringLiteralLike,
@@ -65,7 +62,6 @@ import {
     LateBoundDeclaration,
     LateVisibilityPaintedStatement,
     ModifierFlags,
-    NamespaceImport,
     Node,
     NodeArray,
     NodeFlags,
@@ -120,13 +116,39 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
         }
         return undefined;
     }
+
+    function resolveEntityName(location: Node, node: Expression, meaning: SymbolFlags): EmitDeclarationSymbol | undefined {
+        if (isIdentifier(node)) {
+            return resolveName(location, node.escapedText, meaning);
+        }
+        else if (isPropertyAccessExpression(node) || isElementAccessExpression(node)) {
+            const symbol = resolveEntityName(location, node.expression, meaning);
+            if (symbol === undefined) return undefined;
+
+            const name = isElementAccessExpression(node) ? node.argumentExpression : node.name;
+            if (!isPropertyName(name)) return;
+
+            const memberSymbol = symbol.exports?.get(getMemberKey(name));
+            if (!memberSymbol || !(memberSymbol.flags & meaning)) {
+                return undefined;
+            }
+            return memberSymbol;
+        }
+        else {
+            return undefined;
+        }
+    }
+    function isExpressionMemberOfEnum(target: Expression, location: EnumDeclaration) {
+        const symbol = resolveEntityName(location, target, SymbolFlags.Namespace);
+
+        return !!symbol?.declarations.some(d => d === location);
+    }
     const evaluate = createEvaluator({
         evaluateElementAccessExpression(expr, location) {
             // We only resolve names in the current enum declaration
             if (!location || !isEnumDeclaration(location)) return undefined;
             if (
-                isIdentifier(expr.expression)
-                && expr.expression.escapedText === location.name.escapedText
+                isExpressionMemberOfEnum(expr.expression, location)
                 && isStringLiteralLike(expr.argumentExpression)
             ) {
                 return getEnumValueFromName(expr.argumentExpression, location);
@@ -146,9 +168,8 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
                 return getEnumValueFromName(expr, location);
             }
             if (
-                isPropertyAccessExpression(expr)
-                && isIdentifier(expr.expression)
-                && expr.expression.escapedText === location.name.escapedText
+                isEntityNameExpression(expr.expression)
+                && isExpressionMemberOfEnum(expr.expression, location)
             ) {
                 return getEnumValueFromName(expr.name, location);
             }
@@ -636,24 +657,6 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
             errorNode: firstIdentifier,
         };
     }
-}
-
-function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
-    switch (node.kind) {
-        case SyntaxKind.ImportEqualsDeclaration:
-            return node as ImportEqualsDeclaration;
-        case SyntaxKind.ImportClause:
-            return (node as ImportClause).parent;
-        case SyntaxKind.NamespaceImport:
-            return (node as NamespaceImport).parent.parent;
-        case SyntaxKind.ImportSpecifier:
-            return (node as ImportSpecifier).parent.parent.parent;
-        default:
-            return undefined;
-    }
-}
-function isFunctionExpressionOrArrowFunction(node: Expression) {
-    return isFunctionExpression(node) || isArrowFunction(node);
 }
 
 function getParentScope(declaration: VariableDeclaration | FunctionDeclaration):
