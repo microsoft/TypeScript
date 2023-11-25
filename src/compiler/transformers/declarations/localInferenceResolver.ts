@@ -108,8 +108,10 @@ enum LocalTypeInfoFlags {
     None = 0,
     Invalid = 1 << 1,
 }
-
-interface LocalInferenceResolver {
+/**
+ * @internal
+ */
+export interface LocalInferenceResolver {
     makeInvalidType(): Node;
     fromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined, sourceFile: SourceFile): TypeNode;
 }
