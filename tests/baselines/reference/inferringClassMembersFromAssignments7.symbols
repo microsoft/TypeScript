@@ -11,12 +11,12 @@ class C {
 
         self.x = 1
 >self.x : Symbol(C.x, Decl(inferringClassMembersFromAssignments7.js, 2, 23))
->self : Symbol(C.x, Decl(inferringClassMembersFromAssignments7.js, 2, 23))
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 2, 11))
 >x : Symbol(C.x, Decl(inferringClassMembersFromAssignments7.js, 2, 23))
 
         self.m = function() {
 >self.m : Symbol(C.m, Decl(inferringClassMembersFromAssignments7.js, 3, 18))
->self : Symbol(C.m, Decl(inferringClassMembersFromAssignments7.js, 3, 18))
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 2, 11))
 >m : Symbol(C.m, Decl(inferringClassMembersFromAssignments7.js, 3, 18))
 
             console.log(self.x)
@@ -37,7 +37,7 @@ class C {
 
         self.y = 2
 >self.y : Symbol(C.y, Decl(inferringClassMembersFromAssignments7.js, 9, 23))
->self : Symbol(C.y, Decl(inferringClassMembersFromAssignments7.js, 9, 23))
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 9, 11))
 >y : Symbol(C.y, Decl(inferringClassMembersFromAssignments7.js, 9, 23))
     }
 }

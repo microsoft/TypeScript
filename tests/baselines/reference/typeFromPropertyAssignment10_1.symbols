@@ -93,7 +93,7 @@ Outer.app.Application = (function () {
 
         me.view = new Outer.app.SomeView();
 >me.view : Symbol(Application.view, Decl(application.js, 7, 22))
->me : Symbol(Application.view, Decl(application.js, 7, 22))
+>me : Symbol(me, Decl(application.js, 7, 11))
 >view : Symbol(Application.view, Decl(application.js, 7, 22))
 >Outer.app.SomeView : Symbol(Outer.app.SomeView, Decl(someview.js, 0, 0))
 >Outer.app : Symbol(Outer.app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(someview.js, 6, 6), Decl(someview.js, 15, 6), Decl(application.js, 0, 6))
