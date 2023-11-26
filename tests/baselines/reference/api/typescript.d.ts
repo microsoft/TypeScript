@@ -149,7 +149,7 @@ declare namespace ts {
                 OpenExternalProjects = "openExternalProjects",
                 CloseExternalProject = "closeExternalProject",
                 UpdateOpen = "updateOpen",
-                GetOutliningSpans = "getOutliningSpans", // Full command name is different for backward compatibility purposes
+                GetOutliningSpans = "getOutliningSpans",
                 TodoComments = "todoComments",
                 Indentation = "indentation",
                 DocCommentTemplate = "docCommentTemplate",
@@ -4329,7 +4329,7 @@ declare namespace ts {
         GlobalKeyword = 162,
         BigIntKeyword = 163,
         OverrideKeyword = 164,
-        OfKeyword = 165, // LastKeyword and LastToken and LastContextualKeyword
+        OfKeyword = 165,
         QualifiedName = 166,
         ComputedPropertyName = 167,
         TypeParameter = 168,
@@ -4484,15 +4484,15 @@ declare namespace ts {
         /** @deprecated */ InputFiles = 315,
         JSDocTypeExpression = 316,
         JSDocNameReference = 317,
-        JSDocMemberName = 318, // C#p
-        JSDocAllType = 319, // The * type
-        JSDocUnknownType = 320, // The ? type
+        JSDocMemberName = 318,
+        JSDocAllType = 319,
+        JSDocUnknownType = 320,
         JSDocNullableType = 321,
         JSDocNonNullableType = 322,
         JSDocOptionalType = 323,
         JSDocFunctionType = 324,
         JSDocVariadicType = 325,
-        JSDocNamepathType = 326, // https://jsdoc.app/about-namepaths.html
+        JSDocNamepathType = 326,
         JSDoc = 327,
         /** @deprecated Use SyntaxKind.JSDoc */
         JSDocComment = 327,
@@ -4720,31 +4720,31 @@ declare namespace ts {
     type JSDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind;
     enum NodeFlags {
         None = 0,
-        Let = 1, // Variable declaration
-        Const = 2, // Variable declaration
-        Using = 4, // Variable declaration
-        AwaitUsing = 6, // Variable declaration (NOTE: on a single node these flags would otherwise be mutually exclusive)
-        NestedNamespace = 8, // Namespace declaration
-        Synthesized = 16, // Node was synthesized during transformation
-        Namespace = 32, // Namespace declaration
-        OptionalChain = 64, // Chained MemberExpression rooted to a pseudo-OptionalExpression
-        ExportContext = 128, // Export context (initialized by binding)
-        ContainsThis = 256, // Interface contains references to "this"
-        HasImplicitReturn = 512, // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn = 1024, // If function has explicit reachable return on one of codepaths (initialized by binding)
-        GlobalAugmentation = 2048, // Set if module declaration is an augmentation for the global scope
-        HasAsyncFunctions = 4096, // If the file has async functions (initialized by binding)
-        DisallowInContext = 8192, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext = 16384, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext = 32768, // If node was parsed as part of a decorator
-        AwaitContext = 65536, // If node was parsed in the 'await' context created when parsing an async function
-        DisallowConditionalTypesContext = 131072, // If node was parsed in a context where conditional types are not allowed
-        ThisNodeHasError = 262144, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile = 524288, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1048576, // If this node or any of its children had an error
+        Let = 1,
+        Const = 2,
+        Using = 4,
+        AwaitUsing = 6,
+        NestedNamespace = 8,
+        Synthesized = 16,
+        Namespace = 32,
+        OptionalChain = 64,
+        ExportContext = 128,
+        ContainsThis = 256,
+        HasImplicitReturn = 512,
+        HasExplicitReturn = 1024,
+        GlobalAugmentation = 2048,
+        HasAsyncFunctions = 4096,
+        DisallowInContext = 8192,
+        YieldContext = 16384,
+        DecoratorContext = 32768,
+        AwaitContext = 65536,
+        DisallowConditionalTypesContext = 131072,
+        ThisNodeHasError = 262144,
+        JavaScriptFile = 524288,
+        ThisNodeOrAnySubNodesHasError = 1048576,
         HasAggregatedChildData = 2097152,
-        JSDoc = 16777216, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-        JsonFile = 134217728, // If has '@deprecated' JSDoc tag
+        JSDoc = 16777216,
+        JsonFile = 134217728,
         BlockScoped = 7,
         Constant = 6,
         ReachabilityCheckFlags = 1536,
@@ -4754,25 +4754,25 @@ declare namespace ts {
     }
     enum ModifierFlags {
         None = 0,
-        Public = 1, // Property/Method
-        Private = 2, // Property/Method
-        Protected = 4, // Property/Method
-        Readonly = 8, // Property/Method
-        Override = 16, // Override method.
-        Export = 32, // Declarations
-        Abstract = 64, // Class/Method/ConstructSignature
-        Ambient = 128, // Declarations
-        Static = 256, // Property/Method
-        Accessor = 512, // Property
-        Async = 1024, // Property/Method/Function
-        Default = 2048, // Function/Class (export default declaration)
-        Const = 4096, // Const enum
-        In = 8192, // Contravariance modifier
-        Out = 16384, // Covariance modifier
-        Decorator = 32768, // Contains a decorator.
+        Public = 1,
+        Private = 2,
+        Protected = 4,
+        Readonly = 8,
+        Override = 16,
+        Export = 32,
+        Abstract = 64,
+        Ambient = 128,
+        Static = 256,
+        Accessor = 512,
+        Async = 1024,
+        Default = 2048,
+        Const = 4096,
+        In = 8192,
+        Out = 16384,
+        Decorator = 32768,
         Deprecated = 65536,
-        HasComputedJSDocModifiers = 268435456, // Indicates the computed modifier flags include modifiers from JSDoc.
-        HasComputedFlags = 536870912, // Modifier flags have been computed
+        HasComputedJSDocModifiers = 268435456,
+        HasComputedFlags = 536870912,
         AccessibilityModifier = 7,
         ParameterPropertyModifier = 31,
         NonPublicAccessibilityModifier = 6,
@@ -4944,10 +4944,10 @@ declare namespace ts {
     type ClassMemberModifier = AccessibilityModifier | ReadonlyKeyword | StaticKeyword | AccessorKeyword;
     type ModifiersArray = NodeArray<Modifier>;
     enum GeneratedIdentifierFlags {
-        None = 0, // Mask to extract the kind of identifier from its flags.
-        ReservedInNestedScopes = 8, // Reserve the generated name in nested scopes
-        Optimistic = 16, // First instance won't use '_#' if there's no conflict
-        FileLevel = 32, // Use only the file identifiers list and not generated names to search for conflicts
+        None = 0,
+        ReservedInNestedScopes = 8,
+        Optimistic = 16,
+        FileLevel = 32,
         AllowNameSubstitution = 64,
     }
     interface Identifier extends PrimaryExpression, Declaration, JSDocContainer, FlowContainer {
@@ -5513,11 +5513,11 @@ declare namespace ts {
         readonly kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
     enum TokenFlags {
-        None = 0, // e.g. `\u{10ffff}`
-        Scientific = 16, // e.g. `10e2`
-        Octal = 32, // e.g. `0777`
-        HexSpecifier = 64, // e.g. `0x00000000`
-        BinarySpecifier = 128, // e.g. `0b0110010000000000`
+        None = 0,
+        Scientific = 16,
+        Octal = 32,
+        HexSpecifier = 64,
+        BinarySpecifier = 128,
         OctalSpecifier = 256,
     }
     interface NumericLiteral extends LiteralExpression, Declaration {
@@ -6369,19 +6369,19 @@ declare namespace ts {
         readonly typeExpression: JSDocTypeExpression;
     }
     enum FlowFlags {
-        Unreachable = 1, // Unreachable code
-        Start = 2, // Start of flow graph
-        BranchLabel = 4, // Non-looping junction
-        LoopLabel = 8, // Looping junction
-        Assignment = 16, // Assignment
-        TrueCondition = 32, // Condition known to be true
-        FalseCondition = 64, // Condition known to be false
-        SwitchClause = 128, // Switch statement clause
-        ArrayMutation = 256, // Potential array mutation
-        Call = 512, // Potential assertion call
-        ReduceLabel = 1024, // Temporarily reduce antecedents of label
-        Referenced = 2048, // Referenced as antecedent once
-        Shared = 4096, // Referenced as antecedent more than once
+        Unreachable = 1,
+        Start = 2,
+        BranchLabel = 4,
+        LoopLabel = 8,
+        Assignment = 16,
+        TrueCondition = 32,
+        FalseCondition = 64,
+        SwitchClause = 128,
+        ArrayMutation = 256,
+        Call = 512,
+        ReduceLabel = 1024,
+        Referenced = 2048,
+        Shared = 4096,
         Label = 12,
         Condition = 96,
     }
@@ -6856,23 +6856,23 @@ declare namespace ts {
     }
     enum NodeBuilderFlags {
         None = 0,
-        NoTruncation = 1, // Don't truncate result
-        WriteArrayAsGenericType = 2, // Write Array<T> instead T[]
-        GenerateNamesForShadowedTypeParams = 4, // When a type parameter T is shadowing another T, generate a name for it so it can still be referenced
-        UseStructuralFallback = 8, // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
-        ForbidIndexedAccessSymbolReferences = 16, // Forbid references like `I["a"]["b"]` - print `typeof I.a<x>.b<y>` instead
-        WriteTypeArgumentsOfSignature = 32, // Write the type arguments instead of type parameters of the signature
-        UseFullyQualifiedType = 64, // Write out the fully qualified type name (eg. Module.Type, instead of Type)
-        UseOnlyExternalAliasing = 128, // Only use external aliases for a symbol
-        SuppressAnyReturnType = 256, // If the return type is any-like and can be elided, don't offer a return type.
+        NoTruncation = 1,
+        WriteArrayAsGenericType = 2,
+        GenerateNamesForShadowedTypeParams = 4,
+        UseStructuralFallback = 8,
+        ForbidIndexedAccessSymbolReferences = 16,
+        WriteTypeArgumentsOfSignature = 32,
+        UseFullyQualifiedType = 64,
+        UseOnlyExternalAliasing = 128,
+        SuppressAnyReturnType = 256,
         WriteTypeParametersInQualifiedName = 512,
-        MultilineObjectLiterals = 1024, // Always write object literals across multiple lines
-        WriteClassExpressionAsTypeLiteral = 2048, // Write class {} as { new(): {} } - used for mixin declaration emit
-        UseTypeOfFunction = 4096, // Build using typeof instead of function type literal
-        OmitParameterModifiers = 8192, // Omit modifiers on parameters
-        UseAliasDefinedOutsideCurrentScope = 16384, // Allow non-visible aliases
-        UseSingleQuotesForStringLiteralType = 268435456, // Use single quotes for string literal type
-        NoTypeReduction = 536870912, // Don't call getReducedType
+        MultilineObjectLiterals = 1024,
+        WriteClassExpressionAsTypeLiteral = 2048,
+        UseTypeOfFunction = 4096,
+        OmitParameterModifiers = 8192,
+        UseAliasDefinedOutsideCurrentScope = 16384,
+        UseSingleQuotesForStringLiteralType = 268435456,
+        NoTypeReduction = 536870912,
         OmitThisParameter = 33554432,
         AllowThisInObjectLiteral = 32768,
         AllowQualifiedNameInPlaceOfIdentifier = 65536,
@@ -6880,37 +6880,37 @@ declare namespace ts {
         AllowEmptyUnionOrIntersection = 262144,
         AllowEmptyTuple = 524288,
         AllowUniqueESSymbolType = 1048576,
-        AllowEmptyIndexInfoType = 2097152, // { [E.A]: 1 }
-        AllowNodeModulesRelativePaths = 67108864, // Skip looking up and printing an accessible symbol chain
+        AllowEmptyIndexInfoType = 2097152,
+        AllowNodeModulesRelativePaths = 67108864,
         IgnoreErrors = 70221824,
         InObjectTypeLiteral = 4194304,
-        InTypeAlias = 8388608, // Writing type in type alias declaration
+        InTypeAlias = 8388608,
         InInitialEntityName = 16777216,
     }
     enum TypeFormatFlags {
         None = 0,
-        NoTruncation = 1, // Don't truncate typeToString result
-        WriteArrayAsGenericType = 2, // Write Array<T> instead T[]
-        GenerateNamesForShadowedTypeParams = 4, // When a type parameter T is shadowing another T, generate a name for it so it can still be referenced
-        UseStructuralFallback = 8, // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
-        WriteTypeArgumentsOfSignature = 32, // Write the type arguments instead of type parameters of the signature
-        UseFullyQualifiedType = 64, // Write out the fully qualified type name (eg. Module.Type, instead of Type)
-        SuppressAnyReturnType = 256, // If the return type is any-like, don't offer a return type.
-        MultilineObjectLiterals = 1024, // Always print object literals across multiple lines (only used to map into node builder flags)
-        WriteClassExpressionAsTypeLiteral = 2048, // Write a type literal instead of (Anonymous class)
-        UseTypeOfFunction = 4096, // Write typeof instead of function type literal
-        OmitParameterModifiers = 8192, // Omit modifiers on parameters
-        UseAliasDefinedOutsideCurrentScope = 16384, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
-        UseSingleQuotesForStringLiteralType = 268435456, // Use single quotes for string literal type
-        NoTypeReduction = 536870912, // Don't call getReducedType
+        NoTruncation = 1,
+        WriteArrayAsGenericType = 2,
+        GenerateNamesForShadowedTypeParams = 4,
+        UseStructuralFallback = 8,
+        WriteTypeArgumentsOfSignature = 32,
+        UseFullyQualifiedType = 64,
+        SuppressAnyReturnType = 256,
+        MultilineObjectLiterals = 1024,
+        WriteClassExpressionAsTypeLiteral = 2048,
+        UseTypeOfFunction = 4096,
+        OmitParameterModifiers = 8192,
+        UseAliasDefinedOutsideCurrentScope = 16384,
+        UseSingleQuotesForStringLiteralType = 268435456,
+        NoTypeReduction = 536870912,
         OmitThisParameter = 33554432,
-        AllowUniqueESSymbolType = 1048576, // This is bit 20 to align with the same bit in `NodeBuilderFlags`
-        AddUndefined = 131072, // Add undefined to types of initialized, non-optional parameters
-        WriteArrowStyleSignature = 262144, // Write arrow style signature
-        InArrayType = 524288, // Writing an array element type
-        InElementType = 2097152, // Writing an array or union element type
-        InFirstTypeArgument = 4194304, // Writing first type argument of the instantiated type
-        InTypeAlias = 8388608, // Writing type in type alias declaration
+        AllowUniqueESSymbolType = 1048576,
+        AddUndefined = 131072,
+        WriteArrowStyleSignature = 262144,
+        InArrayType = 524288,
+        InElementType = 2097152,
+        InFirstTypeArgument = 4194304,
+        InTypeAlias = 8388608,
         NodeBuilderFlagsMask = 848330095,
     }
     enum SymbolFormatFlags {
@@ -6957,33 +6957,33 @@ declare namespace ts {
     type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | AssertsThisTypePredicate | AssertsIdentifierTypePredicate;
     enum SymbolFlags {
         None = 0,
-        FunctionScopedVariable = 1, // Variable (var) or parameter
-        BlockScopedVariable = 2, // A block-scoped variable (let or const)
-        Property = 4, // Property or enum member
-        EnumMember = 8, // Enum member
-        Function = 16, // Function
-        Class = 32, // Class
-        Interface = 64, // Interface
-        ConstEnum = 128, // Const enum
-        RegularEnum = 256, // Enum
-        ValueModule = 512, // Instantiated module
-        NamespaceModule = 1024, // Uninstantiated module
-        TypeLiteral = 2048, // Type Literal or mapped type
-        ObjectLiteral = 4096, // Object Literal
-        Method = 8192, // Method
-        Constructor = 16384, // Constructor
-        GetAccessor = 32768, // Get accessor
-        SetAccessor = 65536, // Set accessor
-        Signature = 131072, // Call, construct, or index signature
-        TypeParameter = 262144, // Type parameter
-        TypeAlias = 524288, // Type alias
-        ExportValue = 1048576, // Exported value marker (see comment in declareModuleMember in binder)
-        Alias = 2097152, // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
-        Prototype = 4194304, // Prototype property (no source representation)
-        ExportStar = 8388608, // Export * declaration
-        Optional = 16777216, // Optional property
-        Transient = 33554432, // Transient symbol (created during type check)
-        Assignment = 67108864, // Assignment treated as declaration (eg `this.prop = 1`)
+        FunctionScopedVariable = 1,
+        BlockScopedVariable = 2,
+        Property = 4,
+        EnumMember = 8,
+        Function = 16,
+        Class = 32,
+        Interface = 64,
+        ConstEnum = 128,
+        RegularEnum = 256,
+        ValueModule = 512,
+        NamespaceModule = 1024,
+        TypeLiteral = 2048,
+        ObjectLiteral = 4096,
+        Method = 8192,
+        Constructor = 16384,
+        GetAccessor = 32768,
+        SetAccessor = 65536,
+        Signature = 131072,
+        TypeParameter = 262144,
+        TypeAlias = 524288,
+        ExportValue = 1048576,
+        Alias = 2097152,
+        Prototype = 4194304,
+        ExportStar = 8388608,
+        Optional = 16777216,
+        Transient = 33554432,
+        Assignment = 67108864,
         ModuleExports = 134217728,
         Enum = 384,
         Variable = 3,
@@ -6998,10 +6998,10 @@ declare namespace ts {
         PropertyExcludes = 0,
         EnumMemberExcludes = 900095,
         FunctionExcludes = 110991,
-        ClassExcludes = 899503, // class-interface mergability done in checker.ts
+        ClassExcludes = 899503,
         InterfaceExcludes = 788872,
-        RegularEnumExcludes = 899327, // regular enums merge only with regular enums and modules
-        ConstEnumExcludes = 899967, // const enums merge only with const enums
+        RegularEnumExcludes = 899327,
+        ConstEnumExcludes = 899967,
         ValueModuleExcludes = 110735,
         NamespaceModuleExcludes = 0,
         MethodExcludes = 103359,
@@ -7036,22 +7036,22 @@ declare namespace ts {
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
     }
     enum InternalSymbolName {
-        Call = "__call", // Call signatures
-        Constructor = "__constructor", // Constructor implementations
-        New = "__new", // Constructor signatures
-        Index = "__index", // Index signatures
-        ExportStar = "__export", // Module export * declarations
-        Global = "__global", // Global self-reference
-        Missing = "__missing", // Indicates missing symbol
-        Type = "__type", // Anonymous type literal symbol
-        Object = "__object", // Anonymous object literal declaration
-        JSXAttributes = "__jsxAttributes", // Anonymous JSX attributes object literal declaration
-        Class = "__class", // Unnamed class expression
-        Function = "__function", // Unnamed function expression
-        Computed = "__computed", // Computed property name declaration with dynamic name
-        Resolving = "__resolving__", // Indicator symbol used to mark partially resolved type aliases
-        ExportEquals = "export=", // Export assignment symbol
-        Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
+        Call = "__call",
+        Constructor = "__constructor",
+        New = "__new",
+        Index = "__index",
+        ExportStar = "__export",
+        Global = "__global",
+        Missing = "__missing",
+        Type = "__type",
+        Object = "__object",
+        JSXAttributes = "__jsxAttributes",
+        Class = "__class",
+        Function = "__function",
+        Computed = "__computed",
+        Resolving = "__resolving__",
+        ExportEquals = "export=",
+        Default = "default",
         This = "this",
         InstantiationExpression = "__instantiationExpression",
     }
@@ -7083,29 +7083,29 @@ declare namespace ts {
         String = 4,
         Number = 8,
         Boolean = 16,
-        Enum = 32, // Numeric computed enum member value
+        Enum = 32,
         BigInt = 64,
         StringLiteral = 128,
         NumberLiteral = 256,
         BooleanLiteral = 512,
-        EnumLiteral = 1024, // Always combined with StringLiteral, NumberLiteral, or Union
+        EnumLiteral = 1024,
         BigIntLiteral = 2048,
-        ESSymbol = 4096, // Type of symbol primitive introduced in ES6
-        UniqueESSymbol = 8192, // unique symbol
+        ESSymbol = 4096,
+        UniqueESSymbol = 8192,
         Void = 16384,
         Undefined = 32768,
         Null = 65536,
-        Never = 131072, // Never type
-        TypeParameter = 262144, // Type parameter
-        Object = 524288, // Object type
-        Union = 1048576, // Union (T | U)
-        Intersection = 2097152, // Intersection (T & U)
-        Index = 4194304, // keyof T
-        IndexedAccess = 8388608, // T[K]
-        Conditional = 16777216, // T extends U ? X : Y
-        Substitution = 33554432, // Type parameter substitution
-        NonPrimitive = 67108864, // intrinsic object type
-        TemplateLiteral = 134217728, // Template literal type
+        Never = 131072,
+        TypeParameter = 262144,
+        Object = 524288,
+        Union = 1048576,
+        Intersection = 2097152,
+        Index = 4194304,
+        IndexedAccess = 8388608,
+        Conditional = 16777216,
+        Substitution = 33554432,
+        NonPrimitive = 67108864,
+        TemplateLiteral = 134217728,
         StringMapping = 268435456,
         Literal = 2944,
         Unit = 109472,
@@ -7185,24 +7185,24 @@ declare namespace ts {
     }
     enum ObjectFlags {
         None = 0,
-        Class = 1, // Class
-        Interface = 2, // Interface
-        Reference = 4, // Generic type reference
-        Tuple = 8, // Synthesized generic tuple type
-        Anonymous = 16, // Anonymous
-        Mapped = 32, // Mapped
-        Instantiated = 64, // Instantiated anonymous or mapped type
-        ObjectLiteral = 128, // Originates in an object literal
-        EvolvingArray = 256, // Evolving array type
-        ObjectLiteralPatternWithComputedProperties = 512, // Object literal pattern with computed properties
-        ReverseMapped = 1024, // Object contains a property from a reverse-mapped type
-        JsxAttributes = 2048, // Jsx attributes type
-        JSLiteral = 4096, // Object type declared in JS - disables errors on read/write of nonexisting members
-        FreshLiteral = 8192, // Fresh object literal
-        ArrayLiteral = 16384, // Type could contain a type variable
+        Class = 1,
+        Interface = 2,
+        Reference = 4,
+        Tuple = 8,
+        Anonymous = 16,
+        Mapped = 32,
+        Instantiated = 64,
+        ObjectLiteral = 128,
+        EvolvingArray = 256,
+        ObjectLiteralPatternWithComputedProperties = 512,
+        ReverseMapped = 1024,
+        JsxAttributes = 2048,
+        JSLiteral = 4096,
+        FreshLiteral = 8192,
+        ArrayLiteral = 16384,
         ClassOrInterface = 3,
-        ContainsSpread = 2097152, // Object literal contains spread operation
-        ObjectRestType = 4194304, // Originates in object rest declaration
+        ContainsSpread = 2097152,
+        ObjectRestType = 4194304,
         InstantiationExpressionType = 8388608,
     }
     interface ObjectType extends Type {
@@ -7244,10 +7244,10 @@ declare namespace ts {
     interface GenericType extends InterfaceType, TypeReference {
     }
     enum ElementFlags {
-        Required = 1, // T
-        Optional = 2, // T?
-        Rest = 4, // ...T[]
-        Variadic = 8, // ...T
+        Required = 1,
+        Optional = 2,
+        Rest = 4,
+        Variadic = 8,
         Fixed = 3,
         Variable = 12,
         NonRequired = 14,
@@ -7357,19 +7357,19 @@ declare namespace ts {
     }
     enum InferencePriority {
         None = 0,
-        NakedTypeVariable = 1, // Naked type variable in union or intersection type
-        SpeculativeTuple = 2, // Speculative tuple inference
-        SubstituteSource = 4, // Source of inference originated within a substitution type's substitute
-        HomomorphicMappedType = 8, // Reverse inference for homomorphic mapped type
-        PartialHomomorphicMappedType = 16, // Partial reverse inference for homomorphic mapped type
-        MappedTypeConstraint = 32, // Reverse inference for mapped type
-        ContravariantConditional = 64, // Conditional type in contravariant position
-        ReturnType = 128, // Inference made from return type of generic function
-        LiteralKeyof = 256, // Inference made from a string literal to a keyof T
-        NoConstraints = 512, // Don't infer from constraints of instantiable types
-        AlwaysStrict = 1024, // Always use strict rules for contravariant inferences
-        MaxValue = 2048, // Seed for inference priority tracking
-        PriorityImpliesCombination = 416, // These priorities imply that the resulting type should be a combination of all candidates
+        NakedTypeVariable = 1,
+        SpeculativeTuple = 2,
+        SubstituteSource = 4,
+        HomomorphicMappedType = 8,
+        PartialHomomorphicMappedType = 16,
+        MappedTypeConstraint = 32,
+        ContravariantConditional = 64,
+        ReturnType = 128,
+        LiteralKeyof = 256,
+        NoConstraints = 512,
+        AlwaysStrict = 1024,
+        MaxValue = 2048,
+        PriorityImpliesCombination = 416,
         Circularity = -1,
     }
     interface FileExtensionInfo {
@@ -7433,7 +7433,7 @@ declare namespace ts {
         NodeJs = 2,
         Node10 = 2,
         Node16 = 3,
-        NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+        NodeNext = 99,
         Bundler = 100,
     }
     enum ModuleDetectionKind {
@@ -7843,33 +7843,33 @@ declare namespace ts {
     }
     enum EmitFlags {
         None = 0,
-        SingleLine = 1, // The contents of this node should be emitted on a single line.
+        SingleLine = 1,
         MultiLine = 2,
-        AdviseOnEmitNode = 4, // The printer should invoke the onEmitNode callback when printing this node.
-        NoSubstitution = 8, // Disables further substitution of an expression.
-        CapturesThis = 16, // The function captures a lexical `this`
-        NoLeadingSourceMap = 32, // Do not emit a leading source map location for this node.
-        NoTrailingSourceMap = 64, // Do not emit a trailing source map location for this node.
-        NoSourceMap = 96, // Do not emit a source map location for this node.
-        NoNestedSourceMaps = 128, // Do not emit source map locations for children of this node.
-        NoTokenLeadingSourceMaps = 256, // Do not emit leading source map location for token nodes.
-        NoTokenTrailingSourceMaps = 512, // Do not emit trailing source map location for token nodes.
-        NoTokenSourceMaps = 768, // Do not emit source map locations for tokens of this node.
-        NoLeadingComments = 1024, // Do not emit leading comments for this node.
-        NoTrailingComments = 2048, // Do not emit trailing comments for this node.
-        NoComments = 3072, // Do not emit comments for this node.
+        AdviseOnEmitNode = 4,
+        NoSubstitution = 8,
+        CapturesThis = 16,
+        NoLeadingSourceMap = 32,
+        NoTrailingSourceMap = 64,
+        NoSourceMap = 96,
+        NoNestedSourceMaps = 128,
+        NoTokenLeadingSourceMaps = 256,
+        NoTokenTrailingSourceMaps = 512,
+        NoTokenSourceMaps = 768,
+        NoLeadingComments = 1024,
+        NoTrailingComments = 2048,
+        NoComments = 3072,
         NoNestedComments = 4096,
-        HelperName = 8192, // The Identifier refers to an *unscoped* emit helper (one that is emitted at the top of the file)
-        ExportName = 16384, // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        LocalName = 32768, // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        InternalName = 65536, // The name is internal to an ES5 class body function.
-        Indented = 131072, // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        NoIndentation = 262144, // Do not indent the node.
+        HelperName = 8192,
+        ExportName = 16384,
+        LocalName = 32768,
+        InternalName = 65536,
+        Indented = 131072,
+        NoIndentation = 262144,
         AsyncFunctionBody = 524288,
-        ReuseTempVariableScope = 1048576, // Reuse the existing temp variable scope during emit.
-        CustomPrologue = 2097152, // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-        NoHoisting = 4194304, // Do not hoist this declaration in --module system
-        Iterator = 8388608, // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+        ReuseTempVariableScope = 1048576,
+        CustomPrologue = 2097152,
+        NoHoisting = 4194304,
+        Iterator = 8388608,
         NoAsciiEscaping = 16777216,
     }
     interface EmitHelperBase {
@@ -7889,12 +7889,12 @@ declare namespace ts {
     type EmitHelper = ScopedEmitHelper | UnscopedEmitHelper;
     type EmitHelperUniqueNameCallback = (name: string) => string;
     enum EmitHint {
-        SourceFile = 0, // Emitting a SourceFile
-        Expression = 1, // Emitting an Expression
-        IdentifierName = 2, // Emitting an IdentifierName
-        MappedTypeParameter = 3, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
-        Unspecified = 4, // Emitting an otherwise unspecified node
-        EmbeddedStatement = 5, // Emitting an embedded statement
+        SourceFile = 0,
+        Expression = 1,
+        IdentifierName = 2,
+        MappedTypeParameter = 3,
+        Unspecified = 4,
+        EmbeddedStatement = 5,
         JsxAttributeValue = 6,
     }
     enum OuterExpressionKinds {
@@ -8634,34 +8634,34 @@ declare namespace ts {
     }
     enum ListFormat {
         None = 0,
-        SingleLine = 0, // Prints the list on a single line (default).
-        MultiLine = 1, // Prints the list on multiple lines.
-        PreserveLines = 2, // Prints the list using line preservation if possible.
+        SingleLine = 0,
+        MultiLine = 1,
+        PreserveLines = 2,
         LinesMask = 3,
-        NotDelimited = 0, // There is no delimiter between list items (default).
-        BarDelimited = 4, // Each list item is space-and-bar (" |") delimited.
-        AmpersandDelimited = 8, // Each list item is space-and-ampersand (" &") delimited.
-        CommaDelimited = 16, // Each list item is comma (",") delimited.
-        AsteriskDelimited = 32, // Each list item is asterisk ("\n *") delimited, used with JSDoc.
+        NotDelimited = 0,
+        BarDelimited = 4,
+        AmpersandDelimited = 8,
+        CommaDelimited = 16,
+        AsteriskDelimited = 32,
         DelimitersMask = 60,
-        AllowTrailingComma = 64, // Write a trailing comma (",") if present.
-        Indented = 128, // The list should be indented.
-        SpaceBetweenBraces = 256, // Inserts a space after the opening brace and before the closing brace.
-        SpaceBetweenSiblings = 512, // Inserts a space between each sibling node.
-        Braces = 1024, // The list is surrounded by "{" and "}".
-        Parenthesis = 2048, // The list is surrounded by "(" and ")".
-        AngleBrackets = 4096, // The list is surrounded by "<" and ">".
-        SquareBrackets = 8192, // The list is surrounded by "[" and "]".
+        AllowTrailingComma = 64,
+        Indented = 128,
+        SpaceBetweenBraces = 256,
+        SpaceBetweenSiblings = 512,
+        Braces = 1024,
+        Parenthesis = 2048,
+        AngleBrackets = 4096,
+        SquareBrackets = 8192,
         BracketsMask = 15360,
-        OptionalIfUndefined = 16384, // Do not emit brackets if the list is undefined.
-        OptionalIfEmpty = 32768, // Do not emit brackets if the list is empty.
+        OptionalIfUndefined = 16384,
+        OptionalIfEmpty = 32768,
         Optional = 49152,
-        PreferNewLine = 65536, // Prefer adding a LineTerminator between synthesized nodes.
-        NoTrailingNewLine = 131072, // Do not emit a trailing NewLine for a MultiLine list.
-        NoInterveningComments = 262144, // Do not emit comments between each node
-        NoSpaceIfEmpty = 524288, // If the literal is empty, do not add spaces between braces.
+        PreferNewLine = 65536,
+        NoTrailingNewLine = 131072,
+        NoInterveningComments = 262144,
+        NoSpaceIfEmpty = 524288,
         SingleElement = 1048576,
-        SpaceAfterList = 2097152, // Add space after list
+        SpaceAfterList = 2097152,
         Modifiers = 2359808,
         HeritageClauses = 512,
         SingleLineTypeLiteralMembers = 768,
