@@ -801,7 +801,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 case SyntaxKind.TemplateLiteralType:
                     Debug.assertNode(node, isTemplateLiteralTypeNode);
                     visitForDisplayParts(node.head);
-                    visitDisplayPartList(node.templateSpans, "");
+                    node.templateSpans.forEach(visitForDisplayParts);
                     break;
                 case SyntaxKind.TemplateHead:
                     Debug.assertNode(node, isTemplateHead);

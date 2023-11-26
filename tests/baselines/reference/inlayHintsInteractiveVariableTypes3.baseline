@@ -17,9 +17,6 @@ const lit1 = getTemplateLiteral1();
       "text": "},${"
     },
     {
-      "text": ""
-    },
-    {
       "text": "string"
     },
     {
@@ -47,9 +44,6 @@ const lit2 = getTemplateLiteral2();
     },
     {
       "text": "},${"
-    },
-    {
-      "text": ""
     },
     {
       "text": "string"
@@ -81,9 +75,6 @@ const lit3 = getTemplateLiteral3();
       "text": "}\\${,$${"
     },
     {
-      "text": ""
-    },
-    {
       "text": "string"
     },
     {
@@ -111,9 +102,6 @@ const lit4 = getTemplateLiteral4();
     },
     {
       "text": "}\\`,${"
-    },
-    {
-      "text": ""
     },
     {
       "text": "string"
