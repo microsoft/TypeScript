@@ -1,0 +1,113 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment32.ts] ////
+
+//// [expando.ts]
+function ExpandoMerge(n: number) {
+    return n;
+}
+ExpandoMerge.p1 = 111
+ExpandoMerge.m = function(n: number) {
+    return n + 1;
+}
+ExpandoMerge.p4 = 44444;
+ExpandoMerge.p5 = 555555;
+ExpandoMerge.p6 = 66666;
+ExpandoMerge.p7 = 777777;
+ExpandoMerge.p8 = false; // type error
+ExpandoMerge.p9 = false; // type error
+var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) + ExpandoMerge(1001);
+
+//// [ns.ts]
+namespace ExpandoMerge {
+    export var p3 = 333;
+    export var p4 = 4;
+    export var p5 = 5;
+    export let p6 = 6;
+    export let p7 = 7;
+    export var p8 = 6;
+    export let p9 = 7;
+}
+namespace ExpandoMerge {
+    export var p2 = 222;
+}
+
+
+/// [Declarations] ////
+
+
+
+//// [expando.d.ts]
+declare function ExpandoMerge(n: number): invalid;
+declare var n: invalid;
+
+//// [ns.d.ts]
+declare namespace ExpandoMerge {
+    var p3: number;
+    var p4: number;
+    var p5: number;
+    let p6: number;
+    let p7: number;
+    var p8: number;
+    let p9: number;
+}
+declare namespace ExpandoMerge {
+    var p2: number;
+}
+
+/// [Errors] ////
+
+expando.ts(1,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+expando.ts(4,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+expando.ts(5,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+expando.ts(12,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
+expando.ts(13,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
+expando.ts(14,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ns.ts(1,11): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+ns.ts(10,11): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+
+
+==== expando.ts (6 errors) ====
+    function ExpandoMerge(n: number) {
+             ~~~~~~~~~~~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+        return n;
+    }
+    ExpandoMerge.p1 = 111
+    ~~~~~~~~~~~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+    ExpandoMerge.m = function(n: number) {
+    ~~~~~~~~~~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+        return n + 1;
+    }
+    ExpandoMerge.p4 = 44444;
+    ExpandoMerge.p5 = 555555;
+    ExpandoMerge.p6 = 66666;
+    ExpandoMerge.p7 = 777777;
+    ExpandoMerge.p8 = false; // type error
+    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
+    ExpandoMerge.p9 = false; // type error
+    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
+    var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) + ExpandoMerge(1001);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+    
+==== ns.ts (2 errors) ====
+    namespace ExpandoMerge {
+              ~~~~~~~~~~~~
+!!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+        export var p3 = 333;
+        export var p4 = 4;
+        export var p5 = 5;
+        export let p6 = 6;
+        export let p7 = 7;
+        export var p8 = 6;
+        export let p9 = 7;
+    }
+    namespace ExpandoMerge {
+              ~~~~~~~~~~~~
+!!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+        export var p2 = 222;
+    }
+    

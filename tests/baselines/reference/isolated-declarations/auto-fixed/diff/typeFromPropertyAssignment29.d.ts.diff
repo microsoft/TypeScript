@@ -46,7 +46,7 @@
      export {};
  }
  declare var ExpandoExpr2: (n: number) => string;
-@@ -55,33 +42,36 @@
+@@ -55,37 +42,43 @@
  declare class ExpandoClass {
      n: number;
  }
@@ -61,10 +61,11 @@
  //# sourceMappingURL=typeFromPropertyAssignment29.d.ts.map
  /// [Errors] ////
  
-+typeFromPropertyAssignment29.ts(1,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+typeFromPropertyAssignment29.ts(41,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+typeFromPropertyAssignment29.ts(53,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+typeFromPropertyAssignment29.ts(66,14): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++typeFromPropertyAssignment29.ts(4,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++typeFromPropertyAssignment29.ts(5,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++typeFromPropertyAssignment29.ts(51,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++typeFromPropertyAssignment29.ts(56,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++typeFromPropertyAssignment29.ts(67,5): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
  typeFromPropertyAssignment29.ts(77,14): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
  typeFromPropertyAssignment29.ts(78,14): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
  typeFromPropertyAssignment29.ts(81,30): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
@@ -81,48 +82,50 @@
  
  
 -==== typeFromPropertyAssignment29.ts (12 errors) ====
-+==== typeFromPropertyAssignment29.ts (17 errors) ====
++==== typeFromPropertyAssignment29.ts (18 errors) ====
      function ExpandoDecl(n: number): string {
-+             ~~~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
          return n.toString();
      }
      ExpandoDecl.prop = 2
-     ExpandoDecl.m = function(n: number) {
-@@ -120,8 +110,10 @@
-     
-     }
-     
-     function ExpandoNested(n: number): {
-+             ~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~
 +!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-         (m: number): number;
-         total: number;
-     } {
-         const nested = function (m: number) {
-@@ -132,8 +124,10 @@
+     ExpandoDecl.m = function(n: number) {
++    ~~~~~~~~~~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+         return n + 1;
+     }
+     var n: number = ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length
+     
+@@ -130,13 +123,17 @@
+         nested.total = n + 1_000_000;
+         return nested;
      }
      ExpandoNested.also = -1;
++    ~~~~~~~~~~~~~~~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
      
      function ExpandoMerge(n: number): number {
-+             ~~~~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
          return n * 100;
      }
      ExpandoMerge.p1 = 111
++    ~~~~~~~~~~~~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
      namespace ExpandoMerge {
-@@ -145,8 +139,10 @@
-     var n: number = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
+         export var p2 = 222;
+     }
+     namespace ExpandoMerge {
+@@ -146,8 +143,10 @@
      
      namespace Ns {
          function ExpandoNamespace(): void {}
-+                 ~~~~~~~~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
          ExpandoNamespace.p6 = 42;
++        ~~~~~~~~~~~~~~~~~~~
++!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
          export function foo(): typeof ExpandoNamespace {
              return ExpandoNamespace;
          }
-@@ -189,8 +185,10 @@
+     }
+@@ -189,8 +188,10 @@
  !!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
      
      // Class expressions shouldn't work in typescript either

@@ -23,25 +23,31 @@ declare function baz(): void;
 //# sourceMappingURL=declarationEmitFunctionKeywordProp.d.ts.map
 /// [Errors] ////
 
-declarationEmitFunctionKeywordProp.ts(1,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-declarationEmitFunctionKeywordProp.ts(4,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-declarationEmitFunctionKeywordProp.ts(8,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+declarationEmitFunctionKeywordProp.ts(2,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+declarationEmitFunctionKeywordProp.ts(5,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+declarationEmitFunctionKeywordProp.ts(6,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+declarationEmitFunctionKeywordProp.ts(9,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+declarationEmitFunctionKeywordProp.ts(10,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 
 
-==== declarationEmitFunctionKeywordProp.ts (3 errors) ====
+==== declarationEmitFunctionKeywordProp.ts (5 errors) ====
     function foo(): void {}
-             ~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     foo.null = true;
+    ~~~~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     
     function bar(): void {}
-             ~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     bar.async = true;
+    ~~~~~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     bar.normal = false;
+    ~~~~~~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     
     function baz(): void {}
-             ~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     baz.class = true;
+    ~~~~~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     baz.normal = false;
+    ~~~~~~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
