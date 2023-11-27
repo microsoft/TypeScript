@@ -9,12 +9,13 @@ import {
     EventEmitter,
 } from "events";
 import fs from "fs";
-import _glob from "glob";
+import {
+    glob,
+} from "glob";
 import {
     task,
 } from "hereby";
 import path from "path";
-import util from "util";
 
 import {
     localizationDirectories,
@@ -40,8 +41,6 @@ import {
     readJson,
     rimraf,
 } from "./scripts/build/utils.mjs";
-
-const glob = util.promisify(_glob);
 
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
