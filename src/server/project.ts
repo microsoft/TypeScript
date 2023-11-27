@@ -144,7 +144,7 @@ import {
     ModuleImportResult,
     Msg,
     NormalizedPath,
-    PackageJsonWacher,
+    PackageJsonWatcher,
     projectContainsInfoDirectly,
     ProjectOptions,
     ProjectReferenceProjectLoadKind,
@@ -399,7 +399,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     originalConfiguredProjects: Set<NormalizedPath> | undefined;
 
     /** @internal */
-    packageJsonWatches: Set<PackageJsonWacher> | undefined;
+    packageJsonWatches: Set<PackageJsonWatcher> | undefined;
 
     /** @internal */
     noDtsResolutionProject?: AuxiliaryProject | undefined;

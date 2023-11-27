@@ -812,13 +812,13 @@ interface NodeModulesWatcher extends FileWatcher {
 }
 
 /** @internal */
-export interface PackageJsonWacher extends FileWatcher {
+export interface PackageJsonWatcher extends FileWatcher {
     projects: Set<Project | WildcardWatcher>;
 }
 
 /** @internal */
 export interface WildcardWatcher extends FileWatcher {
-    packageJsonWatches: Set<PackageJsonWacher> | undefined;
+    packageJsonWatches: Set<PackageJsonWatcher> | undefined;
 }
 
 function getDetailWatchInfo(watchType: WatchType, project: Project | NormalizedPath | undefined) {
@@ -1128,7 +1128,7 @@ export class ProjectService {
     /** @internal */
     readonly packageJsonCache: PackageJsonCache;
     /** @internal */
-    private packageJsonFilesMap: Map<Path, PackageJsonWacher> | undefined;
+    private packageJsonFilesMap: Map<Path, PackageJsonWatcher> | undefined;
     /** @internal */
     private incompleteCompletionsCache: IncompleteCompletionsCache | undefined;
     /** @internal */
@@ -4679,7 +4679,7 @@ export class ProjectService {
     /** @internal */
     private watchPackageJsonFile(file: string, path: Path, project: Project | WildcardWatcher) {
         Debug.assert(project !== undefined);
-        let result: PackageJsonWacher = (this.packageJsonFilesMap ??= new Map()).get(path);
+        let result = (this.packageJsonFilesMap ??= new Map()).get(path);
         if (!result) {
             // this.invalidateProjectPackageJson(path);
             let watcher: FileWatcher | undefined = this.watchFactory.watchFile(
@@ -4720,7 +4720,7 @@ export class ProjectService {
     }
 
     /** @internal */
-    private onPackageJsonChange(result: PackageJsonWacher) {
+    private onPackageJsonChange(result: PackageJsonWatcher) {
         result.projects.forEach(project => (project as Project).onPackageJsonChange?.());
     }
 
