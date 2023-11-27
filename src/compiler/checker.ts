@@ -3147,7 +3147,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else if (location.kind === SyntaxKind.ConditionalType) {
                         // A type parameter declared using 'infer T' in a conditional type is visible only in
                         // the true branch of the conditional type.
-                        useResult = lastLocation === (location as ConditionalTypeNode).trueType;
+                        useResult = lastLocation === location.trueType;
                     }
 
                     if (useResult) {
