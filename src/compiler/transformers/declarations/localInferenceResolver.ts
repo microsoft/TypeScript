@@ -1,5 +1,6 @@
 import {
     getCommentRange,
+    getMemberKeyFromElement,
     setCommentRange,
 } from "../../_namespaces/ts";
 import {
@@ -20,7 +21,6 @@ import {
     isParameter,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
-    isPropertyAccessExpression,
     isPropertyAssignment,
     isPropertyDeclaration,
     isSetAccessorDeclaration,
@@ -38,9 +38,6 @@ import {
     setTextRange,
 } from "../../factory/utilitiesPublic";
 import {
-    isIdentifierText,
-} from "../../scanner";
-import {
     nullTransformationContext,
 } from "../../transformer";
 import {
@@ -51,16 +48,13 @@ import {
     DiagnosticMessage,
     EntityNameOrEntityNameExpression,
     ExportAssignment,
-    Expression,
     FunctionExpression,
     GetAccessorDeclaration,
     HasInferredType,
     Identifier,
     KeywordTypeSyntaxKind,
-    LanguageVariant,
     LiteralExpression,
     MethodDeclaration,
-    MethodSignature,
     ModifierFlags,
     Node,
     NodeArray,
@@ -69,9 +63,7 @@ import {
     ParameterDeclaration,
     ParenthesizedExpression,
     PrefixUnaryExpression,
-    PropertyAssignment,
     PropertyName,
-    PropertySignature,
     SetAccessorDeclaration,
     SourceFile,
     SyntaxKind,
@@ -84,14 +76,19 @@ import {
 } from "../../types";
 import {
     createDiagnosticForNode,
+    createPropertyNameNodeForIdentifierOrLiteral,
+    getEmitScriptTarget,
     hasSyntacticModifier,
     isEntityNameExpression,
     isOptionalDeclaration,
+    isStringDoubleQuoted,
 } from "../../utilities";
 import {
     isConstTypeReference,
     isPropertyName,
+    isStringLiteralLike,
     isTypeNode,
+    unescapeLeadingUnderscores,
 } from "../../utilitiesPublic";
 import {
     visitEachChild,
@@ -187,13 +184,13 @@ export function createLocalInferenceResolver({
     }
 
     function getAccessorInfo(parent: ClassExpression | ObjectLiteralExpression, knownAccessor: SetAccessorDeclaration | GetAccessorDeclaration) {
-        const nameKey = getMemberKey(knownAccessor);
+        const nameKey = getMemberKeyFromElement(knownAccessor);
         const members = isClassExpression(parent) ? parent.members : parent.properties;
         let getAccessor, setAccessor;
         let otherAccessorIdx = -1, knownAccessorIdx = -1;
         for (let i = 0; i < members.length; ++i) {
             const member = members[i];
-            if (isGetAccessorDeclaration(member) && getMemberKey(member) === nameKey) {
+            if (isGetAccessorDeclaration(member) && getMemberKeyFromElement(member) === nameKey) {
                 getAccessor = member;
                 if (knownAccessor !== member) {
                     otherAccessorIdx = i;
@@ -202,7 +199,7 @@ export function createLocalInferenceResolver({
                     knownAccessorIdx = i;
                 }
             }
-            else if (isSetAccessorDeclaration(member) && getMemberKey(member) === nameKey) {
+            else if (isSetAccessorDeclaration(member) && getMemberKeyFromElement(member) === nameKey) {
                 setAccessor = member;
                 if (knownAccessor !== member) {
                     otherAccessorIdx = i;
@@ -412,9 +409,9 @@ export function createLocalInferenceResolver({
                 }
             }
 
-            const nameKey = getMemberKey(prop);
+            const nameKey = getMemberKeyFromElement(prop);
             const existingMember = nameKey ? members.get(nameKey) : undefined;
-            const name = simplifyComputedPropertyName(prop.name, existingMember?.name) ??
+            const name = simplifyComputedPropertyName(prop.name, existingMember?.name, isMethodDeclaration(prop)) ??
                 deepClone(visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!);
 
             let newProp;
@@ -588,28 +585,26 @@ export function createLocalInferenceResolver({
         return regular(deepClone(visitedType), owner);
     }
 
-    function simplifyComputedPropertyName(name: PropertyName, existingName?: PropertyName) {
-        let numericValue;
-        function basicStringNumberLiterals(name: PropertyName | Expression) {
-            if (isStringLiteral(name)) {
-                if (isIdentifierText(name.text, options.target, LanguageVariant.Standard)) {
-                    return factory.createIdentifier(name.text);
-                }
-                return existingName && isNumericLiteral(existingName) ? existingName : name;
-            }
-            else if (isNumericLiteral(name)) {
-                numericValue = +name.text;
-            }
+    function simplifyComputedPropertyName(name: PropertyName, _existingName: PropertyName | undefined, isMethod: boolean) {
+        let nameText;
+        let stringNamed = false;
+        let singleQuote = false;
+        if (isIdentifier(name)) {
+            nameText = unescapeLeadingUnderscores(name.escapedText);
         }
-        const result = basicStringNumberLiterals(name);
-        if (result) {
-            return result;
+        if (isNumericLiteral(name)) {
+            nameText = name.text;
+        }
+        else if (isStringLiteralLike(name)) {
+            stringNamed = true;
+            singleQuote = !isStringDoubleQuoted(name, currentSourceFile);
+            nameText = name.text;
         }
         else if (isComputedPropertyName(name)) {
             const expression = name.expression;
-            const result = basicStringNumberLiterals(expression);
-            if (result) {
-                return result;
+            if (isStringLiteralLike(expression) || isNumericLiteral(expression)) {
+                stringNamed = isStringLiteralLike(expression);
+                nameText = expression.text;
             }
             else if (
                 isPrefixUnaryExpression(expression)
@@ -619,75 +614,21 @@ export function createLocalInferenceResolver({
                     return name;
                 }
                 else if (expression.operator === SyntaxKind.PlusToken) {
-                    numericValue = +expression.operand.text;
+                    nameText = expression.operand.text;
                 }
             }
         }
-        if (numericValue === undefined) {
+        if (nameText === undefined) {
             return undefined;
         }
 
-        if (numericValue >= 0) {
-            return factory.createNumericLiteral(numericValue);
-        }
-        else {
-            return factory.createStringLiteral(numericValue.toString());
-        }
-    }
-    function getMemberKey(member: PropertyAssignment | MethodDeclaration | MethodSignature | PropertySignature | GetAccessorDeclaration | SetAccessorDeclaration) {
-        const name = member.name;
-        if (isIdentifier(name)) {
-            return "I:" + name.escapedText;
-        }
-        if (isStringLiteral(name)) {
-            return "I:" + name.text;
-        }
-        if (isNumericLiteral(name)) {
-            return "I:" + (+name.text);
-        }
-        if (isComputedPropertyName(name)) {
-            let fullId = "C:";
-            let computedName = name.expression;
-
-            if (isStringLiteral(computedName)) {
-                return ("I:" + computedName.text);
-            }
-            if (isNumericLiteral(computedName)) {
-                return ("I:" + (+computedName.text));
-            }
-            if (
-                isPrefixUnaryExpression(computedName)
-                && isNumericLiteral(computedName.operand)
-            ) {
-                if (computedName.operator === SyntaxKind.MinusToken) {
-                    return ("I:" + (-computedName.operand.text));
-                }
-                else if (computedName.operator === SyntaxKind.PlusToken) {
-                    return ("I:" + (+computedName.operand.text));
-                }
-                else {
-                    return undefined;
-                }
-            }
-
-            // We only support dotted identifiers as property keys
-            while (true) {
-                if (isIdentifier(computedName)) {
-                    fullId += computedName.escapedText;
-                    break;
-                }
-                else if (isPropertyAccessExpression(computedName)) {
-                    fullId += computedName.name.escapedText;
-                    computedName = computedName.expression;
-                }
-                else {
-                    // Can't compute a property key, bail
-                    return undefined;
-                }
-            }
-            return fullId;
-        }
-        return undefined;
+        return createPropertyNameNodeForIdentifierOrLiteral(
+            nameText,
+            getEmitScriptTarget(options),
+            singleQuote,
+            stringNamed,
+            isMethod,
+        );
     }
 
     // Copied similar function in checker. Maybe a reusable one should be created.
@@ -755,15 +696,15 @@ export function createLocalInferenceResolver({
                  * function x(o = "", v: string)
                  */
                 if (node.initializer && !isOptional) {
-                    localType.typeNode = addUndefinedInUnion(localType.typeNode);
-                }
+                localType.typeNode = addUndefinedInUnion(localType.typeNode);
+            }
                 /**
                  * Constructor properties that are optional must have | undefined included to work well with exactOptionalPropertyTypes
                  * constructor(public x?: number) -> x?: number | undefined
                  */
                 if (isOptional && !node.initializer && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                     localType.typeNode = addUndefinedInUnion(localType.typeNode);
-                }
+        }
             }
         }
         else if (type) {
@@ -791,7 +732,7 @@ export function createLocalInferenceResolver({
             localType = localInference(node.initializer);
             if (isOptionalDeclaration(node)) {
                 localType.typeNode = addUndefinedInUnion(localType.typeNode);
-            }
+        }
         }
         else if (isInterfaceDeclaration(node.parent) || isTypeLiteralNode(node.parent)) {
             return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);

@@ -984,7 +984,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         let maybeBlockedByTypesVersions = false;
         const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
         if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
-            const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
+            const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile(packageJsonPath)!);
             const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
             if (getResolvePackageJsonExports(options)) {
                 // The package name that we found in node_modules could be different from the package
