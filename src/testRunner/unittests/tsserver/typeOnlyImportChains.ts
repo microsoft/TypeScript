@@ -1,9 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -163,7 +162,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
 
 function assertUsageError(subScenario: string, files: readonly File[], openFile: File) {
     const host = createServerHost([...files, libFile]);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    const session = new TestSession(host);
     openFilesForSession([openFile], session);
     session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
         command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,

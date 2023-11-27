@@ -96,26 +96,26 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function main() {
-    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
-        var _d, _e, _f, d1_1, env_1, d1, e_2, result_1, e_1_1;
-        var _g, _h;
+        var _a, _b, _c, d1_1, env_1, d1, e_1, result_1, e_2_1;
+        var _d, _e;
+        var _f, e_2, _g, _h;
         return __generator(this, function (_j) {
             switch (_j.label) {
                 case 0:
                     _j.trys.push([0, 10, 11, 16]);
-                    _d = true, _e = __asyncValues([(_g = {}, _g[Symbol.asyncDispose] = function () {
+                    _a = true, _b = __asyncValues([(_d = {}, _d[Symbol.asyncDispose] = function () {
                             return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                                 return [2 /*return*/];
                             }); });
-                        }, _g), (_h = {}, _h[Symbol.dispose] = function () { }, _h), null, undefined]);
+                        }, _d), (_e = {}, _e[Symbol.dispose] = function () { }, _e), null, undefined]);
                     _j.label = 1;
-                case 1: return [4 /*yield*/, _e.next()];
+                case 1: return [4 /*yield*/, _b.next()];
                 case 2:
-                    if (!(_f = _j.sent(), _a = _f.done, !_a)) return [3 /*break*/, 9];
-                    _c = _f.value;
-                    _d = false;
-                    d1_1 = _c;
+                    if (!(_c = _j.sent(), _f = _c.done, !_f)) return [3 /*break*/, 9];
+                    _h = _c.value;
+                    _a = false;
+                    d1_1 = _h;
                     env_1 = { stack: [], error: void 0, hasError: false };
                     _j.label = 3;
                 case 3:
@@ -123,8 +123,8 @@ function main() {
                     d1 = __addDisposableResource(env_1, d1_1, true);
                     return [3 /*break*/, 8];
                 case 4:
-                    e_2 = _j.sent();
-                    env_1.error = e_2;
+                    e_1 = _j.sent();
+                    env_1.error = e_1;
                     env_1.hasError = true;
                     return [3 /*break*/, 8];
                 case 5:
@@ -136,23 +136,23 @@ function main() {
                     _j.label = 7;
                 case 7: return [7 /*endfinally*/];
                 case 8:
-                    _d = true;
+                    _a = true;
                     return [3 /*break*/, 1];
                 case 9: return [3 /*break*/, 16];
                 case 10:
-                    e_1_1 = _j.sent();
-                    e_1 = { error: e_1_1 };
+                    e_2_1 = _j.sent();
+                    e_2 = { error: e_2_1 };
                     return [3 /*break*/, 16];
                 case 11:
                     _j.trys.push([11, , 14, 15]);
-                    if (!(!_d && !_a && (_b = _e.return))) return [3 /*break*/, 13];
-                    return [4 /*yield*/, _b.call(_e)];
+                    if (!(!_a && !_f && (_g = _b.return))) return [3 /*break*/, 13];
+                    return [4 /*yield*/, _g.call(_b)];
                 case 12:
                     _j.sent();
                     _j.label = 13;
                 case 13: return [3 /*break*/, 15];
                 case 14:
-                    if (e_1) throw e_1.error;
+                    if (e_2) throw e_2.error;
                     return [7 /*endfinally*/];
                 case 15: return [7 /*endfinally*/];
                 case 16: return [2 /*return*/];

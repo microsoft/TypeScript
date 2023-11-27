@@ -4,12 +4,12 @@
 // once caused stack overflow
 interface Query<T> {
     selectMany<U>(selector: (item: T) => U[]): Query<U>;
->selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }
+>selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U_1>(arraySelector: (item: T) => U_1[], resultSelector: (outer: T, inner: U_1) => R): Query<R>; }
 >selector : (item: T) => U[]
 >item : T
 
     selectMany<U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>;
->selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }
+>selectMany : { <U_1>(selector: (item: T) => U_1[]): Query<U_1>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }
 >arraySelector : (item: T) => U[]
 >item : T
 >resultSelector : (outer: T, inner: U) => R

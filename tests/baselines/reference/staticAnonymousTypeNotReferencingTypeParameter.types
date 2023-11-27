@@ -49,9 +49,9 @@ class ListWrapper2 {
     var a = ListWrapper2.clone(dit, array);
 >a : T[]
 >ListWrapper2.clone(dit, array) : T[]
->ListWrapper2.clone : <T>(dit: typeof ListWrapper2, array: T[]) => T[]
+>ListWrapper2.clone : <T_1>(dit: typeof ListWrapper2, array: T_1[]) => T_1[]
 >ListWrapper2 : typeof ListWrapper2
->clone : <T>(dit: typeof ListWrapper2, array: T[]) => T[]
+>clone : <T_1>(dit: typeof ListWrapper2, array: T_1[]) => T_1[]
 >dit : typeof ListWrapper2
 >array : T[]
 
@@ -262,9 +262,9 @@ class ListWrapper {
     var a = ListWrapper.clone(dit, array);
 >a : T[]
 >ListWrapper.clone(dit, array) : T[]
->ListWrapper.clone : <T>(dit: typeof ListWrapper, array: T[]) => T[]
+>ListWrapper.clone : <T_1>(dit: typeof ListWrapper, array: T_1[]) => T_1[]
 >ListWrapper : typeof ListWrapper
->clone : <T>(dit: typeof ListWrapper, array: T[]) => T[]
+>clone : <T_1>(dit: typeof ListWrapper, array: T_1[]) => T_1[]
 >dit : typeof ListWrapper
 >array : T[]
 
@@ -273,9 +273,9 @@ class ListWrapper {
 
     scanner.scanRange(3, 5, () => {  });
 >scanner.scanRange(3, 5, () => {  }) : void
->scanner.scanRange : <T>(start: number, length: number, callback: () => T) => T
+>scanner.scanRange : <T_1>(start: number, length: number, callback: () => T_1) => T_1
 >scanner : Scanner
->scanRange : <T>(start: number, length: number, callback: () => T) => T
+>scanRange : <T_1>(start: number, length: number, callback: () => T_1) => T_1
 >3 : 3
 >5 : 5
 >() => {  } : () => void
@@ -283,9 +283,9 @@ class ListWrapper {
     return tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a;
 >tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a : T[]
 >tessst.funkyFor(array, t => t.toString()) : string
->tessst.funkyFor : <T, U>(array: T[], callback: (element: T, index: number) => U) => U
+>tessst.funkyFor : <T_1, U>(array: T_1[], callback: (element: T_1, index: number) => U) => U
 >tessst : typeof tessst
->funkyFor : <T, U>(array: T[], callback: (element: T, index: number) => U) => U
+>funkyFor : <T_1, U>(array: T_1[], callback: (element: T_1, index: number) => U) => U
 >array : T[]
 >t => t.toString() : (t: T) => string
 >t : T
@@ -556,7 +556,7 @@ class ListWrapper {
 
     if (isPresent(compareFn)) {
 >isPresent(compareFn) : boolean
->isPresent : <T>(compareFn?: (a: T, b: T) => number) => boolean
+>isPresent : <T_1>(compareFn?: (a: T_1, b: T_1) => number) => boolean
 >compareFn : (a: T, b: T) => number
 
       l.sort(compareFn);

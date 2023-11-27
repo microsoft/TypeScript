@@ -4,7 +4,14 @@ Input::
 let x = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"types":["node"],"typeRoots":[]}}
+{
+  "compilerOptions": {
+    "types": [
+      "node"
+    ],
+    "typeRoots": []
+  }
+}
 
 //// [/a/b/node_modules/@types/node/index.d.ts]
 declare var process: any
@@ -32,27 +39,19 @@ Output::
   The file is in the program because:
     Entry point of type library 'node' specified in compilerOptions
 
-  [96m../b/tsconfig.json[0m:[93m1[0m:[93m30[0m
-    [7m1[0m {"compilerOptions":{"types":["node"],"typeRoots":[]}}
-    [7m [0m [96m                             ~~~~~~[0m
+  [96m../b/tsconfig.json[0m:[93m4[0m:[93m7[0m
+    [7m4[0m       "node"
+    [7m [0m [96m      ~~~~~~[0m
     File is entry point of type library specified here.
 
 [[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a/b/app.ts"]
-Program options: {"types":["node"],"typeRoots":[],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/app.ts
+//// [/a/b/app.js]
+var x = 1;
 
-No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/app.ts (used version)
 
 FsWatches::
 /a/b/app.ts: *new*
@@ -66,9 +65,27 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
+Program root files: [
+  "/a/b/app.ts"
+]
+Program options: {
+  "types": [
+    "node"
+  ],
+  "typeRoots": [],
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/app.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/app.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/app.js]
-var x = 1;
-
-

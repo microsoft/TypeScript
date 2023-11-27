@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/declarationEmitObjectLiteralAccessors1.ts] ////
+
+=== declarationEmitObjectLiteralAccessors1.ts ===
+// same type accessors
+export const obj1 = {
+>obj1 : Symbol(obj1, Decl(declarationEmitObjectLiteralAccessors1.ts, 1, 12))
+
+  /** my awesome getter (first in source order) */
+  get x(): string {
+>x : Symbol(x, Decl(declarationEmitObjectLiteralAccessors1.ts, 1, 21), Decl(declarationEmitObjectLiteralAccessors1.ts, 5, 4))
+
+    return "";
+  },
+  /** my awesome setter (second in source order) */
+  set x(a: string) {},
+>x : Symbol(x, Decl(declarationEmitObjectLiteralAccessors1.ts, 1, 21), Decl(declarationEmitObjectLiteralAccessors1.ts, 5, 4))
+>a : Symbol(a, Decl(declarationEmitObjectLiteralAccessors1.ts, 7, 8))
+
+};
+
+// divergent accessors
+export const obj2 = {
+>obj2 : Symbol(obj2, Decl(declarationEmitObjectLiteralAccessors1.ts, 11, 12))
+
+  /** my awesome getter */
+  get x(): string {
+>x : Symbol(x, Decl(declarationEmitObjectLiteralAccessors1.ts, 11, 21), Decl(declarationEmitObjectLiteralAccessors1.ts, 15, 4))
+
+    return "";
+  },
+  /** my awesome setter */
+  set x(a: number) {},
+>x : Symbol(x, Decl(declarationEmitObjectLiteralAccessors1.ts, 11, 21), Decl(declarationEmitObjectLiteralAccessors1.ts, 15, 4))
+>a : Symbol(a, Decl(declarationEmitObjectLiteralAccessors1.ts, 17, 8))
+
+};
+
+export const obj3 = {
+>obj3 : Symbol(obj3, Decl(declarationEmitObjectLiteralAccessors1.ts, 20, 12))
+
+  /** my awesome getter */
+  get x(): string {
+>x : Symbol(x, Decl(declarationEmitObjectLiteralAccessors1.ts, 20, 21))
+
+    return "";
+  },
+};
+
+export const obj4 = {
+>obj4 : Symbol(obj4, Decl(declarationEmitObjectLiteralAccessors1.ts, 27, 12))
+
+  /** my awesome setter */
+  set x(a: number) {},
+>x : Symbol(x, Decl(declarationEmitObjectLiteralAccessors1.ts, 27, 21))
+>a : Symbol(a, Decl(declarationEmitObjectLiteralAccessors1.ts, 29, 8))
+
+};
+

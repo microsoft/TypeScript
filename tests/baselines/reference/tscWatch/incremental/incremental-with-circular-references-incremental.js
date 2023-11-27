@@ -41,38 +41,20 @@ export { C } from "./c";
 
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"target":"es5","module":"commonjs","declaration":true,"emitDeclarationOnly":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}
 
 
 /a/lib/tsc.js -i
 Output::
 
-
-Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/c.ts (used version)
-/users/username/projects/project/b.ts (used version)
-/users/username/projects/project/a.ts (used version)
-/users/username/projects/project/index.ts (used version)
-
-exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/c.d.ts]
 import { A } from "./a";
@@ -222,6 +204,44 @@ export { C } from "./c";
 }
 
 
+Program root files: [
+  "/users/username/projects/project/a.ts",
+  "/users/username/projects/project/b.ts",
+  "/users/username/projects/project/c.ts",
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "target": 1,
+  "module": 1,
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/c.ts (used version)
+/users/username/projects/project/b.ts (used version)
+/users/username/projects/project/a.ts (used version)
+/users/username/projects/project/index.ts (used version)
+
+exitCode:: ExitStatus.Success
+
 Change::
 
 Input::
@@ -236,30 +256,6 @@ export interface A {
 
 Output::
 
-
-Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/a.ts (used version)
-/users/username/projects/project/index.ts (used version)
-/users/username/projects/project/c.ts (used version)
-/users/username/projects/project/b.ts (used version)
-
-exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/c.d.ts] file written with same contents
 //// [/users/username/projects/project/b.d.ts] file written with same contents
@@ -392,3 +388,39 @@ export interface A {
   "size": 1145
 }
 
+
+Program root files: [
+  "/users/username/projects/project/a.ts",
+  "/users/username/projects/project/b.ts",
+  "/users/username/projects/project/c.ts",
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "target": 1,
+  "module": 1,
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/a.ts (used version)
+/users/username/projects/project/index.ts (used version)
+/users/username/projects/project/c.ts (used version)
+/users/username/projects/project/b.ts (used version)
+
+exitCode:: ExitStatus.Success

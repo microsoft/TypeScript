@@ -1,5 +1,5 @@
 // @jsx: react
-// @target: es2015
+// @target: es2015,esnext
 // @filename: /a.tsx
 
 declare const React: any;

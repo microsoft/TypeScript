@@ -173,6 +173,7 @@ import {
     isJSDocEnumTag,
     isJSDocTemplateTag,
     isJSDocTypeAlias,
+    isJSDocTypeAssertion,
     isJsonSourceFile,
     isJsxNamespacedName,
     isLeftHandSideExpression,
@@ -1223,6 +1224,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.CallExpression:
                 return hasNarrowableArgument(expr as CallExpression);
             case SyntaxKind.ParenthesizedExpression:
+                if (isJSDocTypeAssertion(expr)) {
+                    return false;
+                }
+                // fallthrough
             case SyntaxKind.NonNullExpression:
                 return isNarrowingExpression((expr as ParenthesizedExpression | NonNullExpression).expression);
             case SyntaxKind.BinaryExpression:
@@ -1684,9 +1689,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const clauses = node.clauses;
         const isNarrowingSwitch = node.parent.expression.kind === SyntaxKind.TrueKeyword || isNarrowingExpression(node.parent.expression);
         let fallthroughFlow = unreachableFlow;
+
         for (let i = 0; i < clauses.length; i++) {
             const clauseStart = i;
             while (!clauses[i].statements.length && i + 1 < clauses.length) {
+                if (fallthroughFlow === unreachableFlow) {
+                    currentFlow = preSwitchCaseFlow!;
+                }
                 bind(clauses[i]);
                 i++;
             }

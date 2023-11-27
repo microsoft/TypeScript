@@ -3,7 +3,7 @@ CompilerOptions::
 {}
 WatchOptions::
 {
- "synchronousWatchDirectory": true
+  "synchronousWatchDirectory": true
 }
 FileNames::
 0.ts

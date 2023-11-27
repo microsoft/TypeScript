@@ -1,9 +1,9 @@
 config:
 {
- "include": [
-  "*.ts",
-  "*.d.ts"
- ]
+  "include": [
+    "*.ts",
+    "*.d.ts"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -46,32 +46,32 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/a.d.ts",
-  "c:/dev/b.ts",
-  "c:/dev/m.ts",
-  "c:/dev/n.ts",
-  "c:/dev/o.ts",
-  "c:/dev/x.d.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "*.ts",
-   "*.d.ts"
-  ]
- },
- "wildcardDirectories": {
-  "c:/dev": "WatchDirectoryFlags.None"
- },
- "compileOnSave": false
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/dev/a.d.ts",
+    "c:/dev/b.ts",
+    "c:/dev/m.ts",
+    "c:/dev/n.ts",
+    "c:/dev/o.ts",
+    "c:/dev/x.d.ts"
+  ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "*.ts",
+      "*.d.ts"
+    ]
+  },
+  "wildcardDirectories": {
+    "c:/dev": "WatchDirectoryFlags.None"
+  },
+  "compileOnSave": false
 }
 Errors::
 

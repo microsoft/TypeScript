@@ -18,7 +18,7 @@ jobs:
       - name: Get repo name
         run: R=${GITHUB_REPOSITORY%?wiki}; echo "BASENAME=${R##*/}" >> $GITHUB_ENV
       - name: Checkout ${{ env.BASENAME }}-wiki
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           repository: '${{ GITHUB.repository_owner }}/${{ env.BASENAME }}-wiki'
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}

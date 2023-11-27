@@ -1,9 +1,11 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -259,7 +261,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         }
 
         const dependencies = packages.reduce((hash, p) => ({ ...hash, [JSON.parse(p[0].content).name]: "*" }), {});
-        const packageJson: File = { path: "/package.json", content: JSON.stringify(dependencies) };
+        const packageJson: File = { path: "/package.json", content: jsonToReadableText(dependencies) };
         const { projectService, session } = setup([...ts.flatten(packages), indexTs, tsconfig, packageJson]);
 
         openFilesForSession([indexTs], session);
@@ -271,11 +273,11 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
     it("Shared source files between AutoImportProvider and main program do not cause duplicate entries in export info map", () => {
         const files = [
             // node_modules/memfs - AutoImportProvider only
-            { path: "/node_modules/memfs/package.json", content: `{ "name": "memfs", "version": "1.0.0", "types": "lib/index.d.ts" }` },
+            { path: "/node_modules/memfs/package.json", content: jsonToReadableText({ name: "memfs", version: "1.0.0", types: "lib/index.d.ts" }) },
             { path: "/node_modules/memfs/lib/index.d.ts", content: `/// <reference types="node" />\nexport declare class Volume {}` },
 
             // node_modules/@types/node - AutoImportProvider and main program
-            { path: "/node_modules/@types/node/package.json", content: `{ "name": "@types/node", "version": "1.0.0" }` },
+            { path: "/node_modules/@types/node/package.json", content: jsonToReadableText({ name: "@types/node", version: "1.0.0" }) },
             { path: "/node_modules/@types/node/index.d.ts", content: `export declare class Stats {}` },
 
             // root
@@ -369,7 +371,7 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
 
 function setup(files: File[]) {
     const host = createServerHost(files);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    const session = new TestSession(host);
     const projectService = session.getProjectService();
     return {
         host,
