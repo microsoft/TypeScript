@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/declarationEmitParameterProperty.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitParameterProperty.d.ts]
+export declare class Foo {
+    bar?: string | undefined;
+    constructor(bar?: string | undefined);
+}
+//# sourceMappingURL=declarationEmitParameterProperty.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [declarationEmitParameterProperty.d.ts.map]
+{"version":3,"file":"declarationEmitParameterProperty.d.ts","sourceRoot":"","sources":["declarationEmitParameterProperty.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACK,GAAG,CAAC,EAAE,MAAM;gBAAZ,GAAG,CAAC,EAAE,MAAM,YAAA;CAEhC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY2xhc3MgRm9vIHsNCiAgICBiYXI/OiBzdHJpbmcgfCB1bmRlZmluZWQ7DQogICAgY29uc3RydWN0b3IoYmFyPzogc3RyaW5nIHwgdW5kZWZpbmVkKTsNCn0NCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWRlY2xhcmF0aW9uRW1pdFBhcmFtZXRlclByb3BlcnR5LmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0UGFyYW1ldGVyUHJvcGVydHkuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImRlY2xhcmF0aW9uRW1pdFBhcmFtZXRlclByb3BlcnR5LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLHFCQUFhLEdBQUc7SUFDSyxHQUFHLENBQUMsRUFBRSxNQUFNO2dCQUFaLEdBQUcsQ0FBQyxFQUFFLE1BQU0sWUFBQTtDQUVoQyJ9,ZXhwb3J0IGNsYXNzIEZvbyB7CiAgY29uc3RydWN0b3IocHVibGljIGJhcj86IHN0cmluZykgewogIH0KfQo=
+

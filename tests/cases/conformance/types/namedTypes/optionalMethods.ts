@@ -1,6 +1,6 @@
 // @strictNullChecks: true
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: TODO: Optional constructor properties.
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 interface Foo {
     a: number;
