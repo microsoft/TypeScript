@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 // Repro from #22644
 

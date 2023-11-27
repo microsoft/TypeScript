@@ -1,5 +1,6 @@
 // @declaration: true
 // @target: es5
+// @isolatedDeclarationFixedDiffReason: Printing differences
 
 // @filename: other.ts
 type Experiment<Name> = {

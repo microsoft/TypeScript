@@ -1,5 +1,6 @@
 // @declaration: true
 // @skipLibCheck: false
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 class A { }
 

@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters1.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitTypeAliasWithTypeParameters1.d.ts]
+export type Bar<X, Y> = () => [X, Y];
+export type Foo<Y> = Bar<any, Y>;
+export declare const y: (x: Foo<string>) => number;
+//# sourceMappingURL=declarationEmitTypeAliasWithTypeParameters1.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [declarationEmitTypeAliasWithTypeParameters1.d.ts.map]
+{"version":3,"file":"declarationEmitTypeAliasWithTypeParameters1.d.ts","sourceRoot":"","sources":["declarationEmitTypeAliasWithTypeParameters1.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,GAAG,CAAC,CAAC,EAAE,CAAC,IAAI,MAAM,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC;AACrC,MAAM,MAAM,GAAG,CAAC,CAAC,IAAI,GAAG,CAAC,GAAG,EAAE,CAAC,CAAC,CAAC;AACjC,eAAO,MAAM,CAAC,GAAI,CAAC,EAAE,GAAG,CAAC,MAAM,CAAC,KAAG,MAAW,CAAA"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IHR5cGUgQmFyPFgsIFk+ID0gKCkgPT4gW1gsIFldOw0KZXhwb3J0IHR5cGUgRm9vPFk+ID0gQmFyPGFueSwgWT47DQpleHBvcnQgZGVjbGFyZSBjb25zdCB5OiAoeDogRm9vPHN0cmluZz4pID0+IG51bWJlcjsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWRlY2xhcmF0aW9uRW1pdFR5cGVBbGlhc1dpdGhUeXBlUGFyYW1ldGVyczEuZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0VHlwZUFsaWFzV2l0aFR5cGVQYXJhbWV0ZXJzMS5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiZGVjbGFyYXRpb25FbWl0VHlwZUFsaWFzV2l0aFR5cGVQYXJhbWV0ZXJzMS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxNQUFNLE1BQU0sR0FBRyxDQUFDLENBQUMsRUFBRSxDQUFDLElBQUksTUFBTSxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsQ0FBQztBQUNyQyxNQUFNLE1BQU0sR0FBRyxDQUFDLENBQUMsSUFBSSxHQUFHLENBQUMsR0FBRyxFQUFFLENBQUMsQ0FBQyxDQUFDO0FBQ2pDLGVBQU8sTUFBTSxDQUFDLEdBQUksQ0FBQyxFQUFFLEdBQUcsQ0FBQyxNQUFNLENBQUMsS0FBRyxNQUFXLENBQUEifQ==,ZXhwb3J0IHR5cGUgQmFyPFgsIFk+ID0gKCkgPT4gW1gsIFldOwpleHBvcnQgdHlwZSBGb288WT4gPSBCYXI8YW55LCBZPjsKZXhwb3J0IGNvbnN0IHkgPSAoeDogRm9vPHN0cmluZz4pOiBudW1iZXIgPT4gMQ==
+

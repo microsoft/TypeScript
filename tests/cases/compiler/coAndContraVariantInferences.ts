@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 type A = { kind: 'a' };
 type B = { kind: 'b' };

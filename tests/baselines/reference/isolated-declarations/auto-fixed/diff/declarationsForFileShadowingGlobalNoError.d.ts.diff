@@ -1,0 +1,24 @@
+// [[Reason: Printing differences]] ////
+
+//// [tests/cases/compiler/declarationsForFileShadowingGlobalNoError.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -8,10 +8,12 @@
+ //# sourceMappingURL=dom.d.ts.map
+ //// [index.d.ts]
+ import { DOMNode } from './dom';
+ type Constructor = new (...args: any[]) => any;
+-export declare const mixin: (Base: Constructor) => new (...args: any[]) => {
+-    [x: string]: any;
+-    get(domNode: DOMNode): void;
++export declare const mixin: (Base: Constructor) => {
++    new (...args: any[]): {
++        [x: string]: any;
++        get(domNode: DOMNode): void;
++    };
+ };
+ export {};
+ //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file

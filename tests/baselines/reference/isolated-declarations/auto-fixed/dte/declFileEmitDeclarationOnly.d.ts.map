@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/declFileEmitDeclarationOnly.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [helloworld.d.ts]
+declare const Log: {
+    info(msg: string): void;
+};
+declare class HelloWorld {
+    private name;
+    constructor(name: string);
+    hello(): void;
+}
+//# sourceMappingURL=helloworld.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [helloworld.d.ts.map]
+{"version":3,"file":"helloworld.d.ts","sourceRoot":"","sources":["helloworld.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,GAAG;IACP,IAAI,CAAC,GAAG,EAAE,MAAM,GAAG,IAAI;CACxB,CAAA;AAED,cAAM,UAAU;IACF,OAAO,CAAC,IAAI;gBAAJ,IAAI,EAAE,MAAM;IAGzB,KAAK,IAAI,IAAI;CAGrB"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCBMb2c6IHsNCiAgICBpbmZvKG1zZzogc3RyaW5nKTogdm9pZDsNCn07DQpkZWNsYXJlIGNsYXNzIEhlbGxvV29ybGQgew0KICAgIHByaXZhdGUgbmFtZTsNCiAgICBjb25zdHJ1Y3RvcihuYW1lOiBzdHJpbmcpOw0KICAgIGhlbGxvKCk6IHZvaWQ7DQp9DQovLyMgc291cmNlTWFwcGluZ1VSTD1oZWxsb3dvcmxkLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaGVsbG93b3JsZC5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiaGVsbG93b3JsZC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxRQUFBLE1BQU0sR0FBRztJQUNQLElBQUksQ0FBQyxHQUFHLEVBQUUsTUFBTSxHQUFHLElBQUk7Q0FDeEIsQ0FBQTtBQUVELGNBQU0sVUFBVTtJQUNGLE9BQU8sQ0FBQyxJQUFJO2dCQUFKLElBQUksRUFBRSxNQUFNO0lBR3pCLEtBQUssSUFBSSxJQUFJO0NBR3JCIn0=,Y29uc3QgTG9nID0gewogIGluZm8obXNnOiBzdHJpbmcpOiB2b2lkIHt9Cn0KCmNsYXNzIEhlbGxvV29ybGQgewogIGNvbnN0cnVjdG9yKHByaXZhdGUgbmFtZTogc3RyaW5nKSB7CiAgfQoKICBwdWJsaWMgaGVsbG8oKTogdm9pZCB7CiAgICBMb2cuaW5mbyhgSGVsbG8gJHt0aGlzLm5hbWV9YCk7CiAgfQp9Cg==
+

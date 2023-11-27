@@ -1,0 +1,21 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/mappedTypeNoTypeNoCrash.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,13 @@
+ 
++
++//// [mappedTypeNoTypeNoCrash.d.ts]
++type T0<T> = ({
++    [K in keyof T]: ;
++}) extends ({
++    [key in K]: T[K];
++}) ? number : never;
++//# sourceMappingURL=mappedTypeNoTypeNoCrash.d.ts.map
+ /// [Errors] ////
+ 
+ mappedTypeNoTypeNoCrash.ts(1,51): error TS2304: Cannot find name 'K'.
+ mappedTypeNoTypeNoCrash.ts(1,51): error TS4081: Exported type alias 'T0' has or is using private name 'K'.

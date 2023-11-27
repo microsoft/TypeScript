@@ -1,0 +1,19 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/declarationEmitMappedPrivateTypeTypeParameter.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,6 +1,11 @@
+ 
+ 
++//// [/FromFactor.d.ts]
++export type RowToColumns<TColumns> = {
++    [TName in StringKeyOf<TColumns>]: any;
++};
++//# sourceMappingURL=FromFactor.d.ts.map
+ //// [/Helpers.d.ts]
+ export type StringKeyOf<TObj> = Extract<string, keyof TObj>;
+ //# sourceMappingURL=Helpers.d.ts.map
+ /// [Errors] ////

@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Printing differences
 // @filename: test.ts
 import {dropPrivateProps1, dropPrivateProps2} from './api';
 const a = dropPrivateProps1({foo: 42, _bar: 'secret'}); // type is {foo: number}

@@ -1,0 +1,17 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/conformance/types/conditional/inferTypesInvalidExtendsDeclaration.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,9 @@
+ 
++
++//// [inferTypesInvalidExtendsDeclaration.d.ts]
++type Test<T> = T extends infer A extends B ? number : string;
++//# sourceMappingURL=inferTypesInvalidExtendsDeclaration.d.ts.map
+ /// [Errors] ////
+ 
+ inferTypesInvalidExtendsDeclaration.ts(1,42): error TS2304: Cannot find name 'B'.
+ inferTypesInvalidExtendsDeclaration.ts(1,42): error TS4085: Extends clause for inferred type 'A' has or is using private name 'B'.

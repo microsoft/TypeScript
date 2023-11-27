@@ -50,7 +50,6 @@ export declare const C: StyledComponent<"div", DefaultTheme, {}, never>;
 declare const _default: invalid;
 export default _default;
 //# sourceMappingURL=index.d.ts.map
-
 /// [Errors] ////
 
 index.ts(7,1): error TS2742: The inferred type of 'default' cannot be named without a reference to 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.

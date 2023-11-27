@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @emitDeclarationOnly: true
+// @isolatedDeclarationFixedDiffReason: Printing differences
 
 // repro from #53109
 

@@ -688,7 +688,7 @@ export namespace Compiler {
             file.locals = undefined;
             dts.set(declarationPath, new documents.TextDocument(declarationPath, options.emitBOM ? Utils.addUTF8ByteOrderMark(declaration) : declaration));
             if (declarationMapPath && declarationMap) {
-                dtsMap.set(declarationMapPath, new documents.TextDocument(declarationMapPath, options.emitBOM ? Utils.addUTF8ByteOrderMark(declarationMap) : declarationMap));
+                dtsMap.set(declarationMapPath, new documents.TextDocument(declarationMapPath, declarationMap));
             }
             diagnostics.push(...fileDiagnostics);
         });
@@ -1170,6 +1170,8 @@ export namespace Compiler {
     ) {
         let code = "";
         code += "//// [" + header + "] ////\r\n\r\n";
+        code += "\r\n\r\n/// [Declarations] ////\r\n\r\n";
+        code += declarationContent(declarationFiles, tsSources, []);
         code += "\r\n\r\n/// [Declarations Maps] ////\r\n\r\n";
         code += declarationSourceMapContent(declarationFiles, declarationMapFiles, tsSources);
 

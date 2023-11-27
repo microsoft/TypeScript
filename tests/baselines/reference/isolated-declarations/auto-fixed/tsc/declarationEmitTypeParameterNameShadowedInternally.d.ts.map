@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/declarationEmitTypeParameterNameShadowedInternally.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitTypeParameterNameShadowedInternally.d.ts]
+export declare const foo: <T>(x: T) => <T_1>(y: T_1) => readonly [T, T_1];
+//# sourceMappingURL=declarationEmitTypeParameterNameShadowedInternally.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [declarationEmitTypeParameterNameShadowedInternally.d.ts.map]
+{"version":3,"file":"declarationEmitTypeParameterNameShadowedInternally.d.ts","sourceRoot":"","sources":["declarationEmitTypeParameterNameShadowedInternally.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,SAAW,CAAC,uCAG3B,CAAA"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgZm9vOiA8VD4oeDogVCkgPT4gPFRfMT4oeTogVF8xKSA9PiByZWFkb25seSBbVCwgVF8xXTsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWRlY2xhcmF0aW9uRW1pdFR5cGVQYXJhbWV0ZXJOYW1lU2hhZG93ZWRJbnRlcm5hbGx5LmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0VHlwZVBhcmFtZXRlck5hbWVTaGFkb3dlZEludGVybmFsbHkuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImRlY2xhcmF0aW9uRW1pdFR5cGVQYXJhbWV0ZXJOYW1lU2hhZG93ZWRJbnRlcm5hbGx5LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGVBQU8sTUFBTSxHQUFHLFNBQVcsQ0FBQyx1Q0FHM0IsQ0FBQSJ9,ZXhwb3J0IGNvbnN0IGZvbyA9IDxULD4oeDogVCk6IDxUXzE+KHk6IFRfMSkgPT4gcmVhZG9ubHkgW1QsIFRfMV0gPT4gewoJY29uc3QgaW5uZXIgPSA8VCw+KHk6IFQpID0+IFt4LCB5XSBhcyBjb25zdDsKCXJldHVybiBpbm5lcjsKfQo=
+

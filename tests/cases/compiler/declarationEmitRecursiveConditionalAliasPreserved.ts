@@ -1,5 +1,6 @@
 // @declaration: true
 // @filename: input.d.ts
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 type _BuildPowersOf2LengthArrays<
     Length extends number,

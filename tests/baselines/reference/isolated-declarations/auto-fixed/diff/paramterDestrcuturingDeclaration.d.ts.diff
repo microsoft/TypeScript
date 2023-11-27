@@ -1,0 +1,22 @@
+// [[Reason: Aliases are preserved for binding patterns GH#55654]] ////
+
+//// [tests/cases/compiler/paramterDestrcuturingDeclaration.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,12 +1,12 @@
+ 
+ 
+ //// [paramterDestrcuturingDeclaration.d.ts]
+ interface C {
+-    ({ p }: {
++    ({ p: name }: {
+         p: any;
+     }): any;
+-    new ({ p }: {
++    new ({ p: boolean }: {
+         p: any;
+     }): any;
+ }
+ //# sourceMappingURL=paramterDestrcuturingDeclaration.d.ts.map

@@ -35,7 +35,6 @@ export const x: () => Thing;
 //// [index.d.ts]
 export declare const a: invalid;
 //# sourceMappingURL=index.d.ts.map
-
 /// [Errors] ////
 
 error TS2468: Cannot find global value 'Promise'.

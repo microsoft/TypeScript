@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -28,5 +28,49 @@
+@@ -28,5 +28,48 @@
      "Saturday" = 1,
      "Sunday" = 2,
      "Weekend days" = 3
@@ -13,7 +13,6 @@
 -//# sourceMappingURL=declFileEnums.d.ts.map
 \ No newline at end of file
 +//# sourceMappingURL=declFileEnums.d.ts.map
-+
 +/// [Errors] ////
 +
 +declFileEnums.ts(15,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -1,0 +1,17 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/noEmitOnError.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,9 @@
+ 
++
++//// [noEmitOnError.d.ts]
++declare var x: number;
++//# sourceMappingURL=noEmitOnError.d.ts.map
+ /// [Errors] ////
+ 
+ noEmitOnError.ts(1,5): error TS2322: Type 'string' is not assignable to type 'number'.
+ 

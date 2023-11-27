@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @filename: a.d.ts
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed. Symbol is not imported.
 export declare const timestampSymbol: unique symbol;
 
 export declare const Timestamp: {

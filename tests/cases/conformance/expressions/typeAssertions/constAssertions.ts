@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @target: esnext
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 let v1 = 'abc' as const;
 let v2 = `abc` as const;

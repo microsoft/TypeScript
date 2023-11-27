@@ -1,0 +1,15 @@
+// [[Reason: Sourcemap is more detailed]] ////
+
+//// [tests/cases/compiler/declarationEmitPrefersPathKindBasedOnBundling.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -3,6 +3,6 @@
+ {"version":3,"file":"scalar.d.ts","sourceRoot":"","sources":["../../../src/lib/operators/scalar.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,MAAM;IACtB,IAAI,MAAM,CAAC;IACX,KAAK,EAAE,MAAM,CAAC;CACd;AAED,wBAAgB,MAAM,CAAC,KAAK,EAAE,MAAM,GAAG,MAAM,CAE5C"}
+ 
+ 
+ //// [/.src/dist/settings/spacing.d.ts.map]
+-{"version":3,"file":"spacing.d.ts","sourceRoot":"","sources":["../../src/settings/spacing.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAU,MAAM,yBAAyB,CAAC;;;;AAEzD,wBAIE"}
++{"version":3,"file":"spacing.d.ts","sourceRoot":"","sources":["../../src/settings/spacing.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAU,MAAM,yBAAyB,CAAC;;aAGpD,EAAE,EAAI,MAAM;;AADjB,wBAIE"}
+ 

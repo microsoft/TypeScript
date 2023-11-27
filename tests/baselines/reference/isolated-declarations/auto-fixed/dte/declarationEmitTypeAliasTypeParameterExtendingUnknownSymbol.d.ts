@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts] ////
+
+//// [declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts]
+type A<T extends Unknown> = {}
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.d.ts]
+type A<T extends Unknown> = {};
+//# sourceMappingURL=declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.d.ts.map
+/// [Errors] ////
+
+declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts(1,18): error TS2304: Cannot find name 'Unknown'.
+declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts(1,18): error TS4083: Type parameter 'T' of exported type alias has or is using private name 'Unknown'.
+
+
+==== declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts (2 errors) ====
+    type A<T extends Unknown> = {}
+                     ~~~~~~~
+!!! error TS2304: Cannot find name 'Unknown'.
+                     ~~~~~~~
+!!! error TS4083: Type parameter 'T' of exported type alias has or is using private name 'Unknown'.

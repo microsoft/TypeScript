@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/declarationEmitPrefersPathKindBasedOnBundling.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [/.src/dist/lib/operators/scalar.d.ts]
+export interface Scalar {
+    (): string;
+    value: number;
+}
+export declare function scalar(value: string): Scalar;
+//# sourceMappingURL=scalar.d.ts.map
+//// [/.src/dist/settings/spacing.d.ts]
+import { Scalar } from '../lib/operators/scalar';
+declare const _default: {
+    readonly xs: Scalar;
+};
+export default _default;
+//# sourceMappingURL=spacing.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [/.src/dist/lib/operators/scalar.d.ts.map]
+{"version":3,"file":"scalar.d.ts","sourceRoot":"","sources":["../../../src/lib/operators/scalar.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,MAAM;IACtB,IAAI,MAAM,CAAC;IACX,KAAK,EAAE,MAAM,CAAC;CACd;AAED,wBAAgB,MAAM,CAAC,KAAK,EAAE,MAAM,GAAG,MAAM,CAE5C"}
+
+
+//// [/.src/dist/settings/spacing.d.ts.map]
+{"version":3,"file":"spacing.d.ts","sourceRoot":"","sources":["../../src/settings/spacing.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAU,MAAM,yBAAyB,CAAC;;aAGpD,EAAE,EAAI,MAAM;;AADjB,wBAIE"}
+

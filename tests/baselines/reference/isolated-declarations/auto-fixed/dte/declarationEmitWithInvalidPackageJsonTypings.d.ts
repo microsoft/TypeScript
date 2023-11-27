@@ -36,7 +36,6 @@ export interface MutableRefObject<T> {
 export declare function useRef<T>(current: T): MutableRefObject<T>;
 export declare const useCsvParser: invalid;
 //# sourceMappingURL=index.d.ts.map
-
 /// [Errors] ////
 
 /p1/index.ts(7,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -1,0 +1,62 @@
+// [[Reason: Can't fix class expressions]] ////
+
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -104,18 +104,10 @@
+ declare const qq: ActionObject<{
+     type: "PLAY";
+     value: number;
+ }>;
+-declare let Anon: {
+-    new <out T>(): {
+-        foo(): any;
+-    };
+-};
+-declare let OuterC: {
+-    new <out T>(): {
+-        foo(): any;
+-    };
+-};
++declare let Anon: invalid;
++declare let OuterC: invalid;
+ //# sourceMappingURL=varianceAnnotations.d.ts.map
+ /// [Errors] ////
+ 
+ varianceAnnotations.ts(9,1): error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
+@@ -183,11 +175,13 @@
+         Type 'StateNode<any, { type: "PLAY"; value: number; } | { type: "RESET"; }>' is not assignable to type 'StateNode<any, { type: "PLAY"; value: number; }>'.
+           Types of property '_storedEvent' are incompatible.
+             Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
+               Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
++varianceAnnotations.ts(164,12): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
++varianceAnnotations.ts(170,20): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+ 
+ 
+-==== varianceAnnotations.ts (31 errors) ====
++==== varianceAnnotations.ts (33 errors) ====
+     type Covariant<out T> = {
+         x: T;
+     }
+     
+@@ -447,14 +441,18 @@
+     
+     // Repros from #48618
+     
+     let Anon = class <out T> {
++               ~~~~~
++!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+         foo(): InstanceType<(typeof Anon<T>)> {
+             return this;
+         }
+     }
+     
+     let OuterC = class C<out T> {
++                       ~
++!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+         foo(): C<T> {
+             return this;
+         }
+     }

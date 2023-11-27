@@ -1,5 +1,6 @@
 ﻿// @jsx: preserve
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 namespace JSX {
     export interface IntrinsicElements {

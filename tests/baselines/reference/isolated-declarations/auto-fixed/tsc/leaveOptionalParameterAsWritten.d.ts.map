@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/declarationEmit/leaveOptionalParameterAsWritten.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [/.src/dist/a.d.ts]
+export interface Foo {
+}
+//# sourceMappingURL=a.d.ts.map
+//// [/.src/dist/b.d.ts]
+import * as a from "./a";
+declare global {
+    namespace teams {
+        namespace calling {
+            export import Foo = a.Foo;
+        }
+    }
+}
+//# sourceMappingURL=b.d.ts.map
+//// [/.src/dist/c.d.ts]
+type Foo = teams.calling.Foo;
+export declare const bar: (p?: Foo) => void;
+export {};
+//# sourceMappingURL=c.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [/.src/dist/a.d.ts.map]
+{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,GAAG;CAAG"}
+
+
+//// [/.src/dist/b.d.ts.map]
+{"version":3,"file":"b.d.ts","sourceRoot":"","sources":["../b.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,CAAC,MAAM,KAAK,CAAC;AACzB,OAAO,CAAC,MAAM,CAAC;IACb,UAAU,KAAK,CAAC;QACd,UAAiB,OAAO,CAAC;YACvB,MAAM,QAAQ,GAAG,GAAG,CAAC,CAAC,GAAG,CAAC;SAC3B;KACF;CACF"}
+
+
+//// [/.src/dist/c.d.ts.map]
+{"version":3,"file":"c.d.ts","sourceRoot":"","sources":["../c.ts"],"names":[],"mappings":"AAAA,KAAK,GAAG,GAAG,KAAK,CAAC,OAAO,CAAC,GAAG,CAAC;AAC7B,eAAO,MAAM,GAAG,OAAQ,GAAG,KAAG,IAAU,CAAA"}
+

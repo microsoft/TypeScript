@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Aliases are preserved for binding patterns GH#55654
 
 interface a { a }
 interface b { b }

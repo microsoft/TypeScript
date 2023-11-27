@@ -1,0 +1,18 @@
+// [[Reason: Syntactically invalid.]] ////
+
+//// [tests/cases/conformance/controlFlow/definiteAssignmentAssertionsWithObjectShortHand.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -5,9 +5,9 @@
+ declare const foo: {
+     a: string;
+ };
+ declare const bar: {
+-    a?(): void;
++    a(): void;
+ };
+ //# sourceMappingURL=definiteAssignmentAssertionsWithObjectShortHand.d.ts.map
+ /// [Errors] ////
+ 

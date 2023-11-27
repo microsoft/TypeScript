@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Can't fix class expressions
 
 type Covariant<out T> = {
     x: T;

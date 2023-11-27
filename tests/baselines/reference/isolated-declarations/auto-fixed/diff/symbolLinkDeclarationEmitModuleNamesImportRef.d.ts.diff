@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,5 +1,32 @@
+@@ -1,5 +1,31 @@
  
  
  //// [Folder/monorepo/core/index.d.ts]
@@ -14,7 +14,6 @@
 \ No newline at end of file
 +export declare function getStyles(): invalid;
 +//# sourceMappingURL=index.d.ts.map
-+
 +/// [Errors] ////
 +
 +Folder/monorepo/core/index.ts(3,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

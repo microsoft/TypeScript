@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/reexportWrittenCorrectlyInDeclaration.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [Test.d.ts]
+import * as things from "./Things";
+export declare class Test {
+    method: (input: things.ThingA) => void;
+}
+//# sourceMappingURL=Test.d.ts.map
+//// [ThingA.d.ts]
+export declare class ThingA {
+}
+//# sourceMappingURL=ThingA.d.ts.map
+//// [ThingB.d.ts]
+export declare class ThingB {
+}
+//# sourceMappingURL=ThingB.d.ts.map
+//// [Things.d.ts]
+export { ThingA } from "./ThingA";
+export { ThingB } from "./ThingB";
+//# sourceMappingURL=Things.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [Test.d.ts.map]
+{"version":3,"file":"Test.d.ts","sourceRoot":"","sources":["Test.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,MAAM,UAAU,CAAC;AAEnC,qBAAa,IAAI;IACN,MAAM,GAAI,KAAK,EAAE,MAAM,CAAC,MAAM,KAAG,IAAI,CAAS;CACxD"}
+
+//// https://sokra.github.io/source-map-visualization#base64,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vVGhpbmdzIjsNCmV4cG9ydCBkZWNsYXJlIGNsYXNzIFRlc3Qgew0KICAgIG1ldGhvZDogKGlucHV0OiB0aGluZ3MuVGhpbmdBKSA9PiB2b2lkOw0KfQ0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9VGVzdC5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGVzdC5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiVGVzdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLEtBQUssTUFBTSxNQUFNLFVBQVUsQ0FBQztBQUVuQyxxQkFBYSxJQUFJO0lBQ04sTUFBTSxHQUFJLEtBQUssRUFBRSxNQUFNLENBQUMsTUFBTSxLQUFHLElBQUksQ0FBUztDQUN4RCJ9,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vVGhpbmdzIjsKCmV4cG9ydCBjbGFzcyBUZXN0IHsKICAgIHB1YmxpYyBtZXRob2QgPSAoaW5wdXQ6IHRoaW5ncy5UaGluZ0EpOiB2b2lkICA9PiB7IH07Cn0=
+
+
+//// [ThingA.d.ts.map]
+{"version":3,"file":"ThingA.d.ts","sourceRoot":"","sources":["ThingA.ts"],"names":[],"mappings":"AACA,qBAAa,MAAM;CAAI"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY2xhc3MgVGhpbmdBIHsNCn0NCi8vIyBzb3VyY2VNYXBwaW5nVVJMPVRoaW5nQS5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGhpbmdBLmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJUaGluZ0EudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EscUJBQWEsTUFBTTtDQUFJIn0=,Ly8gaHR0cHM6Ly9naXRodWIuY29tL01pY3Jvc29mdC9UeXBlU2NyaXB0L2lzc3Vlcy84NjEyCmV4cG9ydCBjbGFzcyBUaGluZ0EgeyB9IAo=
+
+
+//// [ThingB.d.ts.map]
+{"version":3,"file":"ThingB.d.ts","sourceRoot":"","sources":["ThingB.ts"],"names":[],"mappings":"AAAA,qBAAa,MAAM;CAAI"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY2xhc3MgVGhpbmdCIHsNCn0NCi8vIyBzb3VyY2VNYXBwaW5nVVJMPVRoaW5nQi5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGhpbmdCLmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJUaGluZ0IudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEscUJBQWEsTUFBTTtDQUFJIn0=,ZXhwb3J0IGNsYXNzIFRoaW5nQiB7IH0K
+
+
+//// [Things.d.ts.map]
+{"version":3,"file":"Things.d.ts","sourceRoot":"","sources":["Things.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,MAAM,EAAC,MAAM,UAAU,CAAC;AAChC,OAAO,EAAC,MAAM,EAAC,MAAM,UAAU,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IHsgVGhpbmdBIH0gZnJvbSAiLi9UaGluZ0EiOw0KZXhwb3J0IHsgVGhpbmdCIH0gZnJvbSAiLi9UaGluZ0IiOw0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9VGhpbmdzLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGhpbmdzLmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJUaGluZ3MudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFDLE1BQU0sRUFBQyxNQUFNLFVBQVUsQ0FBQztBQUNoQyxPQUFPLEVBQUMsTUFBTSxFQUFDLE1BQU0sVUFBVSxDQUFDIn0=,ZXhwb3J0IHtUaGluZ0F9IGZyb20gIi4vVGhpbmdBIjsKZXhwb3J0IHtUaGluZ0J9IGZyb20gIi4vVGhpbmdCIjsK
+

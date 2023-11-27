@@ -1,0 +1,20 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/exportAssignmentMembersVisibleInAugmentation.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,6 +1,12 @@
+ 
+ 
++//// [/a.d.ts]
++declare module "foo" {
++    function f(): T;
++}
++export {};
++//# sourceMappingURL=a.d.ts.map
+ //// [/b.d.ts]
+ import * as foo from "foo";
+ declare module "foo" {
+     function g(): foo.T;

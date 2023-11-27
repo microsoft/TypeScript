@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -4,6 +4,38 @@
+@@ -4,6 +4,37 @@
  export interface MutableRefObject<T> {
      current: T;
  }
@@ -15,7 +15,6 @@
 \ No newline at end of file
 +export declare const useCsvParser: invalid;
 +//# sourceMappingURL=index.d.ts.map
-+
 +/// [Errors] ////
 +
 +/p1/index.ts(7,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

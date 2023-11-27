@@ -1,0 +1,18 @@
+// [[Reason: Aliases are preserved for binding patterns GH#55654]] ////
+
+//// [tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -26,9 +26,9 @@
+     a: b;
+ }, {
+     b: a;
+ }]);
+-type F3 = ([{ a }, { b }]: [
++type F3 = ([{ a: b }, { b: a }]: [
+     {
+         a: any;
+     },
+     {

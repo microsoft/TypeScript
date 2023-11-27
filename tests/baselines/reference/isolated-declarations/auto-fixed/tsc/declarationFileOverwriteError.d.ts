@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/declarationFileOverwriteError.ts] ////
+
+//// [a.d.ts]
+declare class c {
+}
+
+//// [a.ts]
+class d {
+}
+
+/// [Declarations] ////
+
+
+/// [Errors] ////
+
+error TS5055: Cannot write file 'a.d.ts' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+
+
+!!! error TS5055: Cannot write file 'a.d.ts' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+==== a.d.ts (0 errors) ====
+    declare class c {
+    }
+    
+==== a.ts (0 errors) ====
+    class d {
+    }

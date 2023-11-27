@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Printing differences
 // Any instance type
 type Client = string
 

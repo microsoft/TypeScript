@@ -1,0 +1,18 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/jsFileCompilationWithDeclarationEmitPathSameAsInput.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,10 @@
+ 
++
++//// [a.d.ts]
++declare class c {
++}
++//# sourceMappingURL=a.d.ts.map
+ /// [Errors] ////
+ 
+ error TS5055: Cannot write file 'a.d.ts' because it would overwrite input file.
+   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.

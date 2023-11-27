@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Semantically invalid. TSC does not emit .d.ts
 
 type Unpacked<T> =
     T extends (infer U)[] ? U :

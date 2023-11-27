@@ -1,5 +1,6 @@
 // @declaration: true
 // @lib: es6
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 // @filename: context.ts
 export const Key = Symbol();
 export interface Context {

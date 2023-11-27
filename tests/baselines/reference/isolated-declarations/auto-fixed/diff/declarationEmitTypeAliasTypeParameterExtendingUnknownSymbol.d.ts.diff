@@ -1,0 +1,17 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,9 @@
+ 
++
++//// [declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.d.ts]
++type A<T extends Unknown> = {};
++//# sourceMappingURL=declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.d.ts.map
+ /// [Errors] ////
+ 
+ declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts(1,18): error TS2304: Cannot find name 'Unknown'.
+ declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts(1,18): error TS4083: Type parameter 'T' of exported type alias has or is using private name 'Unknown'.

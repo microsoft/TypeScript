@@ -1,0 +1,23 @@
+// [[Reason: TSC adds type reference directives.]] ////
+
+//// [tests/cases/conformance/node/nodeModulesImportAssignments.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,14 +1,11 @@
+ 
+ 
+ //// [file.d.ts]
+-/// <reference path="types.d.ts" />
+ export import fs2 = require("fs");
+ //# sourceMappingURL=file.d.ts.map
+ //// [index.d.ts]
+-/// <reference path="types.d.ts" />
+ export import fs2 = require("fs");
+ //# sourceMappingURL=index.d.ts.map
+ //// [subfolder/index.d.ts]
+-/// <reference path="../types.d.ts" />
+ export import fs2 = require("fs");
+ //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file

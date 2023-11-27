@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @target: esnext
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 // Repro from #43493
 

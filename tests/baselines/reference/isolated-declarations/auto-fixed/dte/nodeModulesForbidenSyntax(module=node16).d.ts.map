@@ -1,0 +1,131 @@
+//// [tests/cases/conformance/node/nodeModulesForbidenSyntax.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [index.d.cts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.cts.map
+//// [index.d.mts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.mts.map
+//// [index.d.ts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.ts.map
+//// [subfolder/index.d.cts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.cts.map
+//// [subfolder/index.d.mts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.mts.map
+//// [subfolder/index.d.ts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.ts.map
+//// [subfolder2/another/index.d.cts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.cts.map
+//// [subfolder2/another/index.d.mts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.mts.map
+//// [subfolder2/another/index.d.ts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.ts.map
+//// [subfolder2/index.d.cts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.cts.map
+//// [subfolder2/index.d.mts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.mts.map
+//// [subfolder2/index.d.ts]
+declare const x: <T>() => T;
+export { x };
+//# sourceMappingURL=index.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [index.d.cts.map]
+{"version":3,"file":"index.d.cts","sourceRoot":"","sources":["index.cts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC5jdHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC5jdHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC5jdHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsUUFBQSxNQUFNLENBQUMsR0FBSSxDQUFDLE9BQUssQ0FBcUIsQ0FBQztBQUN2QyxPQUFPLEVBQUMsQ0FBQyxFQUFDLENBQUMifQ==,Ly8gY2pzIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [index.d.mts.map]
+{"version":3,"file":"index.d.mts","sourceRoot":"","sources":["index.mts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC5tdHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC5tdHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC5tdHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsUUFBQSxNQUFNLENBQUMsR0FBSSxDQUFDLE9BQUssQ0FBcUIsQ0FBQztBQUN2QyxPQUFPLEVBQUMsQ0FBQyxFQUFDLENBQUMifQ==,Ly8gZXNtIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [index.d.ts.map]
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNBLFFBQUEsTUFBTSxDQUFDLEdBQUksQ0FBQyxPQUFLLENBQXFCLENBQUM7QUFDdkMsT0FBTyxFQUFDLENBQUMsRUFBQyxDQUFDIn0=,Ly8gY2pzIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [subfolder/index.d.cts.map]
+{"version":3,"file":"index.d.cts","sourceRoot":"","sources":["index.cts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC5jdHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC5jdHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC5jdHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsUUFBQSxNQUFNLENBQUMsR0FBSSxDQUFDLE9BQUssQ0FBcUIsQ0FBQztBQUN2QyxPQUFPLEVBQUMsQ0FBQyxFQUFDLENBQUMifQ==,Ly8gY2pzIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [subfolder/index.d.mts.map]
+{"version":3,"file":"index.d.mts","sourceRoot":"","sources":["index.mts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC5tdHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC5tdHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC5tdHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsUUFBQSxNQUFNLENBQUMsR0FBSSxDQUFDLE9BQUssQ0FBcUIsQ0FBQztBQUN2QyxPQUFPLEVBQUMsQ0FBQyxFQUFDLENBQUMifQ==,Ly8gZXNtIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [subfolder/index.d.ts.map]
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNBLFFBQUEsTUFBTSxDQUFDLEdBQUksQ0FBQyxPQUFLLENBQXFCLENBQUM7QUFDdkMsT0FBTyxFQUFDLENBQUMsRUFBQyxDQUFDIn0=,Ly8gY2pzIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [subfolder2/another/index.d.cts.map]
+{"version":3,"file":"index.d.cts","sourceRoot":"","sources":["index.cts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC5jdHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC5jdHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC5jdHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsUUFBQSxNQUFNLENBQUMsR0FBSSxDQUFDLE9BQUssQ0FBcUIsQ0FBQztBQUN2QyxPQUFPLEVBQUMsQ0FBQyxFQUFDLENBQUMifQ==,Ly8gY2pzIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [subfolder2/another/index.d.mts.map]
+{"version":3,"file":"index.d.mts","sourceRoot":"","sources":["index.mts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC5tdHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC5tdHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC5tdHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsUUFBQSxNQUFNLENBQUMsR0FBSSxDQUFDLE9BQUssQ0FBcUIsQ0FBQztBQUN2QyxPQUFPLEVBQUMsQ0FBQyxFQUFDLENBQUMifQ==,Ly8gZXNtIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [subfolder2/another/index.d.ts.map]
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNBLFFBQUEsTUFBTSxDQUFDLEdBQUksQ0FBQyxPQUFLLENBQXFCLENBQUM7QUFDdkMsT0FBTyxFQUFDLENBQUMsRUFBQyxDQUFDIn0=,Ly8gY2pzIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [subfolder2/index.d.cts.map]
+{"version":3,"file":"index.d.cts","sourceRoot":"","sources":["index.cts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC5jdHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC5jdHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC5jdHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsUUFBQSxNQUFNLENBQUMsR0FBSSxDQUFDLE9BQUssQ0FBcUIsQ0FBQztBQUN2QyxPQUFPLEVBQUMsQ0FBQyxFQUFDLENBQUMifQ==,Ly8gY2pzIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [subfolder2/index.d.mts.map]
+{"version":3,"file":"index.d.mts","sourceRoot":"","sources":["index.mts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC5tdHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC5tdHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC5tdHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsUUFBQSxNQUFNLENBQUMsR0FBSSxDQUFDLE9BQUssQ0FBcUIsQ0FBQztBQUN2QyxPQUFPLEVBQUMsQ0FBQyxFQUFDLENBQUMifQ==,Ly8gZXNtIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+
+
+//// [subfolder2/index.d.ts.map]
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,CAAC,GAAI,CAAC,OAAK,CAAqB,CAAC;AACvC,OAAO,EAAC,CAAC,EAAC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCB4OiA8VD4oKSA9PiBUOw0KZXhwb3J0IHsgeCB9Ow0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9aW5kZXguZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNBLFFBQUEsTUFBTSxDQUFDLEdBQUksQ0FBQyxPQUFLLENBQXFCLENBQUM7QUFDdkMsT0FBTyxFQUFDLENBQUMsRUFBQyxDQUFDIn0=,Ly8gY2pzIGZvcm1hdCBmaWxlCmNvbnN0IHggPSA8VD4oKTogVCA9PiA8VD48YW55Pih2b2lkIDApOwpleHBvcnQge3h9Ow==
+

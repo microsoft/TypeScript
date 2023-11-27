@@ -124,7 +124,6 @@ declare enum MyDeclaredEnum {
 }
 declare let val2: MyDeclaredEnum;
 //# sourceMappingURL=computedEnumTypeWidening.d.ts.map
-
 /// [Errors] ////
 
 computedEnumTypeWidening.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

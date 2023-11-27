@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -33,5 +33,54 @@
+@@ -33,5 +33,53 @@
      a = "1",
      b = "11",
      c = "21"
@@ -13,7 +13,6 @@
 -//# sourceMappingURL=enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts.map
 \ No newline at end of file
 +//# sourceMappingURL=enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts.map
-+
 +/// [Errors] ////
 +
 +enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts(32,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

@@ -1,5 +1,6 @@
 // @declaration: true
 // @module: commonjs
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 export interface Foo {
     a: string;

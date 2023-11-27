@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @target: es2017
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 type Mapped1<K extends string> = { [P in K]: { a: P } };
 

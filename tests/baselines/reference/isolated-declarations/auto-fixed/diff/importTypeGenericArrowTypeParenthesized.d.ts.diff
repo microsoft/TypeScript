@@ -1,0 +1,16 @@
+// [[Reason: TSC adds type reference directives.]] ////
+
+//// [tests/cases/compiler/importTypeGenericArrowTypeParenthesized.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,8 +1,7 @@
+ 
+ 
+ //// [index.d.ts]
+-/// <reference path="module.d.ts" />
+ import { Modifier } from "module";
+ export declare const fail1: Modifier<(<T>(x: T) => T)>;
+ export declare const fail2: Modifier<(<T>(x: T) => T)>;
+ export declare const works1: Modifier<(x: number) => number>;

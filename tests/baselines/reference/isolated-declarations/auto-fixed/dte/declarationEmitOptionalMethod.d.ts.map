@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/declarationEmitOptionalMethod.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitOptionalMethod.d.ts]
+export declare const Foo: (opts: {
+    a?(): void;
+    b?: () => void;
+}) => {
+    c?(): void;
+    d?: () => void;
+};
+//# sourceMappingURL=declarationEmitOptionalMethod.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [declarationEmitOptionalMethod.d.ts.map]
+{"version":3,"file":"declarationEmitOptionalMethod.d.ts","sourceRoot":"","sources":["declarationEmitOptionalMethod.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,GAAI,IAAI,EAAE;IACtB,CAAC,CAAC,IAAI,IAAI,CAAC;IACX,CAAC,CAAC,EAAE,MAAM,IAAI,CAAC;CAClB,KAAG;IACA,CAAC,CAAC,IAAI,IAAI,CAAC;IACX,CAAC,CAAC,EAAE,MAAM,IAAI,CAAC;CACR,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgRm9vOiAob3B0czogew0KICAgIGE/KCk6IHZvaWQ7DQogICAgYj86ICgpID0+IHZvaWQ7DQp9KSA9PiB7DQogICAgYz8oKTogdm9pZDsNCiAgICBkPzogKCkgPT4gdm9pZDsNCn07DQovLyMgc291cmNlTWFwcGluZ1VSTD1kZWNsYXJhdGlvbkVtaXRPcHRpb25hbE1ldGhvZC5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0T3B0aW9uYWxNZXRob2QuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImRlY2xhcmF0aW9uRW1pdE9wdGlvbmFsTWV0aG9kLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGVBQU8sTUFBTSxHQUFHLEdBQUksSUFBSSxFQUFFO0lBQ3RCLENBQUMsQ0FBQyxJQUFJLElBQUksQ0FBQztJQUNYLENBQUMsQ0FBQyxFQUFFLE1BQU0sSUFBSSxDQUFDO0NBQ2xCLEtBQUc7SUFDQSxDQUFDLENBQUMsSUFBSSxJQUFJLENBQUM7SUFDWCxDQUFDLENBQUMsRUFBRSxNQUFNLElBQUksQ0FBQztDQUNSLENBQUMifQ==,ZXhwb3J0IGNvbnN0IEZvbyA9IChvcHRzOiB7CiAgICBhPygpOiB2b2lkLAogICAgYj86ICgpID0+IHZvaWQsCn0pOiB7CiAgICBjPygpOiB2b2lkLAogICAgZD86ICgpID0+IHZvaWQsCn0gPT4gKHsgIH0pOw==
+

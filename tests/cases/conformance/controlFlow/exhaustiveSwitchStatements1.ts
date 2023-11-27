@@ -1,6 +1,7 @@
 // @strict: true
 // @allowUnreachableCode: false
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 function f1(x: 1 | 2): string {
     if (!!true) {

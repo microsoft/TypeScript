@@ -1,5 +1,6 @@
 // @declaration: true
 // @target: es6
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 interface SymbolConstructor {
     readonly observer: symbol;
 }

@@ -1,0 +1,16 @@
+// [[Reason: Sourcemap is more detailed]] ////
+
+//// [tests/cases/compiler/declarationEmitTypeParameterNameShadowedInternally.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,6 +1,6 @@
+ 
+ //// [declarationEmitTypeParameterNameShadowedInternally.d.ts.map]
+-{"version":3,"file":"declarationEmitTypeParameterNameShadowedInternally.d.ts","sourceRoot":"","sources":["declarationEmitTypeParameterNameShadowedInternally.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,SAAW,CAAC,uCAG3B,CAAA"}
++{"version":3,"file":"declarationEmitTypeParameterNameShadowedInternally.d.ts","sourceRoot":"","sources":["declarationEmitTypeParameterNameShadowedInternally.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,GAAI,CAAC,EAAG,CAAC,EAAE,CAAC,KAAG,CAAC,GAAG,EAAE,CAAC,EAAE,GAAG,KAAK,SAAS,CAAC,CAAC,EAAE,GAAG,CAG/D,CAAA"}
+ 
+-//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgZm9vOiA8VD4oeDogVCkgPT4gPFRfMT4oeTogVF8xKSA9PiByZWFkb25seSBbVCwgVF8xXTsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWRlY2xhcmF0aW9uRW1pdFR5cGVQYXJhbWV0ZXJOYW1lU2hhZG93ZWRJbnRlcm5hbGx5LmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0VHlwZVBhcmFtZXRlck5hbWVTaGFkb3dlZEludGVybmFsbHkuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImRlY2xhcmF0aW9uRW1pdFR5cGVQYXJhbWV0ZXJOYW1lU2hhZG93ZWRJbnRlcm5hbGx5LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGVBQU8sTUFBTSxHQUFHLFNBQVcsQ0FBQyx1Q0FHM0IsQ0FBQSJ9,ZXhwb3J0IGNvbnN0IGZvbyA9IDxULD4oeDogVCk6IDxUXzE+KHk6IFRfMSkgPT4gcmVhZG9ubHkgW1QsIFRfMV0gPT4gewoJY29uc3QgaW5uZXIgPSA8VCw+KHk6IFQpID0+IFt4LCB5XSBhcyBjb25zdDsKCXJldHVybiBpbm5lcjsKfQo=
++//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgZm9vOiA8VD4oeDogVCkgPT4gPFRfMT4oeTogVF8xKSA9PiByZWFkb25seSBbVCwgVF8xXTsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWRlY2xhcmF0aW9uRW1pdFR5cGVQYXJhbWV0ZXJOYW1lU2hhZG93ZWRJbnRlcm5hbGx5LmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0VHlwZVBhcmFtZXRlck5hbWVTaGFkb3dlZEludGVybmFsbHkuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImRlY2xhcmF0aW9uRW1pdFR5cGVQYXJhbWV0ZXJOYW1lU2hhZG93ZWRJbnRlcm5hbGx5LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGVBQU8sTUFBTSxHQUFHLEdBQUksQ0FBQyxFQUFHLENBQUMsRUFBRSxDQUFDLEtBQUcsQ0FBQyxHQUFHLEVBQUUsQ0FBQyxFQUFFLEdBQUcsS0FBSyxTQUFTLENBQUMsQ0FBQyxFQUFFLEdBQUcsQ0FHL0QsQ0FBQSJ9,ZXhwb3J0IGNvbnN0IGZvbyA9IDxULD4oeDogVCk6IDxUXzE+KHk6IFRfMSkgPT4gcmVhZG9ubHkgW1QsIFRfMV0gPT4gewoJY29uc3QgaW5uZXIgPSA8VCw+KHk6IFQpID0+IFt4LCB5XSBhcyBjb25zdDsKCXJldHVybiBpbm5lcjsKfQo=
+ 

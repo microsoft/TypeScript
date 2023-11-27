@@ -1,0 +1,137 @@
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile.ts] ////
+
+//// [emitClassExpressionInDeclarationFile.ts]
+export var simpleExample = class {
+    static getTags() { }
+    tags() { }
+}
+export var circularReference = class C {
+    static getTags(c: C): C { return c }
+    tags(c: C): C { return c }
+}
+
+// repro from #15066
+export class FooItem {
+    foo(): void { }
+    name?: string;
+}
+
+export type Constructor<T> = new(...args: any[]) => T;
+export function WithTags<T extends Constructor<FooItem>>(Base: T): {
+    new(...args: any[]): {
+        tags(): void;
+        foo(): void;
+        name?: string;
+    };
+    getTags(): void;
+} & T {
+    return class extends Base {
+        static getTags(): void { }
+        tags(): void { }
+    }
+}
+
+const TestBase: {
+    new(...args: any[]): {
+        tags(): void;
+        foo(): void;
+        name?: string;
+    };
+    getTags(): void;
+} & typeof FooItem = WithTags(FooItem);
+export class Test extends TestBase {}
+
+const test = new Test();
+
+Test.getTags()
+test.tags();
+
+
+/// [Declarations] ////
+
+
+
+//// [emitClassExpressionInDeclarationFile.d.ts]
+export declare var simpleExample: invalid;
+export declare var circularReference: invalid;
+export declare class FooItem {
+    foo(): void;
+    name?: string;
+}
+export type Constructor<T> = new (...args: any[]) => T;
+export declare function WithTags<T extends Constructor<FooItem>>(Base: T): {
+    new (...args: any[]): {
+        tags(): void;
+        foo(): void;
+        name?: string;
+    };
+    getTags(): void;
+} & T;
+declare const TestBase: {
+    new (...args: any[]): {
+        tags(): void;
+        foo(): void;
+        name?: string;
+    };
+    getTags(): void;
+} & typeof FooItem;
+export declare class Test extends TestBase {
+}
+export {};
+//# sourceMappingURL=emitClassExpressionInDeclarationFile.d.ts.map
+/// [Errors] ////
+
+emitClassExpressionInDeclarationFile.ts(1,28): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+emitClassExpressionInDeclarationFile.ts(5,38): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+
+
+==== emitClassExpressionInDeclarationFile.ts (2 errors) ====
+    export var simpleExample = class {
+                               ~~~~~
+!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+        static getTags() { }
+        tags() { }
+    }
+    export var circularReference = class C {
+                                         ~
+!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+        static getTags(c: C): C { return c }
+        tags(c: C): C { return c }
+    }
+    
+    // repro from #15066
+    export class FooItem {
+        foo(): void { }
+        name?: string;
+    }
+    
+    export type Constructor<T> = new(...args: any[]) => T;
+    export function WithTags<T extends Constructor<FooItem>>(Base: T): {
+        new(...args: any[]): {
+            tags(): void;
+            foo(): void;
+            name?: string;
+        };
+        getTags(): void;
+    } & T {
+        return class extends Base {
+            static getTags(): void { }
+            tags(): void { }
+        }
+    }
+    
+    const TestBase: {
+        new(...args: any[]): {
+            tags(): void;
+            foo(): void;
+            name?: string;
+        };
+        getTags(): void;
+    } & typeof FooItem = WithTags(FooItem);
+    export class Test extends TestBase {}
+    
+    const test = new Test();
+    
+    Test.getTags()
+    test.tags();
+    

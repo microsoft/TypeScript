@@ -1,5 +1,6 @@
 // @strictNullChecks: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 interface Foo {
   required1: string;

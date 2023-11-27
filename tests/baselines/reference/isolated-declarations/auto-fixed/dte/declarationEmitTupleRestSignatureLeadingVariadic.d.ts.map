@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/declarationEmitTupleRestSignatureLeadingVariadic.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitTupleRestSignatureLeadingVariadic.d.ts]
+declare const f: <TFirstArgs extends any[], TLastArg>(...args: [...TFirstArgs, TLastArg]) => void;
+//# sourceMappingURL=declarationEmitTupleRestSignatureLeadingVariadic.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [declarationEmitTupleRestSignatureLeadingVariadic.d.ts.map]
+{"version":3,"file":"declarationEmitTupleRestSignatureLeadingVariadic.d.ts","sourceRoot":"","sources":["declarationEmitTupleRestSignatureLeadingVariadic.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,GAAI,UAAU,SAAS,GAAG,EAAE,EAAE,QAAQ,EAAE,GAAG,IAAI,EAAE,CAAC,GAAG,UAAU,EAAE,QAAQ,CAAC,KAAG,IAAU,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjb25zdCBmOiA8VEZpcnN0QXJncyBleHRlbmRzIGFueVtdLCBUTGFzdEFyZz4oLi4uYXJnczogWy4uLlRGaXJzdEFyZ3MsIFRMYXN0QXJnXSkgPT4gdm9pZDsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWRlY2xhcmF0aW9uRW1pdFR1cGxlUmVzdFNpZ25hdHVyZUxlYWRpbmdWYXJpYWRpYy5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0VHVwbGVSZXN0U2lnbmF0dXJlTGVhZGluZ1ZhcmlhZGljLmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJkZWNsYXJhdGlvbkVtaXRUdXBsZVJlc3RTaWduYXR1cmVMZWFkaW5nVmFyaWFkaWMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsUUFBQSxNQUFNLENBQUMsR0FBSSxVQUFVLFNBQVMsR0FBRyxFQUFFLEVBQUUsUUFBUSxFQUFFLEdBQUcsSUFBSSxFQUFFLENBQUMsR0FBRyxVQUFVLEVBQUUsUUFBUSxDQUFDLEtBQUcsSUFBVSxDQUFDIn0=,Y29uc3QgZiA9IDxURmlyc3RBcmdzIGV4dGVuZHMgYW55W10sIFRMYXN0QXJnPiguLi5hcmdzOiBbLi4uVEZpcnN0QXJncywgVExhc3RBcmddKTogdm9pZCA9PiB7fTs=
+

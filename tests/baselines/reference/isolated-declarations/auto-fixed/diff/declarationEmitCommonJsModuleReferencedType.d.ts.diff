@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,8 +1,16 @@
+@@ -1,8 +1,15 @@
  
 +
 +//// [r/entry.d.ts]
@@ -13,7 +13,6 @@
 +export declare const x: invalid;
 +export declare const y: RootProps;
 +//# sourceMappingURL=entry.d.ts.map
-+
  /// [Errors] ////
  
  r/entry.ts(3,14): error TS2742: The inferred type of 'x' cannot be named without a reference to 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
@@ -22,7 +21,7 @@
  
  ==== r/node_modules/foo/node_modules/nested/index.d.ts (0 errors) ====
      export interface NestedProps {}
-@@ -20,12 +28,14 @@
+@@ -20,12 +27,14 @@
  ==== node_modules/root/index.d.ts (0 errors) ====
      export interface RootProps {}
      

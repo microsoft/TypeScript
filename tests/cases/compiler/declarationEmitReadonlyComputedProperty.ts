@@ -1,5 +1,6 @@
 // @declaration: true
 // @lib: es2015
+// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed. Symbol in computed property not imported.
 
 // @filename: bug.ts
 export const SYMBOL = Symbol()

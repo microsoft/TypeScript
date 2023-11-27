@@ -1,5 +1,6 @@
 // @strictNullChecks: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: TODO: Optional constructor properties.
 
 interface Foo {
     a: number;

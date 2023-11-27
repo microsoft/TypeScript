@@ -1,0 +1,17 @@
+// [[Reason: TSC adds type reference directives.]] ////
+
+//// [tests/cases/compiler/declarationEmitBundleWithAmbientReferences.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -4,8 +4,7 @@
+ import * as DatastoreResult from "src/datastore_result";
+ export declare const build: () => DatastoreResult.T<string>;
+ //# sourceMappingURL=conditional_directive_field.d.ts.map
+ //// [src/datastore_result.d.ts]
+-/// <reference path="../lib/lib.d.ts" />
+ import { Result } from "lib/result";
+ export type T<T> = Result<Error, T>;
+ //# sourceMappingURL=datastore_result.d.ts.map
+\ No newline at end of file

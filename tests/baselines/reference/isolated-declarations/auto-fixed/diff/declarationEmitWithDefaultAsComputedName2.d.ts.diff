@@ -1,0 +1,19 @@
+// [[Reason: Printing differences]] ////
+
+//// [tests/cases/compiler/declarationEmitWithDefaultAsComputedName2.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,9 +1,10 @@
+ 
+ 
+ //// [main.d.ts]
++import * as other2 from "./other";
+ export declare const obj: {
+-    foo: number;
++    [other2.default.name]: number;
+ };
+ //# sourceMappingURL=main.d.ts.map
+ //// [other.d.ts]
+ type Experiment<Name> = {

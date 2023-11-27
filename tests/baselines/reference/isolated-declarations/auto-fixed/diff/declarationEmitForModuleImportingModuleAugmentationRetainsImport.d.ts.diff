@@ -1,0 +1,17 @@
+// [[Reason: TSC adds import for augmentation, DTE can't know about the augmentation.]] ////
+
+//// [tests/cases/compiler/declarationEmitForModuleImportingModuleAugmentationRetainsImport.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -9,8 +9,7 @@
+ }
+ export declare function child1(prototype: ParentThing): void;
+ //# sourceMappingURL=child1.d.ts.map
+ //// [/.src/parent.d.ts]
+-import './child1';
+ export declare class ParentThing implements ParentThing {
+ }
+ //# sourceMappingURL=parent.d.ts.map
+\ No newline at end of file

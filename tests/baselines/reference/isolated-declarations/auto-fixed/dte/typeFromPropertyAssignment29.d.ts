@@ -152,14 +152,9 @@ declare class ExpandoClass {
     n: number;
 }
 declare var n: number;
-declare var ExpandoExpr3: {
-    new (): {
-        n: number;
-    };
-};
+declare var ExpandoExpr3: invalid;
 declare var n: number;
 //# sourceMappingURL=typeFromPropertyAssignment29.d.ts.map
-
 /// [Errors] ////
 
 typeFromPropertyAssignment29.ts(1,10): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
@@ -174,13 +169,14 @@ typeFromPropertyAssignment29.ts(87,14): error TS2339: Property 'prop' does not e
 typeFromPropertyAssignment29.ts(88,14): error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
 typeFromPropertyAssignment29.ts(91,30): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
 typeFromPropertyAssignment29.ts(91,50): error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
+typeFromPropertyAssignment29.ts(94,20): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
 typeFromPropertyAssignment29.ts(97,14): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
 typeFromPropertyAssignment29.ts(98,14): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
 typeFromPropertyAssignment29.ts(101,30): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
 typeFromPropertyAssignment29.ts(101,50): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
 
 
-==== typeFromPropertyAssignment29.ts (16 errors) ====
+==== typeFromPropertyAssignment29.ts (17 errors) ====
     function ExpandoDecl(n: number): string {
              ~~~~~~~~~~~
 !!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
@@ -299,6 +295,8 @@ typeFromPropertyAssignment29.ts(101,50): error TS2339: Property 'm' does not exi
     
     // Class expressions shouldn't work in typescript either
     var ExpandoExpr3 = class {
+                       ~~~~~
+!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
         n = 10001;
     }
     ExpandoExpr3.prop = 3

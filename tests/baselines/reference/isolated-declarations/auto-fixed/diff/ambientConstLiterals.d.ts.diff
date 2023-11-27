@@ -1,0 +1,18 @@
+// [[Reason: TODO: Printing differences. Seems avoidable.]] ////
+
+//// [tests/cases/compiler/ambientConstLiterals.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -15,9 +15,9 @@
+ declare const c5: 123;
+ declare const c6: -123;
+ declare const c7 = true;
+ declare const c8: E.A;
+-declare const c8b = E["non identifier"];
++declare const c8b: (typeof E)["non identifier"];
+ declare const c9: {
+     x: string;
+ };
+ declare const c10: number[];

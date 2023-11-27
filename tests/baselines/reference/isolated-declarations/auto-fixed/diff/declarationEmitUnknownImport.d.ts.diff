@@ -1,0 +1,18 @@
+// [[Reason: Semantically invalid. TSC does not emit .d.ts]] ////
+
+//// [tests/cases/compiler/declarationEmitUnknownImport.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,5 +1,10 @@
+ 
++
++//// [declarationEmitUnknownImport.d.ts]
++import Foo = SomeNonExistingName;
++export { Foo };
++//# sourceMappingURL=declarationEmitUnknownImport.d.ts.map
+ /// [Errors] ////
+ 
+ declarationEmitUnknownImport.ts(1,1): error TS2303: Circular definition of import alias 'Foo'.
+ declarationEmitUnknownImport.ts(1,14): error TS2304: Cannot find name 'SomeNonExistingName'.

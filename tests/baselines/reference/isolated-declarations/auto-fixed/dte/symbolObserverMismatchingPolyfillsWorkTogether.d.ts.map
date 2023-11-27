@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/symbolObserverMismatchingPolyfillsWorkTogether.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [symbolObserverMismatchingPolyfillsWorkTogether.d.ts]
+interface SymbolConstructor {
+    readonly observer: symbol;
+}
+interface SymbolConstructor {
+    readonly observer: unique symbol;
+}
+declare const obj: {
+    [Symbol.observer]: number;
+};
+//# sourceMappingURL=symbolObserverMismatchingPolyfillsWorkTogether.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [symbolObserverMismatchingPolyfillsWorkTogether.d.ts.map]
+{"version":3,"file":"symbolObserverMismatchingPolyfillsWorkTogether.d.ts","sourceRoot":"","sources":["symbolObserverMismatchingPolyfillsWorkTogether.ts"],"names":[],"mappings":"AAAA,UAAU,iBAAiB;IACvB,QAAQ,CAAC,QAAQ,EAAE,MAAM,CAAC;CAC7B;AACD,UAAU,iBAAiB;IACvB,QAAQ,CAAC,QAAQ,EAAE,OAAO,MAAM,CAAC;CACpC;AAED,QAAA,MAAM,GAAG;IACL,CAAC,MAAM,CAAC,QAAQ,CAAC;CACpB,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,aW50ZXJmYWNlIFN5bWJvbENvbnN0cnVjdG9yIHsNCiAgICByZWFkb25seSBvYnNlcnZlcjogc3ltYm9sOw0KfQ0KaW50ZXJmYWNlIFN5bWJvbENvbnN0cnVjdG9yIHsNCiAgICByZWFkb25seSBvYnNlcnZlcjogdW5pcXVlIHN5bWJvbDsNCn0NCmRlY2xhcmUgY29uc3Qgb2JqOiB7DQogICAgW1N5bWJvbC5vYnNlcnZlcl06IG51bWJlcjsNCn07DQovLyMgc291cmNlTWFwcGluZ1VSTD1zeW1ib2xPYnNlcnZlck1pc21hdGNoaW5nUG9seWZpbGxzV29ya1RvZ2V0aGVyLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3ltYm9sT2JzZXJ2ZXJNaXNtYXRjaGluZ1BvbHlmaWxsc1dvcmtUb2dldGhlci5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsic3ltYm9sT2JzZXJ2ZXJNaXNtYXRjaGluZ1BvbHlmaWxsc1dvcmtUb2dldGhlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxVQUFVLGlCQUFpQjtJQUN2QixRQUFRLENBQUMsUUFBUSxFQUFFLE1BQU0sQ0FBQztDQUM3QjtBQUNELFVBQVUsaUJBQWlCO0lBQ3ZCLFFBQVEsQ0FBQyxRQUFRLEVBQUUsT0FBTyxNQUFNLENBQUM7Q0FDcEM7QUFFRCxRQUFBLE1BQU0sR0FBRztJQUNMLENBQUMsTUFBTSxDQUFDLFFBQVEsQ0FBQztDQUNwQixDQUFDIn0=,aW50ZXJmYWNlIFN5bWJvbENvbnN0cnVjdG9yIHsKICAgIHJlYWRvbmx5IG9ic2VydmVyOiBzeW1ib2w7Cn0KaW50ZXJmYWNlIFN5bWJvbENvbnN0cnVjdG9yIHsKICAgIHJlYWRvbmx5IG9ic2VydmVyOiB1bmlxdWUgc3ltYm9sOwp9Cgpjb25zdCBvYmogPSB7CiAgICBbU3ltYm9sLm9ic2VydmVyXTogMAp9Ow==
+

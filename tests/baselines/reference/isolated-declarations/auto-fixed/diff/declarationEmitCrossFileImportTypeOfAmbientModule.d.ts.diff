@@ -1,0 +1,16 @@
+// [[Reason: TSC adds type reference directives.]] ////
+
+//// [tests/cases/compiler/declarationEmitCrossFileImportTypeOfAmbientModule.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,7 +1,6 @@
+ 
+ 
+ //// [packages/secondpackage/index.d.ts]
+-/// <reference path="../../types/component.d.ts" />
+ import { Foo } from "@namespace/component";
+ export declare const reeexported: Foo;
+ //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file

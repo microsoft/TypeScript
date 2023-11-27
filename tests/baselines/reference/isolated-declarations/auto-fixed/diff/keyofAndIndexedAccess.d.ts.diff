@@ -1,0 +1,26 @@
+// [[Reason: Printing differences]] ////
+
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -330,12 +330,16 @@
+     [key in V]: Dict<T>;
+ };
+ declare function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+ declare function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+-declare const cf1: <T extends { [P in K]: string; } & {
++declare const cf1: <T extends {
++    [P in K]: string;
++} & {
+     cool: string;
+ }, K extends keyof T>(t: T, k: K) => void;
+-declare const cf2: <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void;
++declare const cf2: <T extends {
++    [P in K | "cool"]: string;
++}, K extends keyof T>(t: T, k: K) => void;
+ //# sourceMappingURL=keyofAndIndexedAccess.d.ts.map
+ /// [Errors] ////
+ 
+ keyofAndIndexedAccess.ts(205,24): error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.

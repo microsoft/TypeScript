@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName02.ts] ////
+
+
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitThisPredicatesWithPrivateName02.d.ts]
+interface Foo {
+    a: string;
+    b: number;
+    c: boolean;
+}
+export declare const obj: {
+    m(): this is Foo;
+};
+export {};
+//# sourceMappingURL=declarationEmitThisPredicatesWithPrivateName02.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [declarationEmitThisPredicatesWithPrivateName02.d.ts.map]
+{"version":3,"file":"declarationEmitThisPredicatesWithPrivateName02.d.ts","sourceRoot":"","sources":["declarationEmitThisPredicatesWithPrivateName02.ts"],"names":[],"mappings":"AAAA,UAAU,GAAG;IACT,CAAC,EAAE,MAAM,CAAC;IACV,CAAC,EAAE,MAAM,CAAC;IACV,CAAC,EAAE,OAAO,CAAC;CACd;AAED,eAAO,MAAM,GAAG;;CAKf,CAAA"}
+
+//// https://sokra.github.io/source-map-visualization#base64,aW50ZXJmYWNlIEZvbyB7DQogICAgYTogc3RyaW5nOw0KICAgIGI6IG51bWJlcjsNCiAgICBjOiBib29sZWFuOw0KfQ0KZXhwb3J0IGRlY2xhcmUgY29uc3Qgb2JqOiB7DQogICAgbSgpOiB0aGlzIGlzIEZvbzsNCn07DQpleHBvcnQge307DQovLyMgc291cmNlTWFwcGluZ1VSTD1kZWNsYXJhdGlvbkVtaXRUaGlzUHJlZGljYXRlc1dpdGhQcml2YXRlTmFtZTAyLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0VGhpc1ByZWRpY2F0ZXNXaXRoUHJpdmF0ZU5hbWUwMi5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiZGVjbGFyYXRpb25FbWl0VGhpc1ByZWRpY2F0ZXNXaXRoUHJpdmF0ZU5hbWUwMi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxVQUFVLEdBQUc7SUFDVCxDQUFDLEVBQUUsTUFBTSxDQUFDO0lBQ1YsQ0FBQyxFQUFFLE1BQU0sQ0FBQztJQUNWLENBQUMsRUFBRSxPQUFPLENBQUM7Q0FDZDtBQUVELGVBQU8sTUFBTSxHQUFHOztDQUtmLENBQUEifQ==,aW50ZXJmYWNlIEZvbyB7CiAgICBhOiBzdHJpbmc7CiAgICBiOiBudW1iZXI7CiAgICBjOiBib29sZWFuOwp9CgpleHBvcnQgY29uc3Qgb2JqID0gewogICAgbSgpOiB0aGlzIGlzIEZvbyB7CiAgICAgICAgbGV0IGRpcyA9IHRoaXMgYXMge30gYXMgRm9vOwogICAgICAgIHJldHVybiBkaXMuYSAhPSBudWxsICYmIGRpcy5iICE9IG51bGwgJiYgZGlzLmMgIT0gbnVsbDsKICAgIH0KfQ==
+

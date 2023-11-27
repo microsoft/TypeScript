@@ -48,7 +48,6 @@ declare class C3 {
     constructor({ x, y, z }: ObjType1);
 }
 //# sourceMappingURL=declarationEmitDestructuringParameterProperties.d.ts.map
-
 /// [Errors] ////
 
 declarationEmitDestructuringParameterProperties.ts(2,17): error TS1187: A parameter property may not be declared using a binding pattern.

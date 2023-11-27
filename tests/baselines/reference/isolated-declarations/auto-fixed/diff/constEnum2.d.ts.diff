@@ -5,12 +5,9 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -8,16 +8,20 @@
-     f,
-     g
+@@ -10,14 +10,17 @@
  }
  //# sourceMappingURL=constEnum2.d.ts.map
-+
  /// [Errors] ////
  
 +constEnum2.ts(10,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -27,7 +24,7 @@
      // In a constant enum declaration, all members must have constant values and
      // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
      
-@@ -26,13 +30,19 @@
+@@ -26,13 +29,19 @@
      const CONST: number = 9000 % 2;
      const enum D {
          d = 10,

@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @module: nodenext
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 // @filename: node_modules/react-select/index.d.ts
 export type Whatever = {x: string, y: number};
 export type Props<T, TThing = Whatever> = Omit<TThing, "y"> & Partial<TThing> & T;

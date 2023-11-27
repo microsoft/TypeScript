@@ -1,0 +1,19 @@
+// [[Reason: Sourcemap is more detailed]] ////
+
+//// [tests/cases/compiler/reexportWrittenCorrectlyInDeclaration.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,9 +1,9 @@
+ 
+ //// [Test.d.ts.map]
+-{"version":3,"file":"Test.d.ts","sourceRoot":"","sources":["Test.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,MAAM,UAAU,CAAC;AAEnC,qBAAa,IAAI;IACN,MAAM,UAAW,OAAO,MAAM,KAAG,IAAI,CAAS;CACxD"}
++{"version":3,"file":"Test.d.ts","sourceRoot":"","sources":["Test.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,MAAM,UAAU,CAAC;AAEnC,qBAAa,IAAI;IACN,MAAM,GAAI,KAAK,EAAE,MAAM,CAAC,MAAM,KAAG,IAAI,CAAS;CACxD"}
+ 
+-//// https://sokra.github.io/source-map-visualization#base64,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vVGhpbmdzIjsNCmV4cG9ydCBkZWNsYXJlIGNsYXNzIFRlc3Qgew0KICAgIG1ldGhvZDogKGlucHV0OiB0aGluZ3MuVGhpbmdBKSA9PiB2b2lkOw0KfQ0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9VGVzdC5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGVzdC5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiVGVzdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLEtBQUssTUFBTSxNQUFNLFVBQVUsQ0FBQztBQUVuQyxxQkFBYSxJQUFJO0lBQ04sTUFBTSxVQUFXLE9BQU8sTUFBTSxLQUFHLElBQUksQ0FBUztDQUN4RCJ9,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vVGhpbmdzIjsKCmV4cG9ydCBjbGFzcyBUZXN0IHsKICAgIHB1YmxpYyBtZXRob2QgPSAoaW5wdXQ6IHRoaW5ncy5UaGluZ0EpOiB2b2lkICA9PiB7IH07Cn0=
++//// https://sokra.github.io/source-map-visualization#base64,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vVGhpbmdzIjsNCmV4cG9ydCBkZWNsYXJlIGNsYXNzIFRlc3Qgew0KICAgIG1ldGhvZDogKGlucHV0OiB0aGluZ3MuVGhpbmdBKSA9PiB2b2lkOw0KfQ0KLy8jIHNvdXJjZU1hcHBpbmdVUkw9VGVzdC5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGVzdC5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiVGVzdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLEtBQUssTUFBTSxNQUFNLFVBQVUsQ0FBQztBQUVuQyxxQkFBYSxJQUFJO0lBQ04sTUFBTSxHQUFJLEtBQUssRUFBRSxNQUFNLENBQUMsTUFBTSxLQUFHLElBQUksQ0FBUztDQUN4RCJ9,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vVGhpbmdzIjsKCmV4cG9ydCBjbGFzcyBUZXN0IHsKICAgIHB1YmxpYyBtZXRob2QgPSAoaW5wdXQ6IHRoaW5ncy5UaGluZ0EpOiB2b2lkICA9PiB7IH07Cn0=
+ 
+ 
+ //// [ThingA.d.ts.map]
+ {"version":3,"file":"ThingA.d.ts","sourceRoot":"","sources":["ThingA.ts"],"names":[],"mappings":"AACA,qBAAa,MAAM;CAAI"}

@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,13 +1,59 @@
+@@ -1,13 +1,58 @@
  
 +
 +//// [declarationFiles.d.ts]
@@ -50,7 +50,6 @@
 +    f4(): () => this;
 +}
 +//# sourceMappingURL=declarationFiles.d.ts.map
-+
  /// [Errors] ////
  
  declarationFiles.ts(4,20): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
@@ -66,7 +65,7 @@
          x: this;
          f(x: this): this { return undefined; }
          constructor(x: this) { }
-@@ -46,16 +92,20 @@
+@@ -46,16 +91,20 @@
          x4 = (): this => this;
          f1() {
          ~~

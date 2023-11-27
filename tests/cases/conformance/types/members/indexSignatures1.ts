@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @target: esnext
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 // Symbol index signature checking
 

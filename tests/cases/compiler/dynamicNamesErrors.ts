@@ -2,6 +2,7 @@
 // @module: commonjs
 // @declaration: true
 // @useDefineForClassFields: false
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 const c0 = "1";
 const c1 = 1;

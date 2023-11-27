@@ -1,0 +1,16 @@
+// [[Reason: Sourcemap is more detailed]] ////
+
+//// [tests/cases/compiler/declarationEmitDistributiveConditionalWithInfer.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,6 +1,6 @@
+ 
+ //// [declarationEmitDistributiveConditionalWithInfer.d.ts.map]
+-{"version":3,"file":"declarationEmitDistributiveConditionalWithInfer.d.ts","sourceRoot":"","sources":["declarationEmitDistributiveConditionalWithInfer.ts"],"names":[],"mappings":"AACA,eAAO,MAAM,GAAG,6DAEL,UAAU,UAAU,CAAC,KAAK,CAAC,EAAE,CAAC,CAAC,EAAE,KAAG,IAAW,CAAC"}
++{"version":3,"file":"declarationEmitDistributiveConditionalWithInfer.d.ts","sourceRoot":"","sources":["declarationEmitDistributiveConditionalWithInfer.ts"],"names":[],"mappings":"AACA,eAAO,MAAM,GAAG,GACZ,MAAM,EAAE,CAAC,UAAU,EAAE,KAAK,SAAS,MAAM,UAAU,OAC5C,SAAS,CAAC,UAAU,CAAC,KAAK,CAAC,EAAE,CAAC,CAAC,EAAE,KAAG,IAAW,CAAC"}
+ 
+-//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgZnVuOiAoc3ViRnVuOiA8Q29sbGVjdGlvbiwgRmllbGQgZXh0ZW5kcyBrZXlvZiBDb2xsZWN0aW9uPigpID0+IEZsYXRBcnJheTxDb2xsZWN0aW9uW0ZpZWxkXSwgMD5bXSkgPT4gdm9pZDsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWRlY2xhcmF0aW9uRW1pdERpc3RyaWJ1dGl2ZUNvbmRpdGlvbmFsV2l0aEluZmVyLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0RGlzdHJpYnV0aXZlQ29uZGl0aW9uYWxXaXRoSW5mZXIuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImRlY2xhcmF0aW9uRW1pdERpc3RyaWJ1dGl2ZUNvbmRpdGlvbmFsV2l0aEluZmVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNBLGVBQU8sTUFBTSxHQUFHLDZEQUVMLFVBQVUsVUFBVSxDQUFDLEtBQUssQ0FBQyxFQUFFLENBQUMsQ0FBQyxFQUFFLEtBQUcsSUFBVyxDQUFDIn0=,Ly8gVGhpcyBmdW5jdGlvbidzIHR5cGUgaXMgY2hhbmdlZCBvbiBkZWNsYXJhdGlvbgpleHBvcnQgY29uc3QgZnVuID0gKAogICAgc3ViRnVuOiA8Q29sbGVjdGlvbiwgRmllbGQgZXh0ZW5kcyBrZXlvZiBDb2xsZWN0aW9uPigpCiAgICAgICAgPT4gRmxhdEFycmF5PENvbGxlY3Rpb25bRmllbGRdLCAwPltdKTogdm9pZCA9PiB7IH07Cg==
++//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgZnVuOiAoc3ViRnVuOiA8Q29sbGVjdGlvbiwgRmllbGQgZXh0ZW5kcyBrZXlvZiBDb2xsZWN0aW9uPigpID0+IEZsYXRBcnJheTxDb2xsZWN0aW9uW0ZpZWxkXSwgMD5bXSkgPT4gdm9pZDsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWRlY2xhcmF0aW9uRW1pdERpc3RyaWJ1dGl2ZUNvbmRpdGlvbmFsV2l0aEluZmVyLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVjbGFyYXRpb25FbWl0RGlzdHJpYnV0aXZlQ29uZGl0aW9uYWxXaXRoSW5mZXIuZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImRlY2xhcmF0aW9uRW1pdERpc3RyaWJ1dGl2ZUNvbmRpdGlvbmFsV2l0aEluZmVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNBLGVBQU8sTUFBTSxHQUFHLEdBQ1osTUFBTSxFQUFFLENBQUMsVUFBVSxFQUFFLEtBQUssU0FBUyxNQUFNLFVBQVUsT0FDNUMsU0FBUyxDQUFDLFVBQVUsQ0FBQyxLQUFLLENBQUMsRUFBRSxDQUFDLENBQUMsRUFBRSxLQUFHLElBQVcsQ0FBQyJ9,Ly8gVGhpcyBmdW5jdGlvbidzIHR5cGUgaXMgY2hhbmdlZCBvbiBkZWNsYXJhdGlvbgpleHBvcnQgY29uc3QgZnVuID0gKAogICAgc3ViRnVuOiA8Q29sbGVjdGlvbiwgRmllbGQgZXh0ZW5kcyBrZXlvZiBDb2xsZWN0aW9uPigpCiAgICAgICAgPT4gRmxhdEFycmF5PENvbGxlY3Rpb25bRmllbGRdLCAwPltdKTogdm9pZCA9PiB7IH07Cg==
+ 

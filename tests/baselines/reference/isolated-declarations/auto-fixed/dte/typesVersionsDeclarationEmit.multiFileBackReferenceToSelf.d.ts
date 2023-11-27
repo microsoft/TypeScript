@@ -40,7 +40,6 @@ export * from "../other";
 export declare const va: any;
 export declare const vb: invalid;
 //# sourceMappingURL=main.d.ts.map
-
 /// [Errors] ////
 
 main.ts(1,10): error TS2305: Module '"ext"' has no exported member 'fa'.

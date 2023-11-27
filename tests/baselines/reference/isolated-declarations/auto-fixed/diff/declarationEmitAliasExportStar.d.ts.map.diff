@@ -1,0 +1,19 @@
+// [[Reason: Sourcemap is more detailed]] ////
+
+//// [tests/cases/compiler/declarationEmitAliasExportStar.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,9 +1,9 @@
+ 
+ //// [index.d.ts.map]
+-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,MAAM,UAAU,CAAC;AACnC,eAAO,MAAM,MAAM,UAAW,OAAO,MAAM,KAAG,GAAW,CAAC"}
++{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,MAAM,UAAU,CAAC;AACnC,eAAO,MAAM,MAAM,GAAI,KAAK,EAAE,MAAM,CAAC,MAAM,KAAG,GAAW,CAAC"}
+ 
+-//// https://sokra.github.io/source-map-visualization#base64,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vdGhpbmdzIjsNCmV4cG9ydCBkZWNsYXJlIGNvbnN0IHRoaW5nMjogKHBhcmFtOiB0aGluZ3MuVGhpbmdCKSA9PiBhbnk7DQovLyMgc291cmNlTWFwcGluZ1VSTD1pbmRleC5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sS0FBSyxNQUFNLE1BQU0sVUFBVSxDQUFDO0FBQ25DLGVBQU8sTUFBTSxNQUFNLFVBQVcsT0FBTyxNQUFNLEtBQUcsR0FBVyxDQUFDIn0=,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vdGhpbmdzIjsKZXhwb3J0IGNvbnN0IHRoaW5nMiA9IChwYXJhbTogdGhpbmdzLlRoaW5nQik6IGFueSA9PiBudWxsOwo=
++//// https://sokra.github.io/source-map-visualization#base64,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vdGhpbmdzIjsNCmV4cG9ydCBkZWNsYXJlIGNvbnN0IHRoaW5nMjogKHBhcmFtOiB0aGluZ3MuVGhpbmdCKSA9PiBhbnk7DQovLyMgc291cmNlTWFwcGluZ1VSTD1pbmRleC5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sS0FBSyxNQUFNLE1BQU0sVUFBVSxDQUFDO0FBQ25DLGVBQU8sTUFBTSxNQUFNLEdBQUksS0FBSyxFQUFFLE1BQU0sQ0FBQyxNQUFNLEtBQUcsR0FBVyxDQUFDIn0=,aW1wb3J0ICogYXMgdGhpbmdzIGZyb20gIi4vdGhpbmdzIjsKZXhwb3J0IGNvbnN0IHRoaW5nMiA9IChwYXJhbTogdGhpbmdzLlRoaW5nQik6IGFueSA9PiBudWxsOwo=
+ 
+ 
+ //// [thingB.d.ts.map]
+ {"version":3,"file":"thingB.d.ts","sourceRoot":"","sources":["thingB.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,MAAM;CAAI"}

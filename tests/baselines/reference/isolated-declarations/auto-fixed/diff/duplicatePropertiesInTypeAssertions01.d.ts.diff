@@ -1,0 +1,17 @@
+// [[Reason: Syntactically invalid. Duplicate property]] ////
+
+//// [tests/cases/conformance/expressions/typeAssertions/duplicatePropertiesInTypeAssertions01.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -2,8 +2,9 @@
+ 
+ //// [duplicatePropertiesInTypeAssertions01.d.ts]
+ declare let x: {
+     a: number;
++    a: number;
+ };
+ //# sourceMappingURL=duplicatePropertiesInTypeAssertions01.d.ts.map
+ /// [Errors] ////
+ 

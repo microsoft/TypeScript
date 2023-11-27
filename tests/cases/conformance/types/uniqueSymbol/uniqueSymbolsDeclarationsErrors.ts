@@ -3,6 +3,7 @@
 // @module: commonjs
 // @declaration: true
 // @useDefineForClassFields: false
+// @isolatedDeclarationFixedDiffReason: Can't fix class expressions.
 
 declare const s: unique symbol;
 interface I { readonly readonlyType: unique symbol; }

@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/declarationEmitLambdaWithMissingTypeParameterNoCrash.ts] ////
+
+//// [declarationEmitLambdaWithMissingTypeParameterNoCrash.ts]
+export interface Foo {
+    preFetch: <T1 extends T2> (c: T1) => void; // Type T2 is not defined
+    preFetcher: new <T1 extends T2> (c: T1) => void; // Type T2 is not defined
+}
+
+
+/// [Declarations] ////
+
+
+
+//// [declarationEmitLambdaWithMissingTypeParameterNoCrash.d.ts]
+export interface Foo {
+    preFetch: <T1 extends T2>(c: T1) => void;
+    preFetcher: new <T1 extends T2>(c: T1) => void;
+}
+//# sourceMappingURL=declarationEmitLambdaWithMissingTypeParameterNoCrash.d.ts.map
+/// [Errors] ////
+
+declarationEmitLambdaWithMissingTypeParameterNoCrash.ts(2,27): error TS2304: Cannot find name 'T2'.
+declarationEmitLambdaWithMissingTypeParameterNoCrash.ts(2,27): error TS4016: Type parameter 'T1' of exported function has or is using private name 'T2'.
+declarationEmitLambdaWithMissingTypeParameterNoCrash.ts(3,33): error TS2304: Cannot find name 'T2'.
+declarationEmitLambdaWithMissingTypeParameterNoCrash.ts(3,33): error TS4006: Type parameter 'T1' of constructor signature from exported interface has or is using private name 'T2'.
+
+
+==== declarationEmitLambdaWithMissingTypeParameterNoCrash.ts (4 errors) ====
+    export interface Foo {
+        preFetch: <T1 extends T2> (c: T1) => void; // Type T2 is not defined
+                              ~~
+!!! error TS2304: Cannot find name 'T2'.
+                              ~~
+!!! error TS4016: Type parameter 'T1' of exported function has or is using private name 'T2'.
+        preFetcher: new <T1 extends T2> (c: T1) => void; // Type T2 is not defined
+                                    ~~
+!!! error TS2304: Cannot find name 'T2'.
+                                    ~~
+!!! error TS4006: Type parameter 'T1' of constructor signature from exported interface has or is using private name 'T2'.
+    }
+    

@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @emitDeclarationOnly: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 // same type accessors
 export const obj1 = {
