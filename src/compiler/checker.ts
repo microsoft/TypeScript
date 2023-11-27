@@ -30877,7 +30877,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const inDestructuringPattern = isAssignmentTarget(node);
         const inConstContext = isConstContext(node);
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
-        const inTupleContext = isSpreadIntoCallOrNew(node) || !!contextualType && someType(contextualType, isTupleLikeType);
+        const inTupleContext = isSpreadIntoCallOrNew(node) || !!contextualType && someType(contextualType, t => isTupleLikeType(t) || isGenericMappedType(t) && !t.nameType && !!getHomomorphicTypeVariable(t.target as MappedType || t));
+
         let hasOmittedExpression = false;
         for (let i = 0; i < elementCount; i++) {
             const e = elements[i];
