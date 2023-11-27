@@ -67,7 +67,7 @@
         "eslint-plugin-no-null": "^1.0.2",
         "eslint-plugin-simple-import-sort": "^10.0.0",
         "fast-xml-parser": "^4.3.2",
-        "glob": "^8.1.0",
+        "glob": "^10.3.10",
         "hereby": "^1.8.8",
         "jsonc-parser": "^3.2.0",
         "minimist": "^1.2.8",
