@@ -7500,7 +7500,7 @@ namespace Parser {
 
     function nextTokenIsFromKeywordOrEqualsToken() {
         nextToken();
-        return token() === SyntaxKind.FromKeyword || token() == SyntaxKind.EqualsToken;
+        return token() === SyntaxKind.FromKeyword || token() === SyntaxKind.EqualsToken;
     }
 
     function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
