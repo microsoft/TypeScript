@@ -93,7 +93,7 @@ assert(moduleSymbol, "Failed to get module's symbol");
 const printer = /** @type {any} */ (ts.createPrinter({ newLine: newLineKind }));
 /** @type {{ writeComment(s: string): void; getText(): string; clear(): void }} */
 const writer = /** @type {any} */ (ts).createTextWriter("\n");
-const originalWriteComment = writer.writeComment;
+const originalWriteComment = writer.writeComment.bind(writer);
 writer.writeComment = s => {
     // Hack; undo https://github.com/microsoft/TypeScript/pull/50097
     // We printNode directly, so we get all of the original source comments.
@@ -101,7 +101,7 @@ writer.writeComment = s => {
     if (s.startsWith("//")) {
         return;
     }
-    originalWriteComment.call(writer, s);
+    originalWriteComment(s);
 };
 
 /**
