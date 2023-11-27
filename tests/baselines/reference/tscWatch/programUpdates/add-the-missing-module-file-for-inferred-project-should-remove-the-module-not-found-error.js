@@ -115,7 +115,7 @@ FsWatches::
   {}
 /users/username/projects/project/file1.ts:
   {}
-/users/username/projects/project/modulefile.ts: *new*
+/users/username/projects/project/moduleFile.ts: *new*
   {}
 
 FsWatchesRecursive *deleted*::

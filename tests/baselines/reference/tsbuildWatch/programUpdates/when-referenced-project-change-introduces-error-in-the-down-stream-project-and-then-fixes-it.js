@@ -136,13 +136,13 @@ var library_1 = require("../Library/library");
 
 
 FsWatches::
-/user/username/projects/sample1/app/app.ts: *new*
+/user/username/projects/sample1/App/app.ts: *new*
   {}
-/user/username/projects/sample1/app/tsconfig.json: *new*
+/user/username/projects/sample1/App/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/library/library.ts: *new*
+/user/username/projects/sample1/Library/library.ts: *new*
   {}
-/user/username/projects/sample1/library/tsconfig.json: *new*
+/user/username/projects/sample1/Library/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

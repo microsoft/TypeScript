@@ -186,13 +186,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/a/lib/lib.d.ts: *new*
+C:/a/node_modules/@types: *new*
   {"pollingInterval":500}
-c:/a/node_modules/@types: *new*
+c:/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/a: *new*
+C:/a/tsconfig.json: *new*
   {}
-c:/a/tsconfig.json: *new*
+c:/a: *new*
   {}

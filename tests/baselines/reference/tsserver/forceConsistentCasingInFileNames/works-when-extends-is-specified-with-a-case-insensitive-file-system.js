@@ -197,19 +197,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
+/Users/username/dev/project/tsconfig.all.json: *new*
+  {}
+/Users/username/dev/project/tsconfig.json: *new*
+  {}
+/Users/username/dev/project/types/file2/index.d.ts: *new*
+  {}
 /a/lib/lib.d.ts: *new*
-  {}
-/users/username/dev/project/tsconfig.all.json: *new*
-  {}
-/users/username/dev/project/tsconfig.json: *new*
-  {}
-/users/username/dev/project/types/file2/index.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/dev/project: *new*
+/Users/username/dev/project/types: *new*
   {}
-/users/username/dev/project/types: *new*
+/users/username/dev/project: *new*
   {}
 
 Before request

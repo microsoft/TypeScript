@@ -203,7 +203,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js: *new*
+/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js: *new*
   {}
 /user/username/projects/myproject/apps/editor/src/src.js: *new*
   {}
@@ -246,11 +246,11 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js:
+/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js:
   {}
 /user/username/projects/myproject/apps/editor/src/src.js:
   {}
-/user/username/projects/myproject/mocks/cssmock.js: *new*
+/user/username/projects/myproject/mocks/cssMock.js: *new*
   {}
 /user/username/projects/myproject/tsconfig.json:
   {}
@@ -474,9 +474,9 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js:
+/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js:
   {}
-/user/username/projects/myproject/mocks/cssmock.js:
+/user/username/projects/myproject/mocks/cssMock.js:
   {}
 
 FsWatchesRecursive::

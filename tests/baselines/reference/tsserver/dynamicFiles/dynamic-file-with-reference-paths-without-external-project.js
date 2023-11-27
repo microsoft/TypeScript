@@ -190,7 +190,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/^walkthroughsnippet:: *new*
+/^walkThroughSnippet:: *new*
   {"pollingInterval":500}
 /bower_components: *new*
   {"pollingInterval":500}

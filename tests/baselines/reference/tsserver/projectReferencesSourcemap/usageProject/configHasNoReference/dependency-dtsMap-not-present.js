@@ -602,7 +602,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/fns.d.ts.map: *new*
+/user/username/projects/myproject/decls/FnS.d.ts.map: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/main/node_modules/@types:
   {"pollingInterval":500}
@@ -869,7 +869,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {"pollingInterval":2000}
 /user/username/projects/myproject/main/node_modules/@types:
   {"pollingInterval":500}
@@ -934,7 +934,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {"pollingInterval":2000}
 /user/username/projects/myproject/main/node_modules/@types:
   {"pollingInterval":500}
@@ -997,7 +997,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {"pollingInterval":2000}
 /user/username/projects/myproject/main/node_modules/@types:
   {"pollingInterval":500}
@@ -1056,7 +1056,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {"pollingInterval":2000}
 /user/username/projects/myproject/main/node_modules/@types:
   {"pollingInterval":500}
@@ -1155,7 +1155,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {"pollingInterval":2000}
 /user/username/projects/myproject/main/node_modules/@types:
   {"pollingInterval":500}

@@ -116,7 +116,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src: *new*
   {}
-/user/username/projects/myproject/src/filea.ts: *new*
+/user/username/projects/myproject/src/fileA.ts: *new*
   {}
 /user/username/projects/myproject/src/tsconfig.json: *new*
   {}
@@ -248,7 +248,7 @@ const fileB_mjs_1 = require("./fileB.mjs");
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs: *new*
+/user/username/projects/myproject/src/fileB.mjs: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -264,7 +264,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -397,7 +397,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileB.mjs:
   {"pollingInterval":500}
 
 FsWatches::
@@ -407,7 +407,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -542,7 +542,7 @@ const fileB_mjs_1 = require("./fileB.mjs");
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs: *new*
+/user/username/projects/myproject/src/fileB.mjs: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -560,7 +560,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -669,7 +669,7 @@ src/fileA.ts
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileB.mjs:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -689,7 +689,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -799,7 +799,7 @@ src/fileA.ts
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileB.mjs:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -817,7 +817,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}

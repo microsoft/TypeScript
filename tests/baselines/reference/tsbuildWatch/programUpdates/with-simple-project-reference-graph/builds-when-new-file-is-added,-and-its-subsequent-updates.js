@@ -437,7 +437,7 @@ export declare const m: typeof mod;
 
 
 FsWatches::
-/user/username/projects/sample1/core/anothermodule.ts: *new*
+/user/username/projects/sample1/core/anotherModule.ts: *new*
   {}
 /user/username/projects/sample1/core/index.ts: *new*
   {}
@@ -686,7 +686,7 @@ export declare const newFileConst = 30;
 
 
 FsWatches::
-/user/username/projects/sample1/core/anothermodule.ts:
+/user/username/projects/sample1/core/anotherModule.ts:
   {}
 /user/username/projects/sample1/core/index.ts:
   {}

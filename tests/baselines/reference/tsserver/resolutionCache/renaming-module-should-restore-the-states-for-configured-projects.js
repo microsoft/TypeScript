@@ -195,7 +195,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/modulefile.ts: *new*
+/users/username/projects/project/moduleFile.ts: *new*
   {}
 /users/username/projects/project/tsconfig.json: *new*
   {}
@@ -256,7 +256,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/users/username/projects/project/modulefile.ts:
+/users/username/projects/project/moduleFile.ts:
   {}
 
 FsWatchesRecursive::
@@ -323,7 +323,7 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/modulefile: *new*
+/users/username/projects/project/moduleFile: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -331,7 +331,7 @@ PolledWatches::
 FsWatches::
 /users/username/projects/project: *new*
   {}
-/users/username/projects/project/modulefile1.ts: *new*
+/users/username/projects/project/moduleFile1.ts: *new*
   {}
 /users/username/projects/project/tsconfig.json:
   {}
@@ -405,7 +405,7 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/modulefile:
+/users/username/projects/project/moduleFile:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -417,7 +417,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/users/username/projects/project/modulefile1.ts:
+/users/username/projects/project/moduleFile1.ts:
   {}
 
 FsWatchesRecursive::
@@ -487,11 +487,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/users/username/projects/project/modulefile:
+/users/username/projects/project/moduleFile:
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/modulefile.ts: *new*
+/users/username/projects/project/moduleFile.ts: *new*
   {}
 /users/username/projects/project/tsconfig.json:
   {}

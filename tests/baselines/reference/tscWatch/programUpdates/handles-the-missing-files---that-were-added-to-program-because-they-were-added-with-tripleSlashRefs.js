@@ -48,7 +48,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/commonfile1.ts: *new*
+/a/b/commonFile1.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -86,7 +86,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
 /a/lib/lib.d.ts:
   {}
@@ -113,9 +113,9 @@ var y = 1;
 
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {}
 /a/lib/lib.d.ts:
   {}

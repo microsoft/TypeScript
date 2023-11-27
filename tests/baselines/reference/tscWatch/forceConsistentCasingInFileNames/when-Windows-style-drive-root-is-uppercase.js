@@ -71,17 +71,17 @@ a_2.b;
 
 
 PolledWatches::
-c:/project/node_modules/@types: *new*
+C:/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/a/lib/lib.d.ts: *new*
+C:/a/lib/lib.d.ts: *new*
   {}
-c:/project/a.ts: *new*
+C:/project/a.ts: *new*
   {}
-c:/project/b.ts: *new*
+C:/project/b.ts: *new*
   {}
-c:/project/tsconfig.json: *new*
+C:/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
