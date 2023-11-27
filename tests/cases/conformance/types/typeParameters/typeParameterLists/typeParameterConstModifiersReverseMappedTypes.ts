@@ -39,3 +39,11 @@ declare function test4<const T extends readonly unknown[]>(arr: {
 }): T;
 
 const result4 = test4(["1", 2]);
+
+declare function test5<const T extends readonly unknown[]>(
+  ...args: {
+    [K in keyof T]: T[K];
+  }
+): T;
+
+const result5 = test5({ a: "foo" });

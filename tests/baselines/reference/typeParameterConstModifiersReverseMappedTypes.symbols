@@ -112,3 +112,24 @@ const result4 = test4(["1", 2]);
 >result4 : Symbol(result4, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 37, 5))
 >test4 : Symbol(test4, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 31, 3))
 
+declare function test5<const T extends readonly unknown[]>(
+>test5 : Symbol(test5, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 37, 32))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 39, 23))
+
+  ...args: {
+>args : Symbol(args, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 39, 59))
+
+    [K in keyof T]: T[K];
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 41, 5))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 39, 23))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 39, 23))
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 41, 5))
+  }
+): T;
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 39, 23))
+
+const result5 = test5({ a: "foo" });
+>result5 : Symbol(result5, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 45, 5))
+>test5 : Symbol(test5, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 37, 32))
+>a : Symbol(a, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 45, 23))
+
