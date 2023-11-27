@@ -12,7 +12,6 @@ import {
     and,
     AnonymousType,
     AnyImportOrReExport,
-    AnyImportSyntax,
     append,
     appendIfUnique,
     ArrayBindingPattern,
@@ -241,6 +240,7 @@ import {
     getAllJSDocTags,
     getAllowSyntheticDefaultImports,
     getAncestor,
+    getAnyImportSyntax,
     getAssignedExpandoInitializer,
     getAssignmentDeclarationKind,
     getAssignmentDeclarationPropertyAccessKind,
@@ -3925,21 +3925,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!parent && !!findAncestor(initial, n =>
             n === parent
             || (n === stopAt || isFunctionLike(n) && (!getImmediatelyInvokedFunctionExpression(n) || (getFunctionFlags(n) & FunctionFlags.AsyncGenerator)) ? "quit" : false));
-    }
-
-    function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
-        switch (node.kind) {
-            case SyntaxKind.ImportEqualsDeclaration:
-                return node as ImportEqualsDeclaration;
-            case SyntaxKind.ImportClause:
-                return (node as ImportClause).parent;
-            case SyntaxKind.NamespaceImport:
-                return (node as NamespaceImport).parent.parent;
-            case SyntaxKind.ImportSpecifier:
-                return (node as ImportSpecifier).parent.parent.parent;
-            default:
-                return undefined;
-        }
     }
 
     function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
