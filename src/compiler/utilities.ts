@@ -8746,9 +8746,20 @@ export type StrictOptionName =
 
 /** @internal */
 export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
-    return compilerOptions[flag] === undefined
-        ? (compilerOptions.strict === undefined ? true : !!compilerOptions.strict)
-        : !!compilerOptions[flag];
+    if (compilerOptions[flag] !== undefined) {
+        return !!compilerOptions[flag];
+    }
+
+    // https://github.com/microsoft/TypeScript/issues/54500#issuecomment-1585189794
+    switch (flag) {
+        case "strictNullChecks":
+        case "noImplicitAny":
+            if (compilerOptions.strict === undefined) {
+                return true;
+            }
+    }
+
+    return !!compilerOptions.strict;
 }
 
 /** @internal */
