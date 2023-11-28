@@ -2383,7 +2383,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // If the missing file paths are now present, it can change the progam structure,
         // and hence cant reuse the structure.
         // This is same as how we dont reuse the structure if one of the file from old program is now missing
-        if (forEachEntry(oldProgram.getMissingFilePaths(), missingFilePath => host.fileExists(missingFilePath))) {
+        if (forEachEntry(oldProgram.getMissingFilePaths(), missingFileName => host.fileExists(missingFileName))) {
             return StructureIsReused.Not;
         }
 
