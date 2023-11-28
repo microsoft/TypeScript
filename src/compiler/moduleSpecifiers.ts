@@ -64,6 +64,7 @@ import {
     isModuleBlock,
     isModuleDeclaration,
     isNonGlobalAmbientModule,
+    isPackageJsonInfo,
     isRootedDiskPath,
     isSourceFile,
     isString,
@@ -992,7 +993,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         let moduleFileToTry = path;
         let maybeBlockedByTypesVersions = false;
         const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
-        if (typeof cachedPackageJson?.contents === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
+        if (isPackageJsonInfo(cachedPackageJson) || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
             const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
             const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
             if (getResolvePackageJsonExports(options)) {

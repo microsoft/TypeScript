@@ -903,11 +903,16 @@ export interface NonRelativeModuleNameResolutionCache extends NonRelativeNameRes
 /** @internal */
 export interface MissingPackageJsonInfo {
     packageDirectory: string;
-    contents: boolean;
+    directoryExists: boolean;
 }
 
 /** @internal */
 export type PackageJsonInfoCacheEntry = PackageJsonInfo | MissingPackageJsonInfo;
+
+/** @internal */
+export function isPackageJsonInfo(entry: PackageJsonInfoCacheEntry | undefined): entry is PackageJsonInfo {
+    return !!(entry as PackageJsonInfo | undefined)?.contents;
+}
 
 export interface PackageJsonInfoCache {
     /** @internal */ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfoCacheEntry | undefined;
@@ -2394,7 +2399,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
 
     const existing = state.packageJsonInfoCache?.getPackageJsonInfo(packageJsonPath);
     if (existing !== undefined) {
-        if (typeof existing.contents !== "boolean") {
+        if (isPackageJsonInfo(existing)) {
             if (traceEnabled) trace(host, Diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath);
             state.affectingLocations?.push(packageJsonPath);
             return existing.packageDirectory === packageDirectory ?
@@ -2402,7 +2407,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
                 { packageDirectory, contents: existing.contents };
         }
         else {
-            if (existing.contents && traceEnabled) trace(host, Diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath);
+            if (existing.directoryExists && traceEnabled) trace(host, Diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath);
             state.failedLookupLocations?.push(packageJsonPath);
             return undefined;
         }
@@ -2422,7 +2427,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
         if (directoryExists && traceEnabled) {
             trace(host, Diagnostics.File_0_does_not_exist, packageJsonPath);
         }
-        if (state.packageJsonInfoCache && !state.packageJsonInfoCache.isReadonly) state.packageJsonInfoCache.setPackageJsonInfo(packageJsonPath, { packageDirectory, contents: directoryExists });
+        if (state.packageJsonInfoCache && !state.packageJsonInfoCache.isReadonly) state.packageJsonInfoCache.setPackageJsonInfo(packageJsonPath, { packageDirectory, directoryExists });
         // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
         state.failedLookupLocations?.push(packageJsonPath);
     }

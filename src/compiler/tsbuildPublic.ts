@@ -74,6 +74,7 @@ import {
     isArray,
     isIgnoredFileFromWildCardWatching,
     isIncrementalCompilation,
+    isPackageJsonInfo,
     isString,
     listFiles,
     loadWithModeAwareCache,
@@ -1091,7 +1092,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
                 internalMap && new Set(arrayFrom(
                     internalMap.values(),
                     data =>
-                        state.host.realpath && data.contents ?
+                        state.host.realpath && (isPackageJsonInfo(data) || data.directoryExists) ?
                             state.host.realpath(combinePaths(data.packageDirectory, "package.json")) :
                             combinePaths(data.packageDirectory, "package.json"),
                 )),
