@@ -1,0 +1,16 @@
+// [[Reason: Sourcemap is more detailed]] ////
+
+//// [tests/cases/compiler/accessorInferredReturnTypeErrorInReturnStatement.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,6 +1,6 @@
+ 
+ //// [accessorInferredReturnTypeErrorInReturnStatement.d.ts.map]
+-{"version":3,"file":"accessorInferredReturnTypeErrorInReturnStatement.d.ts","sourceRoot":"","sources":["accessorInferredReturnTypeErrorInReturnStatement.ts"],"names":[],"mappings":"AAAA,eAAO,IAAI,aAAa;;CAKvB,CAAC"}
++{"version":3,"file":"accessorInferredReturnTypeErrorInReturnStatement.d.ts","sourceRoot":"","sources":["accessorInferredReturnTypeErrorInReturnStatement.ts"],"names":[],"mappings":"AAAA,eAAO,IAAI,aAAa;0BACH,GAAG;CAIvB,CAAC"}
+ 
+-//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgdmFyIGJhc2VQcm90b3R5cGU6IHsNCiAgICByZWFkb25seSBwcmltYXJ5UGF0aDogYW55Ow0KfTsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWFjY2Vzc29ySW5mZXJyZWRSZXR1cm5UeXBlRXJyb3JJblJldHVyblN0YXRlbWVudC5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWNjZXNzb3JJbmZlcnJlZFJldHVyblR5cGVFcnJvckluUmV0dXJuU3RhdGVtZW50LmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJhY2Nlc3NvckluZmVycmVkUmV0dXJuVHlwZUVycm9ySW5SZXR1cm5TdGF0ZW1lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsZUFBTyxJQUFJLGFBQWE7O0NBS3ZCLENBQUMifQ==,ZXhwb3J0IHZhciBiYXNlUHJvdG90eXBlID0gewogIGdldCBwcmltYXJ5UGF0aCgpOiBhbnkgewogICAgdmFyIF90aGlzID0gdGhpczsKICAgIHJldHVybiBfdGhpcy5jb2xsZWN0aW9uLnNjaGVtYS5wcmltYXJ5UGF0aDsKICB9LCAgCn07Cg==
++//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgdmFyIGJhc2VQcm90b3R5cGU6IHsNCiAgICByZWFkb25seSBwcmltYXJ5UGF0aDogYW55Ow0KfTsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWFjY2Vzc29ySW5mZXJyZWRSZXR1cm5UeXBlRXJyb3JJblJldHVyblN0YXRlbWVudC5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWNjZXNzb3JJbmZlcnJlZFJldHVyblR5cGVFcnJvckluUmV0dXJuU3RhdGVtZW50LmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJhY2Nlc3NvckluZmVycmVkUmV0dXJuVHlwZUVycm9ySW5SZXR1cm5TdGF0ZW1lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsZUFBTyxJQUFJLGFBQWE7MEJBQ0gsR0FBRztDQUl2QixDQUFDIn0=,ZXhwb3J0IHZhciBiYXNlUHJvdG90eXBlID0gewogIGdldCBwcmltYXJ5UGF0aCgpOiBhbnkgewogICAgdmFyIF90aGlzID0gdGhpczsKICAgIHJldHVybiBfdGhpcy5jb2xsZWN0aW9uLnNjaGVtYS5wcmltYXJ5UGF0aDsKICB9LCAgCn07Cg==
+ 

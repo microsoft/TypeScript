@@ -1,5 +1,7 @@
 // @module: nodenext
 // @declaration: true
+// @isolatedDeclarations: false
+// @isolatedDeclarationFixedDiffReason: Skipped due to GH:56394
 // @filename: index.ts
 // esm format file
 export {};

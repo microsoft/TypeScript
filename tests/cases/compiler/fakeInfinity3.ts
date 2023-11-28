@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Semantically invalid. TSC does not emit .d.ts
 
 export enum Foo {
     A = 1e999,
