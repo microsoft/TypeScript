@@ -9210,18 +9210,7 @@ namespace Parser {
                 }
                 nextTokenJSDoc(); // start at token after link, then skip any whitespace
                 skipWhitespace();
-                // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
-                const p2 = getNodePos();
-                let name: EntityName | JSDocMemberName | undefined = tokenIsIdentifierOrKeyword(token())
-                    ? parseEntityName(/*allowReservedWords*/ true)
-                    : undefined;
-                if (name) {
-                    while (token() === SyntaxKind.PrivateIdentifier) {
-                        reScanHashToken(); // rescan #id as # id
-                        nextTokenJSDoc(); // then skip the #
-                        name = finishNode(factory.createJSDocMemberName(name, parseIdentifier()), p2);
-                    }
-                }
+                const name = parseJSDocLinkName();
                 const text = [];
                 while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia && token() !== SyntaxKind.EndOfFileToken) {
                     text.push(scanner.getTokenText());
@@ -9231,6 +9220,24 @@ namespace Parser {
                     : linkType === "linkcode" ? factory.createJSDocLinkCode
                     : factory.createJSDocLinkPlain;
                 return finishNode(create(name, text.join("")), start, scanner.getTokenEnd());
+            }
+
+            function parseJSDocLinkName() {
+                if (tokenIsIdentifierOrKeyword(token())) {
+                    const pos = getNodePos();
+
+                    let name: EntityName | JSDocMemberName = parseIdentifierName();
+                    while (parseOptional(SyntaxKind.DotToken)) {
+                        name = finishNode(factory.createQualifiedName(name, token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false) : parseIdentifier()), pos);
+                    }
+                    while (token() === SyntaxKind.PrivateIdentifier) {
+                        reScanHashToken();
+                        nextTokenJSDoc();
+                        name = finishNode(factory.createJSDocMemberName(name, parseIdentifier()), pos);
+                    }
+                    return name;
+                }
+                return undefined;
             }
 
             function parseJSDocLinkPrefix() {
