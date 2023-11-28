@@ -1,10 +1,29 @@
 import {
+    __String,
+    ArrayBindingElement,
+    BinaryExpression,
+    BindingPattern,
+    ClassDeclaration,
+    ClassElement,
+    ComputedPropertyName,
+    Debug,
+    Declaration,
+    EnumDeclaration,
+    EnumMember,
+    Expression,
     factory,
+    findAncestor,
     forEachChild,
+    FunctionDeclaration,
     getModuleInstanceState,
     getNodeId,
+    hasAmbientModifier,
+    hasSyntacticModifier,
+    InterfaceDeclaration,
     isBinaryExpression,
+    isBindingPattern,
     isBlock,
+    isBlockScopedContainerTopLevel,
     isClassDeclaration,
     isComputedPropertyName,
     isConditionalTypeNode,
@@ -12,12 +31,16 @@ import {
     isConstructSignatureDeclaration,
     isDoStatement,
     isElementAccessExpression,
+    isEnumConst,
     isEnumDeclaration,
     isExportAssignment,
     isExportDeclaration,
+    isExpression,
     isExpressionStatement,
+    isForInOrOfStatement,
     isForStatement,
     isFunctionDeclaration,
+    isFunctionExpressionOrArrowFunction,
     isIdentifier,
     isIfStatement,
     isImportDeclaration,
@@ -34,68 +57,35 @@ import {
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
+    isPropertyName,
     isSourceFile,
+    isStringLiteralLike,
     isTypeAliasDeclaration,
+    isVarConst,
     isVariableDeclaration,
     isVariableDeclarationList,
     isVariableStatement,
     isWhileStatement,
-    ModuleInstanceState,
-    Symbol,
-} from "../../_namespaces/ts";
-import {
-    Debug,
-} from "../../debug";
-import {
-    __String,
-    ArrayBindingElement,
-    BinaryExpression,
-    BindingPattern,
-    ClassDeclaration,
-    ClassElement,
-    ComputedPropertyName,
-    Declaration,
-    EnumDeclaration,
-    EnumMember,
-    Expression,
-    FunctionDeclaration,
-    InterfaceDeclaration,
+    MemberKey,
     ModifierFlags,
     ModuleDeclaration,
+    ModuleInstanceState,
     Node,
     NodeArray,
     NoSubstitutionTemplateLiteral,
     ObjectLiteralElement,
     ParameterDeclaration,
     PropertyName,
+    setValueDeclaration,
     SourceFile,
+    Symbol,
     SymbolFlags,
     SyntaxKind,
     TypeAliasDeclaration,
     TypeElement,
     TypeParameterDeclaration,
     VariableDeclaration,
-} from "../../types";
-import {
-    hasAmbientModifier,
-    hasSyntacticModifier,
-    isBlockScopedContainerTopLevel,
-    isEnumConst,
-    isFunctionExpressionOrArrowFunction,
-    isVarConst,
-    setValueDeclaration,
-} from "../../utilities";
-import {
-    findAncestor,
-    isBindingPattern,
-    isExpression,
-    isForInOrOfStatement,
-    isPropertyName,
-    isStringLiteralLike,
-} from "../../utilitiesPublic";
-import {
-    MemberKey,
-} from "./types";
+} from "../../_namespaces/ts";
 
 /** @internal */
 export interface EmitDeclarationNodeLinks {
@@ -121,46 +111,56 @@ export interface EmitDeclarationSymbol {
     exports?: EmitDeclarationSymbolTable;
 }
 
-type SymbolRegistrationFlags = readonly [flags: SymbolFlags, forbiddenFlags: SymbolFlags];
+interface SymbolRegistrationFlags {
+    includes: SymbolFlags;
+    excludes: SymbolFlags;
+}
 const syntaxKindToSymbolMap = {
-    [SyntaxKind.TypeParameter]: [SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes],
-    [SyntaxKind.Parameter]: [SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes],
-    [SyntaxKind.VariableDeclaration]: [SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes],
-    [SyntaxKind.BindingElement]: [SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes],
-    [SyntaxKind.PropertyDeclaration]: [SymbolFlags.Property, SymbolFlags.PropertyExcludes],
-    [SyntaxKind.PropertySignature]: [SymbolFlags.Property, SymbolFlags.PropertyExcludes],
-    [SyntaxKind.PropertyAssignment]: [SymbolFlags.Property, SymbolFlags.PropertyExcludes],
-    [SyntaxKind.ShorthandPropertyAssignment]: [SymbolFlags.Property, SymbolFlags.PropertyExcludes],
-    [SyntaxKind.EnumMember]: [SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes],
-    [SyntaxKind.CallSignature]: [SymbolFlags.Signature, SymbolFlags.None],
-    [SyntaxKind.ConstructSignature]: [SymbolFlags.Signature, SymbolFlags.None],
-    [SyntaxKind.IndexSignature]: [SymbolFlags.Signature, SymbolFlags.None],
-    [SyntaxKind.MethodDeclaration]: [SymbolFlags.Method, SymbolFlags.MethodExcludes],
-    [SyntaxKind.MethodSignature]: [SymbolFlags.Method, SymbolFlags.MethodExcludes],
-    [SyntaxKind.FunctionDeclaration]: [SymbolFlags.Function, SymbolFlags.FunctionExcludes],
-    [SyntaxKind.Constructor]: [SymbolFlags.Constructor, SymbolFlags.None],
-    [SyntaxKind.GetAccessor]: [SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes],
-    [SyntaxKind.SetAccessor]: [SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes],
-    [SyntaxKind.ClassExpression]: [SymbolFlags.Class, SymbolFlags.ClassExcludes],
-    [SyntaxKind.ClassDeclaration]: [SymbolFlags.Class, SymbolFlags.ClassExcludes],
-    [SyntaxKind.InterfaceDeclaration]: [SymbolFlags.Interface, SymbolFlags.InterfaceExcludes],
-    [SyntaxKind.TypeAliasDeclaration]: [SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes],
+    [SyntaxKind.TypeParameter]: { includes: SymbolFlags.TypeParameter, excludes: SymbolFlags.TypeParameterExcludes },
+    [SyntaxKind.Parameter]: { includes: SymbolFlags.FunctionScopedVariable, excludes: SymbolFlags.ParameterExcludes },
+    [SyntaxKind.VariableDeclaration]: { includes: SymbolFlags.BlockScopedVariable, excludes: SymbolFlags.BlockScopedVariableExcludes },
+    [SyntaxKind.BindingElement]: { includes: SymbolFlags.BlockScopedVariable, excludes: SymbolFlags.BlockScopedVariableExcludes },
+    [SyntaxKind.PropertyDeclaration]: { includes: SymbolFlags.Property, excludes: SymbolFlags.PropertyExcludes },
+    [SyntaxKind.PropertySignature]: { includes: SymbolFlags.Property, excludes: SymbolFlags.PropertyExcludes },
+    [SyntaxKind.PropertyAssignment]: { includes: SymbolFlags.Property, excludes: SymbolFlags.PropertyExcludes },
+    [SyntaxKind.ShorthandPropertyAssignment]: { includes: SymbolFlags.Property, excludes: SymbolFlags.PropertyExcludes },
+    [SyntaxKind.EnumMember]: { includes: SymbolFlags.EnumMember, excludes: SymbolFlags.EnumMemberExcludes },
+    [SyntaxKind.CallSignature]: { includes: SymbolFlags.Signature, excludes: SymbolFlags.None },
+    [SyntaxKind.ConstructSignature]: { includes: SymbolFlags.Signature, excludes: SymbolFlags.None },
+    [SyntaxKind.IndexSignature]: { includes: SymbolFlags.Signature, excludes: SymbolFlags.None },
+    [SyntaxKind.MethodDeclaration]: { includes: SymbolFlags.Method, excludes: SymbolFlags.MethodExcludes },
+    [SyntaxKind.MethodSignature]: { includes: SymbolFlags.Method, excludes: SymbolFlags.MethodExcludes },
+    [SyntaxKind.FunctionDeclaration]: { includes: SymbolFlags.Function, excludes: SymbolFlags.FunctionExcludes },
+    [SyntaxKind.Constructor]: { includes: SymbolFlags.Constructor, excludes: SymbolFlags.None },
+    [SyntaxKind.GetAccessor]: { includes: SymbolFlags.GetAccessor, excludes: SymbolFlags.GetAccessorExcludes },
+    [SyntaxKind.SetAccessor]: { includes: SymbolFlags.SetAccessor, excludes: SymbolFlags.SetAccessorExcludes },
+    [SyntaxKind.ClassExpression]: { includes: SymbolFlags.Class, excludes: SymbolFlags.ClassExcludes },
+    [SyntaxKind.ClassDeclaration]: { includes: SymbolFlags.Class, excludes: SymbolFlags.ClassExcludes },
+    [SyntaxKind.InterfaceDeclaration]: { includes: SymbolFlags.Interface, excludes: SymbolFlags.InterfaceExcludes },
+    [SyntaxKind.TypeAliasDeclaration]: { includes: SymbolFlags.TypeAlias, excludes: SymbolFlags.TypeAliasExcludes },
     [SyntaxKind.EnumDeclaration]: {
-        const: [SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes],
-        regular: [SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes],
+        const: { includes: SymbolFlags.ConstEnum, excludes: SymbolFlags.ConstEnumExcludes },
+        regular: { includes: SymbolFlags.RegularEnum, excludes: SymbolFlags.RegularEnumExcludes },
     },
     [SyntaxKind.ModuleDeclaration]: {
-        value: [SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes],
-        namespace: [SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes],
+        value: { includes: SymbolFlags.ValueModule, excludes: SymbolFlags.ValueModuleExcludes },
+        namespace: { includes: SymbolFlags.NamespaceModule, excludes: SymbolFlags.NamespaceModuleExcludes },
     },
-    [SyntaxKind.ImportEqualsDeclaration]: [SymbolFlags.Alias, SymbolFlags.AliasExcludes],
-    [SyntaxKind.NamespaceImport]: [SymbolFlags.Alias, SymbolFlags.AliasExcludes],
-    [SyntaxKind.ImportSpecifier]: [SymbolFlags.Alias, SymbolFlags.AliasExcludes],
-    [SyntaxKind.ExportSpecifier]: [SymbolFlags.Alias | SymbolFlags.ExportValue, SymbolFlags.AliasExcludes],
-    [SyntaxKind.NamespaceExportDeclaration]: [SymbolFlags.Alias, SymbolFlags.AliasExcludes],
-    [SyntaxKind.ImportClause]: [SymbolFlags.Alias, SymbolFlags.AliasExcludes],
+    [SyntaxKind.ImportEqualsDeclaration]: { includes: SymbolFlags.Alias, excludes: SymbolFlags.AliasExcludes },
+    [SyntaxKind.NamespaceImport]: { includes: SymbolFlags.Alias, excludes: SymbolFlags.AliasExcludes },
+    [SyntaxKind.ImportSpecifier]: { includes: SymbolFlags.Alias, excludes: SymbolFlags.AliasExcludes },
+    [SyntaxKind.ExportSpecifier]: { includes: SymbolFlags.Alias | SymbolFlags.ExportValue, excludes: SymbolFlags.AliasExcludes },
+    [SyntaxKind.NamespaceExportDeclaration]: { includes: SymbolFlags.Alias, excludes: SymbolFlags.AliasExcludes },
+    [SyntaxKind.ImportClause]: { includes: SymbolFlags.Alias, excludes: SymbolFlags.AliasExcludes },
 } as const satisfies Partial<Record<SyntaxKind, SymbolRegistrationFlags | Record<string, SymbolRegistrationFlags>>>;
 
+/**
+ * Assigning values to a property of a function will usually cause those members to be implicitly declared on the function
+ * even if they were were not declared (expando functions)
+ * DTE needs to detect these members and error on them since this behavior is not supported in isolated declarations
+ * There are however members that can be assigned on a function that are not expando members, namely members that come from Function
+ * In DTE we do not load the full d.ts so we keep a list of known members of function that can be assigned without considering them expando members.
+ */
 const knownFunctionMembers = new Set([
     "I:apply",
     "I:call",
@@ -262,18 +262,20 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
     }
 
     function bind() {
-        let currentScope: Node = undefined!;
-        let currentSymbol: EmitDeclarationSymbol = undefined!;
-        let currentLocalSymbolTable: EmitDeclarationSymbolTable = undefined!;
-        let currentExportsSymbolTable: EmitDeclarationSymbolTable | undefined;
-        const postBindingAction: (() => void)[] = [];
+        /* eslint-disable no-var */
+        var currentScope: Node = undefined!;
+        var currentSymbol: EmitDeclarationSymbol = undefined!;
+        var currentLocalSymbolTable: EmitDeclarationSymbolTable = undefined!;
+        var currentExportsSymbolTable: EmitDeclarationSymbolTable | undefined;
+        var postBindingAction: (() => void)[] = [];
 
-        const fileLinks = getNodeLinks(file).symbol = newSymbol();
+        var fileLinks = getNodeLinks(file).symbol = createEmitSymbol();
+        /* eslint-enable no-var */
         fileLinks.exports = new Map();
         withScope(file, fileLinks.exports, () => bindEachFunctionsFirst(file.statements));
         postBindingAction.forEach(fn => fn());
 
-        function newSymbol(): EmitDeclarationSymbol {
+        function createEmitSymbol(): EmitDeclarationSymbol {
             return {
                 declarations: [],
                 flags: 0,
@@ -282,25 +284,25 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         function getSymbol(table: EmitDeclarationSymbolTable, name: MemberKey) {
             let symbol = table.get(name);
             if (!symbol) {
-                symbol = newSymbol();
+                symbol = createEmitSymbol();
                 symbol.name = name;
                 table.set(name, symbol);
             }
             return symbol;
         }
-        function addLocalAndExportDeclaration(name: LocalAndExportName | MemberKey | undefined, node: Declaration, [flags, forbiddenFlags]: SymbolRegistrationFlags, isExport: boolean) {
+        function addLocalAndExportDeclaration(name: LocalAndExportName | MemberKey | undefined, node: Declaration, flags: SymbolRegistrationFlags, isExport: boolean) {
             const { exportName, localName } = typeof name === "object" ? name : { exportName: name, localName: name };
             if (isExport) {
-                const exportKind = flags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
-                const localSymbol = addLocalOnlyDeclaration(localName, node, [exportKind, forbiddenFlags]);
-                const exportSymbol = addExportOnlyDeclaration(exportName, node, [flags, forbiddenFlags]);
+                const exportKind = flags.includes & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
+                const localSymbol = addLocalOnlyDeclaration(localName, node, { includes: exportKind, excludes: flags.excludes });
+                const exportSymbol = addExportOnlyDeclaration(exportName, node, flags);
                 localSymbol.exportSymbol = exportSymbol;
                 // Export symbol can be undefined if the export modifier was placed in an unexpected position.
                 // We just assume the local symbol should be used. There are already bigger issues in the file anyway.
                 return exportSymbol ?? localSymbol;
             }
             else {
-                return addLocalOnlyDeclaration(localName, node, [flags, forbiddenFlags]);
+                return addLocalOnlyDeclaration(localName, node, flags);
             }
         }
         function addExportOnlyDeclaration(name: MemberKey | undefined, node: Declaration, flagsAndForbiddenFlags: SymbolRegistrationFlags) {
@@ -313,13 +315,13 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
             return addDeclaration(currentLocalSymbolTable, name, node, flagsAndForbiddenFlags);
         }
 
-        function addDeclaration(table: EmitDeclarationSymbolTable, name: MemberKey | undefined, node: Declaration, [includes, excludes]: SymbolRegistrationFlags) {
-            let symbol = name !== undefined ? getSymbol(table, name) : newSymbol();
+        function addDeclaration(table: EmitDeclarationSymbolTable, name: MemberKey | undefined, node: Declaration, { includes, excludes }: SymbolRegistrationFlags) {
+            let symbol = name !== undefined ? getSymbol(table, name) : createEmitSymbol();
             // Symbols don't merge, create new one
             if (excludes & symbol.flags) {
                 // Variables and expando members from assignments are always allowed to merge
                 if (!(includes & SymbolFlags.Variable && symbol.flags & SymbolFlags.Assignment)) {
-                    symbol = newSymbol();
+                    symbol = createEmitSymbol();
                 }
             }
             symbol.declarations.push(node);
@@ -486,8 +488,11 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                         target.exportSymbol.exports = target.exports;
                     }
                     withScope(fn, target.exports, () => {
-                        const [include, excludes] = syntaxKindToSymbolMap[SyntaxKind.PropertyDeclaration];
-                        addExportOnlyDeclaration(key, assignmentTarget, [include | SymbolFlags.Assignment, excludes & ~SymbolFlags.Assignment]);
+                        const { includes, excludes } = syntaxKindToSymbolMap[SyntaxKind.PropertyDeclaration];
+                        addExportOnlyDeclaration(key, assignmentTarget, {
+                            includes: includes | SymbolFlags.Assignment,
+                            excludes: excludes & ~SymbolFlags.Assignment,
+                        });
                     });
                 }
             }
@@ -590,8 +595,11 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                         // TODO is currentExportsSymbolTable ok here?
                         withScope(node, /*exports*/ undefined, () => {
                             elements.forEach(e => {
-                                const [flags, forbiddenFlags] = getSymbolFlagsForNode(e);
-                                addLocalOnlyDeclaration(getMemberKey(e.propertyName ?? e.name), e, [flags | SymbolFlags.ExportValue, forbiddenFlags]);
+                                const { includes, excludes } = getSymbolFlagsForNode(e);
+                                addLocalOnlyDeclaration(getMemberKey(e.propertyName ?? e.name), e, {
+                                    includes: includes | SymbolFlags.ExportValue,
+                                    excludes,
+                                });
                             });
                         });
                     }

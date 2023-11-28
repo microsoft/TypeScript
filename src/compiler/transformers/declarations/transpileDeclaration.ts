@@ -40,7 +40,10 @@ function createEmitDeclarationHost(options: TranspileDeclarationsOptions): EmitH
         useCaseSensitiveFileNames: () => !!options.useCaseSensitiveFileNames,
         getCompilerOptions: () => options.compilerOptions,
         getCommonSourceDirectory: () => ensureTrailingDirectorySeparator(options.commonSourceDirectory ?? "."),
-        redirectTargetsMap: undefined!, // new Map(),
+        get redirectTargetsMap(): never {
+            Debug.fail("redirectTargetsMap should not be used in isolated declarations");
+            return undefined!; // Need return despite fail call GH#52214
+        },
         directoryExists: throws,
         fileExists: throws,
         readFile: throws,
@@ -86,7 +89,7 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
         addDiagnostic(diag: any) {
             diagnostics.push(diag);
         },
-    } as Partial<TransformationContext> as TransformationContext);
+    } as TransformationContext);
     const result = transformer(sourceFile);
 
     const printer = createPrinter({

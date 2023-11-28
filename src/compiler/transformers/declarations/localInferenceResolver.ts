@@ -1,14 +1,26 @@
 import {
-    getCommentRange,
-    getMemberKeyFromElement,
-    setCommentRange,
-} from "../../_namespaces/ts";
-import {
+    ArrayLiteralExpression,
+    ArrowFunction,
+    AsExpression,
+    ClassExpression,
+    createDiagnosticForNode,
+    createPropertyNameNodeForIdentifierOrLiteral,
+    DiagnosticMessage,
     Diagnostics,
-} from "../../diagnosticInformationMap.generated";
-import {
+    EntityNameOrEntityNameExpression,
+    ExportAssignment,
+    FunctionExpression,
+    GetAccessorDeclaration,
+    getCommentRange,
+    getEmitScriptTarget,
+    getMemberKeyFromElement,
+    HasInferredType,
+    hasSyntacticModifier,
+    Identifier,
     isClassExpression,
     isComputedPropertyName,
+    isConstTypeReference,
+    isEntityNameExpression,
     isExportAssignment,
     isGetAccessorDeclaration,
     isIdentifier,
@@ -18,40 +30,26 @@ import {
     isNoSubstitutionTemplateLiteral,
     isNumericLiteral,
     isOmittedExpression,
+    isOptionalDeclaration,
     isParameter,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPropertyAssignment,
     isPropertyDeclaration,
+    isPropertyName,
     isSetAccessorDeclaration,
     isShorthandPropertyAssignment,
     isSpreadAssignment,
     isSpreadElement,
+    isStringDoubleQuoted,
     isStringLiteral,
+    isStringLiteralLike,
     isTypeLiteralNode,
+    isTypeNode,
     isTypeParameterDeclaration,
     isTypeReferenceNode,
     isUnionTypeNode,
     isVariableDeclaration,
-} from "../../factory/nodeTests";
-import {
-    setTextRange,
-} from "../../factory/utilitiesPublic";
-import {
-    nullTransformationContext,
-} from "../../transformer";
-import {
-    ArrayLiteralExpression,
-    ArrowFunction,
-    AsExpression,
-    ClassExpression,
-    DiagnosticMessage,
-    EntityNameOrEntityNameExpression,
-    ExportAssignment,
-    FunctionExpression,
-    GetAccessorDeclaration,
-    HasInferredType,
-    Identifier,
     KeywordTypeSyntaxKind,
     LiteralExpression,
     MethodDeclaration,
@@ -59,42 +57,28 @@ import {
     Node,
     NodeArray,
     NodeFlags,
+    nullTransformationContext,
     ObjectLiteralExpression,
     ParameterDeclaration,
     ParenthesizedExpression,
     PrefixUnaryExpression,
     PropertyName,
     SetAccessorDeclaration,
+    setCommentRange,
+    setTextRange,
     SourceFile,
     SyntaxKind,
     TransformationContext,
     TypeAssertion,
     TypeElement,
     TypeNode,
-    Visitor,
-    VisitResult,
-} from "../../types";
-import {
-    createDiagnosticForNode,
-    createPropertyNameNodeForIdentifierOrLiteral,
-    getEmitScriptTarget,
-    hasSyntacticModifier,
-    isEntityNameExpression,
-    isOptionalDeclaration,
-    isStringDoubleQuoted,
-} from "../../utilities";
-import {
-    isConstTypeReference,
-    isPropertyName,
-    isStringLiteralLike,
-    isTypeNode,
     unescapeLeadingUnderscores,
-} from "../../utilitiesPublic";
-import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "../../visitorPublic";
+    Visitor,
+    VisitResult,
+} from "../../_namespaces/ts";
 
 enum NarrowBehavior {
     None = 0,
@@ -115,6 +99,9 @@ export interface LocalInferenceResolver {
     makeInvalidType(): Node;
     fromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined, sourceFile: SourceFile): TypeNode;
 }
+/**
+ * @internal
+ */
 export function createLocalInferenceResolver({
     setEnclosingDeclarations,
     visitDeclarationSubtree,
@@ -696,15 +683,15 @@ export function createLocalInferenceResolver({
                  * function x(o = "", v: string)
                  */
                 if (node.initializer && !isOptional) {
-                localType.typeNode = addUndefinedInUnion(localType.typeNode);
-            }
+                    localType.typeNode = addUndefinedInUnion(localType.typeNode);
+                }
                 /**
                  * Constructor properties that are optional must have | undefined included to work well with exactOptionalPropertyTypes
                  * constructor(public x?: number) -> x?: number | undefined
                  */
                 if (isOptional && !node.initializer && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                     localType.typeNode = addUndefinedInUnion(localType.typeNode);
-        }
+                }
             }
         }
         else if (type) {
@@ -732,7 +719,7 @@ export function createLocalInferenceResolver({
             localType = localInference(node.initializer);
             if (isOptionalDeclaration(node)) {
                 localType.typeNode = addUndefinedInUnion(localType.typeNode);
-        }
+            }
         }
         else if (isInterfaceDeclaration(node.parent) || isTypeLiteralNode(node.parent)) {
             return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
