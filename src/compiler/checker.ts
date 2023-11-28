@@ -39021,14 +39021,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return hasSkipDirectInferenceFlag(node) ?
                     blockedStringType :
                     getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
-            case SyntaxKind.NumericLiteral: {
+            case SyntaxKind.NumericLiteral:
                 checkGrammarNumericLiteral(node as NumericLiteral);
-                const value = +(node as NumericLiteral).text;
-                if (!isFinite(value)) {
-                    return numberType;
-                }
-                return getFreshTypeOfLiteralType(getNumberLiteralType(value));
-            }
+                return getFreshTypeOfLiteralType(getNumberLiteralType(+(node as NumericLiteral).text));
             case SyntaxKind.BigIntLiteral:
                 checkGrammarBigIntLiteral(node as BigIntLiteral);
                 return getFreshTypeOfLiteralType(getBigIntLiteralType({
