@@ -422,9 +422,9 @@ After request
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules: *new*
+/user/username/projects/myproject/packages/A/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types: *new*
+/user/username/projects/myproject/packages/A/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
@@ -436,15 +436,15 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/a/tsconfig.json: *new*
+/user/username/projects/myproject/packages/A/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/b/package.json: *new*
+/user/username/projects/myproject/packages/B/package.json: *new*
   {}
-/user/username/projects/myproject/packages/b/src/bar.ts: *new*
+/user/username/projects/myproject/packages/B/src/bar.ts: *new*
   {}
-/user/username/projects/myproject/packages/b/src/index.ts: *new*
+/user/username/projects/myproject/packages/B/src/index.ts: *new*
   {}
-/user/username/projects/myproject/packages/b/tsconfig.json: *new*
+/user/username/projects/myproject/packages/B/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

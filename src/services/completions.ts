@@ -2550,6 +2550,11 @@ export function getCompletionEntriesFromSymbols(
             continue;
         }
 
+        // When in a value location in a JS file, ignore symbols that definitely seem to be type-only
+        if (!isTypeOnlyLocation && isInJSFile(sourceFile) && symbolAppearsToBeTypeOnly(symbol)) {
+            continue;
+        }
+
         const { name, needsConvertPropertyAccess } = info;
         const originalSortText = symbolToSortTextMap?.[getSymbolId(symbol)] ?? SortText.LocationPriority;
         const sortText = isDeprecated(symbol, typeChecker) ? SortText.Deprecated(originalSortText) : originalSortText;
@@ -2664,6 +2669,10 @@ export function getCompletionEntriesFromSymbols(
 
         // expressions are value space (which includes the value namespaces)
         return !!(allFlags & SymbolFlags.Value);
+    }
+
+    function symbolAppearsToBeTypeOnly(symbol: Symbol): boolean {
+        return !(symbol.flags & SymbolFlags.Value) && (!isInJSFile(symbol.declarations?.[0]) || !!(symbol.flags & SymbolFlags.Type));
     }
 }
 
@@ -4657,6 +4666,10 @@ function getCompletionData(
         return undefined;
     }
 
+    function isInDifferentLineThanContextToken(contextToken: Node, position: number): boolean {
+        return sourceFile.getLineEndOfPosition(contextToken.getEnd()) < position;
+    }
+
     /**
      * @returns true if we are certain that the currently edited location must define a new location; false otherwise.
      */
@@ -4724,7 +4737,7 @@ function getCompletionData(
             case SyntaxKind.SetKeyword:
                 return !isFromObjectTypeDeclaration(contextToken);
 
-            case SyntaxKind.Identifier:
+            case SyntaxKind.Identifier: {
                 if (containingNodeKind === SyntaxKind.ImportSpecifier &&
                     contextToken === (parent as ImportSpecifier).name &&
                     (contextToken as Identifier).text === "type"
@@ -4732,7 +4745,16 @@ function getCompletionData(
                     // import { type | }
                     return false;
                 }
+                const ancestorVariableDeclaration = findAncestor(
+                    contextToken.parent, isVariableDeclaration);
+                if (ancestorVariableDeclaration
+                    && isInDifferentLineThanContextToken(contextToken, position)) {
+                    // let a
+                    // |
+                    return false;
+                }
                 break;
+            }
 
             case SyntaxKind.ClassKeyword:
             case SyntaxKind.EnumKeyword:

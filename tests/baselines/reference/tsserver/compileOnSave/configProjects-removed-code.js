@@ -191,7 +191,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/modulefile1.ts: *new*
+/a/b/moduleFile1.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}
@@ -221,7 +221,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/b/modulefile1.ts:
+/a/b/moduleFile1.ts:
   {}
 
 FsWatchesRecursive::

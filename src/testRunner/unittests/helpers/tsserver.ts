@@ -12,7 +12,7 @@ import {
 } from "./solutionBuilder";
 import {
     customTypesMap,
-    TestTypingsInstaller,
+    TestTypingsInstallerAdapter,
     TestTypingsInstallerOptions,
 } from "./typingsInstaller";
 import {
@@ -103,13 +103,13 @@ export class TestSession extends ts.server.Session {
     private seq = 0;
     public override host!: TestSessionAndServiceHost;
     public override logger!: LoggerWithInMemoryLogs;
-    public override readonly typingsInstaller!: TestTypingsInstaller;
+    public override readonly typingsInstaller!: TestTypingsInstallerAdapter;
     public serverCancellationToken: TestServerCancellationToken;
 
     constructor(optsOrHost: TestSessionConstructorOptions) {
         const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
         opts.logger = opts.logger || createLoggerWithInMemoryLogs(opts.host);
-        const typingsInstaller = !opts.disableAutomaticTypingAcquisition ? new TestTypingsInstaller(opts) : undefined;
+        const typingsInstaller = !opts.disableAutomaticTypingAcquisition ? new TestTypingsInstallerAdapter(opts) : undefined;
         const cancellationToken = opts.useCancellationToken ?
             new TestServerCancellationToken(
                 opts.logger,

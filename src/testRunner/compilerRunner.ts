@@ -206,6 +206,7 @@ class CompilerTestBase {
         "importHelpers",
         "downlevelIteration",
         "isolatedModules",
+        "verbatimModuleSyntax",
         "strict",
         "noImplicitAny",
         "strictNullChecks",

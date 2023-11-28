@@ -57,9 +57,9 @@ exports.x = Foo();
 
 
 FsWatches::
-/a/b/modulefile1.ts: *new*
+/a/b/moduleFile1.ts: *new*
   {}
-/a/b/referencefile1.ts: *new*
+/a/b/referenceFile1.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}
@@ -134,7 +134,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/referencefile1.ts:
+/a/b/referenceFile1.ts:
   {}
 /a/b/tsconfig.json:
   {}
@@ -142,7 +142,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/b/modulefile1.ts:
+/a/b/moduleFile1.ts:
   {}
 
 FsWatchesRecursive::
