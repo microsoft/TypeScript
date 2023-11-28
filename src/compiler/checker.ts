@@ -1487,8 +1487,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var lastGetCombinedModifierFlagsNode: Declaration | undefined;
     var lastGetCombinedModifierFlagsResult = ModifierFlags.None;
 
-    var chooseOverloadRecursionLevel = -1; // #56013
-    var chooseOverloadFlushNodesSignaturesReq: (Set<Node> | undefined)[] = []; // #56013
+    var chooseOverloadRecursionLevel = -1;
+    var chooseOverloadFlushNodesSignaturesReq: (Set<Node> | undefined)[] = [];
 
     // for public members that accept a Node or one of its subtypes, we must guard against
     // synthetic nodes created during transformations by calling `getParseTreeNode`.
@@ -34313,9 +34313,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function chooseOverload(candidates: Signature[], relation: Map<string, RelationComparisonResult>, isSingleNonGenericCandidate: boolean, signatureHelpTrailingComma = false) {
-            chooseOverloadRecursionLevel++; // #56013
+            chooseOverloadRecursionLevel++;
             chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel] = undefined;
-            const result = (() => {
+            const result = chooseOverloadWorker();
+            chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel] = undefined;
+            chooseOverloadRecursionLevel--;
+            return result;
+
+            function chooseOverloadWorker(){
                 candidatesForArgumentError = undefined;
                 candidateForArgumentArityError = undefined;
                 candidateForTypeArgumentError = undefined;
@@ -34333,7 +34338,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
-                    if (candidateIndex > 0) chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel] = new Set(); // #56013
+                    if (candidateIndex > 0) chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel] = new Set();
                     const candidate = candidates[candidateIndex];
                     if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                         continue;
@@ -34398,10 +34403,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 return undefined;
-            })();
-            chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel] = undefined;
-            chooseOverloadRecursionLevel--;
-            return result;
+            }
         }
     }
 
@@ -35163,7 +35165,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         links.resolvedSignature = resolvingSignature;
         let result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal);
         /**
-         * #56013
          * The following is an invariant condition beneath the above call to resolveSignature:
          * - links.resolvedSignature is either the global constant readonly value `resolvingSignature`
          * - or a calculated signature.
@@ -38952,13 +38953,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const saveCurrentNode = currentNode;
         currentNode = node;
         instantiationCount = 0;
-        // #56013
         if (node.kind === SyntaxKind.CallExpression && chooseOverloadRecursionLevel >= 0) {
             let setOfNode: Set<Node> | undefined;
             if (chooseOverloadRecursionLevel >= 0 && (setOfNode = chooseOverloadFlushNodesSignaturesReq[chooseOverloadRecursionLevel])) {
                 if (!setOfNode.has(node)) {
                     /**
-                     * #56013
                      * The following is an invariant condition beneath the above call to resolveSignature:
                      * - getNodeLinks(node).resolvedSignature is either the global constant readonly value `resolvingSignature`
                      * - or a calculated signature.
