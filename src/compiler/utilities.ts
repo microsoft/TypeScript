@@ -5823,7 +5823,8 @@ export function createDiagnosticCollection(): DiagnosticCollection {
 }
 
 const templateSubstitutionRegExp = /\$\{/g;
-function escapeTemplateSubstitution(str: string): string {
+/** @internal */
+export function escapeTemplateSubstitution(str: string): string {
     return str.replace(templateSubstitutionRegExp, "\\${");
 }
 
