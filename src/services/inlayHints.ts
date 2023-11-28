@@ -77,6 +77,7 @@ import {
     isRestTypeNode,
     isSpreadElement,
     isStringLiteral,
+    isThisTypeNode,
     isTupleTypeNode,
     isTypeLiteralNode,
     isTypeNode,
@@ -791,6 +792,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     Debug.assertNode(node, isPrefixUnaryExpression);
                     parts.push({ text: tokenToString(node.operator) });
                     visitForDisplayParts(node.operand);
+                    break;
+                case SyntaxKind.ThisType:
+                    Debug.assertNode(node, isThisTypeNode);
+                    parts.push({ text: "this" });
                     break;
                 default:
                     Debug.failBadSyntaxKind(node);
