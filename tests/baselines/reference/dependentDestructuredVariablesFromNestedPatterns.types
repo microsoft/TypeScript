@@ -43,9 +43,9 @@ async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
 >promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
 >await Promise.allSettled(fn()) : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
 >Promise.allSettled(fn()) : Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
->Promise.allSettled : { <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>; <T>(values: Iterable<T | PromiseLike<T>>): Promise<PromiseSettledResult<Awaited<T>>[]>; }
+>Promise.allSettled : { <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: PromiseSettledResult<Awaited<T_1[P]>>; }>; <T_2>(values: Iterable<T_2 | PromiseLike<T_2>>): Promise<PromiseSettledResult<Awaited<T_2>>[]>; }
 >Promise : PromiseConstructor
->allSettled : { <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>; <T>(values: Iterable<T | PromiseLike<T>>): Promise<PromiseSettledResult<Awaited<T>>[]>; }
+>allSettled : { <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: PromiseSettledResult<Awaited<T_1[P]>>; }>; <T_2>(values: Iterable<T_2 | PromiseLike<T_2>>): Promise<PromiseSettledResult<Awaited<T_2>>[]>; }
 >fn() : T
 >fn : () => T
 
@@ -103,9 +103,9 @@ async function test3() {
 >[Promise.resolve(0), Promise.reject(1)] as const : [Promise<number>, Promise<never>]
 >[Promise.resolve(0), Promise.reject(1)] : [Promise<number>, Promise<never>]
 >Promise.resolve(0) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >0 : 0
 >Promise.reject(1) : Promise<never>
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
