@@ -3147,7 +3147,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else if (location.kind === SyntaxKind.ConditionalType) {
                         // A type parameter declared using 'infer T' in a conditional type is visible only in
                         // the true branch of the conditional type.
-                        useResult = lastLocation === (location as ConditionalTypeNode).trueType;
+                        useResult = lastLocation === location.trueType;
                     }
 
                     if (useResult) {
@@ -14055,6 +14055,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return hasNonCircularBaseConstraint(typeParameter) ? getConstraintFromTypeParameter(typeParameter) : undefined;
     }
 
+    function isConstMappedType(type: MappedType, depth: number): boolean {
+        const typeVariable = getHomomorphicTypeVariable(type);
+        return !!typeVariable && isConstTypeVariable(typeVariable, depth);
+    }
+
     function isConstTypeVariable(type: Type | undefined, depth = 0): boolean {
         return depth < 5 && !!(type && (
             type.flags & TypeFlags.TypeParameter && some((type as TypeParameter).symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Const)) ||
@@ -14062,6 +14067,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType, depth + 1) ||
             type.flags & TypeFlags.Conditional && isConstTypeVariable(getConstraintOfConditionalType(type as ConditionalType), depth + 1) ||
             type.flags & TypeFlags.Substitution && isConstTypeVariable((type as SubstitutionType).baseType, depth) ||
+            getObjectFlags(type) & ObjectFlags.Mapped && isConstMappedType(type as MappedType, depth) ||
             isGenericTupleType(type) && findIndex(getElementTypes(type), (t, i) => !!(type.target.elementFlags[i] & ElementFlags.Variadic) && isConstTypeVariable(t, depth)) >= 0
         ));
     }

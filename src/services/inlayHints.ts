@@ -82,6 +82,7 @@ import {
     isTemplateLiteralTypeSpan,
     isTemplateMiddle,
     isTemplateTail,
+    isThisTypeNode,
     isTupleTypeNode,
     isTypeLiteralNode,
     isTypeNode,
@@ -819,6 +820,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 case SyntaxKind.TemplateTail:
                     Debug.assertNode(node, isTemplateTail);
                     parts.push({ text: getLiteralText(node) });
+                    break;
+                case SyntaxKind.ThisType:
+                    Debug.assertNode(node, isThisTypeNode);
+                    parts.push({ text: "this" });
                     break;
                 default:
                     Debug.failBadSyntaxKind(node);

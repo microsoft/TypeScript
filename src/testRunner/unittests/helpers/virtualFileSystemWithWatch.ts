@@ -1,5 +1,7 @@
 import {
     createWatchUtils,
+    Watches,
+    WatchUtils,
 } from "../../../harness/watchUtils";
 import {
     arrayFrom,
@@ -33,7 +35,6 @@ import {
     matchFiles,
     ModuleImportResult,
     ModuleResolutionHost,
-    MultiMap,
     noop,
     patchWriteFileEnsuringDirectory,
     Path,
@@ -153,17 +154,6 @@ function isFsFile(s: FSEntry | undefined): s is FsFile {
 
 function isFsSymLink(s: FSEntry | undefined): s is FsSymLink {
     return !!s && isString((s as FsSymLink).symLink);
-}
-
-function invokeWatcherCallbacks<T>(callbacks: readonly T[] | undefined, invokeCallback: (cb: T) => void): void {
-    if (callbacks) {
-        // The array copy is made to ensure that even if one of the callback removes the callbacks,
-        // we dont miss any callbacks following it
-        const cbs = callbacks.slice();
-        for (const cb of cbs) {
-            invokeCallback(cb);
-        }
-    }
 }
 
 export interface StateLogger {
@@ -351,7 +341,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     readonly pendingInstalls = new Callbacks(this, "PendingInstalls");
     readonly screenClears: number[] = [];
 
-    readonly watchUtils = createWatchUtils<TestFileWatcher, TestFsWatcher, Path>("PolledWatches", "FsWatches");
+    readonly watchUtils: WatchUtils<TestFileWatcher, TestFsWatcher>;
     runWithFallbackPolling: boolean;
     public readonly useCaseSensitiveFileNames: boolean;
     public readonly newLine: string;
@@ -387,6 +377,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.environmentVariables = environmentVariables;
         currentDirectory = currentDirectory || "/";
         this.getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
+        this.watchUtils = createWatchUtils("PolledWatches", "FsWatches", s => this.getCanonicalFileName(s));
         this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
         this.executingFilePath = this.getHostSpecificPath(executingFilePath || getExecutingFilePathFromLibFile());
         this.currentDirectory = this.getHostSpecificPath(currentDirectory);
@@ -691,7 +682,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     private watchFileWorker(fileName: string, cb: FileWatcherCallback, pollingInterval: PollingInterval) {
         return this.watchUtils.pollingWatch(
-            this.toFullPath(fileName),
+            this.toNormalizedAbsolutePath(fileName),
             { cb, pollingInterval },
         );
     }
@@ -702,11 +693,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         cb: FsWatchCallback,
     ) {
         if (this.runWithFallbackPolling) throw new Error("Need to use fallback polling instead of file system native watching");
-        const path = this.toFullPath(fileOrDirectory);
+        const path = this.toPath(fileOrDirectory);
         // Error if the path does not exist
         if (this.inodeWatching && !this.inodes?.has(path)) throw new Error();
         const result = this.watchUtils.fsWatch(
-            path,
+            this.toNormalizedAbsolutePath(fileOrDirectory),
             recursive,
             {
                 cb,
@@ -718,13 +709,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, modifiedTime: Date | undefined) {
-        invokeWatcherCallbacks(this.watchUtils.pollingWatches.get(this.toPath(fileFullPath)), ({ cb }) => cb(fileFullPath, eventKind, modifiedTime));
+        this.watchUtils.pollingWatches.forEach(fileFullPath, ({ cb }) => cb(fileFullPath, eventKind, modifiedTime));
     }
 
-    private fsWatchCallback(map: MultiMap<Path, TestFsWatcher>, fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, entryFullPath: string | undefined, useTildeSuffix: boolean | undefined) {
+    private fsWatchCallback(watches: Watches<TestFsWatcher>, fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, entryFullPath: string | undefined, useTildeSuffix: boolean | undefined) {
         const path = this.toPath(fullPath);
         const currentInode = this.inodes?.get(path);
-        invokeWatcherCallbacks(map.get(path), ({ cb, inode }) => {
+        watches.forEach(path, ({ cb, inode }) => {
             // TODO::
             if (this.inodeWatching && inode !== undefined && inode !== currentInode) return;
             let relativeFileName = entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : "";

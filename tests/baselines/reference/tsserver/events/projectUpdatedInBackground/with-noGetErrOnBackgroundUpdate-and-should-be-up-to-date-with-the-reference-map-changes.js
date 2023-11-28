@@ -186,7 +186,7 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/project/modulefile1: *new*
+/users/username/projects/project/moduleFile1: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -267,7 +267,7 @@ interface Array<T> { length: number; [n: number]: T; }
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/modulefile1:
+/users/username/projects/project/moduleFile1:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -395,7 +395,7 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/modulefile1:
+/users/username/projects/project/moduleFile1:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -405,13 +405,13 @@ FsWatches::
   {}
 /users/username/projects/project:
   {}
-/users/username/projects/project/file1consumer2.ts: *new*
+/users/username/projects/project/file1Consumer2.ts: *new*
   {}
-/users/username/projects/project/globalfile3.ts: *new*
+/users/username/projects/project/globalFile3.ts: *new*
   {}
-/users/username/projects/project/modulefile1.ts: *new*
+/users/username/projects/project/moduleFile1.ts: *new*
   {}
-/users/username/projects/project/modulefile2.ts: *new*
+/users/username/projects/project/moduleFile2.ts: *new*
   {}
 /users/username/projects/project/tsconfig.json:
   {}
@@ -575,19 +575,19 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/users/username/projects/project/modulefile1:
+/users/username/projects/project/moduleFile1:
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/users/username/projects/project/file1consumer2.ts:
+/users/username/projects/project/file1Consumer2.ts:
   {}
-/users/username/projects/project/globalfile3.ts:
+/users/username/projects/project/globalFile3.ts:
   {}
-/users/username/projects/project/modulefile1.ts:
+/users/username/projects/project/moduleFile1.ts:
   {}
-/users/username/projects/project/modulefile2.ts:
+/users/username/projects/project/moduleFile2.ts:
   {}
 /users/username/projects/project/tsconfig.json:
   {}
