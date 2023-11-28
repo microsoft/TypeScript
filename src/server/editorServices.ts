@@ -1650,7 +1650,7 @@ export class ProjectService {
      *
      * @internal
      */
-    private watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, configFileName: NormalizedPath, config: ParsedConfig) {
+    private watchWildcardDirectory(directory: string, flags: WatchDirectoryFlags, configFileName: NormalizedPath, config: ParsedConfig) {
         let watcher: FileWatcher | undefined = this.watchFactory.watchDirectory(
             directory,
             fileOrDirectory => {
@@ -1658,7 +1658,7 @@ export class ProjectService {
                 const fsResult = config.cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 if (
                     getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
-                    (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
+                    (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectory))
                 ) {
                     const file = this.getNormalizedAbsolutePath(fileOrDirectory);
                     this.logger.info(`Config: ${configFileName} Detected new package.json: ${file}`);
@@ -1669,7 +1669,7 @@ export class ProjectService {
                 const configuredProjectForConfig = this.findConfiguredProjectByProjectName(configFileName);
                 if (
                     isIgnoredFileFromWildCardWatching({
-                        watchedDirPath: directory,
+                        watchedDirPath: this.toPath(directory),
                         fileOrDirectory,
                         fileOrDirectoryPath,
                         configFileName,
@@ -2666,9 +2666,9 @@ export class ProjectService {
             config!.watchedDirectoriesStale = false;
             updateWatchingWildcardDirectories(
                 config!.watchedDirectories ||= new Map(),
-                new Map(Object.entries(config!.parsedCommandLine!.wildcardDirectories!)),
+                config!.parsedCommandLine!.wildcardDirectories,
                 // Create new directory watcher
-                (directory, flags) => this.watchWildcardDirectory(directory as Path, flags, configFileName, config!),
+                (directory, flags) => this.watchWildcardDirectory(directory, flags, configFileName, config!),
             );
         }
         else {
@@ -2759,7 +2759,7 @@ export class ProjectService {
             projectRootFilesMap.forEach((value, path) => {
                 if (!newRootScriptInfoMap.has(path)) {
                     if (value.info) {
-                        project.removeFile(value.info, project.fileExists(path), /*detachFromProject*/ true);
+                        project.removeFile(value.info, project.fileExists(value.info.fileName), /*detachFromProject*/ true);
                     }
                     else {
                         projectRootFilesMap.delete(path);
@@ -3145,7 +3145,7 @@ export class ProjectService {
     }
 
     private getModifiedTime(info: ScriptInfo) {
-        return (this.host.getModifiedTime!(info.path) || missingFileModifiedTime).getTime();
+        return (this.host.getModifiedTime!(info.fileName) || missingFileModifiedTime).getTime();
     }
 
     private refreshScriptInfo(info: ScriptInfo) {

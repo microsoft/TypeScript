@@ -148,13 +148,13 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
+/Users/name/projects/web: *new*
+  {}
 /Users/name/projects/web/node_modules: *new*
   {}
 /Users/name/projects/web/node_modules/@types: *new*
   {}
 /Users/name/projects/web/src: *new*
-  {}
-/users/name/projects/web: *new*
   {}
 
 Program root files: [

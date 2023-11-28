@@ -76,7 +76,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror: *new*
+/user/username/projects/noEmitOnError: *new*
   {}
 
 Program root files: [

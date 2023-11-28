@@ -308,13 +308,13 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitiveReferences/a: *new*
+  {}
+/user/username/projects/transitiveReferences/b: *new*
+  {}
+/user/username/projects/transitiveReferences/c: *new*
+  {}
 /user/username/projects/transitiveReferences/refs: *new*
-  {}
-/user/username/projects/transitivereferences/a: *new*
-  {}
-/user/username/projects/transitivereferences/b: *new*
-  {}
-/user/username/projects/transitivereferences/c: *new*
   {}
 
 Program root files: [
@@ -671,13 +671,13 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitiveReferences/a:
+  {}
+/user/username/projects/transitiveReferences/b:
+  {}
+/user/username/projects/transitiveReferences/c:
+  {}
 /user/username/projects/transitiveReferences/nrefs: *new*
-  {}
-/user/username/projects/transitivereferences/a:
-  {}
-/user/username/projects/transitivereferences/b:
-  {}
-/user/username/projects/transitivereferences/c:
   {}
 
 FsWatchesRecursive *deleted*::
@@ -847,13 +847,13 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitiveReferences/a:
+  {}
+/user/username/projects/transitiveReferences/b:
+  {}
+/user/username/projects/transitiveReferences/c:
+  {}
 /user/username/projects/transitiveReferences/refs: *new*
-  {}
-/user/username/projects/transitivereferences/a:
-  {}
-/user/username/projects/transitivereferences/b:
-  {}
-/user/username/projects/transitivereferences/c:
   {}
 
 FsWatchesRecursive *deleted*::
@@ -1004,15 +1004,15 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitiveReferences/a:
+  {}
+/user/username/projects/transitiveReferences/b:
+  {}
+/user/username/projects/transitiveReferences/c:
+  {}
 /user/username/projects/transitiveReferences/nrefs: *new*
   {}
 /user/username/projects/transitiveReferences/refs:
-  {}
-/user/username/projects/transitivereferences/a:
-  {}
-/user/username/projects/transitivereferences/b:
-  {}
-/user/username/projects/transitivereferences/c:
   {}
 
 
@@ -1156,13 +1156,13 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitiveReferences/a:
+  {}
+/user/username/projects/transitiveReferences/b:
+  {}
+/user/username/projects/transitiveReferences/c:
+  {}
 /user/username/projects/transitiveReferences/refs:
-  {}
-/user/username/projects/transitivereferences/a:
-  {}
-/user/username/projects/transitivereferences/b:
-  {}
-/user/username/projects/transitivereferences/c:
   {}
 
 FsWatchesRecursive *deleted*::
@@ -1305,15 +1305,15 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitiveReferences/b:
+  {}
+/user/username/projects/transitiveReferences/c:
+  {}
 /user/username/projects/transitiveReferences/refs:
-  {}
-/user/username/projects/transitivereferences/b:
-  {}
-/user/username/projects/transitivereferences/c:
   {}
 
 FsWatchesRecursive *deleted*::
-/user/username/projects/transitivereferences/a:
+/user/username/projects/transitiveReferences/a:
   {}
 
 Timeout callback:: count: 0
@@ -1462,13 +1462,13 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitiveReferences/a: *new*
+  {}
+/user/username/projects/transitiveReferences/b:
+  {}
+/user/username/projects/transitiveReferences/c:
+  {}
 /user/username/projects/transitiveReferences/refs:
-  {}
-/user/username/projects/transitivereferences/a: *new*
-  {}
-/user/username/projects/transitivereferences/b:
-  {}
-/user/username/projects/transitivereferences/c:
   {}
 
 Timeout callback:: count: 0
@@ -1612,13 +1612,13 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitiveReferences/a:
+  {}
+/user/username/projects/transitiveReferences/b:
+  {}
+/user/username/projects/transitiveReferences/c:
+  {}
 /user/username/projects/transitiveReferences/refs:
-  {}
-/user/username/projects/transitivereferences/a:
-  {}
-/user/username/projects/transitivereferences/b:
-  {}
-/user/username/projects/transitivereferences/c:
   {}
 
 Timeout callback:: count: 0
@@ -1757,13 +1757,13 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitiveReferences/a:
+  {}
+/user/username/projects/transitiveReferences/b:
+  {}
+/user/username/projects/transitiveReferences/c:
+  {}
 /user/username/projects/transitiveReferences/refs:
-  {}
-/user/username/projects/transitivereferences/a:
-  {}
-/user/username/projects/transitivereferences/b:
-  {}
-/user/username/projects/transitivereferences/c:
   {}
 
 Timeout callback:: count: 0

@@ -146,9 +146,9 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/app: *new*
+/user/username/projects/sample1/App: *new*
   {}
-/user/username/projects/sample1/library: *new*
+/user/username/projects/sample1/Library: *new*
   {}
 
 Program root files: [

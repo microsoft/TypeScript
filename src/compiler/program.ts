@@ -4,7 +4,6 @@ import {
     addRange,
     addRelatedInfo,
     append,
-    arrayFrom,
     arrayIsEqualTo,
     AsExpression,
     BuilderProgram,
@@ -215,7 +214,6 @@ import {
     LibResolution,
     libs,
     mapDefined,
-    mapDefinedIterator,
     maybeBind,
     memoize,
     MethodDeclaration,
@@ -1238,7 +1236,8 @@ export function isProgramUptoDate(
     if (program.getSourceFiles().some(sourceFileNotUptoDate)) return false;
 
     // If any of the missing file paths are now created
-    if (program.getMissingFilePaths().some(fileExists)) return false;
+    const missingPaths = program.getMissingFilePaths();
+    if (missingPaths && forEachEntry(missingPaths, fileExists)) return false;
 
     const currentOptions = program.getCompilerOptions();
     // If the compilation settings do no match, then the program is not up-to-date
@@ -1683,8 +1682,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
      * - false if sourceFile missing for source of project reference redirect
      * - undefined otherwise
      */
-    const filesByName = new Map<string, SourceFile | false | undefined>();
-    let missingFilePaths: readonly Path[] | undefined;
+    const filesByName = new Map<Path, SourceFile | false | undefined>();
+    let missingFileNames = new Map<Path, string>();
     // stores 'filename -> file association' ignoring case
     // used to track cases when two file names differ only in casing
     const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? new Map<string, SourceFile>() : undefined;
@@ -1801,13 +1800,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        missingFilePaths = arrayFrom(mapDefinedIterator(filesByName.entries(), ([path, file]) => file === undefined ? path as Path : undefined));
         files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
         processingDefaultLibFiles = undefined;
         processingOtherFiles = undefined;
     }
-
-    Debug.assert(!!missingFilePaths);
 
     // Release any files we have acquired in the old program but are
     // not part of the new program.
@@ -1858,7 +1854,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getSourceFile,
         getSourceFileByPath,
         getSourceFiles: () => files,
-        getMissingFilePaths: () => missingFilePaths!, // TODO: GH#18217
+        getMissingFilePaths: () => missingFileNames,
         getModuleResolutionCache: () => moduleResolutionCache,
         getFilesByNameMap: () => filesByName,
         getCompilerOptions: () => options,
@@ -2387,7 +2383,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // If the missing file paths are now present, it can change the progam structure,
         // and hence cant reuse the structure.
         // This is same as how we dont reuse the structure if one of the file from old program is now missing
-        if (oldProgram.getMissingFilePaths().some(missingFilePath => host.fileExists(missingFilePath))) {
+        if (forEachEntry(oldProgram.getMissingFilePaths(), missingFileName => host.fileExists(missingFileName))) {
             return StructureIsReused.Not;
         }
 
@@ -2568,7 +2564,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             automaticTypeDirectiveNames = getAutomaticTypeDirectiveNames(options, host);
             if (!arrayIsEqualTo(oldProgram.getAutomaticTypeDirectiveNames(), automaticTypeDirectiveNames)) return StructureIsReused.SafeModules;
         }
-        missingFilePaths = oldProgram.getMissingFilePaths();
+        missingFileNames = oldProgram.getMissingFilePaths();
 
         // update fileName -> file mapping
         Debug.assert(newSourceFiles.length === oldProgram.getSourceFiles().length);
@@ -2632,7 +2628,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 // Use local caches
                 const path = toPath(f);
                 if (getSourceFileByPath(path)) return true;
-                if (contains(missingFilePaths, path)) return false;
+                if (missingFileNames.has(path)) return false;
                 // Before falling back to the host
                 return host.fileExists(f);
             },
@@ -3591,7 +3587,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 const file = isString(source) ?
                     findSourceFile(source, isDefaultLib, ignoreNoDefaultLib, reason, packageId) :
                     undefined;
-                if (file) addFileToFilesByName(file, path, /*redirectedPath*/ undefined);
+                if (file) addFileToFilesByName(file, path, fileName, /*redirectedPath*/ undefined);
                 return file;
             }
         }
@@ -3677,7 +3673,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 // Instead of creating a duplicate, just redirect to the existing one.
                 const dupFile = createRedirectedSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName, sourceFileOptions);
                 redirectTargetsMap.add(fileFromPackageId.path, fileName);
-                addFileToFilesByName(dupFile, path, redirectedPath);
+                addFileToFilesByName(dupFile, path, fileName, redirectedPath);
                 addFileIncludeReason(dupFile, reason);
                 sourceFileToPackageName.set(path, packageIdToPackageName(packageId));
                 processingOtherFiles!.push(dupFile);
@@ -3689,7 +3685,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 sourceFileToPackageName.set(path, packageIdToPackageName(packageId));
             }
         }
-        addFileToFilesByName(file, path, redirectedPath);
+        addFileToFilesByName(file, path, fileName, redirectedPath);
 
         if (file) {
             sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
@@ -3740,14 +3736,19 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (file) fileReasons.add(file.path, reason);
     }
 
-    function addFileToFilesByName(file: SourceFile | undefined, path: Path, redirectedPath: Path | undefined) {
+    function addFileToFilesByName(file: SourceFile | undefined, path: Path, fileName: string, redirectedPath: Path | undefined) {
         if (redirectedPath) {
-            filesByName.set(redirectedPath, file);
-            filesByName.set(path, file || false);
+            updateFilesByNameMap(fileName, redirectedPath, file);
+            updateFilesByNameMap(fileName, path, file || false);
         }
         else {
-            filesByName.set(path, file);
+            updateFilesByNameMap(fileName, path, file);
         }
+    }
+    function updateFilesByNameMap(fileName: string, path: Path, file: SourceFile | false | undefined) {
+        filesByName.set(path, file);
+        if (file !== undefined) missingFileNames.delete(path);
+        else missingFileNames.set(path, fileName);
     }
 
     function getProjectReferenceRedirect(fileName: string): string | undefined {
@@ -4119,19 +4120,19 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (host.getParsedCommandLine) {
             commandLine = host.getParsedCommandLine(refPath);
             if (!commandLine) {
-                addFileToFilesByName(/*file*/ undefined, sourceFilePath, /*redirectedPath*/ undefined);
+                addFileToFilesByName(/*file*/ undefined, sourceFilePath, refPath, /*redirectedPath*/ undefined);
                 projectReferenceRedirects.set(sourceFilePath, false);
                 return undefined;
             }
             sourceFile = Debug.checkDefined(commandLine.options.configFile);
             Debug.assert(!sourceFile.path || sourceFile.path === sourceFilePath);
-            addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
+            addFileToFilesByName(sourceFile, sourceFilePath, refPath, /*redirectedPath*/ undefined);
         }
         else {
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), currentDirectory);
             sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
-            addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
+            addFileToFilesByName(sourceFile, sourceFilePath, refPath, /*redirectedPath*/ undefined);
             if (sourceFile === undefined) {
                 projectReferenceRedirects.set(sourceFilePath, false);
                 return undefined;

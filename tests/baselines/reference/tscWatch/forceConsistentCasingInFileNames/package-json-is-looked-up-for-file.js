@@ -106,9 +106,9 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/Users/name/projects/lib-boilerplate/test: *new*
+/Users/name/projects/lib-boilerplate: *new*
   {}
-/users/name/projects/lib-boilerplate: *new*
+/Users/name/projects/lib-boilerplate/test: *new*
   {}
 
 Program root files: [
