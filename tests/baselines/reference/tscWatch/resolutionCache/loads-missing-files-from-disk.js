@@ -31,6 +31,24 @@ Output::
 
 
 
+//// [/users/username/projects/project/foo.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+
+
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/foo.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects: *new*
+  {}
+
 Program root files: [
   "/users/username/projects/project/foo.ts"
 ]
@@ -50,25 +68,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /users/username/projects/project/foo.ts (used version)
 
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/foo.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/foo.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-
-
 
 Change:: write imported file
 
@@ -80,9 +80,14 @@ import {y} from "bar"
 export const y = 1;
 
 
+Timeout callback:: count: 2
+1: timerToUpdateProgram *new*
+2: timerToInvalidateFailedLookupResolutions *new*
+
 Before running Timeout callback:: count: 2
 1: timerToUpdateProgram
 2: timerToInvalidateFailedLookupResolutions
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -90,6 +95,24 @@ Output::
 
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/users/username/projects/project/foo.js] file written with same contents
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/bar.d.ts: *new*
+  {}
+/users/username/projects/project/foo.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects:
+  {}
+
+Timeout callback:: count: 0
+2: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -112,18 +135,4 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/bar.d.ts (used version)
 /users/username/projects/project/foo.ts (computed .d.ts)
 
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/project/bar.d.ts: *new*
-  {}
-/users/username/projects/project/foo.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/foo.js] file written with same contents

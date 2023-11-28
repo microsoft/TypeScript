@@ -1,5 +1,7 @@
 import {
     combinePaths,
+    Debug,
+    forEachAncestorDirectory,
     forEachKey,
     getBaseFileName,
     getDirectoryPath,
@@ -18,6 +20,7 @@ import {
     versionMajorMinor,
 } from "./_namespaces/ts";
 import {
+    ActionPackageInstalled,
     ActionSet,
     ActionWatchTypingLocations,
     BeginInstallTypes,
@@ -26,10 +29,15 @@ import {
     EndInstallTypes,
     EventBeginInstallTypes,
     EventEndInstallTypes,
+    EventTypesRegistry,
+    InstallPackageRequest,
     InstallTypingHost,
     InvalidateCachedTypings,
+    PackageInstalledResponse,
     SetTypings,
     stringifyIndented,
+    TypesRegistryResponse,
+    TypingInstallerRequestUnion,
     WatchTypingLocations,
 } from "./_namespaces/ts.server";
 
@@ -106,7 +114,7 @@ export abstract class TypingsInstaller {
     private readonly projectWatchers = new Map<string, Set<string>>();
     private safeList: JsTyping.SafeList | undefined;
     /** @internal */
-    readonly pendingRunRequests: PendingRequest[] = [];
+    private pendingRunRequests: PendingRequest[] = [];
 
     private installRunCount = 1;
     private inFlightRequestCount = 0;
@@ -126,6 +134,33 @@ export abstract class TypingsInstaller {
             this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
         }
         this.processCacheLocation(this.globalCachePath);
+    }
+
+    /** @internal */
+    handleRequest(req: TypingInstallerRequestUnion) {
+        switch (req.kind) {
+            case "discover":
+                this.install(req);
+                break;
+            case "closeProject":
+                this.closeProject(req);
+                break;
+            case "typesRegistry": {
+                const typesRegistry: { [key: string]: MapLike<string>; } = {};
+                this.typesRegistry.forEach((value, key) => {
+                    typesRegistry[key] = value;
+                });
+                const response: TypesRegistryResponse = { kind: EventTypesRegistry, typesRegistry };
+                this.sendResponse(response);
+                break;
+            }
+            case "installPackage": {
+                this.installPackage(req);
+                break;
+            }
+            default:
+                Debug.assertNever(req);
+        }
     }
 
     closeProject(req: CloseProject) {
@@ -193,6 +228,41 @@ export abstract class TypingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`No new typings were requested as a result of typings discovery`);
             }
+        }
+    }
+
+    /** @internal */
+    installPackage(req: InstallPackageRequest) {
+        const { fileName, packageName, projectName, projectRootPath, id } = req;
+        const cwd = forEachAncestorDirectory(getDirectoryPath(fileName), directory => {
+            if (this.installTypingHost.fileExists(combinePaths(directory, "package.json"))) {
+                return directory;
+            }
+        }) || projectRootPath;
+        if (cwd) {
+            this.installWorker(-1, [packageName], cwd, success => {
+                const message = success ?
+                    `Package ${packageName} installed.` :
+                    `There was an error installing ${packageName}.`;
+                const response: PackageInstalledResponse = {
+                    kind: ActionPackageInstalled,
+                    projectName,
+                    id,
+                    success,
+                    message,
+                };
+                this.sendResponse(response);
+            });
+        }
+        else {
+            const response: PackageInstalledResponse = {
+                kind: ActionPackageInstalled,
+                projectName,
+                id,
+                success: false,
+                message: "Could not determine a project root path.",
+            };
+            this.sendResponse(response);
         }
     }
 
@@ -455,7 +525,8 @@ export abstract class TypingsInstaller {
 
     protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
     protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
-
+    /** @internal */
+    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse | TypesRegistryResponse): void;
     protected readonly latestDistTag = "latest";
 }
 

@@ -1,6 +1,4 @@
 Input::
-Output::
-
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -98,8 +96,6 @@ Project Result:: {
   "project": "/user/username/projects/sample1/core/tsconfig.json",
   "result": 0
 }
-Output::
-
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -220,8 +216,6 @@ Project Result:: {
   "project": "/user/username/projects/sample1/logic/tsconfig.json",
   "result": 0
 }
-Output::
-
 //// [/user/username/projects/sample1/logic/index.js.map]
 {"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
@@ -332,8 +326,6 @@ Project Result:: {
   "project": "/user/username/projects/sample1/tests/tsconfig.json",
   "result": 0
 }
-Output::
-
 //// [/user/username/projects/sample1/tests/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -449,5 +441,3 @@ export declare const m: typeof mod;
 
 
 Project Result:: {}
-Output::
-

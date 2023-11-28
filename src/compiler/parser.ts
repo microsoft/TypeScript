@@ -1971,8 +1971,9 @@ namespace Parser {
 
         // If we parsed this as an external module, it may contain top-level await
         if (!isDeclarationFile && isExternalModule(sourceFile) && sourceFile.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait) {
+            const oldSourceFile = sourceFile;
             sourceFile = reparseTopLevelAwait(sourceFile);
-            setFields(sourceFile);
+            if (oldSourceFile !== sourceFile) setFields(sourceFile);
         }
 
         return sourceFile;
@@ -7496,6 +7497,11 @@ namespace Parser {
     function nextTokenIsStringLiteral() {
         return nextToken() === SyntaxKind.StringLiteral;
     }
+
+    function nextTokenIsFromKeyword() {
+        return nextToken() === SyntaxKind.FromKeyword;
+    }
+
     function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
         nextToken();
         return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token() === SyntaxKind.StringLiteral);
@@ -8328,8 +8334,8 @@ namespace Parser {
 
         let isTypeOnly = false;
         if (
-            token() !== SyntaxKind.FromKeyword &&
             identifier?.escapedText === "type" &&
+            (token() !== SyntaxKind.FromKeyword || isIdentifier() && lookAhead(nextTokenIsFromKeyword)) &&
             (isIdentifier() || tokenAfterImportDefinitelyProducesImportDeclaration())
         ) {
             isTypeOnly = true;

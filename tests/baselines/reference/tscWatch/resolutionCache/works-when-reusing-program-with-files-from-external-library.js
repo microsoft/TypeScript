@@ -45,6 +45,51 @@ Output::
 
 
 
+//// [/a/b/projects/myProject/dist/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var module1 = require("module1");
+module1("hello");
+
+
+//// [/a/b/projects/myProject/dist/file2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var module11 = require("module1");
+module11("hello");
+
+
+
+PolledWatches::
+/a/b/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/myproject/src/node_modules: *new*
+  {"pollingInterval":500}
+/a/b/projects/myproject/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/node_modules: *new*
+  {"pollingInterval":500}
+/a/b/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/myproject/node_modules/module1/index.js: *new*
+  {}
+/a/b/projects/myproject/src/file1.ts: *new*
+  {}
+/a/b/projects/myproject/src/file2.ts: *new*
+  {}
+/a/b/projects/myproject/src/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/myproject/node_modules: *new*
+  {}
+/a/b/projects/myproject/src: *new*
+  {}
+
 Program root files: [
   "/a/b/projects/myProject/src/file1.ts",
   "/a/b/projects/myProject/src/file2.ts"
@@ -78,52 +123,7 @@ Shape signatures in builder refreshed for::
 /a/b/projects/myproject/src/file1.ts (used version)
 /a/b/projects/myproject/src/file2.ts (used version)
 
-PolledWatches::
-/a/b/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/a/b/projects/myproject/src/node_modules: *new*
-  {"pollingInterval":500}
-/a/b/projects/myproject/src/node_modules/@types: *new*
-  {"pollingInterval":500}
-/a/b/projects/node_modules: *new*
-  {"pollingInterval":500}
-/a/b/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/myproject/node_modules/module1/index.js: *new*
-  {}
-/a/b/projects/myproject/src/file1.ts: *new*
-  {}
-/a/b/projects/myproject/src/file2.ts: *new*
-  {}
-/a/b/projects/myproject/src/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/myproject/node_modules: *new*
-  {}
-/a/b/projects/myproject/src: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/projects/myProject/dist/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var module1 = require("module1");
-module1("hello");
-
-
-//// [/a/b/projects/myProject/dist/file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var module11 = require("module1");
-module11("hello");
-
-
 
 Change:: Add new line to file1
 
@@ -134,14 +134,28 @@ module1("hello");
 ;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:44 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/a/b/projects/myProject/dist/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var module1 = require("module1");
+module1("hello");
+;
+
 
 
 
@@ -173,12 +187,3 @@ Shape signatures in builder refreshed for::
 /a/b/projects/myproject/src/file1.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/projects/myProject/dist/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var module1 = require("module1");
-module1("hello");
-;
-
-
