@@ -2764,10 +2764,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return symbol;
                 }
                 if (symbol.flags & SymbolFlags.Alias) {
-                    // Do not take target symbol meaning into account in isolated declaration mode since we don't have access to info from other files.
-                    if (compilerOptions.isolatedDeclarations) {
-                        return symbol;
-                    }
                     const targetFlags = getSymbolFlags(symbol);
                     // `targetFlags` will be `SymbolFlags.All` if an error occurred in alias resolution; this avoids cascading errors
                     if (targetFlags & meaning) {

@@ -1,0 +1,17 @@
+// [[Reason: TSC removes import that is not used in a semantically valid way. DTE can't know about this.]] ////
+
+//// [tests/cases/compiler/decoratorMetadataWithImportDeclarationNameCollision7.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -5,8 +5,9 @@
+     doSomething(): invalid;
+ }
+ 
+ //// [service.d.ts]
++import db from './db';
+ declare class MyClass {
+     db: db.db;
+     constructor(db: db.db);
+ }

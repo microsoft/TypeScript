@@ -1,5 +1,6 @@
 // @noImplicitReferences: true
 // @declaration: true
+// @isolatedDeclarationDiffReason: TSC removes type only import. DTE can't know import is type only.
 // @typeRoots: /types
 // @traceResolution: true
 // @currentDirectory: /

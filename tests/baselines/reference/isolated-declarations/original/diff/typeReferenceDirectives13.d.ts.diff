@@ -1,0 +1,16 @@
+// [[Reason: TSC removes type only import. DTE can't know import is type only.]] ////
+
+//// [tests/cases/compiler/typeReferenceDirectives13.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,7 +1,8 @@
+ 
+ 
+ //// [/app.d.ts]
++import { $ } from "./ref";
+ export interface A {
+     x: () => typeof $;
+ }
+ 
