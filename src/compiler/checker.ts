@@ -18395,6 +18395,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let result;
         let extraTypes: Type[] | undefined;
         let tailCount = 0;
+
+        let lastRoot = root;
+        let lastCombinedMapper: TypeMapper | undefined = undefined;
+        let lastAliasSymbol = aliasSymbol;
+        let lastAliasTypeArguments = aliasTypeArguments;
+
+        let saveNext = false;
         // We loop here for an immediately nested conditional type in the false position, effectively treating
         // types of the form 'A extends B ? X : C extends D ? Y : E extends F ? Z : ...' as a single construct for
         // purposes of resolution. We also loop here when resolution of a conditional type ends in resolution of
@@ -18405,11 +18412,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
             }
-            // We instantiate a distributive checkType with the narrow mapper information
+            // We instantiate a distributive checkType with the narrow mapper
             const checkTypeVariable = getActualTypeVariable(root.checkType);
             const narrowableCheckTypeVariable = getNarrowableCheckTypeVariable(root, mapper);
             const checkType = narrowableCheckTypeVariable ?
-                // instantiateType(checkTypeVariable, combineTypeMappers(mapper, narrowMapper)) :
                 getMappedType(narrowableCheckTypeVariable, narrowMapper) :
                 instantiateType(checkTypeVariable, mapper);
             const extendsType = instantiateType(root.extendsType, mapper);
@@ -18424,7 +18430,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // types can be written `[X] extends [Y] ? ...` and be deferred similarly to `X extends Y ? ...`.
             const checkTuples = isSimpleTupleType(root.node.checkType) && isSimpleTupleType(root.node.extendsType) &&
                 length((root.node.checkType as TupleTypeNode).elements) === length((root.node.extendsType as TupleTypeNode).elements);
-            const forceEagerNarrowing = narrowableCheckTypeVariable && getMappedType(narrowableCheckTypeVariable, narrowMapper) !== root.checkType; // >> TODO: can probably optimize this
+            const forceEagerNarrowing = narrowableCheckTypeVariable && getMappedType(narrowableCheckTypeVariable, narrowMapper) !== narrowableCheckTypeVariable; // >> TODO: can probably optimize this
             const checkTypeDeferred = isDeferredType(checkType, checkTuples) && !forceEagerNarrowing;
             let combinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
@@ -18470,6 +18476,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
+
+            if (saveNext) {
+                saveConditional(combinedMapper);
+            }
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
             // if (!checkTypeDeferred && !isDeferredType(inferredExtendsType, checkTuples)) {
             if (!checkTypeDeferred) {
@@ -18480,6 +18490,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && (checkType.flags & TypeFlags.Any || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
                     // Return union of trueType and falseType for 'any' since it matches anything
                     if (checkType.flags & TypeFlags.Any) {
+                        // >> TODO: took true here? I don't think this can ever happen -- we wouldn't narrow the check type to `any` because we don't narrow anything to `any`
                         (extraTypes || (extraTypes = [])).push(
                             instantiateNarrowType(getTypeFromTypeNode(root.node.trueType), narrowMapper, combinedMapper || mapper));
                     }
@@ -18488,6 +18499,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const falseType = getTypeFromTypeNode(root.node.falseType);
                     if (falseType.flags & TypeFlags.Conditional) {
                         const newRoot = (falseType as ConditionalType).root;
+                        // >> TODO: can we make this recurse even when the original check types are different,
+                        // as long as the check types instantiated with `mapper` are the same?
+                        // What could be wrong is `aliasSymbol` and `aliasTypeArguments`?
+                        // >> TODO: reset those as we do inside `canTailRecurse`
                         if (newRoot.node.parent === root.node && (!newRoot.isDistributive || newRoot.checkType === root.checkType)) {
                             root = newRoot;
                             continue;
@@ -18496,46 +18511,59 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             continue;
                         }
                     }
-                    result = instantiateNarrowType(falseType, narrowMapper, mapper);
-                    break;
+                    // >> TODO: basically disallow this, and go to fall-through case
+                    // result = instantiateNarrowType(falseType, narrowMapper, mapper);
+                    // break;
                 }
                 // Return trueType for a definitely true extends check. We check instantiations of the two
                 // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
                 // that has no constraint. This ensures that, for example, the type
                 //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                 // doesn't immediately resolve to 'string' instead of being deferred.
-                if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
+                else if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
                     const trueType = getTypeFromTypeNode(root.node.trueType);
                     const trueMapper = combinedMapper || mapper;
                     if (canTailRecurse(trueType, narrowMapper, trueMapper)) {
+                        saveNext = true;
                         continue;
                     }
                     result = instantiateNarrowType(trueType, narrowMapper, trueMapper);
                     break;
                 }
                 // >> TODO: document why/when we need this
-                if (isTypeStrictSubtypeOf(checkType, inferredExtendsType)) {
+                // Same as above
+                else if (isTypeStrictSubtypeOf(checkType, inferredExtendsType)) {
                     const trueType = getTypeFromTypeNode(root.node.trueType);
                     const trueMapper = combinedMapper || mapper;
                     if (canTailRecurse(trueType, narrowMapper, trueMapper)) {
+                        saveNext = true;
                         continue;
                     }
                     result = instantiateNarrowType(trueType, narrowMapper, trueMapper);
                     break;
                 }
             }
+            // >> TODO: use saved conditional
             // Return a deferred type for a check that is neither definitely true nor definitely false
             result = createType(TypeFlags.Conditional) as ConditionalType;
-            result.root = root;
-            result.checkType = instantiateType(root.checkType, mapper);
-            result.extendsType = instantiateType(root.extendsType, mapper);
+            // result.root = root;
+            // result.checkType = instantiateType(root.checkType, mapper);
+            // result.extendsType = instantiateType(root.extendsType, mapper);
+            // result.mapper = mapper;
+            // result.combinedMapper = combinedMapper;
+            // result.aliasSymbol = aliasSymbol || root.aliasSymbol;
+            // result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
+            result.root = lastRoot;
+            result.checkType = instantiateType(lastRoot.checkType, mapper);
+            result.extendsType = instantiateType(lastRoot.extendsType, mapper);
             result.mapper = mapper;
-            result.combinedMapper = combinedMapper;
-            result.aliasSymbol = aliasSymbol || root.aliasSymbol;
-            result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
+            result.combinedMapper = lastCombinedMapper;
+            result.aliasSymbol = lastAliasSymbol || lastRoot.aliasSymbol;
+            result.aliasTypeArguments = lastAliasSymbol ? lastAliasTypeArguments : instantiateTypes(lastRoot.aliasTypeArguments, mapper!); // TODO: GH#18217
             break;
         }
         return extraTypes ? getIntersectionType(append(extraTypes, result)) : result;
+
         // We tail-recurse for generic conditional types that (a) have not already been evaluated and cached, and
         // (b) are non distributive, have a check type that is unaffected by instantiation, or have a non-union check
         // type. Note that recursion is possible only through aliased conditional types, so we only increment the tail
@@ -18567,6 +18595,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             return false;
+        }
+
+        function saveConditional(combinedMapper: TypeMapper | undefined): void {
+            lastRoot = root;
+            lastCombinedMapper = combinedMapper;
+            lastAliasSymbol = aliasSymbol;
+            lastAliasTypeArguments = aliasTypeArguments;
+            saveNext = false;
         }
     }
 

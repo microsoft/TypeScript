@@ -67,7 +67,17 @@ interface Four {
     g: "g";
 }
 
-function f10<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four {
+function f10<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four { // Badly written conditional
+    if (x === 1 || x === 2) {
+        return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" }; // Ok
+        return { a: "a" }; // Error
+    }
+    // Excess property becomes a problem with the change,
+    // because we now check assignability to a narrower type...
+    return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" }; // Error
+}
+
+function f101<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : One | Two | Three | Four { // Well written conditional
     if (x === 1 || x === 2) {
         return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" }; // Ok
         return { a: "a" }; // Error
@@ -151,6 +161,24 @@ class Unnamed {
     nameWithError<T extends string>(name?: T): T extends string ? this : string {
         return this; // Error: Investigate error message
     }
+
+    // Good conditional
+    name2<T extends string | undefined>(name?: T): T extends string ? this : T extends undefined ? string : this | undefined {
+        if (typeof name === 'undefined') {
+            return this.root.name; // Ok
+        }
+        this.root.name = name;
+        return this; // Ok
+    }
+
+    // Good conditional, wrong return expressions
+    name3<T extends string | undefined>(name?: T): T extends string ? this : T extends undefined ? string : this | undefined {
+        if (typeof name === 'undefined') {
+            return this; // Error
+        }
+        this.root.name = name;
+        return name; // Error
+    }
 }
 
 interface Aa {
@@ -169,15 +197,16 @@ function trivialConditional<T extends 1 | 2 | 3>(x: T): Aa[T] {
 }
 
 // Conditional expressions
-function conditional<T extends boolean>(x: T): T extends true ? 1 : 2 {
+function conditional<T extends boolean>(x: T):
+ T extends true ? 1 : T extends false ? 2 : 1 | 2 {
     return x ? 1 : 2; // Ok
 }
 
-function contextualConditional<T extends "a" | "b">(x: T): T extends "a" ? "a" : number {
+function contextualConditional<T extends "a" | "b">(x: T): T extends "a" ? "a" : T extends "b" ? number : "a" | number {
     return x === "a" ? x : parseInt(x); // Ok
 }
 
-function conditionalWithError<T extends "a" | "b">(x: T): T extends "a" ? number : string {
+function conditionalWithError<T extends "a" | "b">(x: T): T extends "a" ? number : T extends "b" ? string : number | string {
     return x === "a" ? x : parseInt(x); // Error
 }
 
@@ -221,27 +250,56 @@ function foo<T extends { a: string } | { b: number }>(x: T): T extends { a: stri
 let y = { a: "", b: 1 }
 const r = foo<{ a: string }>(y); // number
 
+function lessBadFoo<T extends { a: string } | { b: number }>(x: T): T extends { b: number } ? string : T extends { a: string } ? number : (string | number) {
+    if (q(x)) {
+        x.b;
+        return "";
+    }
+    return 2;
+}
+
+const r2 = lessBadFoo<{ a: string }>(y); // number, bad
+
 type HelperCond<T, A, R1, B, R2> = T extends A ? R1 : T extends B ? R2 : R1 | R2;
 
+// We don't narrow the return type because the conditionals are not distributive
 function foo2<U extends string | number, V extends boolean>(x: U, y: V):
     HelperCond<{ x: U, y: V },
         { x: string, y: true }, 1,
         { x: number, y: false }, 2> {
     if (typeof x === "string" && y === true) {
-        return 1;
+        return 1; // Error
     }
     if (typeof x === "number" && y === false) {
-        return 2;
+        return 2; // Error
     }
-    return 0;
+    return 0; // Error
 }
 
-// >> TODO: test non-tail recursive and tail recursive conditionals
-
-// >> TODO: fix this
-function voidRet<T extends { a: string } | undefined>(x: T): T extends {} ? void : number {
-    if (x) {
-        return;
+// From https://github.com/microsoft/TypeScript/issues/24929#issue-332087943
+declare function isString(s: unknown): s is string;
+// capitalize a string or each element of an array of strings
+function capitalize<T extends string | string[]>(input: T): T extends string[] ? string[] : T extends string ? string : string[] | string {
+    if (isString(input)) {
+        return input[0].toUpperCase() + input.slice(1); // Ok
+    } else {
+        return input.map(elt => capitalize(elt)); // Ok
     }
-    return 1;
+}
+
+function badCapitalize<T extends string | string[]>(input: T): T extends string[] ? string[] : T extends string ? string : string[] | string {
+    if (isString(input)) {
+        return input[0].toUpperCase() + input.slice(1); // Ok
+    } else {
+        return input[0].toUpperCase() + input.slice(1); // Bad
+    }
+}
+
+// >> TODO: test non-tail recursive conditionals
+
+function voidRet<T extends { a: string } | undefined>(x: T): T extends {} ? void : T extends undefined ? number : void | number {
+    if (x) {
+        return; // Ok
+    }
+    return 1; // Ok
 }

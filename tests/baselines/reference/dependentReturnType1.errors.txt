@@ -2,27 +2,37 @@ dependentReturnType1.ts(11,9): error TS2322: Type 'number' is not assignable to 
 dependentReturnType1.ts(26,9): error TS2322: Type 'string' is not assignable to type 'never'.
 dependentReturnType1.ts(35,9): error TS2322: Type 'string' is not assignable to type 'never'.
 dependentReturnType1.ts(70,9): error TS2322: Type '{ a: "a"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
-dependentReturnType1.ts(74,22): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Three & Four'.
-dependentReturnType1.ts(89,9): error TS2322: Type 'RightOut' is not assignable to type 'Arg extends LeftIn ? LeftOut : RightOut'.
-dependentReturnType1.ts(108,5): error TS2322: Type 'string' is not assignable to type 'T extends Dog ? number : string'.
-dependentReturnType1.ts(145,9): error TS2322: Type 'this' is not assignable to type 'T extends string ? this : string'.
+dependentReturnType1.ts(74,5): error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'Three & (T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four)'.
+  Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
+dependentReturnType1.ts(80,9): error TS2322: Type '{ a: "a"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : One | Two | Three | Four'.
+dependentReturnType1.ts(84,22): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Three & Four'.
+dependentReturnType1.ts(99,9): error TS2322: Type 'RightOut' is not assignable to type 'Arg extends LeftIn ? LeftOut : RightOut'.
+dependentReturnType1.ts(118,5): error TS2322: Type 'string' is not assignable to type 'T extends Dog ? number : string'.
+dependentReturnType1.ts(153,13): error TS2322: Type 'string' is not assignable to type 'T extends string ? this : string'.
+dependentReturnType1.ts(155,9): error TS2322: Type 'this' is not assignable to type 'T extends string ? this : string'.
   Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
-dependentReturnType1.ts(149,9): error TS2322: Type 'this' is not assignable to type 'string & (T extends string ? this : string)'.
-  Type 'Unnamed' is not assignable to type 'string & (T extends string ? this : string)'.
-    Type 'Unnamed' is not assignable to type 'string'.
-      Type 'this' is not assignable to type 'string'.
-        Type 'Unnamed' is not assignable to type 'string'.
-dependentReturnType1.ts(178,24): error TS2322: Type 'string' is not assignable to type 'number'.
-dependentReturnType1.ts(178,28): error TS2322: Type 'number' is not assignable to type 'string'.
-dependentReturnType1.ts(203,47): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-dependentReturnType1.ts(205,9): error TS2322: Type '""' is not assignable to type 'T extends 1 ? string : boolean'.
-dependentReturnType1.ts(211,62): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-dependentReturnType1.ts(228,9): error TS2322: Type '1' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
-dependentReturnType1.ts(231,9): error TS2322: Type '2' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
-dependentReturnType1.ts(233,5): error TS2322: Type '0' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
+dependentReturnType1.ts(159,9): error TS2322: Type 'this' is not assignable to type '(T extends string ? this : string) & (T extends string ? this : string)'.
+  Type 'Unnamed' is not assignable to type '(T extends string ? this : string) & (T extends string ? this : string)'.
+    Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
+      Type 'this' is not assignable to type 'T extends string ? this : string'.
+        Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
+dependentReturnType1.ts(174,13): error TS2322: Type 'this' is not assignable to type 'string'.
+  Type 'Unnamed' is not assignable to type 'string'.
+dependentReturnType1.ts(177,9): error TS2322: Type 'T & {}' is not assignable to type 'this'.
+  'this' could be instantiated with an arbitrary type which could be unrelated to 'T & {}'.
+dependentReturnType1.ts(207,24): error TS2322: Type 'string' is not assignable to type 'number'.
+dependentReturnType1.ts(207,28): error TS2322: Type 'number' is not assignable to type 'string'.
+dependentReturnType1.ts(232,47): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+dependentReturnType1.ts(234,9): error TS2322: Type '""' is not assignable to type 'T extends 1 ? string : boolean'.
+dependentReturnType1.ts(240,62): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+dependentReturnType1.ts(243,9): error TS2322: Type 'string' is not assignable to type 'T extends { a: string; } ? number : string | number'.
+dependentReturnType1.ts(268,9): error TS2322: Type '1' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
+dependentReturnType1.ts(271,9): error TS2322: Type '2' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
+dependentReturnType1.ts(273,5): error TS2322: Type '0' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
+dependentReturnType1.ts(291,9): error TS2322: Type 'string' is not assignable to type 'string[]'.
 
 
-==== dependentReturnType1.ts (17 errors) ====
+==== dependentReturnType1.ts (24 errors) ====
     interface A {
         1: number;
         2: string;
@@ -95,12 +105,27 @@ dependentReturnType1.ts(233,5): error TS2322: Type '0' is not assignable to type
         g: "g";
     }
     
-    function f10<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four {
+    function f10<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four { // Badly written conditional
         if (x === 1 || x === 2) {
             return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" }; // Ok
             return { a: "a" }; // Error
             ~~~~~~
 !!! error TS2322: Type '{ a: "a"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
+        }
+        // Excess property becomes a problem with the change,
+        // because we now check assignability to a narrower type...
+        return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" }; // Error
+        ~~~~~~
+!!! error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'Three & (T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four)'.
+!!! error TS2322:   Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
+    }
+    
+    function f101<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : One | Two | Three | Four { // Well written conditional
+        if (x === 1 || x === 2) {
+            return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" }; // Ok
+            return { a: "a" }; // Error
+            ~~~~~~
+!!! error TS2322: Type '{ a: "a"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : One | Two | Three | Four'.
         }
         // Excess property becomes a problem with the change,
         // because we now check assignability to a narrower type...
@@ -180,6 +205,8 @@ dependentReturnType1.ts(233,5): error TS2322: Type '0' is not assignable to type
         name<T extends string>(name?: T): T extends string ? this : string {
             if (typeof name === 'undefined') {
                 return this.root.name;
+                ~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'T extends string ? this : string'.
             }
             return this;
             ~~~~~~
@@ -190,11 +217,35 @@ dependentReturnType1.ts(233,5): error TS2322: Type '0' is not assignable to type
         nameWithError<T extends string>(name?: T): T extends string ? this : string {
             return this; // Error: Investigate error message
             ~~~~~~
-!!! error TS2322: Type 'this' is not assignable to type 'string & (T extends string ? this : string)'.
-!!! error TS2322:   Type 'Unnamed' is not assignable to type 'string & (T extends string ? this : string)'.
-!!! error TS2322:     Type 'Unnamed' is not assignable to type 'string'.
-!!! error TS2322:       Type 'this' is not assignable to type 'string'.
-!!! error TS2322:         Type 'Unnamed' is not assignable to type 'string'.
+!!! error TS2322: Type 'this' is not assignable to type '(T extends string ? this : string) & (T extends string ? this : string)'.
+!!! error TS2322:   Type 'Unnamed' is not assignable to type '(T extends string ? this : string) & (T extends string ? this : string)'.
+!!! error TS2322:     Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
+!!! error TS2322:       Type 'this' is not assignable to type 'T extends string ? this : string'.
+!!! error TS2322:         Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
+        }
+    
+        // Good conditional
+        name2<T extends string | undefined>(name?: T): T extends string ? this : T extends undefined ? string : this | undefined {
+            if (typeof name === 'undefined') {
+                return this.root.name; // Ok
+            }
+            this.root.name = name;
+            return this; // Ok
+        }
+    
+        // Good conditional, wrong return expressions
+        name3<T extends string | undefined>(name?: T): T extends string ? this : T extends undefined ? string : this | undefined {
+            if (typeof name === 'undefined') {
+                return this; // Error
+                ~~~~~~
+!!! error TS2322: Type 'this' is not assignable to type 'string'.
+!!! error TS2322:   Type 'Unnamed' is not assignable to type 'string'.
+            }
+            this.root.name = name;
+            return name; // Error
+            ~~~~~~
+!!! error TS2322: Type 'T & {}' is not assignable to type 'this'.
+!!! error TS2322:   'this' could be instantiated with an arbitrary type which could be unrelated to 'T & {}'.
         }
     }
     
@@ -214,15 +265,16 @@ dependentReturnType1.ts(233,5): error TS2322: Type '0' is not assignable to type
     }
     
     // Conditional expressions
-    function conditional<T extends boolean>(x: T): T extends true ? 1 : 2 {
+    function conditional<T extends boolean>(x: T):
+     T extends true ? 1 : T extends false ? 2 : 1 | 2 {
         return x ? 1 : 2; // Ok
     }
     
-    function contextualConditional<T extends "a" | "b">(x: T): T extends "a" ? "a" : number {
+    function contextualConditional<T extends "a" | "b">(x: T): T extends "a" ? "a" : T extends "b" ? number : "a" | number {
         return x === "a" ? x : parseInt(x); // Ok
     }
     
-    function conditionalWithError<T extends "a" | "b">(x: T): T extends "a" ? number : string {
+    function conditionalWithError<T extends "a" | "b">(x: T): T extends "a" ? number : T extends "b" ? string : number | string {
         return x === "a" ? x : parseInt(x); // Error
                            ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
@@ -270,39 +322,72 @@ dependentReturnType1.ts(233,5): error TS2322: Type '0' is not assignable to type
         if (q(x)) {
             x.b;
             return "";
+            ~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'T extends { a: string; } ? number : string | number'.
         }
     }
     
     let y = { a: "", b: 1 }
     const r = foo<{ a: string }>(y); // number
     
+    function lessBadFoo<T extends { a: string } | { b: number }>(x: T): T extends { b: number } ? string : T extends { a: string } ? number : (string | number) {
+        if (q(x)) {
+            x.b;
+            return "";
+        }
+        return 2;
+    }
+    
+    const r2 = lessBadFoo<{ a: string }>(y); // number, bad
+    
     type HelperCond<T, A, R1, B, R2> = T extends A ? R1 : T extends B ? R2 : R1 | R2;
     
+    // We don't narrow the return type because the conditionals are not distributive
     function foo2<U extends string | number, V extends boolean>(x: U, y: V):
         HelperCond<{ x: U, y: V },
             { x: string, y: true }, 1,
             { x: number, y: false }, 2> {
         if (typeof x === "string" && y === true) {
-            return 1;
+            return 1; // Error
             ~~~~~~
 !!! error TS2322: Type '1' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
         }
         if (typeof x === "number" && y === false) {
-            return 2;
+            return 2; // Error
             ~~~~~~
 !!! error TS2322: Type '2' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
         }
-        return 0;
+        return 0; // Error
         ~~~~~~
 !!! error TS2322: Type '0' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
     }
     
-    // >> TODO: test non-tail recursive and tail recursive conditionals
-    
-    // >> TODO: fix this
-    function voidRet<T extends { a: string } | undefined>(x: T): T extends {} ? void : number {
-        if (x) {
-            return;
+    // From https://github.com/microsoft/TypeScript/issues/24929#issue-332087943
+    declare function isString(s: unknown): s is string;
+    // capitalize a string or each element of an array of strings
+    function capitalize<T extends string | string[]>(input: T): T extends string[] ? string[] : T extends string ? string : string[] | string {
+        if (isString(input)) {
+            return input[0].toUpperCase() + input.slice(1); // Ok
+        } else {
+            return input.map(elt => capitalize(elt)); // Ok
         }
-        return 1;
+    }
+    
+    function badCapitalize<T extends string | string[]>(input: T): T extends string[] ? string[] : T extends string ? string : string[] | string {
+        if (isString(input)) {
+            return input[0].toUpperCase() + input.slice(1); // Ok
+        } else {
+            return input[0].toUpperCase() + input.slice(1); // Bad
+            ~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'string[]'.
+        }
+    }
+    
+    // >> TODO: test non-tail recursive conditionals
+    
+    function voidRet<T extends { a: string } | undefined>(x: T): T extends {} ? void : T extends undefined ? number : void | number {
+        if (x) {
+            return; // Ok
+        }
+        return 1; // Ok
     }
