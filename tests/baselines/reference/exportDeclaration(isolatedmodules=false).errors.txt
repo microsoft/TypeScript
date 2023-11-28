@@ -13,3 +13,10 @@
 !!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
 !!! related TS1377 /a.ts:2:15: 'A' was exported here.
     
+==== /c.ts (0 errors) ====
+    import type { A } from './a';
+    export = A;
+    
+==== /d.ts (0 errors) ====
+    import { A } from './a';
+    export = A;

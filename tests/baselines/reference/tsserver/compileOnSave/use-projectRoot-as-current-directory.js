@@ -103,13 +103,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/root/typescriptproject3/typescriptproject3/node_modules/@types: *new*
+/root/TypeScriptProject3/TypeScriptProject3/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/root/typescriptproject3/typescriptproject3/foo.ts: *new*
+/root/TypeScriptProject3/TypeScriptProject3/Foo.ts: *new*
   {}
 
 Before request

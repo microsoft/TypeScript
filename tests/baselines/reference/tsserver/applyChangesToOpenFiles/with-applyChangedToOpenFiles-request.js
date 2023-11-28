@@ -168,9 +168,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/commonfile1.ts: *new*
+/a/b/commonFile1.ts: *new*
   {}
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {}
 /a/b/file3.ts: *new*
   {}
@@ -225,9 +225,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {}
 /a/b/tsconfig.json:
   {}
@@ -331,9 +331,9 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {}
 
 FsWatchesRecursive::

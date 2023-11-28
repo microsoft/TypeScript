@@ -216,7 +216,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/package.json: *new*
   {}
-/user/username/projects/myproject/src/fileb.mts: *new*
+/user/username/projects/myproject/src/fileB.mts: *new*
   {}
 /user/username/projects/myproject/src/tsconfig.json: *new*
   {}
@@ -695,7 +695,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/package.json:
   {}
-/user/username/projects/myproject/src/fileb.mts:
+/user/username/projects/myproject/src/fileB.mts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -902,7 +902,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/package.json:
   {}
-/user/username/projects/myproject/src/fileb.mts:
+/user/username/projects/myproject/src/fileB.mts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -1110,7 +1110,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/package.json:
   {}
-/user/username/projects/myproject/src/fileb.mts:
+/user/username/projects/myproject/src/fileB.mts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}

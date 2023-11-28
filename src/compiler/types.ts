@@ -858,7 +858,7 @@ export const enum ModifierFlags {
     Protected =          1 << 2,  // Property/Method
     Readonly =           1 << 3,  // Property/Method
     Override =           1 << 4,  // Override method.
-    
+
     // Syntactic-only modifiers
     Export =             1 << 5,  // Declarations
     Abstract =           1 << 6,  // Class/Method/ConstructSignature
@@ -3663,10 +3663,10 @@ export interface ImportClause extends NamedDeclaration {
 export type AssertionKey = ImportAttributeName;
 
 /** @deprecated */
-export type AssertEntry = ImportAttribute;
+export interface AssertEntry extends ImportAttribute {}
 
 /** @deprecated */
-export type AssertClause = ImportAttributes;
+export interface AssertClause extends ImportAttributes {}
 
 export type ImportAttributeName = Identifier | StringLiteral;
 
@@ -4684,11 +4684,11 @@ export interface Program extends ScriptReferenceHost {
      *
      * @internal
      */
-    getMissingFilePaths(): readonly Path[];
+    getMissingFilePaths(): Map<Path, string>;
     /** @internal */
     getModuleResolutionCache(): ModuleResolutionCache | undefined;
     /** @internal */
-    getFilesByNameMap(): Map<string, SourceFile | false | undefined>;
+    getFilesByNameMap(): Map<Path, SourceFile | false | undefined>;
 
     /** @internal */
     resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
@@ -6130,7 +6130,7 @@ export const enum TypeFlags {
     Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
     StructuredOrInstantiable = StructuredType | Instantiable,
     /** @internal */
-    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection | TemplateLiteral,
+    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
     /** @internal */
     Simplifiable = IndexedAccess | Conditional,
     /** @internal */
@@ -6289,7 +6289,7 @@ export const enum ObjectFlags {
     /** @internal */
     IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
-    // Flags that require TypeFlags.UnionOrIntersection, TypeFlags.Substitution, or TypeFlags.TemplateLiteral
+    // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
     /** @internal */
     IsGenericTypeComputed = 1 << 21, // IsGenericObjectType flag has been computed
     /** @internal */
@@ -6316,7 +6316,7 @@ export const enum ObjectFlags {
 }
 
 /** @internal */
-export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType | TemplateLiteralType;
+export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType;
 
 // Object types (TypeFlags.ObjectType)
 // dprint-ignore
@@ -6675,8 +6675,6 @@ export interface ConditionalType extends InstantiableType {
 }
 
 export interface TemplateLiteralType extends InstantiableType {
-    /** @internal */
-    objectFlags: ObjectFlags;
     texts: readonly string[]; // Always one element longer than types
     types: readonly Type[]; // Always at least one element
 }
@@ -7405,7 +7403,7 @@ export interface CommandLineOptionBase {
     isFilePath?: boolean;                                   // True if option value is a path or fileName
     shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
     description?: DiagnosticMessage;                        // The message describing what the command line switch does.
-    defaultValueDescription?: string | number | boolean | DiagnosticMessage;   // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
+    defaultValueDescription?: string | number | boolean | DiagnosticMessage | undefined;   // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
     paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
     isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
     isCommandLineOnly?: boolean;

@@ -305,7 +305,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/sample1/core/anothermodule.ts: *new*
+/user/username/projects/sample1/core/anotherModule.ts: *new*
   {}
 /user/username/projects/sample1/core/index.ts: *new*
   {}

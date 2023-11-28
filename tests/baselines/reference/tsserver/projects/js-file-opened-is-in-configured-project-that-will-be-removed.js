@@ -203,7 +203,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js: *new*
+/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js: *new*
   {}
 /user/username/projects/myproject/apps/editor/src/src.js: *new*
   {}
@@ -246,11 +246,11 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js:
+/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js:
   {}
 /user/username/projects/myproject/apps/editor/src/src.js:
   {}
-/user/username/projects/myproject/mocks/cssmock.js: *new*
+/user/username/projects/myproject/mocks/cssMock.js: *new*
   {}
 /user/username/projects/myproject/tsconfig.json:
   {}
@@ -474,9 +474,9 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/apps/editor/scripts/createconfigvariable.js:
+/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js:
   {}
-/user/username/projects/myproject/mocks/cssmock.js:
+/user/username/projects/myproject/mocks/cssMock.js:
   {}
 
 FsWatchesRecursive::
@@ -528,12 +528,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/myproject/apps/editor/scripts",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []

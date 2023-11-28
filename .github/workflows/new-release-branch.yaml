@@ -2,7 +2,7 @@ name: New Release Branch
 
 on:
   repository_dispatch:
-    types: new-release-branch
+    types: [new-release-branch]
 
 permissions:
   contents: read

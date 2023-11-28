@@ -1,0 +1,27 @@
+// === Inlay Hints ===
+fn(...foo, 3, 4);
+   ^
+{
+  "text": "x:",
+  "position": 133,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+fn(...foo, 3, 4);
+           ^
+{
+  "text": "a:",
+  "position": 141,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+fn(...foo, 3, 4);
+              ^
+{
+  "text": "b:",
+  "position": 144,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

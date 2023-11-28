@@ -1,13 +1,10 @@
-//// [tests/cases/conformance/externalModules/typeOnly/exportDeclaration.ts] ////
+//// [tests/cases/conformance/externalModules/typeOnly/importDefaultNamedType2.ts] ////
 
 //// [a.ts]
-class A {}
-export type { A };
+export default class A {}
 
 //// [b.ts]
-import { A } from './a';
-declare const a: A;
-new A();
+import type from from './a';
 
 
 //// [a.js]
@@ -18,7 +15,7 @@ var A = /** @class */ (function () {
     }
     return A;
 }());
+exports.default = A;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-new A();
