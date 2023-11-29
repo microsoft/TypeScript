@@ -1,4 +1,4 @@
-// [[Reason: TODO Seems to be missing enough semantic info to fix]] ////
+// [[Reason: checker.typeToTypeNode fails on types that originate from node_module]] ////
 
 //// [tests/cases/conformance/node/nodeModulesExportsBlocksSpecifierResolution.ts] ////
 

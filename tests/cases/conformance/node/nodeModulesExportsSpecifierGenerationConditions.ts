@@ -1,6 +1,6 @@
 // @module: node16,nodenext
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: TODO Seems to be missing enough semantic info to fix
+// @isolatedDeclarationFixedDiffReason: checker.typeToTypeNode fails on types that originate from node_module.
 // @filename: index.ts
 // esm format file
 import { Thing } from "inner/other.js"; // should fail
