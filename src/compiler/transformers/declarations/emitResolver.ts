@@ -1,6 +1,7 @@
 import {
     bindSourceFileForDeclarationEmit,
     ComputedPropertyName,
+    CoreEmitResolver,
     createEntityVisibilityChecker,
     createEvaluator,
     Debug,
@@ -39,7 +40,6 @@ import {
     isIdentifier,
     isInfinityOrNaNString,
     isNumericLiteral,
-    IsolatedEmitResolver,
     isPrefixUnaryExpression,
     isPrimitiveLiteralValue,
     isPropertyAccessExpression,
@@ -70,7 +70,7 @@ import {
 } from "../../_namespaces/ts";
 
 /** @internal */
-export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitResolver {
+export function createEmitDeclarationResolver(file: SourceFile): CoreEmitResolver {
     const { getNodeLinks, resolveMemberKey, resolveName, resolveEntityName } = bindSourceFileForDeclarationEmit(file);
 
     const { isEntityNameVisible } = createEntityVisibilityChecker({
@@ -394,4 +394,4 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
 
         return false;
     }
-}
+        }

@@ -1,5 +1,6 @@
 import {
     ConciseBody,
+    CoreTransformationContext,
     Debug,
     EmitFlags,
     Expression,
@@ -99,7 +100,6 @@ import {
     some,
     Statement,
     SyntaxKind,
-    TransformationContext,
     Visitor,
 } from "./_namespaces/ts";
 
@@ -377,7 +377,7 @@ function visitArrayWorker(
  * Starts a new lexical environment and visits a statement list, ending the lexical environment
  * and merging hoisted declarations upon completion.
  */
-export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor: NodesVisitor = visitNodes) {
+export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: CoreTransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor: NodesVisitor = visitNodes) {
     context.startLexicalEnvironment();
     statements = nodesVisitor(statements, visitor, isStatement, start);
     if (ensureUseStrict) statements = context.factory.ensureUseStrict(statements);
@@ -388,9 +388,9 @@ export function visitLexicalEnvironment(statements: NodeArray<Statement>, visito
  * Starts a new lexical environment and visits a parameter list, suspending the lexical
  * environment upon completion.
  */
-export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration>;
-export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration> | undefined;
-export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes) {
+export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: CoreTransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration>;
+export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: CoreTransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration> | undefined;
+export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: CoreTransformationContext, nodesVisitor = visitNodes) {
     let updated: NodeArray<ParameterDeclaration> | undefined;
     context.startLexicalEnvironment();
     if (nodes) {
@@ -415,7 +415,7 @@ export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | unde
     return updated;
 }
 
-function addDefaultValueAssignmentsIfNeeded(parameters: NodeArray<ParameterDeclaration>, context: TransformationContext) {
+function addDefaultValueAssignmentsIfNeeded(parameters: NodeArray<ParameterDeclaration>, context: CoreTransformationContext) {
     let result: ParameterDeclaration[] | undefined;
     for (let i = 0; i < parameters.length; i++) {
         const parameter = parameters[i];
@@ -431,7 +431,7 @@ function addDefaultValueAssignmentsIfNeeded(parameters: NodeArray<ParameterDecla
     return parameters;
 }
 
-function addDefaultValueAssignmentIfNeeded(parameter: ParameterDeclaration, context: TransformationContext) {
+function addDefaultValueAssignmentIfNeeded(parameter: ParameterDeclaration, context: CoreTransformationContext) {
     // A rest parameter cannot have a binding pattern or an initializer,
     // so let's just ignore it.
     return parameter.dotDotDotToken ? parameter :
@@ -440,7 +440,7 @@ function addDefaultValueAssignmentIfNeeded(parameter: ParameterDeclaration, cont
         parameter;
 }
 
-function addDefaultValueAssignmentForBindingPattern(parameter: ParameterDeclaration, context: TransformationContext) {
+function addDefaultValueAssignmentForBindingPattern(parameter: ParameterDeclaration, context: CoreTransformationContext) {
     const { factory } = context;
     context.addInitializationStatement(
         factory.createVariableStatement(
@@ -469,7 +469,7 @@ function addDefaultValueAssignmentForBindingPattern(parameter: ParameterDeclarat
     return factory.updateParameterDeclaration(parameter, parameter.modifiers, parameter.dotDotDotToken, factory.getGeneratedNameForNode(parameter), parameter.questionToken, parameter.type, /*initializer*/ undefined);
 }
 
-function addDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration, name: Identifier, initializer: Expression, context: TransformationContext) {
+function addDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration, name: Identifier, initializer: Expression, context: CoreTransformationContext) {
     const factory = context.factory;
     context.addInitializationStatement(
         factory.createIfStatement(
@@ -503,21 +503,21 @@ function addDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration
  * Resumes a suspended lexical environment and visits a function body, ending the lexical
  * environment and merging hoisted declarations upon completion.
  */
-export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext): FunctionBody;
+export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: CoreTransformationContext): FunctionBody;
 /**
  * Resumes a suspended lexical environment and visits a function body, ending the lexical
  * environment and merging hoisted declarations upon completion.
  */
-export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext): FunctionBody | undefined;
+export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: CoreTransformationContext): FunctionBody | undefined;
 /**
  * Resumes a suspended lexical environment and visits a concise body, ending the lexical
  * environment and merging hoisted declarations upon completion.
  */
-export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext): ConciseBody;
-/** @internal */ export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody; // eslint-disable-line @typescript-eslint/unified-signatures
-/** @internal */ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-/** @internal */ export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): ConciseBody; // eslint-disable-line @typescript-eslint/unified-signatures
-export function visitFunctionBody(node: ConciseBody | undefined, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): ConciseBody | undefined {
+export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: CoreTransformationContext): ConciseBody;
+/** @internal */ export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: CoreTransformationContext, nodeVisitor?: NodeVisitor): FunctionBody; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: CoreTransformationContext, nodeVisitor?: NodeVisitor): FunctionBody | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */ export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: CoreTransformationContext, nodeVisitor?: NodeVisitor): ConciseBody; // eslint-disable-line @typescript-eslint/unified-signatures
+export function visitFunctionBody(node: ConciseBody | undefined, visitor: Visitor, context: CoreTransformationContext, nodeVisitor: NodeVisitor = visitNode): ConciseBody | undefined {
     context.resumeLexicalEnvironment();
     const updated = nodeVisitor(node, visitor, isConciseBody);
     const declarations = context.endLexicalEnvironment();
@@ -535,10 +535,10 @@ export function visitFunctionBody(node: ConciseBody | undefined, visitor: Visito
 /**
  * Visits an iteration body, adding any block-scoped variables required by the transformation.
  */
-export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement;
+export function visitIterationBody(body: Statement, visitor: Visitor, context: CoreTransformationContext): Statement;
 /** @internal */
-export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): Statement; // eslint-disable-line @typescript-eslint/unified-signatures
-export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): Statement {
+export function visitIterationBody(body: Statement, visitor: Visitor, context: CoreTransformationContext, nodeVisitor?: NodeVisitor): Statement; // eslint-disable-line @typescript-eslint/unified-signatures
+export function visitIterationBody(body: Statement, visitor: Visitor, context: CoreTransformationContext, nodeVisitor: NodeVisitor = visitNode): Statement {
     context.startBlockScope();
     const updated = nodeVisitor(body, visitor, isStatement, context.factory.liftToBlock);
     Debug.assert(updated);
@@ -580,9 +580,9 @@ export function visitCommaListElements(elements: NodeArray<Expression>, visitor:
  * @param visitor The callback used to visit each child.
  * @param context A lexical environment context for the visitor.
  */
-export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
+export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: CoreTransformationContext): T;
 /** @internal */
-export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
+export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: CoreTransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
 /**
  * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
  *
@@ -590,10 +590,10 @@ export function visitEachChild<T extends Node>(node: T, visitor: Visitor, contex
  * @param visitor The callback used to visit each child.
  * @param context A lexical environment context for the visitor.
  */
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
+export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: CoreTransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 /** @internal */
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined;
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor, nodeVisitor: NodeVisitor = visitNode): T | undefined {
+export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: CoreTransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined;
+export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: CoreTransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor, nodeVisitor: NodeVisitor = visitNode): T | undefined {
     if (node === undefined) {
         return undefined;
     }
@@ -602,7 +602,7 @@ export function visitEachChild<T extends Node>(node: T | undefined, visitor: Vis
     return fn === undefined ? node : fn(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor);
 }
 
-type VisitEachChildFunction<T extends Node> = (node: T, visitor: Visitor, context: TransformationContext, nodesVisitor: NodesVisitor, nodeVisitor: NodeVisitor, tokenVisitor: Visitor | undefined) => T;
+type VisitEachChildFunction<T extends Node> = (node: T, visitor: Visitor, context: CoreTransformationContext, nodesVisitor: NodesVisitor, nodeVisitor: NodeVisitor, tokenVisitor: Visitor | undefined) => T;
 
 // A type that correlates a `SyntaxKind` to a `VisitEachChildFunction<T>`, for nodes in the `HasChildren` union.
 // This looks something like:

@@ -31,6 +31,7 @@ import {
     isMethodOrAccessor,
     isNoSubstitutionTemplateLiteral,
     isNumericLiteral,
+    IsolatedTransformationContext,
     isOmittedExpression,
     isOptionalDeclaration,
     isParameter,
@@ -120,44 +121,39 @@ export function createLocalInferenceResolver({
     visitDeclarationSubtree(input: Node): VisitResult<Node | undefined>;
     checkEntityNameVisibility(name: EntityNameOrEntityNameExpression, container?: Node): void;
     ensureParameter(p: ParameterDeclaration): ParameterDeclaration;
-    context: TransformationContext;
-}): { resolver: LocalInferenceResolver; isolatedDeclarations: true; } | { resolver: undefined; isolatedDeclarations: false; } {
+    context: IsolatedTransformationContext | TransformationContext;
+}): LocalInferenceResolver {
     let currentSourceFile: SourceFile;
     const options = context.getCompilerOptions();
     const resolver = context.getEmitResolver();
-    if (!options.isolatedDeclarations) {
-        return { resolver: undefined, isolatedDeclarations: false };
-    }
+    Debug.assert(options.isolatedDeclarations, "createLocalInferenceResolver can only be called when isolatedDeclarations is true");
     const { factory } = context;
     let inferenceContext: { isInvalid: boolean; disableErrors: boolean; } = undefined!;
     const strictNullChecks = !!options.strict || !!options.strictNullChecks;
 
     return {
-        resolver: {
-            fromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined, sourceFile: SourceFile) {
-                const oldSourceFile = currentSourceFile;
-                const hasExistingContext = inferenceContext !== undefined;
+        fromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined, sourceFile: SourceFile) {
+            const oldSourceFile = currentSourceFile;
+            const hasExistingContext = inferenceContext !== undefined;
+            if (!hasExistingContext) {
+                inferenceContext = { isInvalid: false, disableErrors: false };
+            }
+            currentSourceFile = sourceFile;
+            try {
+                const typeNode = localInferenceFromInitializer(node, type);
+                if (typeNode !== undefined) {
+                    return { isInvalid: inferenceContext.isInvalid, typeNode };
+                }
+                return { isInvalid: true, typeNode: invalid(node) };
+            }
+            finally {
+                currentSourceFile = oldSourceFile;
                 if (!hasExistingContext) {
-                    inferenceContext = { isInvalid: false, disableErrors: false };
+                    inferenceContext = undefined!;
                 }
-                currentSourceFile = sourceFile;
-                try {
-                    const typeNode = localInferenceFromInitializer(node, type);
-                    if (typeNode !== undefined) {
-                        return { isInvalid: inferenceContext.isInvalid, typeNode };
-                    }
-                    return { isInvalid: true, typeNode: invalid(node) };
-                }
-                finally {
-                    currentSourceFile = oldSourceFile;
-                    if (!hasExistingContext) {
-                        inferenceContext = undefined!;
-                    }
-                }
-            },
-            makeInvalidType,
+            }
         },
-        isolatedDeclarations: options.isolatedDeclarations,
+        makeInvalidType,
     };
     function hasParseError(node: Node) {
         return !!(node.flags & NodeFlags.ThisNodeHasError);
