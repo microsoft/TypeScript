@@ -31,7 +31,14 @@ function main() { }
 
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"composite":true},"include":["src/**/*.ts"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
 
 
 
@@ -54,8 +61,16 @@ Errors  Files
      1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
      1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
-Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/src/anotherFileWithSameReferenes.ts",
+  "/src/project/src/filePresent.ts",
+  "/src/project/src/main.ts"
+]
+Program options: {
+  "composite": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -230,8 +245,16 @@ Errors  Files
      1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
      1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
-Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/src/anotherFileWithSameReferenes.ts",
+  "/src/project/src/filePresent.ts",
+  "/src/project/src/main.ts"
+]
+Program options: {
+  "composite": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -275,8 +298,16 @@ Errors  Files
      1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
      1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
-Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/src/anotherFileWithSameReferenes.ts",
+  "/src/project/src/filePresent.ts",
+  "/src/project/src/main.ts"
+]
+Program options: {
+  "composite": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -428,8 +459,16 @@ Errors  Files
      1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
      1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
-Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/src/anotherFileWithSameReferenes.ts",
+  "/src/project/src/filePresent.ts",
+  "/src/project/src/main.ts"
+]
+Program options: {
+  "composite": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -586,8 +625,17 @@ Errors  Files
      1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
      1  src/project/src/main.ts[90m:3[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts","/src/project/src/newFile.ts"]
-Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/src/anotherFileWithSameReferenes.ts",
+  "/src/project/src/filePresent.ts",
+  "/src/project/src/main.ts",
+  "/src/project/src/newFile.ts"
+]
+Program options: {
+  "composite": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -766,8 +814,18 @@ function something2() { return 20; }
 Output::
 /lib/tsc --p src/project
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/fileNotFound.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts","/src/project/src/newFile.ts"]
-Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/src/anotherFileWithSameReferenes.ts",
+  "/src/project/src/fileNotFound.ts",
+  "/src/project/src/filePresent.ts",
+  "/src/project/src/main.ts",
+  "/src/project/src/newFile.ts"
+]
+Program options: {
+  "composite": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -964,8 +1022,18 @@ something();something();foo();something();
 Output::
 /lib/tsc --p src/project
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/fileNotFound.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts","/src/project/src/newFile.ts"]
-Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/src/anotherFileWithSameReferenes.ts",
+  "/src/project/src/fileNotFound.ts",
+  "/src/project/src/filePresent.ts",
+  "/src/project/src/main.ts",
+  "/src/project/src/newFile.ts"
+]
+Program options: {
+  "composite": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

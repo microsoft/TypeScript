@@ -40,7 +40,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >name : any
 
       name: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {name: TYPE}>
->name : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
+>name : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {    name: TYPE;}>
 >t : TYPE
 >name : TYPE
     }
@@ -68,12 +68,12 @@ export enum PubSubRecordIsStoredInRedisAsA {
         buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>
 >buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}> : BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
 >buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) : BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
->buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
+>buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
 >Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE} : SO_FAR & { name: TYPE; }
 >Object.assign({}, soFar, {name: instance as TYPE}) : SO_FAR & { name: TYPE; }
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >{} : {}
 >soFar : SO_FAR
 >{name: instance as TYPE} : { name: TYPE; }
@@ -123,11 +123,11 @@ export enum PubSubRecordIsStoredInRedisAsA {
         buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as
 >buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}> : BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>
 >buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) : BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }>
->buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
+>buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
 >Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}) : SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >{} : {}
 >soFar : SO_FAR
 >{storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString} : { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }
@@ -147,11 +147,11 @@ export enum PubSubRecordIsStoredInRedisAsA {
         buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as
 >buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}> : BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>
 >buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) : BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }>
->buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
+>buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
 >Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}) : SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >{} : {}
 >soFar : SO_FAR
 >{storedAs: PubSubRecordIsStoredInRedisAsA.redisHash} : { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }
@@ -176,7 +176,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >record : any
 
       identifier: <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
->identifier : <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
+>identifier : <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {    identifier: TYPE;}>
 >t : TYPE
 >identifier : TYPE
 
@@ -212,12 +212,12 @@ export enum PubSubRecordIsStoredInRedisAsA {
         buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
 >buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}> : BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
 >buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) : BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
->buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
+>buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
 >Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE} : SO_FAR & { identifier: TYPE; }
 >Object.assign({}, soFar, {identifier: instance as TYPE}) : SO_FAR & Record<"record", unknown> & { identifier: TYPE; }
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >{} : {}
 >soFar : SO_FAR & Record<"record", unknown>
 >{identifier: instance as TYPE} : { identifier: TYPE; }
@@ -236,7 +236,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >record : any
 
       record: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {record: TYPE}>
->record : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
+>record : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {    record: TYPE;}>
 >t : TYPE
 >record : TYPE
     }
@@ -264,12 +264,12 @@ export enum PubSubRecordIsStoredInRedisAsA {
         buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>
 >buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}> : BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
 >buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) : BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
->buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
+>buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
 >Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE} : SO_FAR & { record: TYPE; }
 >Object.assign({}, soFar, {record: instance as TYPE}) : SO_FAR & { record: TYPE; }
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >{} : {}
 >soFar : SO_FAR
 >{record: instance as TYPE} : { record: TYPE; }
@@ -321,11 +321,11 @@ export enum PubSubRecordIsStoredInRedisAsA {
         buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,
 >buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}> : BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
 >buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) : BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
->buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
+>buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
 >Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance}) : SO_FAR & { maxMsToWaitBeforePublishing: number; }
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >{} : {}
 >soFar : SO_FAR
 >{maxMsToWaitBeforePublishing: instance} : { maxMsToWaitBeforePublishing: number; }
@@ -340,11 +340,11 @@ export enum PubSubRecordIsStoredInRedisAsA {
         buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,
 >buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}> : BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: 0; }>
 >buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) : BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
->buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
+>buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
 >Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0}) : SO_FAR & { maxMsToWaitBeforePublishing: number; }
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >{} : {}
 >soFar : SO_FAR
 >{maxMsToWaitBeforePublishing: 0} : { maxMsToWaitBeforePublishing: number; }
@@ -443,41 +443,41 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >soFar : SO_FAR
 >Object.assign(    {},    buildNameFieldConstructor(soFar),    buildIdentifierFieldConstructor(soFar),    buildRecordFieldConstructor(soFar),    buildStoredAsConstructor(soFar),    buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),    buildType(soFar)  ) as BuildPubSubRecordType<SO_FAR> : BuildPubSubRecordType<SO_FAR>
 >Object.assign(    {},    buildNameFieldConstructor(soFar),    buildIdentifierFieldConstructor(soFar),    buildRecordFieldConstructor(soFar),    buildStoredAsConstructor(soFar),    buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),    buildType(soFar)  ) : any
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
 
     {},
 >{} : {}
 
     buildNameFieldConstructor(soFar),
 >buildNameFieldConstructor(soFar) : { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
->buildNameFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
+>buildNameFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { name: TYPE; }>; }
 >soFar : SO_FAR
 
     buildIdentifierFieldConstructor(soFar),
 >buildIdentifierFieldConstructor(soFar) : { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
->buildIdentifierFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
+>buildIdentifierFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { identifier: TYPE; }>; }
 >soFar : SO_FAR
 
     buildRecordFieldConstructor(soFar),
 >buildRecordFieldConstructor(soFar) : { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
->buildRecordFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
+>buildRecordFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { record: TYPE; }>; }
 >soFar : SO_FAR
 
     buildStoredAsConstructor(soFar),
 >buildStoredAsConstructor(soFar) : { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
->buildStoredAsConstructor : <SO_FAR>(soFar: SO_FAR) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
+>buildStoredAsConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR_1 & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR_1 & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
 >soFar : SO_FAR
 
     buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),
 >buildMaxMsToWaitBeforePublishingFieldConstructor(soFar) : MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
->buildMaxMsToWaitBeforePublishingFieldConstructor : <SO_FAR>(soFar: SO_FAR) => MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
+>buildMaxMsToWaitBeforePublishingFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR_1>
 >soFar : SO_FAR
 
     buildType(soFar)
 >buildType(soFar) : { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->buildType : <SO_FAR>(soFar: SO_FAR) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
+>buildType : <SO_FAR_1>(soFar: SO_FAR_1) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR_1; fields: () => Set<keyof SO_FAR_1>; hasField: (fieldName: string | number | symbol) => boolean; }
 >soFar : SO_FAR
 
   ) as BuildPubSubRecordType<SO_FAR>;

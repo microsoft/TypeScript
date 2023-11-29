@@ -1,7 +1,11 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node16"}}
+{
+  "compilerOptions": {
+    "moduleResolution": "node16"
+  }
+}
 
 //// [/user/username/projects/myproject/index.ts]
 import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
@@ -14,7 +18,14 @@ export const x = 10;
 
 
 //// [/user/username/projects/myproject/node_modules/pkg/package.json]
-{"name":"pkg","version":"0.0.1","exports":{"import":"./import.js","require":"./require.js"}}
+{
+  "name": "pkg",
+  "version": "0.0.1",
+  "exports": {
+    "import": "./import.js",
+    "require": "./require.js"
+  }
+}
 
 //// [/user/username/projects/myproject/node_modules/pkg/import.d.ts]
 export interface ImportInterface {}
@@ -23,7 +34,14 @@ export interface ImportInterface {}
 export interface RequireInterface {}
 
 //// [/user/username/projects/myproject/node_modules/pkg1/package.json]
-{"name":"pkg1","version":"0.0.1","exports":{"import":"./import.js","require":"./require.js"}}
+{
+  "name": "pkg1",
+  "version": "0.0.1",
+  "exports": {
+    "import": "./import.js",
+    "require": "./require.js"
+  }
+}
 
 //// [/user/username/projects/myproject/node_modules/pkg1/import.d.ts]
 export interface ImportInterface {}
@@ -131,35 +149,24 @@ File '/user/username/projects/myproject/node_modules/pkg/package.json' exists ac
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mindex.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
-
-[7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
-[7m [0m [91m                                      ~~~~~~[0m
+[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/index.ts"]
-Program options: {"moduleResolution":3,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/node_modules/pkg/import.d.ts
-/user/username/projects/myproject/index.ts
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/node_modules/pkg/import.d.ts
-/user/username/projects/myproject/index.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
-/user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
-/user/username/projects/myproject/index.ts (used version)
+//// [/user/username/projects/myproject/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -199,20 +206,32 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/node_modules/pkg/import.d.ts
+/user/username/projects/myproject/index.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
+/user/username/projects/myproject/index.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/user/username/projects/myproject/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: modify aFile by adding import
 
@@ -222,8 +241,12 @@ export const x = 10;
 import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -282,17 +305,26 @@ Reusing resolution of module 'pkg1' from '/user/username/projects/myproject/inde
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mindex.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
-
-[7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
-[7m [0m [91m                                      ~~~~~~[0m
+[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [[90m12:00:54 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/index.ts"]
-Program options: {"moduleResolution":3,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/index.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -300,15 +332,10 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/index.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/index.js] file written with same contents

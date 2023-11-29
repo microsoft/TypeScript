@@ -21,7 +21,12 @@ export class C {
 export class D { }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"incremental":true,"declaration":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -36,34 +41,6 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-
-Output::
-
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/d.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/c.ts (computed .d.ts during emit)
-/user/username/projects/myproject/b.ts (computed .d.ts during emit)
-/user/username/projects/myproject/a.ts (computed .d.ts during emit)
-/user/username/projects/myproject/d.ts (computed .d.ts during emit)
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
@@ -241,6 +218,41 @@ export declare class D {
 }
 
 
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/d.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Add change that affects d.ts
 
 Input::
@@ -254,23 +266,6 @@ Output::
 Cancelled!!
 Operation ws cancelled:: true
 
-
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/c.ts
-
-No shapes updated in the builder::
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"840271342-export class C {\n    d = 1;\n}export function foo() {}","signature":"-6977846840-export declare class C {\n    d: number;\n}\n"},{"version":"-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}","signature":"-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n"},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n"},{"version":"-7804761415-export class D { }","signature":"-8611429667-export declare class D {\n}\n"}],"root":[[2,5]],"options":{"declaration":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,4,3,5],"changeFileSet":[2]},"version":"FakeTSVersion"}
@@ -381,14 +376,17 @@ exitCode:: ExitStatus.undefined
 }
 
 
-Change:: Normal build
-
-Input::
-
-Output::
-
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -399,15 +397,14 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/c.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
 
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/c.ts (computed .d.ts)
-/user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
+
+Change:: Normal build
+
+Input::
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
@@ -541,14 +538,63 @@ export declare function foo(): void;
 }
 
 
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/d.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/c.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Clean build
 
 Input::
 
-Output::
+//// [/user/username/projects/myproject/c.js] file written with same contents
+//// [/user/username/projects/myproject/c.d.ts] file written with same contents
+//// [/user/username/projects/myproject/b.js] file written with same contents
+//// [/user/username/projects/myproject/b.d.ts] file written with same contents
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/a.d.ts] file written with same contents
+//// [/user/username/projects/myproject/d.js] file written with same contents
+//// [/user/username/projects/myproject/d.d.ts] file written with same contents
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -572,14 +618,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/c.js] file written with same contents
-//// [/user/username/projects/myproject/c.d.ts] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents
-//// [/user/username/projects/myproject/b.d.ts] file written with same contents
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/a.d.ts] file written with same contents
-//// [/user/username/projects/myproject/d.js] file written with same contents
-//// [/user/username/projects/myproject/d.d.ts] file written with same contents
-//// [/user/username/projects/myproject/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents

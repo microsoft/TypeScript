@@ -1,16 +1,54 @@
+import {
+    dedent,
+} from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
+import {
+    jsonToReadableText,
+} from "../helpers";
 import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
-    loadProjectFromDisk,
-    replaceText
+    loadProjectFromFiles,
+    replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
     let projFs: vfs.FileSystem;
     before(() => {
-        projFs = loadProjectFromDisk("tests/projects/projectReferenceWithRootDirInParent");
+        projFs = loadProjectFromFiles({
+            "/src/src/main/a.ts": dedent`
+                import { b } from './b';
+                const a = b;
+            `,
+            "/src/src/main/b.ts": dedent`
+                export const b = 0;
+            `,
+            "/src/src/main/tsconfig.json": jsonToReadableText({
+                extends: "../../tsconfig.base.json",
+                references: [
+                    { path: "../other" },
+                ],
+            }),
+            "/src/src/other/other.ts": dedent`
+                export const Other = 0;
+            `,
+            "/src/src/other/tsconfig.json": jsonToReadableText({
+                extends: "../../tsconfig.base.json",
+            }),
+            "/src/tsconfig.base.json": jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    declaration: true,
+                    rootDir: "./src/",
+                    outDir: "./dist/",
+                    skipDefaultLibCheck: true,
+                },
+                exclude: [
+                    "node_modules",
+                ],
+            }),
+        });
     });
 
     after(() => {
@@ -38,13 +76,19 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
         fs: () => projFs,
         commandLineArgs: ["--b", "/src/src/main", "--verbose"],
         modifyFs: fs => {
-            fs.writeFileSync("/src/src/main/tsconfig.json", JSON.stringify({
-                compilerOptions: { composite: true, outDir: "../../dist/" },
-                references: [{ path: "../other" }]
-            }));
-            fs.writeFileSync("/src/src/other/tsconfig.json", JSON.stringify({
-                compilerOptions: { composite: true, outDir: "../../dist/" },
-            }));
+            fs.writeFileSync(
+                "/src/src/main/tsconfig.json",
+                jsonToReadableText({
+                    compilerOptions: { composite: true, outDir: "../../dist/" },
+                    references: [{ path: "../other" }],
+                }),
+            );
+            fs.writeFileSync(
+                "/src/src/other/tsconfig.json",
+                jsonToReadableText({
+                    compilerOptions: { composite: true, outDir: "../../dist/" },
+                }),
+            );
         },
     });
 
@@ -56,13 +100,19 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
         modifyFs: fs => {
             fs.renameSync("/src/src/main/tsconfig.json", "/src/src/main/tsconfig.main.json");
             fs.renameSync("/src/src/other/tsconfig.json", "/src/src/other/tsconfig.other.json");
-            fs.writeFileSync("/src/src/main/tsconfig.main.json", JSON.stringify({
-                compilerOptions: { composite: true, outDir: "../../dist/" },
-                references: [{ path: "../other/tsconfig.other.json" }]
-            }));
-            fs.writeFileSync("/src/src/other/tsconfig.other.json", JSON.stringify({
-                compilerOptions: { composite: true, outDir: "../../dist/" },
-            }));
+            fs.writeFileSync(
+                "/src/src/main/tsconfig.main.json",
+                jsonToReadableText({
+                    compilerOptions: { composite: true, outDir: "../../dist/" },
+                    references: [{ path: "../other/tsconfig.other.json" }],
+                }),
+            );
+            fs.writeFileSync(
+                "/src/src/other/tsconfig.other.json",
+                jsonToReadableText({
+                    compilerOptions: { composite: true, outDir: "../../dist/" },
+                }),
+            );
         },
     });
 });

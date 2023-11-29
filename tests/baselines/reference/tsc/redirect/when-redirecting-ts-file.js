@@ -22,7 +22,11 @@ import {} from "./";
 export const a = 1;
 
 //// [/src/project/copy1/node_modules/target/package.json]
-{"name":"target","version":"1.0.0","main":"index.js"}
+{
+  "name": "target",
+  "version": "1.0.0",
+  "main": "index.js"
+}
 
 //// [/src/project/copy2/node_modules/target/import.ts]
 import {} from "./";
@@ -31,10 +35,22 @@ import {} from "./";
 export const a = 1;
 
 //// [/src/project/copy2/node_modules/target/package.json]
-{"name":"target","version":"1.0.0","main":"index.js"}
+{
+  "name": "target",
+  "version": "1.0.0",
+  "main": "index.js"
+}
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"outDir":"out"},"include":["copy1/node_modules/target/*","copy2/node_modules/target/*"]}
+{
+  "compilerOptions": {
+    "outDir": "out"
+  },
+  "include": [
+    "copy1/node_modules/target/*",
+    "copy2/node_modules/target/*"
+  ]
+}
 
 
 

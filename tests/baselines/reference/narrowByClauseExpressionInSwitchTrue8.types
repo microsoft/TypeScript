@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue8.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue8.ts ===
+function foo(cond1: boolean, cond2: boolean) {
+>foo : (cond1: boolean, cond2: boolean) => void
+>cond1 : boolean
+>cond2 : boolean
+
+    switch (true) {
+>true : true
+
+        case cond1:
+>cond1 : boolean
+
+            cond1; // Should be true
+>cond1 : true
+
+            //  ^?
+            cond2; // Should be boolean
+>cond2 : boolean
+
+            //  ^?
+            break;
+
+        case cond2:
+>cond2 : boolean
+
+            cond1; // Should be false?
+>cond1 : false
+
+            //  ^?
+            cond2; // Should be true
+>cond2 : true
+
+            //  ^?
+            break;
+
+        default:
+            cond1; // Should be false?
+>cond1 : false
+
+            //  ^?
+            cond2; // Should be false?
+>cond2 : false
+
+            //  ^?
+            break;
+    }
+
+    cond1; // Should be boolean
+>cond1 : boolean
+
+    //  ^?
+    cond2; // Should be boolean
+>cond2 : boolean
+
+    //  ^?
+}
+

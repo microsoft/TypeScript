@@ -200,3 +200,17 @@ export abstract class BB {
         this.get(id!);
     }
 }
+
+// repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
+function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string}Downcast` & {}) {}
+conversionTest("testDowncast");
+function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | {} & `${string}Downcast`) {}
+conversionTest2("testDowncast");
+function conversionTest3(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
+conversionTest3("testDowncast");
+function conversionTest4(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
+conversionTest4("testDowncast");
+
+function foo(str: `${`a${string}` & `${string}a`}Test`) {}
+foo("abaTest"); // ok
+foo("abcTest"); // error

@@ -25,7 +25,7 @@ function promiseWithCancellation<T>(promise: Q.Promise<T>) {
     var deferred = Q.defer<T>(); // used to be an error
 >deferred : string
 >Q.defer<T>() : string
->Q.defer : <T>() => string
+>Q.defer : <T_1>() => string
 >Q : typeof Q
->defer : <T>() => string
+>defer : <T_1>() => string
 }

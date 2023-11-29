@@ -33,7 +33,7 @@ var x;
 //// [namespacesDeclaration2.d.ts]
 declare namespace N {
 }
-declare module M {
+declare namespace M {
 }
 declare namespace ns {
     let f: number;

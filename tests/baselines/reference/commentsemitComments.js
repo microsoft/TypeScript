@@ -188,13 +188,13 @@ interface i1 {
 /**interface instance comments*/
 declare var i1_i: i1;
 /** this is module comment*/
-declare module m1 {
+declare namespace m1 {
     /** class b */
     class b {
         x: number;
         constructor(x: number);
     }
-    module m2 {
+    namespace m2 {
     }
 }
 declare var x: any;

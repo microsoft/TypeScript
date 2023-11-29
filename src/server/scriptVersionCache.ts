@@ -37,7 +37,7 @@ export const enum CharRangeSection {
     Entire,
     Mid,
     End,
-    PostEnd
+    PostEnd,
 }
 
 /** @internal */
@@ -45,15 +45,15 @@ export interface LineIndexWalker {
     goSubtree: boolean;
     done: boolean;
     leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
-    pre?(relativeStart: number, relativeLength: number, lineCollection: LineCollection,
-        parent: LineNode, nodeType: CharRangeSection): void;
-    post?(relativeStart: number, relativeLength: number, lineCollection: LineCollection,
-        parent: LineNode, nodeType: CharRangeSection): void;
+    pre?(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineNode, nodeType: CharRangeSection): void;
+    post?(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineNode, nodeType: CharRangeSection): void;
 }
 
 class EditWalker implements LineIndexWalker {
     goSubtree = true;
-    get done() { return false; }
+    get done() {
+        return false;
+    }
 
     readonly lineIndex = new LineIndex();
     // path to start of range
@@ -261,8 +261,7 @@ class TextChange {
     }
 
     getTextChangeRange() {
-        return createTextChangeRange(createTextSpan(this.pos, this.deleteLen),
-            this.insertedText ? this.insertedText.length : 0);
+        return createTextChangeRange(createTextSpan(this.pos, this.deleteLen), this.insertedText ? this.insertedText.length : 0);
     }
 }
 
@@ -292,14 +291,18 @@ export class ScriptVersionCache {
     // REVIEW: can optimize by coalescing simple edits
     edit(pos: number, deleteLen: number, insertedText?: string) {
         this.changes.push(new TextChange(pos, deleteLen, insertedText));
-        if (this.changes.length > ScriptVersionCache.changeNumberThreshold ||
+        if (
+            this.changes.length > ScriptVersionCache.changeNumberThreshold ||
             deleteLen > ScriptVersionCache.changeLengthThreshold ||
-            insertedText && insertedText.length > ScriptVersionCache.changeLengthThreshold) {
+            insertedText && insertedText.length > ScriptVersionCache.changeLengthThreshold
+        ) {
             this.getSnapshot();
         }
     }
 
-    getSnapshot(): IScriptSnapshot { return this._getSnapshot(); }
+    getSnapshot(): IScriptSnapshot {
+        return this._getSnapshot();
+    }
 
     private _getSnapshot(): LineIndexSnapshot {
         let snap = this.versions[this.currentVersionToIndex()];
@@ -418,7 +421,7 @@ export class LineIndex {
         return { line: oneBasedLine, offset: zeroBasedColumn + 1 };
     }
 
-    private positionToColumnAndLineText(position: number): { zeroBasedColumn: number, lineText: string | undefined } {
+    private positionToColumnAndLineText(position: number): { zeroBasedColumn: number; lineText: string | undefined; } {
         return this.root.charOffsetToLineInfo(1, position);
     }
 
@@ -462,7 +465,7 @@ export class LineIndex {
                 done: false,
                 leaf: (relativeStart: number, relativeLength: number, ll: LineLeaf) => {
                     accum = accum.concat(ll.text.substring(relativeStart, relativeStart + relativeLength));
-                }
+                },
             });
         }
         return accum;
@@ -483,7 +486,7 @@ export class LineIndex {
                 if (!f(ll, relativeStart, relativeLength)) {
                     this.done = true;
                 }
-            }
+            },
         };
         this.walk(rangeStart, rangeEnd - rangeStart, walkFns);
         return !walkFns.done;
@@ -680,7 +683,7 @@ export class LineNode implements LineCollection {
 
     // Input position is relative to the start of this node.
     // Output line number is absolute.
-    charOffsetToLineInfo(lineNumberAccumulator: number, relativePosition: number): { oneBasedLine: number, zeroBasedColumn: number, lineText: string | undefined } {
+    charOffsetToLineInfo(lineNumberAccumulator: number, relativePosition: number): { oneBasedLine: number; zeroBasedColumn: number; lineText: string | undefined; } {
         if (this.children.length === 0) {
             // Root node might have no children if this is an empty document.
             return { oneBasedLine: lineNumberAccumulator, zeroBasedColumn: relativePosition, lineText: undefined };
@@ -715,7 +718,7 @@ export class LineNode implements LineCollection {
      * Output line number is relative to the child.
      * positionAccumulator will be an absolute position once relativeLineNumber reaches 0.
      */
-    lineNumberToInfo(relativeOneBasedLine: number, positionAccumulator: number): { position: number, leaf: LineLeaf | undefined } {
+    lineNumberToInfo(relativeOneBasedLine: number, positionAccumulator: number): { position: number; leaf: LineLeaf | undefined; } {
         for (const child of this.children) {
             const childLineCount = child.lineCount();
             if (childLineCount >= relativeOneBasedLine) {
