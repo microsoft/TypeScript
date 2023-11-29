@@ -13980,7 +13980,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (const current of type.types) {
                 for (const prop of getPropertiesOfType(current)) {
                     if (!members.has(prop.escapedName)) {
-                        const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName);
+                        const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName, /*skipObjectFunctionPropertyAugment*/ !!(type.flags & TypeFlags.Intersection));
                         if (combinedProp) {
                             members.set(prop.escapedName, combinedProp);
                         }
@@ -14629,6 +14629,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     type.propertyCacheWithoutObjectFunctionPropertyAugment ||= createSymbolTable() :
                     type.propertyCache ||= createSymbolTable();
                 properties.set(name, property);
+                if (skipObjectFunctionPropertyAugment && !type.propertyCache?.get(name)) {
+                    const properties = type.propertyCache ||= createSymbolTable();
+                    properties.set(name, property);
+                }
             }
         }
         return property;
@@ -14771,7 +14775,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return getPropertyOfObjectType(globalObjectType, name);
         }
-        if (type.flags & TypeFlags.UnionOrIntersection) {
+        if (type.flags & TypeFlags.Intersection) {
+            const prop = getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, /*skipObjectFunctionPropertyAugment*/ true);
+            if (prop) {
+                return prop;
+            }
+            if (!skipObjectFunctionPropertyAugment) {
+                return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment);
+            }
+            return undefined;
+        }
+        if (type.flags & TypeFlags.Union) {
             return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment);
         }
         return undefined;
