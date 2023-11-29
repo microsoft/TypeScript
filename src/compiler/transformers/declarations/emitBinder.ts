@@ -30,6 +30,7 @@ import {
     isModuleDeclaration,
     isNamedExports,
     isNumericLiteral,
+    isParameterDeclaration,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -436,7 +437,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                 Debug.assertNever(d.name);
             }
             function isExportedVariable(d: VariableDeclaration | ParameterDeclaration) {
-                if (!isVariableDeclaration(d)) return false;
+                if (isParameterDeclaration(d)) return false;
                 // exported directly
                 if (hasSyntacticModifier(d.parent.parent, ModifierFlags.Export)) {
                     return true;
