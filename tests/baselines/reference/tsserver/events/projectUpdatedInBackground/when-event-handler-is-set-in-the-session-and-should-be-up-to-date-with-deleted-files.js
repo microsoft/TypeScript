@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;
@@ -183,7 +183,7 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/project/modulefile1: *new*
+/users/username/projects/project/moduleFile1: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -264,7 +264,7 @@ interface Array<T> { length: number; [n: number]: T; }
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/modulefile1:
+/users/username/projects/project/moduleFile1:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -283,12 +283,21 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
+Timeout callback:: count: 3
+10: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+13: /users/username/projects/project/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-15: /users/username/projects/project/tsconfig.json
-16: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+13: /users/username/projects/project/tsconfig.json *deleted*
+14: *ensureProjectForOpenFiles* *deleted*
+15: /users/username/projects/project/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/file1Consumer2.ts :: WatchInfo: /users/username/projects/project 0 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
@@ -305,6 +314,13 @@ Before running Timeout callback:: count: 3
 export var T: number;export function Foo() { };
 
 //// [/users/username/projects/project/file1Consumer2.ts] deleted
+
+Timeout callback:: count: 3
+15: /users/username/projects/project/tsconfig.json *deleted*
+16: *ensureProjectForOpenFiles* *deleted*
+17: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+18: /users/username/projects/project/tsconfig.json *new*
+19: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
@@ -377,17 +393,17 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/users/username/projects/project/modulefile1:
+/users/username/projects/project/moduleFile1:
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/users/username/projects/project/globalfile3.ts: *new*
+/users/username/projects/project/globalFile3.ts: *new*
   {}
-/users/username/projects/project/modulefile1.ts: *new*
+/users/username/projects/project/moduleFile1.ts: *new*
   {}
-/users/username/projects/project/modulefile2.ts: *new*
+/users/username/projects/project/moduleFile2.ts: *new*
   {}
 /users/username/projects/project/tsconfig.json:
   {}

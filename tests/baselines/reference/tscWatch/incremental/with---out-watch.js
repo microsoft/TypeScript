@@ -37,48 +37,6 @@ Output::
 
 
 
-Program root files: [
-  "/users/username/projects/project/file1.ts",
-  "/users/username/projects/project/file2.ts"
-]
-Program options: {
-  "incremental": true,
-  "outFile": "/users/username/projects/project/out.js",
-  "watch": true,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/file1.ts: *new*
-  {}
-/users/username/projects/project/file2.ts: *new*
-  {}
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/users/username/projects/project/out.js]
 var x = 10;
 var y = 20;
@@ -145,3 +103,45 @@ var y = 20;
 
 ======================================================================
 
+
+PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/file1.ts: *new*
+  {}
+/users/username/projects/project/file2.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "outFile": "/users/username/projects/project/out.js",
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

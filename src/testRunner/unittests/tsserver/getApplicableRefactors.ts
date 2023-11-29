@@ -1,11 +1,8 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -16,7 +13,7 @@ describe("unittests:: tsserver:: getApplicableRefactors", () => {
     it("works when taking position", () => {
         const aTs: File = { path: "/a.ts", content: "" };
         const host = createServerHost([aTs]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs], session);
         session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
             command: ts.server.protocol.CommandTypes.GetApplicableRefactors,

@@ -41,6 +41,38 @@ Output::
 
 
 
+//// [/a/b/f1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 5;
+
+
+//// [/a/c/f2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/a/c/f3.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+exports.y = 1;
+
+
+
+FsWatches::
+/a/b/f1.ts: *new*
+  {}
+/a/c/f2.ts: *new*
+  {}
+/a/c/f3.ts: *new*
+  {}
+/a/c/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
 Program root files: [
   "/a/c/f2.ts",
   "/a/c/f3.ts"
@@ -69,36 +101,4 @@ Shape signatures in builder refreshed for::
 /a/c/f2.ts (used version)
 /a/c/f3.ts (used version)
 
-FsWatches::
-/a/b/f1.ts: *new*
-  {}
-/a/c/f2.ts: *new*
-  {}
-/a/c/f3.ts: *new*
-  {}
-/a/c/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/f1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 5;
-
-
-//// [/a/c/f2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/a/c/f3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 1;
-
-

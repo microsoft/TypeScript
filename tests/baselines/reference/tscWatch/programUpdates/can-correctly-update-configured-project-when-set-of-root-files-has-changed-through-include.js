@@ -34,6 +34,34 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/Project/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/Project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/Project/file1.ts: *new*
+  {}
+/user/username/projects/myproject/Project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/Project: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/Project/file1.ts"
 ]
@@ -55,35 +83,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/project/file1.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/project/file1.ts: *new*
-  {}
-/user/username/projects/myproject/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/project: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/Project/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
 
 Change:: Write file2
 
@@ -92,8 +92,12 @@ Input::
 export const y = 10;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -101,6 +105,37 @@ Output::
 
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/Project/file2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+exports.y = 10;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/Project/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/Project/file1.ts:
+  {}
+/user/username/projects/myproject/Project/file2.ts: *new*
+  {}
+/user/username/projects/myproject/Project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/Project:
+  {}
 
 
 Program root files: [
@@ -124,34 +159,4 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project/file2.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/project/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/project/file1.ts:
-  {}
-/user/username/projects/myproject/project/file2.ts: *new*
-  {}
-/user/username/projects/myproject/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/project:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/Project/file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
-
-

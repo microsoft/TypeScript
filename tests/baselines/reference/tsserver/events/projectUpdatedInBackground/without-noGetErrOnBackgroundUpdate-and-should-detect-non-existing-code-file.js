@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/project/referenceFile1.ts]
 
@@ -44,7 +44,7 @@ Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/tsconfig.json 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/modulefile2.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/moduleFile2.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
@@ -185,7 +185,7 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/project/modulefile2.ts: *new*
+/users/username/projects/project/moduleFile2.ts: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -221,7 +221,7 @@ interface Array<T> { length: number; [n: number]: T; }
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/modulefile2.ts:
+/users/username/projects/project/moduleFile2.ts:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -237,6 +237,10 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project:
   {}
+
+Timeout callback:: count: 2
+1: /users/username/projects/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -295,7 +299,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/referenceFile1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/referenceFile1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/referenceFile1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /users/username/projects/project/referenceFile1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -308,12 +313,11 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-3: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/modulefile2.ts:
+/users/username/projects/project/moduleFile2.ts:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -328,11 +332,14 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /users/username/projects/project/modulefile2.ts 0:: WatchInfo: /users/username/projects/project/modulefile2.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/modulefile2.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
+Timeout callback:: count: 1
+3: checkOne *new*
+
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /users/username/projects/project/moduleFile2.ts 0:: WatchInfo: /users/username/projects/project/moduleFile2.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/moduleFile2.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /users/username/projects/project/modulefile2.ts 0:: WatchInfo: /users/username/projects/project/modulefile2.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /users/username/projects/project/moduleFile2.ts 0:: WatchInfo: /users/username/projects/project/moduleFile2.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/moduleFile2.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
@@ -352,7 +359,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/users/username/projects/project/modulefile2.ts:
+/users/username/projects/project/moduleFile2.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -365,7 +372,12 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/modulefile2.ts 500 undefined WatchType: Closed Script info
+Timeout callback:: count: 3
+3: checkOne
+6: /users/username/projects/project/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
+
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/moduleFile2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
@@ -412,7 +424,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/referenceFile1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/project/referenceFile1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/project/referenceFile1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /users/username/projects/project/referenceFile1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -425,7 +438,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-8: checkOne
 
 PolledWatches::
 /users/username/projects/node_modules/@types:
@@ -436,7 +448,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/users/username/projects/project/modulefile2.ts: *new*
+/users/username/projects/project/moduleFile2.ts: *new*
   {}
 /users/username/projects/project/tsconfig.json:
   {}
@@ -444,3 +456,8 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project:
   {}
+
+Timeout callback:: count: 1
+8: checkOne *new*
+
+Immedidate callback:: count: 0

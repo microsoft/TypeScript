@@ -41,7 +41,7 @@ module onlyT {
         var r7 = foo((a: T) => a, (b: T) => b); // T => T
 >r7 : (x: T) => T
 >foo((a: T) => a, (b: T) => b) : (x: T) => T
->foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
 >(a: T) => a : (a: T) => T
 >a : T
 >a : T
@@ -86,7 +86,7 @@ module onlyT {
         var r7 = foo2((a: T) => a, (b: T) => b); // error
 >r7 : (x: Date) => Date
 >foo2((a: T) => a, (b: T) => b) : (x: Date) => Date
->foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo2 : <T_1 extends Date>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
 >(a: T) => a : (a: T) => T
 >a : T
 >a : T
@@ -97,7 +97,7 @@ module onlyT {
         var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
 >r7b : (x: Date) => Date
 >foo2((a) => a, (b) => b) : (x: Date) => Date
->foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo2 : <T_1 extends Date>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
 >(a) => a : (a: Date) => Date
 >a : Date
 >a : Date
@@ -186,7 +186,7 @@ module TU {
         var r7 = foo((a: T) => a, (b: T) => b); 
 >r7 : (x: T) => T
 >foo((a: T) => a, (b: T) => b) : (x: T) => T
->foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>foo : <T_1, U>(a: (x: T_1) => T_1, b: (x: U) => U) => (x: T_1) => T_1
 >(a: T) => a : (a: T) => T
 >a : T
 >a : T
@@ -230,7 +230,7 @@ module TU {
         var r7 = foo2((a: T) => a, (b: T) => b); 
 >r7 : (x: Date) => Date
 >foo2((a: T) => a, (b: T) => b) : (x: Date) => Date
->foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>foo2 : <T_1 extends Date, U extends Date>(a: (x: T_1) => T_1, b: (x: U) => U) => (x: T_1) => T_1
 >(a: T) => a : (a: T) => T
 >a : T
 >a : T
@@ -241,7 +241,7 @@ module TU {
         var r7b = foo2((a) => a, (b) => b); 
 >r7b : (x: Date) => Date
 >foo2((a) => a, (b) => b) : (x: Date) => Date
->foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+>foo2 : <T_1 extends Date, U extends Date>(a: (x: T_1) => T_1, b: (x: U) => U) => (x: T_1) => T_1
 >(a) => a : (a: Date) => Date
 >a : Date
 >a : Date

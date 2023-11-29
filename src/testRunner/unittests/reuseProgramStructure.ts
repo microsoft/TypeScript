@@ -53,7 +53,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         host.getTrace().forEach(trace => baselines.push(Utils.sanitizeTraceResolutionLogEntry(trace)));
         host.clearTrace();
         baselines.push("");
-        baselines.push(`MissingPaths:: ${jsonToReadableText(program.getMissingFilePaths())}`);
+        baselines.push(`MissingPaths:: ${jsonToReadableText(ts.arrayFrom(program.getMissingFilePaths().values()))}`);
         baselines.push("");
         baselines.push(ts.formatDiagnostics(program.getSemanticDiagnostics(), {
             getCurrentDirectory: () => program.getCurrentDirectory(),

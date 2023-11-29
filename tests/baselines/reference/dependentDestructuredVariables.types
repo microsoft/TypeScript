@@ -457,13 +457,13 @@ function unrefined1<T>(ab: AB<T>): void {
 
         printValue<T>(value);
 >printValue<T>(value) : void
->printValue : <T>(t: T) => void
+>printValue : <T_1>(t: T_1) => void
 >value : T
     }
     else {
         printValueList<T>(value);
 >printValueList<T>(value) : void
->printValueList : <T>(t: T[]) => void
+>printValueList : <T_1>(t: T_1[]) => void
 >value : T[]
     }
 }

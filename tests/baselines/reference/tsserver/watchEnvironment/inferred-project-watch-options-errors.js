@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -24,6 +24,39 @@ export { foo } from "./foo";
 export function foo(): string;
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "compilerOptionsForInferredProjects",
+      "arguments": {
+        "options": {
+          "excludeDirectories": [
+            "**/../*"
+          ]
+        },
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts",
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -68,6 +101,36 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/node_modules: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] [
   {
     "messageText": "File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.",

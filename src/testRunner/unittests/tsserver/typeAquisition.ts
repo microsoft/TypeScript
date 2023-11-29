@@ -1,18 +1,13 @@
 import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
-import {
     jsonToReadableText,
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createProjectService,
+    openExternalProjectForSession,
+    openFilesForSession,
+    TestSession,
     toExternalFile,
 } from "../helpers/tsserver";
-import {
-    TestTypingsInstaller,
-} from "../helpers/typingsInstaller";
 import {
     createServerHost,
 } from "../helpers/virtualFileSystemWithWatch";
@@ -28,15 +23,15 @@ describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {
             content: "",
         };
         const host = createServerHost([file1, file2]);
-        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        projectService.openExternalProject({
+        const session = new TestSession(host);
+        openExternalProjectForSession({
             projectFileName: "/a/b/proj.csproj",
-            rootFiles: [toExternalFile(file2.path), { fileName: file1.path, hasMixedContent: true, scriptKind: ts.ScriptKind.JS }],
+            rootFiles: [toExternalFile(file2.path), { fileName: file1.path, hasMixedContent: true, scriptKind: "JS" }],
             options: {},
-        });
-        const typeAcquisition = projectService.externalProjects[0].getTypeAcquisition();
-        projectService.logger.log(`Typine acquisition should be enabled: ${typeAcquisition.enable}`);
-        baselineTsserverLogs("typeAquisition", "does not depend on extension", projectService);
+        }, session);
+        const typeAcquisition = session.getProjectService().externalProjects[0].getTypeAcquisition();
+        session.logger.log(`Typine acquisition should be enabled: ${typeAcquisition.enable}`);
+        baselineTsserverLogs("typeAquisition", "does not depend on extension", session);
     });
 });
 
@@ -60,14 +55,10 @@ describe("unittests:: tsserver:: typeAquisition:: prefer typings to js", () => {
             content: jsonToReadableText({ compilerOptions: { allowJs: true }, exclude: ["node_modules"] }),
         };
         const host = createServerHost([f1, barjs, barTypings, config]);
-        const logger = createLoggerWithInMemoryLogs(host);
-        const projectService = createProjectService(host, {
-            typingsInstaller: new TestTypingsInstaller(host, logger, { globalTypingsCacheLocation }),
-            logger,
-        });
+        const session = new TestSession({ host, globalTypingsCacheLocation });
 
-        projectService.openClientFile(f1.path);
+        openFilesForSession([f1], session);
 
-        baselineTsserverLogs("typeAquisition", "prefer typings in second pass", projectService);
+        baselineTsserverLogs("typeAquisition", "prefer typings in second pass", session);
     });
 });

@@ -84,60 +84,6 @@ index.tsx
 
 
 
-Program root files: [
-  "/users/username/projects/project/index.tsx"
-]
-Program options: {
-  "module": 1,
-  "jsx": 4,
-  "incremental": true,
-  "jsxImportSource": "react",
-  "watch": true,
-  "explainFiles": true,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
-/users/username/projects/project/index.tsx
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
-/users/username/projects/project/index.tsx
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
-/users/username/projects/project/index.tsx (used version)
-
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/index.tsx: *new*
-  {}
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts: *new*
-  {}
-/users/username/projects/project/node_modules/react/package.json: *new*
-  {}
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project: *new*
-  {}
-/users/username/projects/project/node_modules: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/users/username/projects/project/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -214,6 +160,60 @@ exports.App = App;
 }
 
 
+PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/index.tsx: *new*
+  {}
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts: *new*
+  {}
+/users/username/projects/project/node_modules/react/package.json: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+/users/username/projects/project/node_modules: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "module": 1,
+  "jsx": 4,
+  "incremental": true,
+  "jsxImportSource": "react",
+  "watch": true,
+  "explainFiles": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change::
 
 Input::
@@ -271,59 +271,6 @@ index.tsx
 [[90m12:00:57 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: [
-  "/users/username/projects/project/index.tsx"
-]
-Program options: {
-  "module": 1,
-  "jsx": 4,
-  "incremental": true,
-  "jsxImportSource": "preact",
-  "watch": true,
-  "explainFiles": true,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts
-/users/username/projects/project/index.tsx
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts
-/users/username/projects/project/index.tsx
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts (used version)
-/users/username/projects/project/index.tsx (computed .d.ts)
-
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/index.tsx: *new*
-  {}
-/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts: *new*
-  {}
-/users/username/projects/project/node_modules/preact/package.json: *new*
-  {}
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project: *new*
-  {}
-/users/username/projects/project/node_modules: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/index.js]
 "use strict";
@@ -427,3 +374,56 @@ exports.App = App;
   "size": 1640
 }
 
+
+PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/index.tsx: *new*
+  {}
+/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts: *new*
+  {}
+/users/username/projects/project/node_modules/preact/package.json: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+/users/username/projects/project/node_modules: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "module": 1,
+  "jsx": 4,
+  "incremental": true,
+  "jsxImportSource": "preact",
+  "watch": true,
+  "explainFiles": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts (used version)
+/users/username/projects/project/index.tsx (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
