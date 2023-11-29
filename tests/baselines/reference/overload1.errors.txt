@@ -49,7 +49,7 @@ overload1.ts(34,5): error TS2769: No overload matches this call.
               ~
 !!! error TS2554: Expected 1-2 arguments, but got 3.
     z=x.g(); // no match
-        ~~~
+        ~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
 !!! related TS6210 overload1.ts:17:11: An argument for 'n' was not provided.
     z=x.g(new O.B()); // ambiguous (up and down conversion)

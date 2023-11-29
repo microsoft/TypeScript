@@ -69,7 +69,7 @@ strictBindCallApply1.ts(81,14): error TS2769: No overload matches this call.
     
     let c00 = foo.call(undefined, 10, "hello");
     let c01 = foo.call(undefined, 10);  // Error
-                  ~~~~~~~~~~~~~~~~~~~
+                  ~~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
     let c02 = foo.call(undefined, 10, 20);  // Error
                                       ~~
@@ -122,7 +122,7 @@ strictBindCallApply1.ts(81,14): error TS2769: No overload matches this call.
     
     let c10 = c.foo.call(c, 10, "hello");
     let c11 = c.foo.call(c, 10);  // Error
-                    ~~~~~~~~~~~
+                    ~~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
     let c12 = c.foo.call(c, 10, 20);  // Error
                                 ~~
@@ -159,7 +159,7 @@ strictBindCallApply1.ts(81,14): error TS2769: No overload matches this call.
     
     C.call(c, 10, "hello");
     C.call(c, 10);  // Error
-      ~~~~~~~~~~~
+      ~~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
     C.call(c, 10, 20);  // Error
                   ~~
