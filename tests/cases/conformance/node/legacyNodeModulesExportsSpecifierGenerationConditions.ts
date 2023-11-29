@@ -2,7 +2,7 @@
 // @lib: es2020
 // @declaration: true
 // @filename: index.ts
-// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
+// @isolatedDeclarationFixedDiffReason: checker.typeToTypeNode deliberately fails on types that originate from node_modules.
 
 export const a = async () => (await import("inner")).x();
 // @filename: node_modules/inner/index.d.ts

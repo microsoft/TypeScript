@@ -1,5 +1,5 @@
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
+// @isolatedDeclarationFixedDiffReason: checker.typeToTypeNode deliberately fails on types that originate from node_modules.
 
 // @Filename: /node_modules/.prisma/client/index.d.ts
 export interface PrismaClientOptions {

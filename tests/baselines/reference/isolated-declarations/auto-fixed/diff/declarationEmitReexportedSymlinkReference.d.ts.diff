@@ -1,4 +1,4 @@
-// [[Reason: TODO: is not auto fixed, should be fixed.]] ////
+// [[Reason: checker.typeToTypeNode deliberately fails on types that originate from node_modules.]] ////
 
 //// [tests/cases/compiler/declarationEmitReexportedSymlinkReference.ts] ////
 
@@ -14,6 +14,9 @@
 -export declare const ADMIN: MetadataAccessor<boolean, import("@raymondfeng/pkg2").IdType>;
 -//# sourceMappingURL=keys.d.ts.map
 \ No newline at end of file
+
+
+
 +export declare const ADMIN: invalid;
 +//# sourceMappingURL=keys.d.ts.map
 +/// [Errors] ////

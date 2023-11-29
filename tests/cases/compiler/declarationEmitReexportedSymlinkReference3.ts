@@ -1,4 +1,4 @@
-// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
+// @isolatedDeclarationFixedDiffReason: checker.typeToTypeNode deliberately fails on types that originate from node_modules.
 // @filename: monorepo/pkg1/dist/index.d.ts
 export * from './types';
 // @filename: monorepo/pkg1/dist/types.d.ts

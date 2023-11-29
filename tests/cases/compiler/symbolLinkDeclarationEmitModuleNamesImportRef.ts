@@ -1,7 +1,7 @@
 // @declaration: true
 // @useCaseSensitiveFileNames: false
 // @noImplicitReferences: true
-// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
+// @isolatedDeclarationFixedDiffReason: checker.typeToTypeNode deliberately fails on types that originate from node_modules.
 // @filename: Folder/monorepo/package-a/index.d.ts
 export declare const styles: import("styled-components").InterpolationValue[];
 
