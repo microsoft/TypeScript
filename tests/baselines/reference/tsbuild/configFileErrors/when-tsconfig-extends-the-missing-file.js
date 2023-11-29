@@ -17,29 +17,33 @@ declare const console: { log(msg: any): void; };
 
 //// [/src/tsconfig.first.json]
 {
-	"extends": "./foobar.json",
-	"compilerOptions": {
-		"composite": true
-	}
+  "extends": "./foobar.json",
+  "compilerOptions": {
+    "composite": true
+  }
 }
 
 //// [/src/tsconfig.json]
 {
-	"compilerOptions": {
-		"composite": true
-	},
-	"references": [
-		{ "path": "./tsconfig.first.json" },
-		{ "path": "./tsconfig.second.json" }
-	]
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "./tsconfig.first.json"
+    },
+    {
+      "path": "./tsconfig.second.json"
+    }
+  ]
 }
 
 //// [/src/tsconfig.second.json]
 {
-	"extends": "./foobar.json",
-	"compilerOptions": {
-		"composite": true
-	}
+  "extends": "./foobar.json",
+  "compilerOptions": {
+    "composite": true
+  }
 }
 
 

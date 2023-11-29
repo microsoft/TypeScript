@@ -25,14 +25,14 @@ export declare const bar: number;
 
 //// [/home/src/projects/project/node_modules/@types/bar/package.json]
 {
- "name": "@types/bar",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "require": "./index.d.ts"
+  "name": "@types/bar",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
@@ -40,15 +40,15 @@ export declare const bar2: number;
 
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json]
 {
- "name": "@types/bar2",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "require": "./index.d.ts"
+  "name": "@types/bar2",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/bar/index.js]
@@ -59,15 +59,15 @@ export const bar = 1;
 
 //// [/home/src/projects/project/node_modules/bar/package.json]
 {
- "name": "bar",
- "version": "1.0.0",
- "main": "index.js",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "bar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/bar2/index.js]
@@ -78,15 +78,15 @@ export const bar2 = 1;
 
 //// [/home/src/projects/project/node_modules/bar2/package.json]
 {
- "name": "bar2",
- "version": "1.0.0",
- "main": "index.js",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "bar2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/foo/index.d.ts]
@@ -100,16 +100,16 @@ export const foo = 1;
 
 //// [/home/src/projects/project/node_modules/foo/package.json]
 {
- "name": "foo",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts]
@@ -123,21 +123,32 @@ export const foo2 = 1;
 
 //// [/home/src/projects/project/node_modules/foo2/package.json]
 {
- "name": "foo2",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node16","traceResolution":true,"incremental":true,"strict":true,"types":[]},"files":["index.mts"]}
+{
+  "compilerOptions": {
+    "moduleResolution": "node16",
+    "traceResolution": true,
+    "incremental": true,
+    "strict": true,
+    "types": []
+  },
+  "files": [
+    "index.mts"
+  ]
+}
 
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -332,8 +343,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -635,8 +656,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -858,8 +889,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1070,8 +1111,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1269,8 +1320,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1289,15 +1350,15 @@ Change:: update package.json from @types so error is fixed
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/package.json]
 {
- "name": "@types/bar",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "require": "./index.d.ts"
+  "name": "@types/bar",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 
@@ -1440,8 +1501,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1556,17 +1627,17 @@ Change:: update package.json so error is fixed
 Input::
 //// [/home/src/projects/project/node_modules/foo/package.json]
 {
- "name": "foo",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 
@@ -1681,8 +1752,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1810,14 +1891,14 @@ Change:: update package.json from @types so error is introduced
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json]
 {
- "name": "@types/bar2",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "require": "./index.d.ts"
+  "name": "@types/bar2",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 
@@ -1970,8 +2051,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -2085,16 +2176,16 @@ Change:: update package.json so error is introduced
 Input::
 //// [/home/src/projects/project/node_modules/foo2/package.json]
 {
- "name": "foo2",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 
@@ -2275,8 +2366,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -2567,8 +2668,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -2790,8 +2901,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -3002,8 +3123,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -3201,8 +3332,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

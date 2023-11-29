@@ -43,7 +43,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, st
             tokenKind: Debug.formatSyntaxKind(token.kind),
             errorCode,
             start,
-            length
+            length,
         });
         Debug.fail("Token and statement should start at the same point. " + logData);
     }

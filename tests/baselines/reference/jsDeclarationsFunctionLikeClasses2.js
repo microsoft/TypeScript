@@ -189,12 +189,12 @@ export class Point2D {
     /**
      * @param {number} x
      */
-    set x(arg: number);
+    set x(x: number);
     get x(): number;
     /**
      * @param {number} y
      */
-    set y(arg: number);
+    set y(y: number);
     get y(): number;
     __proto__: typeof Vec;
 }

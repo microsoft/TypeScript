@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/divergentAccessorsTypes7.ts] ////
+
+=== divergentAccessorsTypes7.ts ===
+class Test<S> {
+>Test : Symbol(Test, Decl(divergentAccessorsTypes7.ts, 0, 0))
+>S : Symbol(S, Decl(divergentAccessorsTypes7.ts, 0, 11))
+
+    constructor() {}
+
+    set value(value: string | ((item: S) => string)) {}
+>value : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+>value : Symbol(value, Decl(divergentAccessorsTypes7.ts, 3, 14))
+>item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 3, 32))
+>S : Symbol(S, Decl(divergentAccessorsTypes7.ts, 0, 11))
+
+    get value(): string {
+>value : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+
+        return null!;
+    }
+
+    // -- Replacing the getter such that the getter/setter types match, removes the error:
+    // get value(): string | ((item: S) => string) {
+    //     return null!;
+    // }
+
+    // -- Or, replacing the setter such that a concrete type is used, removes the error:
+    // set value(value: string | ((item: { property: string }) => string)) {}
+}
+
+const a = new Test<{
+>a : Symbol(a, Decl(divergentAccessorsTypes7.ts, 18, 5))
+>Test : Symbol(Test, Decl(divergentAccessorsTypes7.ts, 0, 0))
+
+    property: string
+>property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
+
+}>();
+
+a.value = (item) => item.property
+>a.value : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+>a : Symbol(a, Decl(divergentAccessorsTypes7.ts, 18, 5))
+>value : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+>item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 22, 11))
+>item.property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
+>item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 22, 11))
+>property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
+
+a['value'] = (item) => item.property
+>a : Symbol(a, Decl(divergentAccessorsTypes7.ts, 18, 5))
+>'value' : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+>item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 23, 14))
+>item.property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
+>item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 23, 14))
+>property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
+

@@ -46,7 +46,7 @@ var a: {
 }
 
 var a2: {
->a2 : { <T>(x: T): number; <T>(x: T): string; }
+>a2 : { <T>(x: T): number; <T_1>(x: T_1): string; }
 
     <T>(x: T): number;
 >x : T

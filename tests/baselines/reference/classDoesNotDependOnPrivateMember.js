@@ -21,7 +21,7 @@ var M;
 
 
 //// [classDoesNotDependOnPrivateMember.d.ts]
-declare module M {
+declare namespace M {
     class C {
         private x;
     }

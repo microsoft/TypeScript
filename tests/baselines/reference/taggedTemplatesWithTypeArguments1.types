@@ -97,10 +97,10 @@ export const b = g<Stuff, number, string, boolean> `
 `;
 
 declare let obj: {
->obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
+>obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {    returnedObjProp: T;}; }
 
     prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
->prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
+>prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => {    returnedObjProp: T;}
 >strs : TemplateStringsArray
 >x : (input: T) => T
 >input : T

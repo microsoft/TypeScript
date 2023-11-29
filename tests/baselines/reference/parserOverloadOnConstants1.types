@@ -3,18 +3,18 @@
 === parserOverloadOnConstants1.ts ===
 interface Document {
     createElement(tagName: string): HTMLElement;
->createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; (tagName: string): HTMLElement; (tagName: "canvas"): HTMLCanvasElement; (tagName: "div"): HTMLDivElement; (tagName: "span"): HTMLSpanElement; }
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K_1 extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K_1, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K_1]; (tagName: string, options?: ElementCreationOptions): HTMLElement; (tagName: string): HTMLElement; (tagName: "canvas"): HTMLCanvasElement; (tagName: "div"): HTMLDivElement; (tagName: "span"): HTMLSpanElement; }
 >tagName : string
 
     createElement(tagName: 'canvas'): HTMLCanvasElement;
->createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; (tagName: string): HTMLElement; (tagName: 'canvas'): HTMLCanvasElement; (tagName: "div"): HTMLDivElement; (tagName: "span"): HTMLSpanElement; }
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K_1 extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K_1, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K_1]; (tagName: string, options?: ElementCreationOptions): HTMLElement; (tagName: string): HTMLElement; (tagName: 'canvas'): HTMLCanvasElement; (tagName: "div"): HTMLDivElement; (tagName: "span"): HTMLSpanElement; }
 >tagName : "canvas"
 
     createElement(tagName: 'div'): HTMLDivElement;
->createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; (tagName: string): HTMLElement; (tagName: "canvas"): HTMLCanvasElement; (tagName: 'div'): HTMLDivElement; (tagName: "span"): HTMLSpanElement; }
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K_1 extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K_1, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K_1]; (tagName: string, options?: ElementCreationOptions): HTMLElement; (tagName: string): HTMLElement; (tagName: "canvas"): HTMLCanvasElement; (tagName: 'div'): HTMLDivElement; (tagName: "span"): HTMLSpanElement; }
 >tagName : "div"
 
     createElement(tagName: 'span'): HTMLSpanElement;
->createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; (tagName: string): HTMLElement; (tagName: "canvas"): HTMLCanvasElement; (tagName: "div"): HTMLDivElement; (tagName: 'span'): HTMLSpanElement; }
+>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K_1 extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K_1, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K_1]; (tagName: string, options?: ElementCreationOptions): HTMLElement; (tagName: string): HTMLElement; (tagName: "canvas"): HTMLCanvasElement; (tagName: "div"): HTMLDivElement; (tagName: 'span'): HTMLSpanElement; }
 >tagName : "span"
 }

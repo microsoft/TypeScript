@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag7.ts] ////
+
+=== /a.js ===
+class Foo {
+>Foo : Symbol(Foo, Decl(a.js, 0, 0))
+
+    /**
+     * {@linkcode this.a}
+     * {@linkcode this.#c}
+     *
+     * {@link this.a}
+     * {@link this.#c}
+     *
+     * {@linkplain this.a}
+     * {@linkplain this.#c}
+     */
+    a() { }
+>a : Symbol(Foo.a, Decl(a.js, 0, 11))
+
+    b() { }
+>b : Symbol(Foo.b, Decl(a.js, 11, 11))
+
+    #c() { }
+>#c : Symbol(Foo.#c, Decl(a.js, 12, 11))
+}
+

@@ -1,0 +1,54 @@
+// === Inlay Hints ===
+foo1(1, 1, 1, 1);
+     ^
+{
+  "text": "a:",
+  "position": 49,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo1(1, 1, 1, 1);
+        ^
+{
+  "text": "...b:",
+  "position": 52,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo2(1, 2, 3)
+     ^
+{
+  "text": "c:",
+  "position": 153,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo2(1, 2, 3)
+        ^
+{
+  "text": "a:",
+  "position": 156,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo2(1, 2, 3)
+           ^
+{
+  "text": "b:",
+  "position": 159,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo3(1, 2, 3)
+     ^
+{
+  "text": "c:",
+  "position": 247,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
