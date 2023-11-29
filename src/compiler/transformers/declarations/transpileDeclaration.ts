@@ -1,32 +1,23 @@
 import {
-    base64encode,
-    combinePaths,
     CompilerOptions,
     createEmitDeclarationResolver,
     createGetCanonicalFileName,
     createPrinter,
     createSourceMapGenerator,
     createTextWriter,
-    Debug,
     Diagnostic,
-    EmitHost,
     ensureTrailingDirectorySeparator,
     getAreDeclarationMapsEnabled,
     getBaseFileName,
     getDeclarationEmitOutputFilePathWorker,
-    getDirectoryPath,
     getNewLineCharacter,
-    getRelativePathToDirectoryOrUrl,
-    getRootLength,
-    getSourceFilePathInNewDir,
+    getSourceMapDirectory,
+    getSourceMappingURL,
     IsolatedTransformationContext,
-    normalizePath,
     normalizeSlashes,
     nullTransformationContext,
     PrinterOptions,
     SourceFile,
-    SourceMapGenerator,
-    sys,
     TransformationContextKind,
     transformDeclarations,
     TranspileDeclarationsOptions,
@@ -95,25 +86,6 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
     };
 
     // logic replicated from emitter.ts
-    function getSourceMapDirectory(mapOptions: CompilerOptions, filePath: string, sourceFile: SourceFile | undefined) {
-        if (mapOptions.sourceRoot) return emitHost.getCommonSourceDirectory();
-        if (mapOptions.mapRoot) {
-            let sourceMapDir = normalizeSlashes(mapOptions.mapRoot);
-            if (sourceFile) {
-                // For modules or multiple emit files the mapRoot will have directory structure like the sources
-                // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFile.fileName, emitHost as unknown as EmitHost, sourceMapDir));
-            }
-            if (getRootLength(sourceMapDir) === 0) {
-                // The relative paths are relative to the common directory
-                sourceMapDir = combinePaths(emitHost.getCommonSourceDirectory(), sourceMapDir);
-            }
-            return sourceMapDir;
-        }
-        return getDirectoryPath(normalizePath(filePath));
-    }
-
-    // logic replicated from emitter.ts
     function getSourceMapGenerator(declarationFilePath: string, declarationMapPath: string) {
         if (!getAreDeclarationMapsEnabled(compilerOptions)) return;
 
@@ -129,11 +101,12 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
             emitHost,
             getBaseFileName(normalizeSlashes(declarationFilePath)),
             sourceRoot ? ensureTrailingDirectorySeparator(sourceRoot) : sourceRoot,
-            getSourceMapDirectory(compilerOptions, declarationFilePath, sourceFile),
+            getSourceMapDirectory(emitHost, compilerOptions, declarationFilePath, sourceFile),
             mapOptions,
         );
 
         const sourceMappingURL = getSourceMappingURL(
+            emitHost,
             mapOptions,
             sourceMapGenerator,
             declarationFilePath,
@@ -141,42 +114,5 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
             sourceFile,
         );
         return { sourceMapGenerator, sourceMappingURL: `//# ${"sourceMappingURL"}=${sourceMappingURL}` };
-    }
-
-    // logic replicated from emitter.ts
-    function getSourceMappingURL(mapOptions: CompilerOptions, sourceMapGenerator: SourceMapGenerator, filePath: string, sourceMapFilePath: string | undefined, sourceFile: SourceFile | undefined) {
-        if (mapOptions.inlineSourceMap) {
-            // Encode the sourceMap into the sourceMap url
-            const sourceMapText = sourceMapGenerator.toString();
-            const base64SourceMapText = base64encode(sys, sourceMapText);
-            return `data:application/json;base64,${base64SourceMapText}`;
-        }
-
-        const sourceMapFile = getBaseFileName(normalizeSlashes(Debug.checkDefined(sourceMapFilePath)));
-        if (mapOptions.mapRoot) {
-            let sourceMapDir = normalizeSlashes(mapOptions.mapRoot);
-            if (sourceFile) {
-                // For modules or multiple emit files the mapRoot will have directory structure like the sources
-                // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFile.fileName, emitHost as unknown as EmitHost, sourceMapDir));
-            }
-            if (getRootLength(sourceMapDir) === 0) {
-                // The relative paths are relative to the common directory
-                sourceMapDir = combinePaths(emitHost.getCommonSourceDirectory(), sourceMapDir);
-                return encodeURI(
-                    getRelativePathToDirectoryOrUrl(
-                        getDirectoryPath(normalizePath(filePath)), // get the relative sourceMapDir path based on jsFilePath
-                        combinePaths(sourceMapDir, sourceMapFile), // this is where user expects to see sourceMap
-                        emitHost.getCurrentDirectory(),
-                        emitHost.getCanonicalFileName,
-                        /*isAbsolutePathAnUrl*/ true,
-                    ),
-                );
-            }
-            else {
-                return encodeURI(combinePaths(sourceMapDir, sourceMapFile));
-            }
-        }
-        return encodeURI(sourceMapFile);
     }
 }
