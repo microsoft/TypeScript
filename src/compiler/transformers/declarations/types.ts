@@ -47,4 +47,5 @@ export interface IsolatedEmitResolver {
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     tryFindAmbientModule(moduleReferenceExpression: Expression): Symbol | undefined;
+    getPropertiesOfContainerFunction(node: FunctionDeclaration | VariableDeclaration): Symbol[]
 }

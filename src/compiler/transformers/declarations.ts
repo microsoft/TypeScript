@@ -100,6 +100,7 @@ import {
     isAnyImportSyntax,
     isArray,
     isArrayBindingElement,
+    isBinaryExpression,
     isBindingElement,
     isBindingPattern,
     isClassDeclaration,
@@ -1702,14 +1703,23 @@ export function transformDeclarations(context: TransformationContext) {
                     /*body*/ undefined,
                 ));
                 if (clean && resolver.isExpandoFunction(input) && shouldEmitFunctionProperties(input)) {
+                    const props = resolver.getPropertiesOfContainerFunction(input);
+
                     if (isolatedDeclarations) {
-                        context.addDiagnostic(createDiagnosticForNode(
-                            input,
-                            Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
-                        ));
+                        props.forEach(p => {
+                            if (isExpandoPropertyDeclaration(p.valueDeclaration)) {
+                                const errorTarget = isBinaryExpression(p.valueDeclaration) ?
+                                    p.valueDeclaration.left :
+                                    p.valueDeclaration;
+
+                                context.addDiagnostic(createDiagnosticForNode(
+                                    errorTarget,
+                                    Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
+                                ));
+                            }
+                        });
                         return clean;
                     }
-                    const props = resolver.getPropertiesOfContainerFunction(input);
                     // Use parseNodeFactory so it is usable as an enclosing declaration
                     const fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
                     setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);

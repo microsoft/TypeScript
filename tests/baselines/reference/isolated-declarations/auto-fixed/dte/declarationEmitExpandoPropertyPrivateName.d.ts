@@ -25,8 +25,8 @@ export declare function q(): void;
 //# sourceMappingURL=b.d.ts.map
 /// [Errors] ////
 
-b.ts(3,17): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 b.ts(4,1): error TS4032: Property 'val' of exported interface has or is using name 'I' from private module '"a"'.
+b.ts(4,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 
 
 ==== a.ts (0 errors) ====
@@ -36,9 +36,9 @@ b.ts(4,1): error TS4032: Property 'val' of exported interface has or is using na
     import {f} from "./a";
     
     export function q(): void {}
-                    ~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     q.val = f();
     ~~~~~
 !!! error TS4032: Property 'val' of exported interface has or is using name 'I' from private module '"a"'.
+    ~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     

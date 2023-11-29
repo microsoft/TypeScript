@@ -16,6 +16,7 @@ import {
     factory,
     filter,
     findAncestor,
+    forEachEntry,
     FunctionDeclaration,
     FunctionLikeDeclaration,
     getAnyImportSyntax,
@@ -26,17 +27,15 @@ import {
     hasDynamicName,
     hasProperty,
     hasSyntacticModifier,
-    Identifier,
     isAccessor,
     isBigIntLiteral,
-    isBinaryExpression,
     isBindingElement,
     isDeclarationReadonly,
     isElementAccessExpression,
     isEntityNameExpression,
     isEnumDeclaration,
     isEnumMember,
-    isExpressionStatement,
+    isExpandoPropertyDeclaration,
     isFunctionDeclaration,
     isFunctionExpressionOrArrowFunction,
     isFunctionLike,
@@ -50,7 +49,6 @@ import {
     isPartOfTypeNode,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
-    isPropertyName,
     isSetAccessor,
     isSetAccessorDeclaration,
     isStringLiteralLike,
@@ -63,7 +61,6 @@ import {
     LateVisibilityPaintedStatement,
     ModifierFlags,
     Node,
-    NodeArray,
     NodeFlags,
     nodeIsPresent,
     NoSubstitutionTemplateLiteral,
@@ -75,7 +72,6 @@ import {
     PropertySignature,
     skipParentheses,
     SourceFile,
-    Statement,
     SymbolAccessibility,
     SymbolFlags,
     SymbolVisibilityResult,
@@ -90,21 +86,11 @@ import {
 } from "./emitBinder";
 import {
     IsolatedEmitResolver,
-    MemberKey,
 } from "./types";
-
-const knownFunctionMembers = new Set([
-    "I:apply",
-    "I:call",
-    "I:bind",
-    "I:toString",
-    "I:prototype",
-    "I:length",
-]);
 
 /** @internal */
 export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitResolver {
-    const { getNodeLinks, resolveMemberKey, resolveName } = bindSourceFileForDeclarationEmit(file);
+    const { getNodeLinks, resolveMemberKey, resolveName, resolveEntityName } = bindSourceFileForDeclarationEmit(file);
 
     function getEnumValueFromName(name: PropertyName | NoSubstitutionTemplateLiteral, location: EnumDeclaration) {
         const enumKey = getMemberKey(name);
@@ -117,27 +103,6 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
         return undefined;
     }
 
-    function resolveEntityName(location: Node, node: Expression, meaning: SymbolFlags): EmitDeclarationSymbol | undefined {
-        if (isIdentifier(node)) {
-            return resolveName(location, node.escapedText, meaning);
-        }
-        else if (isPropertyAccessExpression(node) || isElementAccessExpression(node)) {
-            const symbol = resolveEntityName(location, node.expression, meaning);
-            if (symbol === undefined) return undefined;
-
-            const name = isElementAccessExpression(node) ? node.argumentExpression : node.name;
-            if (!isPropertyName(name)) return;
-
-            const memberSymbol = symbol.exports?.get(getMemberKey(name));
-            if (!memberSymbol || !(memberSymbol.flags & meaning)) {
-                return undefined;
-            }
-            return memberSymbol;
-        }
-        else {
-            return undefined;
-        }
-    }
     function isExpressionMemberOfEnum(target: Expression, location: EnumDeclaration) {
         const symbol = resolveEntityName(location, target, SymbolFlags.Namespace);
 
@@ -279,59 +244,6 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
         }
         return isIdentifier(expr);
     }
-    function getExpandoMembers(declaration: FunctionDeclaration | VariableDeclaration, functionName: Identifier) {
-        const scope = getParentScope(declaration);
-        if (!scope) return undefined;
-        const members = new Set<MemberKey>();
-        for (const statement of scope.statements) {
-            // Looking for name functionName.member = init;
-            if (!isExpressionStatement(statement)) continue;
-            if (!isBinaryExpression(statement.expression)) continue;
-            const assignment = statement.expression;
-            if (assignment.operatorToken.kind !== SyntaxKind.EqualsToken) continue;
-
-            const isPropertyAccess = isPropertyAccessExpression(assignment.left);
-            if (
-                (isPropertyAccess || isElementAccessExpression(assignment.left))
-                && isIdentifier(assignment.left.expression)
-                && assignment.left.expression.escapedText === functionName.escapedText
-            ) {
-                let name;
-                if (isPropertyAccess) {
-                    name = assignment.left.name;
-                }
-                else {
-                    const argumentExpression = assignment.left.argumentExpression;
-                    name = factory.createComputedPropertyName(argumentExpression);
-                }
-                const key = getMemberKey(name);
-                if (!key || knownFunctionMembers.has(key)) {
-                    continue;
-                }
-                members.add(key);
-            }
-        }
-        return members;
-    }
-
-    function getDefinedMembers(declaration: FunctionDeclaration | VariableDeclaration, functionName: Identifier) {
-        const scope = getParentScope(declaration);
-        if (!scope) return undefined;
-        const cls = resolveName(scope, functionName.escapedText, SymbolFlags.Class);
-
-        const namespace = resolveName(scope, functionName.escapedText, SymbolFlags.Namespace);
-
-        if (!cls?.exports) {
-            return namespace?.exports;
-        }
-        if (!namespace?.exports) {
-            return cls.exports;
-        }
-        return new Set([
-            ...(namespace.exports.keys() ?? []),
-            ...(cls.exports.keys() ?? []),
-        ]);
-    }
 
     // Do a best effort to find expando functions
     function isExpandoFunction(node: FunctionDeclaration | VariableDeclaration) {
@@ -339,6 +251,7 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
         if (!declaration) {
             return false;
         }
+        const symbol = declaration.symbol;
         if (isVariableDeclaration(declaration)) {
             if (declaration.type || !isVarConst(declaration)) {
                 return false;
@@ -347,28 +260,7 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
                 return false;
             }
         }
-
-        const functionName = node.name;
-        if (!functionName || !isIdentifier(functionName)) return false;
-
-        const expandoMembers = getExpandoMembers(declaration, functionName);
-        if (!expandoMembers || expandoMembers.size === 0) return false;
-
-        if (isVariableDeclaration(declaration) && expandoMembers.size) {
-            return true;
-        }
-        const definedMembers = getDefinedMembers(declaration, functionName);
-        // No namespace definitions, and it has assignments => is Expando function
-        if (!definedMembers) {
-            return true;
-        }
-
-        // Some assigned members are not in the defined the namespaces
-        // computed members are ignored, since they don't name it to declarations anyway
-        if ([...expandoMembers.keys()].some(n => !definedMembers.has(n))) {
-            return true;
-        }
-        return false;
+        return !!symbol.exports && !!forEachEntry(symbol.exports, p => p.flags & SymbolFlags.Value && isExpandoPropertyDeclaration(p.valueDeclaration));
     }
 
     return {
@@ -377,6 +269,9 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
         isLiteralComputedName,
         tryFindAmbientModule() {
             return undefined;
+        },
+        getPropertiesOfContainerFunction(node: FunctionDeclaration | VariableDeclaration) {
+            return [...node.symbol.exports?.values() ?? []];
         },
         getAllAccessorDeclarations(declaration) {
             const parentLinks = getNodeLinks(declaration.parent);
@@ -657,20 +552,4 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
             errorNode: firstIdentifier,
         };
     }
-}
-
-function getParentScope(declaration: VariableDeclaration | FunctionDeclaration):
-    | undefined
-    | Node & {
-        statements: NodeArray<Statement>;
-    }
-{
-    let scope: Node = declaration;
-    while (scope) {
-        if (hasProperty(scope, "statements")) {
-            return (scope as any);
-        }
-        scope = scope.parent;
-    }
-    return undefined;
 }

@@ -58,10 +58,11 @@ export declare function C(): any;
 //# sourceMappingURL=index4.d.ts.map
 /// [Errors] ////
 
-index1.ts(2,25): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-index2.ts(3,25): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-index3.ts(2,25): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-index4.ts(5,17): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+index1.ts(3,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+index2.ts(4,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+index3.ts(4,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+index4.ts(9,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+index4.ts(10,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 
 
 ==== foo.ts (0 errors) ====
@@ -70,36 +71,38 @@ index4.ts(5,17): error TS9009: Assigning properties to functions without declari
 ==== index1.ts (1 errors) ====
     import {Foo} from './foo';
     export default function Example(): void {}
-                            ~~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     Example.Foo = Foo
+    ~~~~~~~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     
 ==== index2.ts (1 errors) ====
     import {Foo} from './foo';
     export {Foo};
     export default function Example(): void {}
-                            ~~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     Example.Foo = Foo
+    ~~~~~~~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     
 ==== index3.ts (1 errors) ====
     export class Bar {}
     export default function Example(): void {}
-                            ~~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     
     Example.Bar = Bar
+    ~~~~~~~~~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     
-==== index4.ts (1 errors) ====
+==== index4.ts (2 errors) ====
     function A() {  }
     
     function B() { }
     
     export function C(): any {
-                    ~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
       return null;
     }
     
     C.A = A;
+    ~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     C.B = B;
+    ~~~
+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
