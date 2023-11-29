@@ -10511,7 +10511,7 @@ export function replaceFirstStar(s: string, replacement: string): string {
     // This code triggers CodeQL as they think it's a potentially incorrect string escaping.
     // See: https://codeql.github.com/codeql-query-help/javascript/js-incomplete-sanitization/
     // But, we really do want to replace only the first star.
-    
+
     // TODO(jakebailey): Leaving this here to verify that CodeQL complains.
     return s.replace("*", replacement);
 }
