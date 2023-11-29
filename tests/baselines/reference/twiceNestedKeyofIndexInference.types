@@ -16,13 +16,13 @@ type Set2<T, K1 extends keyof T, K2 extends keyof T[K1]> = T extends any[] ? T :
 }[K1];
 
 declare function set<T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>;
->set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
+>set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(source: T_1, path: [K1_1, K2], value: T_1[K1_1][K2]): Set2<T_1, K1_1, K2>; }
 >source : T
 >path : [K1]
 >value : T[K1]
 
 declare function set<T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>;
->set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
+>set : { <T_1, K1_1 extends keyof T_1>(source: T_1, path: [K1_1], value: T_1[K1_1]): Set1<T_1, K1_1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
 >source : T
 >path : [K1, K2]
 >value : T[K1][K2]
@@ -69,7 +69,7 @@ const state: State = {
 const newState: State = set(state, ["a", 'b'], 'why'); // shouldn't be an error
 >newState : State
 >set(state, ["a", 'b'], 'why') : Pick<State, "d"> & Required<{ a: Pick<{ b: string; c: number; }, "c"> & Required<Pick<{ b: string; c: number; }, "b">>; }>
->set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
+>set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(source: T_1, path: [K1_1, K2], value: T_1[K1_1][K2]): Set2<T_1, K1_1, K2>; }
 >state : State
 >["a", 'b'] : ["a", "b"]
 >"a" : "a"

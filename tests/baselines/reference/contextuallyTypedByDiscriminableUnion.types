@@ -69,3 +69,25 @@ invoke({
     }
 });
 
+const kind = "a"
+>kind : "a"
+>"a" : "a"
+
+invoke({
+>invoke({    kind,    method(a) {        return +a;    }}) : void
+>invoke : (item: ADT) => void
+>{    kind,    method(a) {        return +a;    }} : { kind: "a"; method(a: string): number; }
+
+    kind,
+>kind : "a"
+
+    method(a) {
+>method : (a: string) => number
+>a : string
+
+        return +a;
+>+a : number
+>a : string
+    }
+})
+

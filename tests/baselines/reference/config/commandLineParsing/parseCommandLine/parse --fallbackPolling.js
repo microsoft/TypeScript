@@ -3,7 +3,7 @@ CompilerOptions::
 {}
 WatchOptions::
 {
- "fallbackPolling": 1
+  "fallbackPolling": 1
 }
 FileNames::
 0.ts

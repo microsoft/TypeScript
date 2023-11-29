@@ -11,7 +11,9 @@
 
 
 //// [/root/generated/folder2/file4/package.json]
-{"typings":"dist/types.d.ts"}
+{
+  "typings": "dist/types.d.ts"
+}
 
 //// [/root/someanotherfolder/file5/index.d.ts]
 
@@ -176,7 +178,9 @@ Resolution:: {
 
 
 //// [/root/generated/folder2/file4/package.json]
-{"typings":"dist/types.d.ts"}
+{
+  "typings": "dist/types.d.ts"
+}
 
 //// [/root/someanotherfolder/file5/index.d.ts]
 

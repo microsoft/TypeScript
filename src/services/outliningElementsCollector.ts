@@ -1,6 +1,5 @@
 import {
     ArrowFunction,
-    AssertClause,
     Block,
     CallExpression,
     CancellationToken,
@@ -12,6 +11,7 @@ import {
     DefaultClause,
     findChildOfKind,
     getLeadingCommentRanges,
+    ImportAttributes,
     isAnyImportSyntax,
     isArrayLiteralExpression,
     isBinaryExpression,
@@ -52,8 +52,6 @@ import {
     SyntaxKind,
     TemplateExpression,
     TextSpan,
-    trimString,
-    trimStringStart,
     TryStatement,
 } from "./_namespaces/ts";
 
@@ -164,11 +162,11 @@ const regionDelimiterRegExp = /^#(end)?region(?:\s+(.*))?(?:\r)?$/;
 function isRegionDelimiter(lineText: string) {
     // We trim the leading whitespace and // without the regex since the
     // multiple potential whitespace matches can make for some gnarly backtracking behavior
-    lineText = trimStringStart(lineText);
-    if (!startsWith(lineText, "\/\/")) {
+    lineText = lineText.trimStart();
+    if (!startsWith(lineText, "//")) {
         return null; // eslint-disable-line no-null/no-null
     }
-    lineText = trimString(lineText.slice(2));
+    lineText = lineText.slice(2).trim();
     return regionDelimiterRegExp.exec(lineText);
 }
 
@@ -302,11 +300,11 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
             return spanForParenthesizedExpression(n as ParenthesizedExpression);
         case SyntaxKind.NamedImports:
         case SyntaxKind.NamedExports:
-        case SyntaxKind.AssertClause:
-            return spanForNamedImportsOrExportsOrAssertClause(n as NamedImports | NamedExports | AssertClause);
+        case SyntaxKind.ImportAttributes:
+            return spanForImportExportElements(n as NamedImports | NamedExports | ImportAttributes);
     }
 
-    function spanForNamedImportsOrExportsOrAssertClause(node: NamedImports | NamedExports | AssertClause) {
+    function spanForImportExportElements(node: NamedImports | NamedExports | ImportAttributes) {
         if (!node.elements.length) {
             return undefined;
         }

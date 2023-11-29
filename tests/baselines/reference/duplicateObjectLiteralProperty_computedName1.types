@@ -90,8 +90,8 @@ const t6 = {
 }
 
 const t7 = {
->t7 : { [-1]: number; }
->{    "-1": 1,    ["-1"]: 0 // duplicate} : { [-1]: number; }
+>t7 : { "-1": number; }
+>{    "-1": 1,    ["-1"]: 0 // duplicate} : { "-1": number; }
 
     "-1": 1,
 >"-1" : number

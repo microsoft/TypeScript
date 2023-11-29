@@ -8,10 +8,9 @@ import {
     getEmitScriptTarget,
     getMeaningFromLocation,
     getModeForUsageLocation,
-    getResolvedModule,
     getTextOfNode,
     getTokenAtPosition,
-    hasSyntacticModifier,
+    hasOverrideModifier,
     ImportDeclaration,
     isBinaryExpression,
     isClassElement,
@@ -28,7 +27,6 @@ import {
     isPropertyAccessExpression,
     isQualifiedName,
     isStringLiteralLike,
-    ModifierFlags,
     Node,
     NodeFlags,
     ScriptTarget,
@@ -75,24 +73,28 @@ registerCodeFix({
         return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, symbolName(suggestedSymbol)], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, diag.start, context, diag.code);
-        const target = getEmitScriptTarget(context.host.getCompilationSettings());
-        if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, diag.start, context, diag.code);
+            const target = getEmitScriptTarget(context.host.getCompilationSettings());
+            if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target);
+        }),
 });
 
-function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBase, errorCode: number): { node: Node, suggestedSymbol: Symbol } | undefined {
+function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBase, errorCode: number): { node: Node; suggestedSymbol: Symbol; } | undefined {
     // This is the identifier of the misspelled word. eg:
     // this.speling = 1;
     //      ^^^^^^^
     const node = getTokenAtPosition(sourceFile, pos);
     const parent = node.parent;
     // Only fix spelling for No_overload_matches_this_call emitted on the React class component
-    if ((
-        errorCode === Diagnostics.No_overload_matches_this_call.code ||
-        errorCode === Diagnostics.Type_0_is_not_assignable_to_type_1.code) &&
-        !isJsxAttribute(parent)) return undefined;
+    if (
+        (
+            errorCode === Diagnostics.No_overload_matches_this_call.code ||
+            errorCode === Diagnostics.Type_0_is_not_assignable_to_type_1.code
+        ) &&
+        !isJsxAttribute(parent)
+    ) return undefined;
     const checker = context.program.getTypeChecker();
 
     let suggestedSymbol: Symbol | undefined;
@@ -128,7 +130,7 @@ function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBas
         const props = checker.getContextualTypeForArgumentAtIndex(tag, 0);
         suggestedSymbol = checker.getSuggestedSymbolForNonexistentJSXAttribute(node, props!);
     }
-    else if (hasSyntacticModifier(parent, ModifierFlags.Override) && isClassElement(parent) && parent.name === node) {
+    else if (hasOverrideModifier(parent) && isClassElement(parent) && parent.name === node) {
         const baseDeclaration = findAncestor(node, isClassLike);
         const baseTypeNode = baseDeclaration ? getEffectiveBaseTypeNode(baseDeclaration) : undefined;
         const baseType = baseTypeNode ? checker.getTypeAtLocation(baseTypeNode) : undefined;
@@ -179,7 +181,7 @@ function convertSemanticMeaningToSymbolFlags(meaning: SemanticMeaning): SymbolFl
 function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
     if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
-    const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text, getModeForUsageLocation(sourceFile, importDeclaration.moduleSpecifier));
+    const resolvedModule = context.program.getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text, getModeForUsageLocation(sourceFile, importDeclaration.moduleSpecifier))?.resolvedModule;
     if (!resolvedModule) return undefined;
 
     return context.program.getSourceFile(resolvedModule.resolvedFileName);
