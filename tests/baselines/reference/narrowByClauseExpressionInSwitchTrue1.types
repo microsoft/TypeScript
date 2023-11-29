@@ -1,0 +1,157 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue1.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue1.ts ===
+// https://github.com/microsoft/TypeScript/issues/37178
+
+type A = { type: "A" };
+>A : { type: "A"; }
+>type : "A"
+
+type B = { type: "B" };
+>B : { type: "B"; }
+>type : "B"
+
+type AorB = A | B;
+>AorB : A | B
+
+const isA = (x: AorB): x is A => x.type === "A";
+>isA : (x: AorB) => x is A
+>(x: AorB): x is A => x.type === "A" : (x: AorB) => x is A
+>x : AorB
+>x.type === "A" : boolean
+>x.type : "A" | "B"
+>x : AorB
+>type : "A" | "B"
+>"A" : "A"
+
+const isB = (x: AorB): x is B => x.type === "B";
+>isB : (x: AorB) => x is B
+>(x: AorB): x is B => x.type === "B" : (x: AorB) => x is B
+>x : AorB
+>x.type === "B" : boolean
+>x.type : "A" | "B"
+>x : AorB
+>type : "A" | "B"
+>"B" : "B"
+
+function test1(x: AorB) {
+>test1 : (x: AorB) => void
+>x : AorB
+
+  switch (true) {
+>true : true
+
+    case isA(x):
+>isA(x) : boolean
+>isA : (x: AorB) => x is A
+>x : AorB
+
+      x;
+>x : A
+
+      break;
+    case isB(x):
+>isB(x) : boolean
+>isB : (x: AorB) => x is B
+>x : AorB
+
+      x;
+>x : B
+
+      break;
+  }
+}
+
+function test2(x: AorB) {
+>test2 : (x: AorB) => void
+>x : AorB
+
+  switch (true) {
+>true : true
+
+    case isA(x):
+>isA(x) : boolean
+>isA : (x: AorB) => x is A
+>x : AorB
+
+      x;
+>x : A
+
+    // fallthrough
+    case isB(x):
+>isB(x) : boolean
+>isB : (x: AorB) => x is B
+>x : AorB
+
+      x;
+>x : AorB
+
+      break;
+  }
+}
+
+let x: string | undefined;
+>x : string | undefined
+
+switch (true) {
+>true : true
+
+  case typeof x !== "undefined":
+>typeof x !== "undefined" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | undefined
+>"undefined" : "undefined"
+
+    x.trim();
+>x.trim() : string
+>x.trim : () => string
+>x : string
+>trim : () => string
+}
+
+type SomeType = { type: "SomeType" };
+>SomeType : { type: "SomeType"; }
+>type : "SomeType"
+
+declare function isSomeType(x: unknown): x is SomeType;
+>isSomeType : (x: unknown) => x is SomeType
+>x : unknown
+
+function processInput(input: string | RegExp | SomeType) {
+>processInput : (input: string | RegExp | SomeType) => void
+>input : string | RegExp | SomeType
+
+  switch (true) {
+>true : true
+
+    case typeof input === "string":
+>typeof input === "string" : boolean
+>typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>input : string | RegExp | SomeType
+>"string" : "string"
+
+      input;
+>input : string
+
+      break;
+    case input instanceof RegExp:
+>input instanceof RegExp : boolean
+>input : string | RegExp | SomeType
+>RegExp : RegExpConstructor
+
+      input;
+>input : RegExp
+
+      break;
+    case isSomeType(input):
+>isSomeType(input) : boolean
+>isSomeType : (x: unknown) => x is SomeType
+>input : string | RegExp | SomeType
+
+      input;
+>input : SomeType
+
+      break;
+  }
+}
+

@@ -19,7 +19,19 @@ export const x = "type1";
 
 
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project1/typeroot1/sometype/index.d.ts]
 export type TheNum = "type1";
@@ -31,7 +43,16 @@ export const y = 10;
 export const y = 10
 
 //// [/home/src/projects/project2/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project3/utils.d.ts]
 export const y = 10;
@@ -40,7 +61,16 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project3/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project4/utils.d.ts]
 export const y = 10;
@@ -49,7 +79,17 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project4/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["esnext","dom","webworker"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "esnext",
+      "dom",
+      "webworker"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/lib/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
@@ -231,8 +271,72 @@ project1/file2.ts
 
 
 
-Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
+//// [/home/src/projects/project1/file.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.file = void 0;
+exports.file = 10;
+
+
+//// [/home/src/projects/project1/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = "type1";
+
+
+//// [/home/src/projects/project1/file2.js]
+/// <reference lib="webworker"/>
+/// <reference lib="scripthost"/>
+/// <reference lib="es5"/>
+
+
+
+PolledWatches::
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/home/src/lib/lib.dom.d.ts: *new*
+  {}
+/home/src/lib/lib.es5.d.ts: *new*
+  {}
+/home/src/lib/lib.scripthost.d.ts: *new*
+  {}
+/home/src/lib/lib.webworker.d.ts: *new*
+  {}
+/home/src/projects/project1/core.d.ts: *new*
+  {}
+/home/src/projects/project1/file.ts: *new*
+  {}
+/home/src/projects/project1/file2.ts: *new*
+  {}
+/home/src/projects/project1/index.ts: *new*
+  {}
+/home/src/projects/project1/utils.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/node_modules: *new*
+  {}
+
+Program root files: [
+  "project1/core.d.ts",
+  "project1/utils.d.ts",
+  "project1/file.ts",
+  "project1/index.ts",
+  "project1/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true
+}
 Program structureReused: Not
 Program files::
 /home/src/lib/lib.es5.d.ts
@@ -267,56 +371,7 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/index.ts (used version)
 /home/src/projects/project1/file2.ts (used version)
 
-PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/lib/lib.dom.d.ts: *new*
-  {}
-/home/src/lib/lib.es5.d.ts: *new*
-  {}
-/home/src/lib/lib.scripthost.d.ts: *new*
-  {}
-/home/src/lib/lib.webworker.d.ts: *new*
-  {}
-/home/src/projects/project1/core.d.ts: *new*
-  {}
-/home/src/projects/project1/file.ts: *new*
-  {}
-/home/src/projects/project1/file2.ts: *new*
-  {}
-/home/src/projects/project1/index.ts: *new*
-  {}
-/home/src/projects/project1/utils.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/node_modules: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/home/src/projects/project1/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.file = void 0;
-exports.file = 10;
-
-
-//// [/home/src/projects/project1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "type1";
-
-
-//// [/home/src/projects/project1/file2.js]
-/// <reference lib="webworker"/>
-/// <reference lib="scripthost"/>
-/// <reference lib="es5"/>
-
-
 
 Change:: write redirect file dom
 
@@ -325,13 +380,6 @@ Input::
 interface DOMInterface { }
 
 
-Before running Timeout callback:: count: 1
-2: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-3: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -339,7 +387,28 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+2: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+2: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:25 AM[0m] File change detected. Starting incremental compilation...
 
@@ -387,40 +456,9 @@ project1/file2.ts
 
 
 
-Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-Program structureReused: SafeModules
-Program files::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.webworker.d.ts
-/home/src/lib/lib.scripthost.d.ts
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
-project1/core.d.ts
-project1/utils.d.ts
-project1/file.ts
-project1/index.ts
-project1/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.webworker.d.ts
-/home/src/lib/lib.scripthost.d.ts
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
-project1/core.d.ts
-project1/utils.d.ts
-project1/file.ts
-project1/index.ts
-project1/file2.ts
-
-Shape signatures in builder refreshed for::
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
-/home/src/lib/lib.webworker.d.ts (used version)
-/home/src/lib/lib.scripthost.d.ts (used version)
-/home/src/projects/project1/core.d.ts (used version)
-/home/src/projects/project1/utils.d.ts (used version)
-/home/src/projects/project1/file.ts (computed .d.ts)
-/home/src/projects/project1/index.ts (computed .d.ts)
-/home/src/projects/project1/file2.ts (computed .d.ts)
+//// [/home/src/projects/project1/file.js] file written with same contents
+//// [/home/src/projects/project1/index.js] file written with same contents
+//// [/home/src/projects/project1/file2.js] file written with same contents
 
 PolledWatches::
 /home/src/projects/node_modules/@types:
@@ -454,11 +492,58 @@ FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
 
-exitCode:: ExitStatus.undefined
 
-//// [/home/src/projects/project1/file.js] file written with same contents
-//// [/home/src/projects/project1/index.js] file written with same contents
-//// [/home/src/projects/project1/file2.js] file written with same contents
+Program root files: [
+  "project1/core.d.ts",
+  "project1/utils.d.ts",
+  "project1/file.ts",
+  "project1/index.ts",
+  "project1/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true
+}
+Program structureReused: SafeModules
+Program files::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.webworker.d.ts
+/home/src/lib/lib.scripthost.d.ts
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+project1/core.d.ts
+project1/utils.d.ts
+project1/file.ts
+project1/index.ts
+project1/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.webworker.d.ts
+/home/src/lib/lib.scripthost.d.ts
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+project1/core.d.ts
+project1/utils.d.ts
+project1/file.ts
+project1/index.ts
+project1/file2.ts
+
+Shape signatures in builder refreshed for::
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
+/home/src/lib/lib.webworker.d.ts (used version)
+/home/src/lib/lib.scripthost.d.ts (used version)
+/home/src/projects/project1/core.d.ts (used version)
+/home/src/projects/project1/utils.d.ts (used version)
+/home/src/projects/project1/file.ts (computed .d.ts)
+/home/src/projects/project1/index.ts (computed .d.ts)
+/home/src/projects/project1/file2.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
 
 Change:: edit index
 
@@ -467,13 +552,20 @@ Input::
 export const x = "type1";export const xyz = 10;
 
 
-Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with project1/index.ts 1:: WatchInfo: project1/index.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with project1/index.ts 1:: WatchInfo: project1/index.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
 
@@ -507,8 +599,33 @@ project1/file2.ts
 
 
 
-Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
+//// [/home/src/projects/project1/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.xyz = exports.x = void 0;
+exports.x = "type1";
+exports.xyz = 10;
+
+
+
+
+Program root files: [
+  "project1/core.d.ts",
+  "project1/utils.d.ts",
+  "project1/file.ts",
+  "project1/index.ts",
+  "project1/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true
+}
 Program structureReused: Completely
 Program files::
 /home/src/lib/lib.es5.d.ts
@@ -529,27 +646,25 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/home/src/projects/project1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.xyz = exports.x = void 0;
-exports.x = "type1";
-exports.xyz = 10;
-
-
-
 Change:: delete core
 
 Input::
 //// [/home/src/projects/project1/core.d.ts] deleted
 
-Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with project1/core.d.ts 2:: WatchInfo: project1/core.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with project1/core.d.ts 2:: WatchInfo: project1/core.d.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+5: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:45 AM[0m] File change detected. Starting incremental compilation...
 
@@ -561,7 +676,7 @@ Reusing resolution of module '@typescript/lib-webworker' from '/home/src/project
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
-FileWatcher:: Added:: WatchInfo: /home/src/projects/project1/core.d.ts 500 undefined Missing file
+FileWatcher:: Added:: WatchInfo: project1/core.d.ts 500 undefined Missing file
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
   The file is in the program because:
     Root file specified for compilation
@@ -587,22 +702,6 @@ project1/file2.ts
 
 
 
-Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-Program structureReused: Not
-Program files::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.webworker.d.ts
-/home/src/lib/lib.scripthost.d.ts
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
-project1/utils.d.ts
-project1/file.ts
-project1/index.ts
-project1/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 PolledWatches::
 /home/src/projects/node_modules/@types:
@@ -636,18 +735,46 @@ FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
 
-exitCode:: ExitStatus.undefined
 
+Program root files: [
+  "project1/core.d.ts",
+  "project1/utils.d.ts",
+  "project1/file.ts",
+  "project1/index.ts",
+  "project1/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true
+}
+Program structureReused: Not
+Program files::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.webworker.d.ts
+/home/src/lib/lib.scripthost.d.ts
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+project1/utils.d.ts
+project1/file.ts
+project1/index.ts
+project1/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
 
 Change:: delete redirect file dom
 
 Input::
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
 
-Before running Timeout callback:: count: 2
-6: timerToUpdateProgram
-7: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 Scheduling update
@@ -655,6 +782,18 @@ Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/node_modules/@type
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 2
+6: timerToUpdateProgram *new*
+7: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 2
+6: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:48 AM[0m] File change detected. Starting incremental compilation...
 
@@ -721,29 +860,9 @@ project1/file2.ts
 
 
 
-Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-Program structureReused: Not
-Program files::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/lib/lib.webworker.d.ts
-/home/src/lib/lib.scripthost.d.ts
-project1/utils.d.ts
-project1/file.ts
-project1/index.ts
-project1/file2.ts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/lib/lib.dom.d.ts (used version)
-/home/src/lib/lib.webworker.d.ts (used version)
-/home/src/lib/lib.scripthost.d.ts (used version)
-/home/src/projects/project1/utils.d.ts (used version)
-/home/src/projects/project1/file.ts (computed .d.ts)
-/home/src/projects/project1/index.ts (computed .d.ts)
-/home/src/projects/project1/file2.ts (computed .d.ts)
+//// [/home/src/projects/project1/file.js] file written with same contents
+//// [/home/src/projects/project1/index.js] file written with same contents
+//// [/home/src/projects/project1/file2.js] file written with same contents
 
 PolledWatches::
 /home/src/projects/node_modules/@types:
@@ -777,11 +896,50 @@ FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
 
-exitCode:: ExitStatus.undefined
+Timeout callback:: count: 0
+7: timerToInvalidateFailedLookupResolutions *deleted*
 
-//// [/home/src/projects/project1/file.js] file written with same contents
-//// [/home/src/projects/project1/index.js] file written with same contents
-//// [/home/src/projects/project1/file2.js] file written with same contents
+
+Program root files: [
+  "project1/core.d.ts",
+  "project1/utils.d.ts",
+  "project1/file.ts",
+  "project1/index.ts",
+  "project1/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true
+}
+Program structureReused: Not
+Program files::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/lib/lib.webworker.d.ts
+/home/src/lib/lib.scripthost.d.ts
+project1/utils.d.ts
+project1/file.ts
+project1/index.ts
+project1/file2.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/lib/lib.dom.d.ts (used version)
+/home/src/lib/lib.webworker.d.ts (used version)
+/home/src/lib/lib.scripthost.d.ts (used version)
+/home/src/projects/project1/utils.d.ts (used version)
+/home/src/projects/project1/file.ts (computed .d.ts)
+/home/src/projects/project1/index.ts (computed .d.ts)
+/home/src/projects/project1/file2.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
 
 Change:: write redirect file webworker
 
@@ -790,13 +948,6 @@ Input::
 interface WebworkerInterface { }
 
 
-Before running Timeout callback:: count: 1
-9: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-10: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-10: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -804,7 +955,28 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+9: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+9: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+10: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:02:03 AM[0m] File change detected. Starting incremental compilation...
 
@@ -854,29 +1026,9 @@ project1/file2.ts
 
 
 
-Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-Program structureReused: SafeModules
-Program files::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/lib/lib.scripthost.d.ts
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
-project1/utils.d.ts
-project1/file.ts
-project1/index.ts
-project1/file2.ts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
-/home/src/lib/lib.scripthost.d.ts (used version)
-/home/src/projects/project1/utils.d.ts (used version)
-/home/src/projects/project1/file.ts (computed .d.ts)
-/home/src/projects/project1/index.ts (computed .d.ts)
-/home/src/projects/project1/file2.ts (computed .d.ts)
+//// [/home/src/projects/project1/file.js] file written with same contents
+//// [/home/src/projects/project1/index.js] file written with same contents
+//// [/home/src/projects/project1/file2.js] file written with same contents
 
 PolledWatches::
 /home/src/projects/node_modules/@types:
@@ -910,21 +1062,53 @@ FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
 
-exitCode:: ExitStatus.undefined
 
-//// [/home/src/projects/project1/file.js] file written with same contents
-//// [/home/src/projects/project1/index.js] file written with same contents
-//// [/home/src/projects/project1/file2.js] file written with same contents
+Program root files: [
+  "project1/core.d.ts",
+  "project1/utils.d.ts",
+  "project1/file.ts",
+  "project1/index.ts",
+  "project1/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true
+}
+Program structureReused: SafeModules
+Program files::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/lib/lib.scripthost.d.ts
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+project1/utils.d.ts
+project1/file.ts
+project1/index.ts
+project1/file2.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
+/home/src/lib/lib.scripthost.d.ts (used version)
+/home/src/projects/project1/utils.d.ts (used version)
+/home/src/projects/project1/file.ts (computed .d.ts)
+/home/src/projects/project1/index.ts (computed .d.ts)
+/home/src/projects/project1/file2.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
 
 Change:: delete redirect file webworker
 
 Input::
 //// [/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts] deleted
 
-Before running Timeout callback:: count: 2
-11: timerToUpdateProgram
-12: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
 Scheduling update
@@ -932,6 +1116,18 @@ Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/node_modules/@type
 DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 2
+11: timerToUpdateProgram *new*
+12: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 2
+11: timerToUpdateProgram
+12: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:02:16 AM[0m] File change detected. Starting incremental compilation...
 
@@ -998,29 +1194,9 @@ project1/file2.ts
 
 
 
-Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-Program structureReused: Not
-Program files::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/lib/lib.webworker.d.ts
-/home/src/lib/lib.scripthost.d.ts
-project1/utils.d.ts
-project1/file.ts
-project1/index.ts
-project1/file2.ts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/lib/lib.webworker.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
-/home/src/lib/lib.scripthost.d.ts (used version)
-/home/src/projects/project1/utils.d.ts (used version)
-/home/src/projects/project1/file.ts (computed .d.ts)
-/home/src/projects/project1/index.ts (computed .d.ts)
-/home/src/projects/project1/file2.ts (computed .d.ts)
+//// [/home/src/projects/project1/file.js] file written with same contents
+//// [/home/src/projects/project1/index.js] file written with same contents
+//// [/home/src/projects/project1/file2.js] file written with same contents
 
 PolledWatches::
 /home/src/projects/node_modules/@types:
@@ -1054,8 +1230,47 @@ FsWatchesRecursive::
 /home/src/projects/node_modules:
   {}
 
-exitCode:: ExitStatus.undefined
+Timeout callback:: count: 0
+12: timerToInvalidateFailedLookupResolutions *deleted*
 
-//// [/home/src/projects/project1/file.js] file written with same contents
-//// [/home/src/projects/project1/index.js] file written with same contents
-//// [/home/src/projects/project1/file2.js] file written with same contents
+
+Program root files: [
+  "project1/core.d.ts",
+  "project1/utils.d.ts",
+  "project1/file.ts",
+  "project1/index.ts",
+  "project1/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true
+}
+Program structureReused: Not
+Program files::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/lib/lib.webworker.d.ts
+/home/src/lib/lib.scripthost.d.ts
+project1/utils.d.ts
+project1/file.ts
+project1/index.ts
+project1/file2.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/lib/lib.webworker.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
+/home/src/lib/lib.scripthost.d.ts (used version)
+/home/src/projects/project1/utils.d.ts (used version)
+/home/src/projects/project1/file.ts (computed .d.ts)
+/home/src/projects/project1/index.ts (computed .d.ts)
+/home/src/projects/project1/file2.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/parenthesizedJSDocCastDoesNotNarrow.ts] ////
+
+=== index.js ===
+let value = "";
+>value : string
+>"" : ""
+
+switch (/** @type {"foo" | "bar"} */ (value)) {
+>(value) : "foo" | "bar"
+>value : string
+
+  case "bar":
+>"bar" : "bar"
+
+    value;
+>value : string
+
+    break;
+
+  case "foo":
+>"foo" : "foo"
+
+    value;
+>value : string
+
+    break;
+
+  case "invalid":
+>"invalid" : "invalid"
+
+    value;
+>value : string
+
+    break;
+}
+

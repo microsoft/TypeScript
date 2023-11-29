@@ -1,10 +1,43 @@
+import {
+    incrementalVerifier,
+} from "../../../../harness/incrementalUtils";
+import {
+    createHasErrorMessageLogger,
+} from "../../../../harness/tsserverLogger";
 import * as Harness from "../../../_namespaces/Harness";
 import * as ts from "../../../_namespaces/ts";
-import { createProjectService } from "../../helpers/tsserver";
+import {
+    customTypesMap,
+} from "../../helpers/typingsInstaller";
 import {
     createServerHost,
     libFile,
+    TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch";
+
+export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptions {
+    host: TestServerHost;
+}
+export type TestProjectServicePartialOptionsAndHost = Partial<Omit<TestProjectServiceOptions, "typingsInstaller" | "logger" | "host">> & Pick<TestProjectServiceOptions, "host">;
+
+export class TestProjectService extends ts.server.ProjectService {
+    constructor(optsOrHost: TestServerHost | TestProjectServicePartialOptionsAndHost) {
+        // eslint-disable-next-line local/no-in-operator
+        const opts = "host" in optsOrHost ?
+            optsOrHost :
+            { host: optsOrHost };
+        super({
+            logger: createHasErrorMessageLogger(),
+            session: undefined,
+            cancellationToken: ts.server.nullCancellationToken,
+            useSingleInferredProject: false,
+            useInferredProjectPerProjectRoot: false,
+            typesMapLocation: customTypesMap.path,
+            incrementalVerifier,
+            ...opts,
+        });
+    }
+}
 
 interface Range {
     pos: number;
@@ -25,8 +58,10 @@ export function extractTest(source: string): Test {
     const ranges = new Map<string, Range>();
 
     while (pos < source.length) {
-        if (source.charCodeAt(pos) === ts.CharacterCodes.openBracket &&
-            (source.charCodeAt(pos + 1) === ts.CharacterCodes.hash || source.charCodeAt(pos + 1) === ts.CharacterCodes.$)) {
+        if (
+            source.charCodeAt(pos) === ts.CharacterCodes.openBracket &&
+            (source.charCodeAt(pos + 1) === ts.CharacterCodes.hash || source.charCodeAt(pos + 1) === ts.CharacterCodes.$)
+        ) {
             const saved = pos;
             pos += 2;
             const s = pos;
@@ -80,7 +115,7 @@ export const notImplementedHost: ts.LanguageServiceHost = {
     getDefaultLibFileName: ts.notImplemented,
     getCurrentDirectory: ts.notImplemented,
     readFile: ts.notImplemented,
-    fileExists: ts.notImplemented
+    fileExists: ts.notImplemented,
 };
 
 export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: ts.DiagnosticMessage, includeLib?: boolean) {
@@ -90,8 +125,7 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
         throw new Error(`Test ${caption} does not specify selection range`);
     }
 
-    [ts.Extension.Ts, ts.Extension.Js].forEach(extension =>
-        it(`${caption} [${extension}]`, () => runBaseline(extension)));
+    [ts.Extension.Ts, ts.Extension.Js].forEach(extension => it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
     function runBaseline(extension: ts.Extension) {
         const path = "/a" + extension;
@@ -136,9 +170,9 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
         Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
     }
 
-    function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
+    function makeProgram(f: { path: string; content: string; }, includeLib?: boolean) {
         const host = createServerHost(includeLib ? [f, libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
-        const projectService = createProjectService(host, { allowNonBaseliningLogger: true });
+        const projectService = new TestProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
         const autoImportProvider = projectService.inferredProjects[0].getLanguageService().getAutoImportProvider();
@@ -160,10 +194,10 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
         }
         const f = {
             path: "/a.ts",
-            content: t.source
+            content: t.source,
         };
         const host = createServerHost([f, libFile]);
-        const projectService = createProjectService(host, { allowNonBaseliningLogger: true });
+        const projectService = new TestProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
         const sourceFile = program.getSourceFile(f.path)!;

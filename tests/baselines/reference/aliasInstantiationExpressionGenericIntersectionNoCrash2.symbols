@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/aliasInstantiationExpressionGenericIntersectionNoCrash2.ts] ////
+
+=== aliasInstantiationExpressionGenericIntersectionNoCrash2.ts ===
+declare class Class<T> {
+>Class : Symbol(Class, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 0, 0))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 0, 20))
+
+  x: T;
+>x : Symbol(Class.x, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 0, 24))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 0, 20))
+}
+
+declare function fn<T>(): T;
+>fn : Symbol(fn, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 2, 1))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 4, 20))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 4, 20))
+
+
+type ClassAlias<T> = typeof Class<T>;
+>ClassAlias : Symbol(ClassAlias, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 4, 28))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 7, 16))
+>Class : Symbol(Class, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 0, 0))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 7, 16))
+
+type FnAlias<T> = typeof fn<T>;
+>FnAlias : Symbol(FnAlias, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 7, 37))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 8, 13))
+>fn : Symbol(fn, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 2, 1))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 8, 13))
+
+type Wat<T> = ClassAlias<T> & FnAlias<T>;
+>Wat : Symbol(Wat, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 8, 31))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 10, 9))
+>ClassAlias : Symbol(ClassAlias, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 4, 28))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 10, 9))
+>FnAlias : Symbol(FnAlias, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 7, 37))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 10, 9))
+
+
+declare const wat: Wat<number>;
+>wat : Symbol(wat, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 13, 13))
+>Wat : Symbol(Wat, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 8, 31))
+
+wat as Wat<string>;
+>wat : Symbol(wat, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 13, 13))
+>Wat : Symbol(Wat, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash2.ts, 8, 31))
+

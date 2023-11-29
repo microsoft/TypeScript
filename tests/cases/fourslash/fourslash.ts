@@ -318,7 +318,6 @@ declare namespace FourSlashInterface {
         formatDocumentChangesNothing(): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
-        baselineCommands(...commands: BaselineCommand[]): void;
         baselineFindAllReferences(...markerOrRange: MarkerOrNameOrRange[]): void;
         baselineFindAllReferencesAtRangesWithText(...rangeText: string[]): void;
         baselineGetFileReferences(...fileName: string[]): void;
@@ -364,7 +363,7 @@ declare namespace FourSlashInterface {
         docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string, options?: VerifyDocCommentTemplateOptions): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
-        codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: NewFileContent, commands?: {}[] }): void;
+        codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: NewFileContent, commands?: {}[], preferences?: UserPreferences }): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
@@ -415,10 +414,7 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
-        getInlayHints(expected: readonly VerifyInlayHintsOptions[], textSpan?: {
-            start: number;
-            length: number;
-        }, preference?: InlayHintsOptions);
+        baselineInlayHints(span?: { start: number; length: number; }, preferences?: InlayHintsOptions): void;
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -667,6 +663,7 @@ declare namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: readonly string[];
+        readonly preferTypeOnlyAutoImports?: boolean;
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
         readonly organizeImportsCollation?: "unicode" | "ordinal";
         readonly organizeImportsLocale?: string;
@@ -683,6 +680,7 @@ declare namespace FourSlashInterface {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly interactiveInlayHints?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;
@@ -813,6 +811,7 @@ declare namespace FourSlashInterface {
         readonly pattern: string;
         readonly fileName?: string;
         readonly expected: ReadonlyArray<ExpectedNavigateToItem>;
+        readonly excludeLibFiles?: boolean;
     }
     interface ExpectedNavigateToItem {
         readonly name: string;
@@ -851,27 +850,6 @@ declare namespace FourSlashInterface {
     type RenameOptions = { readonly findInStrings?: boolean, readonly findInComments?: boolean, readonly providePrefixAndSuffixTextForRename?: boolean, readonly quotePreference?: "auto" | "double" | "single" };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
     type DiagnosticIgnoredInterpolations = { template: string }
-    type BaselineCommand = {
-        type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-    } | {
-        type: "getFileReferences";
-        fileName: ArrayOrSingle<string>;
-    } | {
-        type: "findRenameLocations";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-        options?: RenameOptions;
-    } | {
-        type: "documentHighlights";
-        markerOrRange?: ArrayOrSingle<MarkerOrNameOrRange>;
-        rangeText?: ArrayOrSingle<string>;
-        options?: VerifyDocumentHighlightsOptions;
-    } | {
-        type: "customWork";
-        work: () => string | undefined;
-    };
 }
 /** Wraps a diagnostic message to be compared ignoring interpolated strings */
 declare function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations;
@@ -914,6 +892,7 @@ declare namespace completion {
         TypeOnlyAlias = "TypeOnlyAlias/",
         ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
         SwitchCases = "SwitchCases/",
+        ObjectLiteralMemberWithComma = "ObjectLiteralMemberWithComma/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;
