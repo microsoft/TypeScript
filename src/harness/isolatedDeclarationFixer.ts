@@ -1,6 +1,6 @@
+import * as fake from "./_namespaces/fakes";
 import * as ts from "./_namespaces/ts";
 import * as vfs from "./_namespaces/vfs";
-import * as fake from "./fakesHosts";
 
 export const isolatedDeclarationsErrors = new Set([
     ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,

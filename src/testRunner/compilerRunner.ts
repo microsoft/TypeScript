@@ -1,7 +1,7 @@
+import * as compiler from "./_namespaces/compiler";
 import {
     fixTestFiles,
-} from "../harness/isolatedDeclarationFixer";
-import * as compiler from "./_namespaces/compiler";
+} from "./_namespaces/fixer";
 import {
     Baseline,
     Compiler,

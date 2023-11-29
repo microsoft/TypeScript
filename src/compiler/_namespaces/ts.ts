@@ -60,6 +60,7 @@ export * from "../transformers/declarations/diagnostics";
 export * from "../transformers/declarations/emitBinder";
 export * from "../transformers/declarations/emitResolver";
 export * from "../transformers/declarations/transpileDeclaration";
+export * from "../transformers/declarations/localInferenceResolver";
 export * from "../transformers/declarations/types";
 export * from "../transformers/declarations";
 export * from "../transformer";

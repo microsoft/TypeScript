@@ -28,6 +28,7 @@ import {
     createEmptyExports,
     createGetSymbolAccessibilityDiagnosticForNode,
     createGetSymbolAccessibilityDiagnosticForNodeName,
+    createLocalInferenceResolver,
     createSymbolTable,
     createUnparsedSourceFile,
     Debug,
@@ -165,6 +166,7 @@ import {
     LateBoundDeclaration,
     LateVisibilityPaintedStatement,
     length,
+    LocalInferenceResolver,
     map,
     mapDefined,
     MethodDeclaration,
@@ -238,10 +240,6 @@ import {
     VisitResult,
 } from "../_namespaces/ts";
 import * as moduleSpecifiers from "../_namespaces/ts.moduleSpecifiers";
-import {
-    createLocalInferenceResolver,
-    LocalInferenceResolver,
-} from "./declarations/localInferenceResolver";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {

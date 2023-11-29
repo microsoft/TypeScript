@@ -1,5 +1,6 @@
 import {
     appendIfUnique,
+    bindSourceFileForDeclarationEmit,
     ComputedPropertyName,
     createEvaluator,
     Debug,
@@ -7,6 +8,8 @@ import {
     DeclarationName,
     determineIfDeclarationIsVisible,
     ElementAccessExpression,
+    EmitDeclarationNodeLinks,
+    EmitDeclarationSymbol,
     emptyArray,
     EntityNameOrEntityNameExpression,
     EnumDeclaration,
@@ -21,6 +24,7 @@ import {
     FunctionLikeDeclaration,
     getAnyImportSyntax,
     getFirstIdentifier,
+    getMemberKey,
     getNameOfDeclaration,
     getParseTreeNode,
     getTextOfNode,
@@ -46,6 +50,7 @@ import {
     isInJSFile,
     isLateVisibilityPaintedStatement,
     isNumericLiteral,
+    IsolatedEmitResolver,
     isPartOfTypeNode,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
@@ -78,15 +83,8 @@ import {
     SyntaxKind,
     VariableDeclaration,
 } from "../../_namespaces/ts";
-import {
-    bindSourceFileForDeclarationEmit,
-    EmitDeclarationNodeLinks,
-    EmitDeclarationSymbol,
-    getMemberKey,
-} from "./emitBinder";
-import {
-    IsolatedEmitResolver,
-} from "./types";
+
+
 
 /** @internal */
 export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitResolver {
