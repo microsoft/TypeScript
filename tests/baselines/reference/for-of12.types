@@ -6,10 +6,10 @@ var v: string;
 
 for (v of [0, ""].values()) { }
 >v : string
->[0, ""].values() : IterableIterator<string | number>
->[0, ""].values : () => IterableIterator<string | number>
+>[0, ""].values() : BuiltInIterableIterator<string | number>
+>[0, ""].values : () => BuiltInIterableIterator<string | number>
 >[0, ""] : (string | number)[]
 >0 : 0
 >"" : ""
->values : () => IterableIterator<string | number>
+>values : () => BuiltInIterableIterator<string | number>
 

@@ -109,7 +109,7 @@ async function * f16() {
 >f16 : () => AsyncGenerator<any, void, undefined>
 
     yield * [];
->yield * [] : any
+>yield * [] : undefined
 >[] : undefined[]
 }
 === awaitWithValueIsOk.ts ===

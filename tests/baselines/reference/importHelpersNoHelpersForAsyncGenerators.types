@@ -13,7 +13,7 @@ export async function * f() {
 >2 : 2
 
     yield* [3];
->yield* [3] : any
+>yield* [3] : undefined
 >[3] : number[]
 >3 : 3
 }

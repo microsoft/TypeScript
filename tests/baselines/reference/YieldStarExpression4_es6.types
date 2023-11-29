@@ -5,6 +5,6 @@ function *g() {
 >g : () => Generator<any, void, undefined>
 
     yield * [];
->yield * [] : any
+>yield * [] : undefined
 >[] : undefined[]
 }

@@ -138,7 +138,7 @@ const f16 = async function * () {
 >async function * () {    yield * [];} : () => AsyncGenerator<any, void, undefined>
 
     yield * [];
->yield * [] : any
+>yield * [] : undefined
 >[] : undefined[]
 
 };

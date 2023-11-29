@@ -5,12 +5,12 @@ let { [Symbol.iterator]: destructured } = [];
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
 >iterator : unique symbol
->destructured : () => IterableIterator<undefined>
+>destructured : () => BuiltInIterableIterator<undefined>
 >[] : undefined[]
 
 void destructured;
 >void destructured : undefined
->destructured : () => IterableIterator<undefined>
+>destructured : () => BuiltInIterableIterator<undefined>
 
 const named = "prop";
 >named : "prop"

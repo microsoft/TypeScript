@@ -54,10 +54,10 @@ const result2: A[] = Array.from(inputA.values());
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
 >Array : ArrayConstructor
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->inputA.values() : IterableIterator<A>
->inputA.values : () => IterableIterator<A>
+>inputA.values() : BuiltInIterableIterator<A>
+>inputA.values : () => BuiltInIterableIterator<A>
 >inputA : A[]
->values : () => IterableIterator<A>
+>values : () => BuiltInIterableIterator<A>
 
 const result3: B[] = Array.from(inputA.values()); // expect error
 >result3 : B[]
@@ -65,10 +65,10 @@ const result3: B[] = Array.from(inputA.values()); // expect error
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
 >Array : ArrayConstructor
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->inputA.values() : IterableIterator<A>
->inputA.values : () => IterableIterator<A>
+>inputA.values() : BuiltInIterableIterator<A>
+>inputA.values : () => BuiltInIterableIterator<A>
 >inputA : A[]
->values : () => IterableIterator<A>
+>values : () => BuiltInIterableIterator<A>
 
 const result4: A[] = Array.from(inputB, ({ b }): A => ({ a: b }));
 >result4 : A[]

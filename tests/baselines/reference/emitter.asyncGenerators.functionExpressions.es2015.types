@@ -30,8 +30,8 @@ const f4 = async function * () {
 >async function * () {    const x = yield* [1];} : () => AsyncGenerator<number, void, undefined>
 
     const x = yield* [1];
->x : any
->yield* [1] : any
+>x : undefined
+>yield* [1] : undefined
 >[1] : number[]
 >1 : 1
 }
