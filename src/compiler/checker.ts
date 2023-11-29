@@ -33944,6 +33944,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function getErrorNodeForCallNode(callLike: CallLikeExpression): Node {
+        if (isCallOrNewExpression(callLike)) {
+            return isPropertyAccessExpression(callLike.expression) ? callLike.expression.name : callLike.expression;
+        }
+        if (isTaggedTemplateExpression(callLike)) {
+            return isPropertyAccessExpression(callLike.tag) ? callLike.tag.name : callLike.tag;
+        }
+        if (isJsxOpeningLikeElement(callLike)) {
+            return callLike.tagName;
+        }
+        return callLike;
+    }
+
     function isPromiseResolveArityError(node: CallLikeExpression) {
         if (!isCallExpression(node) || !isIdentifier(node.expression)) return false;
 
@@ -34267,7 +34280,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         diag = { file, start, length, code: chain.code, category: chain.category, messageText: chain, relatedInformation: related };
                     }
                     else {
-                        diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), node, chain, related);
+                        diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), getErrorNodeForCallNode(node), chain, related);
                     }
                     addImplementationSuccessElaboration(candidatesForArgumentError[0], diag);
                     diagnostics.add(diag);
