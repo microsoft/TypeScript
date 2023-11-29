@@ -25017,11 +25017,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
-        if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String)) {
-            return true;
-        }
         if (target.flags & TypeFlags.Intersection) {
             return every((target as IntersectionType).types, t => t === emptyTypeLiteralType || isValidTypeForTemplateLiteralPlaceholder(source, t));
+        }
+        if (target.flags & TypeFlags.String || isTypeAssignableTo(source, target)) {
+            return true;
         }
         if (source.flags & TypeFlags.StringLiteral) {
             const value = (source as StringLiteralType).value;
@@ -25035,7 +25035,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const texts = (source as TemplateLiteralType).texts;
             return texts.length === 2 && texts[0] === "" && texts[1] === "" && isTypeAssignableTo((source as TemplateLiteralType).types[0], target);
         }
-        return isTypeAssignableTo(source, target);
+        return false;
     }
 
     function inferTypesFromTemplateLiteralType(source: Type, target: TemplateLiteralType): Type[] | undefined {
