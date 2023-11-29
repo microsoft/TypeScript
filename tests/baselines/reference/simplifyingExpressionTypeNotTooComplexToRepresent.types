@@ -1,0 +1,147 @@
+=== tests/cases/compiler/simplifyingExpressionTypeNotTooComplexToRepresent.ts ===
+function computed<N extends keyof Longhands>(
+>computed : <N extends keyof Longhands>(property: Longhands[N][1], specified: Longhands[N][0]) => void
+
+    property: Longhands[N][1],
+>property : Longhands[N][1]
+
+    specified: Longhands[N][0]
+>specified : Longhands[N][0]
+
+) {
+    // error happens on this line
+    property.compute(specified);
+>property.compute(specified) : Family | Size | Keyword<"percentage"> | Keyword<"ultra-condensed"> | Keyword<"extra-condensed"> | Keyword<"condensed"> | Keyword<"semi-condensed"> | Keyword<"normal"> | Keyword<"semi-expanded"> | Keyword<"expanded"> | Keyword<"extra-expanded"> | Keyword<"ultra-expanded"> | Keyword<"jis78"> | Keyword<"jis83"> | Keyword<"jis90"> | Keyword<"jis04"> | Keyword<"simplified"> | Keyword<"traditional"> | Keyword<"proportional-width"> | Keyword<"full-width"> | Keyword<"ruby"> | Keyword<"none"> | Keyword<"common-ligatures"> | Keyword<"no-common-ligatures"> | Keyword<"discretionary-ligatures"> | Keyword<"no-discretionary-ligatures"> | Keyword<"historical-ligatures"> | Keyword<"no-historical-ligatures"> | Keyword<"contextual"> | Keyword<"no-contextual"> | Keyword<"lining-nums"> | Keyword<"oldstyle-nums"> | Keyword<"proportional-nums"> | Keyword<"tabular-nums"> | Keyword<"diagonal-fractions"> | Keyword<"stacked-fractions"> | Keyword<"ordinal"> | Keyword<"slashed-zero"> | Keyword<"sub"> | Keyword<"super"> | Keyword<"number"> | Keyword<"bold"> | Keyword<"bolder"> | Keyword<"lighter">
+>property.compute : ((value: Family) => Family) | ((value: Size) => Size) | ((value: Stretch) => Stretch) | ((value: Caps) => Caps) | ((value: EastAsian) => EastAsian) | ((value: Ligatures) => Ligatures) | ((value: Numeric) => Numeric) | ((value: Position) => Position) | ((value: Weight) => Weight)
+>property : Property<Family> | Property<Size> | Property<Stretch> | Property<Caps> | Property<EastAsian> | Property<Ligatures> | Property<Numeric> | Property<Position> | Property<Weight>
+>compute : ((value: Family) => Family) | ((value: Size) => Size) | ((value: Stretch) => Stretch) | ((value: Caps) => Caps) | ((value: EastAsian) => EastAsian) | ((value: Ligatures) => Ligatures) | ((value: Numeric) => Numeric) | ((value: Position) => Position) | ((value: Weight) => Weight)
+>specified : Family | Size | Keyword<"percentage"> | Keyword<"ultra-condensed"> | Keyword<"extra-condensed"> | Keyword<"condensed"> | Keyword<"semi-condensed"> | Keyword<"normal"> | Keyword<"semi-expanded"> | Keyword<"expanded"> | Keyword<"extra-expanded"> | Keyword<"ultra-expanded"> | Caps | Keyword<"jis78"> | Keyword<"jis83"> | Keyword<"jis90"> | Keyword<"jis04"> | Keyword<"simplified"> | Keyword<"traditional"> | Keyword<"proportional-width"> | Keyword<"full-width"> | Keyword<"ruby"> | Keyword<"none"> | Keyword<"common-ligatures"> | Keyword<"no-common-ligatures"> | Keyword<"discretionary-ligatures"> | Keyword<"no-discretionary-ligatures"> | Keyword<"historical-ligatures"> | Keyword<"no-historical-ligatures"> | Keyword<"contextual"> | Keyword<"no-contextual"> | Keyword<"lining-nums"> | Keyword<"oldstyle-nums"> | Keyword<"proportional-nums"> | Keyword<"tabular-nums"> | Keyword<"diagonal-fractions"> | Keyword<"stacked-fractions"> | Keyword<"ordinal"> | Keyword<"slashed-zero"> | Keyword<"sub"> | Keyword<"super"> | Keyword<"number"> | Keyword<"bold"> | Keyword<"bolder"> | Keyword<"lighter">
+}
+
+interface Property<T> {
+    compute: (value: T) => T;
+>compute : (value: T) => T
+>value : T
+}
+
+type Wrapper<T> = [T, Property<T>];
+>Wrapper : Wrapper<T>
+
+interface Longhands {
+    "font-family": Wrapper<Family>;
+>"font-family" : Wrapper<Family>
+
+    "font-size": Wrapper<Size>;
+>"font-size" : Wrapper<Size>
+
+    "font-stretch": Wrapper<Stretch>;
+>"font-stretch" : Wrapper<Stretch>
+
+    "font-variant-caps": Wrapper<Caps>;
+>"font-variant-caps" : Wrapper<Caps>
+
+    "font-variant-east-asian": Wrapper<EastAsian>;
+>"font-variant-east-asian" : Wrapper<EastAsian>
+
+    "font-variant-ligatures": Wrapper<Ligatures>;
+>"font-variant-ligatures" : Wrapper<Ligatures>
+
+    "font-variant-numeric": Wrapper<Numeric>;
+>"font-variant-numeric" : Wrapper<Numeric>
+
+    "font-variant-position": Wrapper<Position>;
+>"font-variant-position" : Wrapper<Position>
+
+    "font-weight": Wrapper<Weight>;
+>"font-weight" : Wrapper<Weight>
+}
+
+class Keyword<K extends string> {
+>Keyword : Keyword<K>
+
+    keyword: K;
+>keyword : K
+
+    constructor(keyword: K) {
+>keyword : K
+
+        this.keyword = keyword;
+>this.keyword = keyword : K
+>this.keyword : K
+>this : this
+>keyword : K
+>keyword : K
+    }
+}
+
+type Family = Keyword<"serif">;
+>Family : Keyword<"serif">
+
+type Size = Keyword<"length">;
+>Size : Keyword<"length">
+
+type Stretch =
+>Stretch : Keyword<"percentage"> | Keyword<"ultra-condensed"> | Keyword<"extra-condensed"> | Keyword<"condensed"> | Keyword<"semi-condensed"> | Keyword<"normal"> | Keyword<"semi-expanded"> | Keyword<"expanded"> | Keyword<"extra-expanded"> | Keyword<"ultra-expanded">
+
+    | Keyword<"percentage">
+    | Keyword<"ultra-condensed">
+    | Keyword<"extra-condensed">
+    | Keyword<"condensed">
+    | Keyword<"semi-condensed">
+    | Keyword<"normal">
+    | Keyword<"semi-expanded">
+    | Keyword<"expanded">
+    | Keyword<"extra-expanded">
+    | Keyword<"ultra-expanded">;
+type Caps = Keyword<"normal">;
+>Caps : Keyword<"normal">
+
+type EastAsian =
+>EastAsian : Keyword<"normal"> | Keyword<"jis78"> | Keyword<"jis83"> | Keyword<"jis90"> | Keyword<"jis04"> | Keyword<"simplified"> | Keyword<"traditional"> | Keyword<"proportional-width"> | Keyword<"full-width"> | Keyword<"ruby">
+
+    | Keyword<"normal">
+    | Keyword<"jis78">
+    | Keyword<"jis83">
+    | Keyword<"jis90">
+    | Keyword<"jis04">
+    | Keyword<"simplified">
+    | Keyword<"traditional">
+    | Keyword<"proportional-width">
+    | Keyword<"full-width">
+    | Keyword<"ruby">;
+type Ligatures =
+>Ligatures : Keyword<"normal"> | Keyword<"none"> | Keyword<"common-ligatures"> | Keyword<"no-common-ligatures"> | Keyword<"discretionary-ligatures"> | Keyword<"no-discretionary-ligatures"> | Keyword<"historical-ligatures"> | Keyword<"no-historical-ligatures"> | Keyword<"contextual"> | Keyword<"no-contextual">
+
+    | Keyword<"none">
+    | Keyword<"normal">
+    | Keyword<"common-ligatures">
+    | Keyword<"no-common-ligatures">
+    | Keyword<"discretionary-ligatures">
+    | Keyword<"no-discretionary-ligatures">
+    | Keyword<"historical-ligatures">
+    | Keyword<"no-historical-ligatures">
+    | Keyword<"contextual">
+    | Keyword<"no-contextual">;
+type Numeric =
+>Numeric : Keyword<"normal"> | Keyword<"lining-nums"> | Keyword<"oldstyle-nums"> | Keyword<"proportional-nums"> | Keyword<"tabular-nums"> | Keyword<"diagonal-fractions"> | Keyword<"stacked-fractions"> | Keyword<"ordinal"> | Keyword<"slashed-zero">
+
+    | Keyword<"normal">
+    | Keyword<"lining-nums">
+    | Keyword<"oldstyle-nums">
+    | Keyword<"proportional-nums">
+    | Keyword<"tabular-nums">
+    | Keyword<"diagonal-fractions">
+    | Keyword<"stacked-fractions">
+    | Keyword<"ordinal">
+    | Keyword<"slashed-zero">;
+type Position = Keyword<"normal"> | Keyword<"sub"> | Keyword<"super">;
+>Position : Keyword<"normal"> | Keyword<"sub"> | Keyword<"super">
+
+type Weight =
+>Weight : Keyword<"normal"> | Keyword<"number"> | Keyword<"bold"> | Keyword<"bolder"> | Keyword<"lighter">
+
+    | Keyword<"number">
+    | Keyword<"normal">
+    | Keyword<"bold">
+    | Keyword<"bolder">
+    | Keyword<"lighter">;

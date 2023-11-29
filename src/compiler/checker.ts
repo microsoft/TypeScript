@@ -1397,6 +1397,8 @@ export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums
         (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
 }
 
+const UNION_CROSS_PRODUCT_SIZE_LIMIT = 100_000;
+
 /** @internal */
 export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
@@ -11933,7 +11935,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links.type) {
             Debug.assertIsDefined(links.deferralParent);
             Debug.assertIsDefined(links.deferralConstituents);
-            links.type = links.deferralParent.flags & TypeFlags.Union ? getUnionType(links.deferralConstituents) : getIntersectionType(links.deferralConstituents);
+            const operation = links.deferralParent.flags & TypeFlags.Union ? getUnionType : getIntersectionType;
+            let result = operation(links.deferralConstituents);
+            for (const part of links.deferredMismatchedParts || emptyArray) {
+                result = operation([result, getTypeOfSymbol(part)]);
+            }
+            links.type = result;
         }
         return links.type;
     }
@@ -11942,8 +11949,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const links = getSymbolLinks(symbol);
         if (!links.writeType && links.deferralWriteConstituents) {
             Debug.assertIsDefined(links.deferralParent);
-            Debug.assertIsDefined(links.deferralConstituents);
-            links.writeType = links.deferralParent.flags & TypeFlags.Union ? getUnionType(links.deferralWriteConstituents) : getIntersectionType(links.deferralWriteConstituents);
+            const operation = links.deferralParent.flags & TypeFlags.Union ? getUnionType : getIntersectionType;
+            let result = operation(links.deferralWriteConstituents);
+            for (const part of links.deferredMismatchedParts || emptyArray) {
+                result = operation([result, getTypeOfSymbol(part)]);
+            }
+            links.writeType = result;
         }
         return links.writeType;
     }
@@ -14552,8 +14563,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let declarations: Declaration[] | undefined;
         let firstType: Type | undefined;
         let nameType: Type | undefined;
-        const propTypes: Type[] = [];
+        let propTypes: Type[] = [];
         let writeTypes: Type[] | undefined;
+        let deferredMismatchedParts: Symbol[] | undefined;
         let firstValueDeclaration: Declaration | undefined;
         let hasNonUniformValueDeclaration = false;
         for (const prop of props) {
@@ -14564,6 +14576,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 hasNonUniformValueDeclaration = true;
             }
             declarations = addRange(declarations, prop.declarations);
+            if (getCheckFlags(prop) & CheckFlags.DeferredType) {
+                checkFlags |= (getCheckFlags(prop) & (CheckFlags.HasNeverType | CheckFlags.HasNonUniformType | CheckFlags.HasLiteralType));
+                if (!nameType) {
+                    nameType = getSymbolLinks(prop).nameType;
+                }
+                if ((getSymbolLinks(prop).deferralParent?.flags! & TypeFlags.UnionOrIntersection) === (containingType.flags & TypeFlags.UnionOrIntersection)) {
+                    // Member has a deferred type (of the same kind) - rather than eagerly resolving it, pass on the deferral
+                    const deferredWriteTypes = getSymbolLinks(prop).deferralWriteConstituents;
+                    if (deferredWriteTypes) {
+                        writeTypes = concatenate(!writeTypes ? propTypes.slice() : writeTypes, deferredWriteTypes);
+                    }
+                    propTypes = concatenate(propTypes, getSymbolLinks(prop).deferralConstituents!);
+                    deferredMismatchedParts = concatenate(deferredMismatchedParts, getSymbolLinks(prop).deferredMismatchedParts);
+                    break;
+                }
+                else {
+                    // deferred union used in an intersection or intersection used within an union - defer the whole construct
+                    deferredMismatchedParts = append(deferredMismatchedParts, prop);
+                    break;
+                }
+            }
             const type = getTypeOfSymbol(prop);
             if (!firstType) {
                 firstType = type;
@@ -14598,12 +14631,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         result.declarations = declarations;
         result.links.nameType = nameType;
-        if (propTypes.length > 2) {
+        if (propTypes.length > 2 || deferredMismatchedParts) {
             // When `propTypes` has the potential to explode in size when normalized, defer normalization until absolutely needed
             result.links.checkFlags |= CheckFlags.DeferredType;
             result.links.deferralParent = containingType;
             result.links.deferralConstituents = propTypes;
             result.links.deferralWriteConstituents = writeTypes;
+            result.links.deferredMismatchedParts = deferredMismatchedParts;
         }
         else {
             result.links.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
@@ -17304,7 +17338,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], noSupertypeReduction?: boolean): Type {
         const typeMembershipMap = new Map<string, Type>();
         const includes = addTypesToIntersection(typeMembershipMap, 0 as TypeFlags, types);
-        const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
+        let typeSet: Type[] = arrayFrom(typeMembershipMap.values());
         // An intersection type is considered empty if it contains
         // the type never, or
         // more than one unit type or,
@@ -17359,6 +17393,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const id = getTypeListId(typeSet) + getAliasId(aliasSymbol, aliasTypeArguments);
         let result = intersectionTypes.get(id);
         if (!result) {
+            const originalSet = typeSet;
+            let runningResult: Type | undefined;
             if (includes & TypeFlags.Union) {
                 if (intersectUnionsOfPrimitiveTypes(typeSet)) {
                     // When the intersection creates a reduced set (which might mean that *all* union types have
@@ -17376,6 +17412,42 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                 }
                 else {
+                    if (getCrossProductUnionSize(typeSet) >= UNION_CROSS_PRODUCT_SIZE_LIMIT && every(typeSet, t => !!(t.flags & TypeFlags.Union) || !!(t.flags & TypeFlags.Primitive))) {
+                        if (typeSet.length > 2 || some(typeSet, t => getReducedType(t) !== t)) {
+                            // This type set is going to trigger an "expression too complex" error below. Rather than resort to that, as a last, best effort, simplify the type.
+                            // When the intersection looks like (A | B | C) & (D | E | F) & (G | H | I) - in the general case, this can result in a massive resulting
+                            // union, hence the check on the cross product size below, _however_ in some cases we can also _simplify_ the resulting type massively.
+                            // If we can recognize that upfront, we can still allow the type to form without creating innumerable intermediate types.
+                            // Specifically, in cases where almost all combinations are known to reduce to `never` (so the result is essentially sparse)
+                            // and we can recognize that quickly, we can use a simplified result without checking the worst-case size.
+                            // So we start with the assumption that the result _is_ sparse when the input looks like the above, and we assume the result
+                            // will take the form (A & D & G) | (B & E & H) | (C & F & I). To validate this, we reduce left, first combining
+                            // (A | B | C) & (D | E | F); if that combines into `(A & D) | (B & E) | (C & F)` like we want, which we make 9 intermediate
+                            // types to check, we can then combine the reduced `(A & D) | (B & E) | (C & F)` with (G | H | I), which again takes 9 intermediate types
+                            // to check, finally producing `(A & D & G) | (B & E & H) | (C & F & I)`. This required 18 intermediate types, while the standard method
+                            // of expanding (A | B | C) & (D | E | F) & (G | H | I) would produce 27 types and then perform reduction on the result.
+                            // By going elemnt-wise, and bailing if the result fails to reduce, we can allow these sparse expansions without doing undue work.
+                            runningResult = getReducedType(typeSet[0]);
+                            for (let i = 1; i < typeSet.length; i++) {
+                                // For intersection reduction, here we're considering `undefined & (A | B)` as `never`. (ie, we're disallowing branded primitives)
+                                // This is relevant for, eg, when looking at `(HTMLElement | null) & (SVGElement | null) & ... & undefined` where _usually_
+                                // we'd allow for tons of garbage intermediate types like `null & SVGElement` to exist; but nobody ever really actually _wants_
+                                // that, IMO. Those types can still exist in the type system; just... not when working with unions and intersections with massive
+                                // cross-product growth potential.
+                                const reducedElem = getReducedType(typeSet[i]);
+                                runningResult = reducedElem.flags & TypeFlags.Primitive && everyType(runningResult, t => !!(t.flags & TypeFlags.Object)) ? neverType : getReducedType(intersectTypes(runningResult, reducedElem));
+                                if (i === typeSet.length - 1 || isTypeAny(runningResult) || runningResult.flags & TypeFlags.Never) {
+                                    return runningResult;
+                                }
+                                if (!(runningResult.flags & TypeFlags.Union) || (runningResult as UnionType).types.length > typeSet.length) {
+                                    // Save work done by the accumulated result thus far, even if we're bailing on the heuristic.
+                                    // It may have saved us enough work already that we're willing to work with the type now.
+                                    typeSet = typeSet.slice(i + 1);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     // We are attempting to construct a type of the form X & (A | B) & (C | D). Transform this into a type of
                     // the form X & A & C | X & A & D | X & B & C | X & B & D. If the estimated size of the resulting union type
                     // exceeds 100000 constituents, report an error.
@@ -17383,11 +17455,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return errorType;
                     }
                     const constituents = getCrossProductIntersections(typeSet);
-                    // We attach a denormalized origin type when at least one constituent of the cross-product union is an
-                    // intersection (i.e. when the intersection didn't just reduce one or more unions to smaller unions) and
-                    // the denormalized origin has fewer constituents than the union itself.
-                    const origin = some(constituents, t => !!(t.flags & TypeFlags.Intersection)) && getConstituentCountOfTypes(constituents) > getConstituentCountOfTypes(typeSet) ? createOriginUnionOrIntersectionType(TypeFlags.Intersection, typeSet) : undefined;
-                    result = getUnionType(constituents, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, origin);
+                    if (runningResult && runningResult !== typeSet[0]) {
+                        result = getIntersectionType([runningResult, getUnionType(constituents, UnionReduction.Literal)], aliasSymbol, aliasTypeArguments);
+                    }
+                    else {
+                        // We attach a denormalized origin type when at least one constituent of the cross-product union is an
+                        // intersection (i.e. when the intersection didn't just reduce one or more unions to smaller unions) and
+                        // the denormalized origin has fewer constituents than the union itself.
+                        const origin = some(constituents, t => !!(t.flags & TypeFlags.Intersection)) && getConstituentCountOfTypes(constituents) > getConstituentCountOfTypes(typeSet) ? createOriginUnionOrIntersectionType(TypeFlags.Intersection, originalSet) : undefined;
+                        result = getUnionType(constituents, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, origin);
+                    }
                 }
             }
             else {
@@ -17404,7 +17481,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkCrossProductUnion(types: readonly Type[]) {
         const size = getCrossProductUnionSize(types);
-        if (size >= 100000) {
+        if (size >= UNION_CROSS_PRODUCT_SIZE_LIMIT) {
             tracing?.instant(tracing.Phase.CheckTypes, "checkCrossProductUnion_DepthLimit", { typeIds: types.map(t => t.id), size });
             error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
             return false;

@@ -1,0 +1,277 @@
+=== tests/cases/compiler/simplifyingExpressionTypeNotTooComplexToRepresent.ts ===
+function computed<N extends keyof Longhands>(
+>computed : Symbol(computed, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 0, 0))
+>N : Symbol(N, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 0, 18))
+>Longhands : Symbol(Longhands, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 12, 35))
+
+    property: Longhands[N][1],
+>property : Symbol(property, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 0, 45))
+>Longhands : Symbol(Longhands, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 12, 35))
+>N : Symbol(N, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 0, 18))
+
+    specified: Longhands[N][0]
+>specified : Symbol(specified, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 1, 30))
+>Longhands : Symbol(Longhands, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 12, 35))
+>N : Symbol(N, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 0, 18))
+
+) {
+    // error happens on this line
+    property.compute(specified);
+>property.compute : Symbol(Property.compute, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23), Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23), Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23), Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23), Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23) ... and 4 more)
+>property : Symbol(property, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 0, 45))
+>compute : Symbol(Property.compute, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23), Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23), Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23), Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23), Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23) ... and 4 more)
+>specified : Symbol(specified, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 1, 30))
+}
+
+interface Property<T> {
+>Property : Symbol(Property, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 6, 1))
+>T : Symbol(T, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 19))
+
+    compute: (value: T) => T;
+>compute : Symbol(Property.compute, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 23))
+>value : Symbol(value, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 9, 14))
+>T : Symbol(T, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 19))
+>T : Symbol(T, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 8, 19))
+}
+
+type Wrapper<T> = [T, Property<T>];
+>Wrapper : Symbol(Wrapper, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 10, 1))
+>T : Symbol(T, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 12, 13))
+>T : Symbol(T, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 12, 13))
+>Property : Symbol(Property, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 6, 1))
+>T : Symbol(T, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 12, 13))
+
+interface Longhands {
+>Longhands : Symbol(Longhands, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 12, 35))
+
+    "font-family": Wrapper<Family>;
+>"font-family" : Symbol(Longhands["font-family"], Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 14, 21))
+>Wrapper : Symbol(Wrapper, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 10, 1))
+>Family : Symbol(Family, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 31, 1))
+
+    "font-size": Wrapper<Size>;
+>"font-size" : Symbol(Longhands["font-size"], Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 15, 35))
+>Wrapper : Symbol(Wrapper, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 10, 1))
+>Size : Symbol(Size, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 33, 31))
+
+    "font-stretch": Wrapper<Stretch>;
+>"font-stretch" : Symbol(Longhands["font-stretch"], Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 16, 31))
+>Wrapper : Symbol(Wrapper, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 10, 1))
+>Stretch : Symbol(Stretch, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 34, 30))
+
+    "font-variant-caps": Wrapper<Caps>;
+>"font-variant-caps" : Symbol(Longhands["font-variant-caps"], Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 17, 37))
+>Wrapper : Symbol(Wrapper, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 10, 1))
+>Caps : Symbol(Caps, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 45, 32))
+
+    "font-variant-east-asian": Wrapper<EastAsian>;
+>"font-variant-east-asian" : Symbol(Longhands["font-variant-east-asian"], Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 18, 39))
+>Wrapper : Symbol(Wrapper, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 10, 1))
+>EastAsian : Symbol(EastAsian, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 46, 30))
+
+    "font-variant-ligatures": Wrapper<Ligatures>;
+>"font-variant-ligatures" : Symbol(Longhands["font-variant-ligatures"], Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 19, 50))
+>Wrapper : Symbol(Wrapper, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 10, 1))
+>Ligatures : Symbol(Ligatures, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 57, 22))
+
+    "font-variant-numeric": Wrapper<Numeric>;
+>"font-variant-numeric" : Symbol(Longhands["font-variant-numeric"], Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 20, 49))
+>Wrapper : Symbol(Wrapper, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 10, 1))
+>Numeric : Symbol(Numeric, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 68, 31))
+
+    "font-variant-position": Wrapper<Position>;
+>"font-variant-position" : Symbol(Longhands["font-variant-position"], Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 21, 45))
+>Wrapper : Symbol(Wrapper, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 10, 1))
+>Position : Symbol(Position, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 78, 30))
+
+    "font-weight": Wrapper<Weight>;
+>"font-weight" : Symbol(Longhands["font-weight"], Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 22, 47))
+>Wrapper : Symbol(Wrapper, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 10, 1))
+>Weight : Symbol(Weight, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 79, 70))
+}
+
+class Keyword<K extends string> {
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+>K : Symbol(K, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 26, 14))
+
+    keyword: K;
+>keyword : Symbol(Keyword.keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 26, 33))
+>K : Symbol(K, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 26, 14))
+
+    constructor(keyword: K) {
+>keyword : Symbol(keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 28, 16))
+>K : Symbol(K, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 26, 14))
+
+        this.keyword = keyword;
+>this.keyword : Symbol(Keyword.keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 26, 33))
+>this : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+>keyword : Symbol(Keyword.keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 26, 33))
+>keyword : Symbol(keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 28, 16))
+    }
+}
+
+type Family = Keyword<"serif">;
+>Family : Symbol(Family, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 31, 1))
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+type Size = Keyword<"length">;
+>Size : Symbol(Size, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 33, 31))
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+type Stretch =
+>Stretch : Symbol(Stretch, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 34, 30))
+
+    | Keyword<"percentage">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"ultra-condensed">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"extra-condensed">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"condensed">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"semi-condensed">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"normal">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"semi-expanded">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"expanded">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"extra-expanded">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"ultra-expanded">;
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+type Caps = Keyword<"normal">;
+>Caps : Symbol(Caps, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 45, 32))
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+type EastAsian =
+>EastAsian : Symbol(EastAsian, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 46, 30))
+
+    | Keyword<"normal">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"jis78">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"jis83">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"jis90">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"jis04">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"simplified">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"traditional">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"proportional-width">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"full-width">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"ruby">;
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+type Ligatures =
+>Ligatures : Symbol(Ligatures, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 57, 22))
+
+    | Keyword<"none">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"normal">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"common-ligatures">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"no-common-ligatures">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"discretionary-ligatures">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"no-discretionary-ligatures">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"historical-ligatures">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"no-historical-ligatures">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"contextual">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"no-contextual">;
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+type Numeric =
+>Numeric : Symbol(Numeric, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 68, 31))
+
+    | Keyword<"normal">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"lining-nums">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"oldstyle-nums">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"proportional-nums">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"tabular-nums">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"diagonal-fractions">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"stacked-fractions">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"ordinal">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"slashed-zero">;
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+type Position = Keyword<"normal"> | Keyword<"sub"> | Keyword<"super">;
+>Position : Symbol(Position, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 78, 30))
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+type Weight =
+>Weight : Symbol(Weight, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 79, 70))
+
+    | Keyword<"number">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"normal">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"bold">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"bolder">
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
+    | Keyword<"lighter">;
+>Keyword : Symbol(Keyword, Decl(simplifyingExpressionTypeNotTooComplexToRepresent.ts, 24, 1))
+
