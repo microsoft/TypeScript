@@ -12,6 +12,9 @@
 // @Filename: /d.ts
 //// const test3 = [{...foo/*3*/}]
 
+// @Filename: /e.ts
+//// const test4 = { foo/*4*/ }
+
 verify.completions({ 
     marker: "1",
     includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
@@ -26,5 +29,10 @@ verify.completions({
     marker: "3", 
     includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
     isNewIdentifierLocation: false, 
+    preferences: { includeCompletionsForModuleExports: true } 
+}, {
+    marker: "4", 
+    includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
+    isNewIdentifierLocation: true, 
     preferences: { includeCompletionsForModuleExports: true } 
 });

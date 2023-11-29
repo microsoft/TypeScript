@@ -3415,7 +3415,6 @@ function getCompletionData(
 
     const semanticStart = timestamp();
     let completionKind = CompletionKind.None;
-    let isNonContextualObjectLiteral = false;
     let hasUnresolvedAutoImports = false;
     // This also gets mutated in nested-functions after the return
     let symbols: Symbol[] = [];
@@ -3885,9 +3884,6 @@ function getCompletionData(
     function shouldOfferImportCompletions(): boolean {
         // If already typing an import statement, provide completions for it.
         if (importStatementCompletion) return true;
-        // If current completion is for non-contextual Object literal shortahands, ignore auto-import symbols
-        // if current non-contextual Object literal is spread assignment, we may need auto-import symbols
-        if (isNonContextualObjectLiteral && !isSpreadAssignment(contextToken.parent)) return false;
         // If not already a module, must have modules enabled.
         if (!preferences.includeCompletionsForModuleExports) return false;
         // If already using ES modules, OK to continue using them.
@@ -4332,7 +4328,6 @@ function getCompletionData(
                 if (objectLikeContainer.flags & NodeFlags.InWithStatement) {
                     return GlobalsSearch.Fail;
                 }
-                isNonContextualObjectLiteral = true;
                 return GlobalsSearch.Continue;
             }
             const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
@@ -4345,7 +4340,6 @@ function getCompletionData(
             if (typeMembers.length === 0) {
                 // Edge case: If NumberIndexType exists
                 if (!hasNumberIndextype) {
-                    isNonContextualObjectLiteral = true;
                     return GlobalsSearch.Continue;
                 }
             }
