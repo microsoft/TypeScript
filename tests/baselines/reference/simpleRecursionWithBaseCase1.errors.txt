@@ -14,7 +14,7 @@ simpleRecursionWithBaseCase1.ts(31,10): error TS7023: 'fn5' implicitly has retur
         }
     }
     const num: number = fn1();
-                        ~~~~~
+                        ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 simpleRecursionWithBaseCase1.ts:1:14: An argument for 'n' was not provided.
     
@@ -22,7 +22,7 @@ simpleRecursionWithBaseCase1.ts(31,10): error TS7023: 'fn5' implicitly has retur
         return fn2(n);
     }
     const nev: never = fn2();
-                       ~~~~~
+                       ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 simpleRecursionWithBaseCase1.ts:10:14: An argument for 'n' was not provided.
     

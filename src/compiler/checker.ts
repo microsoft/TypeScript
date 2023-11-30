@@ -13980,7 +13980,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (const current of type.types) {
                 for (const prop of getPropertiesOfType(current)) {
                     if (!members.has(prop.escapedName)) {
-                        const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName);
+                        const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName, /*skipObjectFunctionPropertyAugment*/ !!(type.flags & TypeFlags.Intersection));
                         if (combinedProp) {
                             members.set(prop.escapedName, combinedProp);
                         }
@@ -14629,6 +14629,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     type.propertyCacheWithoutObjectFunctionPropertyAugment ||= createSymbolTable() :
                     type.propertyCache ||= createSymbolTable();
                 properties.set(name, property);
+                if (skipObjectFunctionPropertyAugment && !type.propertyCache?.get(name)) {
+                    const properties = type.propertyCache ||= createSymbolTable();
+                    properties.set(name, property);
+                }
             }
         }
         return property;
@@ -14771,7 +14775,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return getPropertyOfObjectType(globalObjectType, name);
         }
-        if (type.flags & TypeFlags.UnionOrIntersection) {
+        if (type.flags & TypeFlags.Intersection) {
+            const prop = getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, /*skipObjectFunctionPropertyAugment*/ true);
+            if (prop) {
+                return prop;
+            }
+            if (!skipObjectFunctionPropertyAugment) {
+                return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment);
+            }
+            return undefined;
+        }
+        if (type.flags & TypeFlags.Union) {
             return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment);
         }
         return undefined;
@@ -25017,11 +25031,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
-        if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String)) {
-            return true;
-        }
         if (target.flags & TypeFlags.Intersection) {
             return every((target as IntersectionType).types, t => t === emptyTypeLiteralType || isValidTypeForTemplateLiteralPlaceholder(source, t));
+        }
+        if (target.flags & TypeFlags.String || isTypeAssignableTo(source, target)) {
+            return true;
         }
         if (source.flags & TypeFlags.StringLiteral) {
             const value = (source as StringLiteralType).value;
@@ -25035,7 +25049,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const texts = (source as TemplateLiteralType).texts;
             return texts.length === 2 && texts[0] === "" && texts[1] === "" && isTypeAssignableTo((source as TemplateLiteralType).types[0], target);
         }
-        return isTypeAssignableTo(source, target);
+        return false;
     }
 
     function inferTypesFromTemplateLiteralType(source: Type, target: TemplateLiteralType): Type[] | undefined {
@@ -33922,21 +33936,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getDiagnosticSpanForCallNode(node: CallExpression, doNotIncludeArguments?: boolean) {
-        let start: number;
-        let length: number;
+    function getDiagnosticSpanForCallNode(node: CallExpression) {
         const sourceFile = getSourceFileOfNode(node);
-
-        if (isPropertyAccessExpression(node.expression)) {
-            const nameSpan = getErrorSpanForNode(sourceFile, node.expression.name);
-            start = nameSpan.start;
-            length = doNotIncludeArguments ? nameSpan.length : node.end - start;
-        }
-        else {
-            const expressionSpan = getErrorSpanForNode(sourceFile, node.expression);
-            start = expressionSpan.start;
-            length = doNotIncludeArguments ? expressionSpan.length : node.end - start;
-        }
+        const { start, length } = getErrorSpanForNode(sourceFile, isPropertyAccessExpression(node.expression) ? node.expression.name : node.expression);
         return { start, length, sourceFile };
     }
 
@@ -33954,6 +33956,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), node, message);
         }
+    }
+
+    function getErrorNodeForCallNode(callLike: CallLikeExpression): Node {
+        if (isCallOrNewExpression(callLike)) {
+            return isPropertyAccessExpression(callLike.expression) ? callLike.expression.name : callLike.expression;
+        }
+        if (isTaggedTemplateExpression(callLike)) {
+            return isPropertyAccessExpression(callLike.tag) ? callLike.tag.name : callLike.tag;
+        }
+        if (isJsxOpeningLikeElement(callLike)) {
+            return callLike.tagName;
+        }
+        return callLike;
     }
 
     function isPromiseResolveArityError(node: CallLikeExpression) {
@@ -34279,7 +34294,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         diag = { file, start, length, code: chain.code, category: chain.category, messageText: chain, relatedInformation: related };
                     }
                     else {
-                        diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), node, chain, related);
+                        diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), getErrorNodeForCallNode(node), chain, related);
                     }
                     addImplementationSuccessElaboration(candidatesForArgumentError[0], diag);
                     diagnostics.add(diag);
@@ -34915,7 +34930,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
         }
         if (isCallExpression(errorTarget.parent)) {
-            const { start, length } = getDiagnosticSpanForCallNode(errorTarget.parent, /*doNotIncludeArguments*/ true);
+            const { start, length } = getDiagnosticSpanForCallNode(errorTarget.parent);
             diagnostic.start = start;
             diagnostic.length = length;
         }
@@ -38855,17 +38870,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getReturnTypeOfSingleNonGenericCallSignature(funcType: Type) {
+    function getNonGenericReturnTypeOfSingleCallSignature(funcType: Type) {
         const signature = getSingleCallSignature(funcType);
-        if (signature && !signature.typeParameters) {
-            return getReturnTypeOfSignature(signature);
+        if (signature) {
+            const returnType = getReturnTypeOfSignature(signature);
+            if (!signature.typeParameters || !couldContainTypeVariables(returnType)) {
+                return returnType;
+            }
         }
     }
 
     function getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr: CallChain) {
         const funcType = checkExpression(expr.expression);
         const nonOptionalType = getOptionalExpressionType(funcType, expr.expression);
-        const returnType = getReturnTypeOfSingleNonGenericCallSignature(funcType);
+        const returnType = getNonGenericReturnTypeOfSingleCallSignature(funcType);
         return returnType && propagateOptionalTypeMarker(returnType, expr, nonOptionalType !== funcType);
     }
 
@@ -38914,7 +38932,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // signature where we can just fetch the return type without checking the arguments.
         if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr)) {
             return isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
-                getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
+                getNonGenericReturnTypeOfSingleCallSignature(checkNonNullExpression(expr.expression));
         }
         else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
             return getTypeFromTypeNode((expr as TypeAssertion).type);

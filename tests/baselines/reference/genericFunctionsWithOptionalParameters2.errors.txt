@@ -9,7 +9,7 @@ genericFunctionsWithOptionalParameters2.ts(7,7): error TS2554: Expected 1-3 argu
     var utils: Utils;
     
     utils.fold(); // error
-          ~~~~~~
+          ~~~~
 !!! error TS2554: Expected 1-3 arguments, but got 0.
 !!! related TS6210 genericFunctionsWithOptionalParameters2.ts:2:15: An argument for 'c' was not provided.
     utils.fold(null); // no error
