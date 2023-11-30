@@ -13062,7 +13062,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // copy index signature symbol as well (for quickinfo)
                 const sourceIndex = getIndexSymbol(source.symbol);
                 if (sourceIndex) {
-                   symbolTable.set(InternalSymbolName.Index, sourceIndex);
+                    symbolTable.set(InternalSymbolName.Index, sourceIndex);
                 }
                 members = symbolTable;
             }
