@@ -1,4 +1,4 @@
-// [[Reason: checker.typeToTypeNode fails on types that originate from node_module]] ////
+// [[Reason: checker.typeToTypeNode fails on types that originate from node_module.]] ////
 
 //// [tests/cases/conformance/node/nodeModulesExportsSpecifierGenerationDirectory.ts] ////
 
