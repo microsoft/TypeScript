@@ -40,13 +40,13 @@ import {
     Errors,
     ExternalProject,
     InferredProject,
+    isBackgroundProject,
     isConfiguredProject,
     isExternalProject,
     isInferredProject,
     maxFileSize,
     NormalizedPath,
     Project,
-    ProjectKind,
     ScriptVersionCache,
     ServerHost,
 } from "./_namespaces/ts.server";
@@ -682,7 +682,7 @@ export class ScriptInfo {
     isContainedByBackgroundProject() {
         return some(
             this.containingProjects,
-            p => p.projectKind === ProjectKind.AutoImportProvider || p.projectKind === ProjectKind.Auxiliary,
+            isBackgroundProject,
         );
     }
 
@@ -730,7 +730,7 @@ export class ScriptInfo {
  * reported as the default project for a ScriptInfo.
  */
 function ensurePrimaryProjectKind(project: Project | undefined) {
-    if (!project || project.projectKind === ProjectKind.AutoImportProvider || project.projectKind === ProjectKind.Auxiliary) {
+    if (!project || isBackgroundProject(project)) {
         return Errors.ThrowNoProject();
     }
     return project;

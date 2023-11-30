@@ -2,7 +2,7 @@
 
 === parseArrowFunctionWithFunctionReturnType.ts ===
 const fn = <T>(): (() => T) => null as any;
->fn : <T>() => () => T
-><T>(): (() => T) => null as any : <T>() => () => T
+>fn : <T>() => (() => T)
+><T>(): (() => T) => null as any : <T>() => (() => T)
 >null as any : any
 

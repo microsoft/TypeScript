@@ -1,9 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -82,7 +81,7 @@ describe("unittests:: tsserver:: symlinkCache", () => {
                 resolvedFileName: "/one/two/foo",
             },
         });
-        cache.setSymlinksFromResolutions([], map);
+        cache.setSymlinksFromResolutions(ts.noop, ts.noop, map);
     });
 });
 
@@ -96,7 +95,7 @@ function setup() {
         depSrcSubFolderIndexTs,
         link,
     ]);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    const session = new TestSession(host);
     const projectService = session.getProjectService();
     return {
         host,

@@ -231,3 +231,34 @@ describe("unittests:: Public APIs:: getChild* methods on EndOfFileToken with JSD
         assert.notEqual(endOfFileToken.getChildAt(0), /*expected*/ undefined);
     });
 });
+
+describe("unittests:: Public APIs:: get syntactic and effective modifiers", () => {
+    it("caches and reports correct flags in TS file", () => {
+        // https://github.com/microsoft/TypeScript/issues/42189
+        const content = `
+class C {
+    /** @private */
+    prop = 1;
+}`;
+        const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+        const classNode = sourceFile.statements[0] as ts.ClassDeclaration;
+        const propNode = classNode.members[0] as ts.PropertyDeclaration;
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.None, ts.getEffectiveModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+    });
+    it("caches and reports correct flags in JS file", () => {
+        // https://github.com/microsoft/TypeScript/issues/42189
+        const content = `
+class C {
+    /** @private */
+    prop = 1;
+}`;
+        const sourceFile = ts.createSourceFile("/file.js", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+        const classNode = sourceFile.statements[0] as ts.ClassDeclaration;
+        const propNode = classNode.members[0] as ts.PropertyDeclaration;
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.Private, ts.getEffectiveModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+    });
+});

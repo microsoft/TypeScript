@@ -26,7 +26,7 @@ unionTypeCallSignatures4.ts(25,18): error TS2554: Expected 2 arguments, but got 
     
     var f12345: F1 | F2 | F3 | F4 | F5;
     f12345("a");  // error
-    ~~~~~~~~~~~
+    ~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6210 unionTypeCallSignatures4.ts:5:23: An argument for 'b' was not provided.
     f12345("a", "b");

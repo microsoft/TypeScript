@@ -1,0 +1,21 @@
+/a.js(7,9): error TS2730: An arrow function cannot have a 'this' parameter.
+/a.js(10,21): error TS2339: Property 'fn' does not exist on type 'C'.
+
+
+==== /a.js (2 errors) ====
+    /**
+     * @typedef {{fn(a: string): void}} T
+     */
+    
+    class C {
+        /**
+         * @this {T}
+            ~~~~
+!!! error TS2730: An arrow function cannot have a 'this' parameter.
+         * @param {string} a
+         */
+        p = (a) => this.fn("" + a);
+                        ~~
+!!! error TS2339: Property 'fn' does not exist on type 'C'.
+    }
+    

@@ -105,10 +105,11 @@ var A = /** @class */ (function () {
 var C1 = /** @class */ (function (_super) {
     __extends(C1, _super);
     function C1() {
+        var _this = this;
         var env_1 = { stack: [], error: void 0, hasError: false };
         try {
             var x = __addDisposableResource(env_1, null, false);
-            return _super.call(this) || this;
+            _this = _super.call(this) || this;
         }
         catch (e_1) {
             env_1.error = e_1;
@@ -117,15 +118,17 @@ var C1 = /** @class */ (function (_super) {
         finally {
             __disposeResources(env_1);
         }
+        return _this;
     }
     return C1;
 }(A));
 var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2() {
+        var _this = this;
         var env_2 = { stack: [], error: void 0, hasError: false };
         try {
-            var _this = _super.call(this) || this;
+            _this = _super.call(this) || this;
             var x = __addDisposableResource(env_2, null, false);
         }
         catch (e_2) {
@@ -142,10 +145,11 @@ var C2 = /** @class */ (function (_super) {
 var C3 = /** @class */ (function (_super) {
     __extends(C3, _super);
     function C3() {
+        var _this = this;
         var env_3 = { stack: [], error: void 0, hasError: false };
         try {
-            var _this = _super.call(this) || this;
             var x = __addDisposableResource(env_3, null, false);
+            _this = _super.call(this) || this;
             _this.y = 1;
         }
         catch (e_3) {
@@ -162,10 +166,11 @@ var C3 = /** @class */ (function (_super) {
 var C4 = /** @class */ (function (_super) {
     __extends(C4, _super);
     function C4(y) {
+        var _this = this;
         var env_4 = { stack: [], error: void 0, hasError: false };
         try {
-            var _this = _super.call(this) || this;
             var x = __addDisposableResource(env_4, null, false);
+            _this = _super.call(this) || this;
             _this.y = y;
         }
         catch (e_4) {
@@ -182,10 +187,11 @@ var C4 = /** @class */ (function (_super) {
 var C5 = /** @class */ (function (_super) {
     __extends(C5, _super);
     function C5(y) {
+        var _this = this;
         var env_5 = { stack: [], error: void 0, hasError: false };
         try {
-            var _this = _super.call(this) || this;
             var x = __addDisposableResource(env_5, null, false);
+            _this = _super.call(this) || this;
             _this.y = y;
             _this.z = 1;
         }

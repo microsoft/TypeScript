@@ -57,6 +57,7 @@ import {
     getNormalizedAbsolutePath,
     isIncrementalCompilation,
     isWatchSet,
+    JSDocParsingMode,
     normalizePath,
     optionDeclarations,
     optionsForBuild,
@@ -394,7 +395,9 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     // Group synonyms: es6/es2015
                     const inverted: { [value: string]: string[]; } = {};
                     option.type.forEach((value, name) => {
-                        (inverted[value] ||= []).push(name);
+                        if (!option.deprecatedKeys?.has(name)) {
+                            (inverted[value] ||= []).push(name);
+                        }
                     });
                     return Object.entries(inverted)
                         .map(([, synonyms]) => synonyms.join("/"))
@@ -789,6 +792,9 @@ function reportWatchModeWithoutSysSupport(sys: System, reportDiagnostic: Diagnos
     return false;
 }
 
+// This could be inlined everywhere, but this is convenient for debugging and patching.
+const defaultJSDocParsingMode = JSDocParsingMode.ParseForTypeErrors;
+
 function performBuild(
     sys: System,
     cb: ExecuteCommandLineCallbacks,
@@ -839,6 +845,7 @@ function performBuild(
             createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
             createWatchStatusReporter(sys, buildOptions),
         );
+        buildHost.jsDocParsingMode = defaultJSDocParsingMode;
         const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
         updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
         const onWatchStatusChange = buildHost.onWatchStatusChange;
@@ -868,6 +875,7 @@ function performBuild(
         createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
         createReportErrorSummary(sys, buildOptions),
     );
+    buildHost.jsDocParsingMode = defaultJSDocParsingMode;
     const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
     updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
     const builder = createSolutionBuilder(buildHost, projects, buildOptions);
@@ -891,6 +899,7 @@ function performCompilation(
 ) {
     const { fileNames, options, projectReferences } = config;
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys);
+    host.jsDocParsingMode = defaultJSDocParsingMode;
     const currentDirectory = host.getCurrentDirectory();
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -924,6 +933,7 @@ function performIncrementalCompilation(
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
     const host = createIncrementalCompilerHost(options, sys);
+    host.jsDocParsingMode = defaultJSDocParsingMode;
     const exitStatus = ts_performIncrementalCompilation({
         host,
         system: sys,
@@ -975,6 +985,7 @@ function updateWatchCompilationHost(
     cb: ExecuteCommandLineCallbacks,
     watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
 ) {
+    watchCompilerHost.jsDocParsingMode = defaultJSDocParsingMode;
     updateCreateProgram(sys, watchCompilerHost, /*isBuildMode*/ false);
     const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
     watchCompilerHost.afterProgramCreate = builderProgram => {

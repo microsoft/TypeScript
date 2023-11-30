@@ -7,7 +7,6 @@ import {
     CaseClause,
     changeExtension,
     CharacterCodes,
-    CheckMode,
     combinePaths,
     comparePaths,
     comparePatternKeys,
@@ -32,6 +31,7 @@ import {
     endsWith,
     ensureTrailingDirectorySeparator,
     equateStringsCaseSensitive,
+    escapeString,
     Extension,
     fileExtensionIsOneOf,
     filter,
@@ -63,6 +63,7 @@ import {
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
     getTextOfJsxAttributeName,
+    getTextOfNode,
     getTokenAtPosition,
     hasIndexSignature,
     hasProperty,
@@ -95,7 +96,6 @@ import {
     LiteralTypeNode,
     mapDefined,
     MapLike,
-    ModuleKind,
     moduleResolutionUsesNodeModules,
     ModuleSpecifierEnding,
     moduleSpecifiers,
@@ -117,7 +117,6 @@ import {
     ScriptElementKind,
     ScriptElementKindModifier,
     ScriptTarget,
-    Signature,
     signatureHasRestParameter,
     SignatureHelp,
     singleElementArray,
@@ -262,8 +261,13 @@ function convertStringLiteralCompletions(
             return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, optionalReplacementSpan, entries };
         }
         case StringLiteralCompletionKind.Types: {
+            const quoteChar = contextToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral
+                ? CharacterCodes.backtick
+                : startsWith(getTextOfNode(contextToken), "'")
+                ? CharacterCodes.singleQuote
+                : CharacterCodes.doubleQuote;
             const entries = completion.types.map(type => ({
-                name: type.value,
+                name: escapeString(type.value, quoteChar),
                 kindModifiers: ScriptElementKindModifier.none,
                 kind: ScriptElementKind.string,
                 sortText: SortText.LocationPriority,
@@ -407,7 +411,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 // Get string literal completions from specialized signatures of the target
                 // i.e. declare function f(a: 'A');
                 // f("/*completion position*/")
-                return argumentInfo && (getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker, CheckMode.Normal)) || fromContextualType(ContextFlags.None);
+                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType(ContextFlags.None);
             }
             // falls through (is `require("")` or `require(""` or `import("")`)
 
@@ -497,12 +501,11 @@ function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: 
     return mapDefined(union.types, type => type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
 }
 
-function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker, checkMode = CheckMode.IsForStringLiteralArgumentCompletions): StringLiteralCompletionsFromTypes | undefined {
+function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes | undefined {
     let isNewIdentifier = false;
     const uniques = new Map<string, true>();
-    const candidates: Signature[] = [];
     const editingArgument = isJsxOpeningLikeElement(call) ? Debug.checkDefined(findAncestor(arg.parent, isJsxAttribute)) : arg;
-    checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates, checkMode);
+    const candidates = checker.getCandidateSignaturesForStringLiteralCompletions(call, editingArgument);
     const types = flatMap(candidates, candidate => {
         if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
         let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
@@ -646,14 +649,14 @@ function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOpti
  */
 function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, scriptDirectory: string, ignoreCase: boolean): readonly string[] {
     // Make all paths absolute/normalized if they are not already
-    rootDirs = rootDirs.map(rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
+    rootDirs = rootDirs.map(rootDirectory => ensureTrailingDirectorySeparator(normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory))));
 
     // Determine the path to the directory containing the script relative to the root directory it is contained within
     const relativeDirectory = firstDefined(rootDirs, rootDirectory => containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length) : undefined)!; // TODO: GH#18217
 
     // Now find a path for each potential directory that is to be merged with the one containing the script
     return deduplicate<string>(
-        [...rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)), scriptDirectory],
+        [...rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)), scriptDirectory].map(baseDir => removeTrailingDirectorySeparator(baseDir)),
         equateStringsCaseSensitive,
         compareStringsCaseSensitive,
     );
@@ -948,7 +951,7 @@ function getCompletionEntriesForNonRelativeModules(
                             }
                             const keys = getOwnKeys(exports);
                             const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
-                            const conditions = getConditions(compilerOptions, mode === ModuleKind.ESNext);
+                            const conditions = getConditions(compilerOptions, mode);
                             addCompletionEntriesFromPathsOrExports(
                                 result,
                                 fragmentSubpath,

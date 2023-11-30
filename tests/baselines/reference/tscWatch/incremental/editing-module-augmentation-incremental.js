@@ -25,35 +25,17 @@ export {}; declare module "classnames" { interface Result { foo } }
 import classNames from "classnames"; classNames().foo;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","incremental":true}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "incremental": true
+  }
+}
 
 
 /a/lib/tsc.js -i
 Output::
 
-
-Program root files: ["/users/username/projects/project/src/index.ts","/users/username/projects/project/src/types/classnames.d.ts"]
-Program options: {"module":1,"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/classnames/index.d.ts
-/users/username/projects/project/src/index.ts
-/users/username/projects/project/src/types/classnames.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/classnames/index.d.ts
-/users/username/projects/project/src/index.ts
-/users/username/projects/project/src/types/classnames.d.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/node_modules/classnames/index.d.ts (used version)
-/users/username/projects/project/src/index.ts (used version)
-/users/username/projects/project/src/types/classnames.d.ts (used version)
-
-exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/src/index.js]
 "use strict";
@@ -149,6 +131,36 @@ var classnames_1 = require("classnames");
 }
 
 
+Program root files: [
+  "/users/username/projects/project/src/index.ts",
+  "/users/username/projects/project/src/types/classnames.d.ts"
+]
+Program options: {
+  "module": 1,
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/classnames/index.d.ts
+/users/username/projects/project/src/index.ts
+/users/username/projects/project/src/types/classnames.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/classnames/index.d.ts
+/users/username/projects/project/src/index.ts
+/users/username/projects/project/src/types/classnames.d.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/classnames/index.d.ts (used version)
+/users/username/projects/project/src/index.ts (used version)
+/users/username/projects/project/src/types/classnames.d.ts (used version)
+
+exitCode:: ExitStatus.Success
+
 Change::
 
 Input::
@@ -166,25 +178,6 @@ Output::
 Found 1 error in src/index.ts[90m:1[0m
 
 
-
-Program root files: ["/users/username/projects/project/src/index.ts","/users/username/projects/project/src/types/classnames.d.ts"]
-Program options: {"module":1,"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/classnames/index.d.ts
-/users/username/projects/project/src/index.ts
-/users/username/projects/project/src/types/classnames.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/src/index.ts
-/users/username/projects/project/src/types/classnames.d.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/src/types/classnames.d.ts (used version)
-/users/username/projects/project/src/index.ts (computed .d.ts)
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/users/username/projects/project/src/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -285,3 +278,29 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
   "size": 1250
 }
 
+
+Program root files: [
+  "/users/username/projects/project/src/index.ts",
+  "/users/username/projects/project/src/types/classnames.d.ts"
+]
+Program options: {
+  "module": 1,
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/classnames/index.d.ts
+/users/username/projects/project/src/index.ts
+/users/username/projects/project/src/types/classnames.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/src/index.ts
+/users/username/projects/project/src/types/classnames.d.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/src/types/classnames.d.ts (used version)
+/users/username/projects/project/src/index.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
