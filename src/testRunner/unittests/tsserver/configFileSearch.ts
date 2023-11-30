@@ -1,7 +1,8 @@
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createProjectService,
+    closeFilesForSession,
+    openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -20,17 +21,17 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             content: "{}",
         };
         const host = createServerHost([f1, configFile]);
-        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/a");
+        const session = new TestSession(host);
+        openFilesForSession([{ file: f1, projectRootPath: "/a" }], session);
 
-        service.closeClientFile(f1.path);
-        service.openClientFile(f1.path);
-        baselineTsserverLogs("configFileSerach", "should stop at projectRootPath if given", service);
+        closeFilesForSession([f1], session);
+        openFilesForSession([f1], session);
+        baselineTsserverLogs("configFileSearch", "should stop at projectRootPath if given", session);
     });
 
     it("should use projectRootPath when searching for inferred project again", () => {
-        const projectDir = "/a/b/projects/project";
-        const configFileLocation = `${projectDir}/src`;
+        const projectRootPath = "/a/b/projects/project";
+        const configFileLocation = `${projectRootPath}/src`;
         const f1 = {
             path: `${configFileLocation}/file1.ts`,
             content: "",
@@ -44,18 +45,18 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             content: "{}",
         };
         const host = createServerHost([f1, libFile, configFile, configFile2]);
-        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
+        const session = new TestSession(host);
+        openFilesForSession([{ file: f1, projectRootPath }], session);
 
         // Delete config file - should create inferred project and not configured project
         host.deleteFile(configFile.path);
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again", service);
+        baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again", session);
     });
 
     it("should use projectRootPath when searching for inferred project again 2", () => {
-        const projectDir = "/a/b/projects/project";
-        const configFileLocation = `${projectDir}/src`;
+        const projectRootPath = "/a/b/projects/project";
+        const configFileLocation = `${projectRootPath}/src`;
         const f1 = {
             path: `${configFileLocation}/file1.ts`,
             content: "",
@@ -69,17 +70,17 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             content: "{}",
         };
         const host = createServerHost([f1, libFile, configFile, configFile2]);
-        const service = createProjectService(host, {
+        const session = new TestSession({
+            host,
             useSingleInferredProject: true,
             useInferredProjectPerProjectRoot: true,
-            logger: createLoggerWithInMemoryLogs(host),
         });
-        service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
+        openFilesForSession([{ file: f1, projectRootPath }], session);
 
         // Delete config file - should create inferred project with project root path set
         host.deleteFile(configFile.path);
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again 2", service);
+        baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again 2", session);
     });
 
     describe("when the opened file is not from project root", () => {
@@ -94,13 +95,13 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         };
         function openClientFile(files: File[]) {
             const host = createServerHost(files);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-            projectService.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/a/b/projects/proj");
-            return { host, projectService };
+            const session = new TestSession(host);
+            openFilesForSession([{ file, projectRootPath: "/a/b/projects/proj" }], session);
+            return { host, session };
         }
 
         it("tsconfig for the file exists", () => {
-            const { host, projectService } = openClientFile([file, libFile, tsconfig]);
+            const { host, session } = openClientFile([file, libFile, tsconfig]);
 
             host.deleteFile(tsconfig.path);
             host.runQueuedTimeoutCallbacks();
@@ -108,11 +109,11 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             host.writeFile(tsconfig.path, tsconfig.content);
             host.runQueuedTimeoutCallbacks();
 
-            baselineTsserverLogs("configFileSearch", "tsconfig for the file exists", projectService);
+            baselineTsserverLogs("configFileSearch", "tsconfig for the file exists", session);
         });
 
         it("tsconfig for the file does not exist", () => {
-            const { host, projectService } = openClientFile([file, libFile]);
+            const { host, session } = openClientFile([file, libFile]);
 
             host.writeFile(tsconfig.path, tsconfig.content);
             host.runQueuedTimeoutCallbacks();
@@ -120,7 +121,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             host.deleteFile(tsconfig.path);
             host.runQueuedTimeoutCallbacks();
 
-            baselineTsserverLogs("configFileSearch", "tsconfig for the file does not exist", projectService);
+            baselineTsserverLogs("configFileSearch", "tsconfig for the file does not exist", session);
         });
     });
 
@@ -129,9 +130,9 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             it(scenario, () => {
                 const path = `/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js`;
                 const host = createServerHost([libFile, { path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-                service.openClientFile(path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRootPath);
-                baselineTsserverLogs("configFileSearch", scenario, service);
+                const session = new TestSession(host);
+                openFilesForSession([{ file: path, projectRootPath }], session);
+                baselineTsserverLogs("configFileSearch", scenario, session);
             });
         }
         verifyConfigFileWatch("when projectRootPath is not present", /*projectRootPath*/ undefined);

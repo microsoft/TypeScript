@@ -1,8 +1,0 @@
-{
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "declarationMap": true,
-        "skipDefaultLibCheck": true
-    }
-}

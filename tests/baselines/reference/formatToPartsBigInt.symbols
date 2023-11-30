@@ -7,14 +7,14 @@
 new Intl.NumberFormat("fr").formatToParts(3000n);
 >new Intl.NumberFormat("fr").formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.esnext.intl.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --) ... and 4 more)
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
 >NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.esnext.intl.d.ts, --, --))
 >formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
 
 new Intl.NumberFormat("fr").formatToParts(BigInt(123));
 >new Intl.NumberFormat("fr").formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.esnext.intl.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --) ... and 4 more)
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
 >NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.esnext.intl.d.ts, --, --))
 >formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
 >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))

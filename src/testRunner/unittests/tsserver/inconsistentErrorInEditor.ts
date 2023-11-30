@@ -1,8 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
+    TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
@@ -11,7 +10,7 @@ import {
 describe("unittests:: tsserver:: inconsistentErrorInEditor", () => {
     it("should not error", () => {
         const host = createServerHost([]);
-        const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
@@ -43,7 +42,7 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor", () => {
 describe("unittests:: tsserver:: inconsistentErrorInEditor2", () => {
     it("should not error", () => {
         const host = createServerHost([]);
-        const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {

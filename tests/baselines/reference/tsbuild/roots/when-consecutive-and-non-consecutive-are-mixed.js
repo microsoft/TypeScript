@@ -52,7 +52,17 @@ export const random = "hello";
 export const random = "hello";
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"composite":true},"include":["file*.ts","nonconsecutive*.ts","asArray*.ts","anotherNonConsecutive.ts"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "file*.ts",
+    "nonconsecutive*.ts",
+    "asArray*.ts",
+    "anotherNonConsecutive.ts"
+  ]
+}
 
 
 
