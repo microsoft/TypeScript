@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/conflictingTypeParameterSymbolTransfer.ts] ////
+
+=== conflictingTypeParameterSymbolTransfer.ts ===
+// @strict
+
+// Via #56620
+
+class Base<U> { }
+>Base : Base<U>
+
+export class C2<T> extends Base<unknown> {
+>C2 : C2<T>
+>Base : Base<unknown>
+
+    T: number;
+>T : number
+
+    constructor(T: number) {
+>T : number
+
+        super();
+>super() : void
+>super : typeof Base
+
+        // Should not error
+        this.T = T;
+>this.T = T : number
+>this.T : number
+>this : this
+>T : number
+>T : number
+
+        // Should error
+        let a: U = null;
+>a : U
+    }
+}
+

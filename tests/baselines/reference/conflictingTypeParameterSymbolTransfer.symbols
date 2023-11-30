@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/conflictingTypeParameterSymbolTransfer.ts] ////
+
+=== conflictingTypeParameterSymbolTransfer.ts ===
+// @strict
+
+// Via #56620
+
+class Base<U> { }
+>Base : Symbol(Base, Decl(conflictingTypeParameterSymbolTransfer.ts, 0, 0))
+>U : Symbol(U, Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 11))
+
+export class C2<T> extends Base<unknown> {
+>C2 : Symbol(C2, Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 17))
+>T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 5, 16), Decl(conflictingTypeParameterSymbolTransfer.ts, 5, 42))
+>Base : Symbol(Base, Decl(conflictingTypeParameterSymbolTransfer.ts, 0, 0))
+
+    T: number;
+>T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 5, 16), Decl(conflictingTypeParameterSymbolTransfer.ts, 5, 42))
+
+    constructor(T: number) {
+>T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 7, 16))
+
+        super();
+>super : Symbol(Base, Decl(conflictingTypeParameterSymbolTransfer.ts, 0, 0))
+
+        // Should not error
+        this.T = T;
+>this.T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 5, 16), Decl(conflictingTypeParameterSymbolTransfer.ts, 5, 42))
+>this : Symbol(C2, Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 17))
+>T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 5, 16), Decl(conflictingTypeParameterSymbolTransfer.ts, 5, 42))
+>T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 7, 16))
+
+        // Should error
+        let a: U = null;
+>a : Symbol(a, Decl(conflictingTypeParameterSymbolTransfer.ts, 13, 11))
+>U : Symbol(U)
+    }
+}
+
