@@ -24,16 +24,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 5
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
 
       - name: Install dependencies
         run: npm ci
 
-      - uses: microsoft/RichCodeNavIndexer@v0.1
+      - uses: microsoft/RichCodeNavIndexer@e444937494b8941cc2bcccf2bcf2cd595d402f6b # v0.1
         with:
           languages: typescript
           repo-token: ${{ secrets.GITHUB_TOKEN }}

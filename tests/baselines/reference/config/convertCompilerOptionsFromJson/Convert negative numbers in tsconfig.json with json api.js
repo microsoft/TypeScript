@@ -7,19 +7,19 @@ Fs::
 
 //// [/apath/tsconfig.json]
 {
- "compilerOptions": {
-  "allowJs": true,
-  "maxNodeModuleJsDepth": -1
- }
+  "compilerOptions": {
+    "allowJs": true,
+    "maxNodeModuleJsDepth": -1
+  }
 }
 
 
 configFileName:: tsconfig.json
 CompilerOptions::
 {
- "allowJs": true,
- "maxNodeModuleJsDepth": -1,
- "configFilePath": "tsconfig.json"
+  "allowJs": true,
+  "maxNodeModuleJsDepth": -1,
+  "configFilePath": "tsconfig.json"
 }
 Errors::
 

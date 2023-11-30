@@ -3,6 +3,9 @@ import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineParseConfig,
     baselineParseConfigHost,
 } from "./helpers";
@@ -12,122 +15,122 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
         cwd,
         files: {
             [root]: {
-                "dev/node_modules/@foo/tsconfig/package.json": JSON.stringify({
+                "dev/node_modules/@foo/tsconfig/package.json": jsonToReadableText({
                     name: "@foo/tsconfig",
                     version: "1.0.0",
                     exports: {
                         ".": "./src/tsconfig.json",
                     },
                 }),
-                "dev/node_modules/@foo/tsconfig/src/tsconfig.json": JSON.stringify({
+                "dev/node_modules/@foo/tsconfig/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         strict: true,
                     },
                 }),
-                "dev/tsconfig.extendsFoo.json": JSON.stringify({
+                "dev/tsconfig.extendsFoo.json": jsonToReadableText({
                     extends: "@foo/tsconfig",
                     files: [
                         "main.ts",
                     ],
                 }),
-                "dev/node_modules/config-box/package.json": JSON.stringify({
+                "dev/node_modules/config-box/package.json": jsonToReadableText({
                     name: "config-box",
                     version: "1.0.0",
                     tsconfig: "./strict.json",
                 }),
-                "dev/node_modules/config-box/strict.json": JSON.stringify({
+                "dev/node_modules/config-box/strict.json": jsonToReadableText({
                     compilerOptions: {
                         strict: true,
                     },
                 }),
-                "dev/node_modules/config-box/unstrict.json": JSON.stringify({
+                "dev/node_modules/config-box/unstrict.json": jsonToReadableText({
                     compilerOptions: {
                         strict: false,
                     },
                 }),
-                "dev/tsconfig.extendsBox.json": JSON.stringify({
+                "dev/tsconfig.extendsBox.json": jsonToReadableText({
                     extends: "config-box",
                     files: [
                         "main.ts",
                     ],
                 }),
-                "dev/tsconfig.extendsStrict.json": JSON.stringify({
+                "dev/tsconfig.extendsStrict.json": jsonToReadableText({
                     extends: "config-box/strict",
                     files: [
                         "main.ts",
                     ],
                 }),
-                "dev/tsconfig.extendsUnStrict.json": JSON.stringify({
+                "dev/tsconfig.extendsUnStrict.json": jsonToReadableText({
                     extends: "config-box/unstrict",
                     files: [
                         "main.ts",
                     ],
                 }),
-                "dev/tsconfig.extendsStrictExtension.json": JSON.stringify({
+                "dev/tsconfig.extendsStrictExtension.json": jsonToReadableText({
                     extends: "config-box/strict.json",
                     files: [
                         "main.ts",
                     ],
                 }),
-                "dev/node_modules/config-box-implied/package.json": JSON.stringify({
+                "dev/node_modules/config-box-implied/package.json": jsonToReadableText({
                     name: "config-box-implied",
                     version: "1.0.0",
                 }),
-                "dev/node_modules/config-box-implied/tsconfig.json": JSON.stringify({
+                "dev/node_modules/config-box-implied/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         strict: true,
                     },
                 }),
-                "dev/node_modules/config-box-implied/unstrict/tsconfig.json": JSON.stringify({
+                "dev/node_modules/config-box-implied/unstrict/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         strict: false,
                     },
                 }),
-                "dev/tsconfig.extendsBoxImplied.json": JSON.stringify({
+                "dev/tsconfig.extendsBoxImplied.json": jsonToReadableText({
                     extends: "config-box-implied",
                     files: [
                         "main.ts",
                     ],
                 }),
-                "dev/tsconfig.extendsBoxImpliedUnstrict.json": JSON.stringify({
+                "dev/tsconfig.extendsBoxImpliedUnstrict.json": jsonToReadableText({
                     extends: "config-box-implied/unstrict",
                     files: [
                         "main.ts",
                     ],
                 }),
-                "dev/tsconfig.extendsBoxImpliedUnstrictExtension.json": JSON.stringify({
+                "dev/tsconfig.extendsBoxImpliedUnstrictExtension.json": jsonToReadableText({
                     extends: "config-box-implied/unstrict/tsconfig",
                     files: [
                         "main.ts",
                     ],
                 }),
-                "dev/tsconfig.extendsBoxImpliedPath.json": JSON.stringify({
+                "dev/tsconfig.extendsBoxImpliedPath.json": jsonToReadableText({
                     extends: "config-box-implied/tsconfig.json",
                     files: [
                         "main.ts",
                     ],
                 }),
-                "dev/tsconfig.json": JSON.stringify({
+                "dev/tsconfig.json": jsonToReadableText({
                     extends: "./configs/base",
                     files: [
                         "main.ts",
                         "supplemental.ts",
                     ],
                 }),
-                "dev/tsconfig.nostrictnull.json": JSON.stringify({
+                "dev/tsconfig.nostrictnull.json": jsonToReadableText({
                     extends: "./tsconfig",
                     compilerOptions: {
                         strictNullChecks: false,
                     },
                 }),
-                "dev/configs/base.json": JSON.stringify({
+                "dev/configs/base.json": jsonToReadableText({
                     compilerOptions: {
                         allowJs: true,
                         noImplicitAny: true,
                         strictNullChecks: true,
                     },
                 }),
-                "dev/configs/tests.json": JSON.stringify({
+                "dev/configs/tests.json": jsonToReadableText({
                     compilerOptions: {
                         preserveConstEnums: true,
                         removeComments: false,
@@ -141,55 +144,55 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                         "../tests/**/*.ts",
                     ],
                 }),
-                "dev/circular.json": JSON.stringify({
+                "dev/circular.json": jsonToReadableText({
                     extends: "./circular2",
                     compilerOptions: {
                         module: "amd",
                     },
                 }),
-                "dev/circular2.json": JSON.stringify({
+                "dev/circular2.json": jsonToReadableText({
                     extends: "./circular",
                     compilerOptions: {
                         module: "commonjs",
                     },
                 }),
-                "dev/missing.json": JSON.stringify({
+                "dev/missing.json": jsonToReadableText({
                     extends: "./missing2",
                     compilerOptions: {
                         types: [],
                     },
                 }),
-                "dev/failure.json": JSON.stringify({
+                "dev/failure.json": jsonToReadableText({
                     extends: "./failure2.json",
                     compilerOptions: {
                         typeRoots: [],
                     },
                 }),
-                "dev/failure2.json": JSON.stringify({
+                "dev/failure2.json": jsonToReadableText({
                     excludes: ["*.js"],
                 }),
-                "dev/configs/first.json": JSON.stringify({
+                "dev/configs/first.json": jsonToReadableText({
                     extends: "./base",
                     compilerOptions: {
                         module: "commonjs",
                     },
                     files: ["../main.ts"],
                 }),
-                "dev/configs/second.json": JSON.stringify({
+                "dev/configs/second.json": jsonToReadableText({
                     extends: "./base",
                     compilerOptions: {
                         module: "amd",
                     },
                     include: ["../supplemental.*"],
                 }),
-                "dev/configs/third.json": JSON.stringify({
+                "dev/configs/third.json": jsonToReadableText({
                     extends: "./second",
                     compilerOptions: {
                         module: null, // eslint-disable-line no-null/no-null
                     },
                     include: ["../supplemental.*"],
                 }),
-                "dev/configs/fourth.json": JSON.stringify({
+                "dev/configs/fourth.json": jsonToReadableText({
                     extends: "./third",
                     compilerOptions: {
                         module: "system",
@@ -197,35 +200,35 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     include: null, // eslint-disable-line no-null/no-null
                     files: ["../main.ts"],
                 }),
-                "dev/configs/fifth.json": JSON.stringify({
+                "dev/configs/fifth.json": jsonToReadableText({
                     extends: "./fourth",
                     include: ["../tests/utils.ts"],
                     files: [],
                 }),
-                "dev/extends.json": JSON.stringify({ extends: 42 }),
-                "dev/extends2.json": JSON.stringify({ extends: "configs/base" }),
-                "dev/extends3.json": JSON.stringify({ extends: "" }),
-                "dev/extends4.json": JSON.stringify({ extends: [""] }),
+                "dev/extends.json": jsonToReadableText({ extends: 42 }),
+                "dev/extends2.json": jsonToReadableText({ extends: "configs/base" }),
+                "dev/extends3.json": jsonToReadableText({ extends: "" }),
+                "dev/extends4.json": jsonToReadableText({ extends: [""] }),
                 "dev/main.ts": "",
                 "dev/supplemental.ts": "",
                 "dev/tests/unit/spec.ts": "",
                 "dev/tests/utils.ts": "",
                 "dev/tests/scenarios/first.json": "",
                 "dev/tests/baselines/first/output.ts": "",
-                "dev/configs/extendsArrayFirst.json": JSON.stringify({
+                "dev/configs/extendsArrayFirst.json": jsonToReadableText({
                     compilerOptions: {
                         allowJs: true,
                         noImplicitAny: true,
                         strictNullChecks: true,
                     },
                 }),
-                "dev/configs/extendsArraySecond.json": JSON.stringify({
+                "dev/configs/extendsArraySecond.json": jsonToReadableText({
                     compilerOptions: {
                         module: "amd",
                     },
                     include: ["../supplemental.*"],
                 }),
-                "dev/configs/extendsArrayThird.json": JSON.stringify({
+                "dev/configs/extendsArrayThird.json": jsonToReadableText({
                     compilerOptions: {
                         module: null, // eslint-disable-line no-null/no-null
                         noImplicitAny: false,
@@ -233,7 +236,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     extends: "./extendsArrayFirst",
                     include: ["../supplemental.*"],
                 }),
-                "dev/configs/extendsArrayFourth.json": JSON.stringify({
+                "dev/configs/extendsArrayFourth.json": jsonToReadableText({
                     compilerOptions: {
                         module: "system",
                         strictNullChecks: false,
@@ -241,17 +244,17 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     include: null, // eslint-disable-line no-null/no-null
                     files: ["../main.ts"],
                 }),
-                "dev/configs/extendsArrayFifth.json": JSON.stringify({
+                "dev/configs/extendsArrayFifth.json": jsonToReadableText({
                     extends: ["./extendsArrayFirst", "./extendsArraySecond", "./extendsArrayThird", "./extendsArrayFourth"],
                     files: [],
                 }),
-                "dev/extendsArrayFails.json": JSON.stringify({
+                "dev/extendsArrayFails.json": jsonToReadableText({
                     extends: ["./missingFile"],
                     compilerOptions: {
                         types: [],
                     },
                 }),
-                "dev/extendsArrayFails2.json": JSON.stringify({ extends: [42] }),
+                "dev/extendsArrayFails2.json": jsonToReadableText({ extends: [42] }),
             },
         },
     });
@@ -314,7 +317,7 @@ describe("unittests:: config:: configurationExtension", () => {
                     configFileName: entry,
                     baselineParsed: (baseline, parsed) => {
                         baseline.push("CompilerOptions::");
-                        baseline.push(JSON.stringify(parsed.options, undefined, " "));
+                        baseline.push(jsonToReadableText(parsed.options));
                         baseline.push("FileNames::");
                         baseline.push(parsed.fileNames.join());
                     },

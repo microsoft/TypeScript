@@ -204,12 +204,12 @@ React.createElement(RenderArray, null);
 React.createElement(RenderArray, { title: "react" });
 React.createElement(RenderArray, { excessProp: true });
 // React Server Component
-var RenderPromise = function (_a) {
-    var title = _a.title;
-    return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_b) {
+var RenderPromise = function (_a) { return __awaiter(void 0, [_a], void 0, function (_b) {
+    var title = _b.title;
+    return __generator(this, function (_c) {
         return [2 /*return*/, "react"];
-    }); });
-};
+    });
+}); };
 Component = RenderPromise;
 React.createElement(RenderPromise, null);
 React.createElement(RenderPromise, { title: "react" });

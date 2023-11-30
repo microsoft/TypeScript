@@ -1,0 +1,129 @@
+controlFlowAliasedDiscriminants.ts(39,9): error TS18048: 'data1' is possibly 'undefined'.
+controlFlowAliasedDiscriminants.ts(40,9): error TS18048: 'data2' is possibly 'undefined'.
+controlFlowAliasedDiscriminants.ts(65,9): error TS18048: 'bar2' is possibly 'undefined'.
+controlFlowAliasedDiscriminants.ts(66,9): error TS18048: 'bar3' is possibly 'undefined'.
+controlFlowAliasedDiscriminants.ts(86,14): error TS1360: Type 'string | number' does not satisfy the expected type 'string'.
+  Type 'number' is not assignable to type 'string'.
+controlFlowAliasedDiscriminants.ts(98,19): error TS1360: Type 'string | number' does not satisfy the expected type 'string'.
+  Type 'number' is not assignable to type 'string'.
+
+
+==== controlFlowAliasedDiscriminants.ts (6 errors) ====
+    type UseQueryResult<T> = {
+        isSuccess: false;
+        data: undefined;
+    } | {
+        isSuccess: true;
+        data: T
+    };
+    
+    function useQuery(): UseQueryResult<number> {
+        return {
+            isSuccess: false,
+            data: undefined,
+        };
+    }
+    
+    const { data: data1, isSuccess: isSuccess1 } = useQuery();
+    const { data: data2, isSuccess: isSuccess2 } = useQuery();
+    const { data: data3, isSuccess: isSuccess3 } = useQuery();
+    
+    if (isSuccess1 && isSuccess2 && isSuccess3) {
+        data1.toExponential();  // should ok
+        data2.toExponential();  // should ok
+        data3.toExponential();  // should ok
+    }
+    
+    const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
+    if (areSuccess) {
+        data1.toExponential();  // should ok
+        data2.toExponential();  // should ok
+        data3.toExponential();  // should ok
+    }
+    
+    {
+        let { data: data1, isSuccess: isSuccess1 } = useQuery();
+        let { data: data2, isSuccess: isSuccess2 } = useQuery();
+        const { data: data3, isSuccess: isSuccess3 } = useQuery();
+        const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
+        if (areSuccess) {
+            data1.toExponential();  // should error
+            ~~~~~
+!!! error TS18048: 'data1' is possibly 'undefined'.
+            data2.toExponential();  // should error
+            ~~~~~
+!!! error TS18048: 'data2' is possibly 'undefined'.
+            data3.toExponential();  // should ok
+        }
+    }
+    
+    declare function getArrayResult(): [true, number] | [false, undefined];
+    {
+        const [foo1, bar1] = getArrayResult();
+        const [foo2, bar2] = getArrayResult();
+        const [foo3, bar3] = getArrayResult();
+        const arrayAllSuccess = foo1 && foo2 && foo3;
+        if (arrayAllSuccess) {
+            bar1.toExponential();  // should ok
+            bar2.toExponential();  // should ok
+            bar3.toExponential();  // should ok
+        }
+    }
+    
+    {
+        const [foo1, bar1] = getArrayResult();
+        let [foo2, bar2] = getArrayResult();
+        let [foo3, bar3] = getArrayResult();
+        const arrayAllSuccess = foo1 && foo2 && foo3;
+        if (arrayAllSuccess) {
+            bar1.toExponential();   // should ok
+            bar2.toExponential();   // should error
+            ~~~~
+!!! error TS18048: 'bar2' is possibly 'undefined'.
+            bar3.toExponential();   // should error
+            ~~~~
+!!! error TS18048: 'bar3' is possibly 'undefined'.
+        }
+    }
+    
+    type Nested = {
+        type: 'string';
+        resp: {
+            data: string
+        }
+    } | {
+        type: 'number';
+        resp: {
+            data: number;
+        }
+    }
+    
+    {
+        let resp!: Nested;
+        const { resp: { data }, type } = resp;
+        if (type === 'string') {
+            data satisfies string;
+                 ~~~~~~~~~
+!!! error TS1360: Type 'string | number' does not satisfy the expected type 'string'.
+!!! error TS1360:   Type 'number' is not assignable to type 'string'.
+        }
+        if (resp.type === 'string') {
+            resp.resp.data satisfies string;
+        }    
+    }
+    
+    {
+       
+        let resp!: Nested;
+        const { resp: { data: dataAlias }, type } = resp;
+        if (type === 'string') {
+            dataAlias satisfies string;
+                      ~~~~~~~~~
+!!! error TS1360: Type 'string | number' does not satisfy the expected type 'string'.
+!!! error TS1360:   Type 'number' is not assignable to type 'string'.
+        }
+        if (resp.type === 'string') {
+            resp.resp.data satisfies string;
+        }    
+    }
+    

@@ -68,7 +68,7 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 
     forEach(ar, (el) => {
 >forEach(ar, (el) => {        if (f(el)) {            ret.push(el);        }    } ) : void
->forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
+>forEach : <A_1>(list: A_1[], f: (a: A_1, n?: number) => void) => void
 >ar : A[]
 >(el) => {        if (f(el)) {            ret.push(el);        }    } : (el: A) => void
 >el : A
@@ -151,10 +151,10 @@ function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
 
     return compose(length2, cfilter(pred));
 >compose(length2, cfilter(pred)) : (a: A[]) => number
->compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
->length2 : <A>(ar: A[]) => number
+>compose : <A_1, B, C>(f: (b: B) => C, g: (a: A_1) => B) => (a: A_1) => C
+>length2 : <A_1>(ar: A_1[]) => number
 >cfilter(pred) : (bx: A[]) => A[]
->cfilter : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
+>cfilter : <A_1>(ax: (a: A_1) => boolean) => (bx: A_1[]) => A_1[]
 >pred : (a: A) => boolean
 }
 
@@ -167,12 +167,12 @@ function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
     var where = cfilter(pred);
 >where : (bx: A[]) => A[]
 >cfilter(pred) : (bx: A[]) => A[]
->cfilter : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
+>cfilter : <A_1>(ax: (a: A_1) => boolean) => (bx: A_1[]) => A_1[]
 >pred : (a: A) => boolean
 
     return compose(length2, where);
 >compose(length2, where) : (a: A[]) => number
->compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
->length2 : <A>(ar: A[]) => number
+>compose : <A_1, B, C>(f: (b: B) => C, g: (a: A_1) => B) => (a: A_1) => C
+>length2 : <A_1>(ar: A_1[]) => number
 >where : (bx: A[]) => A[]
 }

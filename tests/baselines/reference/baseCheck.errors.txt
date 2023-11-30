@@ -30,7 +30,7 @@ baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
     }
     
     class D extends C { constructor(public z: number) { super(this.z) }  } // too few params
-                                                        ~~~~~~~~~~~~~
+                                                        ~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6210 baseCheck.ts:1:34: An argument for 'y' was not provided.
                                                               ~~~~
