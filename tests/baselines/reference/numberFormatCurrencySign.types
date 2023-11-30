@@ -6,9 +6,9 @@ const str = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD',
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format(999999) : string
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format : { (value: number): string; (value: number | bigint): string; }
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }) : Intl.NumberFormat
->Intl.NumberFormat : { (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; new (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions | undefined): string[]; readonly prototype: Intl.NumberFormat; }
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : { (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; new (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions | undefined): string[]; readonly prototype: Intl.NumberFormat; }
+>NumberFormat : Intl.NumberFormatConstructor
 >'en-NZ' : "en-NZ"
 >{ style: 'currency', currency: 'NZD', currencySign: 'accounting' } : { style: string; currency: string; currencySign: string; }
 >style : string

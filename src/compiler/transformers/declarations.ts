@@ -69,6 +69,7 @@ import {
     getLeadingCommentRangesOfNode,
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
+    getNormalizedAbsolutePath,
     getOriginalNodeId,
     getOutputPathsFor,
     getParseTreeNode,
@@ -219,7 +220,6 @@ import {
     SymbolTracker,
     SyntaxKind,
     toFileNameLowerCase,
-    toPath,
     TransformationContext,
     transformNodes,
     tryCast,
@@ -785,8 +785,8 @@ export function transformDeclarations(context: TransformationContext) {
                     const specifier = moduleSpecifiers.getModuleSpecifier(
                         options,
                         currentSourceFile,
-                        toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
-                        toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
+                        getNormalizedAbsolutePath(outputFilePath, host.getCurrentDirectory()),
+                        getNormalizedAbsolutePath(declFileName, host.getCurrentDirectory()),
                         host,
                     );
                     if (!pathIsRelative(specifier)) {

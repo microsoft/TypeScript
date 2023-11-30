@@ -130,7 +130,7 @@ Output::
 //// [/a/b/referenceFile1.js] file written with same contents
 
 PolledWatches::
-/a/b/modulefile1.ts: *new*
+/a/b/moduleFile1.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::

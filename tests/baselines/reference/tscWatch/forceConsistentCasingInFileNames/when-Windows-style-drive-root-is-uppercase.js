@@ -85,7 +85,7 @@ C:/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-c:/project: *new*
+C:/project: *new*
   {}
 
 Program root files: [

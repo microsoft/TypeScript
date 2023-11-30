@@ -1,7 +1,6 @@
 import {
     append,
     appendIfUnique,
-    arrayFrom,
     arrayIsEqualTo,
     changeAnyExtension,
     CharacterCodes,
@@ -901,11 +900,24 @@ export interface NonRelativeModuleNameResolutionCache extends NonRelativeNameRes
     getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
 }
 
+/** @internal */
+export interface MissingPackageJsonInfo {
+    packageDirectory: string;
+    directoryExists: boolean;
+}
+
+/** @internal */
+export type PackageJsonInfoCacheEntry = PackageJsonInfo | MissingPackageJsonInfo;
+
+/** @internal */
+export function isPackageJsonInfo(entry: PackageJsonInfoCacheEntry | undefined): entry is PackageJsonInfo {
+    return !!(entry as PackageJsonInfo | undefined)?.contents;
+}
+
 export interface PackageJsonInfoCache {
-    /** @internal */ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
-    /** @internal */ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
-    /** @internal */ entries(): [Path, PackageJsonInfo | boolean][];
-    /** @internal */ getInternalMap(): Map<Path, PackageJsonInfo | boolean> | undefined;
+    /** @internal */ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfoCacheEntry | undefined;
+    /** @internal */ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfoCacheEntry): void;
+    /** @internal */ getInternalMap(): Map<Path, PackageJsonInfoCacheEntry> | undefined;
     clear(): void;
     /** @internal */ isReadonly?: boolean;
 }
@@ -1021,20 +1033,16 @@ export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | und
 }
 
 function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): PackageJsonInfoCache {
-    let cache: Map<Path, PackageJsonInfo | boolean> | undefined;
-    return { getPackageJsonInfo, setPackageJsonInfo, clear, entries, getInternalMap };
+    let cache: Map<Path, PackageJsonInfoCacheEntry> | undefined;
+    return { getPackageJsonInfo, setPackageJsonInfo, clear, getInternalMap };
     function getPackageJsonInfo(packageJsonPath: string) {
         return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
     }
-    function setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean) {
+    function setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfoCacheEntry) {
         (cache ||= new Map()).set(toPath(packageJsonPath, currentDirectory, getCanonicalFileName), info);
     }
     function clear() {
         cache = undefined;
-    }
-    function entries() {
-        const iter = cache?.entries();
-        return iter ? arrayFrom(iter) : [];
     }
     function getInternalMap() {
         return cache;
@@ -2391,7 +2399,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
 
     const existing = state.packageJsonInfoCache?.getPackageJsonInfo(packageJsonPath);
     if (existing !== undefined) {
-        if (typeof existing !== "boolean") {
+        if (isPackageJsonInfo(existing)) {
             if (traceEnabled) trace(host, Diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath);
             state.affectingLocations?.push(packageJsonPath);
             return existing.packageDirectory === packageDirectory ?
@@ -2399,7 +2407,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
                 { packageDirectory, contents: existing.contents };
         }
         else {
-            if (existing && traceEnabled) trace(host, Diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath);
+            if (existing.directoryExists && traceEnabled) trace(host, Diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath);
             state.failedLookupLocations?.push(packageJsonPath);
             return undefined;
         }
@@ -2419,7 +2427,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
         if (directoryExists && traceEnabled) {
             trace(host, Diagnostics.File_0_does_not_exist, packageJsonPath);
         }
-        if (state.packageJsonInfoCache && !state.packageJsonInfoCache.isReadonly) state.packageJsonInfoCache.setPackageJsonInfo(packageJsonPath, directoryExists);
+        if (state.packageJsonInfoCache && !state.packageJsonInfoCache.isReadonly) state.packageJsonInfoCache.setPackageJsonInfo(packageJsonPath, { packageDirectory, directoryExists });
         // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
         state.failedLookupLocations?.push(packageJsonPath);
     }

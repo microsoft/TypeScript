@@ -162,7 +162,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/users/name/projects/web: *new*
+/Users/name/projects/web: *new*
   {}
 
 Program root files: [

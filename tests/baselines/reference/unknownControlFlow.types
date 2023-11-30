@@ -819,47 +819,29 @@ function fx1<T extends unknown>(value: T & ({} | null)) {
 
 function fx2<T extends {}>(value: T & ({} | null)) {
 >fx2 : <T extends {}>(value: T & ({} | null)) => void
->value : T & ({} | null)
+>value : T
 
     if (value === 42) {
 >value === 42 : boolean
->value : T & ({} | null)
+>value : T
 >42 : 42
 
         value;  // T & {}
->value : T & ({} | null)
+>value : never
     }
     else {
         value;  // T & ({} | null)
->value : T & ({} | null)
+>value : T
     }
 }
 
 function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 >fx3 : <T extends {} | undefined>(value: T & ({} | null)) => void
->value : T & ({} | null)
+>value : T & {}
 
     if (value === 42) {
 >value === 42 : boolean
->value : T & ({} | null)
->42 : 42
-
-        value;  // T & {}
->value : T & ({} | null)
-    }
-    else {
-        value;  // T & ({} | null)
->value : T & ({} | null)
-    }
-}
-
-function fx4<T extends {} | null>(value: T & ({} | null)) {
->fx4 : <T extends {} | null>(value: T & ({} | null)) => void
->value : T & ({} | null)
-
-    if (value === 42) {
->value === 42 : boolean
->value : T & ({} | null)
+>value : T & {}
 >42 : 42
 
         value;  // T & {}
@@ -867,7 +849,25 @@ function fx4<T extends {} | null>(value: T & ({} | null)) {
     }
     else {
         value;  // T & ({} | null)
->value : T & ({} | null)
+>value : T & {}
+    }
+}
+
+function fx4<T extends {} | null>(value: T & ({} | null)) {
+>fx4 : <T extends {} | null>(value: T & ({} | null)) => void
+>value : T
+
+    if (value === 42) {
+>value === 42 : boolean
+>value : T
+>42 : 42
+
+        value;  // T & {}
+>value : never
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T
     }
 }
 
@@ -1036,12 +1036,12 @@ type AB = "A" | "B";
 
 function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
 >x : <T_AB extends AB>(x: T_AB & undefined, y: any) => void
->x : T_AB & undefined
+>x : never
 >y : any
 
     let r2: never = y as T_AB & undefined;
 >r2 : never
->y as T_AB & undefined : T_AB & undefined
+>y as T_AB & undefined : never
 >y : any
 } 
 
