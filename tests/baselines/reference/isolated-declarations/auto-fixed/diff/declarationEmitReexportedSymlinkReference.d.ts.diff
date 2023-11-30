@@ -14,9 +14,6 @@
 -export declare const ADMIN: MetadataAccessor<boolean, import("@raymondfeng/pkg2").IdType>;
 -//# sourceMappingURL=keys.d.ts.map
 \ No newline at end of file
-
-
-
 +export declare const ADMIN: invalid;
 +//# sourceMappingURL=keys.d.ts.map
 +/// [Errors] ////
