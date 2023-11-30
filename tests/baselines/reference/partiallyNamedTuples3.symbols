@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/types/tuple/named/partiallyNamedTuples3.ts] ////
+
+=== partiallyNamedTuples3.ts ===
+declare const tuple: [number, name: string, boolean, value: number, string];
+>tuple : Symbol(tuple, Decl(partiallyNamedTuples3.ts, 0, 13))
+
+const output = ((...args) => args)(...tuple);
+>output : Symbol(output, Decl(partiallyNamedTuples3.ts, 2, 5))
+>args : Symbol(args, Decl(partiallyNamedTuples3.ts, 2, 17))
+>args : Symbol(args, Decl(partiallyNamedTuples3.ts, 2, 17))
+>tuple : Symbol(tuple, Decl(partiallyNamedTuples3.ts, 0, 13))
+

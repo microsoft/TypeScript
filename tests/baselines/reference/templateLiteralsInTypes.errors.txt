@@ -6,7 +6,7 @@ templateLiteralsInTypes.ts(3,8): error TS2339: Property 'foo' does not exist on 
     const f = (hdr: string, val: number) => `${hdr}:\t${val}\r\n` as `${string}:\t${number}\r\n`;
     
     f("x").foo;
-    ~~~~~~
+    ~
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6210 templateLiteralsInTypes.ts:1:25: An argument for 'val' was not provided.
            ~~~

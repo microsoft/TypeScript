@@ -1,0 +1,177 @@
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidOperands.es2015.ts] ////
+
+=== instanceofOperatorWithInvalidOperands.es2015.ts ===
+class C {
+>C : Symbol(C, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 0, 0))
+
+    foo() { }
+>foo : Symbol(C.foo, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 0, 9))
+}
+
+var x: any;
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+// invalid left operand
+// the left operand is required to be of type Any, an object type, or a type parameter type
+var a1: number;
+>a1 : Symbol(a1, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 8, 3))
+
+var a2: boolean;
+>a2 : Symbol(a2, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 9, 3))
+
+var a3: string;
+>a3 : Symbol(a3, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 10, 3))
+
+var a4: void;
+>a4 : Symbol(a4, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 11, 3))
+
+var ra1 = a1 instanceof x;
+>ra1 : Symbol(ra1, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 13, 3))
+>a1 : Symbol(a1, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 8, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var ra2 = a2 instanceof x;
+>ra2 : Symbol(ra2, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 14, 3))
+>a2 : Symbol(a2, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 9, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var ra3 = a3 instanceof x;
+>ra3 : Symbol(ra3, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 15, 3))
+>a3 : Symbol(a3, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 10, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var ra4 = a4 instanceof x;
+>ra4 : Symbol(ra4, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 16, 3))
+>a4 : Symbol(a4, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 11, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var ra5 = 0 instanceof x;
+>ra5 : Symbol(ra5, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 17, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var ra6 = true instanceof x;
+>ra6 : Symbol(ra6, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 18, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var ra7 = '' instanceof x;
+>ra7 : Symbol(ra7, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 19, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var ra8 = null instanceof x;
+>ra8 : Symbol(ra8, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 20, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var ra9 = undefined instanceof x;
+>ra9 : Symbol(ra9, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 21, 3))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+// invalid right operand
+// the right operand to be of type Any or a subtype of the 'Function' interface type
+var b1: number;
+>b1 : Symbol(b1, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 25, 3))
+
+var b2: boolean;
+>b2 : Symbol(b2, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 26, 3))
+
+var b3: string;
+>b3 : Symbol(b3, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 27, 3))
+
+var b4: void;
+>b4 : Symbol(b4, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 28, 3))
+
+var o1: {};
+>o1 : Symbol(o1, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 29, 3))
+
+var o2: Object;
+>o2 : Symbol(o2, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 30, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var o3: C;
+>o3 : Symbol(o3, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 31, 3))
+>C : Symbol(C, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 0, 0))
+
+var rb1 = x instanceof b1;
+>rb1 : Symbol(rb1, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 33, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+>b1 : Symbol(b1, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 25, 3))
+
+var rb2 = x instanceof b2;
+>rb2 : Symbol(rb2, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 34, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+>b2 : Symbol(b2, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 26, 3))
+
+var rb3 = x instanceof b3;
+>rb3 : Symbol(rb3, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 35, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+>b3 : Symbol(b3, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 27, 3))
+
+var rb4 = x instanceof b4;
+>rb4 : Symbol(rb4, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 36, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+>b4 : Symbol(b4, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 28, 3))
+
+var rb5 = x instanceof 0;
+>rb5 : Symbol(rb5, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 37, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var rb6 = x instanceof true;
+>rb6 : Symbol(rb6, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 38, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var rb7 = x instanceof '';
+>rb7 : Symbol(rb7, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 39, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+
+var rb8 = x instanceof o1;
+>rb8 : Symbol(rb8, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 40, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+>o1 : Symbol(o1, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 29, 3))
+
+var rb9 = x instanceof o2;
+>rb9 : Symbol(rb9, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 41, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+>o2 : Symbol(o2, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 30, 3))
+
+var rb10 = x instanceof o3;
+>rb10 : Symbol(rb10, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 42, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+>o3 : Symbol(o3, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 31, 3))
+
+// both operands are invalid
+var rc1 = '' instanceof {};
+>rc1 : Symbol(rc1, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 45, 3))
+
+// @@hasInstance restricts LHS
+var o4: {[Symbol.hasInstance](value: { x: number }): boolean;};
+>o4 : Symbol(o4, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 48, 3))
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 48, 9))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 48, 30))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 48, 38))
+
+var o5: { y: string };
+>o5 : Symbol(o5, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 49, 3))
+>y : Symbol(y, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 49, 9))
+
+var ra10 = o5 instanceof o4;
+>ra10 : Symbol(ra10, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 50, 3))
+>o5 : Symbol(o5, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 49, 3))
+>o4 : Symbol(o4, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 48, 3))
+
+// invalid @@hasInstance method return type on RHS
+var o6: {[Symbol.hasInstance](value: unknown): number;};
+>o6 : Symbol(o6, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 53, 3))
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 53, 9))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 53, 30))
+
+var rb11 = x instanceof o6;
+>rb11 : Symbol(rb11, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 54, 3))
+>x : Symbol(x, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 4, 3))
+>o6 : Symbol(o6, Decl(instanceofOperatorWithInvalidOperands.es2015.ts, 53, 3))
+

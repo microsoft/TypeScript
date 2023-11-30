@@ -1,4 +1,4 @@
-dissallowSymbolAsWeakType.ts(3,12): error TS2769: No overload matches this call.
+dissallowSymbolAsWeakType.ts(3,16): error TS2769: No overload matches this call.
   Overload 1 of 2, '(iterable: Iterable<object>): WeakSet<object>', gave the following error.
     Argument of type 'symbol[]' is not assignable to parameter of type 'Iterable<object>'.
       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
@@ -11,7 +11,7 @@ dissallowSymbolAsWeakType.ts(3,12): error TS2769: No overload matches this call.
 dissallowSymbolAsWeakType.ts(4,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
 dissallowSymbolAsWeakType.ts(5,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
 dissallowSymbolAsWeakType.ts(6,11): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
-dissallowSymbolAsWeakType.ts(8,12): error TS2769: No overload matches this call.
+dissallowSymbolAsWeakType.ts(8,16): error TS2769: No overload matches this call.
   Overload 1 of 2, '(iterable: Iterable<readonly [object, boolean]>): WeakMap<object, boolean>', gave the following error.
     Argument of type '[symbol, false][]' is not assignable to parameter of type 'Iterable<readonly [object, boolean]>'.
       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
@@ -36,7 +36,7 @@ dissallowSymbolAsWeakType.ts(19,14): error TS2345: Argument of type 'symbol' is 
     const s: symbol = Symbol('s');
     
     const ws = new WeakSet([s]);
-               ~~~~~~~~~~~~~~~~
+                   ~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(iterable: Iterable<object>): WeakSet<object>', gave the following error.
 !!! error TS2769:     Argument of type 'symbol[]' is not assignable to parameter of type 'Iterable<object>'.
@@ -58,7 +58,7 @@ dissallowSymbolAsWeakType.ts(19,14): error TS2345: Argument of type 'symbol' is 
 !!! error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'object'.
     
     const wm = new WeakMap([[s, false]]);
-               ~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(iterable: Iterable<readonly [object, boolean]>): WeakMap<object, boolean>', gave the following error.
 !!! error TS2769:     Argument of type '[symbol, false][]' is not assignable to parameter of type 'Iterable<readonly [object, boolean]>'.

@@ -62,6 +62,7 @@ import {
     CommentDirectivesMap,
     CommentDirectiveType,
     CommentRange,
+    comparePaths,
     compareStringsCaseSensitive,
     compareValues,
     Comparison,
@@ -78,7 +79,6 @@ import {
     contains,
     containsPath,
     createGetCanonicalFileName,
-    createModeAwareCache,
     createMultiMap,
     createScanner,
     createTextSpan,
@@ -162,6 +162,7 @@ import {
     GetCanonicalFileName,
     getCombinedModifierFlags,
     getCombinedNodeFlags,
+    getCommonSourceDirectory,
     getContainerFlags,
     getDirectoryPath,
     getJSDocAugmentsTag,
@@ -193,6 +194,7 @@ import {
     getPathComponents,
     getPathFromPathComponents,
     getRelativePathToDirectoryOrUrl,
+    getResolutionModeOverride,
     getRootLength,
     getSnippetElement,
     getStringComparer,
@@ -229,6 +231,7 @@ import {
     IndexSignatureDeclaration,
     InitializedVariableDeclaration,
     insertSorted,
+    InstanceofExpression,
     InterfaceDeclaration,
     InternalEmitFlags,
     isAccessor,
@@ -386,6 +389,7 @@ import {
     mapDefined,
     MapLike,
     MemberName,
+    memoize,
     MetaProperty,
     MethodDeclaration,
     MethodSignature,
@@ -491,7 +495,6 @@ import {
     startsWith,
     startsWithUseStrict,
     Statement,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     StringLiteralType,
@@ -521,8 +524,6 @@ import {
     tracing,
     TransformFlags,
     TransientSymbol,
-    trimString,
-    trimStringStart,
     TriviaSyntaxKind,
     tryCast,
     tryRemovePrefix,
@@ -554,7 +555,6 @@ import {
     VariableDeclarationList,
     VariableLikeDeclaration,
     VariableStatement,
-    version,
     WhileStatement,
     WithStatement,
     WrappedExpression,
@@ -745,34 +745,6 @@ export function getFullWidth(node: Node) {
 }
 
 /** @internal */
-export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string, mode: ResolutionMode): ResolvedModuleFull | undefined {
-    return sourceFile?.resolvedModules?.get(moduleNameText, mode)?.resolvedModule;
-}
-
-/** @internal */
-export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleWithFailedLookupLocations, mode: ResolutionMode): void {
-    if (!sourceFile.resolvedModules) {
-        sourceFile.resolvedModules = createModeAwareCache();
-    }
-
-    sourceFile.resolvedModules.set(moduleNameText, mode, resolvedModule);
-}
-
-/** @internal */
-export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, mode: ResolutionMode): void {
-    if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
-        sourceFile.resolvedTypeReferenceDirectiveNames = createModeAwareCache();
-    }
-
-    sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, mode, resolvedTypeReferenceDirective);
-}
-
-/** @internal */
-export function getResolvedTypeReferenceDirective(sourceFile: SourceFile | undefined, typeReferenceDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirective | undefined {
-    return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode)?.resolvedTypeReferenceDirective;
-}
-
-/** @internal */
 export function projectReferenceIsEqualTo(oldRef: ProjectReference, newRef: ProjectReference) {
     return oldRef.path === newRef.path &&
         !oldRef.prepend === !newRef.prepend &&
@@ -795,13 +767,13 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
 
 /** @internal */
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
-    const node10Result = sourceFile.resolvedModules?.get(moduleReference, mode)?.node10Result;
+    const node10Result = host.getResolvedModule(sourceFile, moduleReference, mode)?.node10Result;
     const result = node10Result
         ? chainDiagnosticMessages(
             /*details*/ undefined,
             Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
             node10Result,
-            node10Result.indexOf(nodeModulesPathPart + "@types/") > -1 ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
+            node10Result.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
         )
         : host.typesPackageExists(packageName)
         ? chainDiagnosticMessages(
@@ -857,7 +829,7 @@ export function hasChangesInResolutions<K, V>(
     names: readonly K[],
     newSourceFile: SourceFile,
     newResolutions: readonly V[],
-    oldResolutions: ModeAwareCache<V> | undefined,
+    getOldResolution: (name: string, mode: ResolutionMode) => V | undefined,
     comparer: (oldResolution: V, newResolution: V) => boolean,
     nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
 ): boolean {
@@ -868,7 +840,7 @@ export function hasChangesInResolutions<K, V>(
         const entry = names[i];
         const name = nameAndModeGetter.getName(entry);
         const mode = nameAndModeGetter.getMode(entry, newSourceFile);
-        const oldResolution = oldResolutions && oldResolutions.get(name, mode);
+        const oldResolution = getOldResolution(name, mode);
         const changed = oldResolution
             ? !newResolution || !comparer(oldResolution, newResolution)
             : newResolution;
@@ -1231,7 +1203,7 @@ export function getTextOfNodeFromSourceText(sourceText: string, node: Node, incl
 
     if (isJSDocTypeExpressionOrChild(node)) {
         // strip space + asterisk at line start
-        text = text.split(/\r\n|\n|\r/).map(line => trimStringStart(line.replace(/^\s*\*/, ""))).join("\n");
+        text = text.split(/\r\n|\n|\r/).map(line => line.replace(/^\s*\*/, "").trimStart()).join("\n");
     }
 
     return text;
@@ -1281,8 +1253,8 @@ export function getInternalEmitFlags(node: Node): InternalEmitFlags {
 export type ScriptTargetFeatures = ReadonlyMap<string, ReadonlyMap<string, string[]>>;
 
 /** @internal */
-export function getScriptTargetFeatures(): ScriptTargetFeatures {
-    return new Map(Object.entries({
+export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetFeatures =>
+    new Map(Object.entries({
         Array: new Map(Object.entries({
             es2015: [
                 "find",
@@ -1349,7 +1321,7 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
                 "defineProperty",
                 "deleteProperty",
                 "get",
-                " getOwnPropertyDescriptor",
+                "getOwnPropertyDescriptor",
                 "getPrototypeOf",
                 "has",
                 "isExtensible",
@@ -1675,8 +1647,8 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
                 "cause",
             ],
         })),
-    }));
-}
+    }))
+);
 
 /** @internal */
 export const enum GetLiteralTextFlags {
@@ -3149,6 +3121,8 @@ export function getInvokedExpression(node: CallLikeExpression): Expression | Jsx
         case SyntaxKind.JsxOpeningElement:
         case SyntaxKind.JsxSelfClosingElement:
             return node.tagName;
+        case SyntaxKind.BinaryExpression:
+            return node.right;
         default:
             return node.expression;
     }
@@ -4001,12 +3975,13 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.BindingElement:
             return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
         case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ExportDeclaration:
             return tryCast(node.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportEqualsDeclaration:
             return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
@@ -4018,6 +3993,8 @@ export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAcce
             return tryCast(node.parent.parent.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportSpecifier:
             return tryCast(node.parent.parent.parent.moduleSpecifier, isStringLiteralLike);
+        case SyntaxKind.ImportType:
+            return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
         default:
             Debug.assertNever(node);
     }
@@ -4357,7 +4334,7 @@ export function getNextJSDocCommentLocation(node: Node) {
         parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
         parent.kind === SyntaxKind.ReturnStatement ||
         getNestedModuleDeclaration(parent) ||
-        isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken
+        isAssignmentExpression(node)
     ) {
         return parent;
     }
@@ -4369,8 +4346,7 @@ export function getNextJSDocCommentLocation(node: Node) {
     // var x = function(name) { return name.length; }
     else if (
         parent.parent &&
-        (getSingleVariableOfVariableStatement(parent.parent) === node ||
-            isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken)
+        (getSingleVariableOfVariableStatement(parent.parent) === node || isAssignmentExpression(parent))
     ) {
         return parent.parent;
     }
@@ -5088,6 +5064,7 @@ export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttri
         case SyntaxKind.PrivateIdentifier:
             return name.escapedText;
         case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
         case SyntaxKind.NumericLiteral:
             return escapeLeadingUnderscores(name.text);
         case SyntaxKind.ComputedPropertyName:
@@ -5846,7 +5823,8 @@ export function createDiagnosticCollection(): DiagnosticCollection {
 }
 
 const templateSubstitutionRegExp = /\$\{/g;
-function escapeTemplateSubstitution(str: string): string {
+/** @internal */
+export function escapeTemplateSubstitution(str: string): string {
     return str.replace(templateSubstitutionRegExp, "\\${");
 }
 
@@ -5985,7 +5963,7 @@ function isQuoteOrBacktick(charCode: number) {
 /** @internal */
 export function isIntrinsicJsxName(name: __String | string) {
     const ch = (name as string).charCodeAt(0);
-    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains(name as string, "-");
+    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || (name as string).includes("-");
 }
 
 const indentStrings: string[] = ["", "    "];
@@ -6002,11 +5980,6 @@ export function getIndentString(level: number) {
 /** @internal */
 export function getIndentSize() {
     return indentStrings[1].length;
-}
-
-/** @internal */
-export function isNightly() {
-    return stringContains(version, "-dev") || stringContains(version, "-insiders");
 }
 
 /** @internal */
@@ -6235,7 +6208,7 @@ export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameReso
     const specifier = getExternalModuleName(declaration);
     if (
         specifier && isStringLiteralLike(specifier) && !pathIsRelative(specifier.text) &&
-        getCanonicalAbsolutePath(host, file.path).indexOf(getCanonicalAbsolutePath(host, ensureTrailingDirectorySeparator(host.getCommonSourceDirectory()))) === -1
+        !getCanonicalAbsolutePath(host, file.path).includes(getCanonicalAbsolutePath(host, ensureTrailingDirectorySeparator(host.getCommonSourceDirectory())))
     ) {
         return undefined;
     }
@@ -6370,13 +6343,31 @@ export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFi
  */
 export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileMayBeEmittedHost, forceDtsEmit?: boolean) {
     const options = host.getCompilerOptions();
-    return !(options.noEmitForJsFiles && isSourceFileJS(sourceFile)) &&
-        !sourceFile.isDeclarationFile &&
-        !host.isSourceFileFromExternalLibrary(sourceFile) &&
-        (forceDtsEmit || (
-            !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
-            !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)
-        ));
+    // Js files are emitted only if option is enabled
+    if (options.noEmitForJsFiles && isSourceFileJS(sourceFile)) return false;
+    // Declaration files are not emitted
+    if (sourceFile.isDeclarationFile) return false;
+    // Source file from node_modules are not emitted
+    if (host.isSourceFileFromExternalLibrary(sourceFile)) return false;
+    // forcing dts emit => file needs to be emitted
+    if (forceDtsEmit) return true;
+    // Check other conditions for file emit
+    // Source files from referenced projects are not emitted
+    if (host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)) return false;
+    // Any non json file should be emitted
+    if (!isJsonSourceFile(sourceFile)) return true;
+    if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
+    // Emit json file if outFile is specified
+    if (outFile(options)) return true;
+    // Json file is not emitted if outDir is not specified
+    if (!options.outDir) return false;
+    // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
+    if (options.rootDir || (options.composite && options.configFilePath)) {
+        const commonDir = getNormalizedAbsolutePath(getCommonSourceDirectory(options, () => [], host.getCurrentDirectory(), host.getCanonicalFileName), host.getCurrentDirectory());
+        const outputPath = getSourceFilePathInNewDirWorker(sourceFile.fileName, options.outDir, host.getCurrentDirectory(), commonDir, host.getCanonicalFileName);
+        if (comparePaths(sourceFile.fileName, outputPath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) return false;
+    }
+    return true;
 }
 
 /** @internal */
@@ -6828,7 +6819,7 @@ export function writeCommentRange(text: string, lineMap: readonly number[], writ
 
 function writeTrimmedCurrentLine(text: string, commentEnd: number, writer: EmitTextWriter, newLine: string, pos: number, nextLineStart: number) {
     const end = Math.min(commentEnd, nextLineStart - 1);
-    const currentLineText = trimString(text.substring(pos, end));
+    const currentLineText = text.substring(pos, end).trim();
     if (currentLineText) {
         // trimmed forward and ending spaces text
         writer.writeComment(currentLineText);
@@ -6938,11 +6929,14 @@ function getModifierFlagsWorker(node: Node, includeJSDoc: boolean, alwaysInclude
         node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
     }
 
-    if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && (alwaysIncludeJSDoc || isInJSFile(node)) && node.parent) {
-        node.modifierFlagsCache |= getJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
+    if (alwaysIncludeJSDoc || includeJSDoc && isInJSFile(node)) {
+        if (!(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
+            node.modifierFlagsCache |= getRawJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
+        }
+        return selectEffectiveModifierFlags(node.modifierFlagsCache);
     }
 
-    return node.modifierFlagsCache & ~(ModifierFlags.HasComputedFlags | ModifierFlags.HasComputedJSDocModifiers);
+    return selectSyntacticModifierFlags(node.modifierFlagsCache);
 }
 
 /**
@@ -6972,20 +6966,33 @@ export function getSyntacticModifierFlags(node: Node): ModifierFlags {
     return getModifierFlagsWorker(node, /*includeJSDoc*/ false);
 }
 
-function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
+function getRawJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = ModifierFlags.None;
     if (!!node.parent && !isParameter(node)) {
         if (isInJSFile(node)) {
-            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.Public;
-            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
-            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
-            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
-            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.Override;
+            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
+            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
+            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.JSDocProtected;
+            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
+            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
         }
         if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
     }
 
     return flags;
+}
+
+function selectSyntacticModifierFlags(flags: ModifierFlags) {
+    return flags & ModifierFlags.SyntacticModifiers;
+}
+
+function selectEffectiveModifierFlags(flags: ModifierFlags) {
+    return (flags & ModifierFlags.NonCacheOnlyModifiers) |
+        ((flags & ModifierFlags.JSDocCacheOnlyModifiers) >>> 23); // shift ModifierFlags.JSDoc* to match ModifierFlags.*
+}
+
+function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
+    return selectEffectiveModifierFlags(getRawJSDocModifierFlagsNoCache(node));
 }
 
 /**
@@ -7241,8 +7248,8 @@ export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
 
 /** @internal */
 export function isRightSideOfAccessExpression(node: Node) {
-    return isPropertyAccessExpression(node.parent) && node.parent.name === node
-        || isElementAccessExpression(node.parent) && node.parent.argumentExpression === node;
+    return !!node.parent && (isPropertyAccessExpression(node.parent) && node.parent.name === node
+        || isElementAccessExpression(node.parent) && node.parent.argumentExpression === node);
 }
 
 /** @internal */
@@ -7250,6 +7257,15 @@ export function isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName(node
     return isQualifiedName(node.parent) && node.parent.right === node
         || isPropertyAccessExpression(node.parent) && node.parent.name === node
         || isJSDocMemberName(node.parent) && node.parent.right === node;
+}
+/** @internal */
+export function isInstanceOfExpression(node: Node): node is InstanceofExpression {
+    return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.InstanceOfKeyword;
+}
+
+/** @internal */
+export function isRightSideOfInstanceofExpression(node: Node) {
+    return isInstanceOfExpression(node.parent) && node === node.parent.right;
 }
 
 /** @internal */
@@ -7814,9 +7830,12 @@ export function clearMap<K, T>(map: { forEach: Map<K, T>["forEach"]; clear: Map<
 }
 
 /** @internal */
-export interface MutateMapSkippingNewValuesOptions<K, T, U> {
+export interface MutateMapSkippingNewValuesDelete<K, T> {
     onDeleteValue(existingValue: T, key: K): void;
+}
 
+/** @internal */
+export interface MutateMapSkippingNewValuesOptions<K, T, U> extends MutateMapSkippingNewValuesDelete<K, T> {
     /**
      * If present this is called with the key when there is value for that key both in new map as well as existing map provided
      * Caller can then decide to update or remove this key.
@@ -7831,30 +7850,48 @@ export interface MutateMapSkippingNewValuesOptions<K, T, U> {
  *
  * @internal
  */
+export function mutateMapSkippingNewValues<K, T>(
+    map: Map<K, T>,
+    newMap: ReadonlySet<K> | undefined,
+    options: MutateMapSkippingNewValuesDelete<K, T>,
+): void;
+/** @internal */
 export function mutateMapSkippingNewValues<K, T, U>(
     map: Map<K, T>,
-    newMap: ReadonlyMap<K, U>,
+    newMap: ReadonlyMap<K, U> | undefined,
+    options: MutateMapSkippingNewValuesOptions<K, T, U>,
+): void;
+export function mutateMapSkippingNewValues<K, T, U>(
+    map: Map<K, T>,
+    newMap: ReadonlyMap<K, U> | ReadonlySet<K> | undefined,
     options: MutateMapSkippingNewValuesOptions<K, T, U>,
 ) {
     const { onDeleteValue, onExistingValue } = options;
     // Needs update
     map.forEach((existingValue, key) => {
-        const valueInNewMap = newMap.get(key);
         // Not present any more in new map, remove it
-        if (valueInNewMap === undefined) {
+        if (!newMap?.has(key)) {
             map.delete(key);
             onDeleteValue(existingValue, key);
         }
         // If present notify about existing values
         else if (onExistingValue) {
-            onExistingValue(existingValue, valueInNewMap, key);
+            onExistingValue(existingValue, (newMap as Map<K, U>).get?.(key)!, key);
         }
     });
 }
 
 /** @internal */
-export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOptions<K, T, U> {
+export interface MutateMapOptionsCreate<K, T, U> {
     createNewValue(key: K, valueInNewMap: U): T;
+}
+
+/** @internal */
+export interface MutateMapWithNewSetOptions<K, T> extends MutateMapSkippingNewValuesDelete<K, T>, MutateMapOptionsCreate<K, T, K> {
+}
+
+/** @internal */
+export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOptions<K, T, U>, MutateMapOptionsCreate<K, T, U> {
 }
 
 /**
@@ -7862,16 +7899,19 @@ export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOpt
  *
  * @internal
  */
-export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U>, options: MutateMapOptions<K, T, U>) {
+export function mutateMap<K, T>(map: Map<K, T>, newMap: ReadonlySet<K> | undefined, options: MutateMapWithNewSetOptions<K, T>): void;
+/** @internal */
+export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U> | undefined, options: MutateMapOptions<K, T, U>): void;
+export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U> | ReadonlySet<K> | undefined, options: MutateMapOptions<K, T, U>) {
     // Needs update
-    mutateMapSkippingNewValues(map, newMap, options);
+    mutateMapSkippingNewValues(map, newMap as ReadonlyMap<K, U>, options);
 
     const { createNewValue } = options;
     // Add new values that are not already present
-    newMap.forEach((valueInNewMap, key) => {
+    newMap?.forEach((valueInNewMap, key) => {
         if (!map.has(key)) {
             // New values
-            map.set(key, createNewValue(key, valueInNewMap));
+            map.set(key, createNewValue(key, valueInNewMap as U & K));
         }
     });
 }
@@ -8766,7 +8806,9 @@ export function compilerOptionsAffectDeclarationPath(newOptions: CompilerOptions
 
 /** @internal */
 export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
-    return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
+    return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) :
+        option.allowJsFlag ? getAllowJSCompilerOption(options) :
+        options[option.name];
 }
 
 /** @internal */
@@ -8811,9 +8853,15 @@ export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
 
 /** @internal */
 export interface SymlinkedDirectory {
-    /** Matches the casing returned by `realpath`.  Used to compute the `realpath` of children. */
+    /**
+     * Matches the casing returned by `realpath`.  Used to compute the `realpath` of children.
+     * Always has trailing directory separator
+     */
     real: string;
-    /** toPath(real).  Stored to avoid repeated recomputation. */
+    /**
+     * toPath(real).  Stored to avoid repeated recomputation.
+     * Always has trailing directory separator
+     */
     realPath: Path;
 }
 
@@ -8833,7 +8881,15 @@ export interface SymlinkCache {
      * don't include automatic type reference directives. Must be called only when
      * `hasProcessedResolutions` returns false (once per cache instance).
      */
-    setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>): void;
+    setSymlinksFromResolutions(
+        forEachResolvedModule: (
+            callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        ) => void,
+        forEachResolvedTypeReferenceDirective: (
+            callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        ) => void,
+        typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>,
+    ): void;
     /**
      * @internal
      * Whether `setSymlinksFromResolutions` has already been called.
@@ -8860,18 +8916,16 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             if (!containsIgnoredPath(symlinkPath)) {
                 symlinkPath = ensureTrailingDirectorySeparator(symlinkPath);
                 if (real !== false && !symlinkedDirectories?.has(symlinkPath)) {
-                    (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
+                    (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(real.realPath, symlink);
                 }
                 (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
             }
         },
-        setSymlinksFromResolutions(files, typeReferenceDirectives) {
+        setSymlinksFromResolutions(forEachResolvedModule, forEachResolvedTypeReferenceDirective, typeReferenceDirectives) {
             Debug.assert(!hasProcessedResolutions);
             hasProcessedResolutions = true;
-            for (const file of files) {
-                file.resolvedModules?.forEach(resolution => processResolution(this, resolution.resolvedModule));
-                file.resolvedTypeReferenceDirectiveNames?.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
-            }
+            forEachResolvedModule(resolution => processResolution(this, resolution.resolvedModule));
+            forEachResolvedTypeReferenceDirective(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
             typeReferenceDirectives.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
@@ -8885,7 +8939,10 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
         if (commonResolved && commonOriginal) {
             cache.setSymlinkedDirectory(
                 commonOriginal,
-                { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) },
+                {
+                    real: ensureTrailingDirectorySeparator(commonResolved),
+                    realPath: ensureTrailingDirectorySeparator(toPath(commonResolved, cwd, getCanonicalFileName)),
+                },
             );
         }
     }
@@ -9334,7 +9391,7 @@ export function getSupportedExtensions(options?: CompilerOptions, extraFileExten
     const flatBuiltins = flatten(builtins);
     const extensions = [
         ...builtins,
-        ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && flatBuiltins.indexOf(x.extension as Extension) === -1 ? [x.extension] : undefined),
+        ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && !flatBuiltins.includes(x.extension as Extension) ? [x.extension] : undefined),
     ];
 
     return extensions;
@@ -10051,7 +10108,7 @@ export function expressionResultIsUnused(node: Expression): boolean {
 
 /** @internal */
 export function containsIgnoredPath(path: string) {
-    return some(ignoredPaths, p => stringContains(path, p));
+    return some(ignoredPaths, p => path.includes(p));
 }
 
 /** @internal */
@@ -10198,9 +10255,10 @@ export function isNumericLiteralName(name: string | __String) {
 }
 
 /** @internal */
-export function createPropertyNameNodeForIdentifierOrLiteral(name: string, target: ScriptTarget, singleQuote?: boolean, stringNamed?: boolean) {
-    return isIdentifierText(name, target) ? factory.createIdentifier(name) :
-        !stringNamed && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
+export function createPropertyNameNodeForIdentifierOrLiteral(name: string, target: ScriptTarget, singleQuote: boolean, stringNamed: boolean, isMethod: boolean) {
+    const isMethodNamedNew = isMethod && name === "new";
+    return !isMethodNamedNew && isIdentifierText(name, target) ? factory.createIdentifier(name) :
+        !stringNamed && !isMethodNamedNew && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
         factory.createStringLiteral(name, !!singleQuote);
 }
 
@@ -10433,4 +10491,17 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
         return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
     }
     return Debug.fail();
+}
+
+/** @internal */
+export function isExpandoPropertyDeclaration(declaration: Declaration | undefined): declaration is PropertyAccessExpression | ElementAccessExpression | BinaryExpression {
+    return !!declaration && (isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration) || isBinaryExpression(declaration));
+}
+
+/** @internal */
+export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined) {
+    if (node === undefined) {
+        return false;
+    }
+    return !!getResolutionModeOverride(node.attributes);
 }

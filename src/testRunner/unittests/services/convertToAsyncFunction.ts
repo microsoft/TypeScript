@@ -1,9 +1,6 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
-    createProjectService,
-} from "../helpers/tsserver";
-import {
     createServerHost,
     File,
 } from "../helpers/virtualFileSystemWithWatch";
@@ -11,6 +8,7 @@ import {
     extractTest,
     newLineCharacter,
     notImplementedHost,
+    TestProjectService,
 } from "./extract/helpers";
 
 const libFile: File = {
@@ -415,7 +413,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
             files.push(moduleFile);
         }
         const host = createServerHost(files);
-        const projectService = createProjectService(host, { allowNonBaseliningLogger: true });
+        const projectService = new TestProjectService(host);
         projectService.openClientFile(file.path);
         return ts.first(projectService.inferredProjects).getLanguageService();
     }

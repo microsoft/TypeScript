@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/declarationEmitTypeParameterNameInOuterScope.ts] ////
+
+=== declarationEmitTypeParameterNameInOuterScope.ts ===
+class A { }
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 0, 0))
+
+var a = <A,>(x: A) => x;
+>a : Symbol(a, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 2, 3))
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 2, 9))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 2, 13))
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 2, 9))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 2, 13))
+
+function a2<A,>(x: A) { return x }
+>a2 : Symbol(a2, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 2, 24))
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 3, 12))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 3, 16))
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 3, 12))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 3, 16))
+
+var a3 = <A,>(x: A) => new A();
+>a3 : Symbol(a3, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 5, 3))
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 5, 10))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 5, 14))
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 5, 10))
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 0, 0))
+
+function a4<A,>(x: A) { return new A() }
+>a4 : Symbol(a4, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 5, 31))
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 6, 12))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 6, 16))
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 6, 12))
+>A : Symbol(A, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 0, 0))
+
+
+interface B { }
+>B : Symbol(B, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 6, 40))
+
+var b = <B,>(x: B) => x;
+>b : Symbol(b, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 11, 3))
+>B : Symbol(B, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 11, 9))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 11, 13))
+>B : Symbol(B, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 11, 9))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 11, 13))
+
+function b2<B,>(x: B) { return x }
+>b2 : Symbol(b2, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 11, 24))
+>B : Symbol(B, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 12, 12))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 12, 16))
+>B : Symbol(B, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 12, 12))
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameInOuterScope.ts, 12, 16))
+

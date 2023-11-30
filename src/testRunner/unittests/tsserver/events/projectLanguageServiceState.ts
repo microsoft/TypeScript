@@ -1,10 +1,11 @@
 import * as ts from "../../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createProjectService,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../../helpers/tsserver";
 import {
     createServerHost,
@@ -28,13 +29,13 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         };
         const configWithExclude = {
             path: config.path,
-            content: JSON.stringify({ exclude: ["largefile.js"] }),
+            content: jsonToReadableText({ exclude: ["largefile.js"] }),
         };
         const host = createServerHost([f1, f2, config]);
         const originalGetFileSize = host.getFileSize;
         host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([f1], session);
         session.logger.log(`Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
 
@@ -64,11 +65,11 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
             content: "{}",
         };
         const host = createServerHost([f1, f2, f3, libFile, config]);
-        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        service.openClientFile(f1.path);
-        const project = service.configuredProjects.get(config.path)!;
-        service.logger.info(`languageServiceEnabled: ${project.languageServiceEnabled}`);
-        service.logger.info(`lastFileExceededProgramSize: ${project.lastFileExceededProgramSize}`);
-        baselineTsserverLogs("events/projectLanguageServiceState", "large file size is determined correctly", service);
+        const session = new TestSession(host);
+        openFilesForSession([f1], session);
+        const project = session.getProjectService().configuredProjects.get(config.path)!;
+        session.logger.info(`languageServiceEnabled: ${project.languageServiceEnabled}`);
+        session.logger.info(`lastFileExceededProgramSize: ${project.lastFileExceededProgramSize}`);
+        baselineTsserverLogs("events/projectLanguageServiceState", "large file size is determined correctly", session);
     });
 });

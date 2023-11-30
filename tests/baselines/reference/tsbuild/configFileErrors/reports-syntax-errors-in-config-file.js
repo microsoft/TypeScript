@@ -247,7 +247,16 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Change:: builds after fixing config file errors
 Input::
 //// [/src/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true},"files":["a.ts","b.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  },
+  "files": [
+    "a.ts",
+    "b.ts"
+  ]
+}
 
 
 

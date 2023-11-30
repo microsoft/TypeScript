@@ -30,7 +30,7 @@ function foo<U>(x: List<U>); // error, duplicate
 >x : List<U>
 
 function foo<T>(x: List<T>) {
->foo : { <T>(x: List<T>): any; <U>(x: List<U>): any; }
+>foo : { <T_1>(x: List<T_1>): any; <U>(x: List<U>): any; }
 >x : List<T>
 }
 
@@ -43,7 +43,7 @@ function foo2<U>(x: MyList<U>); // ok, nominally compared with first overload
 >x : MyList<U>
 
 function foo2<T>(x: any) {
->foo2 : { <T>(x: List<T>): any; <U>(x: MyList<U>): any; }
+>foo2 : { <T_1>(x: List<T_1>): any; <U>(x: MyList<U>): any; }
 >x : any
 }
 
@@ -57,7 +57,7 @@ function other<T extends List<U>, U>() {
 >x : T
 
     function foo3<V>(x: MyList<V>) { }
->foo3 : <V>(x: T) => any
+>foo3 : <V_1>(x: T) => any
 >x : MyList<V>
 
     // should be error
@@ -67,24 +67,24 @@ function other<T extends List<U>, U>() {
 >x : T
 
     function foo4<V>(x: List<V>) { }
->foo4 : <V>(x: T) => any
+>foo4 : <V_1>(x: T) => any
 >x : List<V>
 
     // ok
     function foo5<V>(x: T): string;
->foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
+>foo5 : { <V>(x: T): string; <V_1>(x: List<V_1>): number; <V_2>(x: MyList<V_2>): boolean; }
 >x : T
 
     function foo5<V>(x: List<V>): number;
->foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
+>foo5 : { <V_1>(x: T): string; <V>(x: List<V>): number; <V_2>(x: MyList<V_2>): boolean; }
 >x : List<V>
 
     function foo5<V>(x: MyList<V>): boolean;
->foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
+>foo5 : { <V_1>(x: T): string; <V_2>(x: List<V_2>): number; <V>(x: MyList<V>): boolean; }
 >x : MyList<V>
 
     function foo5<V>(x: any): any { return null; }
->foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
+>foo5 : { <V_1>(x: T): string; <V_2>(x: List<V_2>): number; <V_3>(x: MyList<V_3>): boolean; }
 >x : any
 
     var list: List<string>;
@@ -96,12 +96,12 @@ function other<T extends List<U>, U>() {
     var r = foo5(list);
 >r : number
 >foo5(list) : number
->foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
+>foo5 : { <V>(x: T): string; <V_1>(x: List<V_1>): number; <V_2>(x: MyList<V_2>): boolean; }
 >list : List<string>
 
     var r2 = foo5(myList);
 >r2 : number
 >foo5(myList) : number
->foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
+>foo5 : { <V>(x: T): string; <V_1>(x: List<V_1>): number; <V_2>(x: MyList<V_2>): boolean; }
 >myList : MyList<string>
 }

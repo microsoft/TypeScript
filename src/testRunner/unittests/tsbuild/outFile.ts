@@ -1,6 +1,12 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
+import {
+    dedent,
+} from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
+import {
+    jsonToReadableText,
+} from "../helpers";
 import {
     createSolutionBuilderHostForBaseline,
 } from "../helpers/solutionBuilder";
@@ -22,7 +28,7 @@ import {
     appendText,
     changeStubToRest,
     enableStrict,
-    loadProjectFromDisk,
+    loadProjectFromFiles,
     prependText,
     removeRest,
     replaceText,
@@ -32,7 +38,107 @@ describe("unittests:: tsbuild:: outFile::", () => {
     let outFileFs: vfs.FileSystem;
     let outFileWithBuildFs: vfs.FileSystem;
     before(() => {
-        outFileFs = loadProjectFromDisk("tests/projects/outfile-concat");
+        outFileFs = loadProjectFromFiles({
+            "/src/first/first_PART1.ts": dedent`
+                interface TheFirst {
+                    none: any;
+                }
+
+                const s = "Hello, world";
+
+                interface NoJsForHereEither {
+                    none: any;
+                }
+
+                console.log(s);
+            `,
+            "/src/first/first_part2.ts": dedent`
+                console.log(f());
+            `,
+            "/src/first/first_part3.ts": dedent`
+                function f() {
+                    return "JS does hoists";
+                }
+            `,
+            "/src/first/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    target: "es5",
+                    composite: true,
+                    removeComments: true,
+                    strict: false,
+                    sourceMap: true,
+                    declarationMap: true,
+                    outFile: "./bin/first-output.js",
+                    skipDefaultLibCheck: true,
+                },
+                files: [
+                    "first_PART1.ts",
+                    "first_part2.ts",
+                    "first_part3.ts",
+                ],
+                references: [],
+            }),
+            "/src/second/second_part1.ts": dedent`
+                namespace N {
+                    // Comment text
+                }
+
+                namespace N {
+                    function f() {
+                        console.log('testing');
+                    }
+
+                    f();
+                }
+            `,
+            "/src/second/second_part2.ts": dedent`
+                class C {
+                    doSomething() {
+                        console.log("something got done");
+                    }
+                }
+            `,
+            "/src/second/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    ignoreDeprecations: "5.0",
+                    target: "es5",
+                    composite: true,
+                    removeComments: true,
+                    strict: false,
+                    sourceMap: true,
+                    declarationMap: true,
+                    declaration: true,
+                    outFile: "../2/second-output.js",
+                    skipDefaultLibCheck: true,
+                },
+                references: [],
+            }),
+            "/src/third/third_part1.ts": dedent`
+                var c = new C();
+                c.doSomething();
+            `,
+            "/src/third/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    ignoreDeprecations: "5.0",
+                    target: "es5",
+                    composite: true,
+                    removeComments: true,
+                    strict: false,
+                    sourceMap: true,
+                    declarationMap: true,
+                    declaration: true,
+                    outFile: "./thirdjs/output/third-output.js",
+                    skipDefaultLibCheck: true,
+                },
+                files: [
+                    "third_part1.ts",
+                ],
+                references: [
+                    { path: "../first", prepend: true },
+                    { path: "../second", prepend: true },
+                ],
+            }),
+        });
     });
     after(() => {
         outFileFs = undefined!;
@@ -497,9 +603,15 @@ ${internal} enum internalEnum { a, b, c }`,
                         "/src/second/tsconfig.json",
                         "[",
                         `[
-    { "path": "../first", "prepend": true }`,
+    { "path": "../first", "prepend": true }\n  `,
                     );
-                    replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true },`, "");
+                    fs.writeFileSync(
+                        "/src/third/tsconfig.json",
+                        jsonToReadableText({
+                            ...JSON.parse(fs.readFileSync("/src/third/tsconfig.json", "utf-8")!),
+                            references: [{ path: "../second", prepend: true }],
+                        }),
+                    );
                 }
 
                 function stripInternalWithDependentOrder(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {
@@ -632,7 +744,7 @@ ${internal} enum internalEnum { a, b, c }`,
                     fs.writeFileSync("/src/third/third_part1.ts", "const B = 2;");
                     fs.writeFileSync(
                         "/src/first/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 composite: true,
                                 declaration: true,
@@ -646,7 +758,7 @@ ${internal} enum internalEnum { a, b, c }`,
                     );
                     fs.writeFileSync(
                         "/src/third/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 ignoreDeprecations: "5.0",
                                 composite: true,
@@ -700,8 +812,8 @@ ${internal} enum internalEnum { a, b, c }`,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
         modifyFs: fs => {
             // No prepend
-            replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true }`, `{ "path": "../first" }`);
-            replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../second", "prepend": true }`, `{ "path": "../second" }`);
+            replaceText(fs, "/src/third/tsconfig.json", `"prepend": true`, "");
+            replaceText(fs, "/src/third/tsconfig.json", `"prepend": true`, "");
 
             // Non Modules
             replaceText(fs, "/src/first/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);

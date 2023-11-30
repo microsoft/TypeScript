@@ -8,6 +8,6 @@ declare function foo<T>(t: T): typeof foo<T>;
 
 foo("");
 >foo("") : (t: string) => any
->foo : <T>(t: T) => (t: T) => any
+>foo : <T>(t: T) => typeof foo<T>
 >"" : ""
 

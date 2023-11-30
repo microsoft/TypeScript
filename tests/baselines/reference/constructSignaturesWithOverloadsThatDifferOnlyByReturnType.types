@@ -60,7 +60,7 @@ var a: {
 }
 
 var b: {
->b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C; }
+>b : { new <T>(x: T, y: string): C2<T>; new <T_1>(x: T_1, y: string): C; }
 
     new <T>(x: T, y: string): C2<T>;
 >x : T

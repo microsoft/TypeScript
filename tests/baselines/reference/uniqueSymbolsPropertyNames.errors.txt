@@ -1,0 +1,113 @@
+uniqueSymbolsPropertyNames.ts(27,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(28,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(33,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(38,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(43,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(45,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(50,3): error TS2300: Duplicate identifier '[uniqueSymbol0]'.
+uniqueSymbolsPropertyNames.ts(52,3): error TS2300: Duplicate identifier '[uniqueSymbol1]'.
+uniqueSymbolsPropertyNames.ts(57,3): error TS2300: Duplicate identifier '[OpNamespace.equal]'.
+uniqueSymbolsPropertyNames.ts(61,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+uniqueSymbolsPropertyNames.ts(62,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+uniqueSymbolsPropertyNames.ts(62,3): error TS2300: Duplicate identifier '[getUniqueSymbol0()]'.
+uniqueSymbolsPropertyNames.ts(63,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+uniqueSymbolsPropertyNames.ts(64,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+uniqueSymbolsPropertyNames.ts(64,3): error TS2300: Duplicate identifier '[getUniqueSymbol1()]'.
+
+
+==== uniqueSymbolsPropertyNames.ts (15 errors) ====
+    interface OpTypes {
+      readonly equal: unique symbol;
+    }
+    
+    namespace OpNamespace {
+      export declare const equal: unique symbol;
+    }
+    
+    const uniqueSymbol0 = Symbol.for("");
+    const uniqueSymbol1 = Symbol.for("");
+    
+    
+    function getUniqueSymbol0(): typeof uniqueSymbol0 {
+      return uniqueSymbol0;
+    }
+    
+    function getUniqueSymbol1(): typeof uniqueSymbol1 {
+        return uniqueSymbol1;
+      }
+    
+    const Op: OpTypes = {
+      equal: Symbol.for("equal"),
+    } as OpTypes;
+    
+    const t0 = {
+      equal: "first",
+      equal: "second",
+      ~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+      ["equal"]: "last",
+      ~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    
+    const t1 = {
+      [Op.equal]: "first",
+      [Op.equal]: "last",
+      ~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    
+    const t2 = {
+      [OpNamespace.equal]: "first",
+      [OpNamespace.equal]: "last",
+      ~~~~~~~~~~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    
+    const t3 = {
+      [getUniqueSymbol0()]: "first",
+      [getUniqueSymbol0()]: "last",
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+      [getUniqueSymbol1()]: "first",
+      [getUniqueSymbol1()]: "last",
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    
+    class Cls1 {
+      [uniqueSymbol0] = "first";
+      [uniqueSymbol0] = "last";
+      ~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[uniqueSymbol0]'.
+      [uniqueSymbol1] = "first";
+      [uniqueSymbol1] = "last";
+      ~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[uniqueSymbol1]'.
+    }
+    
+    class Cls2 {
+      [OpNamespace.equal] = "first";
+      [OpNamespace.equal] = "last";
+      ~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[OpNamespace.equal]'.
+    }
+    
+    class Cls3 {
+      [getUniqueSymbol0()] = "first";
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+      [getUniqueSymbol0()] = "last";
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[getUniqueSymbol0()]'.
+      [getUniqueSymbol1()] = "first";
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+      [getUniqueSymbol1()] = "last";
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier '[getUniqueSymbol1()]'.
+    }
