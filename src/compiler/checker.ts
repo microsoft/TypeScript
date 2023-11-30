@@ -13242,9 +13242,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         let result: Signature[] | undefined;
         for (let i = 0; i < signatureLists.length; i++) {
-            // Allow matching non-generic signatures to have excess parameters and different return types.
+            // Allow matching non-generic signatures to have excess parameters (as a fallback if exact parameter match is not found) and different return types.
             // Prefer matching this types if possible.
-            const match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true);
+            const match = i === listIndex
+                ? signature
+                : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true)
+                    || findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true);
             if (!match) {
                 return undefined;
             }
