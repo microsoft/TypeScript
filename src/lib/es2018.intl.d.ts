@@ -30,9 +30,9 @@ declare namespace Intl {
     }
 
     interface PluralRulesConstructor {
-        new (locales?: string | string[], options?: PluralRulesOptions): PluralRules;
-        (locales?: string | string[], options?: PluralRulesOptions): PluralRules;
-        supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
+        new (locales?: string | string[] | Readonly<string[]>, options?: PluralRulesOptions): PluralRules;
+        (locales?: string | string[] | Readonly<string[]>, options?: PluralRulesOptions): PluralRules;
+        supportedLocalesOf(locales: string | string[] | Readonly<string[]>, options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
     }
 
     const PluralRules: PluralRulesConstructor;

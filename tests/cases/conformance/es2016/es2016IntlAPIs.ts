@@ -8,6 +8,10 @@ console.log(Intl.getCanonicalLocales('EN-US'));
 console.log(Intl.getCanonicalLocales(['EN-US', 'Fr']));
 // Expected output: Array ["en-US", "fr"]
 
+const readonlyLocales: Readonly<string[]> = ['EN-US', 'Fr'];
+console.log(Intl.getCanonicalLocales(readonlyLocales));
+// Expected output: Array ["en-US", "fr"]
+
 try {
   Intl.getCanonicalLocales('EN_US');
 } catch (err) {
