@@ -32,6 +32,10 @@ const bigint = 123456789123456789n;
 const str = "";
 >str : Symbol(str, Decl(localesObjectArgument.ts, 7, 5))
 
+const readonlyLocales: Readonly<string[]> = ['de-DE', 'ja-JP'];
+>readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+
 now.toLocaleString(enUS);
 >now.toLocaleString : Symbol(Date.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
 >now : Symbol(now, Decl(localesObjectArgument.ts, 4, 5))
@@ -151,6 +155,12 @@ new Intl.PluralRules([deDE, jaJP]);
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
 
+new Intl.PluralRules(readonlyLocales);
+>Intl.PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+>readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
+
 Intl.PluralRules.supportedLocalesOf(enUS);
 >Intl.PluralRules.supportedLocalesOf : Symbol(Intl.PluralRulesConstructor.supportedLocalesOf, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
 >Intl.PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
@@ -168,6 +178,14 @@ Intl.PluralRules.supportedLocalesOf([deDE, jaJP]);
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
 
+Intl.PluralRules.supportedLocalesOf(readonlyLocales);
+>Intl.PluralRules.supportedLocalesOf : Symbol(Intl.PluralRulesConstructor.supportedLocalesOf, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl.PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(Intl.PluralRulesConstructor.supportedLocalesOf, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
+
 new Intl.RelativeTimeFormat(enUS);
 >Intl.RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
@@ -180,6 +198,12 @@ new Intl.RelativeTimeFormat([deDE, jaJP]);
 >RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
+
+new Intl.RelativeTimeFormat(readonlyLocales);
+>Intl.RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
 
 Intl.RelativeTimeFormat.supportedLocalesOf(enUS);
 >Intl.RelativeTimeFormat.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
@@ -198,6 +222,14 @@ Intl.RelativeTimeFormat.supportedLocalesOf([deDE, jaJP]);
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
 
+Intl.RelativeTimeFormat.supportedLocalesOf(readonlyLocales);
+>Intl.RelativeTimeFormat.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+>Intl.RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+>readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
+
 new Intl.Collator(enUS);
 >Intl.Collator : Symbol(Intl.Collator, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
@@ -210,6 +242,12 @@ new Intl.Collator([deDE, jaJP]);
 >Collator : Symbol(Intl.Collator, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
+
+new Intl.Collator(readonlyLocales);
+>Intl.Collator : Symbol(Intl.Collator, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>Collator : Symbol(Intl.Collator, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
 
 Intl.Collator.supportedLocalesOf(enUS);
 >Intl.Collator.supportedLocalesOf : Symbol(Intl.CollatorConstructor.supportedLocalesOf, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
@@ -241,6 +279,12 @@ new Intl.DateTimeFormat([deDE, jaJP]);
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
 
+new Intl.DateTimeFormat(readonlyLocales);
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
+
 Intl.DateTimeFormat.supportedLocalesOf(enUS);
 >Intl.DateTimeFormat.supportedLocalesOf : Symbol(Intl.DateTimeFormatConstructor.supportedLocalesOf, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
 >Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
@@ -258,6 +302,14 @@ Intl.DateTimeFormat.supportedLocalesOf([deDE, jaJP]);
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
 
+Intl.DateTimeFormat.supportedLocalesOf(readonlyLocales);
+>Intl.DateTimeFormat.supportedLocalesOf : Symbol(Intl.DateTimeFormatConstructor.supportedLocalesOf, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(Intl.DateTimeFormatConstructor.supportedLocalesOf, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
+
 new Intl.NumberFormat(enUS);
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
@@ -271,6 +323,12 @@ new Intl.NumberFormat([deDE, jaJP]);
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
 
+new Intl.NumberFormat(readonlyLocales);
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
+
 Intl.NumberFormat.supportedLocalesOf(enUS);
 >Intl.NumberFormat.supportedLocalesOf : Symbol(Intl.NumberFormatConstructor.supportedLocalesOf, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
@@ -279,12 +337,11 @@ Intl.NumberFormat.supportedLocalesOf(enUS);
 >supportedLocalesOf : Symbol(Intl.NumberFormatConstructor.supportedLocalesOf, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
 >enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
 
-Intl.NumberFormat.supportedLocalesOf([deDE, jaJP]);
+Intl.NumberFormat.supportedLocalesOf(readonlyLocales);
 >Intl.NumberFormat.supportedLocalesOf : Symbol(Intl.NumberFormatConstructor.supportedLocalesOf, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
 >NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >supportedLocalesOf : Symbol(Intl.NumberFormatConstructor.supportedLocalesOf, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
->deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
->jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
+>readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
 
