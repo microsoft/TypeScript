@@ -63,7 +63,7 @@ varianceAnnotations.ts(160,68): error TS2345: Argument of type 'ActionObject<{ t
         Type 'StateNode<any, { type: "PLAY"; value: number; } | { type: "RESET"; }>' is not assignable to type 'StateNode<any, { type: "PLAY"; value: number; }>'.
           Types of property '_storedEvent' are incompatible.
             Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
-              Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
+              Property 'value' is missing in type '{ type: "RESET"; }' but required in type '{ type: "PLAY"; value: number; }'.
 
 
 ==== varianceAnnotations.ts (31 errors) ====
@@ -323,7 +323,8 @@ varianceAnnotations.ts(160,68): error TS2345: Argument of type 'ActionObject<{ t
 !!! error TS2345:         Type 'StateNode<any, { type: "PLAY"; value: number; } | { type: "RESET"; }>' is not assignable to type 'StateNode<any, { type: "PLAY"; value: number; }>'.
 !!! error TS2345:           Types of property '_storedEvent' are incompatible.
 !!! error TS2345:             Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
-!!! error TS2345:               Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
+!!! error TS2345:               Property 'value' is missing in type '{ type: "RESET"; }' but required in type '{ type: "PLAY"; value: number; }'.
+!!! related TS2728 varianceAnnotations.ts:158:48: 'value' is declared here.
     
     // Repros from #48618
     

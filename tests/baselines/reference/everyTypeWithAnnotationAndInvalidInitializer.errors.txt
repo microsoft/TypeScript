@@ -19,7 +19,7 @@ everyTypeWithAnnotationAndInvalidInitializer.ts(48,32): error TS2322: Type 'stri
 everyTypeWithAnnotationAndInvalidInitializer.ts(50,5): error TS2322: Type 'typeof N' is not assignable to type 'typeof M'.
   The types returned by 'new A()' are incompatible between these types.
     Property 'name' is missing in type 'N.A' but required in type 'M.A'.
-everyTypeWithAnnotationAndInvalidInitializer.ts(51,5): error TS2322: Type 'N.A' is not assignable to type 'M.A'.
+everyTypeWithAnnotationAndInvalidInitializer.ts(51,5): error TS2741: Property 'name' is missing in type 'N.A' but required in type 'M.A'.
 everyTypeWithAnnotationAndInvalidInitializer.ts(52,5): error TS2322: Type '(x: number) => boolean' is not assignable to type '(x: number) => string'.
   Type 'boolean' is not assignable to type 'string'.
 
@@ -116,7 +116,8 @@ everyTypeWithAnnotationAndInvalidInitializer.ts(52,5): error TS2322: Type '(x: n
 !!! related TS2728 everyTypeWithAnnotationAndInvalidInitializer.ts:20:9: 'name' is declared here.
     var aClassInModule: M.A = new N.A();
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'N.A' is not assignable to type 'M.A'.
+!!! error TS2741: Property 'name' is missing in type 'N.A' but required in type 'M.A'.
+!!! related TS2728 everyTypeWithAnnotationAndInvalidInitializer.ts:20:9: 'name' is declared here.
     var aFunctionInModule: typeof M.F2 = F2;
         ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(x: number) => boolean' is not assignable to type '(x: number) => string'.

@@ -22,6 +22,7 @@ keyofAndIndexedAccessErrors.ts(64,33): error TS2345: Argument of type '"name" | 
   Type '"size"' is not assignable to type 'keyof Shape'.
 keyofAndIndexedAccessErrors.ts(66,24): error TS2345: Argument of type '"size"' is not assignable to parameter of type 'keyof Shape'.
 keyofAndIndexedAccessErrors.ts(67,24): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type 'keyof Shape'.
+  Type '"size"' is not assignable to type 'keyof Shape'.
 keyofAndIndexedAccessErrors.ts(73,5): error TS2536: Type 'keyof T | keyof U' cannot be used to index type 'T | U'.
 keyofAndIndexedAccessErrors.ts(74,5): error TS2536: Type 'keyof T | keyof U' cannot be used to index type 'T | U'.
 keyofAndIndexedAccessErrors.ts(82,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
@@ -34,10 +35,28 @@ keyofAndIndexedAccessErrors.ts(82,5): error TS2322: Type 'keyof T | keyof U' is 
               Type 'string' is not assignable to type 'keyof U'.
 keyofAndIndexedAccessErrors.ts(83,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+    Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+      Type 'string' is not assignable to type 'keyof T & keyof U'.
+        Type 'string' is not assignable to type 'keyof T'.
+          Type 'keyof T' is not assignable to type 'keyof U'.
+            Type 'string | number | symbol' is not assignable to type 'keyof U'.
+              Type 'string' is not assignable to type 'keyof U'.
 keyofAndIndexedAccessErrors.ts(86,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+    Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+      Type 'string' is not assignable to type 'keyof T & keyof U'.
+        Type 'string' is not assignable to type 'keyof T'.
+          Type 'keyof T' is not assignable to type 'keyof U'.
+            Type 'string | number | symbol' is not assignable to type 'keyof U'.
+              Type 'string' is not assignable to type 'keyof U'.
 keyofAndIndexedAccessErrors.ts(87,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+    Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+      Type 'string' is not assignable to type 'keyof T & keyof U'.
+        Type 'string' is not assignable to type 'keyof T'.
+          Type 'keyof T' is not assignable to type 'keyof U'.
+            Type 'string | number | symbol' is not assignable to type 'keyof U'.
+              Type 'string' is not assignable to type 'keyof U'.
 keyofAndIndexedAccessErrors.ts(103,9): error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
   'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
     Type 'string' is not assignable to type 'K'.
@@ -45,6 +64,8 @@ keyofAndIndexedAccessErrors.ts(103,9): error TS2322: Type 'Extract<keyof T, stri
 keyofAndIndexedAccessErrors.ts(105,9): error TS2322: Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'.
   Type 'Extract<keyof T, string>' is not assignable to type 'K'.
     'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+      Type 'string' is not assignable to type 'K'.
+        'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
 keyofAndIndexedAccessErrors.ts(108,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
   Type 'T' is not assignable to type 'U'.
     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
@@ -184,6 +205,7 @@ keyofAndIndexedAccessErrors.ts(165,5): error TS2322: Type 'number' is not assign
         setProperty(shape, cond ? "name" : "size", 10);  // Error
                            ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type 'keyof Shape'.
+!!! error TS2345:   Type '"size"' is not assignable to type 'keyof Shape'.
     }
     
     function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) {
@@ -216,16 +238,34 @@ keyofAndIndexedAccessErrors.ts(165,5): error TS2322: Type 'number' is not assign
         ~~
 !!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:       Type 'string' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:         Type 'string' is not assignable to type 'keyof T'.
+!!! error TS2322:           Type 'keyof T' is not assignable to type 'keyof U'.
+!!! error TS2322:             Type 'string | number | symbol' is not assignable to type 'keyof U'.
+!!! error TS2322:               Type 'string' is not assignable to type 'keyof U'.
     
         k2 = k1;
         k2 = k3;  // Error
         ~~
 !!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:       Type 'string' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:         Type 'string' is not assignable to type 'keyof T'.
+!!! error TS2322:           Type 'keyof T' is not assignable to type 'keyof U'.
+!!! error TS2322:             Type 'string | number | symbol' is not assignable to type 'keyof U'.
+!!! error TS2322:               Type 'string' is not assignable to type 'keyof U'.
         k2 = k4;  // Error
         ~~
 !!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:       Type 'string' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:         Type 'string' is not assignable to type 'keyof T'.
+!!! error TS2322:           Type 'keyof T' is not assignable to type 'keyof U'.
+!!! error TS2322:             Type 'string | number | symbol' is not assignable to type 'keyof U'.
+!!! error TS2322:               Type 'string' is not assignable to type 'keyof U'.
     
         k3 = k1;
         k3 = k2;
@@ -253,6 +293,8 @@ keyofAndIndexedAccessErrors.ts(165,5): error TS2322: Type 'number' is not assign
 !!! error TS2322: Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'.
 !!! error TS2322:   Type 'Extract<keyof T, string>' is not assignable to type 'K'.
 !!! error TS2322:     'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:       Type 'string' is not assignable to type 'K'.
+!!! error TS2322:         'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
         }
         tk = uk;
         uk = tk; // error

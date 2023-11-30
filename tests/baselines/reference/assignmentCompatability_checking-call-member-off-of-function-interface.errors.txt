@@ -4,6 +4,7 @@ assignmentCompatability_checking-call-member-off-of-function-interface.ts(12,1):
 assignmentCompatability_checking-call-member-off-of-function-interface.ts(13,1): error TS2741: Property 'call' is missing in type '{}' but required in type 'Callable'.
 assignmentCompatability_checking-call-member-off-of-function-interface.ts(22,4): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Callable'.
 assignmentCompatability_checking-call-member-off-of-function-interface.ts(23,4): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Callable'.
+  Property 'call' is missing in type 'string[]' but required in type 'Callable'.
 assignmentCompatability_checking-call-member-off-of-function-interface.ts(24,4): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Callable'.
 assignmentCompatability_checking-call-member-off-of-function-interface.ts(25,4): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Callable'.
   Property 'call' is missing in type '{}' but required in type 'Callable'.
@@ -47,6 +48,8 @@ assignmentCompatability_checking-call-member-off-of-function-interface.ts(25,4):
     fn(['']);
        ~~~~
 !!! error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Callable'.
+!!! error TS2345:   Property 'call' is missing in type 'string[]' but required in type 'Callable'.
+!!! related TS2728 assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
     fn(4);
        ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Callable'.

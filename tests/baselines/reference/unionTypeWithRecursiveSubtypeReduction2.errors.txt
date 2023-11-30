@@ -10,6 +10,9 @@ unionTypeWithRecursiveSubtypeReduction2.ts(20,1): error TS2322: Type 'Class' is 
           Type '(Class | Property)[]' is not assignable to type 'Class[]'.
             Type 'Class | Property' is not assignable to type 'Class'.
               Type 'Property' is not assignable to type 'Class'.
+                Types of property 'parent' are incompatible.
+                  Type 'Module | Class' is not assignable to type 'Namespace'.
+                    Property 'members' is missing in type 'Class' but required in type 'Namespace'.
 
 
 ==== unionTypeWithRecursiveSubtypeReduction2.ts (2 errors) ====
@@ -48,4 +51,8 @@ unionTypeWithRecursiveSubtypeReduction2.ts(20,1): error TS2322: Type 'Class' is 
 !!! error TS2322:           Type '(Class | Property)[]' is not assignable to type 'Class[]'.
 !!! error TS2322:             Type 'Class | Property' is not assignable to type 'Class'.
 !!! error TS2322:               Type 'Property' is not assignable to type 'Class'.
+!!! error TS2322:                 Types of property 'parent' are incompatible.
+!!! error TS2322:                   Type 'Module | Class' is not assignable to type 'Namespace'.
+!!! error TS2322:                     Property 'members' is missing in type 'Class' but required in type 'Namespace'.
+!!! related TS2728 unionTypeWithRecursiveSubtypeReduction2.ts:6:12: 'members' is declared here.
     
