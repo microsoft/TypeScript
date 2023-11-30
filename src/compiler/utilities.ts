@@ -3975,12 +3975,13 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.BindingElement:
             return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
         case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ExportDeclaration:
             return tryCast(node.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportEqualsDeclaration:
             return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
@@ -3992,6 +3993,8 @@ export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAcce
             return tryCast(node.parent.parent.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportSpecifier:
             return tryCast(node.parent.parent.parent.moduleSpecifier, isStringLiteralLike);
+        case SyntaxKind.ImportType:
+            return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
         default:
             Debug.assertNever(node);
     }
@@ -4331,7 +4334,7 @@ export function getNextJSDocCommentLocation(node: Node) {
         parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
         parent.kind === SyntaxKind.ReturnStatement ||
         getNestedModuleDeclaration(parent) ||
-        isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken
+        isAssignmentExpression(node)
     ) {
         return parent;
     }
@@ -4343,8 +4346,7 @@ export function getNextJSDocCommentLocation(node: Node) {
     // var x = function(name) { return name.length; }
     else if (
         parent.parent &&
-        (getSingleVariableOfVariableStatement(parent.parent) === node ||
-            isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken)
+        (getSingleVariableOfVariableStatement(parent.parent) === node || isAssignmentExpression(parent))
     ) {
         return parent.parent;
     }
@@ -5062,6 +5064,7 @@ export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttri
         case SyntaxKind.PrivateIdentifier:
             return name.escapedText;
         case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
         case SyntaxKind.NumericLiteral:
             return escapeLeadingUnderscores(name.text);
         case SyntaxKind.ComputedPropertyName:
@@ -5820,7 +5823,8 @@ export function createDiagnosticCollection(): DiagnosticCollection {
 }
 
 const templateSubstitutionRegExp = /\$\{/g;
-function escapeTemplateSubstitution(str: string): string {
+/** @internal */
+export function escapeTemplateSubstitution(str: string): string {
     return str.replace(templateSubstitutionRegExp, "\\${");
 }
 
@@ -6925,11 +6929,14 @@ function getModifierFlagsWorker(node: Node, includeJSDoc: boolean, alwaysInclude
         node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
     }
 
-    if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && (alwaysIncludeJSDoc || isInJSFile(node)) && node.parent) {
-        node.modifierFlagsCache |= getJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
+    if (alwaysIncludeJSDoc || includeJSDoc && isInJSFile(node)) {
+        if (!(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
+            node.modifierFlagsCache |= getRawJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
+        }
+        return selectEffectiveModifierFlags(node.modifierFlagsCache);
     }
 
-    return node.modifierFlagsCache & ~(ModifierFlags.HasComputedFlags | ModifierFlags.HasComputedJSDocModifiers);
+    return selectSyntacticModifierFlags(node.modifierFlagsCache);
 }
 
 /**
@@ -6959,20 +6966,33 @@ export function getSyntacticModifierFlags(node: Node): ModifierFlags {
     return getModifierFlagsWorker(node, /*includeJSDoc*/ false);
 }
 
-function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
+function getRawJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = ModifierFlags.None;
     if (!!node.parent && !isParameter(node)) {
         if (isInJSFile(node)) {
-            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.Public;
-            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
-            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
-            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
-            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.Override;
+            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
+            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
+            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.JSDocProtected;
+            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
+            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
         }
         if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
     }
 
     return flags;
+}
+
+function selectSyntacticModifierFlags(flags: ModifierFlags) {
+    return flags & ModifierFlags.SyntacticModifiers;
+}
+
+function selectEffectiveModifierFlags(flags: ModifierFlags) {
+    return (flags & ModifierFlags.NonCacheOnlyModifiers) |
+        ((flags & ModifierFlags.JSDocCacheOnlyModifiers) >>> 23); // shift ModifierFlags.JSDoc* to match ModifierFlags.*
+}
+
+function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
+    return selectEffectiveModifierFlags(getRawJSDocModifierFlagsNoCache(node));
 }
 
 /**
@@ -7810,9 +7830,12 @@ export function clearMap<K, T>(map: { forEach: Map<K, T>["forEach"]; clear: Map<
 }
 
 /** @internal */
-export interface MutateMapSkippingNewValuesOptions<K, T, U> {
+export interface MutateMapSkippingNewValuesDelete<K, T> {
     onDeleteValue(existingValue: T, key: K): void;
+}
 
+/** @internal */
+export interface MutateMapSkippingNewValuesOptions<K, T, U> extends MutateMapSkippingNewValuesDelete<K, T> {
     /**
      * If present this is called with the key when there is value for that key both in new map as well as existing map provided
      * Caller can then decide to update or remove this key.
@@ -7827,30 +7850,48 @@ export interface MutateMapSkippingNewValuesOptions<K, T, U> {
  *
  * @internal
  */
+export function mutateMapSkippingNewValues<K, T>(
+    map: Map<K, T>,
+    newMap: ReadonlySet<K> | undefined,
+    options: MutateMapSkippingNewValuesDelete<K, T>,
+): void;
+/** @internal */
 export function mutateMapSkippingNewValues<K, T, U>(
     map: Map<K, T>,
-    newMap: ReadonlyMap<K, U>,
+    newMap: ReadonlyMap<K, U> | undefined,
+    options: MutateMapSkippingNewValuesOptions<K, T, U>,
+): void;
+export function mutateMapSkippingNewValues<K, T, U>(
+    map: Map<K, T>,
+    newMap: ReadonlyMap<K, U> | ReadonlySet<K> | undefined,
     options: MutateMapSkippingNewValuesOptions<K, T, U>,
 ) {
     const { onDeleteValue, onExistingValue } = options;
     // Needs update
     map.forEach((existingValue, key) => {
-        const valueInNewMap = newMap.get(key);
         // Not present any more in new map, remove it
-        if (valueInNewMap === undefined) {
+        if (!newMap?.has(key)) {
             map.delete(key);
             onDeleteValue(existingValue, key);
         }
         // If present notify about existing values
         else if (onExistingValue) {
-            onExistingValue(existingValue, valueInNewMap, key);
+            onExistingValue(existingValue, (newMap as Map<K, U>).get?.(key)!, key);
         }
     });
 }
 
 /** @internal */
-export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOptions<K, T, U> {
+export interface MutateMapOptionsCreate<K, T, U> {
     createNewValue(key: K, valueInNewMap: U): T;
+}
+
+/** @internal */
+export interface MutateMapWithNewSetOptions<K, T> extends MutateMapSkippingNewValuesDelete<K, T>, MutateMapOptionsCreate<K, T, K> {
+}
+
+/** @internal */
+export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOptions<K, T, U>, MutateMapOptionsCreate<K, T, U> {
 }
 
 /**
@@ -7858,16 +7899,19 @@ export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOpt
  *
  * @internal
  */
-export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U>, options: MutateMapOptions<K, T, U>) {
+export function mutateMap<K, T>(map: Map<K, T>, newMap: ReadonlySet<K> | undefined, options: MutateMapWithNewSetOptions<K, T>): void;
+/** @internal */
+export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U> | undefined, options: MutateMapOptions<K, T, U>): void;
+export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U> | ReadonlySet<K> | undefined, options: MutateMapOptions<K, T, U>) {
     // Needs update
-    mutateMapSkippingNewValues(map, newMap, options);
+    mutateMapSkippingNewValues(map, newMap as ReadonlyMap<K, U>, options);
 
     const { createNewValue } = options;
     // Add new values that are not already present
-    newMap.forEach((valueInNewMap, key) => {
+    newMap?.forEach((valueInNewMap, key) => {
         if (!map.has(key)) {
             // New values
-            map.set(key, createNewValue(key, valueInNewMap));
+            map.set(key, createNewValue(key, valueInNewMap as U & K));
         }
     });
 }

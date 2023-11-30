@@ -24,7 +24,7 @@ keyofAndIndexedAccess2.ts(52,3): error TS2322: Type 'number' is not assignable t
 keyofAndIndexedAccess2.ts(53,3): error TS2322: Type 'number' is not assignable to type 'T[K]'.
   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 keyofAndIndexedAccess2.ts(65,7): error TS2339: Property 'foo' does not exist on type 'T'.
-keyofAndIndexedAccess2.ts(66,3): error TS2536: Type 'string' cannot be used to index type 'T'.
+keyofAndIndexedAccess2.ts(66,3): error TS2862: Type 'T' is generic and can only be indexed for reading.
 keyofAndIndexedAccess2.ts(67,3): error TS2322: Type 'number' is not assignable to type 'T[keyof T]'.
   'number' is assignable to the constraint of type 'T[keyof T]', but 'T[keyof T]' could be instantiated with a different subtype of constraint 'number'.
 keyofAndIndexedAccess2.ts(68,3): error TS2322: Type 'number' is not assignable to type 'T[K]'.
@@ -146,7 +146,7 @@ keyofAndIndexedAccess2.ts(108,5): error TS2322: Type '123' is not assignable to 
 !!! error TS2339: Property 'foo' does not exist on type 'T'.
       obj[k1] = 123;  // Error
       ~~~~~~~
-!!! error TS2536: Type 'string' cannot be used to index type 'T'.
+!!! error TS2862: Type 'T' is generic and can only be indexed for reading.
       obj[k2] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'T[keyof T]'.

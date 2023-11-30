@@ -9,16 +9,16 @@ interface Promise<T> {
 
 interface Bar {
     bar(value: "Menu"): Promise<string>;
->bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
+>bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T_1>(value: string): Promise<T_1>; }
 >value : "Menu"
 
     bar<T>(value: string, element: string): Promise<T>;
->bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
+>bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T_1>(value: string): Promise<T_1>; }
 >value : string
 >element : string
 
     bar<T>(value: string): Promise<T>;
->bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
+>bar : { (value: "Menu"): Promise<string>; <T_1>(value: string, element: string): Promise<T_1>; <T>(value: string): Promise<T>; }
 >value : string
 }
 

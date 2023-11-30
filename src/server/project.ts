@@ -17,7 +17,6 @@ import {
     CompilerHost,
     CompilerOptions,
     concatenate,
-    ConfigFileProgramReloadLevel,
     containsPath,
     createCacheableExportInfoMap,
     createLanguageService,
@@ -98,6 +97,7 @@ import {
     PluginImport,
     PollingInterval,
     Program,
+    ProgramUpdateLevel,
     ProjectPackageJsonInfo,
     ProjectReference,
     removeFileExtension,
@@ -144,6 +144,7 @@ import {
     ModuleImportResult,
     Msg,
     NormalizedPath,
+    PackageJsonWatcher,
     projectContainsInfoDirectly,
     ProjectOptions,
     ProjectReferenceProjectLoadKind,
@@ -254,7 +255,7 @@ export interface PluginCreateInfo {
 
 export interface PluginModule {
     create(createInfo: PluginCreateInfo): LanguageService;
-    getExternalFiles?(proj: Project): string[];
+    getExternalFiles?(proj: Project, updateLevel: ProgramUpdateLevel): string[];
     onConfigurationChanged?(config: any): void;
 }
 
@@ -347,7 +348,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     readonly realpath?: (path: string) => string;
 
     /** @internal */
-    hasInvalidatedResolutions: HasInvalidatedResolutions | undefined;
+    hasInvalidatedResolutions?: HasInvalidatedResolutions | undefined;
 
     /** @internal */
     hasInvalidatedLibResolutions: HasInvalidatedLibResolutions | undefined;
@@ -398,7 +399,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     originalConfiguredProjects: Set<NormalizedPath> | undefined;
 
     /** @internal */
-    private packageJsonsForAutoImport: Set<string> | undefined;
+    packageJsonWatches: Set<PackageJsonWatcher> | undefined;
 
     /** @internal */
     noDtsResolutionProject?: AuxiliaryProject | undefined;
@@ -579,9 +580,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.disableLanguageService(lastFileExceededProgramSize);
         }
         this.markAsDirty();
-        if (projectKind !== ProjectKind.AutoImportProvider) {
+        if (!isBackgroundProject(this)) {
             this.projectService.pendingEnsureProjectForOpenFiles = true;
         }
+        this.projectService.onProjectCreation(this);
     }
 
     isKnownTypesPackageName(name: string): boolean {
@@ -727,6 +729,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return this.resolutionCache.resolveModuleNameLiterals(moduleLiterals, containingFile, redirectedReference, options, containingSourceFile, reusedNames);
     }
 
+    /** @internal */
     getModuleResolutionCache(): ModuleResolutionCache | undefined {
         return this.resolutionCache.getModuleResolutionCache();
     }
@@ -1027,11 +1030,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return { ...newTypeAcquisition, include: this.removeExistingTypings(newTypeAcquisition.include) };
     }
 
-    getExternalFiles(): SortedReadonlyArray<string> {
+    getExternalFiles(updateLevel?: ProgramUpdateLevel): SortedReadonlyArray<string> {
         return sort(flatMap(this.plugins, plugin => {
             if (typeof plugin.module.getExternalFiles !== "function") return;
             try {
-                return plugin.module.getExternalFiles(this);
+                return plugin.module.getExternalFiles(this, updateLevel || ProgramUpdateLevel.Update);
             }
             catch (e) {
                 this.projectService.logger.info(`A plugin threw an exception in getExternalFiles: ${e}`);
@@ -1078,6 +1081,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.resolutionCache.clear();
         this.resolutionCache = undefined!;
         this.cachedUnresolvedImportsPerFile = undefined!;
+        this.packageJsonWatches?.forEach(watcher => {
+            watcher.projects.delete(this);
+            watcher.close();
+        });
+        this.packageJsonWatches = undefined;
+        this.moduleSpecifierCache.clear();
         this.moduleSpecifierCache = undefined!;
         this.directoryStructureHost = undefined!;
         this.exportMapCache = undefined;
@@ -1306,12 +1315,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    onPackageJsonChange(packageJsonPath: Path) {
-        if (this.packageJsonsForAutoImport?.has(packageJsonPath)) {
-            this.moduleSpecifierCache.clear();
-            if (this.autoImportProviderHost) {
-                this.autoImportProviderHost.markAsDirty();
-            }
+    onPackageJsonChange() {
+        this.moduleSpecifierCache.clear();
+        if (this.autoImportProviderHost) {
+            this.autoImportProviderHost.markAsDirty();
         }
     }
 
@@ -1326,6 +1333,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     onDiscoveredSymlink() {
         this.hasAddedOrRemovedSymlinks = true;
+    }
+
+    /** @internal */
+    updateFromProjectInProgress = false;
+
+    /** @internal */
+    updateFromProject() {
+        updateProjectIfDirty(this);
     }
 
     /**
@@ -1351,7 +1366,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
         // update builder only if language service is enabled
         // otherwise tell it to drop its internal state
-        if (this.languageServiceEnabled && this.projectService.serverMode === LanguageServiceMode.Semantic) {
+        if (this.languageServiceEnabled && this.projectService.serverMode === LanguageServiceMode.Semantic && !this.isOrphan()) {
             // 1. no changes in structure, no changes in unresolved imports - do nothing
             // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
             // (can reuse cached imports for files that were not changed)
@@ -1521,8 +1536,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.hasInvalidatedResolutions = hasInvalidatedResolutions;
         this.hasInvalidatedLibResolutions = hasInvalidatedLibResolutions;
         this.resolutionCache.startCachingPerDirectoryResolution();
-        this.program = this.languageService.getProgram(); // TODO: GH#18217
         this.dirty = false;
+        this.updateFromProjectInProgress = true;
+        this.program = this.languageService.getProgram(); // TODO: GH#18217
+        this.updateFromProjectInProgress = false;
         tracing?.push(tracing.Phase.Session, "finishCachingPerDirectoryResolution");
         this.resolutionCache.finishCachingPerDirectoryResolution(this.program, oldProgram);
         tracing?.pop();
@@ -1557,7 +1574,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 this.program,
                 this.missingFilesMap || (this.missingFilesMap = new Map()),
                 // Watch the missing files
-                missingFilePath => this.addMissingFileWatcher(missingFilePath),
+                (missingFilePath, missingFileName) => this.addMissingFileWatcher(missingFilePath, missingFileName),
             );
 
             if (this.generatedFilesMap) {
@@ -1682,14 +1699,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
     }
 
-    private addMissingFileWatcher(missingFilePath: Path): FileWatcher {
+    private addMissingFileWatcher(missingFilePath: Path, missingFileName: string): FileWatcher {
         if (isConfiguredProject(this)) {
             // If this file is referenced config file, we are already watching it, no need to watch again
             const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(missingFilePath as string as NormalizedPath);
             if (configFileExistenceInfo?.config?.projects.has(this.canonicalConfigFilePath)) return noopFileWatcher;
         }
         const fileWatcher = this.projectService.watchFactory.watchFile(
-            missingFilePath,
+            getNormalizedAbsolutePath(missingFileName, this.currentDirectory),
             (fileName, eventKind) => {
                 if (isConfiguredProject(this)) {
                     this.getCachedDirectoryStructureHost().addOrDeleteFile(fileName, missingFilePath, eventKind);
@@ -1892,10 +1909,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             }
             // compute and return the difference
             const lastReportedFileNames = this.lastReportedFileNames;
-            const externalFiles = this.getExternalFiles().map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
+            const externalFiles = this.externalFiles?.map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
                 fileName: toNormalizedPath(f),
                 isSourceOfProjectReferenceRedirect: false,
-            }));
+            })) || emptyArray;
             const currentFiles = arrayToMap(
                 this.getFileNamesWithRedirectInfo(!!includeProjectReferenceRedirectInfo).concat(externalFiles),
                 info => info.fileName,
@@ -1945,10 +1962,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         else {
             // unknown version - return everything
             const projectFileNames = this.getFileNamesWithRedirectInfo(!!includeProjectReferenceRedirectInfo);
-            const externalFiles = this.getExternalFiles().map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
+            const externalFiles = this.externalFiles?.map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
                 fileName: toNormalizedPath(f),
                 isSourceOfProjectReferenceRedirect: false,
-            }));
+            })) || emptyArray;
             const allFiles = projectFileNames.concat(externalFiles);
             this.lastReportedFileNames = arrayToMap(
                 allFiles,
@@ -2066,7 +2083,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[] {
         if (this.projectService.serverMode !== LanguageServiceMode.Semantic) return emptyArray;
-        return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
+        return this.projectService.getPackageJsonsVisibleToFile(fileName, this, rootDir);
     }
 
     /** @internal */
@@ -2076,9 +2093,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     getPackageJsonsForAutoImport(rootDir?: string): readonly ProjectPackageJsonInfo[] {
-        const packageJsons = this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
-        this.packageJsonsForAutoImport = new Set(packageJsons.map(p => p.fileName));
-        return packageJsons;
+        return this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
     }
 
     /** @internal */
@@ -2176,7 +2191,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     watchNodeModulesForPackageJsonChanges(directoryPath: string) {
-        return this.projectService.watchPackageJsonsInNodeModules(this.toPath(directoryPath), this);
+        return this.projectService.watchPackageJsonsInNodeModules(directoryPath, this);
     }
 
     /** @internal */
@@ -2185,35 +2200,15 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getNoDtsResolutionProject(rootFileNames: readonly string[]): Project {
+    getNoDtsResolutionProject(rootFile: NormalizedPath): AuxiliaryProject {
         Debug.assert(this.projectService.serverMode === LanguageServiceMode.Semantic);
         if (!this.noDtsResolutionProject) {
             this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject(), this.currentDirectory);
         }
-
-        enumerateInsertsAndDeletes<NormalizedPath, NormalizedPath>(
-            rootFileNames.map(toNormalizedPath),
-            this.noDtsResolutionProject.getRootFiles(),
-            getStringComparer(!this.useCaseSensitiveFileNames()),
-            pathToAdd => {
-                const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
-                    pathToAdd,
-                    this.currentDirectory,
-                    this.noDtsResolutionProject!.directoryStructureHost,
-                );
-                if (info) {
-                    this.noDtsResolutionProject!.addRoot(info, pathToAdd);
-                }
-            },
-            pathToRemove => {
-                // It may be preferable to remove roots only once project grows to a certain size?
-                const info = this.noDtsResolutionProject!.getScriptInfo(pathToRemove);
-                if (info) {
-                    this.noDtsResolutionProject!.removeRoot(info);
-                }
-            },
-        );
-
+        if (this.noDtsResolutionProject.rootFile !== rootFile) {
+            this.projectService.setFileNamesOfAutpImportProviderOrAuxillaryProject(this.noDtsResolutionProject, [rootFile]);
+            this.noDtsResolutionProject.rootFile = rootFile;
+        }
         return this.noDtsResolutionProject;
     }
 
@@ -2394,6 +2389,7 @@ export class InferredProject extends Project {
 
 /** @internal */
 export class AuxiliaryProject extends Project {
+    /** @internal */ rootFile: NormalizedPath | undefined;
     constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
         super(projectService.newAuxiliaryProjectName(), ProjectKind.Auxiliary, projectService, documentRegistry, /*hasExplicitListOfFiles*/ false, /*lastFileExceededProgramSize*/ undefined, compilerOptions, /*compileOnSaveEnabled*/ false, /*watchOptions*/ undefined, projectService.host, currentDirectory);
     }
@@ -2601,7 +2597,7 @@ export class AutoImportProviderProject extends Project {
             );
         }
 
-        this.projectService.setFileNamesOfAutoImportProviderProject(this, rootFileNames);
+        this.projectService.setFileNamesOfAutpImportProviderOrAuxillaryProject(this, rootFileNames);
         this.rootFileNames = rootFileNames;
         const oldProgram = this.getCurrentProgram();
         const hasSameSetOfFiles = super.updateGraph();
@@ -2657,10 +2653,6 @@ export class AutoImportProviderProject extends Project {
         return PackageJsonAutoImportPreference.Off;
     }
 
-    override getTypeAcquisition(): TypeAcquisition {
-        return { enable: false };
-    }
-
     /** @internal */
     override getSymlinkCache() {
         return this.hostProject.getSymlinkCache();
@@ -2679,12 +2671,12 @@ export class AutoImportProviderProject extends Project {
  */
 export class ConfiguredProject extends Project {
     /** @internal */
-    pendingReload: ConfigFileProgramReloadLevel | undefined;
+    pendingUpdateLevel: ProgramUpdateLevel | undefined;
     /** @internal */
-    pendingReloadReason: string | undefined;
+    pendingUpdateReason: string | undefined;
 
     /** @internal */
-    openFileWatchTriggered = new Map<string, ConfigFileProgramReloadLevel>();
+    openFileWatchTriggered = new Map<string, ProgramUpdateLevel>();
 
     /** @internal */
     canConfigFileJsonReportNoInputFiles = false;
@@ -2775,18 +2767,18 @@ export class ConfiguredProject extends Project {
     override updateGraph(): boolean {
         const isInitialLoad = this.isInitialLoadPending();
         this.isInitialLoadPending = returnFalse;
-        const reloadLevel = this.pendingReload;
-        this.pendingReload = ConfigFileProgramReloadLevel.None;
+        const updateLevel = this.pendingUpdateLevel;
+        this.pendingUpdateLevel = ProgramUpdateLevel.Update;
         let result: boolean;
-        switch (reloadLevel) {
-            case ConfigFileProgramReloadLevel.Partial:
+        switch (updateLevel) {
+            case ProgramUpdateLevel.RootNamesAndUpdate:
                 this.openFileWatchTriggered.clear();
                 result = this.projectService.reloadFileNamesOfConfiguredProject(this);
                 break;
-            case ConfigFileProgramReloadLevel.Full:
+            case ProgramUpdateLevel.Full:
                 this.openFileWatchTriggered.clear();
-                const reason = Debug.checkDefined(this.pendingReloadReason);
-                this.pendingReloadReason = undefined;
+                const reason = Debug.checkDefined(this.pendingUpdateReason);
+                this.pendingUpdateReason = undefined;
                 this.projectService.reloadConfiguredProject(this, reason, isInitialLoad, /*clearSemanticCache*/ false);
                 result = true;
                 break;
@@ -3014,4 +3006,9 @@ export function isConfiguredProject(project: Project): project is ConfiguredProj
 /** @internal */
 export function isExternalProject(project: Project): project is ExternalProject {
     return project.projectKind === ProjectKind.External;
+}
+
+/**@internal */
+export function isBackgroundProject(project: Project): project is AutoImportProviderProject | AuxiliaryProject {
+    return project.projectKind === ProjectKind.AutoImportProvider || project.projectKind === ProjectKind.Auxiliary;
 }

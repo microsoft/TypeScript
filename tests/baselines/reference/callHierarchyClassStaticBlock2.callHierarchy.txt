@@ -1,3 +1,4 @@
+// === Call Hierarchy ===
 ╭ name: static {}
 ├ kind: constructor
 ├ file: /tests/cases/fourslash/callHierarchyClassStaticBlock2.ts

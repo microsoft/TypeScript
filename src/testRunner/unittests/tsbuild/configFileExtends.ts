@@ -1,4 +1,7 @@
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
@@ -8,18 +11,18 @@ import {
 describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends another config", () => {
     function getConfigExtendsWithIncludeFs() {
         return loadProjectFromFiles({
-            "/src/tsconfig.json": JSON.stringify({
+            "/src/tsconfig.json": jsonToReadableText({
                 references: [
                     { path: "./shared/tsconfig.json" },
                     { path: "./webpack/tsconfig.json" },
                 ],
                 files: [],
             }),
-            "/src/shared/tsconfig-base.json": JSON.stringify({
+            "/src/shared/tsconfig-base.json": jsonToReadableText({
                 include: ["./typings-base/"],
             }),
             "/src/shared/typings-base/globals.d.ts": `type Unrestricted = any;`,
-            "/src/shared/tsconfig.json": JSON.stringify({
+            "/src/shared/tsconfig.json": jsonToReadableText({
                 extends: "./tsconfig-base.json",
                 compilerOptions: {
                     composite: true,
@@ -29,7 +32,7 @@ describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends anothe
                 files: ["./index.ts"],
             }),
             "/src/shared/index.ts": `export const a: Unrestricted = 1;`,
-            "/src/webpack/tsconfig.json": JSON.stringify({
+            "/src/webpack/tsconfig.json": jsonToReadableText({
                 extends: "../shared/tsconfig-base.json",
                 compilerOptions: {
                     composite: true,

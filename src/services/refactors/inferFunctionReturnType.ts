@@ -10,7 +10,7 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     getLocaleSpecificMessage,
-    getTokenAtPosition,
+    getTouchingPropertyName,
     isArrowFunction,
     isBlock,
     isInJSFile,
@@ -104,7 +104,7 @@ function doChange(sourceFile: SourceFile, changes: textChanges.ChangeTracker, de
 function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | undefined {
     if (isInJSFile(context.file) || !refactorKindBeginsWith(inferReturnTypeAction.kind, context.kind)) return;
 
-    const token = getTokenAtPosition(context.file, context.startPosition);
+    const token = getTouchingPropertyName(context.file, context.startPosition);
     const declaration = findAncestor(token, n =>
         isBlock(n) || n.parent && isArrowFunction(n.parent) && (n.kind === SyntaxKind.EqualsGreaterThanToken || n.parent.body === n) ? "quit" :
             isConvertibleDeclaration(n)) as ConvertibleDeclaration | undefined;

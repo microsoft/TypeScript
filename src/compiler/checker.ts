@@ -780,6 +780,7 @@ import {
     JSDocSatisfiesTag,
     JSDocSignature,
     JSDocTemplateTag,
+    JSDocThisTag,
     JSDocTypeAssertion,
     JSDocTypedefTag,
     JSDocTypeExpression,
@@ -1009,6 +1010,7 @@ import {
     tokenToString,
     tracing,
     TracingNode,
+    TrackedSymbol,
     TransientSymbol,
     TransientSymbolLinks,
     tryAddToSet,
@@ -1300,6 +1302,12 @@ const enum MappedTypeModifiers {
     ExcludeReadonly = 1 << 1,
     IncludeOptional = 1 << 2,
     ExcludeOptional = 1 << 3,
+}
+
+const enum MappedTypeNameTypeKind {
+    None,
+    Filtering,
+    Remapping,
 }
 
 const enum ExpandingFlags {
@@ -1866,7 +1874,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const nodeLinks = getNodeLinks(node);
                 cachedResolvedSignatures.push([nodeLinks, nodeLinks.resolvedSignature] as const);
                 nodeLinks.resolvedSignature = undefined;
-                if (isFunctionLike(node)) {
+                if (isFunctionExpressionOrArrowFunction(node)) {
                     const symbolLinks = getSymbolLinks(getSymbolOfDeclaration(node));
                     const type = symbolLinks.type;
                     cachedTypes.push([symbolLinks, type] as const);
@@ -3145,7 +3153,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else if (location.kind === SyntaxKind.ConditionalType) {
                         // A type parameter declared using 'infer T' in a conditional type is visible only in
                         // the true branch of the conditional type.
-                        useResult = lastLocation === (location as ConditionalTypeNode).trueType;
+                        useResult = lastLocation === location.trueType;
                     }
 
                     if (useResult) {
@@ -3788,8 +3796,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
         if (meaning & SymbolFlags.Value) {
             if (isPrimitiveTypeName(name)) {
-                if (isExtendedByInterface(errorLocation)) {
-                    error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_an_interface_can_only_extend_named_types_and_classes, unescapeLeadingUnderscores(name));
+                const grandparent = errorLocation.parent.parent;
+                if (grandparent && grandparent.parent && isHeritageClause(grandparent)) {
+                    const heritageKind = grandparent.token;
+                    const containerKind = grandparent.parent.kind;
+                    if (containerKind === SyntaxKind.InterfaceDeclaration && heritageKind === SyntaxKind.ExtendsKeyword) {
+                        error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_It_can_only_extend_other_named_object_types, unescapeLeadingUnderscores(name));
+                    }
+                    else if (containerKind === SyntaxKind.ClassDeclaration && heritageKind === SyntaxKind.ExtendsKeyword) {
+                        error(errorLocation, Diagnostics.A_class_cannot_extend_a_primitive_type_like_0_Classes_can_only_extend_constructable_values, unescapeLeadingUnderscores(name));
+                    }
+                    else if (containerKind === SyntaxKind.ClassDeclaration && heritageKind === SyntaxKind.ImplementsKeyword) {
+                        error(errorLocation, Diagnostics.A_class_cannot_implement_a_primitive_type_like_0_It_can_only_implement_other_named_object_types, unescapeLeadingUnderscores(name));
+                    }
                 }
                 else {
                     error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
@@ -3811,17 +3830,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return true;
             }
-        }
-        return false;
-    }
-
-    function isExtendedByInterface(node: Node): boolean {
-        const grandparent = node.parent.parent;
-        const parentOfGrandparent = grandparent.parent;
-        if (grandparent && parentOfGrandparent) {
-            const isExtending = isHeritageClause(grandparent) && grandparent.token === SyntaxKind.ExtendsKeyword;
-            const isInterface = isInterfaceDeclaration(parentOfGrandparent);
-            return isExtending && isInterface;
         }
         return false;
     }
@@ -4022,7 +4030,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isSyntacticDefault(node: Node) {
-        return ((isExportAssignment(node) && !node.isExportEquals) || hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node));
+        return ((isExportAssignment(node) && !node.isExportEquals)
+            || hasSyntacticModifier(node, ModifierFlags.Default)
+            || isExportSpecifier(node)
+            || isNamespaceExport(node));
     }
 
     function getUsageModeForExpression(usage: Expression) {
@@ -5521,6 +5532,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getMergedSymbol(symbol.parent && getLateBoundSymbol(symbol.parent));
     }
 
+    function getFunctionExpressionParentSymbolOrSymbol(symbol: Symbol) {
+        return symbol.valueDeclaration?.kind === SyntaxKind.ArrowFunction || symbol.valueDeclaration?.kind === SyntaxKind.FunctionExpression
+            ? getSymbolOfNode(symbol.valueDeclaration.parent) || symbol
+            : symbol;
+    }
+
     function getAlternativeContainingModules(symbol: Symbol, enclosingDeclaration: Node): Symbol[] {
         const containingFile = getSourceFileOfNode(enclosingDeclaration);
         const id = getNodeId(containingFile);
@@ -6420,6 +6437,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 symbolDepth: undefined,
                 inferTypeParameters: undefined,
                 approximateLength: 0,
+                trackedSymbols: undefined,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -6617,8 +6635,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (
                     context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
-                    type.flags & TypeFlags.TypeParameter &&
-                    !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)
+                    type.flags & TypeFlags.TypeParameter
                 ) {
                     const name = typeParameterToName(type, context);
                     context.approximateLength += idText(name).length;
@@ -6833,6 +6850,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const typeId = type.id;
                 const symbol = type.symbol;
                 if (symbol) {
+                    const isInstantiationExpressionType = !!(getObjectFlags(type) & ObjectFlags.InstantiationExpressionType);
+                    if (isInstantiationExpressionType) {
+                        const instantiationExpressionType = type as InstantiationExpressionType;
+                        const existing = instantiationExpressionType.node;
+                        if (isTypeQueryNode(existing) && getTypeFromTypeNode(existing) === type) {
+                            const typeNode = serializeExistingTypeNode(context, existing);
+                            if (typeNode) {
+                                return typeNode;
+                            }
+                        }
+                        if (context.visitedTypes?.has(typeId)) {
+                            return createElidedInformationPlaceholder(context);
+                        }
+                        return visitAndTransformType(type, createTypeNodeFromObjectType);
+                    }
                     const isInstanceType = isClassInstanceSide(type) ? SymbolFlags.Type : SymbolFlags.Value;
                     if (isJSConstructor(symbol.valueDeclaration)) {
                         // Instance and static types share the same symbol; only add 'typeof' for the static side.
@@ -6864,20 +6896,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else {
-                    const isInstantiationExpressionType = !!(getObjectFlags(type) & ObjectFlags.InstantiationExpressionType);
-                    if (isInstantiationExpressionType) {
-                        const instantiationExpressionType = type as InstantiationExpressionType;
-                        if (isTypeQueryNode(instantiationExpressionType.node)) {
-                            const typeNode = serializeExistingTypeNode(context, instantiationExpressionType.node);
-                            if (typeNode) {
-                                return typeNode;
-                            }
-                        }
-                        if (context.visitedTypes?.has(typeId)) {
-                            return createElidedInformationPlaceholder(context);
-                        }
-                        return visitAndTransformType(type, createTypeNodeFromObjectType);
-                    }
                     // Anonymous types without a symbol are never circular.
                     return createTypeNodeFromObjectType(type);
                 }
@@ -6918,6 +6936,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const cachedResult = links?.serializedTypes?.get(key);
                 if (cachedResult) {
+                    // TODO:: check if we instead store late painted statements associated with this?
+                    cachedResult.trackedSymbols?.forEach(
+                        ([symbol, enclosingDeclaration, meaning]) =>
+                            context.tracker.trackSymbol(
+                                symbol,
+                                enclosingDeclaration,
+                                meaning,
+                            ),
+                    );
                     if (cachedResult.truncating) {
                         context.truncating = true;
                     }
@@ -6934,16 +6961,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.symbolDepth!.set(id, depth + 1);
                 }
                 context.visitedTypes.add(typeId);
+                const prevTrackedSymbols = context.trackedSymbols;
+                context.trackedSymbols = undefined;
                 const startLength = context.approximateLength;
                 const result = transform(type);
                 const addedLength = context.approximateLength - startLength;
                 if (!context.reportedDiagnostic && !context.encounteredError) {
-                    links?.serializedTypes?.set(key, { node: result, truncating: context.truncating, addedLength });
+                    links?.serializedTypes?.set(key, {
+                        node: result,
+                        truncating: context.truncating,
+                        addedLength,
+                        trackedSymbols: context.trackedSymbols,
+                    });
                 }
                 context.visitedTypes.delete(typeId);
                 if (id) {
                     context.symbolDepth!.set(id, depth!);
                 }
+                context.trackedSymbols = prevTrackedSymbols;
                 return result;
 
                 function deepCloneOrReuseNode<T extends Node>(node: T): T {
@@ -7289,6 +7324,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const propertyName = getPropertyNameNodeForSymbol(propertySymbol, context);
             context.enclosingDeclaration = saveEnclosingDeclaration;
             context.approximateLength += symbolName(propertySymbol).length + 1;
+
+            if (propertySymbol.flags & SymbolFlags.Accessor) {
+                const writeType = getWriteTypeOfSymbol(propertySymbol);
+                if (propertyType !== writeType && !isErrorType(propertyType) && !isErrorType(writeType)) {
+                    const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor)!;
+                    const getterSignature = getSignatureFromDeclaration(getterDeclaration);
+                    typeElements.push(
+                        setCommentRange(
+                            signatureToSignatureDeclarationHelper(getterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
+                            getterDeclaration,
+                        ),
+                    );
+                    const setterDeclaration = getDeclarationOfKind<SetAccessorDeclaration>(propertySymbol, SyntaxKind.SetAccessor)!;
+                    const setterSignature = getSignatureFromDeclaration(setterDeclaration);
+                    typeElements.push(
+                        setCommentRange(
+                            signatureToSignatureDeclarationHelper(setterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
+                            setterDeclaration,
+                        ),
+                    );
+                    return;
+                }
+            }
+
             const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
             if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length && !isReadonlySymbol(propertySymbol)) {
                 const signatures = getSignaturesOfType(filterType(propertyType, t => !(t.flags & TypeFlags.Undefined)), SignatureKind.Call);
@@ -7329,9 +7388,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             typeElements.push(preserveCommentsOn(propertySignature));
 
             function preserveCommentsOn<T extends Node>(node: T) {
-                if (some(propertySymbol.declarations, d => d.kind === SyntaxKind.JSDocPropertyTag)) {
-                    const d = propertySymbol.declarations?.find(d => d.kind === SyntaxKind.JSDocPropertyTag)! as JSDocPropertyTag;
-                    const commentText = getTextOfJSDocComment(d.comment);
+                const jsdocPropertyTag = propertySymbol.declarations?.find((d): d is JSDocPropertyTag => d.kind === SyntaxKind.JSDocPropertyTag);
+                if (jsdocPropertyTag) {
+                    const commentText = getTextOfJSDocComment(jsdocPropertyTag.comment);
                     if (commentText) {
                         setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]);
                     }
@@ -7483,7 +7542,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 && signature.declaration
                 && signature.declaration !== context.enclosingDeclaration
                 && !isInJSFile(signature.declaration)
-                && some(expandedParams)
+                && (some(expandedParams) || some(signature.typeParameters))
             ) {
                 // As a performance optimization, reuse the same fake scope within this chain.
                 // This is especially needed when we are working on an excessively deep type;
@@ -7501,32 +7560,64 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Note that we only check the most immediate enclosingDeclaration; the only place we
                 // could potentially add another fake scope into the chain is right here, so we don't
                 // traverse all ancestors.
-                const existingFakeScope = getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration ? context.enclosingDeclaration : undefined;
-                Debug.assertOptionalNode(existingFakeScope, isBlock);
+                pushFakeScope(
+                    "params",
+                    add => {
+                        for (const param of expandedParams) {
+                            add(param.escapedName, param);
+                        }
+                    },
+                );
 
-                const locals = existingFakeScope?.locals ?? createSymbolTable();
-
-                let newLocals: __String[] | undefined;
-                for (const param of expandedParams) {
-                    if (!locals.has(param.escapedName)) {
-                        newLocals = append(newLocals, param.escapedName);
-                        locals.set(param.escapedName, param);
-                    }
+                if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
+                    // TODO(jakebailey): should this instead be done before walking type parameters?
+                    pushFakeScope(
+                        "typeParams",
+                        add => {
+                            for (const typeParam of signature.typeParameters ?? emptyArray) {
+                                const typeParamName = typeParameterToName(typeParam, context).escapedText;
+                                add(typeParamName, typeParam.symbol);
+                            }
+                        },
+                    );
                 }
 
-                if (newLocals) {
-                    function removeNewLocals() {
+                function pushFakeScope(kind: "params" | "typeParams", addAll: (addSymbol: (name: __String, symbol: Symbol) => void) => void) {
+                    // We only ever need to look two declarations upward.
+                    Debug.assert(context.enclosingDeclaration);
+                    let existingFakeScope: Node | undefined;
+                    if (getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration === kind) {
+                        existingFakeScope = context.enclosingDeclaration;
+                    }
+                    else if (context.enclosingDeclaration.parent && getNodeLinks(context.enclosingDeclaration.parent).fakeScopeForSignatureDeclaration === kind) {
+                        existingFakeScope = context.enclosingDeclaration.parent;
+                    }
+                    Debug.assertOptionalNode(existingFakeScope, isBlock);
+
+                    const locals = existingFakeScope?.locals ?? createSymbolTable();
+                    let newLocals: __String[] | undefined;
+                    addAll((name, symbol) => {
+                        if (!locals.has(name)) {
+                            newLocals = append(newLocals, name);
+                            locals.set(name, symbol);
+                        }
+                    });
+                    if (!newLocals) return;
+
+                    const oldCleanup = cleanup;
+                    function undo() {
                         forEach(newLocals, s => locals.delete(s));
+                        oldCleanup?.();
                     }
 
                     if (existingFakeScope) {
-                        cleanup = removeNewLocals;
+                        cleanup = undo;
                     }
                     else {
                         // Use a Block for this; the type of the node doesn't matter so long as it
                         // has locals, and this is cheaper/easier than using a function-ish Node.
                         const fakeScope = parseNodeFactory.createBlock(emptyArray);
-                        getNodeLinks(fakeScope).fakeScopeForSignatureDeclaration = true;
+                        getNodeLinks(fakeScope).fakeScopeForSignatureDeclaration = kind;
                         fakeScope.locals = locals;
 
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
@@ -7535,7 +7626,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                         cleanup = () => {
                             context.enclosingDeclaration = saveEnclosingDeclaration;
-                            removeNewLocals();
+                            undo();
                         };
                     }
                 }
@@ -8083,13 +8174,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function typeParameterShadowsNameInScope(escapedName: __String, context: NodeBuilderContext, type: TypeParameter) {
+        function typeParameterShadowsOtherTypeParameterInScope(escapedName: __String, context: NodeBuilderContext, type: TypeParameter) {
             const result = resolveName(context.enclosingDeclaration, escapedName, SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, escapedName, /*isUse*/ false);
-            if (result) {
-                if (result.flags & SymbolFlags.TypeParameter && result === type.symbol) {
-                    return false;
-                }
-                return true;
+            if (result && result.flags & SymbolFlags.TypeParameter) {
+                return result !== type.symbol;
             }
             return false;
         }
@@ -8109,7 +8197,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const rawtext = result.escapedText as string;
                 let i = context.typeParameterNamesByTextNextNameCount?.get(rawtext) || 0;
                 let text = rawtext;
-                while (context.typeParameterNamesByText?.has(text) || typeParameterShadowsNameInScope(text as __String, context, type)) {
+                while (context.typeParameterNamesByText?.has(text) || typeParameterShadowsOtherTypeParameterInScope(text as __String, context, type)) {
                     i++;
                     text = `${rawtext}_${i}`;
                 }
@@ -8122,7 +8210,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // `i` we've used thus far, to save work later
                 (context.typeParameterNamesByTextNextNameCount ||= new Map()).set(rawtext, i);
                 (context.typeParameterNames ||= new Map()).set(getTypeId(type), result);
-                (context.typeParameterNamesByText ||= new Set()).add(rawtext);
+                (context.typeParameterNamesByText ||= new Set()).add(text);
             }
             return result;
         }
@@ -8255,7 +8343,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return factory.createStringLiteral(name, !!singleQuote);
                     }
                     if (isNumericLiteralName(name) && startsWith(name, "-")) {
-                        return factory.createComputedPropertyName(factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(+name))));
+                        return factory.createComputedPropertyName(factory.createNumericLiteral(+name));
                     }
                     return createPropertyNameNodeForIdentifierOrLiteral(name, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed, isMethod);
                 }
@@ -8301,7 +8389,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getEnclosingDeclarationIgnoringFakeScope(enclosingDeclaration: Node) {
-            return getNodeLinks(enclosingDeclaration).fakeScopeForSignatureDeclaration ? enclosingDeclaration.parent : enclosingDeclaration;
+            while (getNodeLinks(enclosingDeclaration).fakeScopeForSignatureDeclaration) {
+                enclosingDeclaration = enclosingDeclaration.parent;
+            }
+            return enclosingDeclaration;
         }
 
         /**
@@ -8381,7 +8472,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (isIdentifier(node)) {
                     const type = getDeclaredTypeOfSymbol(sym);
-                    const name = sym.flags & SymbolFlags.TypeParameter && !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration) ? typeParameterToName(type, context) : factory.cloneNode(node);
+                    const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(type, context) : factory.cloneNode(node);
                     name.symbol = sym; // for quickinfo, which uses identifier symbol information
                     return { introducesError, node: setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping) };
                 }
@@ -8789,12 +8880,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function addExportModifier(node: Extract<HasModifiers, Statement>) {
                 const flags = (getEffectiveModifierFlags(node) | ModifierFlags.Export) & ~ModifierFlags.Ambient;
-                return factory.updateModifiers(node, flags);
+                return factory.replaceModifiers(node, flags);
             }
 
             function removeExportModifier(node: Extract<HasModifiers, Statement>) {
                 const flags = getEffectiveModifierFlags(node) & ~ModifierFlags.Export;
-                return factory.updateModifiers(node, flags);
+                return factory.replaceModifiers(node, flags);
             }
 
             function visitSymbolTable(symbolTable: SymbolTable, suppressNewPrivateContext?: boolean, propertyAsAlias?: boolean) {
@@ -8831,6 +8922,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
                     if (context.reportedDiagnostic) {
                         oldcontext.reportedDiagnostic = context.reportedDiagnostic; // hoist diagnostic result into outer context
+                    }
+                    if (context.trackedSymbols) {
+                        if (!oldContext.trackedSymbols) oldContext.trackedSymbols = context.trackedSymbols;
+                        else Debug.assert(context.trackedSymbols === oldContext.trackedSymbols);
                     }
                     context = oldContext;
                 }
@@ -9093,7 +9188,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         newModifierFlags |= ModifierFlags.Default;
                     }
                     if (newModifierFlags) {
-                        node = factory.updateModifiers(node, newModifierFlags | getEffectiveModifierFlags(node));
+                        node = factory.replaceModifiers(node, newModifierFlags | getEffectiveModifierFlags(node));
                     }
                 }
                 results.push(node);
@@ -9795,7 +9890,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !(typeToSerialize.symbol && some(typeToSerialize.symbol.declarations, d => getSourceFileOfNode(d) !== ctxSrc)) &&
                     !some(getPropertiesOfType(typeToSerialize), p => isLateBoundName(p.escapedName)) &&
                     !some(getPropertiesOfType(typeToSerialize), p => some(p.declarations, d => getSourceFileOfNode(d) !== ctxSrc)) &&
-                    every(getPropertiesOfType(typeToSerialize), p => isIdentifierText(symbolName(p), languageVersion));
+                    every(getPropertiesOfType(typeToSerialize), p => {
+                        if (!isIdentifierText(symbolName(p), languageVersion)) {
+                            return false;
+                        }
+                        if (!(p.flags & SymbolFlags.Accessor)) {
+                            return true;
+                        }
+                        return getNonMissingTypeOfSymbol(p) === getWriteTypeOfSymbol(p);
+                    });
             }
 
             function makeSerializePropertySymbol<T extends Node>(
@@ -11145,11 +11248,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         if (symbol.parent?.valueDeclaration) {
-            const typeNode = getEffectiveTypeAnnotationNode(symbol.parent.valueDeclaration);
-            if (typeNode) {
-                const annotationSymbol = getPropertyOfType(getTypeFromTypeNode(typeNode), symbol.escapedName);
-                if (annotationSymbol) {
-                    return getNonMissingTypeOfSymbol(annotationSymbol);
+            const possiblyAnnotatedSymbol = getFunctionExpressionParentSymbolOrSymbol(symbol.parent);
+            if (possiblyAnnotatedSymbol.valueDeclaration) {
+                const typeNode = getEffectiveTypeAnnotationNode(possiblyAnnotatedSymbol.valueDeclaration);
+                if (typeNode) {
+                    const annotationSymbol = getPropertyOfType(getTypeFromTypeNode(typeNode), symbol.escapedName);
+                    if (annotationSymbol) {
+                        return getNonMissingTypeOfSymbol(annotationSymbol);
+                    }
                 }
             }
         }
@@ -11776,9 +11882,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfAlias(symbol: Symbol): Type {
         const links = getSymbolLinks(symbol);
         if (!links.type) {
+            if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                return errorType;
+            }
             const targetSymbol = resolveAlias(symbol);
             const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontRecursivelyResolve*/ true);
             const declaredType = firstDefined(exportSymbol?.declarations, d => isExportAssignment(d) ? tryGetTypeFromEffectiveTypeNode(d) : undefined);
+
             // It only makes sense to get the type of a value symbol. If the result of resolving
             // the alias is not a value, then it has no type. To get the type associated with a
             // type symbol, call getDeclaredTypeOfSymbol.
@@ -11789,6 +11899,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : declaredType ? declaredType
                 : getSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                 : errorType;
+
+            if (!popTypeResolution()) {
+                reportCircularityError(exportSymbol ?? symbol);
+                return links.type = errorType;
+            }
         }
         return links.type;
     }
@@ -11804,15 +11919,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function reportCircularityError(symbol: Symbol) {
-        const declaration = symbol.valueDeclaration as VariableLikeDeclaration;
+        const declaration = symbol.valueDeclaration;
         // Check if variable has type annotation that circularly references the variable itself
-        if (getEffectiveTypeAnnotationNode(declaration)) {
-            error(symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
-            return errorType;
+        if (declaration) {
+            if (getEffectiveTypeAnnotationNode(declaration)) {
+                error(symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
+                return errorType;
+            }
+            // Check if variable has initializer that circularly references the variable itself
+            if (noImplicitAny && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
+                error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer, symbolToString(symbol));
+            }
         }
-        // Check if variable has initializer that circularly references the variable itself
-        if (noImplicitAny && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
-            error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer, symbolToString(symbol));
+        else if (symbol.flags & SymbolFlags.Alias) {
+            const node = getDeclarationOfAliasSymbol(symbol);
+            if (node) {
+                error(node, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
+            }
         }
         // Circularities could also result from parameters in function expressions that end up
         // having themselves as contextual types following type argument inference. In those cases
@@ -12824,9 +12947,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            const assignments = (symbol.valueDeclaration?.kind === SyntaxKind.ArrowFunction || symbol.valueDeclaration?.kind === SyntaxKind.FunctionExpression) &&
-                    getSymbolOfNode(symbol.valueDeclaration.parent)?.assignmentDeclarationMembers ||
-                symbol.assignmentDeclarationMembers;
+            const assignments = getFunctionExpressionParentSymbolOrSymbol(symbol).assignmentDeclarationMembers;
 
             if (assignments) {
                 const decls = arrayFrom(assignments.values());
@@ -13134,9 +13255,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         let result: Signature[] | undefined;
         for (let i = 0; i < signatureLists.length; i++) {
-            // Allow matching non-generic signatures to have excess parameters and different return types.
+            // Allow matching non-generic signatures to have excess parameters (as a fallback if exact parameter match is not found) and different return types.
             // Prefer matching this types if possible.
-            const match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true);
+            const match = i === listIndex
+                ? signature
+                : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true)
+                    || findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ true);
             if (!match) {
                 return undefined;
             }
@@ -13523,6 +13647,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return instantiateType(instantiable, createTypeMapper([type.indexType, type.objectType], [getNumberLiteralType(0), createTupleType([replacement])]));
     }
 
+    // If the original mapped type had an intersection constraint we extract its components,
+    // and we make an attempt to do so even if the intersection has been reduced to a union.
+    // This entire process allows us to possibly retrieve the filtering type literals.
+    // e.g. { [K in keyof U & ("a" | "b") ] } -> "a" | "b"
+    function getLimitedConstraint(type: ReverseMappedType) {
+        const constraint = getConstraintTypeFromMappedType(type.mappedType);
+        if (!(constraint.flags & TypeFlags.Union || constraint.flags & TypeFlags.Intersection)) {
+            return;
+        }
+        const origin = (constraint.flags & TypeFlags.Union) ? (constraint as UnionType).origin : (constraint as IntersectionType);
+        if (!origin || !(origin.flags & TypeFlags.Intersection)) {
+            return;
+        }
+        const limitedConstraint = getIntersectionType((origin as IntersectionType).types.filter(t => t !== type.constraintType));
+        return limitedConstraint !== neverType ? limitedConstraint : undefined;
+    }
+
     function resolveReverseMappedTypeMembers(type: ReverseMappedType) {
         const indexInfo = getIndexInfoOfType(type.source, stringType);
         const modifiers = getMappedTypeModifiers(type.mappedType);
@@ -13530,7 +13671,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
         const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType), readonlyMask && indexInfo.isReadonly)] : emptyArray;
         const members = createSymbolTable();
+        const limitedConstraint = getLimitedConstraint(type);
         for (const prop of getPropertiesOfType(type.source)) {
+            // In case of a reverse mapped type with an intersection constraint, if we were able to
+            // extract the filtering type literals we skip those properties that are not assignable to them,
+            // because the extra properties wouldn't get through the application of the mapped type anyway
+            if (limitedConstraint) {
+                const propertyNameType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
+                if (!isTypeAssignableTo(propertyNameType, limitedConstraint)) {
+                    continue;
+                }
+            }
             const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
             const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as ReverseMappedSymbol;
             inferredProp.declarations = prop.declarations;
@@ -13571,7 +13722,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const checkType = (type as ConditionalType).checkType;
                 const constraint = getLowerBoundOfKeyType(checkType);
                 if (constraint !== checkType) {
-                    return getConditionalTypeInstantiation(type as ConditionalType, prependTypeMapping((type as ConditionalType).root.checkType, constraint, (type as ConditionalType).mapper));
+                    return getConditionalTypeInstantiation(type as ConditionalType, prependTypeMapping((type as ConditionalType).root.checkType, constraint, (type as ConditionalType).mapper), /*forConstraint*/ false);
                 }
             }
             return type;
@@ -13623,7 +13774,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const constraintType = getConstraintTypeFromMappedType(type);
         const mappedType = (type.target as MappedType) || type;
         const nameType = getNameTypeFromMappedType(mappedType);
-        const shouldLinkPropDeclarations = !nameType || isFilteringMappedType(mappedType);
+        const shouldLinkPropDeclarations = getMappedTypeNameTypeKind(mappedType) !== MappedTypeNameTypeKind.Remapping;
         const templateType = getTemplateTypeFromMappedType(mappedType);
         const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
         const templateModifiers = getMappedTypeModifiers(type);
@@ -13805,9 +13956,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function isFilteringMappedType(type: MappedType): boolean {
+    function getMappedTypeNameTypeKind(type: MappedType): MappedTypeNameTypeKind {
         const nameType = getNameTypeFromMappedType(type);
-        return !!nameType && isTypeAssignableTo(nameType, getTypeParameterFromMappedType(type));
+        if (!nameType) {
+            return MappedTypeNameTypeKind.None;
+        }
+        return isTypeAssignableTo(nameType, getTypeParameterFromMappedType(type)) ? MappedTypeNameTypeKind.Filtering : MappedTypeNameTypeKind.Remapping;
     }
 
     function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
@@ -13872,7 +14026,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (const current of type.types) {
                 for (const prop of getPropertiesOfType(current)) {
                     if (!members.has(prop.escapedName)) {
-                        const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName);
+                        const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.escapedName, /*skipObjectFunctionPropertyAugment*/ !!(type.flags & TypeFlags.Intersection));
                         if (combinedProp) {
                             members.set(prop.escapedName, combinedProp);
                         }
@@ -13947,6 +14101,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return hasNonCircularBaseConstraint(typeParameter) ? getConstraintFromTypeParameter(typeParameter) : undefined;
     }
 
+    function isConstMappedType(type: MappedType, depth: number): boolean {
+        const typeVariable = getHomomorphicTypeVariable(type);
+        return !!typeVariable && isConstTypeVariable(typeVariable, depth);
+    }
+
     function isConstTypeVariable(type: Type | undefined, depth = 0): boolean {
         return depth < 5 && !!(type && (
             type.flags & TypeFlags.TypeParameter && some((type as TypeParameter).symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Const)) ||
@@ -13954,6 +14113,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType, depth + 1) ||
             type.flags & TypeFlags.Conditional && isConstTypeVariable(getConstraintOfConditionalType(type as ConditionalType), depth + 1) ||
             type.flags & TypeFlags.Substitution && isConstTypeVariable((type as SubstitutionType).baseType, depth) ||
+            getObjectFlags(type) & ObjectFlags.Mapped && isConstMappedType(type as MappedType, depth) ||
             isGenericTupleType(type) && findIndex(getElementTypes(type), (t, i) => !!(type.target.elementFlags[i] & ElementFlags.Variadic) && isConstTypeVariable(t, depth)) >= 0
         ));
     }
@@ -14020,7 +14180,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const simplified = getSimplifiedType(type.checkType, /*writing*/ false);
             const constraint = simplified === type.checkType ? getConstraintOfType(simplified) : simplified;
             if (constraint && constraint !== type.checkType) {
-                const instantiated = getConditionalTypeInstantiation(type, prependTypeMapping(type.root.checkType, constraint, type.mapper));
+                const instantiated = getConditionalTypeInstantiation(type, prependTypeMapping(type.root.checkType, constraint, type.mapper), /*forConstraint*/ true);
                 if (!(instantiated.flags & TypeFlags.Never)) {
                     type.resolvedConstraintOfDistributive = instantiated;
                     return instantiated;
@@ -14515,6 +14675,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     type.propertyCacheWithoutObjectFunctionPropertyAugment ||= createSymbolTable() :
                     type.propertyCache ||= createSymbolTable();
                 properties.set(name, property);
+                if (skipObjectFunctionPropertyAugment && !type.propertyCache?.get(name)) {
+                    const properties = type.propertyCache ||= createSymbolTable();
+                    properties.set(name, property);
+                }
             }
         }
         return property;
@@ -14657,7 +14821,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return getPropertyOfObjectType(globalObjectType, name);
         }
-        if (type.flags & TypeFlags.UnionOrIntersection) {
+        if (type.flags & TypeFlags.Intersection) {
+            const prop = getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, /*skipObjectFunctionPropertyAugment*/ true);
+            if (prop) {
+                return prop;
+            }
+            if (!skipObjectFunctionPropertyAugment) {
+                return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment);
+            }
+            return undefined;
+        }
+        if (type.flags & TypeFlags.Union) {
             return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment);
         }
         return undefined;
@@ -16686,6 +16860,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!(flags & TypeFlags.Never)) {
             includes |= flags & TypeFlags.IncludesMask;
             if (flags & TypeFlags.Instantiable) includes |= TypeFlags.IncludesInstantiable;
+            if (flags & TypeFlags.Intersection && getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) includes |= TypeFlags.IncludesConstrainedTypeVariable;
             if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
             if (!strictNullChecks && flags & TypeFlags.Nullable) {
                 if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
@@ -16817,10 +16992,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
-        const templates = filter(types, t =>
-            !!(t.flags & TypeFlags.TemplateLiteral) &&
-            isPatternLiteralType(t) &&
-            (t as TemplateLiteralType).types.every(t => !(t.flags & TypeFlags.Intersection) || !areIntersectedTypesAvoidingPrimitiveReduction((t as IntersectionType).types))) as TemplateLiteralType[];
+        const templates = filter(types, t => !!(t.flags & TypeFlags.TemplateLiteral) && isPatternLiteralType(t)) as TemplateLiteralType[];
         if (templates.length) {
             let i = types.length;
             while (i > 0) {
@@ -16829,6 +17001,49 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (t.flags & TypeFlags.StringLiteral && some(templates, template => isTypeMatchedByTemplateLiteralType(t, template))) {
                     orderedRemoveItemAt(types, i);
                 }
+            }
+        }
+    }
+
+    function removeConstrainedTypeVariables(types: Type[]) {
+        const typeVariables: TypeVariable[] = [];
+        // First collect a list of the type variables occurring in constraining intersections.
+        for (const type of types) {
+            if (getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
+                const index = (type as IntersectionType).types[0].flags & TypeFlags.TypeVariable ? 0 : 1;
+                pushIfUnique(typeVariables, (type as IntersectionType).types[index]);
+            }
+        }
+        // For each type variable, check if the constraining intersections for that type variable fully
+        // cover the constraint of the type variable; if so, remove the constraining intersections and
+        // substitute the type variable.
+        for (const typeVariable of typeVariables) {
+            const primitives: Type[] = [];
+            // First collect the primitive types from the constraining intersections.
+            for (const type of types) {
+                if (getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
+                    const index = (type as IntersectionType).types[0].flags & TypeFlags.TypeVariable ? 0 : 1;
+                    if ((type as IntersectionType).types[index] === typeVariable) {
+                        insertType(primitives, (type as IntersectionType).types[1 - index]);
+                    }
+                }
+            }
+            // If every constituent in the type variable's constraint is covered by an intersection of the type
+            // variable and that constituent, remove those intersections and substitute the type variable.
+            const constraint = getBaseConstraintOfType(typeVariable)!;
+            if (everyType(constraint, t => containsType(primitives, t))) {
+                let i = types.length;
+                while (i > 0) {
+                    i--;
+                    const type = types[i];
+                    if (getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
+                        const index = (type as IntersectionType).types[0].flags & TypeFlags.TypeVariable ? 0 : 1;
+                        if ((type as IntersectionType).types[index] === typeVariable && containsType(primitives, (type as IntersectionType).types[1 - index])) {
+                            orderedRemoveItemAt(types, i);
+                        }
+                    }
+                }
+                insertType(types, typeVariable);
             }
         }
     }
@@ -16906,6 +17121,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
                 removeStringLiteralsMatchedByTemplateLiterals(typeSet);
+            }
+            if (includes & TypeFlags.IncludesConstrainedTypeVariable) {
+                removeConstrainedTypeVariables(typeSet);
             }
             if (unionReduction === UnionReduction.Subtype) {
                 typeSet = removeSubtypes(typeSet, !!(includes & TypeFlags.Object));
@@ -17171,9 +17389,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function createIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
+    function createIntersectionType(types: Type[], objectFlags: ObjectFlags, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
         const result = createType(TypeFlags.Intersection) as IntersectionType;
-        result.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
+        result.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
         result.types = types;
         result.aliasSymbol = aliasSymbol;
         result.aliasTypeArguments = aliasTypeArguments;
@@ -17194,6 +17412,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeMembershipMap = new Map<string, Type>();
         const includes = addTypesToIntersection(typeMembershipMap, 0 as TypeFlags, types);
         const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
+        let objectFlags = ObjectFlags.None;
         // An intersection type is considered empty if it contains
         // the type never, or
         // more than one unit type or,
@@ -17245,6 +17464,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (typeSet.length === 1) {
             return typeSet[0];
         }
+        if (typeSet.length === 2) {
+            const typeVarIndex = typeSet[0].flags & TypeFlags.TypeVariable ? 0 : 1;
+            const typeVariable = typeSet[typeVarIndex];
+            const primitiveType = typeSet[1 - typeVarIndex];
+            if (typeVariable.flags & TypeFlags.TypeVariable && (primitiveType.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive) || includes & TypeFlags.IncludesEmptyObject)) {
+                // We have an intersection T & P or P & T, where T is a type variable and P is a primitive type, the object type, or {}.
+                const constraint = getBaseConstraintOfType(typeVariable);
+                // Check that T's constraint is similarly composed of primitive types, the object type, or {}.
+                if (constraint && everyType(constraint, t => !!(t.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive)) || isEmptyAnonymousObjectType(t))) {
+                    // If T's constraint is a subtype of P, simply return T. For example, given `T extends "a" | "b"`,
+                    // the intersection `T & string` reduces to just T.
+                    if (isTypeStrictSubtypeOf(constraint, primitiveType)) {
+                        return typeVariable;
+                    }
+                    if (!(constraint.flags & TypeFlags.Union && someType(constraint, c => isTypeStrictSubtypeOf(c, primitiveType)))) {
+                        // No constituent of T's constraint is a subtype of P. If P is also not a subtype of T's constraint,
+                        // then the constraint and P are unrelated, and the intersection reduces to never. For example, given
+                        // `T extends "a" | "b"`, the intersection `T & number` reduces to never.
+                        if (!isTypeStrictSubtypeOf(primitiveType, constraint)) {
+                            return neverType;
+                        }
+                    }
+                    // Some constituent of T's constraint is a subtype of P, or P is a subtype of T's constraint. Thus,
+                    // the intersection further constrains the type variable. For example, given `T extends string | number`,
+                    // the intersection `T & "a"` is marked as a constrained type variable. Likewise, given `T extends "a" | 1`,
+                    // the intersection `T & number` is marked as a constrained type variable.
+                    objectFlags = ObjectFlags.IsConstrainedTypeVariable;
+                }
+            }
+        }
         const id = getTypeListId(typeSet) + getAliasId(aliasSymbol, aliasTypeArguments);
         let result = intersectionTypes.get(id);
         if (!result) {
@@ -17280,7 +17529,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else {
-                result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
+                result = createIntersectionType(typeSet, objectFlags, aliasSymbol, aliasTypeArguments);
             }
             intersectionTypes.set(id, result);
         }
@@ -17331,20 +17580,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return reduceLeft(types, (n, t) => n + getConstituentCount(t), 0);
     }
 
-    function areIntersectedTypesAvoidingPrimitiveReduction(types: Type[], primitiveFlags = TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt): boolean {
-        if (types.length !== 2) {
-            return false;
-        }
-        const [t1, t2] = types;
-        return !!(t1.flags & primitiveFlags) && t2 === emptyTypeLiteralType || !!(t2.flags & primitiveFlags) && t1 === emptyTypeLiteralType;
-    }
-
     function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
         const links = getNodeLinks(node);
         if (!links.resolvedType) {
             const aliasSymbol = getAliasSymbolForTypeNode(node);
             const types = map(node.types, getTypeFromTypeNode);
-            const noSupertypeReduction = areIntersectedTypesAvoidingPrimitiveReduction(types);
+            // We perform no supertype reduction for X & {} or {} & X, where X is one of string, number, bigint,
+            // or a pattern literal template type. This enables union types like "a" | "b" | string & {} or
+            // "aa" | "ab" | `a${string}` which preserve the literal types for purposes of statement completion.
+            const emptyIndex = types.length === 2 ? types.indexOf(emptyTypeLiteralType) : -1;
+            const t = emptyIndex >= 0 ? types[1 - emptyIndex] : unknownType;
+            const noSupertypeReduction = !!(t.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt) || t.flags & TypeFlags.TemplateLiteral && isPatternLiteralType(t));
             links.resolvedType = getIntersectionType(types, aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol), noSupertypeReduction);
         }
         return links.resolvedType;
@@ -17385,30 +17631,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return constraintType;
         }
         const keyTypes: Type[] = [];
-        if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
-            // We have a { [P in keyof T]: X }
-
-            // `getApparentType` on the T in a generic mapped type can trigger a circularity
-            // (conditionals and `infer` types create a circular dependency in the constraint resolution)
-            // so we only eagerly manifest the keys if the constraint is nongeneric
-            if (!isGenericIndexType(constraintType)) {
-                const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
-                forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, TypeFlags.StringOrNumberLiteralOrUnique, !!(indexFlags & IndexFlags.StringsOnly), addMemberForKeyType);
-            }
-            else {
-                // we have a generic index and a homomorphic mapping (but a distributive key remapping) - we need to defer the whole `keyof whatever` for later
-                // since it's not safe to resolve the shape of modifier type
+        // Calling getApparentType on the `T` of a `keyof T` in the constraint type of a generic mapped type can
+        // trigger a circularity. For example, `T extends { [P in keyof T & string as Captitalize<P>]: any }` is
+        // a circular definition. For this reason, we only eagerly manifest the keys if the constraint is non-generic.
+        if (isGenericIndexType(constraintType)) {
+            if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
+                // We have a generic index and a homomorphic mapping (but a distributive key remapping) - we need to defer
+                // the whole `keyof whatever` for later since it's not safe to resolve the shape of modifier type.
                 return getIndexTypeForGenericType(type, indexFlags);
             }
+            // Include the generic component in the resulting type.
+            forEachType(constraintType, addMemberForKeyType);
+        }
+        else if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
+            const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
+            forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, TypeFlags.StringOrNumberLiteralOrUnique, !!(indexFlags & IndexFlags.StringsOnly), addMemberForKeyType);
         }
         else {
             forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
         }
-        if (isGenericIndexType(constraintType)) { // include the generic component in the resulting type
-            forEachType(constraintType, addMemberForKeyType);
-        }
-        // we had to pick apart the constraintType to potentially map/filter it - compare the final resulting list with the original constraintType,
-        // so we can return the union that preserves aliases/origin data if possible
+        // We had to pick apart the constraintType to potentially map/filter it - compare the final resulting list with the
+        // original constraintType, so we can return the union that preserves aliases/origin data if possible.
         const result = indexFlags & IndexFlags.NoIndexSignatures ? filterType(getUnionType(keyTypes), t => !(t.flags & (TypeFlags.Any | TypeFlags.String))) : getUnionType(keyTypes);
         if (result.flags & TypeFlags.Union && constraintType.flags & TypeFlags.Union && getTypeListId((result as UnionType).types) === getTypeListId((constraintType as UnionType).types)) {
             return constraintType;
@@ -17493,7 +17736,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function shouldDeferIndexType(type: Type, indexFlags = IndexFlags.None) {
         return !!(type.flags & TypeFlags.InstantiableNonPrimitive ||
             isGenericTupleType(type) ||
-            isGenericMappedType(type) && !hasDistributiveNameType(type) ||
+            isGenericMappedType(type) && (!hasDistributiveNameType(type) || getMappedTypeNameTypeKind(type) === MappedTypeNameTypeKind.Remapping) ||
             type.flags & TypeFlags.Union && !(indexFlags & IndexFlags.NoReducibleCheck) && isGenericReducibleType(type) ||
             type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable) && some((type as IntersectionType).types, isEmptyAnonymousObjectType));
     }
@@ -17627,7 +17870,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function createTemplateLiteralType(texts: readonly string[], types: readonly Type[]) {
         const type = createType(TypeFlags.TemplateLiteral) as TemplateLiteralType;
-        type.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
         type.texts = texts;
         type.types = types;
         return type;
@@ -17727,7 +17969,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function getPropertyNameFromIndex(indexType: Type, accessNode: StringLiteral | Identifier | PrivateIdentifier | ObjectBindingPattern | ArrayBindingPattern | ComputedPropertyName | NumericLiteral | IndexedAccessTypeNode | ElementAccessExpression | SyntheticExpression | undefined) {
+    function getPropertyNameFromIndex(indexType: Type, accessNode: PropertyName | ObjectBindingPattern | ArrayBindingPattern | IndexedAccessTypeNode | ElementAccessExpression | SyntheticExpression | undefined) {
         return isTypeUsableAsPropertyName(indexType) ?
             getPropertyNameFromType(indexType) :
             accessNode && isPropertyName(accessNode) ?
@@ -17810,7 +18052,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (indexInfo) {
                 if (accessFlags & AccessFlags.NoIndexSignatures && indexInfo.keyType !== numberType) {
                     if (accessExpression) {
-                        error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
+                        if (accessFlags & AccessFlags.Writing) {
+                            error(accessExpression, Diagnostics.Type_0_is_generic_and_can_only_be_indexed_for_reading, typeToString(originalObjectType));
+                        }
+                        else {
+                            error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
+                        }
                     }
                     return undefined;
                 }
@@ -17947,12 +18194,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isPatternLiteralPlaceholderType(type: Type): boolean {
         if (type.flags & TypeFlags.Intersection) {
-            return some((type as IntersectionType).types, t => !!(t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) || isPatternLiteralPlaceholderType(t));
+            // Return true if the intersection consists of one or more placeholders and zero or
+            // more object type tags.
+            let seenPlaceholder = false;
+            for (const t of (type as IntersectionType).types) {
+                if (t.flags & (TypeFlags.Literal | TypeFlags.Nullable) || isPatternLiteralPlaceholderType(t)) {
+                    seenPlaceholder = true;
+                }
+                else if (!(t.flags & TypeFlags.Object)) {
+                    return false;
+                }
+            }
+            return seenPlaceholder;
         }
         return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type);
     }
 
     function isPatternLiteralType(type: Type) {
+        // A pattern literal type is a template literal or a string mapping type that contains only
+        // non-generic pattern literal placeholders.
         return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType) ||
             !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type);
     }
@@ -17970,12 +18230,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getGenericObjectFlags(type: Type): ObjectFlags {
-        if (type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral)) {
-            if (!((type as UnionOrIntersectionType | TemplateLiteralType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
-                (type as UnionOrIntersectionType | TemplateLiteralType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
-                    reduceLeft((type as UnionOrIntersectionType | TemplateLiteralType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
+        if (type.flags & (TypeFlags.UnionOrIntersection)) {
+            if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                    reduceLeft((type as UnionOrIntersectionType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
             }
-            return (type as UnionOrIntersectionType | TemplateLiteralType).objectFlags & ObjectFlags.IsGenericType;
+            return (type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericType;
         }
         if (type.flags & TypeFlags.Substitution) {
             if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
@@ -17985,7 +18245,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
         }
         return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
-            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
+            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
     }
 
     function getSimplifiedType(type: Type, writing: boolean): Type {
@@ -18058,7 +18318,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // K is generic and N is assignable to P, instantiate E using a mapper that substitutes the index type for P.
         // For example, for an index access { [P in K]: Box<T[P]> }[X], we construct the type Box<T[X]>.
         if (isGenericMappedType(objectType)) {
-            if (!getNameTypeFromMappedType(objectType) || isFilteringMappedType(objectType)) {
+            if (getMappedTypeNameTypeKind(objectType) !== MappedTypeNameTypeKind.Remapping) {
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
         }
@@ -18243,7 +18503,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isGenericType(type) || checkTuples && isTupleType(type) && some(getElementTypes(type), isGenericType);
     }
 
-    function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+    function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, forConstraint: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         let result;
         let extraTypes: Type[] | undefined;
         let tailCount = 0;
@@ -18322,8 +18582,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
                 if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && (checkType.flags & TypeFlags.Any || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
-                    // Return union of trueType and falseType for 'any' since it matches anything
-                    if (checkType.flags & TypeFlags.Any) {
+                    // Return union of trueType and falseType for 'any' since it matches anything. Furthermore, for a
+                    // distributive conditional type applied to the constraint of a type variable, include trueType if
+                    // there are possible values of the check type that are also possible values of the extends type.
+                    // We use a reverse assignability check as it is less expensive than the comparable relationship
+                    // and avoids false positives of a non-empty intersection check.
+                    if (checkType.flags & TypeFlags.Any || forConstraint && !(inferredExtendsType.flags & TypeFlags.Never) && someType(getPermissiveInstantiation(inferredExtendsType), t => isTypeAssignableTo(t, getPermissiveInstantiation(checkType)))) {
                         (extraTypes || (extraTypes = [])).push(instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper));
                     }
                     // If falseType is an immediately nested conditional type that isn't distributive or has an
@@ -18447,7 +18711,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 aliasSymbol,
                 aliasTypeArguments,
             };
-            links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
+            links.resolvedType = getConditionalType(root, /*mapper*/ undefined, /*forConstraint*/ false);
             if (outerTypeParameters) {
                 root.instantiations = new Map<string, Type>();
                 root.instantiations.set(getTypeListId(outerTypeParameters), links.resolvedType);
@@ -19433,6 +19697,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): AnonymousType {
+        Debug.assert(type.symbol, "anonymous type must have symbol to be instantiated");
         const result = createObjectType(type.objectFlags & ~(ObjectFlags.CouldContainTypeVariablesComputed | ObjectFlags.CouldContainTypeVariables) | ObjectFlags.Instantiated, type.symbol) as AnonymousType;
         if (type.objectFlags & ObjectFlags.Mapped) {
             (result as MappedType).declaration = (type as MappedType).declaration;
@@ -19454,14 +19719,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+    function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper, forConstraint: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         const root = type.root;
         if (root.outerTypeParameters) {
             // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
             // mapper to the type parameters to produce the effective list of type arguments, and compute the
             // instantiation cache key from the type IDs of the type arguments.
             const typeArguments = map(root.outerTypeParameters, t => getMappedType(t, mapper));
-            const id = getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
+            const id = (forConstraint ? "C" : "") + getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
             let result = root.instantiations!.get(id);
             if (!result) {
                 const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
@@ -19471,8 +19736,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
                 // result is (A extends U ? X : Y) | (B extends U ? X : Y).
                 result = distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never) ?
-                    mapTypeWithAlias(getReducedType(distributionType), t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments) :
-                    getConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
+                    mapTypeWithAlias(getReducedType(distributionType), t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint), aliasSymbol, aliasTypeArguments) :
+                    getConditionalType(root, newMapper, forConstraint, aliasSymbol, aliasTypeArguments);
                 root.instantiations!.set(id, result);
             }
             return result;
@@ -19554,7 +19819,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getIndexedAccessType(instantiateType((type as IndexedAccessType).objectType, mapper), instantiateType((type as IndexedAccessType).indexType, mapper), (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
         }
         if (flags & TypeFlags.Conditional) {
-            return getConditionalTypeInstantiation(type as ConditionalType, combineTypeMappers((type as ConditionalType).mapper, mapper), aliasSymbol, aliasTypeArguments);
+            return getConditionalTypeInstantiation(type as ConditionalType, combineTypeMappers((type as ConditionalType).mapper, mapper), /*forConstraint*/ false, aliasSymbol, aliasTypeArguments);
         }
         if (flags & TypeFlags.Substitution) {
             const newBaseType = instantiateType((type as SubstitutionType).baseType, mapper);
@@ -21451,7 +21716,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
             }
             if (target.flags & TypeFlags.Union) {
-                return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), target as UnionType, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
+                return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), target as UnionType, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive), intersectionState);
             }
             if (target.flags & TypeFlags.Intersection) {
                 return typeRelatedToEachType(source, target as IntersectionType, reportErrors, IntersectionState.Target);
@@ -21485,7 +21750,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let result = Ternary.True;
             const sourceTypes = source.types;
             for (const sourceType of sourceTypes) {
-                const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false);
+                const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false, IntersectionState.None);
                 if (!related) {
                     return Ternary.False;
                 }
@@ -21494,7 +21759,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
-        function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
+        function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             const targetTypes = target.types;
             if (target.flags & TypeFlags.Union) {
                 if (containsType(targetTypes, source)) {
@@ -21521,14 +21786,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const match = getMatchingUnionConstituentForType(target as UnionType, source);
                 if (match) {
-                    const related = isRelatedTo(source, match, RecursionFlags.Target, /*reportErrors*/ false);
+                    const related = isRelatedTo(source, match, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
                     if (related) {
                         return related;
                     }
                 }
             }
             for (const type of targetTypes) {
-                const related = isRelatedTo(source, type, RecursionFlags.Target, /*reportErrors*/ false);
+                const related = isRelatedTo(source, type, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
                 if (related) {
                     return related;
                 }
@@ -21537,7 +21802,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Elaborate only if we can find a best matching type in the target union
                 const bestMatchingType = getBestMatchingType(source, target, isRelatedTo);
                 if (bestMatchingType) {
-                    isRelatedTo(source, bestMatchingType, RecursionFlags.Target, /*reportErrors*/ true);
+                    isRelatedTo(source, bestMatchingType, RecursionFlags.Target, /*reportErrors*/ true, /*headMessage*/ undefined, intersectionState);
                 }
             }
             return Ternary.False;
@@ -22303,22 +22568,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                 }
-                else {
-                    // conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
-                    // more assignments than are desirable (since it maps the source check type to its constraint, it loses information)
-                    const distributiveConstraint = hasNonCircularBaseConstraint(source) ? getConstraintOfDistributiveConditionalType(source as ConditionalType) : undefined;
-                    if (distributiveConstraint) {
-                        if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
-                            return result;
-                        }
-                    }
-                }
-
-                // conditionals _can_ be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
+                // conditionals can be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
                 // when `O` is a conditional (`never` is trivially assignable to `O`, as is `O`!).
                 const defaultConstraint = getDefaultConstraintOfConditionalType(source as ConditionalType);
                 if (defaultConstraint) {
                     if (result = isRelatedTo(defaultConstraint, target, RecursionFlags.Source, reportErrors)) {
+                        return result;
+                    }
+                }
+                // conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
+                // more assignments than are desirable (since it maps the source check type to its constraint, it loses information).
+                const distributiveConstraint = !(targetFlags & TypeFlags.Conditional) && hasNonCircularBaseConstraint(source) ? getConstraintOfDistributiveConditionalType(source as ConditionalType) : undefined;
+                if (distributiveConstraint) {
+                    resetErrorInfo(saveErrorInfo);
+                    if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
                         return result;
                     }
                 }
@@ -22965,6 +23228,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // method). Simply do a pairwise comparison of the signatures in the two signature lists instead
                 // of the much more expensive N * M comparison matrix we explore below. We erase type parameters
                 // as they are known to always be the same.
+                Debug.assertEqual(sourceSignatures.length, targetSignatures.length);
                 for (let i = 0; i < targetSignatures.length; i++) {
                     const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors, intersectionState, incompatibleReporter(sourceSignatures[i], targetSignatures[i]));
                     if (!related) {
@@ -23528,22 +23792,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !hasBaseType(checkClass, getDeclaringClass(p)) : false) ? undefined : checkClass;
     }
 
-    // Return true if the given type is deeply nested. We consider this to be the case when structural type comparisons
-    // for maxDepth or more occurrences or instantiations of the same type have been recorded on the given stack. The
-    // "sameness" of instantiations is determined by the getRecursionIdentity function. An intersection is considered
-    // deeply nested if any constituent of the intersection is deeply nested. It is possible, though highly unlikely, for
-    // the deeply nested check to be true in a situation where a chain of instantiations is not infinitely expanding.
-    // Effectively, we will generate a false positive when two types are structurally equal to at least maxDepth levels,
-    // but unequal at some level beyond that.
-    // In addition, this will also detect when an indexed access has been chained off of maxDepth more times (which is
-    // essentially the dual of the structural comparison), and likewise mark the type as deeply nested, potentially adding
-    // false positives for finite but deeply expanding indexed accesses (eg, for `Q[P1][P2][P3][P4][P5]`).
-    // It also detects when a recursive type reference has expanded maxDepth or more times, e.g. if the true branch of
-    // `type A<T> = null extends T ? [A<NonNullable<T>>] : [T]`
-    // has expanded into `[A<NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<T>>>>>>]`. In such cases we need
-    // to terminate the expansion, and we do so here.
+    // Return true if the given type is deeply nested. We consider this to be the case when the given stack contains
+    // maxDepth or more occurrences of types with the same recursion identity as the given type. The recursion identity
+    // provides a shared identity for type instantiations that repeat in some (possibly infinite) pattern. For example,
+    // in `type Deep<T> = { next: Deep<Deep<T>> }`, repeatedly referencing the `next` property leads to an infinite
+    // sequence of ever deeper instantiations with the same recursion identity (in this case the symbol associated with
+    // the object type literal).
+    // A homomorphic mapped type is considered deeply nested if its target type is deeply nested, and an intersection is
+    // considered deeply nested if any constituent of the intersection is deeply nested.
+    // It is possible, though highly unlikely, for the deeply nested check to be true in a situation where a chain of
+    // instantiations is not infinitely expanding. Effectively, we will generate a false positive when two types are
+    // structurally equal to at least maxDepth levels, but unequal at some level beyond that.
     function isDeeplyNestedType(type: Type, stack: Type[], depth: number, maxDepth = 3): boolean {
         if (depth >= maxDepth) {
+            if ((getObjectFlags(type) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped) {
+                type = getMappedTargetWithSymbol(type);
+            }
             if (type.flags & TypeFlags.Intersection) {
                 return some((type as IntersectionType).types, t => isDeeplyNestedType(t, stack, depth, maxDepth));
             }
@@ -23552,7 +23816,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let lastTypeId = 0;
             for (let i = 0; i < depth; i++) {
                 const t = stack[i];
-                if (t.flags & TypeFlags.Intersection ? some((t as IntersectionType).types, u => getRecursionIdentity(u) === identity) : getRecursionIdentity(t) === identity) {
+                if (hasMatchingRecursionIdentity(t, identity)) {
                     // We only count occurrences with a higher type id than the previous occurrence, since higher
                     // type ids are an indicator of newer instantiations caused by recursion.
                     if (t.id >= lastTypeId) {
@@ -23566,6 +23830,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return false;
+    }
+
+    // Unwrap nested homomorphic mapped types and return the deepest target type that has a symbol. This better
+    // preserves unique type identities for mapped types applied to explicitly written object literals. For example
+    // in `Mapped<{ x: Mapped<{ x: Mapped<{ x: string }>}>}>`, each of the mapped type applications will have a
+    // unique recursion identity (that of their target object type literal) and thus avoid appearing deeply nested.
+    function getMappedTargetWithSymbol(type: Type) {
+        let target;
+        while (
+            (getObjectFlags(type) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped &&
+            (target = getModifiersTypeFromMappedType(type as MappedType)) &&
+            (target.symbol || target.flags & TypeFlags.Intersection && some((target as IntersectionType).types, t => !!t.symbol))
+        ) {
+            type = target;
+        }
+        return type;
+    }
+
+    function hasMatchingRecursionIdentity(type: Type, identity: object): boolean {
+        if ((getObjectFlags(type) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped) {
+            type = getMappedTargetWithSymbol(type);
+        }
+        if (type.flags & TypeFlags.Intersection) {
+            return some((type as IntersectionType).types, t => hasMatchingRecursionIdentity(t, identity));
+        }
+        return getRecursionIdentity(type) === identity;
     }
 
     // The recursion identity of a type is an object identity that is shared among multiple instantiations of the type.
@@ -23583,28 +23873,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // unique AST node.
                 return (type as TypeReference).node!;
             }
-            if (type.symbol) {
-                // We track object types that have a symbol by that symbol (representing the origin of the type).
-                if (getObjectFlags(type) & ObjectFlags.Mapped) {
-                    // When a homomorphic mapped type is applied to a type with a symbol, we use the symbol of that
-                    // type as the recursion identity. This is a better strategy than using the symbol of the mapped
-                    // type, which doesn't work well for recursive mapped types.
-                    type = getMappedTargetWithSymbol(type);
-                }
-                if (!(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
-                    // We exclude the static side of a class since it shares its symbol with the instance side.
-                    return type.symbol;
-                }
+            if (type.symbol && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
+                // We track object types that have a symbol by that symbol (representing the origin of the type), but
+                // exclude the static side of a class since it shares its symbol with the instance side.
+                return type.symbol;
             }
             if (isTupleType(type)) {
                 return type.target;
             }
         }
         if (type.flags & TypeFlags.TypeParameter) {
+            // We use the symbol of the type parameter such that all "fresh" instantiations of that type parameter
+            // have the same recursion identity.
             return type.symbol;
         }
         if (type.flags & TypeFlags.IndexedAccess) {
-            // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P][Q] it is A
+            // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P1][P2][P3] it is A.
             do {
                 type = (type as IndexedAccessType).objectType;
             }
@@ -23616,14 +23900,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as ConditionalType).root;
         }
         return type;
-    }
-
-    function getMappedTargetWithSymbol(type: Type) {
-        let target = type;
-        while ((getObjectFlags(target) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped && isMappedTypeWithKeyofConstraintDeclaration(target as MappedType)) {
-            target = getModifiersTypeFromMappedType(target as MappedType);
-        }
-        return target.symbol ? target : type;
     }
 
     function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -24641,7 +24917,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                     objectFlags & (ObjectFlags.Mapped | ObjectFlags.ReverseMapped | ObjectFlags.ObjectRestType | ObjectFlags.InstantiationExpressionType)
                 ) ||
-            type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType | TemplateLiteralType).types, couldContainTypeVariables));
+            type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType).types, couldContainTypeVariables));
         if (type.flags & TypeFlags.ObjectFlagsType) {
             (type as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (result ? ObjectFlags.CouldContainTypeVariables : 0);
         }
@@ -24879,11 +25155,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
-        if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String)) {
-            return true;
-        }
         if (target.flags & TypeFlags.Intersection) {
             return every((target as IntersectionType).types, t => t === emptyTypeLiteralType || isValidTypeForTemplateLiteralPlaceholder(source, t));
+        }
+        if (target.flags & TypeFlags.String || isTypeAssignableTo(source, target)) {
+            return true;
         }
         if (source.flags & TypeFlags.StringLiteral) {
             const value = (source as StringLiteralType).value;
@@ -24897,7 +25173,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const texts = (source as TemplateLiteralType).texts;
             return texts.length === 2 && texts[0] === "" && texts[1] === "" && isTypeAssignableTo((source as TemplateLiteralType).types[0], target);
         }
-        return isTypeAssignableTo(source, target);
+        return false;
     }
 
     function inferTypesFromTemplateLiteralType(source: Type, target: TemplateLiteralType): Type[] | undefined {
@@ -25416,9 +25692,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
-            if (constraintType.flags & TypeFlags.Union) {
+            if ((constraintType.flags & TypeFlags.Union) || (constraintType.flags & TypeFlags.Intersection)) {
                 let result = false;
-                for (const type of (constraintType as UnionType).types) {
+                for (const type of (constraintType as (UnionType | IntersectionType)).types) {
                     result = inferToMappedType(source, target, type) || result;
                 }
                 return result;
@@ -26082,7 +26358,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node)) {
             const initializer = getEffectiveInitializer(declaration);
             if (initializer) {
-                return tryGetNameFromType(getTypeOfExpression(initializer));
+                const initializerType = isBindingPattern(declaration.parent) ? getTypeForBindingElement(declaration as BindingElement) : getTypeOfExpression(initializer);
+                return initializerType && tryGetNameFromType(initializerType);
             }
             if (isEnumMember(declaration)) {
                 return getTextOfPropertyName(declaration.name);
@@ -27120,6 +27397,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ElementAccessExpression:
                 // The resolvedSymbol property is initialized by checkPropertyAccess or checkElementAccess before we get here.
                 return isConstantReference((node as AccessExpression).expression) && isReadonlySymbol(getNodeLinks(node).resolvedSymbol || unknownSymbol);
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ArrayBindingPattern:
+                const rootDeclaration = getRootDeclaration(node.parent);
+                return isVariableDeclaration(rootDeclaration) && isVarConstLike(rootDeclaration);
         }
         return false;
     }
@@ -27411,7 +27692,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
-            const expr = flow.switchStatement.expression;
+            const expr = skipParentheses(flow.switchStatement.expression);
             const flowType = getTypeAtFlowNode(flow.antecedent);
             let type = getTypeFromFlowType(flowType);
             if (isMatchingReference(reference, expr)) {
@@ -27421,11 +27702,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 type = narrowTypeBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
             else if (expr.kind === SyntaxKind.TrueKeyword) {
-                const clause = flow.switchStatement.caseBlock.clauses.find((_, index) => index === flow.clauseStart);
-                const clauseExpression = clause && clause.kind === SyntaxKind.CaseClause ? clause.expression : undefined;
-                if (clauseExpression) {
-                    type = narrowType(type, clauseExpression, /*assumeTrue*/ true);
-                }
+                type = narrowTypeBySwitchOnTrue(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
             else {
                 if (strictNullChecks) {
@@ -27641,13 +27918,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
-            const type = !(computedType.flags & TypeFlags.Union) && declaredType.flags & TypeFlags.Union ? declaredType : computedType;
-            if (type.flags & TypeFlags.Union) {
+            // As long as the computed type is a subset of the declared type, we use the full declared type to detect
+            // a discriminant property. In cases where the computed type isn't a subset, e.g because of a preceding type
+            // predicate narrowing, we use the actual computed type.
+            if (declaredType.flags & TypeFlags.Union || computedType.flags & TypeFlags.Union) {
                 const access = getCandidateDiscriminantPropertyAccess(expr);
                 if (access) {
                     const name = getAccessedPropertyName(access);
-                    if (name && isDiscriminantProperty(type, name)) {
-                        return access;
+                    if (name) {
+                        const type = declaredType.flags & TypeFlags.Union && isTypeSubsetOf(computedType, declaredType) ? declaredType : computedType;
+                        if (isDiscriminantProperty(type, name)) {
+                            return access;
+                        }
                     }
                 }
             }
@@ -27792,10 +28074,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (isMatchingConstructorReference(right)) {
                         return narrowTypeByConstructor(type, operator, left, assumeTrue);
                     }
-                    if (isBooleanLiteral(right)) {
+                    if (isBooleanLiteral(right) && !isAccessExpression(left)) {
                         return narrowTypeByBooleanComparison(type, left, right, operator, assumeTrue);
                     }
-                    if (isBooleanLiteral(left)) {
+                    if (isBooleanLiteral(left) && !isAccessExpression(right)) {
                         return narrowTypeByBooleanComparison(type, right, left, operator, assumeTrue);
                     }
                     break;
@@ -28040,6 +28322,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getUnionType(map(clauseWitnesses, text => text ? narrowTypeByTypeName(type, text) : neverType));
         }
 
+        function narrowTypeBySwitchOnTrue(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
+            const defaultIndex = findIndex(switchStatement.caseBlock.clauses, clause => clause.kind === SyntaxKind.DefaultClause);
+            const hasDefaultClause = clauseStart === clauseEnd || (defaultIndex >= clauseStart && defaultIndex < clauseEnd);
+
+            // First, narrow away all of the cases that preceded this set of cases.
+            for (let i = 0; i < clauseStart; i++) {
+                const clause = switchStatement.caseBlock.clauses[i];
+                if (clause.kind === SyntaxKind.CaseClause) {
+                    type = narrowType(type, clause.expression, /*assumeTrue*/ false);
+                }
+            }
+
+            // If our current set has a default, then none the other cases were hit either.
+            // There's no point in narrowing by the the other cases in the set, since we can
+            // get here through other paths.
+            if (hasDefaultClause) {
+                for (let i = clauseEnd; i < switchStatement.caseBlock.clauses.length; i++) {
+                    const clause = switchStatement.caseBlock.clauses[i];
+                    if (clause.kind === SyntaxKind.CaseClause) {
+                        type = narrowType(type, clause.expression, /*assumeTrue*/ false);
+                    }
+                }
+                return type;
+            }
+
+            // Now, narrow based on the cases in this set.
+            const clauses = switchStatement.caseBlock.clauses.slice(clauseStart, clauseEnd);
+            return getUnionType(map(clauses, clause => clause.kind === SyntaxKind.CaseClause ? narrowType(type, clause.expression, /*assumeTrue*/ true) : neverType));
+        }
+
         function isMatchingConstructorReference(expr: Expression) {
             return (isPropertyAccessExpression(expr) && idText(expr.name) === "constructor" ||
                 isElementAccessExpression(expr) && isStringLiteralLike(expr.argumentExpression) && expr.argumentExpression.text === "constructor") &&
@@ -28154,6 +28466,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function getNarrowedTypeWorker(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
             if (!assumeTrue) {
+                if (type === candidate) {
+                    return neverType;
+                }
                 if (checkDerived) {
                     return filterType(type, t => !isTypeDerivedFrom(t, candidate));
                 }
@@ -28163,6 +28478,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.AnyOrUnknown) {
                 return candidate;
             }
+            if (type === candidate) {
+                return candidate;
+            }
+
             // We first attempt to filter the current type, narrowing constituents as appropriate and removing
             // constituents that are unrelated to the candidate.
             const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
@@ -28537,14 +28856,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // destructuring from the narrowed parent type.
             if (isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
                 const parent = declaration.parent.parent;
-                if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlagsCached(declaration) & NodeFlags.Constant || parent.kind === SyntaxKind.Parameter) {
+                const rootDeclaration = getRootDeclaration(parent);
+                if (rootDeclaration.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlagsCached(rootDeclaration) & NodeFlags.Constant || rootDeclaration.kind === SyntaxKind.Parameter) {
                     const links = getNodeLinks(parent);
                     if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                         links.flags |= NodeCheckFlags.InCheckIdentifier;
                         const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
                         const parentTypeConstraint = parentType && mapType(parentType, getBaseConstraintOrType);
                         links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                        if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
+                        if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
                             const pattern = declaration.parent;
                             const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
                             if (narrowedType.flags & TypeFlags.Never) {
@@ -28618,17 +28938,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return errorType;
             }
 
-            const container = getContainingFunction(node)!;
-            if (languageVersion < ScriptTarget.ES2015) {
-                if (container.kind === SyntaxKind.ArrowFunction) {
-                    error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+            let container = getContainingFunction(node);
+            if (container) {
+                if (languageVersion < ScriptTarget.ES2015) {
+                    if (container.kind === SyntaxKind.ArrowFunction) {
+                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+                    }
+                    else if (hasSyntacticModifier(container, ModifierFlags.Async)) {
+                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_async_function_or_method_in_ES3_and_ES5_Consider_using_a_standard_function_or_method);
+                    }
                 }
-                else if (hasSyntacticModifier(container, ModifierFlags.Async)) {
-                    error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_async_function_or_method_in_ES3_and_ES5_Consider_using_a_standard_function_or_method);
+
+                getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
+                while (container && isArrowFunction(container)) {
+                    container = getContainingFunction(container);
+                    if (container) {
+                        getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
+                    }
                 }
             }
-
-            getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
             return getTypeOfSymbol(symbol);
         }
 
@@ -29462,8 +29790,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
             // contextual type for 'this' is 'obj'.
             const parent = walkUpParenthesizedExpressions(func.parent);
-            if (parent.kind === SyntaxKind.BinaryExpression && (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                const target = (parent as BinaryExpression).left;
+            if (isAssignmentExpression(parent)) {
+                const target = parent.left;
                 if (isAccessExpression(target)) {
                     const { expression } = target;
                     // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
@@ -29673,7 +30001,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
         const signature = getContextualSignatureForFunctionLikeDeclaration(functionDecl as FunctionExpression);
         if (signature && !isResolvingReturnTypeOfSignature(signature)) {
-            return getReturnTypeOfSignature(signature);
+            const returnType = getReturnTypeOfSignature(signature);
+            const functionFlags = getFunctionFlags(functionDecl);
+            if (functionFlags & FunctionFlags.Generator) {
+                return filterType(returnType, t => {
+                    return !!(t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void | TypeFlags.InstantiableNonPrimitive)) || checkGeneratorInstantiationAssignabilityToReturnType(t, functionFlags, /*errorNode*/ undefined);
+                });
+            }
+            if (functionFlags & FunctionFlags.Async) {
+                return filterType(returnType, t => {
+                    return !!(t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void | TypeFlags.InstantiableNonPrimitive)) || !!getAwaitedTypeOfPromise(t);
+                });
+            }
+            return returnType;
         }
         const iife = getImmediatelyInvokedFunctionExpression(functionDecl);
         if (iife) {
@@ -31261,7 +31601,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Handle children attribute
         const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement : undefined;
         // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
-        if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
+        if (parent && parent.openingElement === openingLikeElement && getSemanticJsxChildren(parent.children).length > 0) {
             const childrenTypes: Type[] = checkJsxChildren(parent, checkMode);
 
             if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
@@ -33356,8 +33696,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (arg.kind === SyntaxKind.SyntheticExpression && (arg as SyntheticExpression).tupleNameSource) {
                 names.push((arg as SyntheticExpression).tupleNameSource!);
             }
+            else {
+                names.push(undefined);
+            }
         }
-        return createTupleType(types, flags, inConstContext && !someType(restType, isMutableArrayLikeType), length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, inConstContext && !someType(restType, isMutableArrayLikeType), names);
     }
 
     function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
@@ -33717,21 +34060,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getDiagnosticSpanForCallNode(node: CallExpression, doNotIncludeArguments?: boolean) {
-        let start: number;
-        let length: number;
+    function getDiagnosticSpanForCallNode(node: CallExpression) {
         const sourceFile = getSourceFileOfNode(node);
-
-        if (isPropertyAccessExpression(node.expression)) {
-            const nameSpan = getErrorSpanForNode(sourceFile, node.expression.name);
-            start = nameSpan.start;
-            length = doNotIncludeArguments ? nameSpan.length : node.end - start;
-        }
-        else {
-            const expressionSpan = getErrorSpanForNode(sourceFile, node.expression);
-            start = expressionSpan.start;
-            length = doNotIncludeArguments ? expressionSpan.length : node.end - start;
-        }
+        const { start, length } = getErrorSpanForNode(sourceFile, isPropertyAccessExpression(node.expression) ? node.expression.name : node.expression);
         return { start, length, sourceFile };
     }
 
@@ -33749,6 +34080,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), node, message);
         }
+    }
+
+    function getErrorNodeForCallNode(callLike: CallLikeExpression): Node {
+        if (isCallOrNewExpression(callLike)) {
+            return isPropertyAccessExpression(callLike.expression) ? callLike.expression.name : callLike.expression;
+        }
+        if (isTaggedTemplateExpression(callLike)) {
+            return isPropertyAccessExpression(callLike.tag) ? callLike.tag.name : callLike.tag;
+        }
+        if (isJsxOpeningLikeElement(callLike)) {
+            return callLike.tagName;
+        }
+        return callLike;
     }
 
     function isPromiseResolveArityError(node: CallLikeExpression) {
@@ -34074,7 +34418,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         diag = { file, start, length, code: chain.code, category: chain.category, messageText: chain, relatedInformation: related };
                     }
                     else {
-                        diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), node, chain, related);
+                        diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), getErrorNodeForCallNode(node), chain, related);
                     }
                     addImplementationSuccessElaboration(candidatesForArgumentError[0], diag);
                     diagnostics.add(diag);
@@ -34432,7 +34776,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // use the resolvingSignature singleton to indicate that we deferred processing. This result will be
         // propagated out and eventually turned into silentNeverType (a type that is assignable to anything and
         // from which we never make inferences).
-        if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments && callSignatures.some(isGenericFunctionReturningFunction)) {
+        if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments && callSignatures.some(isGenericFunctionReturningFunctionOrConstructor)) {
             skippedGenericFunction(node, checkMode);
             return resolvingSignature;
         }
@@ -34445,8 +34789,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return resolveCall(node, callSignatures, candidatesOutArray, checkMode, callChainFlags);
     }
 
-    function isGenericFunctionReturningFunction(signature: Signature) {
-        return !!(signature.typeParameters && isFunctionType(getReturnTypeOfSignature(signature)));
+    function isGenericFunctionReturningFunctionOrConstructor(signature: Signature) {
+        if (!signature.typeParameters) {
+            return false;
+        }
+        const returnType = getReturnTypeOfSignature(signature);
+        return isFunctionType(returnType) || isConstructorType(returnType);
     }
 
     /**
@@ -34710,7 +35058,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
         }
         if (isCallExpression(errorTarget.parent)) {
-            const { start, length } = getDiagnosticSpanForCallNode(errorTarget.parent, /*doNotIncludeArguments*/ true);
+            const { start, length } = getDiagnosticSpanForCallNode(errorTarget.parent);
             diagnostic.start = start;
             diagnostic.length = length;
         }
@@ -35495,7 +35843,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     hasSignatures ||= resolved.callSignatures.length !== 0 || resolved.constructSignatures.length !== 0;
                     hasApplicableSignature ||= callSignatures.length !== 0 || constructSignatures.length !== 0;
                     if (callSignatures !== resolved.callSignatures || constructSignatures !== resolved.constructSignatures) {
-                        const result = createAnonymousType(/*symbol*/ undefined, resolved.members, callSignatures, constructSignatures, resolved.indexInfos) as ResolvedType & InstantiationExpressionType;
+                        const result = createAnonymousType(createSymbol(SymbolFlags.None, InternalSymbolName.InstantiationExpression), resolved.members, callSignatures, constructSignatures, resolved.indexInfos) as ResolvedType & InstantiationExpressionType;
                         result.objectFlags |= ObjectFlags.InstantiationExpressionType;
                         result.node = node;
                         return result;
@@ -35741,12 +36089,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 types.push(restType);
                 flags.push(ElementFlags.Variadic);
             }
-            const name = getNameableDeclarationAtPosition(source, i);
-            if (name) {
-                names.push(name);
-            }
+            names.push(getNameableDeclarationAtPosition(source, i));
         }
-        return createTupleType(types, flags, readonly, length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, readonly, names);
     }
 
     // Return the number of parameters in a signature. The rest parameter, if present, counts as one
@@ -36613,9 +36958,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let hasReturnWithNoExpression = functionHasImplicitReturn(func);
         let hasReturnOfTypeNever = false;
         forEachReturnStatement(func.body as Block, returnStatement => {
-            const expr = returnStatement.expression;
+            let expr = returnStatement.expression;
             if (expr) {
+                expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
                 // Bare calls to this same function don't contribute to inference
+                // and `return await` is also safe to unwrap here
+                if (functionFlags & FunctionFlags.Async && expr.kind === SyntaxKind.AwaitExpression) {
+                    expr = skipParentheses((expr as AwaitExpression).expression, /*excludeJSDocTypeAssertions*/ true);
+                }
                 if (
                     expr.kind === SyntaxKind.CallExpression &&
                     (expr as CallExpression).expression.kind === SyntaxKind.Identifier &&
@@ -37019,7 +37369,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkVoidExpression(node: VoidExpression): Type {
-        checkExpression(node.expression);
+        checkNodeDeferred(node);
         return undefinedWideningType;
     }
 
@@ -38250,7 +38600,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // There is no point in doing an assignability check if the function
         // has no explicit return type because the return type is directly computed
         // from the yield expressions.
-        const returnType = getReturnTypeFromAnnotation(func);
+        let returnType = getReturnTypeFromAnnotation(func);
+        if (returnType && returnType.flags & TypeFlags.Union) {
+            returnType = filterType(returnType, t => checkGeneratorInstantiationAssignabilityToReturnType(t, functionFlags, /*errorNode*/ undefined));
+        }
         const iterationTypes = returnType && getIterationTypesOfGeneratorFunctionReturnType(returnType, isAsync);
         const signatureYieldType = iterationTypes && iterationTypes.yieldType || anyType;
         const signatureNextType = iterationTypes && iterationTypes.nextType || anyType;
@@ -38645,17 +38998,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getReturnTypeOfSingleNonGenericCallSignature(funcType: Type) {
+    function getNonGenericReturnTypeOfSingleCallSignature(funcType: Type) {
         const signature = getSingleCallSignature(funcType);
-        if (signature && !signature.typeParameters) {
-            return getReturnTypeOfSignature(signature);
+        if (signature) {
+            const returnType = getReturnTypeOfSignature(signature);
+            if (!signature.typeParameters || !couldContainTypeVariables(returnType)) {
+                return returnType;
+            }
         }
     }
 
     function getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr: CallChain) {
         const funcType = checkExpression(expr.expression);
         const nonOptionalType = getOptionalExpressionType(funcType, expr.expression);
-        const returnType = getReturnTypeOfSingleNonGenericCallSignature(funcType);
+        const returnType = getNonGenericReturnTypeOfSingleCallSignature(funcType);
         return returnType && propagateOptionalTypeMarker(returnType, expr, nonOptionalType !== funcType);
     }
 
@@ -38704,7 +39060,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // signature where we can just fetch the return type without checking the arguments.
         if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr)) {
             return isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
-                getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
+                getNonGenericReturnTypeOfSingleCallSignature(checkNonNullExpression(expr.expression));
         }
         else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
             return getTypeFromTypeNode((expr as TypeAssertion).type);
@@ -38812,14 +39168,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return hasSkipDirectInferenceFlag(node) ?
                     blockedStringType :
                     getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
-            case SyntaxKind.NumericLiteral: {
+            case SyntaxKind.NumericLiteral:
                 checkGrammarNumericLiteral(node as NumericLiteral);
-                const value = +(node as NumericLiteral).text;
-                if (!isFinite(value)) {
-                    return numberType;
-                }
-                return getFreshTypeOfLiteralType(getNumberLiteralType(value));
-            }
+                return getFreshTypeOfLiteralType(getNumberLiteralType(+(node as NumericLiteral).text));
             case SyntaxKind.BigIntLiteral:
                 checkGrammarBigIntLiteral(node as BigIntLiteral);
                 return getFreshTypeOfLiteralType(getBigIntLiteralType({
@@ -39178,17 +39529,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         error(returnTypeErrorLocation, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
                     }
                     else {
-                        // Naively, one could check that Generator<any, any, any> is assignable to the return type annotation.
-                        // However, that would not catch the error in the following case.
-                        //
-                        //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
-                        //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
-                        //
-                        const generatorYieldType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
-                        const generatorReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, (functionFlags & FunctionFlags.Async) !== 0) || generatorYieldType;
-                        const generatorNextType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, (functionFlags & FunctionFlags.Async) !== 0) || unknownType;
-                        const generatorInstantiation = createGeneratorReturnType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async));
-                        checkTypeAssignableTo(generatorInstantiation, returnType, returnTypeErrorLocation);
+                        checkGeneratorInstantiationAssignabilityToReturnType(returnType, functionFlags, returnTypeErrorLocation);
                     }
                 }
                 else if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) {
@@ -39199,6 +39540,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 registerForUnusedIdentifiersCheck(node);
             }
         }
+    }
+
+    function checkGeneratorInstantiationAssignabilityToReturnType(returnType: Type, functionFlags: FunctionFlags, errorNode?: TypeNode) {
+        // Naively, one could check that Generator<any, any, any> is assignable to the return type annotation.
+        // However, that would not catch the error in the following case.
+        //
+        //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
+        //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
+        //
+        const generatorYieldType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
+        const generatorReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, (functionFlags & FunctionFlags.Async) !== 0) || generatorYieldType;
+        const generatorNextType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, (functionFlags & FunctionFlags.Async) !== 0) || unknownType;
+        const generatorInstantiation = createGeneratorReturnType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async));
+
+        return checkTypeAssignableTo(generatorInstantiation, returnType, errorNode);
     }
 
     function checkClassForDuplicateDeclarations(node: ClassLikeDeclaration) {
@@ -39792,7 +40148,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Check if the index type is assignable to 'keyof T' for the object type.
         const objectType = (type as IndexedAccessType).objectType;
         const indexType = (type as IndexedAccessType).indexType;
-        if (isTypeAssignableTo(indexType, getIndexType(objectType, IndexFlags.None))) {
+        // skip index type deferral on remapping mapped types
+        const objectIndexType = isGenericMappedType(objectType) && getMappedTypeNameTypeKind(objectType) === MappedTypeNameTypeKind.Remapping
+            ? getIndexTypeForMappedType(objectType, IndexFlags.None)
+            : getIndexType(objectType, IndexFlags.None);
+        if (isTypeAssignableTo(indexType, objectIndexType)) {
             if (
                 accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
                 getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(objectType as MappedType) & MappedTypeModifiers.IncludeReadonly
@@ -41152,6 +41512,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkJSDocParameterTag(node: JSDocParameterTag) {
         checkSourceElement(node.typeExpression);
     }
+
     function checkJSDocPropertyTag(node: JSDocPropertyTag) {
         checkSourceElement(node.typeExpression);
     }
@@ -41164,6 +41525,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!node.type && !isJSDocConstructSignature(node)) {
                 reportImplicitAny(node, anyType);
             }
+        }
+    }
+
+    function checkJSDocThisTag(node: JSDocThisTag) {
+        const host = getEffectiveJSDocHost(node);
+        if (host && isArrowFunction(host)) {
+            error(node.tagName, Diagnostics.An_arrow_function_cannot_have_a_this_parameter);
         }
     }
 
@@ -41998,7 +42366,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             forEach(node.name.elements, checkSourceElement);
         }
         // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
-        if (isParameter(node) && node.initializer && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
+        if (node.initializer && isParameterDeclaration(node) && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
             error(node, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
             return;
         }
@@ -45220,6 +45588,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
                 error(node, message, symbolToString(symbol));
             }
+            else if (node.kind !== SyntaxKind.ExportSpecifier) {
+                // Look at 'compilerOptions.isolatedModules' and not 'getIsolatedModules(...)' (which considers 'verbatimModuleSyntax')
+                // here because 'verbatimModuleSyntax' will already have an error for importing a type without 'import type'.
+                const appearsValueyToTranspiler = compilerOptions.isolatedModules && !findAncestor(node, isTypeOnlyImportOrExportDeclaration);
+                if (appearsValueyToTranspiler && symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+                    error(
+                        node,
+                        Diagnostics.Import_0_conflicts_with_local_value_so_must_be_declared_with_a_type_only_import_when_isolatedModules_is_enabled,
+                        symbolToString(symbol),
+                        isolatedModulesLikeFlagName,
+                    );
+                }
+            }
 
             if (
                 getIsolatedModules(compilerOptions)
@@ -45628,12 +46009,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const id = node.expression as Identifier;
             const sym = getExportSymbolOfValueSymbolIfExported(resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node));
             if (sym) {
+                const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value);
                 markAliasReferenced(sym, id);
                 // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                 if (getSymbolFlags(sym) & SymbolFlags.Value) {
                     // However if it is a value, we need to check it's being used correctly
                     checkExpressionCached(id);
-                    if (!isIllegalExportDefaultInCJS && !(node.flags & NodeFlags.Ambient) && compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
+                    if (!isIllegalExportDefaultInCJS && !(node.flags & NodeFlags.Ambient) && compilerOptions.verbatimModuleSyntax && typeOnlyDeclaration) {
                         error(
                             id,
                             node.isExportEquals
@@ -45651,6 +46033,44 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             : Diagnostics.An_export_default_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type,
                         idText(id),
                     );
+                }
+
+                if (!isIllegalExportDefaultInCJS && getIsolatedModules(compilerOptions) && !(sym.flags & SymbolFlags.Value)) {
+                    if (
+                        sym.flags & SymbolFlags.Alias
+                        && resolveAlias(sym) !== unknownSymbol
+                        && getSymbolFlags(sym, /*excludeTypeOnlyMeanings*/ false, /*excludeLocalMeanings*/ true) & SymbolFlags.Type
+                        && (!typeOnlyDeclaration || getSourceFileOfNode(typeOnlyDeclaration) !== getSourceFileOfNode(node))
+                    ) {
+                        // import { SomeType } from "./someModule";
+                        // export default SomeType; OR
+                        // export = SomeType;
+                        error(
+                            id,
+                            node.isExportEquals ?
+                                Diagnostics._0_resolves_to_a_type_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_import_type_where_0_is_imported
+                                : Diagnostics._0_resolves_to_a_type_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_export_type_0_as_default,
+                            idText(id),
+                            isolatedModulesLikeFlagName,
+                        );
+                    }
+                    else if (typeOnlyDeclaration && getSourceFileOfNode(typeOnlyDeclaration) !== getSourceFileOfNode(node)) {
+                        // import { SomeTypeOnlyValue } from "./someModule";
+                        // export default SomeTypeOnlyValue; OR
+                        // export = SomeTypeOnlyValue;
+                        addTypeOnlyDeclarationRelatedInfo(
+                            error(
+                                id,
+                                node.isExportEquals ?
+                                    Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_import_type_where_0_is_imported
+                                    : Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_marked_type_only_in_this_file_before_re_exporting_when_1_is_enabled_Consider_using_export_type_0_as_default,
+                                idText(id),
+                                isolatedModulesLikeFlagName,
+                            ),
+                            typeOnlyDeclaration,
+                            idText(id),
+                        );
+                    }
                 }
             }
             else {
@@ -45885,6 +46305,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkJSDocAccessibilityModifiers(node as JSDocPublicTag | JSDocProtectedTag | JSDocPrivateTag);
             case SyntaxKind.JSDocSatisfiesTag:
                 return checkJSDocSatisfiesTag(node as JSDocSatisfiesTag);
+            case SyntaxKind.JSDocThisTag:
+                return checkJSDocThisTag(node as JSDocThisTag);
             case SyntaxKind.IndexedAccessType:
                 return checkIndexedAccessType(node as IndexedAccessTypeNode);
             case SyntaxKind.MappedType:
@@ -46131,6 +46553,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.AsExpression:
             case SyntaxKind.ParenthesizedExpression:
                 checkAssertionDeferred(node as AssertionExpression | JSDocTypeAssertion);
+                break;
+            case SyntaxKind.VoidExpression:
+                checkExpression((node as VoidExpression).expression);
                 break;
             case SyntaxKind.BinaryExpression:
                 if (isInstanceOfExpression(node)) {
@@ -47335,7 +47760,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 );
             case SyntaxKind.ExportAssignment:
                 return (node as ExportAssignment).expression && (node as ExportAssignment).expression.kind === SyntaxKind.Identifier ?
-                    isAliasResolvedToValue(getSymbolOfDeclaration(node as ExportAssignment)) :
+                    isAliasResolvedToValue(getSymbolOfDeclaration(node as ExportAssignment), /*excludeTypeOnlyValues*/ true) :
                     true;
         }
         return false;
@@ -47358,7 +47783,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));
         if (target === unknownSymbol) {
-            return true;
+            return !excludeTypeOnlyValues || !getTypeOnlyAliasDeclaration(symbol);
         }
         // const enums and modules that contain only const enums are not considered values from the emit perspective
         // unless 'preserveConstEnums' option is set to true
@@ -47724,9 +48149,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (enumResult) return enumResult;
         const literalValue = (type as LiteralType).value;
         return typeof literalValue === "object" ? factory.createBigIntLiteral(literalValue) :
-            typeof literalValue === "string" ? factory.createStringLiteral(literalValue) :
-            literalValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(literalValue))) :
-            factory.createNumericLiteral(literalValue);
+            typeof literalValue === "number" ? factory.createNumericLiteral(literalValue) :
+            factory.createStringLiteral(literalValue);
     }
 
     function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker) {
@@ -47869,6 +48293,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
             },
             isImportRequiredByAugmentation,
+            tryFindAmbientModule: moduleReferenceExpression => {
+                const node = getParseTreeNode(moduleReferenceExpression);
+                const moduleSpecifier = node && isStringLiteralLike(node) ? node.text : undefined;
+                return moduleSpecifier !== undefined ? tryFindAmbientModule(moduleSpecifier, /*withAugmentations*/ true) : undefined;
+            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {
@@ -50271,6 +50700,7 @@ interface NodeBuilderContext {
     // State
     encounteredError: boolean;
     reportedDiagnostic: boolean;
+    trackedSymbols: TrackedSymbol[] | undefined;
     visitedTypes: Set<number> | undefined;
     symbolDepth: Map<string, number> | undefined;
     inferTypeParameters: TypeParameter[] | undefined;
@@ -50311,6 +50741,8 @@ class SymbolTrackerImpl implements SymbolTracker {
                 this.onDiagnosticReported();
                 return true;
             }
+            // Skip recording type parameters as they dont contribute to late painted statements
+            if (!(symbol.flags & SymbolFlags.TypeParameter)) (this.context.trackedSymbols ??= []).push([symbol, enclosingDeclaration, meaning]);
         }
         return false;
     }

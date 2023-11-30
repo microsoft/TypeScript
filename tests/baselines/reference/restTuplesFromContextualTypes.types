@@ -265,8 +265,8 @@ f3((a, b, c) => {})
 f3((...x) => {})
 >f3((...x) => {}) : void
 >f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
->(...x) => {} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
->x : [number, boolean, ...string[]]
+>(...x) => {} : (x: number, x_1: boolean, ...x_2: string[]) => void
+>x : [x: number, boolean, ...string[]]
 
 f3((a, ...x) => {})
 >f3((a, ...x) => {}) : void

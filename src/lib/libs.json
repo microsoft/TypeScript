@@ -30,6 +30,7 @@
         "es2015.symbol",
         "es2015.symbol.wellknown",
         "es2016.array.include",
+        "es2016.intl",
         "es2017.date",
         "es2017.object",
         "es2017.sharedmemory",
@@ -70,6 +71,7 @@
         "esnext.decorators",
         "esnext.intl",
         "esnext.disposable",
+        "esnext.promise",
         "decorators",
         "decorators.legacy",
         // Default libraries

@@ -3,6 +3,9 @@ import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineParseConfig,
 } from "./helpers";
 
@@ -20,7 +23,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             for (const jsonText of jsonTexts()) {
                 baseline.push("Input::", jsonText);
                 const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
-                baseline.push("Config::", JSON.stringify(parsed.config, /*replacer*/ undefined, " "));
+                baseline.push("Config::", jsonToReadableText(parsed.config));
                 baseline.push("Errors::");
                 baseline.push(formatErrors(parsed.error ? [parsed.error] : ts.emptyArray));
                 baseline.push("");
@@ -232,7 +235,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         baseline.push("Initial::", content);
         const result = ts.parseJsonText("config.json", content);
         const configJsonObject = ts.convertToObject(result, result.parseDiagnostics);
-        baseline.push("Result::", JSON.stringify(configJsonObject, undefined, " "));
+        baseline.push("Result::", jsonToReadableText(configJsonObject));
         baseline.push("Errors::", formatErrors(result.parseDiagnostics));
         Harness.Baseline.runBaseline(`config/tsconfigParsing/parse and re-emit tsconfig.json file with diagnostics.js`, baseline.join("\n"));
     });
@@ -320,7 +323,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     }], /*skipJson*/ true);
 
     baselinedParsed("generates errors when files is not string", () => [{
-        jsonText: JSON.stringify({
+        jsonText: jsonToReadableText({
             files: [{
                 compilerOptions: {
                     experimentalDecorators: true,
@@ -334,7 +337,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     }]);
 
     baselinedParsed("generates errors when include is not string", () => [{
-        jsonText: JSON.stringify({
+        jsonText: jsonToReadableText({
             include: [
                 ["./**/*.ts"],
             ],
@@ -345,7 +348,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     }]);
 
     baselinedParsed("generates errors when commandline option is in tsconfig", () => [{
-        jsonText: JSON.stringify({
+        jsonText: jsonToReadableText({
             compilerOptions: {
                 help: true,
             },
@@ -382,7 +385,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
 
     baselineWildcards("parses wildcard directories even when parent directories have dots", () => [{
         configFileName: "/foo.bar/tsconfig.json",
-        jsonText: JSON.stringify({
+        jsonText: jsonToReadableText({
             include: ["src"],
         }),
         basePath: "/foo.bar",
@@ -390,7 +393,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
 
     baselineWildcards("correctly parses wild card directories from implicit glob when two keys differ only in directory seperator", () => [{
         configFileName: "/foo.bar/tsconfig.json",
-        jsonText: JSON.stringify({
+        jsonText: jsonToReadableText({
             include: ["./", "./**/*.json"],
         }),
         basePath: "/foo",

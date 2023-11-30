@@ -41,6 +41,7 @@ import {
     firstDefined,
     firstOrUndefined,
     flatMap,
+    forEach,
     forEachChild,
     forEachChildRecursively,
     forEachReturnStatement,
@@ -131,7 +132,9 @@ import {
     isInString,
     isInterfaceDeclaration,
     isJSDocMemberName,
+    isJSDocPropertyLikeTag,
     isJSDocTag,
+    isJSDocTypeLiteral,
     isJsxClosingElement,
     isJsxElement,
     isJsxFragment,
@@ -185,7 +188,9 @@ import {
     isVariableStatement,
     isVoidExpression,
     isWriteAccess,
+    JSDocPropertyLikeTag,
     JSDocTag,
+    length,
     map,
     mapDefined,
     MethodDeclaration,
@@ -1928,6 +1933,15 @@ export namespace Core {
             return;
         }
 
+        if (
+            isJSDocPropertyLikeTag(parent) && parent.isNameFirst &&
+            parent.typeExpression && isJSDocTypeLiteral(parent.typeExpression.type) &&
+            parent.typeExpression.type.jsDocPropertyTags && length(parent.typeExpression.type.jsDocPropertyTags)
+        ) {
+            getReferencesAtJSDocTypeLiteral(parent.typeExpression.type.jsDocPropertyTags, referenceLocation, search, state);
+            return;
+        }
+
         const relatedSymbol = getRelatedSymbol(search, referenceSymbol, referenceLocation, state);
         if (!relatedSymbol) {
             getReferenceForShorthandProperty(referenceSymbol, search, state);
@@ -1961,6 +1975,17 @@ export namespace Core {
         }
 
         getImportOrExportReferences(referenceLocation, referenceSymbol, search, state);
+    }
+
+    function getReferencesAtJSDocTypeLiteral(jsDocPropertyTags: readonly JSDocPropertyLikeTag[], referenceLocation: Node, search: Search, state: State) {
+        const addRef = state.referenceAdder(search.symbol);
+
+        addReference(referenceLocation, search.symbol, state);
+        forEach(jsDocPropertyTags, propTag => {
+            if (isQualifiedName(propTag.name)) {
+                addRef(propTag.name.left);
+            }
+        });
     }
 
     function getReferencesAtExportSpecifier(
