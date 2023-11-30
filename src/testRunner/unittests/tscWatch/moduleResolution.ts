@@ -1,5 +1,8 @@
 import * as Utils from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     getFsConentsForNode10ResultAtTypesPackageJson,
     getFsContentsForNode10Result,
     getFsContentsForNode10ResultDts,
@@ -22,7 +25,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg1",
                         version: "1.0.0",
                         main: "build/index.js",
@@ -36,7 +39,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             outDir: "build",
                         },
@@ -56,7 +59,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg2/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg2",
                         version: "1.0.0",
                         main: "build/index.js",
@@ -96,7 +99,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             moduleResolution: "nodenext",
                             outDir: "./dist",
@@ -107,7 +110,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "@this/package",
                         type: "module",
                         exports: {
@@ -146,7 +149,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         function getSys(packageFileContents: string) {
             const configFile: File = {
                 path: `/user/username/projects/myproject/src/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         target: "es2016",
                         module: "Node16",
@@ -181,14 +184,14 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             scenario: "moduleResolution",
             subScenario: "package json file is edited",
             commandLineArgs: ["--w", "--p", "src", "--extendedDiagnostics", "-traceResolution", "--explainFiles"],
-            sys: () => getSys(JSON.stringify({ name: "app", version: "1.0.0" })),
+            sys: () => getSys(jsonToReadableText({ name: "app", version: "1.0.0" })),
             edits: [
                 {
                     caption: "Modify package json file to add type module",
                     edit: sys =>
                         sys.writeFile(
                             `/user/username/projects/myproject/package.json`,
-                            JSON.stringify({
+                            jsonToReadableText({
                                 name: "app",
                                 version: "1.0.0",
                                 type: "module",
@@ -201,7 +204,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package.json file to remove type module",
-                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -220,7 +223,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     edit: sys =>
                         sys.writeFile(
                             `/user/username/projects/myproject/package.json`,
-                            JSON.stringify({
+                            jsonToReadableText({
                                 name: "app",
                                 version: "1.0.0",
                                 type: "module",
@@ -247,7 +250,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             subScenario: "package json file is edited when package json with type module exists",
             commandLineArgs: ["--w", "--p", "src", "--extendedDiagnostics", "-traceResolution", "--explainFiles"],
             sys: () =>
-                getSys(JSON.stringify({
+                getSys(jsonToReadableText({
                     name: "app",
                     version: "1.0.0",
                     type: "module",
@@ -255,7 +258,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             edits: [
                 {
                     caption: "Modify package.json file to remove type module",
-                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -266,7 +269,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     edit: sys =>
                         sys.writeFile(
                             `/user/username/projects/myproject/package.json`,
-                            JSON.stringify({
+                            jsonToReadableText({
                                 name: "app",
                                 version: "1.0.0",
                                 type: "module",
@@ -287,7 +290,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package json file to without type module",
-                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -312,7 +315,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: { moduleResolution: "node16" },
                     }),
                 },
@@ -332,7 +335,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/node_modules/pkg/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg",
                         version: "0.0.1",
                         exports: {
@@ -351,7 +354,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/node_modules/pkg1/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg1",
                         version: "0.0.1",
                         exports: {
@@ -378,12 +381,83 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
 
     verifyTscWatch({
         scenario: "moduleResolution",
+        subScenario: "module resolutions from files with partially used import attributes",
+        sys: () =>
+            createWatchedSystem([
+                {
+                    path: `/user/username/projects/myproject/tsconfig.json`,
+                    content: jsonToReadableText({
+                        compilerOptions: { moduleResolution: "node16" },
+                    }),
+                },
+                {
+                    path: `/user/username/projects/myproject/index.ts`,
+                    content: Utils.dedent`
+                        import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+                        import type { RequireInterface } from "pkg1" with { "resolution-mode": "require" };
+                        import {x} from "./a";
+                    `,
+                },
+                {
+                    path: `/user/username/projects/myproject/a.ts`,
+                    content: Utils.dedent`
+                        export const x = 10;
+                    `,
+                },
+                {
+                    path: `/user/username/projects/myproject/node_modules/pkg/package.json`,
+                    content: jsonToReadableText({
+                        name: "pkg",
+                        version: "0.0.1",
+                        exports: {
+                            import: "./import.js",
+                            require: "./require.js",
+                        },
+                    }),
+                },
+                {
+                    path: `/user/username/projects/myproject/node_modules/pkg/import.d.ts`,
+                    content: `export interface ImportInterface {}`,
+                },
+                {
+                    path: `/user/username/projects/myproject/node_modules/pkg/require.d.ts`,
+                    content: `export interface RequireInterface {}`,
+                },
+                {
+                    path: `/user/username/projects/myproject/node_modules/pkg1/package.json`,
+                    content: jsonToReadableText({
+                        name: "pkg1",
+                        version: "0.0.1",
+                        exports: {
+                            import: "./import.js",
+                            require: "./require.js",
+                        },
+                    }),
+                },
+                {
+                    path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
+                    content: `export interface ImportInterface {}`,
+                },
+                libFile,
+            ], { currentDirectory: "/user/username/projects/myproject" }),
+        commandLineArgs: ["-w", "--traceResolution"],
+        edits: [
+            {
+                caption: "modify aFile by adding import",
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/a.ts`, `import type { ImportInterface } from "pkg" with { "resolution-mode": "import" }`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario: "moduleResolution",
         subScenario: "type reference resolutions reuse",
         sys: () =>
             createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: { moduleResolution: "node16" },
                     }),
                 },
@@ -403,7 +477,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/node_modules/pkg/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg",
                         version: "0.0.1",
                         exports: {
@@ -432,7 +506,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/node_modules/pkg1/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg1",
                         version: "0.0.1",
                         exports: {

@@ -28,7 +28,7 @@ export async function exec(cmd, args, options = {}) {
         const { ignoreExitCode, waitForExit = true, ignoreStdout } = options;
 
         if (!options.hidePrompt) console.log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
-        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore" });
+        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore", detached: !waitForExit });
         if (waitForExit) {
             const onCanceled = () => {
                 proc.kill();
@@ -52,8 +52,7 @@ export async function exec(cmd, args, options = {}) {
         }
         else {
             proc.unref();
-            // wait a short period in order to allow the process to start successfully before Node exits.
-            setTimeout(() => resolve({ exitCode: undefined }), 100);
+            resolve({ exitCode: undefined });
         }
     }));
 }
@@ -72,12 +71,18 @@ export class ExecError extends Error {
 }
 
 /**
- * Reads JSON data with optional comments using the LKG TypeScript compiler
+ * Reads JSON data with optional comments
  * @param {string} jsonPath
  */
 export function readJson(jsonPath) {
     const jsonText = fs.readFileSync(jsonPath, "utf8");
-    return JSONC.parse(jsonText);
+    /** @type {JSONC.ParseError[]} */
+    const errors = [];
+    const result = JSONC.parse(jsonText, errors);
+    if (errors.length) {
+        throw new Error(`Error parsing ${jsonPath}`);
+    }
+    return result;
 }
 
 /**
@@ -231,4 +236,12 @@ export function memoize(fn) {
         }
         return value;
     };
+}
+
+/**
+ * @param {fs.PathLike} p
+ */
+export function rimraf(p) {
+    // The rimraf package uses maxRetries=10 on Windows, but Node's fs.rm does not have that special case.
+    return fs.promises.rm(p, { recursive: true, force: true, maxRetries: process.platform === "win32" ? 10 : 0 });
 }

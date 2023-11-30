@@ -89,7 +89,31 @@ assert(sourceFile, "Failed to load source file");
 const moduleSymbol = typeChecker.getSymbolAtLocation(sourceFile);
 assert(moduleSymbol, "Failed to get module's symbol");
 
-const printer = ts.createPrinter({ newLine: newLineKind });
+/** @type {{ writeNode(hint: ts.EmitHint, node: ts.Node, sourceFile: ts.SourceFile | undefined, writer: any): void }} */
+const printer = /** @type {any} */ (ts.createPrinter({ newLine: newLineKind }));
+/** @type {{ writeComment(s: string): void; getText(): string; clear(): void }} */
+const writer = /** @type {any} */ (ts).createTextWriter("\n");
+const originalWriteComment = writer.writeComment.bind(writer);
+writer.writeComment = s => {
+    // Hack; undo https://github.com/microsoft/TypeScript/pull/50097
+    // We printNode directly, so we get all of the original source comments.
+    // If we were using actual declaration emit instead, this wouldn't be needed.
+    if (s.startsWith("//")) {
+        return;
+    }
+    originalWriteComment(s);
+};
+
+/**
+ * @param {ts.Node} node
+ * @param {ts.SourceFile} sourceFile
+ */
+function printNode(node, sourceFile) {
+    printer.writeNode(ts.EmitHint.Unspecified, node, sourceFile, writer);
+    const text = writer.getText();
+    writer.clear();
+    return text;
+}
 
 /** @type {string[]} */
 const publicLines = [];
@@ -141,7 +165,7 @@ function write(s, target) {
  * @param {WriteTarget} target
  */
 function writeNode(node, sourceFile, target) {
-    write(printer.printNode(ts.EmitHint.Unspecified, node, sourceFile), target);
+    write(printNode(node, sourceFile), target);
 }
 
 /** @type {Map<ts.Symbol, boolean>} */
@@ -417,7 +441,7 @@ const dprintPath = path.resolve(__dirname, "..", "node_modules", "dprint", "bin.
  * @returns {string}
  */
 function dprint(contents) {
-    return cp.execFileSync(
+    const result = cp.execFileSync(
         process.execPath,
         [dprintPath, "fmt", "--stdin", "ts"],
         {
@@ -427,6 +451,7 @@ function dprint(contents) {
             maxBuffer: 100 * 1024 * 1024, // 100 MB "ought to be enough for anyone"; https://github.com/nodejs/node/issues/9829
         },
     );
+    return result.replace(/\r\n/g, "\n");
 }
 
 fs.writeFileSync(output, dprint(publicContents));

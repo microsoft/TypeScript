@@ -44,7 +44,7 @@ let x3 = f3(x => x);  // Array<any>
 
 declare const s: <R>(go: <S>(ops: { init(): S; }) => R) => R;
 >s : <R>(go: <S>(ops: { init(): S; }) => R) => R
->go : <S>(ops: { init(): S; }) => R
+>go : <S>(ops: {    init(): S;}) => R
 >ops : { init(): S; }
 >init : () => S
 

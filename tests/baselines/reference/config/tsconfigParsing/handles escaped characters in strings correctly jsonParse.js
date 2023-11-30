@@ -6,9 +6,9 @@ Input::
         }
 Config::
 {
- "exclude": [
-  "xx\"//files"
- ]
+  "exclude": [
+    "xx\"//files"
+  ]
 }
 Errors::
 
@@ -21,9 +21,9 @@ Input::
         }
 Config::
 {
- "exclude": [
-  "xx\\"
- ]
+  "exclude": [
+    "xx\\"
+  ]
 }
 Errors::
 

@@ -22,7 +22,7 @@ import { PrismaClient } from "@prisma/client";
 >PrismaClient : typeof PrismaClient
 
 declare const enhancePrisma: <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown };
->enhancePrisma : <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown; }
+>enhancePrisma : <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & {    enhanced: unknown;}
 >client : TPrismaClientCtor
 >enhanced : unknown
 

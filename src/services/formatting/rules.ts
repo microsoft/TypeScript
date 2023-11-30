@@ -91,7 +91,7 @@ export function getAllRules(): RuleSpec[] {
     const typeScriptOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.ClassKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ImportKeyword]);
 
     // Place a space before open brace in a control flow construct
-    const controlOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.CloseParenToken, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.DoKeyword, SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword, SyntaxKind.ElseKeyword]);
+    const controlOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.CloseParenToken, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.DoKeyword, SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CatchKeyword]);
 
     // These rules are higher in priority than user-configurable
     const highPriorityCommonRules = [
@@ -106,7 +106,7 @@ export function getAllRules(): RuleSpec[] {
         rule("SpaceAfterQuestionMarkInConditionalOperator", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext, isConditionalOperatorContext], RuleAction.InsertSpace),
 
         // in other cases there should be no space between '?' and next token
-        rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext, isNonOptionalPropertyContext], RuleAction.DeleteSpace),
 
         rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext, isNotPropertyAccessOnIntegerLiteral], RuleAction.DeleteSpace),
         rule("NoSpaceAfterDot", [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
@@ -561,6 +561,14 @@ function isTypeAnnotationContext(context: FormattingContext): boolean {
         isFunctionLikeKind(contextKind);
 }
 
+function isOptionalPropertyContext(context: FormattingContext) {
+    return isPropertyDeclaration(context.contextNode) && context.contextNode.questionToken;
+}
+
+function isNonOptionalPropertyContext(context: FormattingContext) {
+    return !isOptionalPropertyContext(context);
+}
+
 function isConditionalOperatorContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ConditionalExpression ||
         context.contextNode.kind === SyntaxKind.ConditionalType;
@@ -971,5 +979,5 @@ function isSemicolonInsertionContext(context: FormattingContext): boolean {
 function isNotPropertyAccessOnIntegerLiteral(context: FormattingContext): boolean {
     return !isPropertyAccessExpression(context.contextNode)
         || !isNumericLiteral(context.contextNode.expression)
-        || context.contextNode.expression.getText().indexOf(".") !== -1;
+        || context.contextNode.expression.getText().includes(".");
 }

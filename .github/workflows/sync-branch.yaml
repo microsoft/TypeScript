@@ -2,7 +2,7 @@ name: Sync branch with master
 
 on:
   repository_dispatch:
-    types: sync-branch
+    types: [sync-branch]
   workflow_dispatch:
     inputs:
       branch_name:
@@ -22,16 +22,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-
     steps:
-      - uses: actions/setup-node@v3
-      - uses: actions/checkout@v3
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           ref: ${{ github.event.inputs.branch_name || github.event.client_payload.branch_name }}
-          fetch-depth: 0
-      # This does a test post-merge and only pushes the result if the test succeeds
+          filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
+          fetch-depth: 0 # Default is 1; need to set to 0 to get the benefits of blob:none.
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
       # required client_payload members:
       # branch_name - the target branch
       - run: |
@@ -40,5 +38,7 @@ jobs:
           git fetch origin main
           git merge origin/main --no-ff
           npm ci
-          npm test
+          npx hereby LKG
+          git add --force ./lib
+          git commit -m 'Update LKG'
           git push

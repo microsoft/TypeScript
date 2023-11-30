@@ -2,7 +2,7 @@ name: Set branch version
 
 on:
   repository_dispatch:
-    types: set-version
+    types: [set-version]
 
 permissions:
   contents: read
@@ -16,15 +16,12 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
     steps:
-      - uses: actions/setup-node@v3
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           ref: ${{ github.event.client_payload.branch_name }}
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
       - run: |
           npm --version
           # corepack enable npm
@@ -44,10 +41,11 @@ jobs:
           sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ github.event.client_payload.core_major_minor }}"/g' tests/baselines/reference/api/tsserverlibrary.d.ts
           sed -i -e 's/const version\(: string\)\{0,1\} = .*;/const version = "${{ github.event.client_payload.package_version }}" as string;/g' src/compiler/corePublic.ts
           npm ci
+          npm install # update package-lock.json to ensure the version bump is included
           npx hereby LKG
           npm test
           git diff
-          git add package.json
+          git add package.json package-lock.json
           git add src/compiler/corePublic.ts
           git add tests/baselines/reference/api/typescript.d.ts
           git add tests/baselines/reference/api/tsserverlibrary.d.ts

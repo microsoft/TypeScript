@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/typeOfYieldWithUnionInContextualReturnType.ts] ////
+
+=== typeOfYieldWithUnionInContextualReturnType.ts ===
+// https://github.com/microsoft/TypeScript/issues/42439
+
+type SyncSequenceFactory = () => Generator<string, string, string>;
+>SyncSequenceFactory : Symbol(SyncSequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 0, 0))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+type AsyncSequenceFactory = () => AsyncGenerator<string, string, string>;
+>AsyncSequenceFactory : Symbol(AsyncSequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 2, 67))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+type SequenceFactory = SyncSequenceFactory | AsyncSequenceFactory
+>SequenceFactory : Symbol(SequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 4, 73))
+>SyncSequenceFactory : Symbol(SyncSequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 0, 0))
+>AsyncSequenceFactory : Symbol(AsyncSequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 2, 67))
+
+const syncFactory: SyncSequenceFactory = function* (){
+>syncFactory : Symbol(syncFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 8, 5))
+>SyncSequenceFactory : Symbol(SyncSequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 0, 0))
+
+  let name = "";
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 9, 5))
+
+  while(!name){
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 9, 5))
+
+    name = yield "What is your name?"
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 9, 5))
+  }
+  return `That's the end of the game, ${name}`
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 9, 5))
+} 
+
+const asyncFactory: AsyncSequenceFactory = async function* (){
+>asyncFactory : Symbol(asyncFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 16, 5))
+>AsyncSequenceFactory : Symbol(AsyncSequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 2, 67))
+
+  let name = "";
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 17, 5))
+
+  while(!name){
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 17, 5))
+
+    name = yield "What is your name?"
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 17, 5))
+  }
+  return `That's the end of the game, ${name}`
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 17, 5))
+} 
+
+const looserSyncFactory: SequenceFactory = function* (){
+>looserSyncFactory : Symbol(looserSyncFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 24, 5))
+>SequenceFactory : Symbol(SequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 4, 73))
+
+  let name = "";
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 25, 5))
+
+  while(!name){
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 25, 5))
+
+    name = yield "What is your name?"
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 25, 5))
+  }
+  return `That's the end of the game, ${name}`
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 25, 5))
+} 
+
+const looserAsyncFactory: SequenceFactory = async function* (){
+>looserAsyncFactory : Symbol(looserAsyncFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 32, 5))
+>SequenceFactory : Symbol(SequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 4, 73))
+
+  let name = "";
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 33, 5))
+
+  while(!name){
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 33, 5))
+
+    name = yield "What is your name?"
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 33, 5))
+  }
+  return `That's the end of the game, ${name}`
+>name : Symbol(name, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 33, 5))
+} 
+

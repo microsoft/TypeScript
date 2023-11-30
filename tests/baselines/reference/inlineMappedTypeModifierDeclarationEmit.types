@@ -2,17 +2,17 @@
 
 === index.ts ===
 import { test1, test2 } from "./other";
->test1 : <T, K extends string>(obj: T, k: K) => { [P in Exclude<keyof T, K>]: T[P]; }
+>test1 : <T, K extends string>(obj: T, k: K) => Exclude<keyof T, K> extends infer T_1 extends keyof T ? { [P in T_1]: T[P]; } : never
 >test2 : <T, K extends string>(obj: T, k: K) => { [P in Exclude<keyof T, K>]: T[P]; }
 
 export function wrappedTest1<T, K extends string>(obj: T, k: K) {
->wrappedTest1 : <T, K extends string>(obj: T, k: K) => { [P in Exclude<keyof T, K>]: T[P]; }
+>wrappedTest1 : <T, K extends string>(obj: T, k: K) => Exclude<keyof T, K> extends infer T_1 extends keyof T ? { [P in T_1]: T[P]; } : never
 >obj : T
 >k : K
 
   return test1(obj, k);
->test1(obj, k) : { [P in Exclude<keyof T, K>]: T[P]; }
->test1 : <T, K extends string>(obj: T, k: K) => { [P in Exclude<keyof T, K>]: T[P]; }
+>test1(obj, k) : Exclude<keyof T, K> extends infer T_1 extends keyof T ? { [P in T_1]: T[P]; } : never
+>test1 : <T_1, K_1 extends string>(obj: T_1, k: K_1) => Exclude<keyof T_1, K_1> extends infer T_2 extends keyof T_1 ? { [P in T_2]: T_1[P]; } : never
 >obj : T
 >k : K
 }
@@ -24,7 +24,7 @@ export function wrappedTest2<T, K extends string>(obj: T, k: K) {
 
   return test2(obj, k);
 >test2(obj, k) : { [P in Exclude<keyof T, K>]: T[P]; }
->test2 : <T, K extends string>(obj: T, k: K) => { [P in Exclude<keyof T, K>]: T[P]; }
+>test2 : <T_1, K_1 extends string>(obj: T_1, k: K_1) => { [P in Exclude<keyof T_1, K_1>]: T_1[P]; }
 >obj : T
 >k : K
 }
@@ -43,7 +43,7 @@ export type Obj = {
 export const processedInternally1 = wrappedTest1({} as Obj, "a");
 >processedInternally1 : { readonly foo: string; }
 >wrappedTest1({} as Obj, "a") : { readonly foo: string; }
->wrappedTest1 : <T, K extends string>(obj: T, k: K) => { [P in Exclude<keyof T, K>]: T[P]; }
+>wrappedTest1 : <T, K extends string>(obj: T, k: K) => Exclude<keyof T, K> extends infer T_1 extends keyof T ? { [P in T_1]: T[P]; } : never
 >{} as Obj : Obj
 >{} : {}
 >"a" : "a"

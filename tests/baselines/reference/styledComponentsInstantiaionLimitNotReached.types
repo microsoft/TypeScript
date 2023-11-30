@@ -332,7 +332,7 @@ export interface StyledComponentBase<
 >React : any
 
     withComponent<WithC extends AnyStyledComponent>(
->withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
+>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC_1 extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC_1): StyledComponent<WithC_1, T, O, A>; }
 
         component: WithC,
 >component : WithC
@@ -344,7 +344,7 @@ export interface StyledComponentBase<
         A | StyledComponentInnerAttrs<WithC>
     >;
     withComponent<WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
->withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
+>withComponent : { <WithC_1 extends AnyStyledComponent>(component: WithC_1): StyledComponent<StyledComponentInnerComponent<WithC_1>, T, O & StyledComponentInnerOtherProps<WithC_1>, A | StyledComponentInnerAttrs<WithC_1>>; <WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
 >JSX : any
 >React : any
 

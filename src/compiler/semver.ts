@@ -8,7 +8,6 @@ import {
     isArray,
     map,
     some,
-    trimString,
 } from "./_namespaces/ts";
 
 // https://semver.org/#spec-item-2
@@ -275,17 +274,17 @@ const rangeRegExp = /^(~|\^|<|<=|>|>=|=)?\s*([a-z0-9-+.*]+)$/i;
 
 function parseRange(text: string) {
     const alternatives: Comparator[][] = [];
-    for (let range of trimString(text).split(logicalOrRegExp)) {
+    for (let range of text.trim().split(logicalOrRegExp)) {
         if (!range) continue;
         const comparators: Comparator[] = [];
-        range = trimString(range);
+        range = range.trim();
         const match = hyphenRegExp.exec(range);
         if (match) {
             if (!parseHyphen(match[1], match[2], comparators)) return undefined;
         }
         else {
             for (const simple of range.split(whitespaceRegExp)) {
-                const match = rangeRegExp.exec(trimString(simple));
+                const match = rangeRegExp.exec(simple.trim());
                 if (!match || !parseComparator(match[1], match[2], comparators)) return undefined;
             }
         }

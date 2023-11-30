@@ -1,7 +1,13 @@
 currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/web/package.json]
-{"name":"@this/package","type":"module","exports":{".":"./dist/index.js"}}
+{
+  "name": "@this/package",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}
 
 //// [/Users/name/projects/web/index.ts]
 import * as me from "@this/package";
@@ -10,7 +16,16 @@ export function thing(): void {}
 
 
 //// [/Users/name/projects/web/tsconfig.json]
-{"compilerOptions":{"module":"nodenext","outDir":"./dist","declarationDir":"./types","composite":true,"forceConsistentCasingInFileNames":true,"traceResolution":true}}
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "outDir": "./dist",
+    "declarationDir": "./types",
+    "composite": true,
+    "forceConsistentCasingInFileNames": true,
+    "traceResolution": true
+  }
+}
 
 //// [/a/lib/lib.esnext.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -52,43 +67,6 @@ index.ts
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/Users/name/projects/web/index.ts"]
-Program options: {"module":199,"outDir":"/Users/name/projects/web/dist","declarationDir":"/Users/name/projects/web/types","composite":true,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/web/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.esnext.full.d.ts
-/Users/name/projects/web/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.esnext.full.d.ts
-/Users/name/projects/web/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.esnext.full.d.ts (used version)
-/users/name/projects/web/index.ts (computed .d.ts during emit)
-
-PolledWatches::
-/users/name/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/name/projects/web/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.esnext.full.d.ts: *new*
-  {}
-/users/name/projects/web/index.ts: *new*
-  {}
-/users/name/projects/web/package.json: *new*
-  {}
-/users/name/projects/web/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/name/projects/web: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/Users/name/projects/web/dist/index.js]
 import * as me from "@this/package";
@@ -166,3 +144,52 @@ export declare function thing(): void;
   "size": 985
 }
 
+
+PolledWatches::
+/Users/name/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/Users/name/projects/web/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/Users/name/projects/web/index.ts: *new*
+  {}
+/Users/name/projects/web/package.json: *new*
+  {}
+/Users/name/projects/web/tsconfig.json: *new*
+  {}
+/a/lib/lib.esnext.full.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/Users/name/projects/web: *new*
+  {}
+
+Program root files: [
+  "/Users/name/projects/web/index.ts"
+]
+Program options: {
+  "module": 199,
+  "outDir": "/Users/name/projects/web/dist",
+  "declarationDir": "/Users/name/projects/web/types",
+  "composite": true,
+  "forceConsistentCasingInFileNames": true,
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "configFilePath": "/Users/name/projects/web/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.esnext.full.d.ts
+/Users/name/projects/web/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.esnext.full.d.ts
+/Users/name/projects/web/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.esnext.full.d.ts (used version)
+/users/name/projects/web/index.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
