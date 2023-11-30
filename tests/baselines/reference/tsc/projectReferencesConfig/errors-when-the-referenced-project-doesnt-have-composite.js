@@ -20,11 +20,11 @@ export { };
 
 //// [/primary/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": false,
-  "outDir": "bin"
- },
- "references": []
+  "compilerOptions": {
+    "composite": false,
+    "outDir": "bin"
+  },
+  "references": []
 }
 
 //// [/reference/b.ts]
@@ -32,32 +32,32 @@ import * as mod_0 from "../primary/a"
 
 //// [/reference/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": [
-  {
-   "path": "../primary"
-  }
- ],
- "files": [
-  "b.ts"
- ]
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": [
+    {
+      "path": "../primary"
+    }
+  ],
+  "files": [
+    "b.ts"
+  ]
 }
 
 
 
 Output::
 /lib/tsc --p /reference/tsconfig.json
-[96mreference/tsconfig.json[0m:[93m7[0m:[93m3[0m - [91merror[0m[90m TS6306: [0mReferenced project '/primary' must have setting "composite": true.
+[96mreference/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/primary' must have setting "composite": true.
 
-[7m7[0m   {
-[7m [0m [91m  ~[0m
-[7m8[0m    "path": "../primary"
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m9[0m   }
-[7m [0m [91m~~~[0m
+[7m7[0m     {
+[7m [0m [91m    ~[0m
+[7m8[0m       "path": "../primary"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m9[0m     }
+[7m [0m [91m~~~~~[0m
 
 
 Found 1 error in reference/tsconfig.json[90m:7[0m

@@ -1,0 +1,116 @@
+// === Inlay Hints ===
+const lit1 = getTemplateLiteral1();
+          ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "`${"
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "},${"
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "}`"
+    }
+  ],
+  "position": 73,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const lit2 = getTemplateLiteral2();
+          ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "`\\${${"
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "},${"
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "}`"
+    }
+  ],
+  "position": 175,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const lit3 = getTemplateLiteral3();
+          ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "`start${"
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "}\\${,$${"
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "}end`"
+    }
+  ],
+  "position": 286,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const lit4 = getTemplateLiteral4();
+          ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "`${"
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "}\\`,${"
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "}`"
+    }
+  ],
+  "position": 387,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

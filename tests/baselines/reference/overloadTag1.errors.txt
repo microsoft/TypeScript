@@ -40,7 +40,7 @@ overloadTag1.js(43,1): error TS2769: No overload matches this call.
     }
     var o1 = overloaded(1,2)
     var o2 = overloaded("zero", "one")
-             ~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(a: number, b: number): number', gave the following error.
 !!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -64,7 +64,7 @@ overloadTag1.js(43,1): error TS2769: No overload matches this call.
     }
     uncheckedInternally(1,2)
     uncheckedInternally("zero", "one")
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(a: number, b: number): number', gave the following error.
 !!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.

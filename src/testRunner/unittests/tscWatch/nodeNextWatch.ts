@@ -1,5 +1,10 @@
 import * as Utils from "../../_namespaces/Utils";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
@@ -14,51 +19,52 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
         sys: () => {
             const configFile: File = {
                 path: "/project/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         strict: true,
                         target: "es2020",
                         module: "nodenext",
                         moduleResolution: "nodenext",
-                        outDir: "../dist"
-                    }
-                })
+                        outDir: "../dist",
+                    },
+                }),
             };
             const packageFile: File = {
                 path: "/project/package.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     name: "some-proj",
                     version: "1.0.0",
                     description: "",
                     type: "module",
                     main: "index.js",
-                })
+                }),
             };
             const file1: File = {
                 path: "/project/src/index.ts",
                 content: Utils.dedent`
                         import * as Thing from "thing";
 
-                        Thing.fn();`
+                        Thing.fn();`,
             };
             const declFile: File = {
                 path: "/project/src/deps.d.ts",
-                content: `declare module "thing";`
+                content: `declare module "thing";`,
             };
             return createWatchedSystem([configFile, file1, declFile, packageFile, { ...libFile, path: "/a/lib/lib.es2020.full.d.ts" }]);
         },
         edits: [
             {
                 caption: "Modify typescript file",
-                edit: sys => sys.modifyFile(
-                    "/project/src/index.ts",
-                    Utils.dedent`
+                edit: sys =>
+                    sys.modifyFile(
+                        "/project/src/index.ts",
+                        Utils.dedent`
                             import * as Thing from "thing";
                             Thing.fn();`,
-                    {},
-                ),
+                        {},
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
+            },
         ],
     });
 });

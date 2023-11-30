@@ -1,14 +1,21 @@
-import { protocol } from "../../_namespaces/ts.server";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession } from "../helpers/tsserver";
-import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
+import {
+    protocol,
+} from "../../_namespaces/ts.server";
+import {
+    baselineTsserverLogs,
+    TestSession,
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: services:: goToDefinition", () => {
     it("does not issue errors on jsdoc in TS", () => {
         const files: File[] = [
             {
                 path: "/packages/babel-loader/tsconfig.json",
-                content:
-                `
+                content: `
 {
     "compilerOptions": {
         "target": "ES2018",
@@ -20,23 +27,22 @@ describe("unittests:: services:: goToDefinition", () => {
     },
     "include": ["src"],
 }
-`
+`,
             },
             {
                 path: "/packages/babel-loader/src/index.ts",
-                content:
-                `
+                content: `
 declare class Stuff {
     /** For more thorough tests, use {@link checkFooIs} */
     checkFooLengthIs(len: number): void;
 
     checkFooIs(value: object): void;
 }
-`
+`,
             },
         ];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
             command: protocol.CommandTypes.UpdateOpen,
@@ -45,9 +51,9 @@ declare class Stuff {
                     {
                         file: files[1].path, // babel-loader/src/index.ts
                         fileContent: files[1].content,
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         });
         session.executeCommandSeq<protocol.DefinitionRequest>({
             command: protocol.CommandTypes.Definition,
@@ -62,17 +68,15 @@ declare class Stuff {
             command: protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: {
                 file: "/packages/babel-loader/src/index.ts",
-            }
+            },
         });
         baselineTsserverLogs("goToDefinition", "does not issue errors on jsdoc in TS", session);
-
     });
     it("does not issue errors on jsdoc in TS", () => {
         const files: File[] = [
             {
                 path: "/packages/babel-loader/tsconfig.json",
-                content:
-                `
+                content: `
 {
     "compilerOptions": {
         "target": "ES2018",
@@ -84,12 +88,11 @@ declare class Stuff {
     },
     "include": ["src"],
 }
-`
+`,
             },
             {
                 path: "/packages/babel-loader/src/index.ts",
-                content:
-                `
+                content: `
 declare class Stuff {
   /**
    * Register a function to be run on mod initialization...
@@ -102,11 +105,11 @@ declare class Stuff {
    */
   on_init(f: (() => void) | undefined): void
 }
-`
+`,
             },
         ];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
             command: protocol.CommandTypes.UpdateOpen,
@@ -115,9 +118,9 @@ declare class Stuff {
                     {
                         file: files[1].path, // babel-loader/src/index.ts
                         fileContent: files[1].content,
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         });
         session.executeCommandSeq<protocol.DefinitionRequest>({
             command: protocol.CommandTypes.Definition,
@@ -132,9 +135,8 @@ declare class Stuff {
             command: protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: {
                 file: "/packages/babel-loader/src/index.ts",
-            }
+            },
         });
         baselineTsserverLogs("goToDefinition", "does not issue errors on jsdoc in TS2", session);
-
     });
 });

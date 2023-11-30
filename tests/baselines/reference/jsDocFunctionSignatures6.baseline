@@ -1,3 +1,4 @@
+// === SignatureHelp ===
 === /tests/cases/fourslash/Foo.js ===
 // /**
 //  * @param {string} p1 - A string param

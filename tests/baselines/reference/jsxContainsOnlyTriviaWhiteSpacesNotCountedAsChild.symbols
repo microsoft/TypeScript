@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx] ////
+
+=== jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx ===
+namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 0, 0))
+
+  export interface ElementChildrenAttribute {
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 0, 15))
+
+    children: {};
+>children : Symbol(ElementChildrenAttribute.children, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 1, 45))
+  }
+}
+
+interface Props {
+>Props : Symbol(Props, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 4, 1))
+
+  className?: string | undefined;
+>className : Symbol(Props.className, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 6, 17))
+}
+
+function NoticeList(props: Props) {
+>NoticeList : Symbol(NoticeList, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 8, 1))
+>props : Symbol(props, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 10, 20))
+>Props : Symbol(Props, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 4, 1))
+
+  return null;
+}
+
+<NoticeList className="my-notice-list">
+>NoticeList : Symbol(NoticeList, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 8, 1))
+>className : Symbol(className, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 14, 11))
+
+</NoticeList>;
+>NoticeList : Symbol(NoticeList, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 8, 1))
+
+<NoticeList className="my-notice-list">
+>NoticeList : Symbol(NoticeList, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 8, 1))
+>className : Symbol(className, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 17, 11))
+
+</NoticeList>;
+>NoticeList : Symbol(NoticeList, Decl(jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx, 8, 1))
+

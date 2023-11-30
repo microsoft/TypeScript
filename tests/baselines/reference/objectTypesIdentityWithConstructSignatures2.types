@@ -32,8 +32,8 @@ var a: { new(x: Date): string }
 >x : Date
 
 var b = { new(x: RegExp) { return ''; } }; // not a construct signature, function called new
->b : { new(x: RegExp): string; }
->{ new(x: RegExp) { return ''; } } : { new(x: RegExp): string; }
+>b : { "new"(x: RegExp): string; }
+>{ new(x: RegExp) { return ''; } } : { "new"(x: RegExp): string; }
 >new : (x: RegExp) => string
 >x : RegExp
 >'' : ""
@@ -89,17 +89,17 @@ function foo3(x: any) { }
 >x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: typeof b): any; (x: { new(x: RegExp): string; }): any; }
->x : { new(x: RegExp): string; }
->b : { new(x: RegExp): string; }
+>foo4 : { (x: typeof b): any; (x: { "new"(x: RegExp): string; }): any; }
+>x : { "new"(x: RegExp): string; }
+>b : { "new"(x: RegExp): string; }
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { new(x: RegExp): string; }): any; (x: typeof b): any; }
->x : { new(x: RegExp): string; }
->b : { new(x: RegExp): string; }
+>foo4 : { (x: { "new"(x: RegExp): string; }): any; (x: typeof b): any; }
+>x : { "new"(x: RegExp): string; }
+>b : { "new"(x: RegExp): string; }
 
 function foo4(x: any) { }
->foo4 : { (x: { new(x: RegExp): string; }): any; (x: { new(x: RegExp): string; }): any; }
+>foo4 : { (x: { "new"(x: RegExp): string; }): any; (x: { "new"(x: RegExp): string; }): any; }
 >x : any
 
 function foo8(x: B);
@@ -140,16 +140,16 @@ function foo10(x: any) { }
 >x : any
 
 function foo11(x: B);
->foo11 : { (x: B): any; (x: { new(x: RegExp): string; }): any; }
+>foo11 : { (x: B): any; (x: { "new"(x: RegExp): string; }): any; }
 >x : B
 
 function foo11(x: typeof b); // ok
 >foo11 : { (x: B): any; (x: typeof b): any; }
->x : { new(x: RegExp): string; }
->b : { new(x: RegExp): string; }
+>x : { "new"(x: RegExp): string; }
+>b : { "new"(x: RegExp): string; }
 
 function foo11(x: any) { }
->foo11 : { (x: B): any; (x: { new(x: RegExp): string; }): any; }
+>foo11 : { (x: B): any; (x: { "new"(x: RegExp): string; }): any; }
 >x : any
 
 function foo12(x: I);
@@ -190,16 +190,16 @@ function foo13(x: any) { }
 >x : any
 
 function foo14(x: I);
->foo14 : { (x: I): any; (x: { new(x: RegExp): string; }): any; }
+>foo14 : { (x: I): any; (x: { "new"(x: RegExp): string; }): any; }
 >x : I
 
 function foo14(x: typeof b); // ok
 >foo14 : { (x: I): any; (x: typeof b): any; }
->x : { new(x: RegExp): string; }
->b : { new(x: RegExp): string; }
+>x : { "new"(x: RegExp): string; }
+>b : { "new"(x: RegExp): string; }
 
 function foo14(x: any) { }
->foo14 : { (x: I): any; (x: { new(x: RegExp): string; }): any; }
+>foo14 : { (x: I): any; (x: { "new"(x: RegExp): string; }): any; }
 >x : any
 
 function foo15(x: I2<string>);

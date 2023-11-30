@@ -1,7 +1,13 @@
 currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"composite":true,"traceResolution":true,"outDir":"outDir"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "traceResolution": true,
+    "outDir": "outDir"
+  }
+}
 
 //// [/users/username/projects/project/fileWithImports.ts]
 import type { Import0 } from "pkg0";
@@ -153,60 +159,6 @@ DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefin
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
 
 
-Program root files: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/pkg0/index.d.ts
-/users/username/projects/project/fileWithImports.ts
-/users/username/projects/project/node_modules/pkg2/index.d.ts
-/users/username/projects/project/fileWithTypeRefs.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/pkg0/index.d.ts
-/users/username/projects/project/fileWithImports.ts
-/users/username/projects/project/node_modules/pkg2/index.d.ts
-/users/username/projects/project/fileWithTypeRefs.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/node_modules/pkg0/index.d.ts (used version)
-/users/username/projects/project/filewithimports.ts (computed .d.ts during emit)
-/users/username/projects/project/node_modules/pkg2/index.d.ts (used version)
-/users/username/projects/project/filewithtyperefs.ts (computed .d.ts during emit)
-
-PolledWatches::
-/users/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/filewithimports.ts: *new*
-  {}
-/users/username/projects/project/filewithtyperefs.ts: *new*
-  {}
-/users/username/projects/project/node_modules/pkg0/index.d.ts: *new*
-  {}
-/users/username/projects/project/node_modules/pkg2/index.d.ts: *new*
-  {}
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project: *new*
-  {}
-/users/username/projects/project/node_modules: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/users/username/projects/project/outDir/fileWithImports.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -349,6 +301,71 @@ export {};
 }
 
 
+PolledWatches::
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/fileWithImports.ts: *new*
+  {}
+/users/username/projects/project/fileWithTypeRefs.ts: *new*
+  {}
+/users/username/projects/project/node_modules/pkg0/index.d.ts: *new*
+  {}
+/users/username/projects/project/node_modules/pkg2/index.d.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+/users/username/projects/project/node_modules: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/fileWithImports.ts",
+  "/users/username/projects/project/fileWithTypeRefs.ts"
+]
+Program options: {
+  "composite": true,
+  "traceResolution": true,
+  "outDir": "/users/username/projects/project/outDir",
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/pkg0/index.d.ts
+/users/username/projects/project/fileWithImports.ts
+/users/username/projects/project/node_modules/pkg2/index.d.ts
+/users/username/projects/project/fileWithTypeRefs.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/pkg0/index.d.ts
+/users/username/projects/project/fileWithImports.ts
+/users/username/projects/project/node_modules/pkg2/index.d.ts
+/users/username/projects/project/fileWithTypeRefs.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/pkg0/index.d.ts (used version)
+/users/username/projects/project/filewithimports.ts (computed .d.ts during emit)
+/users/username/projects/project/node_modules/pkg2/index.d.ts (used version)
+/users/username/projects/project/filewithtyperefs.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
+
 Change:: write file not resolved by import
 
 Input::
@@ -356,14 +373,6 @@ Input::
 export interface Import1 {}
 
 
-Before running Timeout callback:: count: 2
-3: timerToInvalidateFailedLookupResolutions
-4: timerToUpdateProgram
-After running Timeout callback:: count: 1
-5: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg1 :: WatchInfo: /users/username/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -377,7 +386,31 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project
 DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg1/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg1/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
+
+
+Timeout callback:: count: 2
+3: timerToInvalidateFailedLookupResolutions *new*
+4: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 2
+3: timerToInvalidateFailedLookupResolutions
+4: timerToUpdateProgram
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+4: timerToUpdateProgram *deleted*
+5: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
@@ -427,57 +460,6 @@ fileWithTypeRefs.ts
 [[90m12:01:01 AM[0m] Found 2 errors. Watching for file changes.
 
 
-
-Program root files: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/pkg0/index.d.ts
-/users/username/projects/project/node_modules/pkg1/index.d.ts
-/users/username/projects/project/fileWithImports.ts
-/users/username/projects/project/node_modules/pkg2/index.d.ts
-/users/username/projects/project/fileWithTypeRefs.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/node_modules/pkg1/index.d.ts
-/users/username/projects/project/fileWithImports.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/node_modules/pkg1/index.d.ts (used version)
-/users/username/projects/project/filewithimports.ts (computed .d.ts)
-
-PolledWatches::
-/users/username/projects/node_modules:
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/project/filewithimports.ts:
-  {}
-/users/username/projects/project/filewithtyperefs.ts:
-  {}
-/users/username/projects/project/node_modules/pkg0/index.d.ts:
-  {}
-/users/username/projects/project/node_modules/pkg1/index.d.ts: *new*
-  {}
-/users/username/projects/project/node_modules/pkg2/index.d.ts:
-  {}
-/users/username/projects/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project:
-  {}
-/users/username/projects/project/node_modules:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/outDir/fileWithImports.js] file written with same contents
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
@@ -598,6 +580,69 @@ exitCode:: ExitStatus.undefined
 }
 
 
+PolledWatches::
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/fileWithImports.ts:
+  {}
+/users/username/projects/project/fileWithTypeRefs.ts:
+  {}
+/users/username/projects/project/node_modules/pkg0/index.d.ts:
+  {}
+/users/username/projects/project/node_modules/pkg1/index.d.ts: *new*
+  {}
+/users/username/projects/project/node_modules/pkg2/index.d.ts:
+  {}
+/users/username/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project:
+  {}
+/users/username/projects/project/node_modules:
+  {}
+
+
+Program root files: [
+  "/users/username/projects/project/fileWithImports.ts",
+  "/users/username/projects/project/fileWithTypeRefs.ts"
+]
+Program options: {
+  "composite": true,
+  "traceResolution": true,
+  "outDir": "/users/username/projects/project/outDir",
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/pkg0/index.d.ts
+/users/username/projects/project/node_modules/pkg1/index.d.ts
+/users/username/projects/project/fileWithImports.ts
+/users/username/projects/project/node_modules/pkg2/index.d.ts
+/users/username/projects/project/fileWithTypeRefs.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/node_modules/pkg1/index.d.ts
+/users/username/projects/project/fileWithImports.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/node_modules/pkg1/index.d.ts (used version)
+/users/username/projects/project/filewithimports.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: write file not resolved by typeRef
 
 Input::
@@ -605,14 +650,6 @@ Input::
 export interface Import3 {}
 
 
-Before running Timeout callback:: count: 2
-8: timerToInvalidateFailedLookupResolutions
-9: timerToUpdateProgram
-After running Timeout callback:: count: 1
-10: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-10: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg3 :: WatchInfo: /users/username/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -626,7 +663,31 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project
 DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg3/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg3/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
+
+
+Timeout callback:: count: 2
+8: timerToInvalidateFailedLookupResolutions *new*
+9: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 2
+8: timerToInvalidateFailedLookupResolutions
+9: timerToUpdateProgram
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+9: timerToUpdateProgram *deleted*
+10: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
 [[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
@@ -674,60 +735,6 @@ fileWithTypeRefs.ts
 [[90m12:01:17 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/pkg0/index.d.ts
-/users/username/projects/project/node_modules/pkg1/index.d.ts
-/users/username/projects/project/fileWithImports.ts
-/users/username/projects/project/node_modules/pkg2/index.d.ts
-/users/username/projects/project/node_modules/pkg3/index.d.ts
-/users/username/projects/project/fileWithTypeRefs.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/node_modules/pkg3/index.d.ts
-/users/username/projects/project/fileWithTypeRefs.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/node_modules/pkg3/index.d.ts (used version)
-/users/username/projects/project/filewithtyperefs.ts (computed .d.ts)
-
-PolledWatches::
-/users/username/projects/node_modules:
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/project/filewithimports.ts:
-  {}
-/users/username/projects/project/filewithtyperefs.ts:
-  {}
-/users/username/projects/project/node_modules/pkg0/index.d.ts:
-  {}
-/users/username/projects/project/node_modules/pkg1/index.d.ts:
-  {}
-/users/username/projects/project/node_modules/pkg2/index.d.ts:
-  {}
-/users/username/projects/project/node_modules/pkg3/index.d.ts: *new*
-  {}
-/users/username/projects/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project:
-  {}
-/users/username/projects/project/node_modules:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/outDir/fileWithTypeRefs.js] file written with same contents
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
@@ -855,3 +862,69 @@ exitCode:: ExitStatus.undefined
   "size": 1614
 }
 
+
+PolledWatches::
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/fileWithImports.ts:
+  {}
+/users/username/projects/project/fileWithTypeRefs.ts:
+  {}
+/users/username/projects/project/node_modules/pkg0/index.d.ts:
+  {}
+/users/username/projects/project/node_modules/pkg1/index.d.ts:
+  {}
+/users/username/projects/project/node_modules/pkg2/index.d.ts:
+  {}
+/users/username/projects/project/node_modules/pkg3/index.d.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project:
+  {}
+/users/username/projects/project/node_modules:
+  {}
+
+
+Program root files: [
+  "/users/username/projects/project/fileWithImports.ts",
+  "/users/username/projects/project/fileWithTypeRefs.ts"
+]
+Program options: {
+  "composite": true,
+  "traceResolution": true,
+  "outDir": "/users/username/projects/project/outDir",
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/pkg0/index.d.ts
+/users/username/projects/project/node_modules/pkg1/index.d.ts
+/users/username/projects/project/fileWithImports.ts
+/users/username/projects/project/node_modules/pkg2/index.d.ts
+/users/username/projects/project/node_modules/pkg3/index.d.ts
+/users/username/projects/project/fileWithTypeRefs.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/node_modules/pkg3/index.d.ts
+/users/username/projects/project/fileWithTypeRefs.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/node_modules/pkg3/index.d.ts (used version)
+/users/username/projects/project/filewithtyperefs.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

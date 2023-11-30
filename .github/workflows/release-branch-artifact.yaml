@@ -19,29 +19,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-    - run: |
-        npm --version
-        # corepack enable npm
-        npm install -g $(jq -r '.packageManager' < package.json)
-        npm --version
-    - name: npm install and test
-      run: |
-        npm ci
-        npm test
-    - name: Adding playwright
-      run: npm install --no-save --no-package-lock playwright
-    - name: Validate the browser can import TypeScript
-      run: npx hereby test-browser-integration
-    - name: LKG, clean, and pack
-      run: |
-        npx hereby LKG
-        npx hereby clean
-        npm pack ./
-        mv typescript-*.tgz typescript.tgz
-    - name: Upload built tarfile
-      uses: actions/upload-artifact@v3
-      with:
-        name: tgz
-        path: typescript.tgz
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+      - run: |
+          npm --version
+          # corepack enable npm
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
+      - name: npm install and test
+        run: |
+          npm ci
+          npm test
+      - name: Installing browsers
+        run: npx playwright install --with-deps
+      - name: Validate the browser can import TypeScript
+        run: npx hereby test-browser-integration
+      - name: LKG, clean, and pack
+        run: |
+          npx hereby LKG
+          npx hereby clean
+          npm pack ./
+          mv typescript-*.tgz typescript.tgz
+      - name: Upload built tarfile
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        with:
+          name: tgz
+          path: typescript.tgz

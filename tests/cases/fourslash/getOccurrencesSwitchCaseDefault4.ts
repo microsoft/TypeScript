@@ -10,7 +10,5 @@
 ////        contin/*2*/ue foo;
 ////}
 
-verify.baselineCommands(
-    { type: "documentHighlights" },
-    { type: "documentHighlights", markerOrRange: test.markers() },
-);
+verify.baselineDocumentHighlights();
+verify.baselineDocumentHighlights(test.markers());

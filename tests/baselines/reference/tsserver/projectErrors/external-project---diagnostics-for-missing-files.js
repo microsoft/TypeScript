@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/app.ts]
 
@@ -53,6 +53,43 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "d68dc94b373a808a0811d3a75a89059832e9aee6c4c266dc78a03cf30f1e3380",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 0,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "compileOnSave": true,
+          "configFileName": "other",
+          "projectType": "external",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -120,6 +157,9 @@ FsWatches *deleted*::
 /a/b/app.ts:
   {}
 
+Timeout callback:: count: 1
+2: /a/b/test.csproj *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "compilerOptionsDiagnostics-full",
@@ -186,6 +226,10 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
+
+Timeout callback:: count: 1
+2: /a/b/test.csproj *deleted*
+3: /a/b/test.csproj *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
