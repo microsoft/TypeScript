@@ -34320,7 +34320,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             chooseOverloadRecursionLevel--;
             return result;
 
-            function chooseOverloadWorker(){
+            function chooseOverloadWorker() {
                 candidatesForArgumentError = undefined;
                 candidateForArgumentArityError = undefined;
                 candidateForTypeArgumentError = undefined;
