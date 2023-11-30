@@ -7,7 +7,7 @@ on:
   schedule:
     - cron: '0 8 * * *'
   repository_dispatch:
-    types: run-twoslash-repros
+    types: [run-twoslash-repros]
   workflow_dispatch:
     inputs:
       issue:
@@ -34,13 +34,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - if: ${{ github.event.inputs.bisect }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
-          fetch-depth: 0
+          filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
+          fetch-depth: 0 # Default is 1; need to set to 0 to get the benefits of blob:none.
       - if: ${{ !github.event.inputs.bisect }}
-        uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+      - uses: microsoft/TypeScript-Twoslash-Repro-Action@80178415feb0ebd3ed88d09e263a7cb8c8d6e1d2 # master
         with:
           github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
           issue: ${{ github.event.inputs.issue }}

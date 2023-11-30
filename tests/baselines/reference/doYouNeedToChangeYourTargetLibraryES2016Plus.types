@@ -57,9 +57,9 @@ const testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
 >new Intl.DateTimeFormat("en-US").formatToParts() : any
 >new Intl.DateTimeFormat("en-US").formatToParts : any
 >new Intl.DateTimeFormat("en-US") : Intl.DateTimeFormat
->Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
 >Intl : typeof Intl
->DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
+>DateTimeFormat : Intl.DateTimeFormatConstructor
 >"en-US" : "en-US"
 >formatToParts : any
 
@@ -150,9 +150,9 @@ const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToPar
 >new Intl.NumberFormat("en-US").formatToParts() : any
 >new Intl.NumberFormat("en-US").formatToParts : any
 >new Intl.NumberFormat("en-US") : Intl.NumberFormat
->Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; readonly prototype: Intl.NumberFormat; }
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; readonly prototype: Intl.NumberFormat; }
+>NumberFormat : Intl.NumberFormatConstructor
 >"en-US" : "en-US"
 >formatToParts : any
 

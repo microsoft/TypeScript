@@ -2,6 +2,7 @@ import {
     arrayToMap,
     binarySearch,
     BuilderProgram,
+    clearMap,
     closeFileWatcher,
     compareStringsCaseSensitive,
     CompilerOptions,
@@ -20,9 +21,11 @@ import {
     FileWatcherCallback,
     FileWatcherEventKind,
     find,
+    getAllowJSCompilerOption,
     getBaseFileName,
     getDirectoryPath,
     getNormalizedAbsolutePath,
+    getResolveJsonModule,
     hasExtension,
     identity,
     insertSorted,
@@ -31,6 +34,7 @@ import {
     isExcludedFile,
     isSupportedSourceFileName,
     map,
+    MapLike,
     matchesExclude,
     matchFiles,
     mutateMap,
@@ -43,7 +47,7 @@ import {
     removeFileExtension,
     removeIgnoredPath,
     returnNoopFileWatcher,
-    returnTrue,
+    ScriptKind,
     setSysLog,
     SortedArray,
     SortedReadonlyArray,
@@ -312,8 +316,8 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
 
         const baseName = getBaseNameOfFileName(fileOrDirectory);
         const fsQueryResult: FileAndDirectoryExistence = {
-            fileExists: host.fileExists(fileOrDirectoryPath),
-            directoryExists: host.directoryExists(fileOrDirectoryPath),
+            fileExists: host.fileExists(fileOrDirectory),
+            directoryExists: host.directoryExists(fileOrDirectory),
         };
         if (fsQueryResult.directoryExists || hasEntry(parentResult.sortedAndCanonicalizedDirectories, getCanonicalFileName(baseName))) {
             // Folder added or removed, clear the cache instead of updating the folder and its structure
@@ -362,12 +366,18 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     }
 }
 
-/** @internal */
-export enum ConfigFileProgramReloadLevel {
-    None,
-    /** Update the file name list from the disk */
-    Partial,
-    /** Reload completely by re-reading contents of config file from disk and updating program */
+export enum ProgramUpdateLevel {
+    /** Program is updated with same root file names and options */
+    Update,
+    /** Loads program after updating root file names from the disk */
+    RootNamesAndUpdate,
+    /**
+     * Loads program completely, including:
+     *  - re-reading contents of config file from disk
+     *  - calculating root file names for the program
+     *  - Updating the program
+     */
+
     Full,
 }
 
@@ -452,27 +462,6 @@ export function cleanExtendedConfigCache(
 }
 
 /**
- * Updates watchers based on the package json files used in module resolution
- *
- * @internal
- */
-export function updatePackageJsonWatch(
-    lookups: readonly (readonly [Path, object | boolean])[],
-    packageJsonWatches: Map<Path, FileWatcher>,
-    createPackageJsonWatch: (packageJsonPath: Path, data: object | boolean) => FileWatcher,
-) {
-    const newMap = new Map(lookups);
-    mutateMap(
-        packageJsonWatches,
-        newMap,
-        {
-            createNewValue: createPackageJsonWatch,
-            onDeleteValue: closeFileWatcher,
-        },
-    );
-}
-
-/**
  * Updates the existing missing file watches with the new set of missing files after new program is created
  *
  * @internal
@@ -480,15 +469,12 @@ export function updatePackageJsonWatch(
 export function updateMissingFilePathsWatch(
     program: Program,
     missingFileWatches: Map<Path, FileWatcher>,
-    createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
+    createMissingFileWatch: (missingFilePath: Path, missingFileName: string) => FileWatcher,
 ) {
-    const missingFilePaths = program.getMissingFilePaths();
-    // TODO(rbuckton): Should be a `Set` but that requires changing the below code that uses `mutateMap`
-    const newMissingFilePathMap = arrayToMap(missingFilePaths, identity, returnTrue);
     // Update the missing file paths watcher
     mutateMap(
         missingFileWatches,
-        newMissingFilePathMap,
+        program.getMissingFilePaths(),
         {
             // Watch the missing files
             createNewValue: createMissingFileWatch,
@@ -515,21 +501,26 @@ export interface WildcardDirectoryWatcher {
  */
 export function updateWatchingWildcardDirectories(
     existingWatchedForWildcards: Map<string, WildcardDirectoryWatcher>,
-    wildcardDirectories: Map<string, WatchDirectoryFlags>,
+    wildcardDirectories: MapLike<WatchDirectoryFlags> | undefined,
     watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher,
 ) {
-    mutateMap(
-        existingWatchedForWildcards,
-        wildcardDirectories,
-        {
-            // Create new watch and recursive info
-            createNewValue: createWildcardDirectoryWatcher,
-            // Close existing watch thats not needed any more
-            onDeleteValue: closeFileWatcherOf,
-            // Close existing watch that doesnt match in the flags
-            onExistingValue: updateWildcardDirectoryWatcher,
-        },
-    );
+    if (wildcardDirectories) {
+        mutateMap(
+            existingWatchedForWildcards,
+            new Map(Object.entries(wildcardDirectories)),
+            {
+                // Create new watch and recursive info
+                createNewValue: createWildcardDirectoryWatcher,
+                // Close existing watch thats not needed any more
+                onDeleteValue: closeFileWatcherOf,
+                // Close existing watch that doesnt match in the flags
+                onExistingValue: updateWildcardDirectoryWatcher,
+            },
+        );
+    }
+    else {
+        clearMap(existingWatchedForWildcards, closeFileWatcherOf);
+    }
 
     function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher {
         // Create new watch and recursive info
@@ -563,6 +554,7 @@ export interface IsIgnoredFileFromWildCardWatchingInput {
     useCaseSensitiveFileNames: boolean;
     writeLog: (s: string) => void;
     toPath: (fileName: string) => Path;
+    getScriptKind?: (fileName: string) => ScriptKind;
 }
 /** @internal */
 export function isIgnoredFileFromWildCardWatching({
@@ -577,6 +569,7 @@ export function isIgnoredFileFromWildCardWatching({
     useCaseSensitiveFileNames,
     writeLog,
     toPath,
+    getScriptKind,
 }: IsIgnoredFileFromWildCardWatchingInput): boolean {
     const newPath = removeIgnoredPath(fileOrDirectoryPath);
     if (!newPath) {
@@ -588,8 +581,12 @@ export function isIgnoredFileFromWildCardWatching({
     if (fileOrDirectoryPath === watchedDirPath) return false;
 
     // If the the added or created file or directory is not supported file name, ignore the file
-    // But when watched directory is added/removed, we need to reload the file list
-    if (hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, options, extraFileExtensions)) {
+    if (
+        hasExtension(fileOrDirectoryPath) && !(
+            isSupportedSourceFileName(fileOrDirectory, options, extraFileExtensions) ||
+            isSupportedScriptKind()
+        )
+    ) {
         writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
         return true;
     }
@@ -633,6 +630,25 @@ export function isIgnoredFileFromWildCardWatching({
             builderProgram ?
             builderProgram.getState().fileInfos.has(file) :
             !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
+    }
+
+    function isSupportedScriptKind() {
+        if (!getScriptKind) return false;
+        const scriptKind = getScriptKind(fileOrDirectory);
+        switch (scriptKind) {
+            case ScriptKind.TS:
+            case ScriptKind.TSX:
+            case ScriptKind.Deferred:
+            case ScriptKind.External:
+                return true;
+            case ScriptKind.JS:
+            case ScriptKind.JSX:
+                return getAllowJSCompilerOption(options);
+            case ScriptKind.JSON:
+                return getResolveJsonModule(options);
+            case ScriptKind.Unknown:
+                return false;
+        }
     }
 }
 

@@ -183,7 +183,7 @@ interface I extends B {
 >y : T
 
     a14: <T, U>(x: { a: T; b: U }) => T; // ok
->a14 : <T, U>(x: { a: T; b: U; }) => T
+>a14 : <T, U>(x: {    a: T;    b: U;}) => T
 >x : { a: T; b: U; }
 >a : T
 >b : U
