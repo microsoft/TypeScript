@@ -108,6 +108,7 @@ import {
     createDiagnosticForNodeFromMessageChain,
     createDiagnosticMessageChainFromDiagnostic,
     createEmptyExports,
+    createEntityVisibilityChecker,
     createEvaluator,
     createFileDiagnostic,
     createGetCanonicalFileName,
@@ -623,7 +624,6 @@ import {
     isJsxSpreadAttribute,
     isJSXTagName,
     isKnownSymbol,
-    isLateVisibilityPaintedStatement,
     isLeftHandSideExpression,
     isLineBreak,
     isLiteralComputedPropertyDeclarationName,
@@ -821,7 +821,6 @@ import {
     LateBoundBinaryExpressionDeclaration,
     LateBoundDeclaration,
     LateBoundName,
-    LateVisibilityPaintedStatement,
     length,
     LiteralExpression,
     LiteralType,
@@ -997,7 +996,6 @@ import {
     symbolName,
     SymbolTable,
     SymbolTracker,
-    SymbolVisibilityResult,
     SyntaxKind,
     SyntheticDefaultModuleType,
     SyntheticExpression,
@@ -1466,6 +1464,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
 
+    var { hasVisibleDeclarations, isEntityNameVisible } = createEntityVisibilityChecker({
+        defaultSymbolAccessibility: SymbolAccessibility.NotAccessible,
+        isThisAccessible,
+        isDeclarationVisible,
+        markDeclarationAsVisible(declaration) {
+            getNodeLinks(declaration).isVisible = true;
+        },
+        resolveName,
+    });
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
     var nodeBuilder = createNodeBuilder();
@@ -6162,121 +6169,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isModuleWithStringLiteralName(declaration) || (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(declaration as SourceFile));
     }
 
-    function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
-        let aliasesToMakeVisible: LateVisibilityPaintedStatement[] | undefined;
-        if (!every(filter(symbol.declarations, d => d.kind !== SyntaxKind.Identifier), getIsDeclarationVisible)) {
-            return undefined;
-        }
-        return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
-
-        function getIsDeclarationVisible(declaration: Declaration) {
-            if (!isDeclarationVisible(declaration)) {
-                // Mark the unexported alias as visible if its parent is visible
-                // because these kind of aliases can be used to name types in declaration file
-
-                const anyImportSyntax = getAnyImportSyntax(declaration);
-                if (
-                    anyImportSyntax &&
-                    !hasSyntacticModifier(anyImportSyntax, ModifierFlags.Export) && // import clause without export
-                    isDeclarationVisible(anyImportSyntax.parent)
-                ) {
-                    return addVisibleAlias(declaration, anyImportSyntax);
-                }
-                else if (
-                    isVariableDeclaration(declaration) && isVariableStatement(declaration.parent.parent) &&
-                    !hasSyntacticModifier(declaration.parent.parent, ModifierFlags.Export) && // unexported variable statement
-                    isDeclarationVisible(declaration.parent.parent.parent)
-                ) {
-                    return addVisibleAlias(declaration, declaration.parent.parent);
-                }
-                else if (
-                    isLateVisibilityPaintedStatement(declaration) // unexported top-level statement
-                    && !hasSyntacticModifier(declaration, ModifierFlags.Export)
-                    && isDeclarationVisible(declaration.parent)
-                ) {
-                    return addVisibleAlias(declaration, declaration);
-                }
-                else if (isBindingElement(declaration)) {
-                    if (
-                        symbol.flags & SymbolFlags.Alias && isInJSFile(declaration) && declaration.parent?.parent // exported import-like top-level JS require statement
-                        && isVariableDeclaration(declaration.parent.parent)
-                        && declaration.parent.parent.parent?.parent && isVariableStatement(declaration.parent.parent.parent.parent)
-                        && !hasSyntacticModifier(declaration.parent.parent.parent.parent, ModifierFlags.Export)
-                        && declaration.parent.parent.parent.parent.parent // check if the thing containing the variable statement is visible (ie, the file)
-                        && isDeclarationVisible(declaration.parent.parent.parent.parent.parent)
-                    ) {
-                        return addVisibleAlias(declaration, declaration.parent.parent.parent.parent);
-                    }
-                    else if (symbol.flags & SymbolFlags.BlockScopedVariable) {
-                        const variableStatement = findAncestor(declaration, isVariableStatement)!;
-                        if (hasSyntacticModifier(variableStatement, ModifierFlags.Export)) {
-                            return true;
-                        }
-                        if (!isDeclarationVisible(variableStatement.parent)) {
-                            return false;
-                        }
-                        return addVisibleAlias(declaration, variableStatement);
-                    }
-                }
-
-                // Declaration is not visible
-                return false;
-            }
-
-            return true;
-        }
-
-        function addVisibleAlias(declaration: Declaration, aliasingStatement: LateVisibilityPaintedStatement) {
-            // In function "buildTypeDisplay" where we decide whether to write type-alias or serialize types,
-            // we want to just check if type- alias is accessible or not but we don't care about emitting those alias at that time
-            // since we will do the emitting later in trackSymbol.
-            if (shouldComputeAliasToMakeVisible) {
-                getNodeLinks(declaration).isVisible = true;
-                aliasesToMakeVisible = appendIfUnique(aliasesToMakeVisible, aliasingStatement);
-            }
-            return true;
-        }
-    }
-
-    function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
-        // get symbol of the first identifier of the entityName
-        let meaning: SymbolFlags;
-        if (
-            entityName.parent.kind === SyntaxKind.TypeQuery ||
-            entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isPartOfTypeNode(entityName.parent) ||
-            entityName.parent.kind === SyntaxKind.ComputedPropertyName
-        ) {
-            // Typeof value
-            meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
-        }
-        else if (
-            entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression ||
-            entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration
-        ) {
-            // Left identifier from type reference or TypeAlias
-            // Entity name of the import declaration
-            meaning = SymbolFlags.Namespace;
-        }
-        else {
-            // Type Reference or TypeAlias entity = Identifier
-            meaning = SymbolFlags.Type;
-        }
-
-        const firstIdentifier = getFirstIdentifier(entityName);
-        const symbol = resolveName(enclosingDeclaration, firstIdentifier.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
-        if (symbol && symbol.flags & SymbolFlags.TypeParameter && meaning & SymbolFlags.Type) {
-            return { accessibility: SymbolAccessibility.Accessible };
-        }
-        if (!symbol && isThisIdentifier(firstIdentifier) && isSymbolAccessible(getSymbolOfDeclaration(getThisContainer(firstIdentifier, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false)), firstIdentifier, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
-            return { accessibility: SymbolAccessibility.Accessible };
-        }
-
-        // Verify if the symbol is accessible
-        return (symbol && hasVisibleDeclarations(symbol, /*shouldComputeAliasToMakeVisible*/ true)) || {
-            accessibility: SymbolAccessibility.NotAccessible,
-            errorSymbolName: getTextOfNode(firstIdentifier),
-            errorNode: firstIdentifier,
-        };
+    function isThisAccessible(thisIdentifier: Identifier, meaning: SymbolFlags) {
+        return isSymbolAccessible(getSymbolOfDeclaration(getThisContainer(thisIdentifier, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false)), thisIdentifier, meaning, /*shouldComputeAliasesToMakeVisible*/ false);
     }
 
     function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.AllowAnyNodeKind, writer?: EmitTextWriter): string {
