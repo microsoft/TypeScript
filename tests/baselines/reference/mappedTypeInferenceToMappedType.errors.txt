@@ -1,0 +1,24 @@
+mappedTypeInferenceToMappedType.ts(9,5): error TS2416: Property 'method' in type 'Derived<T>' is not assignable to the same property in base type 'Base<T>'.
+  Type '<U extends unknown[]>(x: { [K in keyof U]: U[K]; }) => Base<U>' is not assignable to type '<U extends unknown[]>(x: { [K in keyof U]: U[K]; }) => Base<U>'. Two different types with this name exist, but they are unrelated.
+    Type 'Base<unknown[]>' is not assignable to type 'Base<U>'.
+      Type 'unknown[]' is not assignable to type 'U'.
+        'unknown[]' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'unknown[]'.
+
+
+==== mappedTypeInferenceToMappedType.ts (1 errors) ====
+    // #56133
+    
+    declare class Base<T> {
+        someProp: T;
+        method<U extends unknown[]>(x: { [K in keyof U]: U[K] }): Base<U>;
+    }
+    
+    declare class Derived<T> extends Base<T> {
+        method<U extends unknown[]>(x: { [K in keyof U]: U[K] }): Base<U>;
+        ~~~~~~
+!!! error TS2416: Property 'method' in type 'Derived<T>' is not assignable to the same property in base type 'Base<T>'.
+!!! error TS2416:   Type '<U extends unknown[]>(x: { [K in keyof U]: U[K]; }) => Base<U>' is not assignable to type '<U extends unknown[]>(x: { [K in keyof U]: U[K]; }) => Base<U>'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     Type 'Base<unknown[]>' is not assignable to type 'Base<U>'.
+!!! error TS2416:       Type 'unknown[]' is not assignable to type 'U'.
+!!! error TS2416:         'unknown[]' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'unknown[]'.
+    }
