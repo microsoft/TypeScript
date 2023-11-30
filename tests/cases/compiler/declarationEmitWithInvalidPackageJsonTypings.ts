@@ -1,5 +1,5 @@
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed
+// @isolatedDeclarationFixedDiffReason: checker.typeToTypeNode deliberately fails on types that originate from node_modules.
 // @filename: /p1/node_modules/csv-parse/lib/index.d.ts
 export function bar(): number;
 // @filename: /p1/node_modules/csv-parse/package.json
