@@ -6153,6 +6153,8 @@ export const enum TypeFlags {
     /** @internal */
     IncludesInstantiable = Substitution,
     /** @internal */
+    IncludesConstrainedTypeVariable = StringMapping,
+    /** @internal */
     NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
 }
 
@@ -6313,6 +6315,8 @@ export const enum ObjectFlags {
     IsNeverIntersectionComputed = 1 << 24, // IsNeverLike flag has been computed
     /** @internal */
     IsNeverIntersection = 1 << 25, // Intersection reduces to never
+    /** @internal */
+    IsConstrainedTypeVariable = 1 << 26, // T & C, where T's constraint and C are primitives, object, or {}
 }
 
 /** @internal */
