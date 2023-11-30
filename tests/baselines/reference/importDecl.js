@@ -210,9 +210,6 @@ export declare function foo(): d;
 import m4 = require("./importDecl_require");
 export declare function foo2(): m4.d;
 //// [importDecl_1.d.ts]
-/// <reference path="importDecl_require.d.ts" />
-/// <reference path="importDecl_require1.d.ts" />
-/// <reference path="importDecl_require2.d.ts" />
 /// <reference path="importDecl_require3.d.ts" />
 /// <reference path="importDecl_require4.d.ts" />
 import m4 = require("./importDecl_require");
