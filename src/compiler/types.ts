@@ -919,8 +919,8 @@ export const enum RelationComparisonResult {
     Succeeded           = 1 << 0, // Should be truthy
     Failed              = 1 << 1,
 
-    ReportsUnmeasurable = 1 << 3,
-    ReportsUnreliable   = 1 << 4,
+    ReportsUnmeasurable = 1 << 2,
+    ReportsUnreliable   = 1 << 3,
     ReportsMask         = ReportsUnmeasurable | ReportsUnreliable,
 }
 
