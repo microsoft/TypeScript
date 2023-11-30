@@ -16893,10 +16893,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
-        const templates = filter(types, t =>
-            !!(t.flags & TypeFlags.TemplateLiteral) &&
-            isPatternLiteralType(t) &&
-            (t as TemplateLiteralType).types.every(t => !(t.flags & TypeFlags.Intersection) || !areIntersectedTypesAvoidingPrimitiveReduction((t as IntersectionType).types))) as TemplateLiteralType[];
+        const templates = filter(types, t => !!(t.flags & TypeFlags.TemplateLiteral) && isPatternLiteralType(t)) as TemplateLiteralType[];
         if (templates.length) {
             let i = types.length;
             while (i > 0) {
@@ -17407,20 +17404,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return reduceLeft(types, (n, t) => n + getConstituentCount(t), 0);
     }
 
-    function areIntersectedTypesAvoidingPrimitiveReduction(types: Type[], primitiveFlags = TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt): boolean {
-        if (types.length !== 2) {
-            return false;
-        }
-        const [t1, t2] = types;
-        return !!(t1.flags & primitiveFlags) && t2 === emptyTypeLiteralType || !!(t2.flags & primitiveFlags) && t1 === emptyTypeLiteralType;
-    }
-
     function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
         const links = getNodeLinks(node);
         if (!links.resolvedType) {
             const aliasSymbol = getAliasSymbolForTypeNode(node);
             const types = map(node.types, getTypeFromTypeNode);
-            const noSupertypeReduction = areIntersectedTypesAvoidingPrimitiveReduction(types);
+            // We perform no supertype reduction for X & {} or {} & X, where X is one of string, number, bigint,
+            // or a pattern literal template type. This enables union types like "a" | "b" | string & {} or
+            // "aa" | "ab" | `a${string}` which preserve the literal types for purposes of statement completion.
+            const emptyIndex = types.length === 2 ? types.indexOf(emptyTypeLiteralType) : -1;
+            const t = emptyIndex >= 0 ? types[1 - emptyIndex] : unknownType;
+            const noSupertypeReduction = !!(t.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt) || t.flags & TypeFlags.TemplateLiteral && isPatternLiteralType(t));
             links.resolvedType = getIntersectionType(types, aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol), noSupertypeReduction);
         }
         return links.resolvedType;
@@ -17703,7 +17697,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function createTemplateLiteralType(texts: readonly string[], types: readonly Type[]) {
         const type = createType(TypeFlags.TemplateLiteral) as TemplateLiteralType;
-        type.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
         type.texts = texts;
         type.types = types;
         return type;
@@ -18028,12 +18021,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isPatternLiteralPlaceholderType(type: Type): boolean {
         if (type.flags & TypeFlags.Intersection) {
-            return !isGenericType(type) && some((type as IntersectionType).types, t => !!(t.flags & (TypeFlags.Literal | TypeFlags.Nullable)) || isPatternLiteralPlaceholderType(t));
+            // Return true if the intersection consists of one or more placeholders and zero or
+            // more object type tags.
+            let seenPlaceholder = false;
+            for (const t of (type as IntersectionType).types) {
+                if (t.flags & (TypeFlags.Literal | TypeFlags.Nullable) || isPatternLiteralPlaceholderType(t)) {
+                    seenPlaceholder = true;
+                }
+                else if (!(t.flags & TypeFlags.Object)) {
+                    return false;
+                }
+            }
+            return seenPlaceholder;
         }
         return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || isPatternLiteralType(type);
     }
 
     function isPatternLiteralType(type: Type) {
+        // A pattern literal type is a template literal or a string mapping type that contains only
+        // non-generic pattern literal placeholders.
         return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType) ||
             !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type);
     }
@@ -18051,12 +18057,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getGenericObjectFlags(type: Type): ObjectFlags {
-        if (type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral)) {
-            if (!((type as UnionOrIntersectionType | TemplateLiteralType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
-                (type as UnionOrIntersectionType | TemplateLiteralType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
-                    reduceLeft((type as UnionOrIntersectionType | TemplateLiteralType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
+        if (type.flags & (TypeFlags.UnionOrIntersection)) {
+            if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                    reduceLeft((type as UnionOrIntersectionType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
             }
-            return (type as UnionOrIntersectionType | TemplateLiteralType).objectFlags & ObjectFlags.IsGenericType;
+            return (type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericType;
         }
         if (type.flags & TypeFlags.Substitution) {
             if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
@@ -18066,7 +18072,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
         }
         return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
-            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
+            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
     }
 
     function getSimplifiedType(type: Type, writing: boolean): Type {
@@ -24734,7 +24740,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                     objectFlags & (ObjectFlags.Mapped | ObjectFlags.ReverseMapped | ObjectFlags.ObjectRestType | ObjectFlags.InstantiationExpressionType)
                 ) ||
-            type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType | TemplateLiteralType).types, couldContainTypeVariables));
+            type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType).types, couldContainTypeVariables));
         if (type.flags & TypeFlags.ObjectFlagsType) {
             (type as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (result ? ObjectFlags.CouldContainTypeVariables : 0);
         }
