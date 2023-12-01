@@ -59,7 +59,10 @@ import {
     EndOfFileToken,
     endsWith,
     ensureScriptKind,
+    EqualityComparer,
     EqualityOperator,
+    equateStringsCaseInsensitive,
+    equateStringsCaseSensitive,
     escapeString,
     ExportAssignment,
     ExportDeclaration,
@@ -226,6 +229,7 @@ import {
     isRequireVariableStatement,
     isRightSideOfQualifiedNameOrPropertyAccess,
     isRootedDiskPath,
+    isSatisfiesExpression,
     isSetAccessorDeclaration,
     isSourceFile,
     isSourceFileJS,
@@ -2500,7 +2504,7 @@ export function makeImport(defaultImport: Identifier | undefined, namedImports: 
             ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
             : undefined,
         typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier,
-        /*assertClause*/ undefined,
+        /*attributes*/ undefined,
     );
 }
 
@@ -2662,8 +2666,14 @@ export function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined)
     return !!a && !!b && a.start === b.start && a.length === b.length;
 }
 /** @internal */
-export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan): boolean {
-    return a.fileName === b.fileName && textSpansEqual(a.textSpan, b.textSpan);
+export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan, useCaseSensitiveFileNames: boolean): boolean {
+    return (useCaseSensitiveFileNames ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(a.fileName, b.fileName) &&
+        textSpansEqual(a.textSpan, b.textSpan);
+}
+
+/** @internal */
+export function getDocumentSpansEqualityComparer(useCaseSensitiveFileNames: boolean): EqualityComparer<DocumentSpan> {
+    return (a, b) => documentSpansEqual(a, b, useCaseSensitiveFileNames);
 }
 
 /**
@@ -2976,7 +2986,8 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
             if (text) parts.push(linkTextPart(text));
         }
         else {
-            parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
+            const separator = suffix === 0 || (link.text.charCodeAt(suffix) === CharacterCodes.bar && name.charCodeAt(name.length - 1) !== CharacterCodes.space) ? " " : "";
+            parts.push(linkTextPart(name + separator + text));
         }
     }
     parts.push(linkPart("}"));
@@ -3355,7 +3366,7 @@ function indexInTextChange(change: string, name: string): number {
 export function needsParentheses(expression: Expression): boolean {
     return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken
         || isObjectLiteralExpression(expression)
-        || isAsExpression(expression) && isObjectLiteralExpression(expression.expression);
+        || (isAsExpression(expression) || isSatisfiesExpression(expression)) && isObjectLiteralExpression(expression.expression);
 }
 
 /** @internal */

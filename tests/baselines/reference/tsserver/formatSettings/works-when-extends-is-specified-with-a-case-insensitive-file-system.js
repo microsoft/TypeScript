@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/app.ts]
 let x;
@@ -82,14 +82,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Format host information updated
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 2,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -98,28 +98,28 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FormatCodeOptions should be global:: /a/b/app.ts:: {
- "indentSize": 4,
- "tabSize": 4,
- "newLineCharacter": "\n",
- "convertTabsToSpaces": true,
- "indentStyle": 2,
- "insertSpaceAfterConstructor": false,
- "insertSpaceAfterCommaDelimiter": true,
- "insertSpaceAfterSemicolonInForStatements": true,
- "insertSpaceBeforeAndAfterBinaryOperators": true,
- "insertSpaceAfterKeywordsInControlFlowStatements": true,
- "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
- "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
- "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
- "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
- "insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
- "insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
- "insertSpaceBeforeFunctionParenthesis": false,
- "placeOpenBraceOnNewLineForFunctions": false,
- "placeOpenBraceOnNewLineForControlBlocks": true,
- "semicolons": "ignore",
- "trimTrailingWhitespace": true,
- "indentSwitchCase": true
+  "indentSize": 4,
+  "tabSize": 4,
+  "newLineCharacter": "\n",
+  "convertTabsToSpaces": true,
+  "indentStyle": 2,
+  "insertSpaceAfterConstructor": false,
+  "insertSpaceAfterCommaDelimiter": true,
+  "insertSpaceAfterSemicolonInForStatements": true,
+  "insertSpaceBeforeAndAfterBinaryOperators": true,
+  "insertSpaceAfterKeywordsInControlFlowStatements": true,
+  "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+  "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+  "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+  "insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+  "insertSpaceBeforeFunctionParenthesis": false,
+  "placeOpenBraceOnNewLineForFunctions": false,
+  "placeOpenBraceOnNewLineForControlBlocks": true,
+  "semicolons": "ignore",
+  "trimTrailingWhitespace": true,
+  "indentSwitchCase": true
 }
 Before request
 
@@ -159,14 +159,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Host configuration update for file /a/b/app.ts
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 3,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -175,28 +175,28 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FormatCodeOptions should be per file:: /a/b/app.ts:: {
- "indentSize": 4,
- "tabSize": 4,
- "newLineCharacter": "\n",
- "convertTabsToSpaces": true,
- "indentStyle": 2,
- "insertSpaceAfterConstructor": false,
- "insertSpaceAfterCommaDelimiter": false,
- "insertSpaceAfterSemicolonInForStatements": true,
- "insertSpaceBeforeAndAfterBinaryOperators": true,
- "insertSpaceAfterKeywordsInControlFlowStatements": true,
- "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
- "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
- "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
- "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
- "insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
- "insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
- "insertSpaceBeforeFunctionParenthesis": false,
- "placeOpenBraceOnNewLineForFunctions": false,
- "placeOpenBraceOnNewLineForControlBlocks": false,
- "semicolons": "ignore",
- "trimTrailingWhitespace": true,
- "indentSwitchCase": true
+  "indentSize": 4,
+  "tabSize": 4,
+  "newLineCharacter": "\n",
+  "convertTabsToSpaces": true,
+  "indentStyle": 2,
+  "insertSpaceAfterConstructor": false,
+  "insertSpaceAfterCommaDelimiter": false,
+  "insertSpaceAfterSemicolonInForStatements": true,
+  "insertSpaceBeforeAndAfterBinaryOperators": true,
+  "insertSpaceAfterKeywordsInControlFlowStatements": true,
+  "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+  "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+  "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+  "insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+  "insertSpaceBeforeFunctionParenthesis": false,
+  "placeOpenBraceOnNewLineForFunctions": false,
+  "placeOpenBraceOnNewLineForControlBlocks": false,
+  "semicolons": "ignore",
+  "trimTrailingWhitespace": true,
+  "indentSwitchCase": true
 }
 Before request
 
@@ -235,14 +235,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Format host information updated
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 4,
-     "success": true,
-     "performanceData": {
-      "updateGraphDurationMs": *
-     }
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -251,26 +251,26 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FormatCodeOptions should be per file:: /a/b/app.ts:: {
- "indentSize": 4,
- "tabSize": 4,
- "newLineCharacter": "\n",
- "convertTabsToSpaces": true,
- "indentStyle": 2,
- "insertSpaceAfterConstructor": false,
- "insertSpaceAfterCommaDelimiter": false,
- "insertSpaceAfterSemicolonInForStatements": true,
- "insertSpaceBeforeAndAfterBinaryOperators": true,
- "insertSpaceAfterKeywordsInControlFlowStatements": true,
- "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
- "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
- "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
- "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
- "insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
- "insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
- "insertSpaceBeforeFunctionParenthesis": false,
- "placeOpenBraceOnNewLineForFunctions": false,
- "placeOpenBraceOnNewLineForControlBlocks": false,
- "semicolons": "ignore",
- "trimTrailingWhitespace": true,
- "indentSwitchCase": true
+  "indentSize": 4,
+  "tabSize": 4,
+  "newLineCharacter": "\n",
+  "convertTabsToSpaces": true,
+  "indentStyle": 2,
+  "insertSpaceAfterConstructor": false,
+  "insertSpaceAfterCommaDelimiter": false,
+  "insertSpaceAfterSemicolonInForStatements": true,
+  "insertSpaceBeforeAndAfterBinaryOperators": true,
+  "insertSpaceAfterKeywordsInControlFlowStatements": true,
+  "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+  "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+  "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+  "insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+  "insertSpaceBeforeFunctionParenthesis": false,
+  "placeOpenBraceOnNewLineForFunctions": false,
+  "placeOpenBraceOnNewLineForControlBlocks": false,
+  "semicolons": "ignore",
+  "trimTrailingWhitespace": true,
+  "indentSwitchCase": true
 }

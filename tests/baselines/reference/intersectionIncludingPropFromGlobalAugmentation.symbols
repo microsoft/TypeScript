@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/intersectionIncludingPropFromGlobalAugmentation.ts] ////
+
+=== intersectionIncludingPropFromGlobalAugmentation.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54345
+
+interface Test1 { toString: null | 'string'; }
+>Test1 : Symbol(Test1, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 0, 0))
+>toString : Symbol(Test1.toString, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 2, 17))
+
+type Test2 = Test1 & { optional?: unknown };
+>Test2 : Symbol(Test2, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 2, 46))
+>Test1 : Symbol(Test1, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 0, 0))
+>optional : Symbol(optional, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 3, 22))
+
+declare const source: Test1;
+>source : Symbol(source, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 4, 13))
+>Test1 : Symbol(Test1, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 0, 0))
+
+const target: Test2 = { ...source };
+>target : Symbol(target, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 5, 5))
+>Test2 : Symbol(Test2, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 2, 46))
+>source : Symbol(source, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 4, 13))
+
+const toString = target.toString;
+>toString : Symbol(toString, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 7, 5))
+>target.toString : Symbol(Test1.toString, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 2, 17))
+>target : Symbol(target, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 5, 5))
+>toString : Symbol(Test1.toString, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 2, 17))
+
+const hasOwn = target.hasOwnProperty; // not an own member but it should still be accessible
+>hasOwn : Symbol(hasOwn, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 8, 5))
+>target.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>target : Symbol(target, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 5, 5))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+export {}
+

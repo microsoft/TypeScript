@@ -38,6 +38,10 @@
         "yml.singleQuote": true,
         "yaml.singleQuote": true
     },
+    "json": {
+        // This would be good to do in known-JSONC files, but VS Code warns on trailing commas.
+        "trailingCommas": "never"
+    },
     "excludes": [
         "**/node_modules",
         "**/*-lock.json",
@@ -51,8 +55,8 @@
     ],
     // Note: if adding new languages, make sure settings.template.json is updated too.
     "plugins": [
-        "https://plugins.dprint.dev/typescript-0.87.1.wasm",
-        "https://plugins.dprint.dev/prettier-0.27.0.json@3557a62b4507c55a47d8cde0683195b14d13c41dda66d0f0b0e111aed107e2fe",
-        "https://plugins.dprint.dev/json-0.17.4.wasm"
+        "https://plugins.dprint.dev/typescript-0.88.3.wasm",
+        "https://plugins.dprint.dev/json-0.19.0.wasm",
+        "https://plugins.dprint.dev/prettier-0.27.0.json@3557a62b4507c55a47d8cde0683195b14d13c41dda66d0f0b0e111aed107e2fe"
     ]
 }

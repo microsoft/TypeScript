@@ -1,0 +1,54 @@
+simpleRecursionWithBaseCase1.ts(8,21): error TS2554: Expected 1 arguments, but got 0.
+simpleRecursionWithBaseCase1.ts(13,20): error TS2554: Expected 1 arguments, but got 0.
+simpleRecursionWithBaseCase1.ts(19,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+simpleRecursionWithBaseCase1.ts(27,16): error TS2304: Cannot find name 'notfoundsymbol'.
+simpleRecursionWithBaseCase1.ts(31,10): error TS7023: 'fn5' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
+==== simpleRecursionWithBaseCase1.ts (5 errors) ====
+    function fn1(n: number) {
+        if (n === 0) {
+            return 3;
+        } else {
+            return fn1(n - 1);
+        }
+    }
+    const num: number = fn1();
+                        ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 simpleRecursionWithBaseCase1.ts:1:14: An argument for 'n' was not provided.
+    
+    function fn2(n: number) {
+        return fn2(n);
+    }
+    const nev: never = fn2();
+                       ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 simpleRecursionWithBaseCase1.ts:10:14: An argument for 'n' was not provided.
+    
+    function fn3(n: number) {
+        if (n === 0) {
+            return 3;
+        } else {
+            return fn1("hello world");
+                       ~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+        }
+    }
+    
+    function fn4(n: number) {
+        if (n === 0) {
+            return 3;
+        } else {
+            return notfoundsymbol("hello world");
+                   ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'notfoundsymbol'.
+        }
+    }
+    
+    function fn5() {
+             ~~~
+!!! error TS7023: 'fn5' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        return [fn5][0]();
+    }
+    

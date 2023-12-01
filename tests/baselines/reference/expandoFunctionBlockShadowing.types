@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/expandoFunctionBlockShadowing.ts] ////
+
+=== expandoFunctionBlockShadowing.ts ===
+// https://github.com/microsoft/TypeScript/issues/56538
+
+export function X() {}
+>X : () => void
+
+if (Math.random()) {
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+  const X: { test?: any } = {};
+>X : { test?: any; }
+>test : any
+>{} : {}
+
+  X.test = 1;
+>X.test = 1 : 1
+>X.test : any
+>X : { test?: any; }
+>test : any
+>1 : 1
+}
+
+export function Y() {}
+>Y : typeof Y
+
+Y.test = "foo";
+>Y.test = "foo" : "foo"
+>Y.test : string
+>Y : typeof Y
+>test : string
+>"foo" : "foo"
+
+const aliasTopY = Y;
+>aliasTopY : typeof Y
+>Y : typeof Y
+
+if (Math.random()) {
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+  const Y = function Y() {}
+>Y : { (): void; test: number; }
+>function Y() {} : { (): void; test: number; }
+>Y : { (): void; test: number; }
+
+  Y.test = 42;
+>Y.test = 42 : 42
+>Y.test : number
+>Y : { (): void; test: number; }
+>test : number
+>42 : 42
+
+  const topYcheck: { (): void; test: string } = aliasTopY;
+>topYcheck : { (): void; test: string; }
+>test : string
+>aliasTopY : typeof import("expandoFunctionBlockShadowing").Y
+
+  const blockYcheck: { (): void; test: number } = Y;
+>blockYcheck : { (): void; test: number; }
+>test : number
+>Y : { (): void; test: number; }
+}

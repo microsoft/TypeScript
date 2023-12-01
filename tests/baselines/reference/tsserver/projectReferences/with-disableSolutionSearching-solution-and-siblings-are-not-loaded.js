@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -15,10 +15,31 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/solution/tsconfig.json]
-{"files":[],"include":[],"references":[{"path":"./compiler"},{"path":"./services"}]}
+{
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./compiler"
+    },
+    {
+      "path": "./services"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/compiler/tsconfig.json]
-{"compilerOptions":{"composite":true,"module":"none","disableSolutionSearching":true},"files":["./types.ts","./program.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "none",
+    "disableSolutionSearching": true
+  },
+  "files": [
+    "./types.ts",
+    "./program.ts"
+  ]
+}
 
 //// [/user/username/projects/solution/compiler/types.ts]
 
@@ -38,7 +59,19 @@ interface Array<T> { length: number; [n: number]: T; }
                 }
 
 //// [/user/username/projects/solution/services/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["./services.ts"],"references":[{"path":"../compiler"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [
+    "./services.ts"
+  ],
+  "references": [
+    {
+      "path": "../compiler"
+    }
+  ]
+}
 
 //// [/user/username/projects/solution/services/services.ts]
 
@@ -60,6 +93,16 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/compiler
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/compiler/program.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/compiler/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/compiler/tsconfig.json 2000 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/solution/compiler/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/solution/compiler/program.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/solution/compiler/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/solution/compiler/types.ts",
@@ -97,6 +140,71 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/solution/compiler/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "9255dbc4fb1f75fa2b50c36a658cba7d79fd13c25d9457645d002e0beab57ab9",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 429,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "composite": true,
+            "module": "none",
+            "disableSolutionSearching": true
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": true,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/solution/compiler/program.ts",
+        "configFile": "/user/username/projects/solution/compiler/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 

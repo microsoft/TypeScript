@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/aliasInstantiationExpressionGenericIntersectionNoCrash1.ts] ////
+
+=== aliasInstantiationExpressionGenericIntersectionNoCrash1.ts ===
+class ErrImpl<E> {
+>ErrImpl : Symbol(ErrImpl, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 0, 0))
+>E : Symbol(E, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 0, 14))
+
+  e!: E;
+>e : Symbol(ErrImpl.e, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 0, 18))
+>E : Symbol(E, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 0, 14))
+}
+
+declare const Err: typeof ErrImpl & (<T>() => T);
+>Err : Symbol(Err, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 4, 13))
+>ErrImpl : Symbol(ErrImpl, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 0, 0))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 4, 38))
+>T : Symbol(T, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 4, 38))
+
+type ErrAlias<U> = typeof Err<U>;
+>ErrAlias : Symbol(ErrAlias, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 4, 49))
+>U : Symbol(U, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 6, 14))
+>Err : Symbol(Err, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 4, 13))
+>U : Symbol(U, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 6, 14))
+
+declare const e: ErrAlias<number>;
+>e : Symbol(e, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 8, 13))
+>ErrAlias : Symbol(ErrAlias, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 4, 49))
+
+e as ErrAlias<string>;
+>e : Symbol(e, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 8, 13))
+>ErrAlias : Symbol(ErrAlias, Decl(aliasInstantiationExpressionGenericIntersectionNoCrash1.ts, 4, 49))
+

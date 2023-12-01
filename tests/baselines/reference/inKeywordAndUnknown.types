@@ -138,12 +138,12 @@ function f5<T>(x: T & {}) {
 
 function f6<T extends {}>(x: T & {}) {
 >f6 : <T extends {}>(x: T & {}) => boolean
->x : T & {}
+>x : T
 
     return x instanceof Object && 'a' in x;
 >x instanceof Object && 'a' in x : boolean
 >x instanceof Object : boolean
->x : T & {}
+>x : T
 >Object : ObjectConstructor
 >'a' in x : boolean
 >'a' : "a"
@@ -152,15 +152,15 @@ function f6<T extends {}>(x: T & {}) {
 
 function f7<T extends object>(x: T & {}) {
 >f7 : <T extends object>(x: T & {}) => boolean
->x : T & {}
+>x : T
 
     return x instanceof Object && 'a' in x;
 >x instanceof Object && 'a' in x : boolean
 >x instanceof Object : boolean
->x : T & {}
+>x : T
 >Object : ObjectConstructor
 >'a' in x : boolean
 >'a' : "a"
->x : T & {}
+>x : T
 }
 

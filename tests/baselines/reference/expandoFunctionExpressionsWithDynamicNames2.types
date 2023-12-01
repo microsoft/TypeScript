@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/expandoFunctionExpressionsWithDynamicNames2.ts] ////
+
+=== expandoFunctionExpressionsWithDynamicNames2.ts ===
+const mySymbol = Symbol();
+>mySymbol : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+interface Foo {
+  (): void;
+  [mySymbol]: true;
+>[mySymbol] : true
+>mySymbol : unique symbol
+>true : true
+}
+const foo: Foo = () => {};
+>foo : Foo
+>() => {} : { (): void; [mySymbol]: true; }
+
+foo[mySymbol] = true;
+>foo[mySymbol] = true : true
+>foo[mySymbol] : true
+>foo : Foo
+>mySymbol : unique symbol
+>true : true
+
+interface Bar {
+  (): void;
+  test: true;
+>test : true
+>true : true
+}
+const t = "test" as const;
+>t : "test"
+>"test" as const : "test"
+>"test" : "test"
+
+const bar: Bar = () => {};
+>bar : Bar
+>() => {} : { (): void; test: true; }
+
+bar[t] = true;
+>bar[t] = true : true
+>bar[t] : true
+>bar : Bar
+>t : "test"
+>true : true
+

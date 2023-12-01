@@ -333,68 +333,64 @@ export class Verify extends VerifyNegatable {
         this.state.verifyTypeAtLocation(range, expected);
     }
 
-    public baselineCommands(...commands: BaselineCommand[]) {
-        this.state.verifyBaselineCommands(...commands);
-    }
-
     public baselineFindAllReferences(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
-        this.state.verifyBaselineCommands({ type: "findAllReferences", markerOrRange });
+        this.state.baselineFindAllReferences(markerOrRange, /*rangeText*/ undefined);
     }
 
     public baselineFindAllReferencesAtRangesWithText(...rangeText: string[]) {
-        this.state.verifyBaselineCommands({ type: "findAllReferences", rangeText });
+        this.state.baselineFindAllReferences(/*markerOrRange*/ undefined, rangeText);
     }
 
     public baselineGetFileReferences(...fileName: string[]) {
-        this.state.verifyBaselineCommands({ type: "getFileReferences", fileName });
+        this.state.baselineGetFileReferences(fileName);
     }
 
     public baselineGoToDefinition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
-        this.state.verifyBaselineCommands({ type: "goToDefinition", markerOrRange });
+        this.state.baselineGoToDefinition(markerOrRange, /*rangeText*/ undefined);
     }
 
     public baselineGoToDefinitionAtRangesWithText(...rangeText: string[]) {
-        this.state.verifyBaselineCommands({ type: "goToDefinition", rangeText });
+        this.state.baselineGoToDefinition(/*markerOrRange*/ undefined, rangeText);
     }
 
     public baselineGetDefinitionAtPosition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
-        this.state.verifyBaselineCommands({ type: "getDefinitionAtPosition", markerOrRange });
+        this.state.baselineGetDefinitionAtPosition(markerOrRange, /*rangeText*/ undefined);
     }
 
     public baselineGetDefinitionAtRangesWithText(...rangeText: string[]) {
-        this.state.verifyBaselineCommands({ type: "getDefinitionAtPosition", rangeText });
+        this.state.baselineGetDefinitionAtPosition(/*markerOrRange*/ undefined, rangeText);
     }
 
     public baselineGoToSourceDefinition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
-        this.state.verifyBaselineCommands({ type: "goToSourceDefinition", markerOrRange });
+        this.state.baselineGoToSourceDefinition(markerOrRange, /*rangeText*/ undefined);
     }
 
     public baselineGoToSourceDefinitionAtRangesWithText(...rangeText: string[]) {
-        this.state.verifyBaselineCommands({ type: "goToSourceDefinition", rangeText });
+        this.state.baselineGoToSourceDefinition(/*markerOrRange*/ undefined, rangeText);
     }
 
     public baselineGoToType(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
-        this.state.verifyBaselineCommands({ type: "goToType", markerOrRange });
+        this.state.baselineGoToType(markerOrRange, /*rangeText*/ undefined);
     }
 
     public baselineGoToTypeAtRangesWithText(...rangeText: string[]) {
-        this.state.verifyBaselineCommands({ type: "goToType", rangeText });
+        this.state.baselineGoToType(/*markerOrRange*/ undefined, rangeText);
     }
 
     public baselineGoToImplementation(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
-        this.state.verifyBaselineCommands({ type: "goToImplementation", markerOrRange });
+        this.state.baselineGoToImplementation(markerOrRange, /*rangeText*/ undefined);
     }
 
     public baselineGoToImplementationAtRangesWithText(...rangeText: string[]) {
-        this.state.verifyBaselineCommands({ type: "goToImplementation", rangeText });
+        this.state.baselineGoToImplementation(/*markerOrRange*/ undefined, rangeText);
     }
 
     public baselineDocumentHighlights(markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>, options?: VerifyDocumentHighlightsOptions) {
-        this.state.verifyBaselineCommands({ type: "documentHighlights", markerOrRange, options });
+        this.state.baselineDocumentHighlights(markerOrRange, /*rangeText*/ undefined, options);
     }
 
     public baselineDocumentHighlightsAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: VerifyDocumentHighlightsOptions) {
-        this.state.verifyBaselineCommands({ type: "documentHighlights", rangeText, options });
+        this.state.baselineDocumentHighlights(/*markerOrRange*/ undefined, rangeText, options);
     }
 
     public noErrors() {
@@ -574,11 +570,11 @@ export class Verify extends VerifyNegatable {
     }
 
     public baselineRename(markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>, options?: RenameOptions) {
-        this.state.verifyBaselineCommands({ type: "findRenameLocations", markerOrRange, options });
+        this.state.baselineRename(markerOrRange, /*rangeText*/ undefined, options);
     }
 
     public baselineRenameAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: RenameOptions) {
-        this.state.verifyBaselineCommands({ type: "findRenameLocations", rangeText, options });
+        this.state.baselineRename(/*markerOrRange*/ undefined, rangeText, options);
     }
 
     public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: FourSlash.TextSpan, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]) {
@@ -1133,6 +1129,7 @@ export namespace Completion {
         interfaceEntry("ImportMeta"),
         interfaceEntry("ImportCallOptions"),
         interfaceEntry("ImportAssertions"),
+        interfaceEntry("ImportAttributes"),
         varEntry("Math"),
         varEntry("Date"),
         interfaceEntry("DateConstructor"),
@@ -1872,6 +1869,7 @@ export interface VerifyCodeFixAllOptions {
     fixAllDescription: string;
     newFileContent: NewFileContent;
     commands: readonly {}[];
+    preferences?: ts.UserPreferences;
 }
 
 export interface VerifyRefactorOptions {
@@ -1930,25 +1928,3 @@ export interface RenameOptions {
     readonly providePrefixAndSuffixTextForRename?: boolean;
     readonly quotePreference?: "auto" | "double" | "single";
 }
-export type BaselineCommandWithMarkerOrRange = {
-    type: "findAllReferences" | "goToDefinition" | "getDefinitionAtPosition" | "goToSourceDefinition" | "goToType" | "goToImplementation";
-    markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
-    rangeText?: ArrayOrSingle<string>;
-} | {
-    type: "findRenameLocations";
-    markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
-    rangeText?: ArrayOrSingle<string>;
-    options?: RenameOptions;
-} | {
-    type: "documentHighlights";
-    markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>;
-    rangeText?: ArrayOrSingle<string>;
-    options?: VerifyDocumentHighlightsOptions;
-};
-export type BaselineCommand = BaselineCommandWithMarkerOrRange | {
-    type: "getFileReferences";
-    fileName: ArrayOrSingle<string>;
-} | {
-    type: "customWork";
-    work: () => string | undefined;
-};

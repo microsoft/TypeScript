@@ -2,7 +2,7 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/hello.json]
 {
- "hello": "world"
+  "hello": "world"
 }
 
 //// [/lib/lib.d.ts]
@@ -27,18 +27,18 @@ export default hello.hello
 
 //// [/src/tsconfig.json]
 {
- "compilerOptions": {
-  "moduleResolution": "node",
-  "module": "commonjs",
-  "resolveJsonModule": true,
-  "esModuleInterop": true,
-  "allowSyntheticDefaultImports": true,
-  "outDir": "dist",
-  "skipDefaultLibCheck": true
- },
- "include": [
-  "src/**/*"
- ]
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/**/*"
+  ]
 }
 
 
