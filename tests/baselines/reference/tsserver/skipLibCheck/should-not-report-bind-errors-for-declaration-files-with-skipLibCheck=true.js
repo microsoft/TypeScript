@@ -83,9 +83,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/dtsfile1.d.ts: *new*
+/a/dTsFile1.d.ts: *new*
   {}
-/a/dtsfile2.d.ts: *new*
+/a/dTsFile2.d.ts: *new*
   {}
 /a/jsconfig.json: *new*
   {}
@@ -138,11 +138,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/dTsFile1.d.ts:
+  {}
+/a/dTsFile2.d.ts:
+  {}
 /a/data/package.json: *new*
-  {}
-/a/dtsfile1.d.ts:
-  {}
-/a/dtsfile2.d.ts:
   {}
 /a/jsconfig.json:
   {}
@@ -392,11 +392,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/dTsFile1.d.ts:
+  {}
+/a/dTsFile2.d.ts:
+  {}
 /a/data/package.json:
-  {}
-/a/dtsfile1.d.ts:
-  {}
-/a/dtsfile2.d.ts:
   {}
 /a/jsconfig.json:
   {}

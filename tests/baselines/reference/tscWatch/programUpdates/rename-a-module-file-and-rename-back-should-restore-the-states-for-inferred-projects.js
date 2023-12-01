@@ -51,7 +51,7 @@ FsWatches::
   {}
 /users/username/projects/project/file1.ts: *new*
   {}
-/users/username/projects/project/modulefile.ts: *new*
+/users/username/projects/project/moduleFile.ts: *new*
   {}
 
 Program root files: [
@@ -116,7 +116,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/users/username/projects/project/modulefile.ts:
+/users/username/projects/project/moduleFile.ts:
   {}
 
 FsWatchesRecursive::
@@ -194,7 +194,7 @@ FsWatches::
   {}
 /users/username/projects/project/file1.ts:
   {}
-/users/username/projects/project/modulefile.ts: *new*
+/users/username/projects/project/moduleFile.ts: *new*
   {}
 
 FsWatchesRecursive *deleted*::

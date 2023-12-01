@@ -48,9 +48,9 @@ var y = 1;
 
 
 FsWatches::
-/a/b/commonfile1.ts: *new*
+/a/b/commonFile1.ts: *new*
   {}
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}
@@ -179,7 +179,7 @@ a/b/commonFile1.ts
 //// [/a/b/commonFile1.js] file written with same contents
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
 /a/b/tsconfig.json:
   {}
@@ -187,7 +187,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {}
 
 FsWatchesRecursive::
@@ -252,9 +252,9 @@ var y = 1;
 
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {}
 /a/b/tsconfig.json:
   {}

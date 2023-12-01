@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/inferenceGenericNestedCallReturningConstructor.ts] ////
+
+=== inferenceGenericNestedCallReturningConstructor.ts ===
+interface Action<TContext> {
+>Action : Symbol(Action, Decl(inferenceGenericNestedCallReturningConstructor.ts, 0, 0))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 0, 17))
+
+  new (ctx: TContext): void;
+>ctx : Symbol(ctx, Decl(inferenceGenericNestedCallReturningConstructor.ts, 1, 7))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 0, 17))
+}
+
+declare class AssignAction<TContext> {
+>AssignAction : Symbol(AssignAction, Decl(inferenceGenericNestedCallReturningConstructor.ts, 2, 1))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 4, 27))
+
+  constructor(ctx: TContext);
+>ctx : Symbol(ctx, Decl(inferenceGenericNestedCallReturningConstructor.ts, 5, 14))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 4, 27))
+}
+
+declare function assign<TContext>(
+>assign : Symbol(assign, Decl(inferenceGenericNestedCallReturningConstructor.ts, 6, 1))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 8, 24))
+
+  assigner: (ctx: TContext) => void
+>assigner : Symbol(assigner, Decl(inferenceGenericNestedCallReturningConstructor.ts, 8, 34))
+>ctx : Symbol(ctx, Decl(inferenceGenericNestedCallReturningConstructor.ts, 9, 13))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 8, 24))
+
+): {
+  new (ctx: TContext): AssignAction<TContext>;
+>ctx : Symbol(ctx, Decl(inferenceGenericNestedCallReturningConstructor.ts, 11, 7))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 8, 24))
+>AssignAction : Symbol(AssignAction, Decl(inferenceGenericNestedCallReturningConstructor.ts, 2, 1))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 8, 24))
+}
+
+declare function createMachine<TContext>(config: {
+>createMachine : Symbol(createMachine, Decl(inferenceGenericNestedCallReturningConstructor.ts, 12, 1))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 14, 31))
+>config : Symbol(config, Decl(inferenceGenericNestedCallReturningConstructor.ts, 14, 41))
+
+  context: TContext;
+>context : Symbol(context, Decl(inferenceGenericNestedCallReturningConstructor.ts, 14, 50))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 14, 31))
+
+  entry: Action<TContext>;
+>entry : Symbol(entry, Decl(inferenceGenericNestedCallReturningConstructor.ts, 15, 20))
+>Action : Symbol(Action, Decl(inferenceGenericNestedCallReturningConstructor.ts, 0, 0))
+>TContext : Symbol(TContext, Decl(inferenceGenericNestedCallReturningConstructor.ts, 14, 31))
+
+}): void;
+
+createMachine({
+>createMachine : Symbol(createMachine, Decl(inferenceGenericNestedCallReturningConstructor.ts, 12, 1))
+
+  context: { count: 0 },
+>context : Symbol(context, Decl(inferenceGenericNestedCallReturningConstructor.ts, 19, 15))
+>count : Symbol(count, Decl(inferenceGenericNestedCallReturningConstructor.ts, 20, 12))
+
+  entry: assign((ctx) => {
+>entry : Symbol(entry, Decl(inferenceGenericNestedCallReturningConstructor.ts, 20, 24))
+>assign : Symbol(assign, Decl(inferenceGenericNestedCallReturningConstructor.ts, 6, 1))
+>ctx : Symbol(ctx, Decl(inferenceGenericNestedCallReturningConstructor.ts, 21, 17))
+
+    ctx // { count: number }
+>ctx : Symbol(ctx, Decl(inferenceGenericNestedCallReturningConstructor.ts, 21, 17))
+
+  }),
+});
+

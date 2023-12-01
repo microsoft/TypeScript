@@ -682,7 +682,7 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package-b/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package-b/package-ax: *new*
+/home/src/projects/project/packages/package-b/package-aX: *new*
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -940,7 +940,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/home/src/projects/project/packages/package-b/package-ax:
+/home/src/projects/project/packages/package-b/package-aX:
   {"pollingInterval":500}
 
 FsWatches::

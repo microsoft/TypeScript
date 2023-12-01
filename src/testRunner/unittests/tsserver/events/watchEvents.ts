@@ -38,7 +38,11 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         const originalSerializeWatches = host.serializeWatches;
         host.serializeWatches = serializeWatches;
         host.factoryData = {
-            watchUtils: createWatchUtils<ts.server.protocol.CreateFileWatcherEventBody, ts.server.protocol.CreateDirectoryWatcherEventBody>(`Custom WatchedFiles`, `Custom WatchedDirectories`),
+            watchUtils: createWatchUtils<ts.server.protocol.CreateFileWatcherEventBody, ts.server.protocol.CreateDirectoryWatcherEventBody>(
+                "Custom WatchedFiles",
+                "Custom WatchedDirectories",
+                host.getCanonicalFileName,
+            ),
             watchFile,
             watchDirectory,
             closeWatcher,
@@ -95,11 +99,13 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
     function addFile(session: TestSession, path: string) {
         updateFileOnHost(session, path, "Add file");
         session.logger.log("Custom watch");
-        (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.fsWatchesRecursive.get("/user/username/projects/myproject")?.forEach(data =>
-            session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
-                command: ts.server.protocol.CommandTypes.WatchChange,
-                arguments: { id: data.id, path, eventType: "create" },
-            })
+        (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.fsWatchesRecursive.forEach(
+            "/user/username/projects/myproject",
+            data =>
+                session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.WatchChange,
+                    arguments: { id: data.id, path, eventType: "create" },
+                }),
         );
         session.host.runQueuedTimeoutCallbacks();
     }
@@ -107,11 +113,13 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
     function changeFile(session: TestSession, path: string) {
         updateFileOnHost(session, path, "Change File");
         session.logger.log("Custom watch");
-        (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.pollingWatches.get(path)?.forEach(data =>
-            session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
-                command: ts.server.protocol.CommandTypes.WatchChange,
-                arguments: { id: data.id, path, eventType: "update" },
-            })
+        (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.pollingWatches.forEach(
+            path,
+            data =>
+                session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.WatchChange,
+                    arguments: { id: data.id, path, eventType: "update" },
+                }),
         );
         session.host.runQueuedTimeoutCallbacks();
     }

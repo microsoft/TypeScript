@@ -185,9 +185,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/foo/b.ts: *new*
+/Foo/b.ts: *new*
   {}
-/foo/tsconfig.json: *new*
+/Foo/tsconfig.json: *new*
   {}
 
 Before request

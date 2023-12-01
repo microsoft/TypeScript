@@ -104,11 +104,11 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/modulea.ts: *new*
+/user/username/projects/myproject/ModuleC.ts: *new*
   {}
-/user/username/projects/myproject/moduleb.ts: *new*
+/user/username/projects/myproject/moduleA.ts: *new*
   {}
-/user/username/projects/myproject/modulec.ts: *new*
+/user/username/projects/myproject/moduleB.ts: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
   {}

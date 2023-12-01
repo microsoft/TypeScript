@@ -15,7 +15,7 @@ functionCall7.ts(7,1): error TS2554: Expected 1 arguments, but got 0.
         ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'c1'.
     foo();
-    ~~~~~
+    ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 functionCall7.ts:2:14: An argument for 'a' was not provided.
     

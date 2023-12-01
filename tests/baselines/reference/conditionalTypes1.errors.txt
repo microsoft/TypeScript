@@ -88,6 +88,7 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
 !!! error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
 !!! error TS2322:   Type 'T' is not assignable to type '{}'.
 !!! related TS2208 conditionalTypes1.ts:10:13: This type parameter might need an `extends {}` constraint.
+!!! related TS2208 conditionalTypes1.ts:10:13: This type parameter might need an `extends NonNullable<T>` constraint.
     }
     
     function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
