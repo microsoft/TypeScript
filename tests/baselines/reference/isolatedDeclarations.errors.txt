@@ -1,0 +1,8 @@
+error TS5053: Option 'outFile' cannot be specified with option 'isolatedDeclarations'.
+
+
+!!! error TS5053: Option 'outFile' cannot be specified with option 'isolatedDeclarations'.
+==== file1.ts (0 errors) ====
+    export var x;
+==== file2.ts (0 errors) ====
+    var y;
