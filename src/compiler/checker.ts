@@ -2837,7 +2837,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // still might be illegal if usage is in the initializer of the variable declaration (eg var a = a)
                 return !isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration as VariableDeclaration, usage);
             }
-            else if (isClassDeclaration(declaration)) {
+            else if (isClassLike(declaration)) {
                 // still might be illegal if the usage is within a computed property name in the class (eg class A { static p = "a"; [A.p]() {} })
                 return !findAncestor(usage, n => isComputedPropertyName(n) && n.parent.parent === declaration);
             }
@@ -20691,8 +20691,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                 // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                 // with respect to T.
-                const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType), /*allowMembers*/ false);
-                const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType), /*allowMembers*/ false);
+                const sourceSig = checkMode & SignatureCheckMode.Callback || isInstantiatedGenericParameter(source, i) ? undefined : getSingleCallSignature(getNonNullableType(sourceType), /*allowMembers*/ false);
+                const targetSig = checkMode & SignatureCheckMode.Callback || isInstantiatedGenericParameter(target, i) ? undefined : getSingleCallSignature(getNonNullableType(targetType), /*allowMembers*/ false);
                 const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
                     getTypeFacts(sourceType, TypeFacts.IsUndefinedOrNull) === getTypeFacts(targetType, TypeFacts.IsUndefinedOrNull);
                 let related = callbacks ?
@@ -33484,6 +33484,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const minTypeArgumentCount = getMinTypeArgumentCount(signature.typeParameters);
         return !some(typeArguments) ||
             (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
+    }
+
+    function isInstantiatedGenericParameter(signature: Signature, pos: number) {
+        let type;
+        return !!(signature.target && (type = tryGetTypeAtPosition(signature.target, pos)) && isGenericType(type));
     }
 
     // By default if type has a single call signature and no other members, return that signature. Otherwise, return undefined.
