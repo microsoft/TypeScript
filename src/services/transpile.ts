@@ -124,8 +124,6 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
             setExternalModuleIndicator: getSetExternalModuleIndicator(options),
             jsDocParsingMode: transpileOptions.jsDocParsingMode !== undefined ?
                 transpileOptions.jsDocParsingMode :
-                transpileOptions.transformers ?
-                JSDocParsingMode.ParseAll :
                 JSDocParsingMode.ParseNone,
         },
     );
