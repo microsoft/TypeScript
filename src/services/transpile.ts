@@ -122,9 +122,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
             languageVersion: getEmitScriptTarget(options),
             impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*packageJsonInfoCache*/ undefined, compilerHost, options),
             setExternalModuleIndicator: getSetExternalModuleIndicator(options),
-            jsDocParsingMode: transpileOptions.jsDocParsingMode !== undefined ?
-                transpileOptions.jsDocParsingMode :
-                JSDocParsingMode.ParseNone,
+            jsDocParsingMode: transpileOptions.jsDocParsingMode ?? JSDocParsingMode.ParseNone,
         },
     );
     if (transpileOptions.moduleName) {
