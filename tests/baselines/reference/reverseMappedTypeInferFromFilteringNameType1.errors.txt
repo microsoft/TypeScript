@@ -1,7 +1,7 @@
-reverseMappedTypeInferFromFilteringNameType.ts(34,7): error TS2353: Object literal may only specify known properties, and 'doesntExist' does not exist in type 'AllowedNeeds<{ last: boolean; doesntExist: boolean; }>'.
+reverseMappedTypeInferFromFilteringNameType1.ts(34,7): error TS2353: Object literal may only specify known properties, and 'doesntExist' does not exist in type 'AllowedNeeds<{ last: boolean; doesntExist: boolean; }>'.
 
 
-==== reverseMappedTypeInferFromFilteringNameType.ts (1 errors) ====
+==== reverseMappedTypeInferFromFilteringNameType1.ts (1 errors) ====
     declare class User {
       public name: string;
       public last: string;
@@ -38,7 +38,7 @@ reverseMappedTypeInferFromFilteringNameType.ts(34,7): error TS2353: Object liter
           doesntExist: true // error
           ~~~~~~~~~~~
 !!! error TS2353: Object literal may only specify known properties, and 'doesntExist' does not exist in type 'AllowedNeeds<{ last: boolean; doesntExist: boolean; }>'.
-!!! related TS6500 reverseMappedTypeInferFromFilteringNameType.ts:14:7: The expected type comes from property 'needs' which is declared here on type '{ needs: AllowedNeeds<{ last: boolean; doesntExist: boolean; }>; compute: (x: Pick<User, "last">) => any; }'
+!!! related TS6500 reverseMappedTypeInferFromFilteringNameType1.ts:14:7: The expected type comes from property 'needs' which is declared here on type '{ needs: AllowedNeeds<{ last: boolean; doesntExist: boolean; }>; compute: (x: Pick<User, "last">) => any; }'
         },
         compute: (user) => {},
       },

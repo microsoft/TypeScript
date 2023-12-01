@@ -6,10 +6,6 @@ type StateConfig<TAction extends string> = {
   states?: Record<string, StateConfig<TAction>>;
 };
 
-type StateSchema = {
-  states?: Record<string, StateSchema>;
-};
-
 declare function createMachine<
   TConfig extends StateConfig<TAction>,
   TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string,
@@ -46,8 +42,6 @@ const checked = checkType<{x: number, y: string}>()({
   z: "z", // undesirable property z is *not* allowed
 });
 
-checked;
-
 // -----------------------------------------------------------------------------------------
 
 interface Stuff {
@@ -63,7 +57,7 @@ function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[
     }
 }
 
-doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
+const stuff1 = doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
 
 function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K] }[]): T[] {
     if(Math.random() > 0.5) {
@@ -73,7 +67,7 @@ function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff
     }
 }
 
-doStuffWithStuffArr([
+const stuff2 = doStuffWithStuffArr([
     { field: 1, anotherField: 'a', extra: 123 },
 ])
 
@@ -81,26 +75,26 @@ doStuffWithStuffArr([
 
 type XNumber = { x: number }
 
-declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): void;
+declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): T;
 
 function bar(props: {x: number, y: string}) {
   return foo(props); // no error because lack of excess property check by design
 }
 
-foo({x: 1, y: 'foo'});
+const foo1 = foo({x: 1, y: 'foo'});
 
-foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
+const foo2 = foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
 
 // -----------------------------------------------------------------------------------------
 
 type NoErrWithOptProps = { x: number, y?: string }
 
-declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): void;
+declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): T;
 
-baz({x: 1});
-baz({x: 1, z: 123});
-baz({x: 1, y: 'foo'});
-baz({x: 1, y: 'foo', z: 123});
+const baz1 = baz({x: 1});
+const baz2 = baz({x: 1, z: 123});
+const baz3 = baz({x: 1, y: 'foo'});
+const baz4 = baz({x: 1, y: 'foo', z: 123});
 
 // -----------------------------------------------------------------------------------------
 
@@ -118,8 +112,6 @@ const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 // -----------------------------------------------------------------------------------------
 
 type IsLiteralString<T extends string> = string extends T ? false : true;
-
-type DeepWritable<T> = T extends Function ? T : { -readonly [K in keyof T]: DeepWritable<T[K]> }
 
 interface ProvidedActor {
   src: string;
@@ -141,10 +133,6 @@ interface MachineConfig<TActor extends ProvidedActor> {
     : {
         src: string;
       };
-}
-
-type NoExtra<T> = {
-  [K in keyof T]: K extends keyof MachineConfig<any> ? T[K] : never
 }
 
 declare function createXMachine<
@@ -213,7 +201,6 @@ var checked = checkType()({
     y: "y",
     z: "z", // undesirable property z is *not* allowed
 });
-checked;
 function doStuffWithStuff(s) {
     if (Math.random() > 0.5) {
         return s;
@@ -222,7 +209,7 @@ function doStuffWithStuff(s) {
         return s;
     }
 }
-doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 });
+var stuff1 = doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 });
 function doStuffWithStuffArr(arr) {
     if (Math.random() > 0.5) {
         return arr;
@@ -231,18 +218,18 @@ function doStuffWithStuffArr(arr) {
         return arr;
     }
 }
-doStuffWithStuffArr([
+var stuff2 = doStuffWithStuffArr([
     { field: 1, anotherField: 'a', extra: 123 },
 ]);
 function bar(props) {
     return foo(props); // no error because lack of excess property check by design
 }
-foo({ x: 1, y: 'foo' });
-foo(__assign({ x: 1, y: 'foo' })); // no error because lack of excess property check by design
-baz({ x: 1 });
-baz({ x: 1, z: 123 });
-baz({ x: 1, y: 'foo' });
-baz({ x: 1, y: 'foo', z: 123 });
+var foo1 = foo({ x: 1, y: 'foo' });
+var foo2 = foo(__assign({ x: 1, y: 'foo' })); // no error because lack of excess property check by design
+var baz1 = baz({ x: 1 });
+var baz2 = baz({ x: 1, z: 123 });
+var baz3 = baz({ x: 1, y: 'foo' });
+var baz4 = baz({ x: 1, y: 'foo', z: 123 });
 var wnp = withNestedProp({ prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 var child = function () { return Promise.resolve("foo"); };
 var config = createXMachine({

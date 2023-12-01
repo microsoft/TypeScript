@@ -1,0 +1,491 @@
+//// [tests/cases/compiler/reverseMappedTypeInferFromFilteringNameType2.ts] ////
+
+=== reverseMappedTypeInferFromFilteringNameType2.ts ===
+type StateConfig<TAction extends string> = {
+>StateConfig : Symbol(StateConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 0, 0))
+>TAction : Symbol(TAction, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 0, 17))
+
+  entry?: TAction;
+>entry : Symbol(entry, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 0, 44))
+>TAction : Symbol(TAction, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 0, 17))
+
+  states?: Record<string, StateConfig<TAction>>;
+>states : Symbol(states, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 1, 18))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>StateConfig : Symbol(StateConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 0, 0))
+>TAction : Symbol(TAction, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 0, 17))
+
+};
+declare function createMachine<
+>createMachine : Symbol(createMachine, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 3, 2))
+
+  TConfig extends StateConfig<TAction>,
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 4, 31))
+>StateConfig : Symbol(StateConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 0, 0))
+>TAction : Symbol(TAction, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 5, 39))
+
+  TAction extends string = TConfig["entry"] extends string
+>TAction : Symbol(TAction, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 5, 39))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 4, 31))
+
+    ? TConfig["entry"]
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 4, 31))
+
+    : string,
+>(config: { [K in keyof TConfig as K & keyof StateConfig<any>]: TConfig[K] }): [
+>config : Symbol(config, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 9, 2))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 9, 13))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 4, 31))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 9, 13))
+>StateConfig : Symbol(StateConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 0, 0))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 4, 31))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 9, 13))
+
+  TAction,
+>TAction : Symbol(TAction, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 5, 39))
+
+  TConfig,
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 4, 31))
+
+];
+const inferredParams1 = createMachine({
+>inferredParams1 : Symbol(inferredParams1, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 13, 5))
+>createMachine : Symbol(createMachine, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 3, 2))
+
+  entry: "foo",
+>entry : Symbol(entry, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 13, 39))
+
+  states: {
+>states : Symbol(states, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 14, 15))
+
+    a: {
+>a : Symbol(a, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 15, 11))
+
+      entry: "bar",
+>entry : Symbol(entry, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 16, 8))
+
+    },
+  },
+  extra: 12,
+>extra : Symbol(extra, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 19, 4))
+
+});
+const inferredParams2 = createMachine({
+>inferredParams2 : Symbol(inferredParams2, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 22, 5))
+>createMachine : Symbol(createMachine, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 3, 2))
+
+  entry: "foo",
+>entry : Symbol(entry, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 22, 39))
+
+  states: {
+>states : Symbol(states, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 23, 15))
+
+    a: {
+>a : Symbol(a, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 24, 11))
+
+      entry: "foo",
+>entry : Symbol(entry, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 25, 8))
+
+    },
+  },
+  extra: 12,
+>extra : Symbol(extra, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 28, 4))
+
+});
+
+const checkType =
+>checkType : Symbol(checkType, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 32, 5))
+
+  <T,>() =>
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 33, 3))
+
+  <U extends T>(value: { [K in keyof U as K & keyof T]: U[K] }) =>
+>U : Symbol(U, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 34, 3))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 33, 3))
+>value : Symbol(value, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 34, 16))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 34, 26))
+>U : Symbol(U, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 34, 3))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 34, 26))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 33, 3))
+>U : Symbol(U, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 34, 3))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 34, 26))
+
+    value;
+>value : Symbol(value, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 34, 16))
+
+const checked = checkType<{ x: number; y: string }>()({
+>checked : Symbol(checked, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 36, 5))
+>checkType : Symbol(checkType, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 32, 5))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 36, 27))
+>y : Symbol(y, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 36, 38))
+
+  x: 1 as number,
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 36, 55))
+
+  y: "y",
+>y : Symbol(y, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 37, 17))
+
+  z: "z", // undesirable property z is *not* allowed
+>z : Symbol(z, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 38, 9))
+
+});
+
+interface Stuff {
+>Stuff : Symbol(Stuff, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 40, 3))
+
+  field: number;
+>field : Symbol(Stuff.field, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 42, 17))
+
+  anotherField: string;
+>anotherField : Symbol(Stuff.anotherField, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 43, 16))
+}
+function doStuffWithStuff<T extends Stuff>(s: {
+>doStuffWithStuff : Symbol(doStuffWithStuff, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 45, 1))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 46, 26))
+>Stuff : Symbol(Stuff, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 40, 3))
+>s : Symbol(s, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 46, 43))
+
+  [K in keyof T as K & keyof Stuff]: T[K];
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 47, 3))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 46, 26))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 47, 3))
+>Stuff : Symbol(Stuff, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 40, 3))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 46, 26))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 47, 3))
+
+}): T {
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 46, 26))
+
+  if (Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    return s as T;
+>s : Symbol(s, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 46, 43))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 46, 26))
+
+  } else {
+    return s;
+>s : Symbol(s, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 46, 43))
+  }
+}
+const stuff1 = doStuffWithStuff({ field: 1, anotherField: "a", extra: 123 });
+>stuff1 : Symbol(stuff1, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 55, 5))
+>doStuffWithStuff : Symbol(doStuffWithStuff, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 45, 1))
+>field : Symbol(field, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 55, 33))
+>anotherField : Symbol(anotherField, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 55, 43))
+>extra : Symbol(extra, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 55, 62))
+
+function doStuffWithStuffArr<T extends Stuff>(
+>doStuffWithStuffArr : Symbol(doStuffWithStuffArr, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 55, 77))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 56, 29))
+>Stuff : Symbol(Stuff, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 40, 3))
+
+  arr: { [K in keyof T as K & keyof Stuff]: T[K] }[],
+>arr : Symbol(arr, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 56, 46))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 57, 10))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 56, 29))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 57, 10))
+>Stuff : Symbol(Stuff, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 40, 3))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 56, 29))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 57, 10))
+
+): T[] {
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 56, 29))
+
+  if (Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    return arr as T[];
+>arr : Symbol(arr, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 56, 46))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 56, 29))
+
+  } else {
+    return arr;
+>arr : Symbol(arr, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 56, 46))
+  }
+}
+const stuff2 = doStuffWithStuffArr([{ field: 1, anotherField: "a", extra: 123 }]);
+>stuff2 : Symbol(stuff2, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 65, 5))
+>doStuffWithStuffArr : Symbol(doStuffWithStuffArr, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 55, 77))
+>field : Symbol(field, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 65, 37))
+>anotherField : Symbol(anotherField, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 65, 47))
+>extra : Symbol(extra, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 65, 66))
+
+type XNumber = { x: number };
+>XNumber : Symbol(XNumber, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 65, 82))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 67, 16))
+
+declare function foo<T extends XNumber>(props: {
+>foo : Symbol(foo, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 67, 29))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 68, 21))
+>XNumber : Symbol(XNumber, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 65, 82))
+>props : Symbol(props, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 68, 40))
+
+  [K in keyof T as K & keyof XNumber]: T[K];
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 69, 3))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 68, 21))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 69, 3))
+>XNumber : Symbol(XNumber, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 65, 82))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 68, 21))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 69, 3))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 68, 21))
+
+function bar(props: { x: number; y: string }) {
+>bar : Symbol(bar, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 70, 6))
+>props : Symbol(props, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 71, 13))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 71, 21))
+>y : Symbol(y, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 71, 32))
+
+  return foo(props); // no error because lack of excess property check by design
+>foo : Symbol(foo, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 67, 29))
+>props : Symbol(props, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 71, 13))
+}
+const foo1 = foo({ x: 1, y: "foo" });
+>foo1 : Symbol(foo1, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 74, 5))
+>foo : Symbol(foo, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 67, 29))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 74, 18))
+>y : Symbol(y, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 74, 24))
+
+const foo2 = foo({ ...{ x: 1, y: "foo" } }); // no error because lack of excess property check by design
+>foo2 : Symbol(foo2, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 75, 5))
+>foo : Symbol(foo, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 67, 29))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 75, 23))
+>y : Symbol(y, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 75, 29))
+
+type NoErrWithOptProps = { x: number; y?: string };
+>NoErrWithOptProps : Symbol(NoErrWithOptProps, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 75, 44))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 77, 26))
+>y : Symbol(y, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 77, 37))
+
+declare function baz<T extends NoErrWithOptProps>(props: {
+>baz : Symbol(baz, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 77, 51))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 78, 21))
+>NoErrWithOptProps : Symbol(NoErrWithOptProps, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 75, 44))
+>props : Symbol(props, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 78, 50))
+
+  [K in keyof T as K & keyof NoErrWithOptProps]: T[K];
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 79, 3))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 78, 21))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 79, 3))
+>NoErrWithOptProps : Symbol(NoErrWithOptProps, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 75, 44))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 78, 21))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 79, 3))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 78, 21))
+
+const baz1 = baz({ x: 1 });
+>baz1 : Symbol(baz1, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 81, 5))
+>baz : Symbol(baz, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 77, 51))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 81, 18))
+
+const baz2 = baz({ x: 1, z: 123 });
+>baz2 : Symbol(baz2, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 82, 5))
+>baz : Symbol(baz, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 77, 51))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 82, 18))
+>z : Symbol(z, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 82, 24))
+
+const baz3 = baz({ x: 1, y: "foo" });
+>baz3 : Symbol(baz3, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 83, 5))
+>baz : Symbol(baz, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 77, 51))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 83, 18))
+>y : Symbol(y, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 83, 24))
+
+const baz4 = baz({ x: 1, y: "foo", z: 123 });
+>baz4 : Symbol(baz4, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 84, 5))
+>baz : Symbol(baz, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 77, 51))
+>x : Symbol(x, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 84, 18))
+>y : Symbol(y, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 84, 24))
+>z : Symbol(z, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 84, 34))
+
+interface WithNestedProp {
+>WithNestedProp : Symbol(WithNestedProp, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 84, 45))
+
+  prop: string;
+>prop : Symbol(WithNestedProp.prop, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 86, 26))
+
+  nested: {
+>nested : Symbol(WithNestedProp.nested, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 87, 15))
+
+    prop: string;
+>prop : Symbol(prop, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 88, 11))
+
+  };
+}
+declare function withNestedProp<T extends WithNestedProp>(props: {
+>withNestedProp : Symbol(withNestedProp, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 91, 1))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 92, 32))
+>WithNestedProp : Symbol(WithNestedProp, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 84, 45))
+>props : Symbol(props, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 92, 58))
+
+  [K in keyof T as K & keyof WithNestedProp]: T[K];
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 93, 3))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 92, 32))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 93, 3))
+>WithNestedProp : Symbol(WithNestedProp, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 84, 45))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 92, 32))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 93, 3))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 92, 32))
+
+const wnp = withNestedProp({ prop: "foo", nested: { prop: "bar" }, extra: 10 });
+>wnp : Symbol(wnp, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 95, 5))
+>withNestedProp : Symbol(withNestedProp, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 91, 1))
+>prop : Symbol(prop, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 95, 28))
+>nested : Symbol(nested, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 95, 41))
+>prop : Symbol(prop, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 95, 51))
+>extra : Symbol(extra, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 95, 66))
+
+type IsLiteralString<T extends string> = string extends T ? false : true;
+>IsLiteralString : Symbol(IsLiteralString, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 95, 80))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 97, 21))
+>T : Symbol(T, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 97, 21))
+
+interface ProvidedActor {
+>ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 97, 73))
+
+  src: string;
+>src : Symbol(ProvidedActor.src, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 98, 25))
+
+  logic: () => Promise<unknown>;
+>logic : Symbol(ProvidedActor.logic, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 99, 14))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+}
+type DistributeActors<TActor> = TActor extends { src: infer TSrc }
+>DistributeActors : Symbol(DistributeActors, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 101, 1))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 102, 22))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 102, 22))
+>src : Symbol(src, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 102, 48))
+>TSrc : Symbol(TSrc, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 102, 59))
+
+  ? {
+      src: TSrc;
+>src : Symbol(src, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 103, 5))
+>TSrc : Symbol(TSrc, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 102, 59))
+    }
+  : never;
+interface MachineConfig<TActor extends ProvidedActor> {
+>MachineConfig : Symbol(MachineConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 106, 10))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 107, 24))
+>ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 97, 73))
+
+  types?: {
+>types : Symbol(MachineConfig.types, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 107, 55))
+
+    actors?: TActor;
+>actors : Symbol(actors, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 108, 11))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 107, 24))
+
+  };
+  invoke: IsLiteralString<TActor["src"]> extends true
+>invoke : Symbol(MachineConfig.invoke, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 110, 4))
+>IsLiteralString : Symbol(IsLiteralString, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 95, 80))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 107, 24))
+
+    ? DistributeActors<TActor>
+>DistributeActors : Symbol(DistributeActors, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 101, 1))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 107, 24))
+
+    : {
+        src: string;
+>src : Symbol(src, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 113, 7))
+
+      };
+}
+declare function createXMachine<
+>createXMachine : Symbol(createXMachine, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 116, 1))
+
+  const TConfig extends MachineConfig<TActor>,
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 117, 32))
+>MachineConfig : Symbol(MachineConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 106, 10))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 118, 46))
+
+  TActor extends ProvidedActor = TConfig extends {
+>TActor : Symbol(TActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 118, 46))
+>ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 97, 73))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 117, 32))
+
+    types: { actors: ProvidedActor };
+>types : Symbol(types, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 119, 50))
+>actors : Symbol(actors, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 120, 12))
+>ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 97, 73))
+  }
+    ? TConfig["types"]["actors"]
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 117, 32))
+
+    : ProvidedActor,
+>ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 97, 73))
+
+>(config: {
+>config : Symbol(config, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 124, 2))
+
+  [K in keyof TConfig as K & keyof MachineConfig<any>]: TConfig[K];
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 125, 3))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 117, 32))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 125, 3))
+>MachineConfig : Symbol(MachineConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 106, 10))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 117, 32))
+>K : Symbol(K, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 125, 3))
+
+}): TConfig;
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 117, 32))
+
+const child = () => Promise.resolve("foo");
+>child : Symbol(child, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 127, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+const config = createXMachine({
+>config : Symbol(config, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 128, 5))
+>createXMachine : Symbol(createXMachine, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 116, 1))
+
+  types: {} as {
+>types : Symbol(types, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 128, 31))
+
+    actors: {
+>actors : Symbol(actors, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 129, 16))
+
+      src: "str";
+>src : Symbol(src, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 130, 13))
+
+      logic: typeof child;
+>logic : Symbol(logic, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 131, 17))
+>child : Symbol(child, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 127, 5))
+
+    };
+  },
+  invoke: {
+>invoke : Symbol(invoke, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 134, 4))
+
+    src: "str",
+>src : Symbol(src, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 135, 11))
+
+  },
+  extra: 10,
+>extra : Symbol(extra, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 137, 4))
+
+});
+const config2 = createXMachine({
+>config2 : Symbol(config2, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 140, 5))
+>createXMachine : Symbol(createXMachine, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 116, 1))
+
+  invoke: {
+>invoke : Symbol(invoke, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 140, 32))
+
+    src: "whatever",
+>src : Symbol(src, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 141, 11))
+
+  },
+  extra: 10,
+>extra : Symbol(extra, Decl(reverseMappedTypeInferFromFilteringNameType2.ts, 143, 4))
+
+});
+
