@@ -20691,8 +20691,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                 // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                 // with respect to T.
-                const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
-                const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType));
+                const sourceSig = checkMode & SignatureCheckMode.Callback || isInstantiatedGenericParameter(source, i) ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
+                const targetSig = checkMode & SignatureCheckMode.Callback || isInstantiatedGenericParameter(target, i) ? undefined : getSingleCallSignature(getNonNullableType(targetType));
                 const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
                     getTypeFacts(sourceType, TypeFacts.IsUndefinedOrNull) === getTypeFacts(targetType, TypeFacts.IsUndefinedOrNull);
                 let related = callbacks ?
@@ -33484,6 +33484,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const minTypeArgumentCount = getMinTypeArgumentCount(signature.typeParameters);
         return !some(typeArguments) ||
             (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
+    }
+
+    function isInstantiatedGenericParameter(signature: Signature, pos: number) {
+        let type;
+        return !!(signature.target && (type = tryGetTypeAtPosition(signature.target, pos)) && isGenericType(type));
     }
 
     // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
