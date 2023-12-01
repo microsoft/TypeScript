@@ -10981,7 +10981,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return getReturnTypeOfSignature(getterSignature);
                 }
             }
-            const parameterTypeOfTypeTag = getParameterTypeOfTypeTag(func, declaration);
+            const parameterTypeOfTypeTag = getParameterTypeOfTypeTag(func, declaration, /*allowMembers*/ true);
             if (parameterTypeOfTypeTag) return parameterTypeOfTypeTag;
             // Use contextual parameter type if one is available
             const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
@@ -15201,15 +15201,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function getSignatureOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
+    function getSignatureOfTypeTag(node: SignatureDeclaration | JSDocSignature, allowMembers?: boolean) {
         // should be attached to a function declaration or expression
         if (!(isInJSFile(node) && isFunctionLikeDeclaration(node))) return undefined;
         const typeTag = getJSDocTypeTag(node);
-        return typeTag?.typeExpression && getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
+        return typeTag?.typeExpression && getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression), allowMembers);
     }
 
-    function getParameterTypeOfTypeTag(func: FunctionLikeDeclaration, parameter: ParameterDeclaration) {
-        const signature = getSignatureOfTypeTag(func);
+    function getParameterTypeOfTypeTag(func: FunctionLikeDeclaration, parameter: ParameterDeclaration, allowMembers?: boolean) {
+        const signature = getSignatureOfTypeTag(func, allowMembers);
         if (!signature) return undefined;
         const pos = func.parameters.indexOf(parameter);
         return parameter.dotDotDotToken ? getRestTypeAtPosition(signature, pos) : getTypeAtPosition(signature, pos);
@@ -33486,9 +33486,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
     }
 
-    // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
-    function getSingleCallSignature(type: Type): Signature | undefined {
-        return getSingleSignature(type, SignatureKind.Call, /*allowMembers*/ false);
+    // By default if type has a single call signature and no other members, return that signature. Otherwise, return undefined.
+    function getSingleCallSignature(type: Type, allowMembers = false): Signature | undefined {
+        return getSingleSignature(type, SignatureKind.Call, allowMembers);
     }
 
     function getSingleCallOrConstructSignature(type: Type): Signature | undefined {

@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration.ts] ////
+
+=== index.js ===
+/**
+ * @type {{(arg1: string): string;}}
+*/
+function fn(arg1) {
+>fn : Symbol(fn, Decl(index.js, 0, 0))
+>arg1 : Symbol(arg1, Decl(index.js, 3, 12))
+
+    return arg1;
+>arg1 : Symbol(arg1, Decl(index.js, 3, 12))
+}
+
+/**
+ * @type {{(arg1: string): string; bar: string}}
+*/
+function fn2(arg1) {
+>fn2 : Symbol(fn2, Decl(index.js, 5, 1), Decl(index.js, 12, 1))
+>arg1 : Symbol(arg1, Decl(index.js, 10, 13))
+
+    return arg1;
+>arg1 : Symbol(arg1, Decl(index.js, 10, 13))
+}
+
+fn2.bar = 42; // error
+>fn2.bar : Symbol(fn2.bar, Decl(index.js, 12, 1))
+>fn2 : Symbol(fn2, Decl(index.js, 5, 1), Decl(index.js, 12, 1))
+>bar : Symbol(fn2.bar, Decl(index.js, 12, 1))
+
