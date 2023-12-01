@@ -25256,6 +25256,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 inferToTemplateLiteralType(source, target as TemplateLiteralType);
             }
             else {
+                if (isGenericMappedType(source) && isGenericMappedType(target)) {
+                    invokeOnce(source, target, (source, target) => {
+                        // The source and target types are generic types { [P in S]: X } and { [P in T]: Y }, so we infer
+                        // from S to T and from X to Y.
+                        inferFromTypes(getConstraintTypeFromMappedType(source), getConstraintTypeFromMappedType(target));
+                        inferFromTypes(getTemplateTypeFromMappedType(source), getTemplateTypeFromMappedType(target));
+                        const sourceNameType = getNameTypeFromMappedType(source);
+                        const targetNameType = getNameTypeFromMappedType(target);
+                        if (sourceNameType && targetNameType) inferFromTypes(sourceNameType, targetNameType);
+                    });
+                }
                 source = getReducedType(source);
                 if (!(priority & InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
                     const apparentSource = getApparentType(source);
