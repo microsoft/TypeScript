@@ -11276,14 +11276,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const getFunc = getTypeOfPropertyOfType(objectLitType, "get" as __String);
             if (getFunc) {
-                const getSig = getSingleCallSignature(getFunc);
+                const getSig = getSingleCallSignature(getFunc, /*allowMembers*/ false);
                 if (getSig) {
                     return getReturnTypeOfSignature(getSig);
                 }
             }
             const setFunc = getTypeOfPropertyOfType(objectLitType, "set" as __String);
             if (setFunc) {
-                const setSig = getSingleCallSignature(setFunc);
+                const setSig = getSingleCallSignature(setFunc, /*allowMembers*/ false);
                 if (setSig) {
                     return getTypeOfFirstParameterOfSignature(setSig);
                 }
@@ -14965,7 +14965,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             result = appendIfUnique(result, getDeclaredTypeOfTypeParameter(node.symbol));
         }
         return result?.length ? result
-            : isFunctionDeclaration(declaration) ? getSignatureOfTypeTag(declaration)?.typeParameters
+            : isFunctionDeclaration(declaration) ? getSignatureOfTypeTag(declaration, /*allowMembers*/ false)?.typeParameters
             : undefined;
     }
 
@@ -15201,14 +15201,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function getSignatureOfTypeTag(node: SignatureDeclaration | JSDocSignature, allowMembers?: boolean) {
+    function getSignatureOfTypeTag(node: SignatureDeclaration | JSDocSignature, allowMembers: boolean) {
         // should be attached to a function declaration or expression
         if (!(isInJSFile(node) && isFunctionLikeDeclaration(node))) return undefined;
         const typeTag = getJSDocTypeTag(node);
         return typeTag?.typeExpression && getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression), allowMembers);
     }
 
-    function getParameterTypeOfTypeTag(func: FunctionLikeDeclaration, parameter: ParameterDeclaration, allowMembers?: boolean) {
+    function getParameterTypeOfTypeTag(func: FunctionLikeDeclaration, parameter: ParameterDeclaration, allowMembers: boolean) {
         const signature = getSignatureOfTypeTag(func, allowMembers);
         if (!signature) return undefined;
         const pos = func.parameters.indexOf(parameter);
@@ -15216,7 +15216,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getReturnTypeOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
-        const signature = getSignatureOfTypeTag(node);
+        const signature = getSignatureOfTypeTag(node, /*allowMembers*/ false);
         return signature && getReturnTypeOfSignature(signature);
     }
 
@@ -15298,7 +15298,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             result.push(
                 (!isFunctionExpressionOrArrowFunction(decl) &&
                     !isObjectLiteralMethod(decl) &&
-                    getSignatureOfTypeTag(decl)) ||
+                    getSignatureOfTypeTag(decl, /*allowMembers*/ false)) ||
                     getSignatureFromDeclaration(decl),
             );
         }
@@ -15336,7 +15336,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const type = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
                 let jsdocPredicate: TypePredicate | undefined;
                 if (!type) {
-                    const jsdocSignature = getSignatureOfTypeTag(signature.declaration!);
+                    const jsdocSignature = getSignatureOfTypeTag(signature.declaration!, /*allowMembers*/ false);
                     if (jsdocSignature && signature !== jsdocSignature) {
                         jsdocPredicate = getTypePredicateOfSignature(jsdocSignature);
                     }
@@ -20159,7 +20159,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (some(node.parameters, hasType)) {
             return false;
         }
-        const sourceSig = getSingleCallSignature(source);
+        const sourceSig = getSingleCallSignature(source, /*allowMembers*/ false);
         if (!sourceSig) {
             return false;
         }
@@ -20691,8 +20691,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                 // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                 // with respect to T.
-                const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
-                const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType));
+                const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType), /*allowMembers*/ false);
+                const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType), /*allowMembers*/ false);
                 const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
                     getTypeFacts(sourceType, TypeFacts.IsUndefinedOrNull) === getTypeFacts(targetType, TypeFacts.IsUndefinedOrNull);
                 let related = callbacks ?
@@ -29493,7 +29493,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (thisTag && thisTag.typeExpression) {
             return getTypeFromTypeNode(thisTag.typeExpression);
         }
-        const signature = getSignatureOfTypeTag(node);
+        const signature = getSignatureOfTypeTag(node, /*allowMembers*/ false);
         if (signature) {
             return getThisTypeOfSignature(signature);
         }
@@ -30954,7 +30954,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // union type of return types from these signatures
     function getContextualSignature(node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature | undefined {
         Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-        const typeTagSignature = getSignatureOfTypeTag(node);
+        const typeTagSignature = getSignatureOfTypeTag(node, /*allowMembers*/ false);
         if (typeTagSignature) {
             return typeTagSignature;
         }
@@ -33046,7 +33046,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function hasProp(name: "set" | "get") {
             const prop = getPropertyOfObjectType(objectType, name as __String);
             if (prop) {
-                const s = getSingleCallSignature(getTypeOfSymbol(prop));
+                const s = getSingleCallSignature(getTypeOfSymbol(prop), /*allowMembers*/ false);
                 return !!s && getMinArgumentCount(s) >= 1 && isTypeAssignableTo(keyedType, getTypeAtPosition(s, 0));
             }
             return false;
@@ -33487,7 +33487,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     // By default if type has a single call signature and no other members, return that signature. Otherwise, return undefined.
-    function getSingleCallSignature(type: Type, allowMembers = false): Signature | undefined {
+    function getSingleCallSignature(type: Type, allowMembers: boolean): Signature | undefined {
         return getSingleSignature(type, SignatureKind.Call, allowMembers);
     }
 
@@ -33590,7 +33590,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         //   declare function arrayMap<T, U>(f: (x: T) => U): (a: T[]) => U[];
                         //   const boxElements: <A>(a: A[]) => { value: A }[] = arrayMap(value => ({ value }));
                         // Above, the type of the 'value' parameter is inferred to be 'A'.
-                        const contextualSignature = getSingleCallSignature(instantiatedType);
+                        const contextualSignature = getSingleCallSignature(instantiatedType, /*allowMembers*/ false);
                         const inferenceSourceType = contextualSignature && contextualSignature.typeParameters ?
                             getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.typeParameters)) :
                             instantiatedType;
@@ -38999,7 +38999,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNonGenericReturnTypeOfSingleCallSignature(funcType: Type) {
-        const signature = getSingleCallSignature(funcType);
+        const signature = getSingleCallSignature(funcType, /*allowMembers*/ false);
         if (signature) {
             const returnType = getReturnTypeOfSignature(signature);
             if (!signature.typeParameters || !couldContainTypeVariables(returnType)) {
@@ -39502,7 +39502,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isInJSFile(node)) {
                 const typeTag = getJSDocTypeTag(node);
                 if (typeTag && typeTag.typeExpression && isTypeReferenceNode(typeTag.typeExpression.type)) {
-                    const signature = getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
+                    const signature = getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression), /*allowMembers*/ false);
                     if (signature && signature.declaration) {
                         returnTypeNode = getEffectiveReturnTypeNode(signature.declaration);
                         returnTypeErrorLocation = typeTag.typeExpression.type;
