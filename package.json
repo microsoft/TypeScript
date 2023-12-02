@@ -91,7 +91,6 @@
         "build:compiler": "hereby local",
         "build:tests": "hereby tests",
         "build:tests:notypecheck": "hereby tests --no-typecheck",
-        "start": "node bin/tsc",
         "clean": "hereby clean",
         "gulp": "hereby",
         "lint": "hereby lint",
