@@ -1,5 +1,6 @@
 // @allowUnusedLabels: true
 // @allowUnreachableCode: true
+// @isolatedDeclarationDiffReason: DTE resolves unicode escapes in some cases.
 
 /*
     0 .. \u0030

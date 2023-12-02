@@ -490,7 +490,9 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         clonedOptions.allowJs = false;
         clonedOptions.checkJs = false;
         clonedOptions.skipLibCheck = true;
-        clonedOptions.forceDtsEmit = true;
+        if (clonedOptions.forceDtsEmit === undefined) {
+            clonedOptions.forceDtsEmit = true;
+        }
         delete clonedOptions.outFile;
         delete clonedOptions.out;
         delete clonedOptions.declarationMap;

@@ -1,4 +1,5 @@
 // @target: es6
+// @isolatedDeclarationDiffReason: TS normalizes types
 // ok - usage is deferred
 function foo1(y = class {c = x}, x = 1) {
     new y().c;

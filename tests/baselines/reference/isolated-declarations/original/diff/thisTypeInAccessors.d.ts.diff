@@ -1,0 +1,19 @@
+// [[Reason: TS merges accessors wth the same type. DTE can only merge if one type is specified.]] ////
+
+//// [tests/cases/conformance/types/thisType/thisTypeInAccessors.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -6,9 +6,10 @@
+     x: number;
+ }
+ declare const explicit: {
+     n: number;
+-    x: number;
++    get x(this: Foo): number;
++    set x(this: Foo, n: number);
+ };
+ declare const copiedFromGetter: {
+     n: number;
+     x: number;

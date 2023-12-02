@@ -1,0 +1,29 @@
+// [[Reason: TS resolves types]] ////
+
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -15,9 +15,9 @@
+     [x: I]: I;
+ };
+ declare var e: (x: I) => invalid;
+ declare function f(x: I): I;
+-declare var g: (x: any) => any;
++declare var g: (x: I) => I;
+ declare class D extends I {
+ }
+ interface U extends I {
+ }
+@@ -34,9 +34,9 @@
+ }
+ declare function h<T extends I>(x: T): invalid;
+ declare function i<T extends M.E>(x: T): invalid;
+ declare var j: C;
+-declare var k: any;
++declare var k: M.E;
+ 
+ /// [Errors] ////
+ 
+ genericTypeReferenceWithoutTypeArgument2.ts(8,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).

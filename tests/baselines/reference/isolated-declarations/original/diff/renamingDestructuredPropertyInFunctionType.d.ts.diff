@@ -1,0 +1,24 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -42,13 +42,13 @@
+ }
+ declare function f1({ a: string }: O): invalid;
+ declare const f2: ({ a: string }: O) => invalid;
+ declare const f3: ({ a: string, b, c }: O) => invalid;
+-declare const f4: ({ a: string }: O) => string;
+-declare const f5: ({ a: string, b, c }: O) => string;
++declare const f4: ({ a: string }: O) => typeof string;
++declare const f5: ({ a: string, b, c }: O) => typeof string;
+ declare const obj1: invalid;
+ declare const obj2: {
+-    method({ a: string }: O): string;
++    method({ a: string }: O): typeof string;
+ };
+ declare function f6({ a: string }: O): invalid;
+ declare const f7: ({ a: string, b, c }: O) => invalid;
+ declare const f8: ({ "a": string }: O) => invalid;

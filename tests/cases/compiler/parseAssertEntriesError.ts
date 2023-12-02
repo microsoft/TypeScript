@@ -2,6 +2,7 @@
 // @module: nodenext
 // @declaration: true
 // @outDir: out
+// @isolatedDeclarationDiffReason: TS resolves invalid types to any
 // @filename: /node_modules/pkg/package.json
 {
     "name": "pkg",

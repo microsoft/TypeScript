@@ -1,6 +1,7 @@
 // @noImplicitAny: true
 // @noImplicitThis: true
 // @target: es5
+// @isolatedDeclarationDiffReason: TS merges accessors wth the same type. DTE can only merge if one type is specified.
 interface Foo {
     n: number;
     x: number;

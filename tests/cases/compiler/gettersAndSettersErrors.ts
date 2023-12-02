@@ -1,3 +1,4 @@
+// @isolatedDeclarationDiffReason: Duplicate identifiers in class result in different types
 class C {
     public get Foo() { return "foo";} // ok
     public set Foo(foo:string) {} // ok

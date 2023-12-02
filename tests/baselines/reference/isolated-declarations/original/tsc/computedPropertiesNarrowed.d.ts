@@ -59,7 +59,7 @@ export const o9 = {
 export declare let o: invalid;
 declare const y: 0;
 export declare let o2: {
-    [y]: number;
+    0: number;
 };
 export declare let o3: {
     1: number;
@@ -79,7 +79,7 @@ declare let E: {
     readonly A: 1;
 };
 export declare const o8: {
-    [E.A]: number;
+    1: number;
 };
 export declare const o9: invalid;
 export {};

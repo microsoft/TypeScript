@@ -5,6 +5,27 @@ function Foo(): void {
 >Foo : typeof Foo
 
 }
+let d: number = (Foo.inVariableInit = 1);
+>d : number
+>(Foo.inVariableInit = 1) : 1
+>Foo.inVariableInit = 1 : 1
+>Foo.inVariableInit : number
+>Foo : typeof Foo
+>inVariableInit : number
+>1 : 1
+
+
+function bar(p = (Foo.inNestedFunction = 1)) {
+>bar : (p?: number) => void
+>p : number
+>(Foo.inNestedFunction = 1) : 1
+>Foo.inNestedFunction = 1 : 1
+>Foo.inNestedFunction : any
+>Foo : typeof Foo
+>inNestedFunction : any
+>1 : 1
+
+}
 
 (Foo.bla = { foo: 1}).foo = (Foo.baz = 1) + (Foo.bar  = 0);
 >(Foo.bla = { foo: 1}).foo = (Foo.baz = 1) + (Foo.bar  = 0) : number

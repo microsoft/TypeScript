@@ -1,0 +1,14 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/compiler/declarationEmitNoNonRequiredParens.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -6,5 +6,5 @@
+     B = 1,
+     C = 2
+ }
+ export type TestType = typeof Test;
+-export declare const bar: Test[];
++export declare const bar: TestType[Extract<keyof TestType, string>][];

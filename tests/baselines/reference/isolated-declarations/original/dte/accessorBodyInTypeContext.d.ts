@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/accessorBodyInTypeContext.ts] ////
+
+//// [accessorBodyInTypeContext.ts]
+type A = {
+    get foo() { return 0 }
+};
+
+type B = {
+    set foo(v: any) { }
+};
+
+interface X {
+    get foo() { return 0 }
+}
+
+interface Y {
+    set foo(v: any) { }
+}
+
+
+
+/// [Declarations] ////
+
+
+
+//// [accessorBodyInTypeContext.d.ts]
+type A = {
+    get foo(): any;
+};
+type B = {
+    set foo(v: any);
+};
+interface X {
+    get foo(): any;
+}
+interface Y {
+    set foo(v: any);
+}
+
+/// [Errors] ////
+
+accessorBodyInTypeContext.ts(2,15): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorBodyInTypeContext.ts(6,21): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorBodyInTypeContext.ts(10,15): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorBodyInTypeContext.ts(14,21): error TS1183: An implementation cannot be declared in ambient contexts.
+
+
+==== accessorBodyInTypeContext.ts (4 errors) ====
+    type A = {
+        get foo() { return 0 }
+                  ~~~~~~~~~~~~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+    };
+    
+    type B = {
+        set foo(v: any) { }
+                        ~~~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+    };
+    
+    interface X {
+        get foo() { return 0 }
+                  ~~~~~~~~~~~~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+    }
+    
+    interface Y {
+        set foo(v: any) { }
+                        ~~~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+    }
+    
+    

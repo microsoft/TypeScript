@@ -34,7 +34,7 @@ export interface MutableRefObject<T> {
     current: T;
 }
 export declare function useRef<T>(current: T): MutableRefObject<T>;
-export declare const useCsvParser: invalid;
+export declare const useCsvParser: () => invalid;
 //# sourceMappingURL=index.d.ts.map
 /// [Errors] ////
 

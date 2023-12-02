@@ -1,4 +1,5 @@
 // @sourcemap: true
+// @isolatedDeclarationDiffReason: TS normalizes types
 // DEFAULT INTERFACES
 interface IFoo {
     n: number;

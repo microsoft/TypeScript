@@ -1,0 +1,28 @@
+// [[Reason: TS resolves invalid types to any]] ////
+
+//// [tests/cases/conformance/types/thisType/thisTypeErrors.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -42,18 +42,18 @@
+     };
+ }
+ declare class C2 {
+     static x: this;
+-    static y: any;
++    static y: this;
+     static foo(x: this): this;
+ }
+ declare namespace N1 {
+     var x: this;
+     var y: invalid;
+ }
+ declare class C3 {
+     x1: {
+-        g(x: any): any;
++        g(x: this): this;
+     };
+     f(): invalid;
+ }
+ 

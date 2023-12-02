@@ -48,9 +48,7 @@ declare const typedArray: invalid;
 
 //// [b.d.ts]
 declare const a: {};
-declare const b: {
-    [1n]: number;
-};
+declare const b: invalid;
 declare const c: invalid;
 
 /// [Errors] ////
@@ -64,6 +62,7 @@ b.ts(2,12): error TS1136: Property assignment expected.
 b.ts(2,14): error TS1005: ';' expected.
 b.ts(2,19): error TS1128: Declaration or statement expected.
 b.ts(3,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+b.ts(3,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 b.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 b.ts(4,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 
@@ -103,7 +102,7 @@ b.ts(4,12): error TS9007: Declaration emit for this file requires type resolutio
     typedArray[2] = 0xCC;
     
     // {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
-==== b.ts (6 errors) ====
+==== b.ts (7 errors) ====
     // BigInt cannot be used as an object literal property
     const a = {1n: 123};
                ~~
@@ -115,6 +114,8 @@ b.ts(4,12): error TS9007: Declaration emit for this file requires type resolutio
     const b = {[1n]: 456};
                ~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+               ~~~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     const c = {[bigNum]: 789};
                ~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.

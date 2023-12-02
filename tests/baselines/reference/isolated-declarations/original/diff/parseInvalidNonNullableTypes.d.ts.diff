@@ -1,0 +1,21 @@
+// [[Reason: Syntactically invalid.]] ////
+
+//// [tests/cases/compiler/parseInvalidNonNullableTypes.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -8,11 +8,11 @@
+ declare function f5(a: !string): invalid;
+ declare function f6(a: !number): invalid;
+ declare function f7(): !string;
+ declare function f8(): !string;
+-declare const a: any;
++declare const a: !any;
+ declare const b: !number;
+-declare const c: any;
++declare const c: !any;
+ declare const d: !number;
+ 
+ /// [Errors] ////
+ 

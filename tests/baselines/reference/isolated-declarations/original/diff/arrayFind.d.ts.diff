@@ -1,0 +1,18 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/compiler/arrayFind.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -3,9 +3,9 @@
+ //// [arrayFind.d.ts]
+ declare function isNumber(x: any): x is number;
+ declare const arrayOfStringsNumbersAndBooleans: invalid;
+ declare const foundNumber: number | undefined;
+-declare const readonlyArrayOfStringsNumbersAndBooleans: readonly (string | number | boolean)[];
++declare const readonlyArrayOfStringsNumbersAndBooleans: ReadonlyArray<string | number | boolean>;
+ declare const readonlyFoundNumber: number | undefined;
+ 
+ /// [Errors] ////
+ 

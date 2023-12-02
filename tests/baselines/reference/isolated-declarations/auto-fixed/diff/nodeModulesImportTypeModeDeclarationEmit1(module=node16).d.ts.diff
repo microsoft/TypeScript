@@ -1,4 +1,4 @@
-// [[Reason: TODO: Import type has different module attributes]] ////
+// [[Reason: TSC simplifies import type removing resolution-mode and uses with instead of assert]] ////
 
 //// [tests/cases/conformance/node/nodeModulesImportTypeModeDeclarationEmit1.ts] ////
 

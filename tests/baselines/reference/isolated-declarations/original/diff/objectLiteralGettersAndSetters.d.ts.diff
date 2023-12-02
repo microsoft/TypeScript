@@ -1,0 +1,34 @@
+// [[Reason: TS merges accessors wth the same type. DTE can only merge if one type is specified.]] ////
+
+//// [tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -40,18 +40,22 @@
+     x: any;
+ };
+ declare var anyVar: any;
+ declare var sameType1: {
+-    x: string;
++    get x(): string;
++    set x(n: string);
+ };
+ declare var sameType2: {
+-    x: number[];
++    get x(): Array<number>;
++    set x(n: number[]);
+ };
+ declare var sameType3: {
+-    x: any;
++    get x(): any;
++    set x(n: typeof anyVar);
+ };
+ declare var sameType4: {
+-    x: Date;
++    get x(): Date;
++    set x(n: Date);
+ };
+ declare var setParamType1: {
+     n: (t: string) => void;
+ };

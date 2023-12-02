@@ -1,0 +1,18 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/conformance/types/literal/literalTypesAndTypeAssertions.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -5,9 +5,9 @@
+     a: "foo";
+     b: "foo";
+     c: string;
+ };
+-declare let x1: 0 | 1;
++declare let x1: (0 | 1);
+ declare let x2: number;
+ declare let a: invalid;
+ declare let b: invalid;
+ declare let c: invalid;

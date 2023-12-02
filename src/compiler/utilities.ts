@@ -340,6 +340,7 @@ import {
     isString,
     isStringLiteral,
     isStringLiteralLike,
+    isTemplateExpression,
     isTypeAliasDeclaration,
     isTypeElement,
     isTypeLiteralNode,
@@ -10903,4 +10904,26 @@ export function createEntityVisibilityChecker<T extends { flags: SymbolFlags; de
     }
 
     return { hasVisibleDeclarations, isEntityNameVisible };
+}
+
+/** @internal */
+export function isPrimitiveLiteralValue(node: Expression, includeBigInt = true): boolean {
+    if (isBigIntLiteral(node)) return includeBigInt;
+    if (isNumericLiteral(node) || isStringLiteralLike(node)) return true;
+
+    if (node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) return true;
+
+    if (isPrefixUnaryExpression(node)) {
+        const operand = node.operand;
+        if (node.operator === SyntaxKind.MinusToken) {
+            return isNumericLiteral(operand) || (includeBigInt && isBigIntLiteral(operand));
+        }
+        if (node.operator === SyntaxKind.PlusToken) {
+            return isNumericLiteral(operand);
+        }
+    }
+    if (isTemplateExpression(node)) {
+        return node.templateSpans.every(t => isPrimitiveLiteralValue(t.expression));
+    }
+    return false;
 }

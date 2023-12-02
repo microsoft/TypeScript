@@ -1,0 +1,40 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -23,26 +23,26 @@
+ declare var h: () => typeof h;
+ declare var i: (x: typeof i) => typeof x;
+ declare var i: (x: typeof i) => typeof x;
+ declare var j: <T extends typeof j>(x: T) => T;
+-declare var j: <T extends any>(x: T) => T;
++declare var j: <T extends typeof j>(x: T) => T;
+ declare var h2: new () => typeof h2;
+ declare var h2: new () => typeof h2;
+ declare var i2: new (x: typeof i2) => typeof x;
+ declare var i2: new (x: typeof i2) => typeof x;
+ declare var j2: new <T extends typeof j2>(x: T) => T;
+-declare var j2: new <T extends any>(x: T) => T;
++declare var j2: new <T extends typeof j2>(x: T) => T;
+ declare var k: {
+     [n: number]: typeof k;
+     [s: string]: typeof k;
+ };
+ declare var k: {
+-    [n: number]: any;
+-    [s: string]: any;
++    [n: number]: typeof k;
++    [s: string]: typeof k;
+ };
+ declare var k: {
+-    [n: number]: any;
+-    [s: string]: any;
++    [n: number]: typeof k;
++    [s: string]: typeof k;
+ };
+ declare var hy1: {
+     x: typeof hy1;
+ }[];

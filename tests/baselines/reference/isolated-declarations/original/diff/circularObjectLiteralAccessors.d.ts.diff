@@ -1,0 +1,18 @@
+// [[Reason: TS merges accessors wth the same type. DTE can only merge if one type is specified.]] ////
+
+//// [tests/cases/compiler/circularObjectLiteralAccessors.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -2,8 +2,9 @@
+ 
+ //// [circularObjectLiteralAccessors.d.ts]
+ declare const a: {
+     b: {
+-        foo: string;
++        get foo(): string;
++        set foo(value: string);
+     };
+     foo: string;
+ };

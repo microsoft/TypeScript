@@ -1,4 +1,5 @@
 // @lib: es2015
+// @isolatedDeclarationDiffReason: TS normalizes types
 
 // test fix for #18112, type guard predicates should narrow returned element
 function isNumber(x: any): x is number {

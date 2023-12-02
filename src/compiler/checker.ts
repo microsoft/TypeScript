@@ -461,7 +461,6 @@ import {
     isAssignmentTarget,
     isAutoAccessorPropertyDeclaration,
     isAwaitExpression,
-    isBigIntLiteral,
     isBinaryExpression,
     isBindableObjectDefinePropertyCall,
     isBindableStaticElementAccessExpression,
@@ -678,6 +677,7 @@ import {
     isPartOfTypeQuery,
     isPlainJsFile,
     isPrefixUnaryExpression,
+    isPrimitiveLiteralValue,
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
     isPrivateIdentifierPropertyAccessExpression,
@@ -721,7 +721,6 @@ import {
     isSuperCall,
     isSuperProperty,
     isTaggedTemplateExpression,
-    isTemplateExpression,
     isTemplateSpan,
     isThisContainerOrFunctionBlock,
     isThisIdentifier,
@@ -47885,26 +47884,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function isPrimitiveLiteralValue(node: Expression): boolean {
-        if (isNumericLiteral(node) || isBigIntLiteral(node) || isStringLiteralLike(node)) return true;
-
-        if (node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) return true;
-
-        if (isPrefixUnaryExpression(node)) {
-            const operand = node.operand;
-            if (node.operator === SyntaxKind.MinusToken) {
-                return isNumericLiteral(operand) || isBigIntLiteral(operand);
-            }
-            if (node.operator === SyntaxKind.PlusToken) {
-                return isNumericLiteral(operand);
-            }
-        }
-        if (isTemplateExpression(node)) {
-            return node.templateSpans.every(t => isPrimitiveLiteralValue(t.expression));
-        }
-        return false;
-    }
-
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
         if (isDeclarationReadonly(node) || (isVariableDeclaration(node) && isVarConstLike(node)) || isEnumMember(node)) {
             if (compilerOptions.isolatedDeclarations) {
@@ -47916,7 +47895,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
     function isLiteralComputedName(node: ComputedPropertyName) {
         const expression = node.expression;
-        if (isPrimitiveLiteralValue(expression)) {
+        if (isPrimitiveLiteralValue(expression, /*includeBigInt*/ false)) {
             return true;
         }
         const type = getTypeOfExpression(expression);

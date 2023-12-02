@@ -1,4 +1,4 @@
-// [[Reason: TODO: Import type has different module attributes]] ////
+// [[Reason: TSC simplifies import type removing resolution-mode]] ////
 
 //// [tests/cases/conformance/node/nodeModulesImportAttributesTypeModeDeclarationEmit.ts] ////
 

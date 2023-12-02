@@ -1,3 +1,4 @@
+// @isolatedDeclarationDiffReason: Computed property are not resolved
 const n = 1;
 const s = "s";
 enum E1 { A = "ENUM_KEY" }

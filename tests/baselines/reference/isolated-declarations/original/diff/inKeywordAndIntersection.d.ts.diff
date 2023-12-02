@@ -1,0 +1,20 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/compiler/inKeywordAndIntersection.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -16,9 +16,11 @@
+ interface InstanceTwo {
+     two(): void;
+ }
+ declare const instance: InstanceOne | InstanceTwo;
+-declare const ClassOne: (new () => InstanceOne) & {
++declare const ClassOne: {
++    new (): InstanceOne;
++} & {
+     foo: true;
+ };
+ 
+ /// [Errors] ////

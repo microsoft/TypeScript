@@ -1,34 +1,33 @@
 import {
     __String,
     ArrayBindingElement,
-    BinaryExpression,
     BindingPattern,
-    ClassDeclaration,
-    ClassElement,
     ComputedPropertyName,
-    Debug,
     Declaration,
     EnumDeclaration,
-    EnumMember,
     Expression,
     factory,
     findAncestor,
     forEachChild,
-    FunctionDeclaration,
+    getCombinedNodeFlags,
     getModuleInstanceState,
     getNodeId,
     hasAmbientModifier,
     hasSyntacticModifier,
-    InterfaceDeclaration,
+    isAccessor,
+    isArrayBindingPattern,
     isBinaryExpression,
     isBindingPattern,
     isBlock,
+    isBlockOrCatchScoped,
     isBlockScopedContainerTopLevel,
     isClassDeclaration,
+    isClassExpression,
     isComputedPropertyName,
     isConditionalTypeNode,
     isConstructorDeclaration,
     isConstructSignatureDeclaration,
+    isDeclaration,
     isDoStatement,
     isElementAccessExpression,
     isEnumConst,
@@ -47,13 +46,18 @@ import {
     isImportEqualsDeclaration,
     isInferTypeNode,
     isInterfaceDeclaration,
+    isJsxNamespacedName,
     isLabeledStatement,
     isMappedTypeNode,
+    isMethodDeclaration,
     isModuleBlock,
     isModuleDeclaration,
     isNamedExports,
     isNumericLiteral,
-    isParameterDeclaration,
+    isObjectBindingPattern,
+    isObjectLiteralExpression,
+    isParenthesizedExpression,
+    isParenthesizedTypeNode,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -61,6 +65,7 @@ import {
     isSourceFile,
     isStringLiteralLike,
     isTypeAliasDeclaration,
+    isTypeLiteralNode,
     isVarConst,
     isVariableDeclaration,
     isVariableDeclarationList,
@@ -70,19 +75,20 @@ import {
     ModifierFlags,
     ModuleDeclaration,
     ModuleInstanceState,
+    NamedDeclaration,
     Node,
     NodeArray,
+    NodeFlags,
     NoSubstitutionTemplateLiteral,
-    ObjectLiteralElement,
+    ObjectLiteralExpression,
     ParameterDeclaration,
+    PropertyDeclaration,
     PropertyName,
     setValueDeclaration,
     SourceFile,
     Symbol,
     SymbolFlags,
     SyntaxKind,
-    TypeAliasDeclaration,
-    TypeElement,
     TypeParameterDeclaration,
     VariableDeclaration,
 } from "../../_namespaces/ts";
@@ -102,8 +108,10 @@ export type EmitDeclarationSymbolTable = Map<MemberKey, EmitDeclarationSymbol>;
 /** @internal */
 export interface EmitDeclarationSymbol {
     name?: MemberKey;
+    parent?: EmitDeclarationSymbol;
     exportSymbol?: EmitDeclarationSymbol;
     declarations: Declaration[];
+    valueDeclaration?: Declaration;
     signatureDeclarations?: Node[];
     flags: SymbolFlags;
     members?: EmitDeclarationSymbolTable;
@@ -117,7 +125,10 @@ interface SymbolRegistrationFlags {
 const syntaxKindToSymbolMap = {
     [SyntaxKind.TypeParameter]: { includes: SymbolFlags.TypeParameter, excludes: SymbolFlags.TypeParameterExcludes },
     [SyntaxKind.Parameter]: { includes: SymbolFlags.FunctionScopedVariable, excludes: SymbolFlags.ParameterExcludes },
-    [SyntaxKind.VariableDeclaration]: { includes: SymbolFlags.BlockScopedVariable, excludes: SymbolFlags.BlockScopedVariableExcludes },
+    [SyntaxKind.VariableDeclaration]: {
+        fnScope: { includes: SymbolFlags.FunctionScopedVariable, excludes: SymbolFlags.FunctionScopedVariableExcludes },
+        blockScope: { includes: SymbolFlags.BlockScopedVariable, excludes: SymbolFlags.BlockScopedVariableExcludes },
+    },
     [SyntaxKind.BindingElement]: { includes: SymbolFlags.BlockScopedVariable, excludes: SymbolFlags.BlockScopedVariableExcludes },
     [SyntaxKind.PropertyDeclaration]: { includes: SymbolFlags.Property, excludes: SymbolFlags.PropertyExcludes },
     [SyntaxKind.PropertySignature]: { includes: SymbolFlags.Property, excludes: SymbolFlags.PropertyExcludes },
@@ -240,6 +251,11 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
     }
 
     function getSymbolFlagsForNode(node: Node & { kind: keyof typeof syntaxKindToSymbolMap; }) {
+        if (node.kind === SyntaxKind.VariableDeclaration) {
+            return getCombinedNodeFlags(node) & NodeFlags.BlockScoped ?
+                syntaxKindToSymbolMap[node.kind].blockScope :
+                syntaxKindToSymbolMap[node.kind].fnScope;
+        }
         if (node.kind === SyntaxKind.EnumDeclaration) {
             return isEnumConst(node as EnumDeclaration) ?
                 syntaxKindToSymbolMap[node.kind].const :
@@ -252,30 +268,33 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         }
         return syntaxKindToSymbolMap[node.kind];
     }
-    function getElementFlagsOrThrow(node: Node) {
-        const result = getSymbolFlagsForNode(node as Node & { kind: keyof typeof syntaxKindToSymbolMap; });
-        if (!result) {
-            throw new Error("Unknown binding element type");
-        }
-        return result;
-    }
-
     function bind() {
         /* eslint-disable no-var */
         var currentScope: Node = undefined!;
+        var currentFunctionLocalSymbolTable: EmitDeclarationSymbolTable = undefined!;
         var currentSymbol: EmitDeclarationSymbol = undefined!;
         var currentLocalSymbolTable: EmitDeclarationSymbolTable = undefined!;
         var currentExportsSymbolTable: EmitDeclarationSymbolTable | undefined;
         var postBindingAction: (() => void)[] = [];
 
         var fileLinks = getNodeLinks(file).symbol = createEmitSymbol();
+        fileLinks.declarations.push(file);
+        setValueDeclaration(fileLinks as Symbol, file);
         /* eslint-enable no-var */
         fileLinks.exports = new Map();
         withScope(file, fileLinks.exports, () => bindEachFunctionsFirst(file.statements));
         postBindingAction.forEach(fn => fn());
 
+        function createAnonymousEmitSymbol(node: Declaration): EmitDeclarationSymbol {
+            const symbol = createEmitSymbol();
+            symbol.declarations.push(node);
+            setValueDeclaration(symbol as Symbol, node);
+            node.symbol = symbol as Symbol;
+            return symbol;
+        }
         function createEmitSymbol(): EmitDeclarationSymbol {
             return {
+                parent: currentSymbol,
                 declarations: [],
                 flags: 0,
             };
@@ -289,11 +308,11 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
             }
             return symbol;
         }
-        function addLocalAndExportDeclaration(name: LocalAndExportName | MemberKey | undefined, node: Declaration, flags: SymbolRegistrationFlags, isExport: boolean) {
+        function addLocalAndExportDeclaration(name: LocalAndExportName | MemberKey | undefined, node: Declaration, flags: SymbolRegistrationFlags, isExport: boolean, isBlockScoped = true) {
             const { exportName, localName } = typeof name === "object" ? name : { exportName: name, localName: name };
             if (isExport) {
                 const exportKind = flags.includes & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
-                const localSymbol = addLocalOnlyDeclaration(localName, node, { includes: exportKind, excludes: flags.excludes });
+                const localSymbol = addLocalOnlyDeclaration(localName, node, { includes: exportKind, excludes: flags.excludes }, isBlockScoped);
                 const exportSymbol = addExportOnlyDeclaration(exportName, node, flags);
                 localSymbol.exportSymbol = exportSymbol;
                 // Export symbol can be undefined if the export modifier was placed in an unexpected position.
@@ -301,7 +320,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                 return exportSymbol ?? localSymbol;
             }
             else {
-                return addLocalOnlyDeclaration(localName, node, flags);
+                return addLocalOnlyDeclaration(localName, node, flags, isBlockScoped);
             }
         }
         function addExportOnlyDeclaration(name: MemberKey | undefined, node: Declaration, flagsAndForbiddenFlags: SymbolRegistrationFlags) {
@@ -310,8 +329,8 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
             }
             return addDeclaration(currentExportsSymbolTable, name, node, flagsAndForbiddenFlags);
         }
-        function addLocalOnlyDeclaration(name: MemberKey | undefined, node: Declaration, flagsAndForbiddenFlags: SymbolRegistrationFlags) {
-            return addDeclaration(currentLocalSymbolTable, name, node, flagsAndForbiddenFlags);
+        function addLocalOnlyDeclaration(name: MemberKey | undefined, node: Declaration, flagsAndForbiddenFlags: SymbolRegistrationFlags, isBlockScoped = true) {
+            return addDeclaration(isBlockScoped ? currentLocalSymbolTable : currentFunctionLocalSymbolTable, name, node, flagsAndForbiddenFlags);
         }
 
         function addDeclaration(table: EmitDeclarationSymbolTable, name: MemberKey | undefined, node: Declaration, { includes, excludes }: SymbolRegistrationFlags) {
@@ -324,21 +343,25 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                 }
             }
             symbol.declarations.push(node);
-            symbol.flags |= includes;
             setValueDeclaration(symbol as Symbol, node);
+            symbol.flags |= includes;
             getNodeLinks(node).symbol = symbol;
             // Some parts of declarations.ts use the symbol directly. We provide enough of it for everything to work.
             node.symbol = symbol as Symbol;
             return symbol;
         }
         function withScope(scope: Node, exports: EmitDeclarationSymbolTable | undefined, fn: () => void) {
-            const old = [currentScope, currentLocalSymbolTable, currentExportsSymbolTable] as const;
+            const old = [currentScope, currentSymbol, currentFunctionLocalSymbolTable, currentLocalSymbolTable, currentExportsSymbolTable] as const;
             currentScope = scope;
             const links = getNodeLinks(scope);
             currentLocalSymbolTable = links.locals ??= new Map();
+            currentSymbol = links.symbol ?? currentSymbol;
             currentExportsSymbolTable = exports;
+            if (isBlockScopedContainerTopLevel(scope)) {
+                currentFunctionLocalSymbolTable = currentLocalSymbolTable;
+            }
             fn();
-            [currentScope, currentLocalSymbolTable, currentExportsSymbolTable] = old;
+            [currentScope, currentSymbol, currentFunctionLocalSymbolTable, currentLocalSymbolTable, currentExportsSymbolTable] = old;
         }
         function withMembers(symbol: EmitDeclarationSymbol, table: "members" | "exports" = "members", fn: () => void) {
             const old = [currentLocalSymbolTable, currentSymbol] as const;
@@ -352,72 +375,29 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
             exportName?: MemberKey;
             localName?: MemberKey;
         }
-        function getStatementName(s: TypeAliasDeclaration | EnumDeclaration | InterfaceDeclaration | ClassDeclaration | FunctionDeclaration): undefined | MemberKey | LocalAndExportName {
+        function getStatementName(s: NamedDeclaration): undefined | MemberKey | LocalAndExportName {
             if (hasSyntacticModifier(s, ModifierFlags.Export) && hasSyntacticModifier(s, ModifierFlags.Default)) {
                 return {
                     exportName: "default" as MemberKey,
-                    localName: getMemberKey(s.name),
+                    localName: getMemberKeyFromElement(s),
                 };
             }
-            if (s.name) {
-                return getMemberKey(s.name);
+            if (s) {
+                return getMemberKeyFromElement(s);
             }
         }
-        // We need to bind locals for types (conditional and mapped typed define parameters in their definitions)
-        function bindTypeExpressions(node?: Node) {
-            function bindChildren(node: Node) {
-                forEachChild(node, bindWorker, arr => arr.forEach(bindWorker));
-            }
-            function bindWorker(node?: Node) {
-                if (!node) return;
-                if (isMappedTypeNode(node)) {
-                    const mappedType = node;
-                    withScope(node, /*exports*/ undefined, () => {
-                        bindTypeParameters([mappedType.typeParameter]);
-                    });
-                    bindWorker(mappedType.nameType);
-                    bindWorker(mappedType.type);
-                }
-                else if (isConditionalTypeNode(node)) {
-                    withScope(node.extendsType, /*exports*/ undefined, () => {
-                        bindWorker(node.extendsType);
-                    });
-                    bindWorker(node.checkType);
-                    bindWorker(node.falseType);
-                    getNodeLinks(node.trueType).locals = getNodeLinks(node.extendsType).locals;
-                    bindWorker(node.trueType);
-                }
-                else if (isInferTypeNode(node)) {
-                    const conditionalTypeOwner = findAncestor(node, isConditionalTypeNode);
-                    // Probably an error, infer not in a conditional type context
-                    // Try to bind the rest of it
-                    if (conditionalTypeOwner) {
-                        withScope(conditionalTypeOwner, /*exports*/ undefined, () => {
-                            bindTypeParameters([node.typeParameter]);
-                        });
-                    }
-                    bindChildren(node);
-                }
-                else if (isBlock(node)) {
-                    // Do not go into bodies
-                    return;
-                }
-                else {
-                    bindChildren(node);
-                }
-            }
-            bindWorker(node);
-        }
+
         function bindTypeParameters(typeParameters: TypeParameterDeclaration[] | NodeArray<TypeParameterDeclaration> | undefined) {
             typeParameters?.forEach(t => addLocalOnlyDeclaration(getMemberKey(t.name), t, getSymbolFlagsForNode(t)));
         }
-        function bindVariable(d: VariableDeclaration | ParameterDeclaration) {
-            bindTypeExpressions(d.type);
+        function bindVariable(d: VariableDeclaration | ParameterDeclaration | PropertyDeclaration) {
+            bindNode(d.type);
             const isExported = isExportedVariable(d);
-            if (isIdentifier(d.name)) {
-                addLocalAndExportDeclaration(getMemberKey(d.name), d, getSymbolFlagsForNode(d), isExported);
+            const isBlockScoped = isBlockOrCatchScoped(d);
+            if (d.initializer) {
+                bindNode(d.initializer);
             }
-            else if (isBindingPattern(d.name)) {
+            if (isBindingPattern(d.name)) {
                 function bindBindingPattern(pattern: BindingPattern) {
                     // type BindingPattern = ObjectBindingPattern | ArrayBindingPattern;
                     (pattern.elements as NodeArray<ArrayBindingElement>).forEach(b => {
@@ -425,7 +405,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                         if (!b.name) return;
 
                         if (isIdentifier(b.name)) {
-                            addLocalAndExportDeclaration(getMemberKey(b.name), b, getSymbolFlagsForNode(b), isExported);
+                            addLocalAndExportDeclaration(getMemberKey(b.name), b, getSymbolFlagsForNode(b), isExported, isBlockScoped);
                         }
                         else {
                             bindBindingPattern(b.name);
@@ -435,10 +415,10 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                 bindBindingPattern(d.name);
             }
             else {
-                Debug.assertNever(d.name);
+                addLocalAndExportDeclaration(getMemberKeyFromElement(d), d, getSymbolFlagsForNode(d), isExported, isBlockScoped);
             }
-            function isExportedVariable(d: VariableDeclaration | ParameterDeclaration) {
-                if (isParameterDeclaration(d)) return false;
+            function isExportedVariable(d: VariableDeclaration | ParameterDeclaration | PropertyDeclaration) {
+                if (!isVariableDeclaration(d)) return false;
                 // exported directly
                 if (hasSyntacticModifier(d.parent.parent, ModifierFlags.Export)) {
                     return true;
@@ -455,13 +435,6 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         }
         function bindExpandoMembers(expression: Node) {
             if (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.EqualsToken) {
-                bindExpandoMemberAssignment(expression);
-            }
-            forEachChild(expression, node => {
-                bindExpandoMembers(node);
-            });
-
-            function bindExpandoMemberAssignment(expression: BinaryExpression) {
                 const assignmentTarget = expression.left;
                 const isPropertyAccess = isPropertyAccessExpression(assignmentTarget);
                 if (
@@ -482,6 +455,9 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                     const fn = target.declarations.find(canHaveExpandoMembers);
                     if (!fn) return;
 
+                    const parentLocals = target.parent?.valueDeclaration && getNodeLinks(target.parent.valueDeclaration).locals;
+                    if (currentFunctionLocalSymbolTable !== parentLocals) return;
+
                     target.exports ??= new Map();
                     if (target.exportSymbol) {
                         target.exportSymbol.exports = target.exports;
@@ -495,36 +471,91 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                     });
                 }
             }
-            function canHaveExpandoMembers(declaration: Node) {
-                if (isFunctionDeclaration(declaration)) {
-                    return true;
-                }
-                else if (isVariableDeclaration(declaration)) {
-                    if (declaration.type || !isVarConst(declaration)) {
-                        return false;
-                    }
-                    if (!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
-                        return false;
-                    }
-                    return true;
-                }
-            }
         }
 
+        function canHaveExpandoMembers(declaration: Node) {
+            if (isFunctionDeclaration(declaration)) {
+                return true;
+            }
+            else if (isVariableDeclaration(declaration)) {
+                if (declaration.type || !isVarConst(declaration)) {
+                    return false;
+                }
+                if (!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
+                    return false;
+                }
+                return true;
+            }
+        }
+        function bindObjectLiteral(object: ObjectLiteralExpression) {
+            const objectSymbol = createAnonymousEmitSymbol(object);
+
+            withMembers(objectSymbol, "members", () => {
+                object.properties.forEach(m => {
+                    bindNode(m);
+                });
+            });
+        }
         function bindContainer(statements: NodeArray<Node> | Node[], filter: (node: Node) => boolean) {
             statements.forEach(statement => {
                 if (!filter(statement)) return;
                 bindNode(statement);
             });
         }
+        function bindChildren(node: Node) {
+            forEachChild(node, bindNode, arr => arr.forEach(bindNode));
+        }
         function bindNode(node: Node | undefined) {
             if (!node) return;
             const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
-            if (isExpressionStatement(node)) {
-                bindExpandoMembers(node.expression);
+
+            if (isParenthesizedExpression(node)) {
+                bindNode(node.expression);
             }
-            else if (isExpression(node)) {
-                bindExpandoMembers(node);
+            else if (isParenthesizedTypeNode(node)) {
+                bindNode(node.type);
+            }
+            else if (isObjectLiteralExpression(node)) {
+                bindObjectLiteral(node);
+            }
+            else if (isMappedTypeNode(node)) {
+                const mappedType = node;
+                withScope(node, /*exports*/ undefined, () => {
+                    bindTypeParameters([mappedType.typeParameter]);
+                });
+                bindNode(mappedType.nameType);
+                bindNode(mappedType.type);
+            }
+            else if (isConditionalTypeNode(node)) {
+                withScope(node.extendsType, /*exports*/ undefined, () => {
+                    bindNode(node.extendsType);
+                });
+                bindNode(node.checkType);
+                bindNode(node.falseType);
+                getNodeLinks(node.trueType).locals = getNodeLinks(node.extendsType).locals;
+                bindNode(node.trueType);
+            }
+            else if (isInferTypeNode(node)) {
+                const conditionalTypeOwner = findAncestor(node, isConditionalTypeNode);
+                // Probably an error, infer not in a conditional type context
+                // Try to bind the rest of it
+                if (conditionalTypeOwner) {
+                    withScope(conditionalTypeOwner, /*exports*/ undefined, () => {
+                        bindTypeParameters([node.typeParameter]);
+                    });
+                }
+                bindChildren(node);
+            }
+            else if (isExpressionStatement(node)) {
+                bindNode(node.expression);
+            }
+            else if (isFunctionExpressionOrArrowFunction(node)) {
+                createAnonymousEmitSymbol(node);
+                withScope(node, /*exports*/ undefined, () => {
+                    bindTypeParameters(node.typeParameters);
+                    bindNode(node.type);
+                    node.parameters.forEach(bindVariable);
+                });
             }
             else if (isImportEqualsDeclaration(node)) {
                 addLocalOnlyDeclaration(getMemberKey(node.name), node, getSymbolFlagsForNode(node));
@@ -557,22 +588,26 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
             else if (isVariableDeclarationList(node)) {
                 node.declarations.forEach(bindVariable);
             }
-            else if (isFunctionDeclaration(node)) {
-                bindTypeParameters(node.typeParameters);
-                bindTypeExpressions(node.type);
+            else if (isFunctionDeclaration(node) || isConstructorDeclaration(node) || isMethodDeclaration(node) || isAccessor(node)) {
+                addLocalAndExportDeclaration(getStatementName(node), node, getSymbolFlagsForNode(node), isExported);
                 withScope(node, /*exports*/ undefined, () => {
-                    bindTypeExpressions(node);
+                    bindTypeParameters(node.typeParameters);
+                    bindNode(node.type);
                     node.parameters.forEach(bindVariable);
                 });
-
-                addLocalAndExportDeclaration(getStatementName(node), node, getSymbolFlagsForNode(node), isExported);
+            }
+            else if (isTypeLiteralNode(node)) {
+                const objectSymbol = createAnonymousEmitSymbol(node);
+                withMembers(objectSymbol, "members", () => {
+                    node.members.forEach(bindNode);
+                });
             }
             else if (isTypeAliasDeclaration(node)) {
                 addLocalAndExportDeclaration(getStatementName(node), node, getSymbolFlagsForNode(node), isExported);
                 withScope(node, /*exports*/ undefined, () => {
                     bindTypeParameters(node.typeParameters);
+                    bindNode(node.type);
                 });
-                bindTypeExpressions(node.type);
             }
             // Default export declarations set isVisible on true on associated symbols in the type checker.
             else if (isExportAssignment(node)) {
@@ -650,12 +685,11 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                 });
                 withMembers(interfaceSymbol, "members", () => {
                     interfaceDeclaration.members.forEach(m => {
-                        addLocalOnlyDeclaration(getMemberKeyFromElement(m), m, getElementFlagsOrThrow(m));
-                        bindTypeExpressions(m);
+                        bindNode(m);
                     });
                 });
             }
-            else if (isClassDeclaration(node)) {
+            else if (isClassDeclaration(node) || isClassExpression(node)) {
                 const classDeclaration = node;
                 const classSymbol = addLocalAndExportDeclaration(getStatementName(classDeclaration), classDeclaration, getSymbolFlagsForNode(classDeclaration), isExported);
                 withScope(classDeclaration, /*exports*/ undefined, () => {
@@ -666,8 +700,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                         if (hasSyntacticModifier(m, ModifierFlags.Static)) return;
                         if (m.kind === SyntaxKind.SemicolonClassElement || m.kind === SyntaxKind.ClassStaticBlockDeclaration) return;
 
-                        addLocalOnlyDeclaration(getMemberKeyFromElement(m), m, getElementFlagsOrThrow(m));
-                        bindTypeExpressions(m);
+                        bindNode(m);
                     });
                 });
                 withMembers(classSymbol, "exports", () => {
@@ -678,10 +711,18 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                             || m.kind === SyntaxKind.ClassStaticBlockDeclaration
                         ) return;
 
-                        addLocalOnlyDeclaration(getMemberKeyFromElement(m), m, getElementFlagsOrThrow(m));
-                        bindTypeExpressions(m);
+                        bindNode(m);
                     });
                 });
+            }
+            else if (isDeclaration(node)) {
+                const flags = getSymbolFlagsForNode(node as Node & { kind: keyof typeof syntaxKindToSymbolMap; });
+                // Unsupported declaration
+                if (!flags) {
+                    return;
+                }
+                addLocalOnlyDeclaration(getMemberKeyFromElement(node), node, flags);
+                bindChildren(node);
             }
             else if (isLabeledStatement(node)) {
                 bindNode(node.statement);
@@ -714,6 +755,13 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                 bindNode(node.expression);
                 bindNode(node.thenStatement);
                 bindNode(node.elseStatement);
+            }
+            else if (isExpression(node)) {
+                bindExpandoMembers(node);
+                bindChildren(node);
+            }
+            else {
+                bindChildren(node);
             }
         }
     }
@@ -765,7 +813,7 @@ export function getMemberKey(name: string | PropertyName | NoSubstitutionTemplat
                 return ("I:" + (-computedName.operand.text));
             }
             else if (computedName.operator === SyntaxKind.PlusToken) {
-                return ("I:" + (-computedName.operand.text));
+                return ("I:" + (+computedName.operand.text));
             }
             else {
                 return undefined;
@@ -796,11 +844,11 @@ export function getMemberKey(name: string | PropertyName | NoSubstitutionTemplat
  * Gets the symbolic name for a member from its type.
  * @internal
  */
-export function getMemberKeyFromElement(element: ObjectLiteralElement | TypeElement | ClassElement | EnumMember): MemberKey | undefined {
+export function getMemberKeyFromElement(element: NamedDeclaration): MemberKey | undefined {
     if (isConstructorDeclaration(element) || isConstructSignatureDeclaration(element)) {
         return "@constructor" as MemberKey;
     }
     const name = element.name;
-    if (!name) return undefined;
+    if (!name || isElementAccessExpression(name) || isObjectBindingPattern(name) || isArrayBindingPattern(name) || isJsxNamespacedName(name) || isPropertyAccessExpression(name)) return undefined;
     return getMemberKey(name) as MemberKey;
 }

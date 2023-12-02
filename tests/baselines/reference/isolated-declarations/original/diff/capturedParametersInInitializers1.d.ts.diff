@@ -1,0 +1,18 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/compiler/capturedParametersInInitializers1.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -4,9 +4,9 @@
+ declare function foo1(y?: invalid, x?: number): invalid;
+ declare function foo2(y?: (x: typeof z) => invalid, z?: number): invalid;
+ declare let a: invalid;
+ declare function foo3(y?: {
+-    x: number;
++    x: typeof z;
+ }, z?: number): invalid;
+ declare function foo4(y?: invalid, z?: number): invalid;
+ declare function foo5(y?: invalid, z?: number): invalid;
+ declare function foo6(y?: () => invalid, z?: number): invalid;

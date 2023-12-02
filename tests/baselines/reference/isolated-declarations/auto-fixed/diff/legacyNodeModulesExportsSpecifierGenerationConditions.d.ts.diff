@@ -12,7 +12,7 @@
 -export declare const a: () => Promise<import("inner/private").Thing>;
 -//# sourceMappingURL=index.d.ts.map
 \ No newline at end of file
-+export declare const a: invalid;
++export declare const a: () => invalid;
 +//# sourceMappingURL=index.d.ts.map
 +/// [Errors] ////
 +

@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @isolatedDeclarationDiffReason: TS normalizes types
 // @isolatedDeclarationFixedDiffReason: Printing differences
 
 // Various repros from #30581
