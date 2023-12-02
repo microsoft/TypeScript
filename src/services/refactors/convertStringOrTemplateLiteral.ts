@@ -193,9 +193,9 @@ function escapeRawStringForTemplate(s: string) {
     // Escaping for $s in strings that are to be used in template strings
     // Naive implementation: replace \x by itself and otherwise $ and ` by \$ and \`.
     // But to complicate it a bit, this should work for raw strings too.
-    return s.replace(/\\.|[$`]/g, m => m[0] === "\\" ? m : "\\" + m);
+    return s.replace(/\\.|[$`]/g, match => match[0] === "\\" ? match : "\\" + match);
     // Finally, a less-backslash-happy version can work too, doing only ${ instead of all $s:
-    //     s.replace(/\\.|\${|`/g, m => m[0] === "\\" ? m : "\\" + m);
+    //     s.replace(/\\.|\${|`/g, match => match[0] === "\\" ? match : "\\" + match);
     // but `\$${foo}` is likely more clear than the more-confusing-but-still-working `$${foo}`.
 }
 
