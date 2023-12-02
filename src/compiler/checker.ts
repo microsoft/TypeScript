@@ -48772,7 +48772,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const parent = node.parent;
                         if (
                             node.kind === SyntaxKind.TypeParameter && !(isFunctionLikeDeclaration(parent) || isClassLike(parent) || isFunctionTypeNode(parent) ||
-                                isConstructorTypeNode(parent) || isCallSignatureDeclaration(parent) || isConstructSignatureDeclaration(parent) || isMethodSignature(parent))
+                                isConstructorTypeNode(parent) || isCallSignatureDeclaration(parent) || isConstructSignatureDeclaration(parent) || isMethodSignature(parent) || isJSDocTemplateTag(parent))
                         ) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter_of_a_function_method_or_class, tokenToString(modifier.kind));
                         }
