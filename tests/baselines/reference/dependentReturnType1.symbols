@@ -873,3 +873,62 @@ function voidRet<T extends { a: string } | undefined>(x: T): T extends {} ? void
     }
     return 1; // Ok
 }
+
+function woo<T extends string | number, U extends string | number>(x: T, y: U):
+>woo : Symbol(woo, Decl(dependentReturnType1.ts, 301, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 303, 13))
+>U : Symbol(U, Decl(dependentReturnType1.ts, 303, 39))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 303, 67))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 303, 13))
+>y : Symbol(y, Decl(dependentReturnType1.ts, 303, 72))
+>U : Symbol(U, Decl(dependentReturnType1.ts, 303, 39))
+
+T extends string ? U extends string ? 1 : 2 : U extends number ? 3 : 4 {
+>T : Symbol(T, Decl(dependentReturnType1.ts, 303, 13))
+>U : Symbol(U, Decl(dependentReturnType1.ts, 303, 39))
+>U : Symbol(U, Decl(dependentReturnType1.ts, 303, 39))
+
+    if (typeof x === "number" && typeof y === "string") {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 303, 67))
+>y : Symbol(y, Decl(dependentReturnType1.ts, 303, 72))
+
+        return 1; // Error
+    }
+    return undefined as any;
+>undefined : Symbol(undefined)
+}
+
+function ttt<T extends string | number, U extends string | number>(x: T, y: U):
+>ttt : Symbol(ttt, Decl(dependentReturnType1.ts, 309, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 311, 13))
+>U : Symbol(U, Decl(dependentReturnType1.ts, 311, 39))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 311, 67))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 311, 13))
+>y : Symbol(y, Decl(dependentReturnType1.ts, 311, 72))
+>U : Symbol(U, Decl(dependentReturnType1.ts, 311, 39))
+
+T extends string
+>T : Symbol(T, Decl(dependentReturnType1.ts, 311, 13))
+
+? number extends string
+  ? 6
+  : U extends string
+>U : Symbol(U, Decl(dependentReturnType1.ts, 311, 39))
+
+    ? 1
+    : 2
+: U extends number
+>U : Symbol(U, Decl(dependentReturnType1.ts, 311, 39))
+
+  ? 3
+  : 4 {
+    if (typeof x === "string" && typeof y === "string") {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 311, 67))
+>y : Symbol(y, Decl(dependentReturnType1.ts, 311, 72))
+
+        return 1; // Ok
+    }
+    
+    return undefined as any;
+>undefined : Symbol(undefined)
+}

@@ -846,3 +846,62 @@ function voidRet<T extends { a: string } | undefined>(x: T): T extends {} ? void
     return 1; // Ok
 >1 : 1
 }
+
+function woo<T extends string | number, U extends string | number>(x: T, y: U):
+>woo : <T extends string | number, U extends string | number>(x: T, y: U) => T extends string ? U extends string ? 1 : 2 : U extends number ? 3 : 4
+>x : T
+>y : U
+
+T extends string ? U extends string ? 1 : 2 : U extends number ? 3 : 4 {
+    if (typeof x === "number" && typeof y === "string") {
+>typeof x === "number" && typeof y === "string" : boolean
+>typeof x === "number" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : T
+>"number" : "number"
+>typeof y === "string" : boolean
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>y : U
+>"string" : "string"
+
+        return 1; // Error
+>1 : 1
+    }
+    return undefined as any;
+>undefined as any : any
+>undefined : undefined
+}
+
+function ttt<T extends string | number, U extends string | number>(x: T, y: U):
+>ttt : <T extends string | number, U extends string | number>(x: T, y: U) => T extends string ? number extends string ? 6 : U extends string ? 1 : 2 : U extends number ? 3 : 4
+>x : T
+>y : U
+
+T extends string
+? number extends string
+  ? 6
+  : U extends string
+    ? 1
+    : 2
+: U extends number
+  ? 3
+  : 4 {
+    if (typeof x === "string" && typeof y === "string") {
+>typeof x === "string" && typeof y === "string" : boolean
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : T
+>"string" : "string"
+>typeof y === "string" : boolean
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>y : U
+>"string" : "string"
+
+        return 1; // Ok
+>1 : 1
+    }
+    
+    return undefined as any;
+>undefined as any : any
+>undefined : undefined
+}

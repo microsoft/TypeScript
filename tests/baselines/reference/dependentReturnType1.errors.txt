@@ -30,9 +30,10 @@ dependentReturnType1.ts(268,9): error TS2322: Type '1' is not assignable to type
 dependentReturnType1.ts(271,9): error TS2322: Type '2' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
 dependentReturnType1.ts(273,5): error TS2322: Type '0' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
 dependentReturnType1.ts(291,9): error TS2322: Type 'string' is not assignable to type 'string[]'.
+dependentReturnType1.ts(307,9): error TS2322: Type '1' is not assignable to type 'T extends string ? U extends string ? 1 : 2 : U extends number ? 3 : 4'.
 
 
-==== dependentReturnType1.ts (24 errors) ====
+==== dependentReturnType1.ts (25 errors) ====
     interface A {
         1: number;
         2: string;
@@ -390,4 +391,31 @@ dependentReturnType1.ts(291,9): error TS2322: Type 'string' is not assignable to
             return; // Ok
         }
         return 1; // Ok
+    }
+    
+    function woo<T extends string | number, U extends string | number>(x: T, y: U):
+    T extends string ? U extends string ? 1 : 2 : U extends number ? 3 : 4 {
+        if (typeof x === "number" && typeof y === "string") {
+            return 1; // Error
+            ~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'T extends string ? U extends string ? 1 : 2 : U extends number ? 3 : 4'.
+        }
+        return undefined as any;
+    }
+    
+    function ttt<T extends string | number, U extends string | number>(x: T, y: U):
+    T extends string
+    ? number extends string
+      ? 6
+      : U extends string
+        ? 1
+        : 2
+    : U extends number
+      ? 3
+      : 4 {
+        if (typeof x === "string" && typeof y === "string") {
+            return 1; // Ok
+        }
+        
+        return undefined as any;
     }

@@ -303,3 +303,28 @@ function voidRet<T extends { a: string } | undefined>(x: T): T extends {} ? void
     }
     return 1; // Ok
 }
+
+function woo<T extends string | number, U extends string | number>(x: T, y: U):
+T extends string ? U extends string ? 1 : 2 : U extends number ? 3 : 4 {
+    if (typeof x === "number" && typeof y === "string") {
+        return 1; // Error
+    }
+    return undefined as any;
+}
+
+function ttt<T extends string | number, U extends string | number>(x: T, y: U):
+T extends string
+? number extends string
+  ? 6
+  : U extends string
+    ? 1
+    : 2
+: U extends number
+  ? 3
+  : 4 {
+    if (typeof x === "string" && typeof y === "string") {
+        return 1; // Ok
+    }
+    
+    return undefined as any;
+}
