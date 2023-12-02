@@ -1,0 +1,177 @@
+//// [tests/cases/compiler/isolatedDeclarationBinderSignatures.ts] ////
+
+=== isolatedDeclarationBinderSignatures.ts ===
+type N = "not used";
+>N : "not used"
+
+const N = "not used"
+>N : "not used"
+>"not used" : "not used"
+
+export type F = <N>() => N;
+>F : <N>() => N
+
+export const fn = <N>(): N  => {
+>fn : <N>() => N
+><N>(): N  => {    return null!;} : <N>() => N
+
+    return null!;
+>null! : null
+}
+export const fn2 = <N>(p:  N): void => {
+>fn2 : <N>(p: N) => void
+><N>(p:  N): void => {    return null!} : <N>(p: N) => void
+>p : N
+
+    return null!
+>null! : null
+}
+
+
+export module M1 {
+>M1 : typeof M1
+
+    export type N<T> =  T extends T? N<T> : never;
+>N : N<T>
+
+    export function N(): typeof N {
+>N : () => typeof N
+>N : () => typeof N
+
+        return N
+>N : () => typeof N
+    }
+}
+
+export module M2 {
+    export interface N { 
+        child: N
+>child : N
+
+        m(): N;
+>m : () => N
+
+        get X(): N
+>X : N
+
+        set X(value: N);
+>X : N
+>value : N
+    }
+}
+
+export module M3 {
+    export interface N { 
+        [n: string]: N
+>n : string
+    }
+}
+export module M3 {
+>M3 : typeof M3
+
+    export class N { child: N }
+>N : N
+>child : N
+
+    export function fn(): N {
+>fn : () => N
+
+        return new N();
+>new N() : N
+>N : typeof N
+    }
+}
+export module M4 {
+>M4 : typeof M4
+
+    export module N {
+>N : typeof N
+
+        export function fn(): typeof N {
+>fn : () => typeof N
+>N : typeof N
+
+            return N;
+>N : typeof N
+        }
+    }
+}
+
+
+export const fn3 = function <N>(p: N): void {
+>fn3 : <N>(p: N) => void
+>function <N>(p: N): void {    } : <N>(p: N) => void
+>p : N
+    
+}
+
+export const fn4 = function <N>(): { name: N } {
+>fn4 : <N>() => {    name: N;}
+>function <N>(): { name: N } {    return null!;} : <N>() => {    name: N;}
+>name : N
+
+    return null!;
+>null! : null
+}
+
+export interface I<N> {
+    (): N;
+    new (): N
+    m(): N;
+>m : { (): N; (): N; }
+}
+
+export interface I2<N> {
+    [n: string]: N
+>n : string
+}
+
+export interface I1 {
+    <N>(): N;
+    new <N>(): N
+    m<N>(): N;
+>m : <N>() => N
+}
+
+
+export interface I<N> {
+    (): N;
+    new (): N
+    m(): N;
+>m : { (): N; (): N; }
+}
+
+export class C<N> {
+>C : C<N>
+
+    constructor(n: N) {
+>n : N
+
+    }
+    m(): N {
+>m : () => N
+
+        return null!;
+>null! : null
+    }
+    get N(): N { return null! }
+>N : N
+>null! : null
+
+    set N(value) { }
+>N : N
+>value : N
+}
+
+export class C2 {
+>C2 : C2
+
+    m<N>(): N {
+>m : <N>() => N
+
+        return null!;
+>null! : null
+    }
+}
+
+

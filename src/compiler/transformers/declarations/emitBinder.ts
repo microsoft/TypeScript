@@ -1,77 +1,70 @@
 import {
     __String,
     ArrayBindingElement,
+    ArrowFunction,
     BindingPattern,
+    CallSignatureDeclaration,
+    ClassDeclaration,
+    ClassExpression,
     ComputedPropertyName,
+    ConditionalTypeNode,
+    ConstructorDeclaration,
+    ConstructSignatureDeclaration,
     Declaration,
     EnumDeclaration,
+    ExportAssignment,
+    ExportDeclaration,
     Expression,
     factory,
     findAncestor,
     forEachChild,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionTypeNode,
+    GetAccessorDeclaration,
     getCombinedNodeFlags,
     getModuleInstanceState,
     getNodeId,
     hasAmbientModifier,
     hasSyntacticModifier,
-    isAccessor,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    InferTypeNode,
+    InterfaceDeclaration,
     isArrayBindingPattern,
     isBinaryExpression,
     isBindingPattern,
-    isBlock,
     isBlockOrCatchScoped,
     isBlockScopedContainerTopLevel,
-    isClassDeclaration,
-    isClassExpression,
     isComputedPropertyName,
     isConditionalTypeNode,
     isConstructorDeclaration,
     isConstructSignatureDeclaration,
     isDeclaration,
-    isDoStatement,
     isElementAccessExpression,
     isEnumConst,
-    isEnumDeclaration,
-    isExportAssignment,
-    isExportDeclaration,
     isExpression,
-    isExpressionStatement,
-    isForInOrOfStatement,
-    isForStatement,
     isFunctionDeclaration,
     isFunctionExpressionOrArrowFunction,
     isIdentifier,
-    isIfStatement,
-    isImportDeclaration,
-    isImportEqualsDeclaration,
-    isInferTypeNode,
-    isInterfaceDeclaration,
     isJsxNamespacedName,
-    isLabeledStatement,
-    isMappedTypeNode,
-    isMethodDeclaration,
     isModuleBlock,
     isModuleDeclaration,
     isNamedExports,
     isNumericLiteral,
     isObjectBindingPattern,
-    isObjectLiteralExpression,
-    isParenthesizedExpression,
-    isParenthesizedTypeNode,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyName,
     isSourceFile,
     isStringLiteralLike,
-    isTypeAliasDeclaration,
-    isTypeLiteralNode,
     isVarConst,
     isVariableDeclaration,
-    isVariableDeclarationList,
-    isVariableStatement,
-    isWhileStatement,
+    MappedTypeNode,
     MemberKey,
+    MethodDeclaration,
+    MethodSignature,
     ModifierFlags,
     ModuleDeclaration,
     ModuleInstanceState,
@@ -84,11 +77,14 @@ import {
     ParameterDeclaration,
     PropertyDeclaration,
     PropertyName,
+    SetAccessorDeclaration,
     setValueDeclaration,
     SourceFile,
     Symbol,
     SymbolFlags,
     SyntaxKind,
+    TypeAliasDeclaration,
+    TypeLiteralNode,
     TypeParameterDeclaration,
     VariableDeclaration,
 } from "../../_namespaces/ts";
@@ -250,7 +246,10 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         return undefined;
     }
 
-    function getSymbolFlagsForNode(node: Node & { kind: keyof typeof syntaxKindToSymbolMap; }) {
+    function tryGetSymbolFlagsForNode(node: Node): SymbolRegistrationFlags | undefined {
+        return getSymbolFlagsForNode(node as Node & { kind: keyof typeof syntaxKindToSymbolMap; });
+    }
+    function getSymbolFlagsForNode(node: Node & { kind: keyof typeof syntaxKindToSymbolMap; }): SymbolRegistrationFlags {
         if (node.kind === SyntaxKind.VariableDeclaration) {
             return getCombinedNodeFlags(node) & NodeFlags.BlockScoped ?
                 syntaxKindToSymbolMap[node.kind].blockScope :
@@ -507,262 +506,309 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         }
         function bindNode(node: Node | undefined) {
             if (!node) return;
-            const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
 
-            if (isParenthesizedExpression(node)) {
-                bindNode(node.expression);
+            switch (node.kind) {
+                case SyntaxKind.ObjectLiteralExpression:
+                    bindObjectLiteralExpression(node as ObjectLiteralExpression);
+                    break;
+                case SyntaxKind.TypeLiteral:
+                    bindTypeLiteralNode(node as TypeLiteralNode);
+                    break;
+                case SyntaxKind.TypeAliasDeclaration:
+                    bindTypeAliasDeclaration(node as TypeAliasDeclaration);
+                    break;
+                case SyntaxKind.MappedType:
+                    bindMappedTypeNode(node as MappedTypeNode);
+                    break;
+                case SyntaxKind.ConditionalType:
+                    bindConditionalTypeNode(node as ConditionalTypeNode);
+                    break;
+                case SyntaxKind.InferType:
+                    bindInferTypeNode(node as InferTypeNode);
+                    break;
+                case SyntaxKind.ImportEqualsDeclaration:
+                    bindImportEqualsDeclaration(node as ImportEqualsDeclaration);
+                    break;
+                case SyntaxKind.ImportDeclaration:
+                    bindImportDeclaration(node as ImportDeclaration);
+                    break;
+                case SyntaxKind.ExportAssignment:
+                    bindExportAssignment(node as ExportAssignment);
+                    break;
+                case SyntaxKind.ExportDeclaration:
+                    bindExportDeclaration(node as ExportDeclaration);
+                    break;
+                case SyntaxKind.VariableDeclaration:
+                    bindVariable(node as VariableDeclaration);
+                    break;
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    bindFunctionExpressionOrArrowFunction(node as FunctionExpression | ArrowFunction);
+                    break;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.FunctionType:
+                    bindFunctionLikeContainer(node as FunctionLikeContainer);
+                    break;
+                case SyntaxKind.ClassExpression:
+                    // Class Expressions are not supported
+                    break;
+                case SyntaxKind.EnumDeclaration:
+                    bindEnumDeclaration(node as EnumDeclaration);
+                    break;
+                case SyntaxKind.ModuleDeclaration:
+                    bindModuleDeclaration(node as ModuleDeclaration);
+                    break;
+                case SyntaxKind.InterfaceDeclaration:
+                    bindInterfaceDeclaration(node as InterfaceDeclaration);
+                    break;
+                case SyntaxKind.ClassDeclaration:
+                    bindClassDeclaration(node as ClassDeclaration);
+                    break;
+                case SyntaxKind.ForOfStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.Block:
+                    withScope(node, /*exports*/ undefined, () => {
+                        bindChildren(node);
+                    });
+                    break;
+                default:
+                    if (isDeclaration(node)) {
+                        bindDeclaration(node);
+                    }
+                    if (isExpression(node)) {
+                        bindExpandoMembers(node);
+                    }
+                    bindChildren(node);
+                    break;
             }
-            else if (isParenthesizedTypeNode(node)) {
+        }
+        function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
+            bindObjectLiteral(node);
+        }
+        function bindMappedTypeNode(node: MappedTypeNode) {
+            const mappedType = node;
+            withScope(node, /*exports*/ undefined, () => {
+                bindTypeParameters([mappedType.typeParameter]);
+            });
+            bindNode(mappedType.nameType);
+            bindNode(mappedType.type);
+        }
+        function bindConditionalTypeNode(node: ConditionalTypeNode) {
+            withScope(node.extendsType, /*exports*/ undefined, () => {
+                bindNode(node.extendsType);
+            });
+            bindNode(node.checkType);
+            bindNode(node.falseType);
+            getNodeLinks(node.trueType).locals = getNodeLinks(node.extendsType).locals;
+            bindNode(node.trueType);
+        }
+        function bindInferTypeNode(node: InferTypeNode) {
+            const conditionalTypeOwner = findAncestor(node, isConditionalTypeNode);
+            // Probably an error, infer not in a conditional type context
+            // Try to bind the rest of it
+            if (conditionalTypeOwner) {
+                withScope(conditionalTypeOwner, /*exports*/ undefined, () => {
+                    bindTypeParameters([node.typeParameter]);
+                });
+            }
+            bindChildren(node);
+        }
+        function bindFunctionExpressionOrArrowFunction(node: FunctionExpression | ArrowFunction) {
+            createAnonymousEmitSymbol(node);
+            withScope(node, /*exports*/ undefined, () => {
+                bindTypeParameters(node.typeParameters);
                 bindNode(node.type);
+                node.parameters.forEach(bindVariable);
+            });
+        }
+        function bindImportEqualsDeclaration(node: ImportEqualsDeclaration) {
+            addLocalOnlyDeclaration(getMemberKey(node.name), node, getSymbolFlagsForNode(node));
+        }
+        function bindImportDeclaration(node: ImportDeclaration) {
+            if (!node.importClause) {
+                return;
             }
-            else if (isObjectLiteralExpression(node)) {
-                bindObjectLiteral(node);
+            if (node.importClause.name) {
+                addLocalOnlyDeclaration(getMemberKey(node.importClause.name), node.importClause, getSymbolFlagsForNode(node.importClause));
             }
-            else if (isMappedTypeNode(node)) {
-                const mappedType = node;
-                withScope(node, /*exports*/ undefined, () => {
-                    bindTypeParameters([mappedType.typeParameter]);
-                });
-                bindNode(mappedType.nameType);
-                bindNode(mappedType.type);
-            }
-            else if (isConditionalTypeNode(node)) {
-                withScope(node.extendsType, /*exports*/ undefined, () => {
-                    bindNode(node.extendsType);
-                });
-                bindNode(node.checkType);
-                bindNode(node.falseType);
-                getNodeLinks(node.trueType).locals = getNodeLinks(node.extendsType).locals;
-                bindNode(node.trueType);
-            }
-            else if (isInferTypeNode(node)) {
-                const conditionalTypeOwner = findAncestor(node, isConditionalTypeNode);
-                // Probably an error, infer not in a conditional type context
-                // Try to bind the rest of it
-                if (conditionalTypeOwner) {
-                    withScope(conditionalTypeOwner, /*exports*/ undefined, () => {
-                        bindTypeParameters([node.typeParameter]);
+            if (node.importClause.namedBindings) {
+                const namedBindings = node.importClause.namedBindings;
+                if (namedBindings.kind === SyntaxKind.NamedImports) {
+                    namedBindings.elements.forEach(v => {
+                        addLocalOnlyDeclaration(getMemberKey(v.name), v, getSymbolFlagsForNode(v));
                     });
                 }
-                bindChildren(node);
+                else if (namedBindings.kind === SyntaxKind.NamespaceImport) {
+                    addLocalOnlyDeclaration(getMemberKey(namedBindings.name), namedBindings, getSymbolFlagsForNode(namedBindings));
+                }
+                else {
+                    throw new Error("Not supported");
+                }
             }
-            else if (isExpressionStatement(node)) {
-                bindNode(node.expression);
+        }
+        type FunctionLikeContainer =
+            | FunctionDeclaration
+            | MethodDeclaration
+            | ConstructorDeclaration
+            | GetAccessorDeclaration
+            | SetAccessorDeclaration
+            | MethodSignature
+            | FunctionDeclaration
+            | CallSignatureDeclaration
+            | ConstructSignatureDeclaration
+            | FunctionTypeNode;
+        function bindFunctionLikeContainer(node: FunctionLikeContainer) {
+            const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
+            const declarationFlags = tryGetSymbolFlagsForNode(node);
+            if (declarationFlags) {
+                addLocalAndExportDeclaration(getStatementName(node), node, declarationFlags, isExported);
             }
-            else if (isFunctionExpressionOrArrowFunction(node)) {
-                createAnonymousEmitSymbol(node);
-                withScope(node, /*exports*/ undefined, () => {
-                    bindTypeParameters(node.typeParameters);
-                    bindNode(node.type);
-                    node.parameters.forEach(bindVariable);
+            withScope(node, /*exports*/ undefined, () => {
+                bindTypeParameters(node.typeParameters);
+                bindNode(node.type);
+                node.parameters.forEach(bindVariable);
+            });
+        }
+        function bindTypeLiteralNode(node: TypeLiteralNode) {
+            const objectSymbol = createAnonymousEmitSymbol(node);
+            withMembers(objectSymbol, "members", () => {
+                node.members.forEach(bindNode);
+            });
+        }
+        function bindTypeAliasDeclaration(node: TypeAliasDeclaration) {
+            const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
+            addLocalAndExportDeclaration(getStatementName(node), node, getSymbolFlagsForNode(node), isExported);
+            withScope(node, /*exports*/ undefined, () => {
+                bindTypeParameters(node.typeParameters);
+                bindNode(node.type);
+            });
+        }
+        // Default export declarations set isVisible on true on associated symbols in the type checker.
+        function bindExportAssignment(node: ExportAssignment) {
+            if (node.expression && isIdentifier(node.expression)) {
+                const name = node.expression.escapedText;
+                postBindingAction.push(() => {
+                    const resolvedSymbol = resolveName(node.expression, name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+                    if (resolvedSymbol) {
+                        resolvedSymbol.declarations.forEach(d => getNodeLinks(d).isVisible = true);
+                    }
                 });
             }
-            else if (isImportEqualsDeclaration(node)) {
-                addLocalOnlyDeclaration(getMemberKey(node.name), node, getSymbolFlagsForNode(node));
-            }
-            else if (isImportDeclaration(node)) {
-                if (!node.importClause) {
-                    return;
-                }
-                if (node.importClause.name) {
-                    addLocalOnlyDeclaration(getMemberKey(node.importClause.name), node.importClause, getSymbolFlagsForNode(node.importClause));
-                }
-                if (node.importClause.namedBindings) {
-                    const namedBindings = node.importClause.namedBindings;
-                    if (namedBindings.kind === SyntaxKind.NamedImports) {
-                        namedBindings.elements.forEach(v => {
-                            addLocalOnlyDeclaration(getMemberKey(v.name), v, getSymbolFlagsForNode(v));
+        }
+        function bindExportDeclaration(node: ExportDeclaration) {
+            if (node.exportClause && isNamedExports(node.exportClause)) {
+                const elements = node.exportClause.elements;
+                if (node.moduleSpecifier) {
+                    // TODO is currentExportsSymbolTable ok here?
+                    withScope(node, /*exports*/ undefined, () => {
+                        elements.forEach(e => {
+                            const { includes, excludes } = getSymbolFlagsForNode(e);
+                            addLocalOnlyDeclaration(getMemberKey(e.propertyName ?? e.name), e, {
+                                includes: includes | SymbolFlags.ExportValue,
+                                excludes,
+                            });
                         });
-                    }
-                    else if (namedBindings.kind === SyntaxKind.NamespaceImport) {
-                        addLocalOnlyDeclaration(getMemberKey(namedBindings.name), namedBindings, getSymbolFlagsForNode(namedBindings));
-                    }
-                    else {
-                        throw new Error("Not supported");
-                    }
+                    });
                 }
-            }
-            else if (isVariableStatement(node)) {
-                node.declarationList.declarations.forEach(bindVariable);
-            }
-            else if (isVariableDeclarationList(node)) {
-                node.declarations.forEach(bindVariable);
-            }
-            else if (isFunctionDeclaration(node) || isConstructorDeclaration(node) || isMethodDeclaration(node) || isAccessor(node)) {
-                addLocalAndExportDeclaration(getStatementName(node), node, getSymbolFlagsForNode(node), isExported);
-                withScope(node, /*exports*/ undefined, () => {
-                    bindTypeParameters(node.typeParameters);
-                    bindNode(node.type);
-                    node.parameters.forEach(bindVariable);
-                });
-            }
-            else if (isTypeLiteralNode(node)) {
-                const objectSymbol = createAnonymousEmitSymbol(node);
-                withMembers(objectSymbol, "members", () => {
-                    node.members.forEach(bindNode);
-                });
-            }
-            else if (isTypeAliasDeclaration(node)) {
-                addLocalAndExportDeclaration(getStatementName(node), node, getSymbolFlagsForNode(node), isExported);
-                withScope(node, /*exports*/ undefined, () => {
-                    bindTypeParameters(node.typeParameters);
-                    bindNode(node.type);
-                });
-            }
-            // Default export declarations set isVisible on true on associated symbols in the type checker.
-            else if (isExportAssignment(node)) {
-                if (node.expression && isIdentifier(node.expression)) {
-                    const name = node.expression.escapedText;
+                elements.forEach(e => {
                     postBindingAction.push(() => {
-                        const resolvedSymbol = resolveName(node.expression, name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+                        const resolvedSymbol = resolveName(e, (e.propertyName ?? e.name).escapedText, ~0);
                         if (resolvedSymbol) {
                             resolvedSymbol.declarations.forEach(d => getNodeLinks(d).isVisible = true);
                         }
                     });
-                }
-            }
-            else if (isExportDeclaration(node)) {
-                if (node.exportClause && isNamedExports(node.exportClause)) {
-                    const elements = node.exportClause.elements;
-                    if (node.moduleSpecifier) {
-                        // TODO is currentExportsSymbolTable ok here?
-                        withScope(node, /*exports*/ undefined, () => {
-                            elements.forEach(e => {
-                                const { includes, excludes } = getSymbolFlagsForNode(e);
-                                addLocalOnlyDeclaration(getMemberKey(e.propertyName ?? e.name), e, {
-                                    includes: includes | SymbolFlags.ExportValue,
-                                    excludes,
-                                });
-                            });
-                        });
-                    }
-                    elements.forEach(e => {
-                        postBindingAction.push(() => {
-                            const resolvedSymbol = resolveName(e, (e.propertyName ?? e.name).escapedText, ~0);
-                            if (resolvedSymbol) {
-                                resolvedSymbol.declarations.forEach(d => getNodeLinks(d).isVisible = true);
-                            }
-                        });
-                    });
-                }
-            }
-            else if (isEnumDeclaration(node)) {
-                addLocalAndExportDeclaration(getStatementName(node), node, getSymbolFlagsForNode(node), isExported);
-                withScope(node, /*exports*/ undefined, () => {
-                    node.members.forEach(m => {
-                        addLocalOnlyDeclaration(getMemberKeyFromElement(m), m, getSymbolFlagsForNode(m));
-                    });
                 });
             }
-            else if (isModuleDeclaration(node)) {
-                function bindModuleDeclaration(moduleDeclaration: ModuleDeclaration) {
-                    const name = isIdentifier(moduleDeclaration.name) ? moduleDeclaration.name : undefined;
-                    const moduleSymbol = addLocalAndExportDeclaration(getMemberKey(name), moduleDeclaration, getSymbolFlagsForNode(moduleDeclaration), isExported);
-                    moduleSymbol.exports ??= new Map();
-                    withScope(moduleDeclaration, moduleSymbol.exports, () => {
-                        if (moduleDeclaration.body) {
-                            if (isModuleBlock(moduleDeclaration.body)) {
-                                const moduleBlock = moduleDeclaration.body;
-                                bindEachFunctionsFirst(moduleBlock.statements);
-                            }
-                            else if (isModuleDeclaration(moduleDeclaration.body)) {
-                                const subModule = moduleDeclaration.body;
-                                bindModuleDeclaration(subModule);
-                            }
-                            else {
-                                throw new Error("Unsupported body type");
-                            }
+        }
+        function bindEnumDeclaration(node: EnumDeclaration) {
+            const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
+            addLocalAndExportDeclaration(getStatementName(node), node, getSymbolFlagsForNode(node), isExported);
+            withScope(node, /*exports*/ undefined, () => {
+                node.members.forEach(m => {
+                    addLocalOnlyDeclaration(getMemberKeyFromElement(m), m, getSymbolFlagsForNode(m));
+                });
+            });
+        }
+        function bindModuleDeclaration(node: ModuleDeclaration) {
+            const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
+            function bindModuleDeclaration(moduleDeclaration: ModuleDeclaration) {
+                const name = isIdentifier(moduleDeclaration.name) ? moduleDeclaration.name : undefined;
+                const moduleSymbol = addLocalAndExportDeclaration(getMemberKey(name), moduleDeclaration, getSymbolFlagsForNode(moduleDeclaration), isExported);
+                moduleSymbol.exports ??= new Map();
+                withScope(moduleDeclaration, moduleSymbol.exports, () => {
+                    if (moduleDeclaration.body) {
+                        if (isModuleBlock(moduleDeclaration.body)) {
+                            const moduleBlock = moduleDeclaration.body;
+                            bindEachFunctionsFirst(moduleBlock.statements);
                         }
-                    });
-                }
-                bindModuleDeclaration(node);
-            }
-            else if (isInterfaceDeclaration(node)) {
-                const interfaceDeclaration = node;
-                const interfaceSymbol = addLocalAndExportDeclaration(getStatementName(interfaceDeclaration), interfaceDeclaration, getSymbolFlagsForNode(interfaceDeclaration), isExported);
-                withScope(interfaceDeclaration, /*exports*/ undefined, () => {
-                    bindTypeParameters(interfaceDeclaration.typeParameters);
-                });
-                withMembers(interfaceSymbol, "members", () => {
-                    interfaceDeclaration.members.forEach(m => {
-                        bindNode(m);
-                    });
+                        else if (isModuleDeclaration(moduleDeclaration.body)) {
+                            const subModule = moduleDeclaration.body;
+                            bindModuleDeclaration(subModule);
+                        }
+                        else {
+                            throw new Error("Unsupported body type");
+                        }
+                    }
                 });
             }
-            else if (isClassDeclaration(node) || isClassExpression(node)) {
-                const classDeclaration = node;
-                const classSymbol = addLocalAndExportDeclaration(getStatementName(classDeclaration), classDeclaration, getSymbolFlagsForNode(classDeclaration), isExported);
-                withScope(classDeclaration, /*exports*/ undefined, () => {
-                    bindTypeParameters(classDeclaration.typeParameters);
+            bindModuleDeclaration(node);
+        }
+        function bindInterfaceDeclaration(node: InterfaceDeclaration) {
+            const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
+            const interfaceDeclaration = node;
+            const interfaceSymbol = addLocalAndExportDeclaration(getStatementName(interfaceDeclaration), interfaceDeclaration, getSymbolFlagsForNode(interfaceDeclaration), isExported);
+            withScope(interfaceDeclaration, /*exports*/ undefined, () => {
+                bindTypeParameters(interfaceDeclaration.typeParameters);
+            });
+            withMembers(interfaceSymbol, "members", () => {
+                interfaceDeclaration.members.forEach(m => {
+                    bindNode(m);
                 });
-                withMembers(classSymbol, "members", () => {
-                    classDeclaration.members.forEach(m => {
-                        if (hasSyntacticModifier(m, ModifierFlags.Static)) return;
-                        if (m.kind === SyntaxKind.SemicolonClassElement || m.kind === SyntaxKind.ClassStaticBlockDeclaration) return;
+            });
+        }
+        function bindClassDeclaration(node: ClassExpression | ClassDeclaration) {
+            const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
+            const classDeclaration = node;
+            const classSymbol = addLocalAndExportDeclaration(getStatementName(classDeclaration), classDeclaration, getSymbolFlagsForNode(classDeclaration), isExported);
+            withScope(classDeclaration, /*exports*/ undefined, () => {
+                bindTypeParameters(classDeclaration.typeParameters);
+            });
+            withMembers(classSymbol, "members", () => {
+                classDeclaration.members.forEach(m => {
+                    if (hasSyntacticModifier(m, ModifierFlags.Static)) return;
+                    if (m.kind === SyntaxKind.SemicolonClassElement || m.kind === SyntaxKind.ClassStaticBlockDeclaration) return;
 
-                        bindNode(m);
-                    });
+                    bindNode(m);
                 });
-                withMembers(classSymbol, "exports", () => {
-                    classDeclaration.members.forEach(m => {
-                        if (!hasSyntacticModifier(m, ModifierFlags.Static)) return;
-                        if (
-                            m.kind === SyntaxKind.SemicolonClassElement
-                            || m.kind === SyntaxKind.ClassStaticBlockDeclaration
-                        ) return;
+            });
+            withMembers(classSymbol, "exports", () => {
+                classDeclaration.members.forEach(m => {
+                    if (!hasSyntacticModifier(m, ModifierFlags.Static)) return;
+                    if (
+                        m.kind === SyntaxKind.SemicolonClassElement
+                        || m.kind === SyntaxKind.ClassStaticBlockDeclaration
+                    ) return;
 
-                        bindNode(m);
-                    });
+                    bindNode(m);
                 });
+            });
+        }
+        function bindDeclaration(node: Declaration) {
+            const flags = tryGetSymbolFlagsForNode(node);
+            // Unsupported declaration
+            if (!flags) {
+                return;
             }
-            else if (isDeclaration(node)) {
-                const flags = getSymbolFlagsForNode(node as Node & { kind: keyof typeof syntaxKindToSymbolMap; });
-                // Unsupported declaration
-                if (!flags) {
-                    return;
-                }
-                addLocalOnlyDeclaration(getMemberKeyFromElement(node), node, flags);
-                bindChildren(node);
-            }
-            else if (isLabeledStatement(node)) {
-                bindNode(node.statement);
-            }
-            else if (isForStatement(node)) {
-                withScope(node, /*exports*/ undefined, () => {
-                    bindNode(node.initializer);
-                    bindNode(node.condition);
-                    bindNode(node.incrementor);
-                    bindNode(node.statement);
-                });
-            }
-            else if (isForInOrOfStatement(node)) {
-                withScope(node, /*exports*/ undefined, () => {
-                    bindNode(node.initializer);
-                    bindNode(node.expression);
-                    bindNode(node.statement);
-                });
-            }
-            else if (isWhileStatement(node) || isDoStatement(node)) {
-                bindNode(node.expression);
-                bindNode(node.statement);
-            }
-            else if (isBlock(node)) {
-                withScope(node, /*exports*/ undefined, () => {
-                    bindEachFunctionsFirst(node.statements);
-                });
-            }
-            else if (isIfStatement(node)) {
-                bindNode(node.expression);
-                bindNode(node.thenStatement);
-                bindNode(node.elseStatement);
-            }
-            else if (isExpression(node)) {
-                bindExpandoMembers(node);
-                bindChildren(node);
-            }
-            else {
-                bindChildren(node);
-            }
+            addLocalOnlyDeclaration(getMemberKeyFromElement(node), node, flags);
+            bindChildren(node);
         }
     }
 }
