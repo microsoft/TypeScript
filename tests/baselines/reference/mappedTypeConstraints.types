@@ -45,21 +45,21 @@ function f3<T extends { a: string, b: string }, U extends { b: string, c: string
 >b : string
 >b : string
 >c : string
->obj : Pick<T & U, keyof T | keyof U>
+>obj : Pick<T & U, keyof (T & U)>
 
     obj.a;
 >obj.a : (T & U)["a"]
->obj : Pick<T & U, keyof T | keyof U>
+>obj : Pick<T & U, keyof (T & U)>
 >a : (T & U)["a"]
 
     obj.b;
 >obj.b : (T & U)["b"]
->obj : Pick<T & U, keyof T | keyof U>
+>obj : Pick<T & U, keyof (T & U)>
 >b : (T & U)["b"]
 
     obj.c;
 >obj.c : (T & U)["c"]
->obj : Pick<T & U, keyof T | keyof U>
+>obj : Pick<T & U, keyof (T & U)>
 >c : (T & U)["c"]
 }
 

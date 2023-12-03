@@ -586,13 +586,13 @@ type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) 
 >title : string | undefined
 
 function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
->getColumnProperty : <T>(column: Column<T>, key: keyof Column<T>) => Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
+>getColumnProperty : <T>(column: Column<T>, key: keyof Column<T>) => Column<T>[keyof Column<T>]
 >column : Column<T>
->key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
+>key : keyof Column<T>
 
   return column[key];
->column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
+>column[key] : Column<T>[keyof Column<T>]
 >column : Column<T>
->key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
+>key : keyof Column<T>
 }
 
