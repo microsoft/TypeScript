@@ -17702,7 +17702,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isGenericTupleType(type) ||
             isGenericMappedType(type) && !hasDistributiveNameType(type) ||
             type.flags & TypeFlags.Union && !(indexFlags & IndexFlags.NoReducibleCheck) && isGenericReducibleType(type) ||
-            type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable) && some((type as IntersectionType).types, isEmptyAnonymousObjectType));
+            type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable));
     }
 
     function getIndexType(type: Type, indexFlags = defaultIndexFlags): Type {
@@ -18215,14 +18215,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getSimplifiedType(type: Type, writing: boolean): Type {
         return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(type as IndexedAccessType, writing) :
             type.flags & TypeFlags.Conditional ? getSimplifiedConditionalType(type as ConditionalType, writing) :
+            type.flags & TypeFlags.Index ? getSimplifiedIndexType(type as IndexType) :
             type;
     }
 
     function distributeIndexOverObjectType(objectType: Type, indexType: Type, writing: boolean) {
         // (T | U)[K] -> T[K] | U[K] (reading)
         // (T | U)[K] -> T[K] & U[K] (writing)
-        // (T & U)[K] -> T[K] & U[K]
-        if (objectType.flags & TypeFlags.Union || objectType.flags & TypeFlags.Intersection && !shouldDeferIndexType(objectType)) {
+        // (T & U)[K] -> T[K] & U[K], except when T or U is {}
+        if (objectType.flags & TypeFlags.Union || objectType.flags & TypeFlags.Intersection && !(maybeTypeOfKind(objectType, TypeFlags.Instantiable) && some((objectType as IntersectionType).types, isEmptyAnonymousObjectType))) {
             const types = map((objectType as UnionOrIntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType), writing));
             return objectType.flags & TypeFlags.Intersection || writing ? getIntersectionType(types) : getUnionType(types);
         }
@@ -18312,6 +18313,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return type;
+    }
+
+    function getSimplifiedIndexType(type: IndexType) {
+        // keyof (T & U) -> keyof T | keyof U, except when T or U is {}
+        const target = type.type;
+        return target.flags & TypeFlags.Intersection && !some((target as IntersectionType).types, isEmptyAnonymousObjectType) ?
+            getUnionType(map((target as IntersectionType).types, t => getIndexType(t, type.indexFlags))) :
+            type;
     }
 
     /**
@@ -25656,6 +25665,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
+            if (constraintType.flags & TypeFlags.Index) {
+                constraintType = getSimplifiedIndexType(constraintType as IndexType);
+            }
             if (constraintType.flags & TypeFlags.Union) {
                 let result = false;
                 for (const type of (constraintType as UnionType).types) {
