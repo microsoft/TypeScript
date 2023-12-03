@@ -1,0 +1,227 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocTags14.ts ===
+// /**
+//  * @param {Object} options the args object
+//  * @param {number} options.a first number
+//  * @param {number} options.b second number
+//  * @param {Object} options.c sub-object
+//  * @param {number} options.c.d third number
+//  * @param {Function} callback the callback function
+//  * @returns {number}
+//  */
+// function fn(options, callback = null) { }
+//          ^^
+// | ----------------------------------------------------------------------
+// | function fn(options: any, callback?: any): void
+// | @param options the args object
+// | @param options.a first number
+// | @param options.b second number
+// | @param options.c sub-object
+// | @param options.c.d third number
+// | @param callback the callback function
+// | @returns 
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags14.ts",
+      "position": 302,
+      "name": ""
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 302,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "fn",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "options",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "callback",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "options",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "the args object",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "options.a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "first number",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "options.b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "second number",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "options.c",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "sub-object",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "options.c.d",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "third number",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "callback",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "the callback function",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns"
+        }
+      ]
+    }
+  }
+]
