@@ -6132,7 +6132,7 @@ export const enum TypeFlags {
     /** @internal */
     ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
     /** @internal */
-    Simplifiable = IndexedAccess | Conditional,
+    Simplifiable = Index | IndexedAccess | Conditional,
     /** @internal */
     Singleton = Any | Unknown | String | Number | Boolean | BigInt | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
     // 'Narrowable' types are types where narrowing actually narrows.
