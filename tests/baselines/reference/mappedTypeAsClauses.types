@@ -65,8 +65,13 @@ type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b
 type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
 >TD2 : "a1" | "b1" | "a2" | "b2"
 
-type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & string}2`
->TD3 : `${keyof U & string}1` | `${keyof U & string}2`
+type TD3<U> = keyof DoubleProp<U>; // keyof DoubleProp<U>
+>TD3 : keyof DoubleProp<U>
+
+type TD4 = TD3<{ a: string, b: number }>;  // 'a1' | 'a2' | 'b1' | 'b2'
+>TD4 : "a1" | "b1" | "a2" | "b2"
+>a : string
+>b : number
 
 // Repro from #40619
 
@@ -277,7 +282,7 @@ type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
 >TS4 : keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string; }
 
 type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
->TS5 : NameMap[keyof T & "a"] | NameMap[keyof T & "b"] | NameMap[keyof T & "c"]
+>TS5 : keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string; }
 
 type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
 >TS6 : keyof { [K in keyof T as V & (K extends U ? K : never)]: string; }
@@ -302,4 +307,50 @@ type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T
 type TN5<T, U> = keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string };
 >TN5 : keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true; }]: string; }
 >true : true
+
+// repro from https://github.com/microsoft/TypeScript/issues/55129
+type Fruit =
+>Fruit : { name: "apple"; color: "red"; } | { name: "banana"; color: "yellow"; } | { name: "orange"; color: "orange"; }
+
+  | {
+      name: "apple";
+>name : "apple"
+
+      color: "red";
+>color : "red"
+    }
+  | {
+      name: "banana";
+>name : "banana"
+
+      color: "yellow";
+>color : "yellow"
+    }
+  | {
+      name: "orange";
+>name : "orange"
+
+      color: "orange";
+>color : "orange"
+
+    };
+type Result1<T extends {name: string | number; color: string | number }> = {
+>Result1 : Result1<T>
+>name : string | number
+>color : string | number
+
+  [Key in T as `${Key['name']}:${Key['color']}`]: unknown
+}; 
+type Result2<T extends {name: string | number; color: string | number }> = keyof {
+>Result2 : keyof { [Key in T as `${Key["name"]}:${Key["color"]}`]: unknown; }
+>name : string | number
+>color : string | number
+
+  [Key in T as `${Key['name']}:${Key['color']}`]: unknown
+}
+type Test1 = keyof Result1<Fruit> // "apple:red" | "banana:yellow" | "orange:orange"
+>Test1 : "apple:red" | "banana:yellow" | "orange:orange"
+
+type Test2 = Result2<Fruit> // "apple:red" | "banana:yellow" | "orange:orange"
+>Test2 : "apple:red" | "banana:yellow" | "orange:orange"
 

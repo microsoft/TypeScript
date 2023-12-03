@@ -597,6 +597,7 @@ import {
     isJSDocSatisfiesTag,
     isJSDocSignature,
     isJSDocTemplateTag,
+    isJSDocThisTag,
     isJSDocTypeAlias,
     isJSDocTypeAssertion,
     isJSDocTypedefTag,
@@ -1302,6 +1303,12 @@ const enum MappedTypeModifiers {
     ExcludeReadonly = 1 << 1,
     IncludeOptional = 1 << 2,
     ExcludeOptional = 1 << 3,
+}
+
+const enum MappedTypeNameTypeKind {
+    None,
+    Filtering,
+    Remapping,
 }
 
 const enum ExpandingFlags {
@@ -2831,7 +2838,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // still might be illegal if usage is in the initializer of the variable declaration (eg var a = a)
                 return !isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration as VariableDeclaration, usage);
             }
-            else if (isClassDeclaration(declaration)) {
+            else if (isClassLike(declaration)) {
                 // still might be illegal if the usage is within a computed property name in the class (eg class A { static p = "a"; [A.p]() {} })
                 return !findAncestor(usage, n => isComputedPropertyName(n) && n.parent.parent === declaration);
             }
@@ -13641,6 +13648,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return instantiateType(instantiable, createTypeMapper([type.indexType, type.objectType], [getNumberLiteralType(0), createTupleType([replacement])]));
     }
 
+    // If the original mapped type had an intersection constraint we extract its components,
+    // and we make an attempt to do so even if the intersection has been reduced to a union.
+    // This entire process allows us to possibly retrieve the filtering type literals.
+    // e.g. { [K in keyof U & ("a" | "b") ] } -> "a" | "b"
+    function getLimitedConstraint(type: ReverseMappedType) {
+        const constraint = getConstraintTypeFromMappedType(type.mappedType);
+        if (!(constraint.flags & TypeFlags.Union || constraint.flags & TypeFlags.Intersection)) {
+            return;
+        }
+        const origin = (constraint.flags & TypeFlags.Union) ? (constraint as UnionType).origin : (constraint as IntersectionType);
+        if (!origin || !(origin.flags & TypeFlags.Intersection)) {
+            return;
+        }
+        const limitedConstraint = getIntersectionType((origin as IntersectionType).types.filter(t => t !== type.constraintType));
+        return limitedConstraint !== neverType ? limitedConstraint : undefined;
+    }
+
     function resolveReverseMappedTypeMembers(type: ReverseMappedType) {
         const indexInfo = getIndexInfoOfType(type.source, stringType);
         const modifiers = getMappedTypeModifiers(type.mappedType);
@@ -13648,7 +13672,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
         const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType), readonlyMask && indexInfo.isReadonly)] : emptyArray;
         const members = createSymbolTable();
+        const limitedConstraint = getLimitedConstraint(type);
         for (const prop of getPropertiesOfType(type.source)) {
+            // In case of a reverse mapped type with an intersection constraint, if we were able to
+            // extract the filtering type literals we skip those properties that are not assignable to them,
+            // because the extra properties wouldn't get through the application of the mapped type anyway
+            if (limitedConstraint) {
+                const propertyNameType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
+                if (!isTypeAssignableTo(propertyNameType, limitedConstraint)) {
+                    continue;
+                }
+            }
             const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
             const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as ReverseMappedSymbol;
             inferredProp.declarations = prop.declarations;
@@ -13741,7 +13775,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const constraintType = getConstraintTypeFromMappedType(type);
         const mappedType = (type.target as MappedType) || type;
         const nameType = getNameTypeFromMappedType(mappedType);
-        const shouldLinkPropDeclarations = !nameType || isFilteringMappedType(mappedType);
+        const shouldLinkPropDeclarations = getMappedTypeNameTypeKind(mappedType) !== MappedTypeNameTypeKind.Remapping;
         const templateType = getTemplateTypeFromMappedType(mappedType);
         const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
         const templateModifiers = getMappedTypeModifiers(type);
@@ -13923,9 +13957,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function isFilteringMappedType(type: MappedType): boolean {
+    function getMappedTypeNameTypeKind(type: MappedType): MappedTypeNameTypeKind {
         const nameType = getNameTypeFromMappedType(type);
-        return !!nameType && isTypeAssignableTo(nameType, getTypeParameterFromMappedType(type));
+        if (!nameType) {
+            return MappedTypeNameTypeKind.None;
+        }
+        return isTypeAssignableTo(nameType, getTypeParameterFromMappedType(type)) ? MappedTypeNameTypeKind.Filtering : MappedTypeNameTypeKind.Remapping;
     }
 
     function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
@@ -15043,6 +15080,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let flags = SignatureFlags.None;
             let minArgumentCount = 0;
             let thisParameter: Symbol | undefined;
+            let thisTag: JSDocThisTag | undefined = isInJSFile(declaration) ? getJSDocThisTag(declaration) : undefined;
             let hasThisParameter = false;
             const iife = getImmediatelyInvokedFunctionExpression(declaration);
             const isJSConstructSignature = isJSDocConstructSignature(declaration);
@@ -15060,6 +15098,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // signature.
             for (let i = isJSConstructSignature ? 1 : 0; i < declaration.parameters.length; i++) {
                 const param = declaration.parameters[i];
+                if (isInJSFile(param) && isJSDocThisTag(param)) {
+                    thisTag = param;
+                    continue;
+                }
 
                 let paramSymbol = param.symbol;
                 const type = isJSDocParameterTag(param) ? (param.typeExpression && param.typeExpression.type) : param.type;
@@ -15103,11 +15145,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            if (isInJSFile(declaration)) {
-                const thisTag = getJSDocThisTag(declaration);
-                if (thisTag && thisTag.typeExpression) {
-                    thisParameter = createSymbolWithType(createSymbol(SymbolFlags.FunctionScopedVariable, InternalSymbolName.This), getTypeFromTypeNode(thisTag.typeExpression));
-                }
+            if (thisTag && thisTag.typeExpression) {
+                thisParameter = createSymbolWithType(createSymbol(SymbolFlags.FunctionScopedVariable, InternalSymbolName.This), getTypeFromTypeNode(thisTag.typeExpression));
             }
 
             const hostDeclaration = isJSDocSignature(declaration) ? getEffectiveJSDocHost(declaration) : declaration;
@@ -17700,7 +17739,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function shouldDeferIndexType(type: Type, indexFlags = IndexFlags.None) {
         return !!(type.flags & TypeFlags.InstantiableNonPrimitive ||
             isGenericTupleType(type) ||
-            isGenericMappedType(type) && !hasDistributiveNameType(type) ||
+            isGenericMappedType(type) && (!hasDistributiveNameType(type) || getMappedTypeNameTypeKind(type) === MappedTypeNameTypeKind.Remapping) ||
             type.flags & TypeFlags.Union && !(indexFlags & IndexFlags.NoReducibleCheck) && isGenericReducibleType(type) ||
             type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable));
     }
@@ -18283,7 +18322,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // K is generic and N is assignable to P, instantiate E using a mapper that substitutes the index type for P.
         // For example, for an index access { [P in K]: Box<T[P]> }[X], we construct the type Box<T[X]>.
         if (isGenericMappedType(objectType)) {
-            if (!getNameTypeFromMappedType(objectType) || isFilteringMappedType(objectType)) {
+            if (getMappedTypeNameTypeKind(objectType) !== MappedTypeNameTypeKind.Remapping) {
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
         }
@@ -20664,8 +20703,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                 // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                 // with respect to T.
-                const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
-                const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType));
+                const sourceSig = checkMode & SignatureCheckMode.Callback || isInstantiatedGenericParameter(source, i) ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
+                const targetSig = checkMode & SignatureCheckMode.Callback || isInstantiatedGenericParameter(target, i) ? undefined : getSingleCallSignature(getNonNullableType(targetType));
                 const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
                     getTypeFacts(sourceType, TypeFacts.IsUndefinedOrNull) === getTypeFacts(targetType, TypeFacts.IsUndefinedOrNull);
                 let related = callbacks ?
@@ -25327,7 +25366,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     target = getIntersectionType(targets);
                 }
             }
-            else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
+            if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
                 target = getActualTypeVariable(target);
             }
             if (target.flags & TypeFlags.TypeVariable) {
@@ -25668,9 +25707,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (constraintType.flags & TypeFlags.Index) {
                 constraintType = getSimplifiedIndexType(constraintType as IndexType);
             }
-            if (constraintType.flags & TypeFlags.Union) {
+            if (constraintType.flags & TypeFlags.UnionOrIntersection) {
                 let result = false;
-                for (const type of (constraintType as UnionType).types) {
+                for (const type of (constraintType as (UnionType | IntersectionType)).types) {
                     result = inferToMappedType(source, target, type) || result;
                 }
                 return result;
@@ -33462,6 +33501,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
     }
 
+    function isInstantiatedGenericParameter(signature: Signature, pos: number) {
+        let type;
+        return !!(signature.target && (type = tryGetTypeAtPosition(signature.target, pos)) && isGenericType(type));
+    }
+
     // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
     function getSingleCallSignature(type: Type): Signature | undefined {
         return getSingleSignature(type, SignatureKind.Call, /*allowMembers*/ false);
@@ -34752,7 +34796,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // use the resolvingSignature singleton to indicate that we deferred processing. This result will be
         // propagated out and eventually turned into silentNeverType (a type that is assignable to anything and
         // from which we never make inferences).
-        if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments && callSignatures.some(isGenericFunctionReturningFunction)) {
+        if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments && callSignatures.some(isGenericFunctionReturningFunctionOrConstructor)) {
             skippedGenericFunction(node, checkMode);
             return resolvingSignature;
         }
@@ -34765,8 +34809,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return resolveCall(node, callSignatures, candidatesOutArray, checkMode, callChainFlags);
     }
 
-    function isGenericFunctionReturningFunction(signature: Signature) {
-        return !!(signature.typeParameters && isFunctionType(getReturnTypeOfSignature(signature)));
+    function isGenericFunctionReturningFunctionOrConstructor(signature: Signature) {
+        if (!signature.typeParameters) {
+            return false;
+        }
+        const returnType = getReturnTypeOfSignature(signature);
+        return isFunctionType(returnType) || isConstructorType(returnType);
     }
 
     /**
@@ -40120,7 +40168,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Check if the index type is assignable to 'keyof T' for the object type.
         const objectType = (type as IndexedAccessType).objectType;
         const indexType = (type as IndexedAccessType).indexType;
-        if (isTypeAssignableTo(indexType, getIndexType(objectType, IndexFlags.None))) {
+        // skip index type deferral on remapping mapped types
+        const objectIndexType = isGenericMappedType(objectType) && getMappedTypeNameTypeKind(objectType) === MappedTypeNameTypeKind.Remapping
+            ? getIndexTypeForMappedType(objectType, IndexFlags.None)
+            : getIndexType(objectType, IndexFlags.None);
+        if (isTypeAssignableTo(indexType, objectIndexType)) {
             if (
                 accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
                 getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(objectType as MappedType) & MappedTypeModifiers.IncludeReadonly
