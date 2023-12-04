@@ -676,7 +676,7 @@ Reusing resolution of module '@typescript/lib-webworker' from '/home/src/project
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
-FileWatcher:: Added:: WatchInfo: /home/src/projects/project1/core.d.ts 500 undefined Missing file
+FileWatcher:: Added:: WatchInfo: project1/core.d.ts 500 undefined Missing file
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
   The file is in the program because:
     Root file specified for compilation

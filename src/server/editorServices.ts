@@ -808,7 +808,17 @@ interface NodeModulesWatcher extends FileWatcher {
     /** How many watchers of this directory were for closed ScriptInfo */
     refreshScriptInfoRefCount: number;
     /** List of project names whose module specifier cache should be cleared when package.jsons change */
-    affectedModuleSpecifierCacheProjects?: Set<string>;
+    affectedModuleSpecifierCacheProjects?: Set<Project>;
+}
+
+/** @internal */
+export interface PackageJsonWatcher extends FileWatcher {
+    projects: Set<Project | WildcardWatcher>;
+}
+
+/** @internal */
+export interface WildcardWatcher extends FileWatcher {
+    packageJsonWatches: Set<PackageJsonWatcher> | undefined;
 }
 
 function getDetailWatchInfo(watchType: WatchType, project: Project | NormalizedPath | undefined) {
@@ -1000,7 +1010,7 @@ export class ProjectService {
      * @internal
      */
     readonly filenameToScriptInfo = new Map<string, ScriptInfo>();
-    private readonly nodeModulesWatchers = new Map<string, NodeModulesWatcher>();
+    private readonly nodeModulesWatchers = new Map<Path, NodeModulesWatcher>();
     /**
      * Contains all the deleted script info's version information so that
      * it does not reset when creating script info again
@@ -1118,7 +1128,7 @@ export class ProjectService {
     /** @internal */
     readonly packageJsonCache: PackageJsonCache;
     /** @internal */
-    private packageJsonFilesMap: Map<Path, FileWatcher> | undefined;
+    private packageJsonFilesMap: Map<Path, PackageJsonWatcher> | undefined;
     /** @internal */
     private incompleteCompletionsCache: IncompleteCompletionsCache | undefined;
     /** @internal */
@@ -1640,24 +1650,26 @@ export class ProjectService {
      *
      * @internal
      */
-    private watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, configFileName: NormalizedPath, config: ParsedConfig) {
-        return this.watchFactory.watchDirectory(
+    private watchWildcardDirectory(directory: string, flags: WatchDirectoryFlags, configFileName: NormalizedPath, config: ParsedConfig) {
+        let watcher: FileWatcher | undefined = this.watchFactory.watchDirectory(
             directory,
             fileOrDirectory => {
                 const fileOrDirectoryPath = this.toPath(fileOrDirectory);
                 const fsResult = config.cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 if (
                     getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
-                    (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
+                    (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectory))
                 ) {
-                    this.logger.info(`Config: ${configFileName} Detected new package.json: ${fileOrDirectory}`);
-                    this.onAddPackageJson(fileOrDirectoryPath);
+                    const file = this.getNormalizedAbsolutePath(fileOrDirectory);
+                    this.logger.info(`Config: ${configFileName} Detected new package.json: ${file}`);
+                    this.packageJsonCache.addOrUpdate(file, fileOrDirectoryPath);
+                    this.watchPackageJsonFile(file, fileOrDirectoryPath, result);
                 }
 
                 const configuredProjectForConfig = this.findConfiguredProjectByProjectName(configFileName);
                 if (
                     isIgnoredFileFromWildCardWatching({
-                        watchedDirPath: directory,
+                        watchedDirPath: this.toPath(directory),
                         fileOrDirectory,
                         fileOrDirectoryPath,
                         configFileName,
@@ -1707,6 +1719,22 @@ export class ProjectService {
             WatchType.WildcardDirectory,
             configFileName,
         );
+
+        const result: WildcardWatcher = {
+            packageJsonWatches: undefined,
+            close() {
+                if (watcher) {
+                    watcher.close();
+                    watcher = undefined;
+                    result.packageJsonWatches?.forEach(watcher => {
+                        watcher.projects.delete(result);
+                        watcher.close();
+                    });
+                    result.packageJsonWatches = undefined;
+                }
+            },
+        };
+        return result;
     }
 
     /** @internal */
@@ -2638,9 +2666,9 @@ export class ProjectService {
             config!.watchedDirectoriesStale = false;
             updateWatchingWildcardDirectories(
                 config!.watchedDirectories ||= new Map(),
-                new Map(Object.entries(config!.parsedCommandLine!.wildcardDirectories!)),
+                config!.parsedCommandLine!.wildcardDirectories,
                 // Create new directory watcher
-                (directory, flags) => this.watchWildcardDirectory(directory as Path, flags, configFileName, config!),
+                (directory, flags) => this.watchWildcardDirectory(directory, flags, configFileName, config!),
             );
         }
         else {
@@ -2731,7 +2759,7 @@ export class ProjectService {
             projectRootFilesMap.forEach((value, path) => {
                 if (!newRootScriptInfoMap.has(path)) {
                     if (value.info) {
-                        project.removeFile(value.info, project.fileExists(path), /*detachFromProject*/ true);
+                        project.removeFile(value.info, project.fileExists(value.info.fileName), /*detachFromProject*/ true);
                     }
                     else {
                         projectRootFilesMap.delete(path);
@@ -3012,7 +3040,7 @@ export class ProjectService {
             (!this.globalCacheLocationDirectoryPath ||
                 !startsWith(info.path, this.globalCacheLocationDirectoryPath))
         ) {
-            const indexOfNodeModules = info.path.indexOf("/node_modules/");
+            const indexOfNodeModules = info.fileName.indexOf("/node_modules/");
             if (!this.host.getModifiedTime || indexOfNodeModules === -1) {
                 info.fileWatcher = this.watchFactory.watchFile(
                     info.fileName,
@@ -3024,13 +3052,13 @@ export class ProjectService {
             }
             else {
                 info.mTime = this.getModifiedTime(info);
-                info.fileWatcher = this.watchClosedScriptInfoInNodeModules(info.path.substr(0, indexOfNodeModules) as Path);
+                info.fileWatcher = this.watchClosedScriptInfoInNodeModules(info.fileName.substring(0, indexOfNodeModules));
             }
         }
     }
 
-    private createNodeModulesWatcher(dir: Path) {
-        const watcher = this.watchFactory.watchDirectory(
+    private createNodeModulesWatcher(dir: string, dirPath: Path) {
+        let watcher: FileWatcher | undefined = this.watchFactory.watchDirectory(
             dir,
             fileOrDirectory => {
                 const fileOrDirectoryPath = removeIgnoredPath(this.toPath(fileOrDirectory));
@@ -3044,15 +3072,15 @@ export class ProjectService {
                         basename === "package.json" || basename === "node_modules"
                     )
                 ) {
-                    result.affectedModuleSpecifierCacheProjects.forEach(projectName => {
-                        this.findProject(projectName)?.getModuleSpecifierCache()?.clear();
+                    result.affectedModuleSpecifierCacheProjects.forEach(project => {
+                        project.getModuleSpecifierCache()?.clear();
                     });
                 }
 
                 // Refresh closed script info after an npm install
                 if (result.refreshScriptInfoRefCount) {
-                    if (dir === fileOrDirectoryPath) {
-                        this.refreshScriptInfosInDirectory(dir);
+                    if (dirPath === fileOrDirectoryPath) {
+                        this.refreshScriptInfosInDirectory(dirPath);
                     }
                     else {
                         const info = this.getScriptInfoForPath(fileOrDirectoryPath);
@@ -3076,32 +3104,36 @@ export class ProjectService {
             refreshScriptInfoRefCount: 0,
             affectedModuleSpecifierCacheProjects: undefined,
             close: () => {
-                if (!result.refreshScriptInfoRefCount && !result.affectedModuleSpecifierCacheProjects?.size) {
+                if (watcher && !result.refreshScriptInfoRefCount && !result.affectedModuleSpecifierCacheProjects?.size) {
                     watcher.close();
-                    this.nodeModulesWatchers.delete(dir);
+                    watcher = undefined;
+                    this.nodeModulesWatchers.delete(dirPath);
                 }
             },
         };
-        this.nodeModulesWatchers.set(dir, result);
+        this.nodeModulesWatchers.set(dirPath, result);
         return result;
     }
 
     /** @internal */
-    watchPackageJsonsInNodeModules(dir: Path, project: Project): FileWatcher {
-        const watcher = this.nodeModulesWatchers.get(dir) || this.createNodeModulesWatcher(dir);
-        (watcher.affectedModuleSpecifierCacheProjects ||= new Set()).add(project.getProjectName());
+    watchPackageJsonsInNodeModules(dir: string, project: Project): FileWatcher {
+        const dirPath = this.toPath(dir);
+        const watcher = this.nodeModulesWatchers.get(dirPath) || this.createNodeModulesWatcher(dir, dirPath);
+        Debug.assert(!watcher.affectedModuleSpecifierCacheProjects?.has(project));
+        (watcher.affectedModuleSpecifierCacheProjects ||= new Set()).add(project);
 
         return {
             close: () => {
-                watcher.affectedModuleSpecifierCacheProjects?.delete(project.getProjectName());
+                watcher.affectedModuleSpecifierCacheProjects?.delete(project);
                 watcher.close();
             },
         };
     }
 
-    private watchClosedScriptInfoInNodeModules(dir: Path): FileWatcher {
-        const watchDir = dir + "/node_modules" as Path;
-        const watcher = this.nodeModulesWatchers.get(watchDir) || this.createNodeModulesWatcher(watchDir);
+    private watchClosedScriptInfoInNodeModules(dir: string): FileWatcher {
+        const watchDir = dir + "/node_modules";
+        const watchDirPath = this.toPath(watchDir);
+        const watcher = this.nodeModulesWatchers.get(watchDirPath) || this.createNodeModulesWatcher(watchDir, watchDirPath);
         watcher.refreshScriptInfoRefCount++;
 
         return {
@@ -3113,7 +3145,7 @@ export class ProjectService {
     }
 
     private getModifiedTime(info: ScriptInfo) {
-        return (this.host.getModifiedTime!(info.path) || missingFileModifiedTime).getTime();
+        return (this.host.getModifiedTime!(info.fileName) || missingFileModifiedTime).getTime();
     }
 
     private refreshScriptInfo(info: ScriptInfo) {
@@ -3406,7 +3438,9 @@ export class ProjectService {
                     });
                 }
                 if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
-                    this.invalidateProjectPackageJson(/*packageJsonPath*/ undefined);
+                    this.forEachProject(project => {
+                        project.onAutoImportProviderSettingsChanged();
+                    });
                 }
             }
             if (args.extraFileExtensions) {
@@ -4600,12 +4634,11 @@ export class ProjectService {
     }
 
     /** @internal */
-    getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[] {
+    getPackageJsonsVisibleToFile(fileName: string, project: Project, rootDir?: string): readonly ProjectPackageJsonInfo[] {
         const packageJsonCache = this.packageJsonCache;
         const rootPath = rootDir && this.toPath(rootDir);
-        const filePath = this.toPath(fileName);
         const result: ProjectPackageJsonInfo[] = [];
-        const processDirectory = (directory: Path): boolean | undefined => {
+        const processDirectory = (directory: string): boolean | undefined => {
             switch (packageJsonCache.directoryHasPackageJson(directory)) {
                 // Sync and check same directory again
                 case Ternary.Maybe:
@@ -4614,7 +4647,7 @@ export class ProjectService {
                 // Check package.json
                 case Ternary.True:
                     const packageJsonFileName = combinePaths(directory, "package.json");
-                    this.watchPackageJsonFile(packageJsonFileName as Path);
+                    this.watchPackageJsonFile(packageJsonFileName, this.toPath(packageJsonFileName), project);
                     const info = packageJsonCache.getInDirectory(directory);
                     if (info) result.push(info);
             }
@@ -4623,14 +4656,14 @@ export class ProjectService {
             }
         };
 
-        forEachAncestorDirectory(getDirectoryPath(filePath), processDirectory);
+        forEachAncestorDirectory(getDirectoryPath(fileName), processDirectory);
         return result;
     }
 
     /** @internal */
     getNearestAncestorDirectoryWithPackageJson(fileName: string): string | undefined {
         return forEachAncestorDirectory(fileName, directory => {
-            switch (this.packageJsonCache.directoryHasPackageJson(this.toPath(directory))) {
+            switch (this.packageJsonCache.directoryHasPackageJson(directory)) {
                 case Ternary.True:
                     return directory;
                 case Ternary.False:
@@ -4644,42 +4677,51 @@ export class ProjectService {
     }
 
     /** @internal */
-    private watchPackageJsonFile(path: Path) {
-        const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = new Map());
-        if (!watchers.has(path)) {
-            this.invalidateProjectPackageJson(path);
-            watchers.set(
-                path,
-                this.watchFactory.watchFile(
-                    path,
-                    (fileName, eventKind) => {
-                        const path = this.toPath(fileName);
-                        switch (eventKind) {
-                            case FileWatcherEventKind.Created:
-                                return Debug.fail();
-                            case FileWatcherEventKind.Changed:
-                                this.packageJsonCache.addOrUpdate(path);
-                                this.invalidateProjectPackageJson(path);
-                                break;
-                            case FileWatcherEventKind.Deleted:
-                                this.packageJsonCache.delete(path);
-                                this.invalidateProjectPackageJson(path);
-                                watchers.get(path)!.close();
-                                watchers.delete(path);
-                        }
-                    },
-                    PollingInterval.Low,
-                    this.hostConfiguration.watchOptions,
-                    WatchType.PackageJson,
-                ),
+    private watchPackageJsonFile(file: string, path: Path, project: Project | WildcardWatcher) {
+        Debug.assert(project !== undefined);
+        let result = (this.packageJsonFilesMap ??= new Map()).get(path);
+        if (!result) {
+            // this.invalidateProjectPackageJson(path);
+            let watcher: FileWatcher | undefined = this.watchFactory.watchFile(
+                file,
+                (fileName, eventKind) => {
+                    switch (eventKind) {
+                        case FileWatcherEventKind.Created:
+                            return Debug.fail();
+                        case FileWatcherEventKind.Changed:
+                            this.packageJsonCache.addOrUpdate(fileName, path);
+                            this.onPackageJsonChange(result);
+                            break;
+                        case FileWatcherEventKind.Deleted:
+                            this.packageJsonCache.delete(path);
+                            this.onPackageJsonChange(result);
+                            result.projects.clear();
+                            result.close();
+                    }
+                },
+                PollingInterval.Low,
+                this.hostConfiguration.watchOptions,
+                WatchType.PackageJson,
             );
+            result = {
+                projects: new Set(),
+                close: () => {
+                    if (result.projects.size || !watcher) return;
+                    watcher.close();
+                    watcher = undefined;
+                    this.packageJsonFilesMap?.delete(path);
+                    this.packageJsonCache.invalidate(path);
+                },
+            };
+            this.packageJsonFilesMap.set(path, result);
         }
+        result.projects.add(project);
+        (project.packageJsonWatches ??= new Set()).add(result);
     }
 
     /** @internal */
-    private onAddPackageJson(path: Path) {
-        this.packageJsonCache.addOrUpdate(path);
-        this.watchPackageJsonFile(path);
+    private onPackageJsonChange(result: PackageJsonWatcher) {
+        result.projects.forEach(project => (project as Project).onPackageJsonChange?.());
     }
 
     /** @internal */
@@ -4691,21 +4733,6 @@ export class ProjectService {
                 return PackageJsonAutoImportPreference.Off;
             default:
                 return PackageJsonAutoImportPreference.Auto;
-        }
-    }
-
-    /** @internal */
-    private invalidateProjectPackageJson(packageJsonPath: Path | undefined) {
-        this.configuredProjects.forEach(invalidate);
-        this.inferredProjects.forEach(invalidate);
-        this.externalProjects.forEach(invalidate);
-        function invalidate(project: Project) {
-            if (packageJsonPath) {
-                project.onPackageJsonChange(packageJsonPath);
-            }
-            else {
-                project.onAutoImportProviderSettingsChanged();
-            }
         }
     }
 

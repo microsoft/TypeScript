@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures7.ts] ////
+
+=== unionTypeCallSignatures7.ts ===
+// https://github.com/microsoft/TypeScript/issues/55203
+
+interface Callable<Name extends string> {
+>Callable : Symbol(Callable, Decl(unionTypeCallSignatures7.ts, 0, 0))
+>Name : Symbol(Name, Decl(unionTypeCallSignatures7.ts, 2, 19))
+
+  (): `${Name} without id`;
+>Name : Symbol(Name, Decl(unionTypeCallSignatures7.ts, 2, 19))
+
+  (id: number): `${Name} with id`;
+>id : Symbol(id, Decl(unionTypeCallSignatures7.ts, 4, 3))
+>Name : Symbol(Name, Decl(unionTypeCallSignatures7.ts, 2, 19))
+}
+
+declare const f: Callable<"A"> | Callable<"B">;
+>f : Symbol(f, Decl(unionTypeCallSignatures7.ts, 7, 13))
+>Callable : Symbol(Callable, Decl(unionTypeCallSignatures7.ts, 0, 0))
+>Callable : Symbol(Callable, Decl(unionTypeCallSignatures7.ts, 0, 0))
+
+const result = f(123);
+>result : Symbol(result, Decl(unionTypeCallSignatures7.ts, 8, 5))
+>f : Symbol(f, Decl(unionTypeCallSignatures7.ts, 7, 13))
+

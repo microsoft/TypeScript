@@ -90,7 +90,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with tmp/package.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Config: /jsconfig.json Detected new package.json: tmp/package.json
+Info seq  [hh:mm:ss:mss] Config: /jsconfig.json Detected new package.json: /tmp/package.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tmp/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project: /jsconfig.json Detected file add/remove of non supported extension: tmp/package.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/package.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
@@ -170,12 +170,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/tmp",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/bower.json' dependencies: ["jquery"]
@@ -541,12 +537,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/tmp",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/bower.json' dependencies: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []

@@ -29,8 +29,8 @@ Info seq  [hh:mm:ss:mss] Search path: ^walkThroughSnippet:/Users/UserName/projec
 Info seq  [hh:mm:ss:mss] For info: ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /typings/@epic/shell.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /typings/@epic/Core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /typings/@epic/Shell.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -47,9 +47,9 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/typings/@epic/core.d.ts: *new*
+/typings/@epic/Core.d.ts: *new*
   {"pollingInterval":500}
-/typings/@epic/shell.d.ts: *new*
+/typings/@epic/Shell.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -97,12 +97,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -194,15 +190,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/^walkthroughsnippet:: *new*
+/^walkThroughSnippet:: *new*
   {"pollingInterval":500}
 /bower_components: *new*
   {"pollingInterval":500}
 /node_modules: *new*
   {"pollingInterval":500}
-/typings/@epic/core.d.ts:
+/typings/@epic/Core.d.ts:
   {"pollingInterval":500}
-/typings/@epic/shell.d.ts:
+/typings/@epic/Shell.d.ts:
   {"pollingInterval":500}
 
 FsWatches::

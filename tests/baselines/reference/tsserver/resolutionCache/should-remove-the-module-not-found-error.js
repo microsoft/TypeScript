@@ -58,7 +58,7 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-/users/username/projects/project/modulefile: *new*
+/users/username/projects/project/moduleFile: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -194,11 +194,11 @@ PolledWatches::
   {"pollingInterval":2000}
 
 PolledWatches *deleted*::
-/users/username/projects/project/modulefile:
+/users/username/projects/project/moduleFile:
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/modulefile.ts: *new*
+/users/username/projects/project/moduleFile.ts: *new*
   {}
 
 FsWatches *deleted*::

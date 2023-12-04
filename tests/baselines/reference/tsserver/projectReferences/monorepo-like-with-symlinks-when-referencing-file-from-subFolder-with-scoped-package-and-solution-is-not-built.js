@@ -101,8 +101,8 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/packages/A/ts
   }
  ]
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/a/src 1 undefined Config: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/a/src 1 undefined Config: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/src 1 undefined Config: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/A/src 1 undefined Config: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/packages/B/tsconfig.json : {
  "rootNames": [
@@ -117,8 +117,8 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/packages/B/ts
  }
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/b/src 1 undefined Config: /user/username/projects/myproject/packages/B/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/b/src 1 undefined Config: /user/username/projects/myproject/packages/B/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/src 1 undefined Config: /user/username/projects/myproject/packages/B/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/src 1 undefined Config: /user/username/projects/myproject/packages/B/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/src/foo.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/B/src/bar/foo.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
@@ -241,9 +241,9 @@ After request
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules: *new*
+/user/username/projects/myproject/packages/A/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types: *new*
+/user/username/projects/myproject/packages/A/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
@@ -255,23 +255,23 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/packages/a/tsconfig.json: *new*
+/user/username/projects/myproject/packages/A/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/packages/b/package.json: *new*
+/user/username/projects/myproject/packages/B/package.json: *new*
   {}
-/user/username/projects/myproject/packages/b/src/bar/foo.ts: *new*
+/user/username/projects/myproject/packages/B/src/bar/foo.ts: *new*
   {}
-/user/username/projects/myproject/packages/b/src/foo.ts: *new*
+/user/username/projects/myproject/packages/B/src/foo.ts: *new*
   {}
-/user/username/projects/myproject/packages/b/tsconfig.json: *new*
+/user/username/projects/myproject/packages/B/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/packages/a/src: *new*
+/user/username/projects/myproject/packages/A/src: *new*
   {}
-/user/username/projects/myproject/packages/b/src: *new*
+/user/username/projects/myproject/packages/B/src: *new*
   {}
 
 Before request

@@ -49,9 +49,11 @@ declare namespace ts {
             readonly fileName: Path;
             readonly packageName: string;
             readonly projectRootPath: Path;
+            readonly id: number;
         }
         interface PackageInstalledResponse extends ProjectResponse {
             readonly kind: ActionPackageInstalled;
+            readonly id: number;
             readonly success: boolean;
             readonly message: string;
         }
@@ -6018,9 +6020,11 @@ declare namespace ts {
     /** @deprecated */
     type AssertionKey = ImportAttributeName;
     /** @deprecated */
-    type AssertEntry = ImportAttribute;
+    interface AssertEntry extends ImportAttribute {
+    }
     /** @deprecated */
-    type AssertClause = ImportAttributes;
+    interface AssertClause extends ImportAttributes {
+    }
     type ImportAttributeName = Identifier | StringLiteral;
     interface ImportAttribute extends Node {
         readonly kind: SyntaxKind.ImportAttribute;
@@ -10418,7 +10422,7 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
-        jsDocParsingMode?: JSDocParsingMode;
+        jsDocParsingMode?: JSDocParsingMode | undefined;
     }
     type WithMetadata<T> = T & {
         metadata?: unknown;
@@ -11614,6 +11618,7 @@ declare namespace ts {
         moduleName?: string;
         renamedDependencies?: MapLike<string>;
         transformers?: CustomTransformers;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface TranspileOutput {
         outputText: string;

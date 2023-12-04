@@ -1,4 +1,4 @@
-file.tsx(48,12): error TS2769: No overload matches this call.
+file.tsx(48,13): error TS2769: No overload matches this call.
   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
       Property 'to' does not exist on type 'IntrinsicAttributes & ButtonProps'.
@@ -82,7 +82,7 @@ file.tsx(56,13): error TS2769: No overload matches this call.
     
     // Error
     const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // extra property;
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
 !!! error TS2769:     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.

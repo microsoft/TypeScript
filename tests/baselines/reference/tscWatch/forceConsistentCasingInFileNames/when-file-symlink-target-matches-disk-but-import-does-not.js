@@ -90,13 +90,13 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
+/user/username/projects/myproject/XY.ts: *new*
+  {}
 /user/username/projects/myproject/b.ts: *new*
   {}
 /user/username/projects/myproject/link.ts: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/xy.ts: *new*
   {}
 
 FsWatchesRecursive::
