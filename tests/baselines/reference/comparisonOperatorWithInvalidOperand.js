@@ -13,7 +13,6 @@ var g: string[] = [];
 var h: bigint = 9007199254740991n;
 var i: Number = 0;
 var j: any;
-// Literal
 const k = 0;
 const l = 9007199254740991n;
 
@@ -159,7 +158,6 @@ var g = [];
 var h = 9007199254740991n;
 var i = 0;
 var j;
-// Literal
 var k = 0;
 var l = 9007199254740991n;
 // operator <

@@ -43,7 +43,6 @@ var i: Number = 0;
 var j: any;
 >j : any
 
-// Literal
 const k = 0;
 >k : 0
 >0 : 0

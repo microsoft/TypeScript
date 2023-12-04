@@ -36,12 +36,11 @@ var i: Number = 0;
 var j: any;
 >j : Symbol(j, Decl(comparisonOperatorWithInvalidOperand.ts, 11, 3))
 
-// Literal
 const k = 0;
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
 const l = 9007199254740991n;
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // operator <
 // boolean
@@ -87,11 +86,11 @@ a < j;
 
 a < k;
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
 a < l;
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // number
 b < c;
@@ -128,15 +127,15 @@ b < j;
 
 b < k;
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
 b < l;
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 k < l;
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // Date
 d < d;
@@ -191,11 +190,11 @@ a > j;
 
 a > k;
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
 a > l;
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // number
 b > c;
@@ -232,15 +231,15 @@ b > j;
 
 b > k;
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
 b > l;
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 k > l;
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // Date
 d > d;
@@ -295,11 +294,11 @@ a <= j;
 
 a <= k;
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
 a <= l;
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // number
 b <= c;
@@ -336,15 +335,15 @@ b <= j;
 
 b <= k;
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
 b <= l;
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 k <= l;
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // Date
 d <= d;
@@ -399,11 +398,11 @@ a >= j;
 
 a >= k;
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
 a >= l;
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // number
 b >= c;
@@ -440,15 +439,15 @@ b >= j;
 
 b >= k;
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
 b >= l;
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 k >= l;
->k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
->l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 14, 5))
+>k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
+>l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // Date
 d >= d;
