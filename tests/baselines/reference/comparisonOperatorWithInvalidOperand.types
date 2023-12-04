@@ -1,0 +1,570 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithInvalidOperand.ts] ////
+
+=== comparisonOperatorWithInvalidOperand.ts ===
+// repro #15506
+// assumes that only valid comparisons are between anys, numbers and strings
+var a: boolean = false;
+>a : boolean
+>false : false
+
+var b: number = 0;
+>b : number
+>0 : 0
+
+var c: string = "";
+>c : string
+>"" : ""
+
+var d: Date = new Date();
+>d : Date
+>new Date() : Date
+>Date : DateConstructor
+
+var e: number[] = [];
+>e : number[]
+>[] : undefined[]
+
+var f: {} = {};
+>f : {}
+>{} : {}
+
+var g: string[] = [];
+>g : string[]
+>[] : undefined[]
+
+var h: bigint = 9007199254740991n;
+>h : bigint
+>9007199254740991n : 9007199254740991n
+
+var i: Number = 0;
+>i : Number
+>0 : 0
+
+var j: any;
+>j : any
+
+// Literal
+const k = 0;
+>k : 0
+>0 : 0
+
+const l = 9007199254740991n;
+>l : 9007199254740991n
+>9007199254740991n : 9007199254740991n
+
+// operator <
+// boolean
+a < a;
+>a < a : boolean
+>a : false
+>a : false
+
+a < b;
+>a < b : boolean
+>a : false
+>b : number
+
+a < c;
+>a < c : boolean
+>a : false
+>c : string
+
+a < d;
+>a < d : boolean
+>a : false
+>d : Date
+
+a < e;
+>a < e : boolean
+>a : false
+>e : number[]
+
+a < f;
+>a < f : boolean
+>a : false
+>f : {}
+
+a < g;
+>a < g : boolean
+>a : false
+>g : string[]
+
+a < h;
+>a < h : boolean
+>a : false
+>h : bigint
+
+a < i;
+>a < i : boolean
+>a : false
+>i : Number
+
+a < j;
+>a < j : boolean
+>a : false
+>j : any
+
+a < k;
+>a < k : boolean
+>a : false
+>k : 0
+
+a < l;
+>a < l : boolean
+>a : false
+>l : 9007199254740991n
+
+// number
+b < c;
+>b < c : boolean
+>b : number
+>c : string
+
+b < d;
+>b < d : boolean
+>b : number
+>d : Date
+
+b < e;
+>b < e : boolean
+>b : number
+>e : number[]
+
+b < f;
+>b < f : boolean
+>b : number
+>f : {}
+
+b < g;
+>b < g : boolean
+>b : number
+>g : string[]
+
+b < h;
+>b < h : boolean
+>b : number
+>h : bigint
+
+b < i;
+>b < i : boolean
+>b : number
+>i : Number
+
+b < j;
+>b < j : boolean
+>b : number
+>j : any
+
+b < k;
+>b < k : boolean
+>b : number
+>k : 0
+
+b < l;
+>b < l : boolean
+>b : number
+>l : 9007199254740991n
+
+k < l;
+>k < l : boolean
+>k : 0
+>l : 9007199254740991n
+
+// Date
+d < d;
+>d < d : boolean
+>d : Date
+>d : Date
+
+d < a;
+>d < a : boolean
+>d : Date
+>a : false
+
+// operator >
+// boolean
+a > a;
+>a > a : boolean
+>a : false
+>a : false
+
+a > b;
+>a > b : boolean
+>a : false
+>b : number
+
+a > c;
+>a > c : boolean
+>a : false
+>c : string
+
+a > d;
+>a > d : boolean
+>a : false
+>d : Date
+
+a > e;
+>a > e : boolean
+>a : false
+>e : number[]
+
+a > f;
+>a > f : boolean
+>a : false
+>f : {}
+
+a > g;
+>a > g : boolean
+>a : false
+>g : string[]
+
+a > h;
+>a > h : boolean
+>a : false
+>h : bigint
+
+a > i;
+>a > i : boolean
+>a : false
+>i : Number
+
+a > j;
+>a > j : boolean
+>a : false
+>j : any
+
+a > k;
+>a > k : boolean
+>a : false
+>k : 0
+
+a > l;
+>a > l : boolean
+>a : false
+>l : 9007199254740991n
+
+// number
+b > c;
+>b > c : boolean
+>b : number
+>c : string
+
+b > d;
+>b > d : boolean
+>b : number
+>d : Date
+
+b > e;
+>b > e : boolean
+>b : number
+>e : number[]
+
+b > f;
+>b > f : boolean
+>b : number
+>f : {}
+
+b > g;
+>b > g : boolean
+>b : number
+>g : string[]
+
+b > h;
+>b > h : boolean
+>b : number
+>h : bigint
+
+b > i;
+>b > i : boolean
+>b : number
+>i : Number
+
+b > j;
+>b > j : boolean
+>b : number
+>j : any
+
+b > k;
+>b > k : boolean
+>b : number
+>k : 0
+
+b > l;
+>b > l : boolean
+>b : number
+>l : 9007199254740991n
+
+k > l;
+>k > l : boolean
+>k : 0
+>l : 9007199254740991n
+
+// Date
+d > d;
+>d > d : boolean
+>d : Date
+>d : Date
+
+d > a;
+>d > a : boolean
+>d : Date
+>a : false
+
+// operator <=
+// boolean
+a <= a;
+>a <= a : boolean
+>a : false
+>a : false
+
+a <= b;
+>a <= b : boolean
+>a : false
+>b : number
+
+a <= c;
+>a <= c : boolean
+>a : false
+>c : string
+
+a <= d;
+>a <= d : boolean
+>a : false
+>d : Date
+
+a <= e;
+>a <= e : boolean
+>a : false
+>e : number[]
+
+a <= f;
+>a <= f : boolean
+>a : false
+>f : {}
+
+a <= g;
+>a <= g : boolean
+>a : false
+>g : string[]
+
+a <= h;
+>a <= h : boolean
+>a : false
+>h : bigint
+
+a <= i;
+>a <= i : boolean
+>a : false
+>i : Number
+
+a <= j;
+>a <= j : boolean
+>a : false
+>j : any
+
+a <= k;
+>a <= k : boolean
+>a : false
+>k : 0
+
+a <= l;
+>a <= l : boolean
+>a : false
+>l : 9007199254740991n
+
+// number
+b <= c;
+>b <= c : boolean
+>b : number
+>c : string
+
+b <= d;
+>b <= d : boolean
+>b : number
+>d : Date
+
+b <= e;
+>b <= e : boolean
+>b : number
+>e : number[]
+
+b <= f;
+>b <= f : boolean
+>b : number
+>f : {}
+
+b <= g;
+>b <= g : boolean
+>b : number
+>g : string[]
+
+b <= h;
+>b <= h : boolean
+>b : number
+>h : bigint
+
+b <= i;
+>b <= i : boolean
+>b : number
+>i : Number
+
+b <= j;
+>b <= j : boolean
+>b : number
+>j : any
+
+b <= k;
+>b <= k : boolean
+>b : number
+>k : 0
+
+b <= l;
+>b <= l : boolean
+>b : number
+>l : 9007199254740991n
+
+k <= l;
+>k <= l : boolean
+>k : 0
+>l : 9007199254740991n
+
+// Date
+d <= d;
+>d <= d : boolean
+>d : Date
+>d : Date
+
+d <= a;
+>d <= a : boolean
+>d : Date
+>a : false
+
+// operator >=
+// boolean
+a >= a;
+>a >= a : boolean
+>a : false
+>a : false
+
+a >= b;
+>a >= b : boolean
+>a : false
+>b : number
+
+a >= c;
+>a >= c : boolean
+>a : false
+>c : string
+
+a >= d;
+>a >= d : boolean
+>a : false
+>d : Date
+
+a >= e;
+>a >= e : boolean
+>a : false
+>e : number[]
+
+a >= f;
+>a >= f : boolean
+>a : false
+>f : {}
+
+a >= g;
+>a >= g : boolean
+>a : false
+>g : string[]
+
+a >= h;
+>a >= h : boolean
+>a : false
+>h : bigint
+
+a >= i;
+>a >= i : boolean
+>a : false
+>i : Number
+
+a >= j;
+>a >= j : boolean
+>a : false
+>j : any
+
+a >= k;
+>a >= k : boolean
+>a : false
+>k : 0
+
+a >= l;
+>a >= l : boolean
+>a : false
+>l : 9007199254740991n
+
+// number
+b >= c;
+>b >= c : boolean
+>b : number
+>c : string
+
+b >= d;
+>b >= d : boolean
+>b : number
+>d : Date
+
+b >= e;
+>b >= e : boolean
+>b : number
+>e : number[]
+
+b >= f;
+>b >= f : boolean
+>b : number
+>f : {}
+
+b >= g;
+>b >= g : boolean
+>b : number
+>g : string[]
+
+b >= h;
+>b >= h : boolean
+>b : number
+>h : bigint
+
+b >= i;
+>b >= i : boolean
+>b : number
+>i : Number
+
+b >= j;
+>b >= j : boolean
+>b : number
+>j : any
+
+b >= k;
+>b >= k : boolean
+>b : number
+>k : 0
+
+b >= l;
+>b >= l : boolean
+>b : number
+>l : 9007199254740991n
+
+k >= l;
+>k >= l : boolean
+>k : 0
+>l : 9007199254740991n
+
+// Date
+d >= d;
+>d >= d : boolean
+>d : Date
+>d : Date
+
+d >= a;
+>d >= a : boolean
+>d : Date
+>a : false
+

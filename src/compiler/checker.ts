@@ -20035,6 +20035,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isTypeComparableTo(type1, type2) || isTypeComparableTo(type2, type1);
     }
 
+    function checkTypeComparableWithLessOrGreaterThanOperator(valueType: Type): boolean {
+        const t = valueType.flags;
+        return !!(
+            (t & TypeFlags.Number ||
+                t & TypeFlags.NumberLiteral ||
+                t & TypeFlags.BigInt ||
+                t & TypeFlags.BigIntLiteral ||
+                t & TypeFlags.String ||
+                t & TypeFlags.StringLiteral ||
+                t & TypeFlags.Any) &&
+            !(t & TypeFlags.Boolean) &&
+            !(t & TypeFlags.Object)
+        );
+    }
+
     function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, errorOutputObject?: { errors?: Diagnostic[]; }): boolean {
         return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain, errorOutputObject);
     }
@@ -38273,13 +38288,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(leftType, left));
                     rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(rightType, right));
                     reportOperatorErrorUnless((left, right) => {
+                        if(!checkTypeComparableWithLessOrGreaterThanOperator(left) || !checkTypeComparableWithLessOrGreaterThanOperator(right)) {
+                            return false
+                        }
+
                         if (isTypeAny(left) || isTypeAny(right)) {
                             return true;
                         }
+
                         const leftAssignableToNumber = isTypeAssignableTo(left, numberOrBigIntType);
                         const rightAssignableToNumber = isTypeAssignableTo(right, numberOrBigIntType);
-                        return leftAssignableToNumber && rightAssignableToNumber ||
-                            !leftAssignableToNumber && !rightAssignableToNumber && areTypesComparable(left, right);
+
+                        return leftAssignableToNumber && rightAssignableToNumber || !leftAssignableToNumber && !rightAssignableToNumber && areTypesComparable(left, right);
                     });
                 }
                 return booleanType;

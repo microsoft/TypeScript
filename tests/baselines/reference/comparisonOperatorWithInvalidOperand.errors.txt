@@ -1,0 +1,393 @@
+comparisonOperatorWithInvalidOperand.ts(10,17): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+comparisonOperatorWithInvalidOperand.ts(15,11): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+comparisonOperatorWithInvalidOperand.ts(19,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'boolean'.
+comparisonOperatorWithInvalidOperand.ts(20,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'number'.
+comparisonOperatorWithInvalidOperand.ts(21,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'string'.
+comparisonOperatorWithInvalidOperand.ts(22,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(23,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'number[]'.
+comparisonOperatorWithInvalidOperand.ts(24,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and '{}'.
+comparisonOperatorWithInvalidOperand.ts(25,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'string[]'.
+comparisonOperatorWithInvalidOperand.ts(26,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'bigint'.
+comparisonOperatorWithInvalidOperand.ts(27,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(28,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'any'.
+comparisonOperatorWithInvalidOperand.ts(29,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'number'.
+comparisonOperatorWithInvalidOperand.ts(30,1): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'bigint'.
+comparisonOperatorWithInvalidOperand.ts(33,1): error TS2365: Operator '<' cannot be applied to types 'number' and 'string'.
+comparisonOperatorWithInvalidOperand.ts(34,1): error TS2365: Operator '<' cannot be applied to types 'number' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(35,1): error TS2365: Operator '<' cannot be applied to types 'number' and 'number[]'.
+comparisonOperatorWithInvalidOperand.ts(36,1): error TS2365: Operator '<' cannot be applied to types 'number' and '{}'.
+comparisonOperatorWithInvalidOperand.ts(37,1): error TS2365: Operator '<' cannot be applied to types 'number' and 'string[]'.
+comparisonOperatorWithInvalidOperand.ts(39,1): error TS2365: Operator '<' cannot be applied to types 'number' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(46,1): error TS2365: Operator '<' cannot be applied to types 'Date' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(47,1): error TS2365: Operator '<' cannot be applied to types 'Date' and 'boolean'.
+comparisonOperatorWithInvalidOperand.ts(51,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'boolean'.
+comparisonOperatorWithInvalidOperand.ts(52,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+comparisonOperatorWithInvalidOperand.ts(53,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
+comparisonOperatorWithInvalidOperand.ts(54,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(55,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number[]'.
+comparisonOperatorWithInvalidOperand.ts(56,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and '{}'.
+comparisonOperatorWithInvalidOperand.ts(57,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string[]'.
+comparisonOperatorWithInvalidOperand.ts(58,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'bigint'.
+comparisonOperatorWithInvalidOperand.ts(59,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(60,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
+comparisonOperatorWithInvalidOperand.ts(61,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+comparisonOperatorWithInvalidOperand.ts(62,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'bigint'.
+comparisonOperatorWithInvalidOperand.ts(65,1): error TS2365: Operator '>' cannot be applied to types 'number' and 'string'.
+comparisonOperatorWithInvalidOperand.ts(66,1): error TS2365: Operator '>' cannot be applied to types 'number' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(67,1): error TS2365: Operator '>' cannot be applied to types 'number' and 'number[]'.
+comparisonOperatorWithInvalidOperand.ts(68,1): error TS2365: Operator '>' cannot be applied to types 'number' and '{}'.
+comparisonOperatorWithInvalidOperand.ts(69,1): error TS2365: Operator '>' cannot be applied to types 'number' and 'string[]'.
+comparisonOperatorWithInvalidOperand.ts(71,1): error TS2365: Operator '>' cannot be applied to types 'number' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(78,1): error TS2365: Operator '>' cannot be applied to types 'Date' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(79,1): error TS2365: Operator '>' cannot be applied to types 'Date' and 'boolean'.
+comparisonOperatorWithInvalidOperand.ts(83,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'boolean'.
+comparisonOperatorWithInvalidOperand.ts(84,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'number'.
+comparisonOperatorWithInvalidOperand.ts(85,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'string'.
+comparisonOperatorWithInvalidOperand.ts(86,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(87,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'number[]'.
+comparisonOperatorWithInvalidOperand.ts(88,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and '{}'.
+comparisonOperatorWithInvalidOperand.ts(89,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'string[]'.
+comparisonOperatorWithInvalidOperand.ts(90,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'bigint'.
+comparisonOperatorWithInvalidOperand.ts(91,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(92,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'any'.
+comparisonOperatorWithInvalidOperand.ts(93,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'number'.
+comparisonOperatorWithInvalidOperand.ts(94,1): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'bigint'.
+comparisonOperatorWithInvalidOperand.ts(97,1): error TS2365: Operator '<=' cannot be applied to types 'number' and 'string'.
+comparisonOperatorWithInvalidOperand.ts(98,1): error TS2365: Operator '<=' cannot be applied to types 'number' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(99,1): error TS2365: Operator '<=' cannot be applied to types 'number' and 'number[]'.
+comparisonOperatorWithInvalidOperand.ts(100,1): error TS2365: Operator '<=' cannot be applied to types 'number' and '{}'.
+comparisonOperatorWithInvalidOperand.ts(101,1): error TS2365: Operator '<=' cannot be applied to types 'number' and 'string[]'.
+comparisonOperatorWithInvalidOperand.ts(103,1): error TS2365: Operator '<=' cannot be applied to types 'number' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(110,1): error TS2365: Operator '<=' cannot be applied to types 'Date' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(111,1): error TS2365: Operator '<=' cannot be applied to types 'Date' and 'boolean'.
+comparisonOperatorWithInvalidOperand.ts(115,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'boolean'.
+comparisonOperatorWithInvalidOperand.ts(116,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'number'.
+comparisonOperatorWithInvalidOperand.ts(117,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'string'.
+comparisonOperatorWithInvalidOperand.ts(118,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(119,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'number[]'.
+comparisonOperatorWithInvalidOperand.ts(120,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and '{}'.
+comparisonOperatorWithInvalidOperand.ts(121,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'string[]'.
+comparisonOperatorWithInvalidOperand.ts(122,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'bigint'.
+comparisonOperatorWithInvalidOperand.ts(123,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(124,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'any'.
+comparisonOperatorWithInvalidOperand.ts(125,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'number'.
+comparisonOperatorWithInvalidOperand.ts(126,1): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'bigint'.
+comparisonOperatorWithInvalidOperand.ts(129,1): error TS2365: Operator '>=' cannot be applied to types 'number' and 'string'.
+comparisonOperatorWithInvalidOperand.ts(130,1): error TS2365: Operator '>=' cannot be applied to types 'number' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(131,1): error TS2365: Operator '>=' cannot be applied to types 'number' and 'number[]'.
+comparisonOperatorWithInvalidOperand.ts(132,1): error TS2365: Operator '>=' cannot be applied to types 'number' and '{}'.
+comparisonOperatorWithInvalidOperand.ts(133,1): error TS2365: Operator '>=' cannot be applied to types 'number' and 'string[]'.
+comparisonOperatorWithInvalidOperand.ts(135,1): error TS2365: Operator '>=' cannot be applied to types 'number' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(142,1): error TS2365: Operator '>=' cannot be applied to types 'Date' and 'Date'.
+comparisonOperatorWithInvalidOperand.ts(143,1): error TS2365: Operator '>=' cannot be applied to types 'Date' and 'boolean'.
+
+
+==== comparisonOperatorWithInvalidOperand.ts (82 errors) ====
+    // repro #15506
+    // assumes that only valid comparisons are between anys, numbers and strings
+    var a: boolean = false;
+    var b: number = 0;
+    var c: string = "";
+    var d: Date = new Date();
+    var e: number[] = [];
+    var f: {} = {};
+    var g: string[] = [];
+    var h: bigint = 9007199254740991n;
+                    ~~~~~~~~~~~~~~~~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+    var i: Number = 0;
+    var j: any;
+    // Literal
+    const k = 0;
+    const l = 9007199254740991n;
+              ~~~~~~~~~~~~~~~~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+    
+    // operator <
+    // boolean
+    a < a;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'boolean'.
+    a < b;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'number'.
+    a < c;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'string'.
+    a < d;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'Date'.
+    a < e;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'number[]'.
+    a < f;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and '{}'.
+    a < g;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'string[]'.
+    a < h;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'bigint'.
+    a < i;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'Number'.
+    a < j;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'any'.
+    a < k;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'number'.
+    a < l;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'bigint'.
+    
+    // number
+    b < c;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'string'.
+    b < d;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'Date'.
+    b < e;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'number[]'.
+    b < f;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and '{}'.
+    b < g;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'string[]'.
+    b < h;
+    b < i;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'number' and 'Number'.
+    b < j;
+    b < k;
+    b < l;
+    k < l;
+    
+    // Date
+    d < d;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'Date' and 'Date'.
+    d < a;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'Date' and 'boolean'.
+    
+    // operator >
+    // boolean
+    a > a;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'boolean'.
+    a > b;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+    a > c;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
+    a > d;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'Date'.
+    a > e;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number[]'.
+    a > f;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{}'.
+    a > g;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string[]'.
+    a > h;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'bigint'.
+    a > i;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'Number'.
+    a > j;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
+    a > k;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+    a > l;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'bigint'.
+    
+    // number
+    b > c;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'string'.
+    b > d;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'Date'.
+    b > e;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'number[]'.
+    b > f;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and '{}'.
+    b > g;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'string[]'.
+    b > h;
+    b > i;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and 'Number'.
+    b > j;
+    b > k;
+    b > l;
+    k > l;
+    
+    // Date
+    d > d;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'Date' and 'Date'.
+    d > a;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'Date' and 'boolean'.
+    
+    // operator <=
+    // boolean
+    a <= a;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'boolean'.
+    a <= b;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'number'.
+    a <= c;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'string'.
+    a <= d;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'Date'.
+    a <= e;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'number[]'.
+    a <= f;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and '{}'.
+    a <= g;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'string[]'.
+    a <= h;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'bigint'.
+    a <= i;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'Number'.
+    a <= j;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'any'.
+    a <= k;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'number'.
+    a <= l;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'bigint'.
+    
+    // number
+    b <= c;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'number' and 'string'.
+    b <= d;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'number' and 'Date'.
+    b <= e;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'number' and 'number[]'.
+    b <= f;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'number' and '{}'.
+    b <= g;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'number' and 'string[]'.
+    b <= h;
+    b <= i;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'number' and 'Number'.
+    b <= j;
+    b <= k;
+    b <= l;
+    k <= l;
+    
+    // Date
+    d <= d;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'Date' and 'Date'.
+    d <= a;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'Date' and 'boolean'.
+    
+    // operator >=
+    // boolean
+    a >= a;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'boolean'.
+    a >= b;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'number'.
+    a >= c;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'string'.
+    a >= d;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'Date'.
+    a >= e;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'number[]'.
+    a >= f;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and '{}'.
+    a >= g;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'string[]'.
+    a >= h;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'bigint'.
+    a >= i;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'Number'.
+    a >= j;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'any'.
+    a >= k;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'number'.
+    a >= l;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'bigint'.
+    
+    // number
+    b >= c;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'number' and 'string'.
+    b >= d;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'number' and 'Date'.
+    b >= e;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'number' and 'number[]'.
+    b >= f;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'number' and '{}'.
+    b >= g;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'number' and 'string[]'.
+    b >= h;
+    b >= i;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'number' and 'Number'.
+    b >= j;
+    b >= k;
+    b >= l;
+    k >= l;
+    
+    // Date
+    d >= d;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'Date' and 'Date'.
+    d >= a;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'Date' and 'boolean'.
+    
