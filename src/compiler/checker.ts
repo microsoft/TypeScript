@@ -38289,7 +38289,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(rightType, right));
                     reportOperatorErrorUnless((left, right) => {
                         if (!checkTypeComparableWithLessOrGreaterThanOperator(left) || !checkTypeComparableWithLessOrGreaterThanOperator(right)) {
-                            return false
+                            return false;
                         }
 
                         if (isTypeAny(left) || isTypeAny(right)) {
