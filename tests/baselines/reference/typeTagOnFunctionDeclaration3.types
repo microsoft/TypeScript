@@ -31,9 +31,8 @@ export function test2() {}
 >test2 : typeof test2
 
 /** @type {{(): string; bar: number}} */
-function getter2(arg1) {
+function getter2() {
 >getter2 : typeof getter2
->arg1 : any
 
   return "";
 >"" : ""

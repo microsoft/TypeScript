@@ -15,7 +15,7 @@ Object.defineProperty(test1, "foo", {
 export function test2() {}
 
 /** @type {{(): string; bar: number}} */
-function getter2(arg1) {
+function getter2() {
   return "";
 }
 getter2.bar = 10;
@@ -41,7 +41,7 @@ Object.defineProperty(test1, "foo", {
 function test2() { }
 exports.test2 = test2;
 /** @type {{(): string; bar: number}} */
-function getter2(arg1) {
+function getter2() {
     return "";
 }
 getter2.bar = 10;
