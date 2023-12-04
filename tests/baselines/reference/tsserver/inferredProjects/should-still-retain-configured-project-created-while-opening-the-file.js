@@ -384,7 +384,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/app.ts:
   {}
-/user/username/projects/myproject/jsfile1.js: *new*
+/user/username/projects/myproject/jsFile1.js: *new*
   {}
 /user/username/projects/myproject/tsconfig.json:
   {}
@@ -557,7 +557,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/jsfile1.js:
+/user/username/projects/myproject/jsFile1.js:
   {}
 
 FsWatchesRecursive::

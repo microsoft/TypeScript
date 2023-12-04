@@ -301,11 +301,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/app/appa.ts: *new*
+/users/username/projects/app/appA.ts: *new*
   {}
 /users/username/projects/app/tsconfig.json: *new*
   {}
-/users/username/projects/common/moduleb.ts: *new*
+/users/username/projects/common/moduleB.ts: *new*
   {}
 /users/username/projects/common/tsconfig.json: *new*
   {}
