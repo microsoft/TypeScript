@@ -583,10 +583,13 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                     if (isDeclaration(node)) {
                         bindDeclaration(node);
                     }
-                    if (isExpression(node)) {
+                    else if (isExpression(node)) {
                         bindExpandoMembers(node);
+                        bindChildren(node);
                     }
-                    bindChildren(node);
+                    else {
+                        bindChildren(node);
+                    }
                     break;
             }
         }

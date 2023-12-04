@@ -1,6 +1,7 @@
 // @declaration: true
 // @strict: true
 // @target: es5
+// @isolatedDeclarationDiffReason: Sourcemap is more detailed
 
 // In methods of an object literal with no contextual type, 'this' has the type
 // of the object literal.
