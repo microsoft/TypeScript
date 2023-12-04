@@ -34,13 +34,13 @@ var result = foo(derived, d => d.toBase());
 // bar should type check just like foo.
 // result2 should have the same type as result
 declare function bar<T>(x: T, func: (p: T) => T): T;
->bar : { <T>(x: T, func: (p: T) => T): T; <T>(x: T, func: (p: T) => T): T; }
+>bar : { <T>(x: T, func: (p: T) => T): T; <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; }
 >x : T
 >func : (p: T) => T
 >p : T
 
 declare function bar<T>(x: T, func: (p: T) => T): T;
->bar : { <T>(x: T, func: (p: T) => T): T; <T>(x: T, func: (p: T) => T): T; }
+>bar : { <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; <T>(x: T, func: (p: T) => T): T; }
 >x : T
 >func : (p: T) => T
 >p : T
@@ -48,7 +48,7 @@ declare function bar<T>(x: T, func: (p: T) => T): T;
 var result2 = bar(derived, d => d.toBase());
 >result2 : Base
 >bar(derived, d => d.toBase()) : Base
->bar : { <T>(x: T, func: (p: T) => T): T; <T>(x: T, func: (p: T) => T): T; }
+>bar : { <T>(x: T, func: (p: T) => T): T; <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; }
 >derived : Derived
 >d => d.toBase() : (d: Derived) => Base
 >d : Derived

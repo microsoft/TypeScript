@@ -1,7 +1,13 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    libContent,
+    jsonToReadableText,
+} from "../helpers";
+import {
+    FsContents,
 } from "../helpers/contents";
+import {
+    getFsContentsForDemoProjectReferences,
+} from "../helpers/demoProjectReferences";
 import {
     solutionBuildWithBaseline,
 } from "../helpers/solutionBuilder";
@@ -14,20 +20,19 @@ import {
     createWatchedSystem,
     File,
     FileOrFolderOrSymLink,
-    getTsBuildProjectFile,
     libFile,
     SymLink,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedirect", () => {
     interface VerifyWatchInput {
-        files: readonly FileOrFolderOrSymLink[];
+        files: FsContents | readonly FileOrFolderOrSymLink[];
         config: string;
         subScenario: string;
     }
 
     function verifyWatch({ files, config, subScenario }: VerifyWatchInput, alreadyBuilt: boolean) {
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(
+        const { sys, baseline, cb, getPrograms } = createBaseline(
             createWatchedSystem(files),
             alreadyBuilt ? (sys, originalRead) => {
                 solutionBuildWithBaseline(sys, [config], originalRead);
@@ -47,7 +52,6 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             commandLineArgs: ["--w", "--p", config],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             watchOrSolution: watch,
             useSourceOfProjectReferenceRedirect: ts.returnTrue,
@@ -66,16 +70,9 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
 
     describe("with simple project", () => {
         verifyScenario(() => {
-            const baseConfig = getTsBuildProjectFile("demo", "tsconfig-base.json");
-            const coreTs = getTsBuildProjectFile("demo", "core/utilities.ts");
-            const coreConfig = getTsBuildProjectFile("demo", "core/tsconfig.json");
-            const animalTs = getTsBuildProjectFile("demo", "animals/animal.ts");
-            const dogTs = getTsBuildProjectFile("demo", "animals/dog.ts");
-            const indexTs = getTsBuildProjectFile("demo", "animals/index.ts");
-            const animalsConfig = getTsBuildProjectFile("demo", "animals/tsconfig.json");
             return {
-                files: [{ path: libFile.path, content: libContent }, baseConfig, coreTs, coreConfig, animalTs, dogTs, indexTs, animalsConfig],
-                config: animalsConfig.path,
+                files: getFsContentsForDemoProjectReferences(),
+                config: "/user/username/projects/demo/animals/tsconfig.json",
                 subScenario: "with simple project",
             };
         });
@@ -115,7 +112,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
         function config(packageName: string, extraOptions: ts.CompilerOptions, references?: string[]): File {
             return {
                 path: `/user/username/projects/myproject/packages/${packageName}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         outDir: "lib",
                         rootDir: "src",
@@ -140,7 +137,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
                 verifySymlinkScenario(() => ({
                     bPackageJson: {
                         path: `/user/username/projects/myproject/packages/B/package.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             main: "lib/index.js",
                             types: "lib/index.d.ts",
                         }),

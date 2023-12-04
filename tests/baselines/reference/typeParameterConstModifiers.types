@@ -402,8 +402,8 @@ const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) 
 >o : NotEmptyMapped<O>
 
 const tMapped = thingMapped({ foo: '' });  // { foo: "" }
->tMapped : { foo: ""; }
->thingMapped({ foo: '' }) : { foo: ""; }
+>tMapped : { readonly foo: ""; }
+>thingMapped({ foo: '' }) : { readonly foo: ""; }
 >thingMapped : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
 >{ foo: '' } : { foo: ""; }
 >foo : ""

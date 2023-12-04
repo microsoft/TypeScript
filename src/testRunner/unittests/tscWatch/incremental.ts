@@ -1,6 +1,9 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     CommandLineProgram,
 } from "../helpers/baseline";
 import {
@@ -9,7 +12,6 @@ import {
 import {
     applyEdit,
     createBaseline,
-    SystemSnap,
     verifyTscWatch,
     watchBaseline,
 } from "../helpers/tscWatch";
@@ -25,7 +27,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
 
     const configFile: File = {
         path: `${project}/tsconfig.json`,
-        content: JSON.stringify({ compilerOptions: { incremental: true } }),
+        content: jsonToReadableText({ compilerOptions: { incremental: true } }),
     };
 
     interface VerifyIncrementalWatchEmitInput {
@@ -49,21 +51,21 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
         incremental: boolean,
     ) {
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
         if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
         const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || ts.emptyArray)];
         baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
         let oldPrograms: readonly CommandLineProgram[] = ts.emptyArray;
-        build(oldSnap);
+        build();
 
         if (modifyFs) {
-            const oldSnap = applyEdit(sys, baseline, modifyFs);
-            build(oldSnap);
+            applyEdit(sys, baseline, modifyFs);
+            build();
         }
 
         Harness.Baseline.runBaseline(`${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
 
-        function build(oldSnap: SystemSnap) {
+        function build() {
             const closer = ts.executeCommandLine(
                 sys,
                 cb,
@@ -74,7 +76,6 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 getPrograms,
                 oldPrograms,
                 sys,
-                oldSnap,
             });
             if (closer) closer.close();
         }
@@ -115,7 +116,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         verifyIncrementalWatchEmit({
             files: () => [libFile, file1, file2, {
                 path: configFile.path,
-                content: JSON.stringify({ compilerOptions: { incremental: true, outFile: "out.js" } }),
+                content: jsonToReadableText({ compilerOptions: { incremental: true, outFile: "out.js" } }),
             }],
             subScenario: "with --out",
         });
@@ -132,7 +133,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         };
         const config: File = {
             path: configFile.path,
-            content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd" } }),
+            content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd" } }),
         };
 
         verifyIncrementalWatchEmit({
@@ -229,7 +230,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         verifyIncrementalWatchEmit({
             files: () => [libFile, file1, file2, {
                 path: configFile.path,
-                content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } }),
+                content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } }),
             }],
             subScenario: "module compilation/with --out",
         });
@@ -239,7 +240,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         files: () => {
             const config: File = {
                 path: configFile.path,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
                         target: "es5",
@@ -301,7 +302,7 @@ export interface A {
             { path: libFile.path, content: libContent },
             { path: `${project}/globals.d.ts`, content: `declare namespace Config { const value: string;} ` },
             { path: `${project}/index.ts`, content: `console.log(Config.value);` },
-            { path: configFile.path, content: JSON.stringify({ compilerOptions: { incremental: true } }) },
+            { path: configFile.path, content: jsonToReadableText({ compilerOptions: { incremental: true } }) },
         ],
         modifyFs: host => host.deleteFile(`${project}/globals.d.ts`),
     });
@@ -326,13 +327,13 @@ export const Fragment: unique symbol;
             files: () => [
                 { path: libFile.path, content: libContent },
                 { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
-                { path: `${project}/node_modules/react/package.json`, content: JSON.stringify({ name: "react", version: "0.0.1" }) },
+                { path: `${project}/node_modules/react/package.json`, content: jsonToReadableText({ name: "react", version: "0.0.1" }) },
                 { path: `${project}/node_modules/preact/jsx-runtime/index.d.ts`, content: jsxLibraryContent.replace("propA", "propB") },
-                { path: `${project}/node_modules/preact/package.json`, content: JSON.stringify({ name: "preact", version: "0.0.1" }) },
+                { path: `${project}/node_modules/preact/package.json`, content: jsonToReadableText({ name: "preact", version: "0.0.1" }) },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
-                { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) },
+                { path: configFile.path, content: jsonToReadableText({ compilerOptions: jsxImportSourceOptions }) },
             ],
-            modifyFs: host => host.writeFile(configFile.path, JSON.stringify({ compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } })),
+            modifyFs: host => host.writeFile(configFile.path, jsonToReadableText({ compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } })),
             optionsToExtend: ["--explainFiles"],
         });
 
@@ -341,14 +342,14 @@ export const Fragment: unique symbol;
             files: () => [
                 { path: libFile.path, content: libContent },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
-                { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) },
+                { path: configFile.path, content: jsonToReadableText({ compilerOptions: jsxImportSourceOptions }) },
             ],
             modifyFs: host => {
                 host.createDirectory(`${project}/node_modules`);
                 host.createDirectory(`${project}/node_modules/react`);
                 host.createDirectory(`${project}/node_modules/react/jsx-runtime`);
                 host.writeFile(`${project}/node_modules/react/jsx-runtime/index.d.ts`, jsxLibraryContent);
-                host.writeFile(`${project}/node_modules/react/package.json`, JSON.stringify({ name: "react", version: "0.0.1" }));
+                host.writeFile(`${project}/node_modules/react/package.json`, jsonToReadableText({ name: "react", version: "0.0.1" }));
             },
         });
 
@@ -357,9 +358,9 @@ export const Fragment: unique symbol;
             files: () => [
                 { path: libFile.path, content: libContent },
                 { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
-                { path: `${project}/node_modules/react/package.json`, content: JSON.stringify({ name: "react", version: "0.0.1" }) },
+                { path: `${project}/node_modules/react/package.json`, content: jsonToReadableText({ name: "react", version: "0.0.1" }) },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
-                { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) },
+                { path: configFile.path, content: jsonToReadableText({ compilerOptions: jsxImportSourceOptions }) },
             ],
             modifyFs: host => {
                 host.deleteFile(`${project}/node_modules/react/jsx-runtime/index.d.ts`);
@@ -372,9 +373,9 @@ export const Fragment: unique symbol;
             files: () => [
                 { path: libFile.path, content: libContent },
                 { path: `${project}/node_modules/tslib/index.d.ts`, content: "export function __assign(...args: any[]): any;" },
-                { path: `${project}/node_modules/tslib/package.json`, content: JSON.stringify({ name: "tslib", version: "0.0.1" }) },
+                { path: `${project}/node_modules/tslib/package.json`, content: jsonToReadableText({ name: "tslib", version: "0.0.1" }) },
                 { path: `${project}/index.tsx`, content: `export const x = {...{}};` },
-                { path: configFile.path, content: JSON.stringify({ compilerOptions: { importHelpers: true } }) },
+                { path: configFile.path, content: jsonToReadableText({ compilerOptions: { importHelpers: true } }) },
             ],
             modifyFs: host => {
                 host.deleteFile(`${project}/node_modules/tslib/index.d.ts`);
@@ -391,7 +392,7 @@ export const Fragment: unique symbol;
                 { path: `${project}/node_modules/classnames/index.d.ts`, content: `export interface Result {} export default function classNames(): Result;` },
                 { path: `${project}/src/types/classnames.d.ts`, content: `export {}; declare module "classnames" { interface Result { foo } }` },
                 { path: `${project}/src/index.ts`, content: `import classNames from "classnames"; classNames().foo;` },
-                { path: configFile.path, content: JSON.stringify({ compilerOptions: { module: "commonjs", incremental: true } }) },
+                { path: configFile.path, content: jsonToReadableText({ compilerOptions: { module: "commonjs", incremental: true } }) },
             ],
             modifyFs: host => {
                 // delete 'foo'

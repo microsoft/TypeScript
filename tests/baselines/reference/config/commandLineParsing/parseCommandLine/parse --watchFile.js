@@ -3,7 +3,7 @@ CompilerOptions::
 {}
 WatchOptions::
 {
- "watchFile": 4
+  "watchFile": 4
 }
 FileNames::
 0.ts

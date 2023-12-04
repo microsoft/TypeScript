@@ -30,38 +30,28 @@ export const Fragment: unique symbol;
 
 
 //// [/users/username/projects/project/node_modules/react/package.json]
-{"name":"react","version":"0.0.1"}
+{
+  "name": "react",
+  "version": "0.0.1"
+}
 
 //// [/users/username/projects/project/index.tsx]
 export const App = () => <div propA={true}></div>;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","jsx":"react-jsx","incremental":true,"jsxImportSource":"react"}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "jsx": "react-jsx",
+    "incremental": true,
+    "jsxImportSource": "react"
+  }
+}
 
 
 /a/lib/tsc.js -i
 Output::
 
-
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
-/users/username/projects/project/index.tsx
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
-/users/username/projects/project/index.tsx
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
-/users/username/projects/project/index.tsx (used version)
-
-exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/index.js]
 "use strict";
@@ -139,6 +129,34 @@ exports.App = App;
 }
 
 
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "module": 1,
+  "jsx": 4,
+  "incremental": true,
+  "jsxImportSource": "react",
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
+exitCode:: ExitStatus.Success
+
 Change::
 
 Input::
@@ -155,21 +173,6 @@ Output::
 Found 1 error in index.tsx[90m:1[0m
 
 
-
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.tsx
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/index.tsx
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/index.tsx (computed .d.ts)
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/users/username/projects/project/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -235,3 +238,26 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
   "size": 1049
 }
 
+
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "module": 1,
+  "jsx": 4,
+  "incremental": true,
+  "jsxImportSource": "react",
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/index.tsx
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/index.tsx (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

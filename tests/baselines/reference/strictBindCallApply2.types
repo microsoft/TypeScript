@@ -17,9 +17,9 @@ type Test = ThisParameterType<typeof fn>;
 const fb = fn.bind({ blub: "blub" });
 >fb : () => void
 >fn.bind({ blub: "blub" }) : () => void
->fn.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>fn.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
 >fn : (this: Foo) => void
->bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
 >{ blub: "blub" } : { blub: string; }
 >blub : string
 >"blub" : "blub"

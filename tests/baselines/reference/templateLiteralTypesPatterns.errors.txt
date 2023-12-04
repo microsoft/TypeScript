@@ -55,7 +55,7 @@ templateLiteralTypesPatterns.ts(129,9): error TS2345: Argument of type '"1.1e-10
 templateLiteralTypesPatterns.ts(140,1): error TS2322: Type '`a${string}`' is not assignable to type '`a${number}`'.
 templateLiteralTypesPatterns.ts(141,1): error TS2322: Type '"bno"' is not assignable to type '`a${any}`'.
 templateLiteralTypesPatterns.ts(160,7): error TS2322: Type '"anything"' is not assignable to type '`${number} ${number}`'.
-templateLiteralTypesPatterns.ts(211,5): error TS2345: Argument of type '"abcTest"' is not assignable to parameter of type '`${`a${string}` & `${string}a`}Test`'.
+templateLiteralTypesPatterns.ts(215,5): error TS2345: Argument of type '"abcTest"' is not assignable to parameter of type '`${`a${string}` & `${string}a`}Test`'.
 
 
 ==== templateLiteralTypesPatterns.ts (58 errors) ====
@@ -376,10 +376,14 @@ templateLiteralTypesPatterns.ts(211,5): error TS2345: Argument of type '"abcTest
     }
     
     // repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
-    function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
+    function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string}Downcast` & {}) {}
     conversionTest("testDowncast");
-    function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
+    function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | {} & `${string}Downcast`) {}
     conversionTest2("testDowncast");
+    function conversionTest3(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
+    conversionTest3("testDowncast");
+    function conversionTest4(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
+    conversionTest4("testDowncast");
     
     function foo(str: `${`a${string}` & `${string}a`}Test`) {}
     foo("abaTest"); // ok

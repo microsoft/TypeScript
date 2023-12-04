@@ -41,7 +41,6 @@ exports.A = A;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = types;
 //// [c.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

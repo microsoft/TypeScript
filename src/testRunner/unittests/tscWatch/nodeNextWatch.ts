@@ -1,5 +1,8 @@
 import * as Utils from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTscWatch,
 } from "../helpers/tscWatch";
 import {
@@ -16,7 +19,7 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
         sys: () => {
             const configFile: File = {
                 path: "/project/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         strict: true,
                         target: "es2020",
@@ -28,7 +31,7 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
             };
             const packageFile: File = {
                 path: "/project/package.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     name: "some-proj",
                     version: "1.0.0",
                     description: "",

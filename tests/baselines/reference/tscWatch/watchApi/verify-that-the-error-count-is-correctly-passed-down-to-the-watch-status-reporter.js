@@ -17,7 +17,14 @@ interface Array<T> { length: number; [n: number]: T; }
 let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"module":"commonjs"},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 
 /a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
@@ -44,20 +51,11 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/index.ts"]
-Program options: {"module":1,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/index.ts
+//// [/user/username/projects/myproject/index.js]
+var compiler = new Compiler();
+for (var i = 0; j < 5; i++) { }
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/index.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/index.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -73,10 +71,24 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "module": 1,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/index.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/index.js]
-var compiler = new Compiler();
-for (var i = 0; j < 5; i++) { }
-
-

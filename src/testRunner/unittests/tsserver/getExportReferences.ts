@@ -1,10 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -30,7 +29,7 @@ export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };
             content: "{}",
         };
         const host = createServerHost([mainTs, modTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([mainTs, modTs], session);
         return { session, modTs };
     }
