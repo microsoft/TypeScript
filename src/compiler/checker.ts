@@ -11276,14 +11276,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const getFunc = getTypeOfPropertyOfType(objectLitType, "get" as __String);
             if (getFunc) {
-                const getSig = getSingleCallSignature(getFunc);
+                const getSig = getSingleSignature(getFunc, SignatureKind.Call, /*allowMembers*/ true);
                 if (getSig) {
                     return getReturnTypeOfSignature(getSig);
                 }
             }
             const setFunc = getTypeOfPropertyOfType(objectLitType, "set" as __String);
             if (setFunc) {
-                const setSig = getSingleCallSignature(setFunc);
+                const setSig = getSingleSignature(setFunc, SignatureKind.Call, /*allowMembers*/ true);
                 if (setSig) {
                     return getTypeOfFirstParameterOfSignature(setSig);
                 }

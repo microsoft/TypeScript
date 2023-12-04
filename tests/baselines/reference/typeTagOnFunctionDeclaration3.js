@@ -57,6 +57,6 @@ export namespace test1 {
 }
 export function test2(): void;
 export namespace test2 {
-    const foo_1: any;
+    const foo_1: string;
     export { foo_1 as foo };
 }
