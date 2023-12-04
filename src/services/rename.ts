@@ -114,6 +114,19 @@ function getRenameInfoForNode(
         return getRenameInfoError(wouldRenameNodeModules);
     }
 
+    if (isImportSpecifier(node)) {
+        const importDeclaration = node.parent.parent;
+        const namedBindings = importDeclaration.importClause.namedBindings;
+        if (namedBindings && namedBindings.kind === SyntaxKind.NamedImports) {
+            namedBindings.elements.forEach(element => {
+                if (element.name.text === element.propertyName?.text) {
+                    // Simplify only the redundant named imports
+                    element.propertyName = undefined;
+                }
+            });
+        }
+    }
+    
     const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
     const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
         ? stripQuotes(getTextOfIdentifierOrLiteral(node))
