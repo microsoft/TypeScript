@@ -106,7 +106,6 @@ export interface EmitDeclarationSymbol {
     declarations: Declaration[];
     signatureDeclarations?: Node[];
     flags: SymbolFlags;
-    isVisible?: boolean;
     members?: EmitDeclarationSymbolTable;
     exports?: EmitDeclarationSymbolTable;
 }
@@ -582,7 +581,6 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                     postBindingAction.push(() => {
                         const resolvedSymbol = resolveName(node.expression, name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
                         if (resolvedSymbol) {
-                            resolvedSymbol.isVisible = true;
                             resolvedSymbol.declarations.forEach(d => getNodeLinks(d).isVisible = true);
                         }
                     });
@@ -607,7 +605,6 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                         postBindingAction.push(() => {
                             const resolvedSymbol = resolveName(e, (e.propertyName ?? e.name).escapedText, ~0);
                             if (resolvedSymbol) {
-                                resolvedSymbol.isVisible = true;
                                 resolvedSymbol.declarations.forEach(d => getNodeLinks(d).isVisible = true);
                             }
                         });
