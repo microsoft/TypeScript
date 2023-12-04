@@ -19,16 +19,22 @@ export declare function create<T>(config: T): void;
 >config : Symbol(config, Decl(contextuallyTypedParametersWithInitializers3.ts, 6, 34))
 >T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers3.ts, 6, 31))
 
+declare function takesDirection(direction: CanvasDirection): void;
+>takesDirection : Symbol(takesDirection, Decl(contextuallyTypedParametersWithInitializers3.ts, 6, 51))
+>direction : Symbol(direction, Decl(contextuallyTypedParametersWithInitializers3.ts, 8, 32))
+>CanvasDirection : Symbol(CanvasDirection, Decl(contextuallyTypedParametersWithInitializers3.ts, 0, 0))
+
 create<GraphActions>({
 >create : Symbol(create, Decl(contextuallyTypedParametersWithInitializers3.ts, 4, 1))
 >GraphActions : Symbol(GraphActions, Decl(contextuallyTypedParametersWithInitializers3.ts, 0, 40))
 
   setDirection: (direction = "RIGHT") => {
->setDirection : Symbol(setDirection, Decl(contextuallyTypedParametersWithInitializers3.ts, 8, 22))
->direction : Symbol(direction, Decl(contextuallyTypedParametersWithInitializers3.ts, 9, 17))
+>setDirection : Symbol(setDirection, Decl(contextuallyTypedParametersWithInitializers3.ts, 10, 22))
+>direction : Symbol(direction, Decl(contextuallyTypedParametersWithInitializers3.ts, 11, 17))
 
-    direction; // CanvasDirection
->direction : Symbol(direction, Decl(contextuallyTypedParametersWithInitializers3.ts, 9, 17))
+    takesDirection(direction);
+>takesDirection : Symbol(takesDirection, Decl(contextuallyTypedParametersWithInitializers3.ts, 6, 51))
+>direction : Symbol(direction, Decl(contextuallyTypedParametersWithInitializers3.ts, 11, 17))
 
   },
 });
