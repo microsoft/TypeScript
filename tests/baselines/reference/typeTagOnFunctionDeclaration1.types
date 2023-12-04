@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration.ts] ////
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration1.ts] ////
 
 === index.js ===
 /**
@@ -29,4 +29,25 @@ fn2.bar = 42; // error
 >fn2 : typeof fn2
 >bar : string
 >42 : 42
+
+/**
+ * @type {{(arg1: string): string; bar: string}}
+*/
+function fn3(arg1) {
+>fn3 : (arg1: string) => string
+>arg1 : string
+
+    return arg1;
+>arg1 : string
+}
+
+fn3('hello');
+>fn3('hello') : string
+>fn3 : (arg1: string) => string
+>'hello' : "hello"
+
+fn3(100); // error
+>fn3(100) : string
+>fn3 : (arg1: string) => string
+>100 : 100
 

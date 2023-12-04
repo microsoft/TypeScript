@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration2.ts] ////
+
+=== index.js ===
+export function test1() {}
+>test1 : Symbol(test1, Decl(index.js, 0, 0), Decl(index.js, 5, 22))
+
+/** @type {{(arg1: string): void;}} */
+function setter1(arg1) {}
+>setter1 : Symbol(setter1, Decl(index.js, 0, 26))
+>arg1 : Symbol(arg1, Decl(index.js, 3, 17))
+
+Object.defineProperty(test1, "foo", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>test1 : Symbol(test1, Decl(index.js, 0, 0), Decl(index.js, 5, 22))
+>"foo" : Symbol(test1.foo, Decl(index.js, 3, 25))
+
+  set: setter1,
+>set : Symbol(set, Decl(index.js, 5, 37))
+>setter1 : Symbol(setter1, Decl(index.js, 0, 26))
+
+});
+
+export function test2() {}
+>test2 : Symbol(test2, Decl(index.js, 7, 3), Decl(index.js, 15, 22))
+
+/** @type {{(arg1: string): void; bar: number}} */
+function setter2(arg1) {}
+>setter2 : Symbol(setter2, Decl(index.js, 9, 26), Decl(index.js, 12, 25))
+>arg1 : Symbol(arg1, Decl(index.js, 12, 17))
+
+setter2.bar = 10;
+>setter2.bar : Symbol(setter2.bar, Decl(index.js, 12, 25))
+>setter2 : Symbol(setter2, Decl(index.js, 9, 26), Decl(index.js, 12, 25))
+>bar : Symbol(setter2.bar, Decl(index.js, 12, 25))
+
+Object.defineProperty(test2, "foo", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>test2 : Symbol(test2, Decl(index.js, 7, 3), Decl(index.js, 15, 22))
+>"foo" : Symbol(test2.foo, Decl(index.js, 13, 17))
+
+  set: setter2,
+>set : Symbol(set, Decl(index.js, 15, 37))
+>setter2 : Symbol(setter2, Decl(index.js, 9, 26), Decl(index.js, 12, 25))
+
+});
+

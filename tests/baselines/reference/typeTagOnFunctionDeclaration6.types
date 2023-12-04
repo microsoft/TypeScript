@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration6.ts] ////
+
+=== index.js ===
+/** @type {{(this: { name: string }, arg: boolean): void}} */
+function fn1(arg) {
+>fn1 : (this: {    name: string;}, arg: boolean) => void
+>arg : boolean
+
+    this
+>this : { name: string; }
+}
+
+/** @type {{(this: { name: string }, arg: boolean): void; bar: string}} */
+function fn2(arg) {
+>fn2 : typeof fn2
+>arg : boolean
+
+    this
+>this : { name: string; }
+}
+
+fn2.bar = ''
+>fn2.bar = '' : ""
+>fn2.bar : string
+>fn2 : typeof fn2
+>bar : string
+>'' : ""
+

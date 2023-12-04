@@ -1,0 +1,62 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration3.ts] ////
+
+=== index.js ===
+export function test1() {}
+>test1 : typeof test1
+
+/** @type {{(): string;}} */
+function getter1() {
+>getter1 : () => string
+
+  return "";
+>"" : ""
+}
+
+Object.defineProperty(test1, "foo", {
+>Object.defineProperty(test1, "foo", {  get: getter1,}) : typeof test1
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>test1 : typeof test1
+>"foo" : "foo"
+>{  get: getter1,} : { get: () => string; }
+
+  get: getter1,
+>get : () => string
+>getter1 : () => string
+
+});
+
+export function test2() {}
+>test2 : typeof test2
+
+/** @type {{(): string; bar: number}} */
+function getter2(arg1) {
+>getter2 : typeof getter2
+>arg1 : any
+
+  return "";
+>"" : ""
+}
+getter2.bar = 10;
+>getter2.bar = 10 : 10
+>getter2.bar : number
+>getter2 : typeof getter2
+>bar : number
+>10 : 10
+
+Object.defineProperty(test2, "foo", {
+>Object.defineProperty(test2, "foo", {  get: getter2,}) : typeof test2
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>test2 : typeof test2
+>"foo" : "foo"
+>{  get: getter2,} : { get: typeof getter2; }
+
+  get: getter2,
+>get : typeof getter2
+>getter2 : typeof getter2
+
+});
+

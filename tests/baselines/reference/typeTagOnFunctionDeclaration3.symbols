@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration3.ts] ////
+
+=== index.js ===
+export function test1() {}
+>test1 : Symbol(test1, Decl(index.js, 0, 0), Decl(index.js, 7, 22))
+
+/** @type {{(): string;}} */
+function getter1() {
+>getter1 : Symbol(getter1, Decl(index.js, 0, 26))
+
+  return "";
+}
+
+Object.defineProperty(test1, "foo", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>test1 : Symbol(test1, Decl(index.js, 0, 0), Decl(index.js, 7, 22))
+>"foo" : Symbol(test1.foo, Decl(index.js, 5, 1))
+
+  get: getter1,
+>get : Symbol(get, Decl(index.js, 7, 37))
+>getter1 : Symbol(getter1, Decl(index.js, 0, 26))
+
+});
+
+export function test2() {}
+>test2 : Symbol(test2, Decl(index.js, 9, 3), Decl(index.js, 19, 22))
+
+/** @type {{(): string; bar: number}} */
+function getter2(arg1) {
+>getter2 : Symbol(getter2, Decl(index.js, 11, 26), Decl(index.js, 16, 1))
+>arg1 : Symbol(arg1, Decl(index.js, 14, 17))
+
+  return "";
+}
+getter2.bar = 10;
+>getter2.bar : Symbol(getter2.bar, Decl(index.js, 16, 1))
+>getter2 : Symbol(getter2, Decl(index.js, 11, 26), Decl(index.js, 16, 1))
+>bar : Symbol(getter2.bar, Decl(index.js, 16, 1))
+
+Object.defineProperty(test2, "foo", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>test2 : Symbol(test2, Decl(index.js, 9, 3), Decl(index.js, 19, 22))
+>"foo" : Symbol(test2.foo, Decl(index.js, 17, 17))
+
+  get: getter2,
+>get : Symbol(get, Decl(index.js, 19, 37))
+>getter2 : Symbol(getter2, Decl(index.js, 11, 26), Decl(index.js, 16, 1))
+
+});
+

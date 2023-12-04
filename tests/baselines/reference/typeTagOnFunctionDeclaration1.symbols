@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration.ts] ////
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration1.ts] ////
 
 === index.js ===
 /**
@@ -27,4 +27,21 @@ fn2.bar = 42; // error
 >fn2.bar : Symbol(fn2.bar, Decl(index.js, 12, 1))
 >fn2 : Symbol(fn2, Decl(index.js, 5, 1), Decl(index.js, 12, 1))
 >bar : Symbol(fn2.bar, Decl(index.js, 12, 1))
+
+/**
+ * @type {{(arg1: string): string; bar: string}}
+*/
+function fn3(arg1) {
+>fn3 : Symbol(fn3, Decl(index.js, 14, 13))
+>arg1 : Symbol(arg1, Decl(index.js, 19, 13))
+
+    return arg1;
+>arg1 : Symbol(arg1, Decl(index.js, 19, 13))
+}
+
+fn3('hello');
+>fn3 : Symbol(fn3, Decl(index.js, 14, 13))
+
+fn3(100); // error
+>fn3 : Symbol(fn3, Decl(index.js, 14, 13))
 

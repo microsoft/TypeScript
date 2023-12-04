@@ -20,3 +20,13 @@ function fn2(arg1) {
 }
 
 fn2.bar = 42; // error
+
+/**
+ * @type {{(arg1: string): string; bar: string}}
+*/
+function fn3(arg1) {
+    return arg1;
+}
+
+fn3('hello');
+fn3(100); // error
