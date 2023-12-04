@@ -1,0 +1,82 @@
+comparisonOperatorWithNumericLiteral.ts(5,1): error TS2365: Operator '>' cannot be applied to types 'BrandedNum' and 'number'.
+comparisonOperatorWithNumericLiteral.ts(6,1): error TS2365: Operator '>' cannot be applied to types 'BrandedNum' and 'number'.
+comparisonOperatorWithNumericLiteral.ts(7,1): error TS2365: Operator '>' cannot be applied to types 'BrandedNum' and 'BrandedNum'.
+comparisonOperatorWithNumericLiteral.ts(10,1): error TS2365: Operator '<' cannot be applied to types 'BrandedNum' and 'number'.
+comparisonOperatorWithNumericLiteral.ts(11,1): error TS2365: Operator '<' cannot be applied to types 'BrandedNum' and 'number'.
+comparisonOperatorWithNumericLiteral.ts(12,1): error TS2365: Operator '<' cannot be applied to types 'BrandedNum' and 'BrandedNum'.
+comparisonOperatorWithNumericLiteral.ts(15,1): error TS2365: Operator '>=' cannot be applied to types 'BrandedNum' and 'number'.
+comparisonOperatorWithNumericLiteral.ts(16,1): error TS2365: Operator '>=' cannot be applied to types 'BrandedNum' and 'number'.
+comparisonOperatorWithNumericLiteral.ts(17,1): error TS2365: Operator '>=' cannot be applied to types 'BrandedNum' and 'BrandedNum'.
+comparisonOperatorWithNumericLiteral.ts(20,1): error TS2365: Operator '<=' cannot be applied to types 'BrandedNum' and 'number'.
+comparisonOperatorWithNumericLiteral.ts(21,1): error TS2365: Operator '<=' cannot be applied to types 'BrandedNum' and 'number'.
+comparisonOperatorWithNumericLiteral.ts(22,1): error TS2365: Operator '<=' cannot be applied to types 'BrandedNum' and 'BrandedNum'.
+
+
+==== comparisonOperatorWithNumericLiteral.ts (12 errors) ====
+    type BrandedNum = number & { __numberBrand: any };
+    var x : BrandedNum;
+    
+    // operator >
+    x > 0;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'BrandedNum' and 'number'.
+    x > <number>0;
+    ~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'BrandedNum' and 'number'.
+    x > <BrandedNum>0;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'BrandedNum' and 'BrandedNum'.
+    
+    // operator <
+    x < 0;
+    ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'BrandedNum' and 'number'.
+    x < <number>0;
+    ~~~~~~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'BrandedNum' and 'number'.
+    x < <BrandedNum>0;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'BrandedNum' and 'BrandedNum'.
+    
+    // operator >=
+    x >= 0;
+    ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'BrandedNum' and 'number'.
+    x >= <number>0;
+    ~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'BrandedNum' and 'number'.
+    x >= <BrandedNum>0;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'BrandedNum' and 'BrandedNum'.
+    
+    // operator <=
+    x <= 0;
+    ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'BrandedNum' and 'number'.
+    x <= <number>0;
+    ~~~~~~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'BrandedNum' and 'number'.
+    x <= <BrandedNum>0;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'BrandedNum' and 'BrandedNum'.
+    
+    // operator ==
+    x == 0;
+    x == <number>0;
+    x == <BrandedNum>0;
+    
+    // operator !=
+    x != 0;
+    x != <number>0;
+    x != <BrandedNum>0;
+    
+    // operator ===
+    x === 0;
+    x === <number>0;
+    x === <BrandedNum>0;
+    
+    // operator !==
+    x !== 0;
+    x !== <number>0;
+    x !== <BrandedNum>0;
+    
