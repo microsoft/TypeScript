@@ -1,0 +1,91 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionLikeDeclaration1.ts] ////
+
+=== index.js ===
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test1() {
+>test1 : () => { doStuff(arg: 'a'): void; }
+
+    return {
+>{        /** @type {{(arg: string): void}} */        doStuff(arg) { }    } : { doStuff(arg: string): void; }
+
+        /** @type {{(arg: string): void}} */
+        doStuff(arg) { }
+>doStuff : (arg: string) => void
+>arg : string
+    }
+}
+
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test2() {
+>test2 : () => { doStuff(arg: 'a'): void; }
+
+    return {
+>{        /** @type {{(arg: string): void; bar: string}} */        doStuff(arg) { }    } : { doStuff: { (arg: string): void; bar: string; }; }
+
+        /** @type {{(arg: string): void; bar: string}} */
+        doStuff(arg) { }
+>doStuff : (arg: string) => void
+>arg : string
+    }
+}
+
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test3() {
+>test3 : () => { doStuff(arg: 'a'): void; }
+
+    return {
+>{        /** @type {{(arg: string): void}} */        doStuff: (arg) => { }    } : { doStuff: (arg: string) => void; }
+
+        /** @type {{(arg: string): void}} */
+        doStuff: (arg) => { }
+>doStuff : (arg: string) => void
+>(arg) => { } : (arg: string) => void
+>arg : string
+    }
+}
+
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test4() {
+>test4 : () => { doStuff(arg: 'a'): void; }
+
+    return {
+>{        /** @type {{(arg: string): void; bar: string}} */        doStuff: (arg) => { }    } : { doStuff: { (arg: string): void; bar: string; }; }
+
+        /** @type {{(arg: string): void; bar: string}} */
+        doStuff: (arg) => { }
+>doStuff : { (arg: string): void; bar: string; }
+>(arg) => { } : (arg: string) => void
+>arg : string
+    }
+}
+
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test5() {
+>test5 : () => { doStuff(arg: 'a'): void; }
+
+    return {
+>{        /** @type {{(arg: string): void}} */        doStuff: function (arg) { }    } : { doStuff: (arg: string) => void; }
+
+        /** @type {{(arg: string): void}} */
+        doStuff: function (arg) { }
+>doStuff : (arg: string) => void
+>function (arg) { } : (arg: string) => void
+>arg : string
+    }
+}
+
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test6() {
+>test6 : () => { doStuff(arg: 'a'): void; }
+
+    return {
+>{        /** @type {{(arg: string): void; bar: string}} */        doStuff: function (arg) { }    } : { doStuff: { (arg: string): void; bar: string; }; }
+
+        /** @type {{(arg: string): void; bar: string}} */
+        doStuff: function (arg) { }
+>doStuff : { (arg: string): void; bar: string; }
+>function (arg) { } : (arg: string) => void
+>arg : string
+    }
+}
+
