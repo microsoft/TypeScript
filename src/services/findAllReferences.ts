@@ -163,6 +163,7 @@ import {
     isParameterPropertyDeclaration,
     isPrivateIdentifierClassElementDeclaration,
     isPropertyAccessExpression,
+    isPropertySignature,
     isQualifiedName,
     isReferencedFile,
     isReferenceFileLocation,
@@ -2471,7 +2472,7 @@ export namespace Core {
                 if (isStringLiteralLike(ref) && ref.text === node.text) {
                     if (type) {
                         const refType = getContextualTypeFromParentOrAncestorTypeNode(ref, checker);
-                        if (type !== checker.getStringType() && type === refType) {
+                        if (type !== checker.getStringType() && (type === refType || isStringLiteralPropertyReference(ref, checker))) {
                             return nodeEntry(ref, EntryKind.StringLiteral);
                         }
                     }
@@ -2487,6 +2488,12 @@ export namespace Core {
             definition: { type: DefinitionKind.String, node },
             references,
         }];
+    }
+
+    function isStringLiteralPropertyReference(node: StringLiteralLike, checker: TypeChecker) {
+        if (isPropertySignature(node.parent)) {
+            return checker.getPropertyOfType(checker.getTypeAtLocation(node.parent.parent), node.text);
+        }
     }
 
     // For certain symbol kinds, we need to include other symbols in the search set.
