@@ -3372,7 +3372,12 @@ function parseOwnConfigOfJsonSourceFile(
                 else if (parentOption === typeAcquisitionDeclaration) currentOption = typeAcquisition ??= getDefaultTypeAcquisition(configFileName);
                 else if (parentOption === moduleOptionDeclaration) currentOption = moduleOption ??= {};
                 else Debug.fail("Unknown option");
-                currentOption[option.name] = value;
+                if (currentOption === options && option.name === "module" && moduleOption) {
+                    options.module = moduleOption;
+                }
+                else {
+                    currentOption[option.name] = value;
+                }
             }
             else if (keyText && parentOption?.extraKeyDiagnostics) {
                 if (parentOption.elementOptions) {
@@ -3592,18 +3597,8 @@ export function convertJsonOption(
                 return isNullOrUndefined(validatedValue) ? validatedValue : normalizeNonListOptionValue(opt, basePath, validatedValue);
             }
             else {
-                // const result: NestedCompilerOption = {};
-                // for (const id in value as NestedCompilerOption) {
-                //     const property = (value as NestedCompilerOption)[id];
-                //     const subOption = opt.elementOptions.get(id);
-                //     if (subOption) {
-                //         result[opt.name] = convertJsonOption(opt, property, basePath, errors, propertyAssignment, valueExpression, sourceFile);
-                //     }
-                //     else {
-                //         errors.push(createUnknownOptionError(id, opt.extraKeyDiagnostics, /*unknownOptionErrorText*/ undefined, propertyAssignment?.name, sourceFile));
-                //     }
-                // }
-                return {};
+                // Property keys have already been converted/validated
+                return value;
             }
         }
         else if (!isString(opt.type)) {
