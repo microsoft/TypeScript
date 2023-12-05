@@ -578,6 +578,8 @@ const moduleSubOptionDeclarations: readonly CommandLineOption[] = [
             bundler: ModuleFormatDetectionKind.Bundler,
             node16: ModuleFormatDetectionKind.Node16,
             nodenext: ModuleFormatDetectionKind.NodeNext,
+            defaultmodule: ModuleFormatDetectionKind.DefaultModule,
+            defaultcommonjs: ModuleFormatDetectionKind.DefaultCommonJS,
         })),
         affectsModuleResolution: true,
         affectsSemanticDiagnostics: true,
