@@ -89,7 +89,6 @@ import {
     removeExtension,
     removeFileExtension,
     removePrefix,
-    replaceFirstStar,
     ResolutionMode,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
@@ -2287,8 +2286,8 @@ function loadEntrypointsFromExportMap(
                     /*excludes*/ undefined,
                     [
                         isDeclarationFileName(target)
-                            ? replaceFirstStar(target, "**/*")
-                            : changeAnyExtension(replaceFirstStar(target, "**/*"), getDeclarationEmitExtensionForPath(target)),
+                            ? target.replace("*", () => "**/*")
+                            : changeAnyExtension(target.replace("*", () => "**/*"), getDeclarationEmitExtensionForPath(target)),
                     ],
                 ).forEach(entry => {
                     entrypoints = appendIfUnique(entrypoints, {
@@ -3097,7 +3096,7 @@ function tryLoadModuleUsingPaths(extensions: Extensions, moduleName: string, bas
             trace(state.host, Diagnostics.Module_name_0_matched_pattern_1, moduleName, matchedPatternText);
         }
         const resolved = forEach(paths[matchedPatternText], subst => {
-            const path = matchedStar ? replaceFirstStar(subst, matchedStar) : subst;
+            const path = matchedStar ? subst.replace("*", () => matchedStar) : subst;
             // When baseUrl is not specified, the command line parser resolves relative paths to the config file location.
             const candidate = normalizePath(combinePaths(baseDirectory, path));
             if (state.traceEnabled) {
