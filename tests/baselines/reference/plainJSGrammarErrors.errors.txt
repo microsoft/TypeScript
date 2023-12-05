@@ -97,8 +97,8 @@ plainJSGrammarErrors.js(197,1): error TS1105: A 'break' statement can only be us
 plainJSGrammarErrors.js(198,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
 plainJSGrammarErrors.js(201,28): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
 plainJSGrammarErrors.js(202,22): error TS17012: 'targe' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
-plainJSGrammarErrors.js(203,30): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
-plainJSGrammarErrors.js(204,30): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+plainJSGrammarErrors.js(203,30): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+plainJSGrammarErrors.js(204,30): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot be spread element.
 
 
@@ -505,10 +505,10 @@ plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot
 !!! error TS17012: 'targe' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
     const nullaryDynamicImport = import()
                                  ~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     const trinaryDynamicImport = import('1', '2', '3')
                                  ~~~~~~~~~~~~~~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     const spreadDynamicImport = import(...[])
                                        ~~~~~
 !!! error TS1325: Argument of dynamic import cannot be spread element.

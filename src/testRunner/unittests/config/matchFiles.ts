@@ -2,6 +2,9 @@ import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineParseConfig,
 } from "./helpers";
 
@@ -141,8 +144,28 @@ const caseSensitiveOrderingDiffersWithCaseHost = new fakes.ParseConfigHost(
     }),
 );
 
+const caseInsensitiveHostWithSameFileNamesWithDifferentExtensions = new fakes.ParseConfigHost(
+    new vfs.FileSystem(/*ignoreCase*/ true, {
+        cwd: caseInsensitiveBasePath,
+        files: {
+            "c:/dev/a.tsx": "",
+            "c:/dev/a.d.ts": "",
+            "c:/dev/b.tsx": "",
+            "c:/dev/b.ts": "",
+            "c:/dev/c.tsx": "",
+            "c:/dev/m.ts": "",
+            "c:/dev/m.d.ts": "",
+            "c:/dev/n.tsx": "",
+            "c:/dev/n.ts": "",
+            "c:/dev/n.d.ts": "",
+            "c:/dev/o.ts": "",
+            "c:/dev/x.d.ts": "",
+        },
+    }),
+);
+
 function baselineMatches(subScenario: string, json: any, host: fakes.ParseConfigHost, basePath: string) {
-    const jsonText = JSON.stringify(json, undefined, " ");
+    const jsonText = jsonToReadableText(json);
     baselineParseConfig({
         scenario: "matchFiles",
         subScenario,
@@ -156,15 +179,11 @@ function baselineMatches(subScenario: string, json: any, host: fakes.ParseConfig
                 if (parsed.wildcardDirectories) ts.getOwnKeys(parsed.wildcardDirectories).forEach(dir => wildcardDirectories![dir] = `WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`);
                 baseline.push(
                     "Result",
-                    JSON.stringify(
-                        {
-                            ...parsed,
-                            errors: undefined,
-                            wildcardDirectories,
-                        },
-                        undefined,
-                        " ",
-                    ),
+                    jsonToReadableText({
+                        ...parsed,
+                        errors: undefined,
+                        wildcardDirectories,
+                    }),
                 );
             },
         }],
@@ -836,6 +855,51 @@ describe("unittests:: config:: matchFiles", () => {
                     include: ["z"],
                 },
                 caseInsensitiveHost,
+                caseInsensitiveBasePath,
+            );
+        });
+
+        describe("sameNamedDeclarations", () => {
+            baselineMatches(
+                "same named declarations with include ts",
+                { include: ["*.ts"] },
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveBasePath,
+            );
+            baselineMatches(
+                "same named declarations with include ts dts",
+                { include: ["*.ts", "*.d.ts"] },
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveBasePath,
+            );
+            baselineMatches(
+                "same named declarations with include tsx",
+                { include: ["*.tsx"] },
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveBasePath,
+            );
+            baselineMatches(
+                "same named declarations with include tsx ts",
+                { include: ["*.tsx", "*.ts"] },
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveBasePath,
+            );
+            baselineMatches(
+                "same named declarations with include ts tsx",
+                { include: ["*.tsx", "*.ts"] },
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveBasePath,
+            );
+            baselineMatches(
+                "same named declarations with include tsx dts",
+                { include: ["*.tsx", "*.d.ts"] },
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveBasePath,
+            );
+            baselineMatches(
+                "same named declarations with include dts tsx",
+                { include: ["*.tsx", "*.d.ts"] },
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
                 caseInsensitiveBasePath,
             );
         });

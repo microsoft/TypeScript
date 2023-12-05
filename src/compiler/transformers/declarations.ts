@@ -6,7 +6,6 @@ import {
     append,
     ArrayBindingElement,
     arrayFrom,
-    AssertClause,
     BindingElement,
     BindingName,
     BindingPattern,
@@ -68,12 +67,13 @@ import {
     getLeadingCommentRangesOfNode,
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
+    getNormalizedAbsolutePath,
     getOriginalNode,
     getOriginalNodeId,
     getOutputPathsFor,
     getParseTreeNode,
     getRelativePathToDirectoryOrUrl,
-    getResolutionModeOverrideForClause,
+    getResolutionModeOverride,
     getResolvedExternalModuleName,
     getSetAccessorValueParameter,
     getSourceFileOfNode,
@@ -89,6 +89,7 @@ import {
     hasSyntacticModifier,
     HeritageClause,
     Identifier,
+    ImportAttributes,
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportTypeNode,
@@ -98,16 +99,15 @@ import {
     isAnyImportSyntax,
     isArray,
     isArrayBindingElement,
-    isBinaryExpression,
     isBindingElement,
     isBindingPattern,
     isClassDeclaration,
     isClassElement,
     isComputedPropertyName,
     isDeclaration,
-    isElementAccessExpression,
     isEntityName,
     isEntityNameExpression,
+    isExpandoPropertyDeclaration,
     isExportAssignment,
     isExportDeclaration,
     isExpressionWithTypeArguments,
@@ -134,11 +134,9 @@ import {
     isMethodSignature,
     isModifier,
     isModuleDeclaration,
-    isNightly,
     isOmittedExpression,
     isParameter,
     isPrivateIdentifier,
-    isPropertyAccessExpression,
     isPropertySignature,
     isSemicolonClassElement,
     isSetAccessorDeclaration,
@@ -217,10 +215,10 @@ import {
     SymbolTracker,
     SyntaxKind,
     toFileNameLowerCase,
-    toPath,
     TransformationContext,
     transformNodes,
     tryCast,
+    tryGetModuleSpecifierFromDeclaration,
     TypeAliasDeclaration,
     TypeNode,
     TypeParameterDeclaration,
@@ -321,7 +319,6 @@ export function transformDeclarations(context: TransformationContext) {
         trackExternalModuleSymbolOfImportTypeNode,
         reportNonlocalAugmentation,
         reportNonSerializableProperty,
-        reportImportTypeNodeResolutionModeOverride,
     };
     let errorNameNode: DeclarationName | undefined;
     let errorFallbackNode: Declaration | undefined;
@@ -354,6 +351,18 @@ export function transformDeclarations(context: TransformationContext) {
         // Otherwise we should emit a path-based reference
         const container = getSourceFileOfNode(node);
         refs.set(getOriginalNodeId(container), container);
+    }
+
+    function trackReferencedAmbientModuleFromImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportTypeNode) {
+        const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(node);
+        const symbol = moduleSpecifier && resolver.tryFindAmbientModule(moduleSpecifier);
+        if (symbol?.declarations) {
+            for (const decl of symbol.declarations) {
+                if (isAmbientModule(decl) && getSourceFileOfNode(decl) !== currentSourceFile) {
+                    trackReferencedAmbientModule(decl, symbol);
+                }
+            }
+        }
     }
 
     function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -473,12 +482,6 @@ export function transformDeclarations(context: TransformationContext) {
     function reportNonSerializableProperty(propertyName: string) {
         if (errorNameNode || errorFallbackNode) {
             context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
-        }
-    }
-
-    function reportImportTypeNodeResolutionModeOverride() {
-        if (!isNightly() && (errorNameNode || errorFallbackNode)) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_expression_cannot_be_named_without_a_resolution_mode_assertion_which_is_an_unstable_feature_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
         }
     }
 
@@ -646,8 +649,8 @@ export function transformDeclarations(context: TransformationContext) {
                     const specifier = moduleSpecifiers.getModuleSpecifier(
                         options,
                         currentSourceFile,
-                        toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
-                        toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
+                        getNormalizedAbsolutePath(outputFilePath, host.getCurrentDirectory()),
+                        getNormalizedAbsolutePath(declFileName, host.getCurrentDirectory()),
                         host,
                     );
                     if (!pathIsRelative(specifier)) {
@@ -1172,7 +1175,7 @@ export function transformDeclarations(context: TransformationContext) {
                 decl.modifiers,
                 decl.importClause,
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                tryGetResolutionModeOverride(decl.attributes),
             );
         }
         // The `importClause` visibility corresponds to the default's visibility.
@@ -1189,7 +1192,7 @@ export function transformDeclarations(context: TransformationContext) {
                     /*namedBindings*/ undefined,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                tryGetResolutionModeOverride(decl.attributes),
             );
         }
         if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
@@ -1205,7 +1208,7 @@ export function transformDeclarations(context: TransformationContext) {
                     namedBindings,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                tryGetResolutionModeOverride(decl.attributes),
             ) : undefined;
         }
         // Named imports (optionally with visible default)
@@ -1221,7 +1224,7 @@ export function transformDeclarations(context: TransformationContext) {
                     bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                tryGetResolutionModeOverride(decl.attributes),
             );
         }
         // Augmentation of export depends on import
@@ -1231,21 +1234,15 @@ export function transformDeclarations(context: TransformationContext) {
                 decl.modifiers,
                 /*importClause*/ undefined,
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                tryGetResolutionModeOverride(decl.attributes),
             );
         }
         // Nothing visible
     }
 
-    function getResolutionModeOverrideForClauseInNightly(assertClause: AssertClause | undefined) {
-        const mode = getResolutionModeOverrideForClause(assertClause);
-        if (mode !== undefined) {
-            if (!isNightly()) {
-                context.addDiagnostic(createDiagnosticForNode(assertClause!, Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
-            }
-            return assertClause;
-        }
-        return undefined;
+    function tryGetResolutionModeOverride(node: ImportAttributes | undefined) {
+        const mode = getResolutionModeOverride(node);
+        return node && mode !== undefined ? node : undefined;
     }
 
     function transformAndReplaceLatePaintedStatements(statements: NodeArray<Statement>): NodeArray<Statement> {
@@ -1551,10 +1548,11 @@ export function transformDeclarations(context: TransformationContext) {
                 }
                 case SyntaxKind.ImportType: {
                     if (!isLiteralImportTypeNode(input)) return cleanup(input);
+                    trackReferencedAmbientModuleFromImport(input);
                     return cleanup(factory.updateImportTypeNode(
                         input,
                         factory.updateLiteralTypeNode(input.argument, rewriteModuleSpecifier(input, input.argument.literal)),
-                        input.assertions,
+                        input.attributes,
                         input.qualifier,
                         visitNodes(input.typeArguments, visitDeclarationSubtree, isTypeNode),
                         input.isTypeOf,
@@ -1609,6 +1607,7 @@ export function transformDeclarations(context: TransformationContext) {
                 }
                 resultHasScopeMarker = true;
                 // Always visible if the parent node isn't dropped for being not visible
+                trackReferencedAmbientModuleFromImport(input);
                 // Rewrite external module names if necessary
                 return factory.updateExportDeclaration(
                     input,
@@ -1616,7 +1615,7 @@ export function transformDeclarations(context: TransformationContext) {
                     input.isTypeOnly,
                     input.exportClause,
                     rewriteModuleSpecifier(input, input.moduleSpecifier),
-                    getResolutionModeOverrideForClause(input.assertClause) ? input.assertClause : undefined,
+                    tryGetResolutionModeOverride(input.attributes),
                 );
             }
             case SyntaxKind.ExportAssignment: {
@@ -1660,7 +1659,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
 
         const modifiers = factory.createModifiersFromModifierFlags(getEffectiveModifierFlags(statement) & (ModifierFlags.All ^ ModifierFlags.Export));
-        return factory.updateModifiers(statement, modifiers);
+        return factory.replaceModifiers(statement, modifiers);
     }
 
     function updateModuleDeclarationAndKeyword(
@@ -1695,10 +1694,18 @@ export function transformDeclarations(context: TransformationContext) {
         if (shouldStripInternal(input)) return;
         switch (input.kind) {
             case SyntaxKind.ImportEqualsDeclaration: {
-                return transformImportEqualsDeclaration(input);
+                const transformed = transformImportEqualsDeclaration(input);
+                if (transformed) {
+                    trackReferencedAmbientModuleFromImport(input);
+                }
+                return transformed;
             }
             case SyntaxKind.ImportDeclaration: {
-                return transformImportDeclaration(input);
+                const transformed = transformImportDeclaration(input);
+                if (transformed) {
+                    trackReferencedAmbientModuleFromImport(input);
+                }
+                return transformed;
             }
         }
         if (isDeclaration(input) && isDeclarationAndNotVisible(input)) return;
@@ -1766,7 +1773,7 @@ export function transformDeclarations(context: TransformationContext) {
                     fakespace.symbol = props[0].parent!;
                     const exportMappings: [Identifier, string][] = [];
                     let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
-                        if (!p.valueDeclaration || !(isPropertyAccessExpression(p.valueDeclaration) || isElementAccessExpression(p.valueDeclaration) || isBinaryExpression(p.valueDeclaration))) {
+                        if (!isExpandoPropertyDeclaration(p.valueDeclaration)) {
                             return undefined;
                         }
                         const nameStr = unescapeLeadingUnderscores(p.escapedName);
@@ -1785,7 +1792,7 @@ export function transformDeclarations(context: TransformationContext) {
                         return factory.createVariableStatement(isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)], factory.createVariableDeclarationList([varDecl]));
                     });
                     if (!exportMappings.length) {
-                        declarations = mapDefined(declarations, declaration => factory.updateModifiers(declaration, ModifierFlags.None));
+                        declarations = mapDefined(declarations, declaration => factory.replaceModifiers(declaration, ModifierFlags.None));
                     }
                     else {
                         declarations.push(factory.createExportDeclaration(
@@ -2017,14 +2024,7 @@ export function transformDeclarations(context: TransformationContext) {
                         if (shouldStripInternal(m)) return;
                         // Rewrite enum values to their constants, if available
                         const constValue = resolver.getConstantValue(m);
-                        const newInitializer = constValue === undefined
-                            ? undefined
-                            : typeof constValue === "string"
-                            ? factory.createStringLiteral(constValue)
-                            : constValue < 0
-                            ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(constValue)))
-                            : factory.createNumericLiteral(constValue);
-                        return preserveJsDoc(factory.updateEnumMember(m, m.name, newInitializer), m);
+                        return preserveJsDoc(factory.updateEnumMember(m, m.name, constValue !== undefined ? typeof constValue === "string" ? factory.createStringLiteral(constValue) : factory.createNumericLiteral(constValue) : undefined), m);
                     })),
                 ));
             }

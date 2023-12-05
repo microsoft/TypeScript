@@ -175,6 +175,7 @@ const libEntries: [string, string][] = [
     ["es2015.symbol", "lib.es2015.symbol.d.ts"],
     ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
     ["es2016.array.include", "lib.es2016.array.include.d.ts"],
+    ["es2016.intl", "lib.es2016.intl.d.ts"],
     ["es2017.date", "lib.es2017.date.d.ts"],
     ["es2017.object", "lib.es2017.object.d.ts"],
     ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"],
@@ -220,7 +221,7 @@ const libEntries: [string, string][] = [
     ["esnext.disposable", "lib.esnext.disposable.d.ts"],
     ["esnext.bigint", "lib.es2020.bigint.d.ts"],
     ["esnext.string", "lib.es2022.string.d.ts"],
-    ["esnext.promise", "lib.es2021.promise.d.ts"],
+    ["esnext.promise", "lib.esnext.promise.d.ts"],
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
     ["esnext.decorators", "lib.esnext.decorators.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
@@ -528,6 +529,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
+    deprecatedKeys: new Set(["es3"]),
     paramType: Diagnostics.VERSION,
     showInSimplifiedHelpView: true,
     category: Diagnostics.Language_and_Environment,
@@ -553,6 +555,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         node16: ModuleKind.Node16,
         nodenext: ModuleKind.NodeNext,
     })),
+    affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
@@ -647,7 +650,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "allowJs",
         type: "boolean",
-        affectsModuleResolution: true,
+        allowJsFlag: true,
+        affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these_files,
@@ -657,6 +661,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         name: "checkJs",
         type: "boolean",
         affectsModuleResolution: true,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Enable_error_reporting_in_type_checked_JavaScript_files,
@@ -669,6 +675,10 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsModuleResolution: true,
+        // The checker emits an error when it sees JSX but this option is not set in compilerOptions.
+        // This is effectively a semantic error, so mark this option as affecting semantic diagnostics
+        // so we know to refresh errors when this option is changed.
+        affectsSemanticDiagnostics: true,
         paramType: Diagnostics.KIND,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Language_and_Environment,
@@ -987,6 +997,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             bundler: ModuleResolutionKind.Bundler,
         })),
         deprecatedKeys: new Set(["node"]),
+        affectsSourceFile: true,
         affectsModuleResolution: true,
         paramType: Diagnostics.STRATEGY,
         category: Diagnostics.Modules,
@@ -1240,7 +1251,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsDeclarationPath: true,
-        isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
+        isFilePath: false, // This is intentionally broken to support compatibility with existing tsconfig files
         // for correct behaviour, please use outFile
         category: Diagnostics.Backwards_Compatibility,
         paramType: Diagnostics.FILE,
@@ -1533,6 +1544,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             legacy: ModuleDetectionKind.Legacy,
             force: ModuleDetectionKind.Force,
         })),
+        affectsSourceFile: true,
         affectsModuleResolution: true,
         description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
         category: Diagnostics.Language_and_Environment,
@@ -1564,7 +1576,7 @@ export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOptio
 export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsModuleResolution);
 
 /** @internal */
-export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
+export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSourceFile || !!option.affectsBindDiagnostics);
 
 /** @internal */
 export const optionsAffectingProgramStructure: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsProgramStructure);
@@ -2374,7 +2386,7 @@ export function convertToJson(
                 // Currently having element option declaration in the tsconfig with type "object"
                 // determines if it needs onSetValidOptionKeyValueInParent callback or not
                 // At moment there are only "compilerOptions", "typeAcquisition" and "typingOptions"
-                // that satifies it and need it to modify options set in them (for normalizing file paths)
+                // that satisfies it and need it to modify options set in them (for normalizing file paths)
                 // vs what we set in the json
                 // If need arises, we can modify this interface and callbacks as needed
                 return convertObjectLiteralExpressionToJson(objectLiteralExpression, option as TsConfigOnlyOption);
@@ -3759,7 +3771,7 @@ function specToDiagnostic(spec: CompilerOptionsValue, disallowTrailingRecursion?
 /**
  * Gets directories in a set of include patterns that should be watched for changes.
  */
-function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExcludeSpecs: exclude }: ConfigFileSpecs, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
+function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExcludeSpecs: exclude }: ConfigFileSpecs, basePath: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
     // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
     // of the pattern:
     //
@@ -3772,23 +3784,26 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
     //
     //  /a/b/*      - Watch /a/b directly to catch any new file
     //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
-    const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
+    const rawExcludeRegex = getRegularExpressionForWildcard(exclude, basePath, "exclude");
     const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
     const wildcardDirectories: MapLike<WatchDirectoryFlags> = {};
+    const wildCardKeyToPath = new Map<CanonicalKey, string>();
     if (include !== undefined) {
-        const recursiveKeys: string[] = [];
+        const recursiveKeys: CanonicalKey[] = [];
         for (const file of include) {
-            const spec = normalizePath(combinePaths(path, file));
+            const spec = normalizePath(combinePaths(basePath, file));
             if (excludeRegex && excludeRegex.test(spec)) {
                 continue;
             }
 
             const match = getWildcardDirectoryFromSpec(spec, useCaseSensitiveFileNames);
             if (match) {
-                const { key, flags } = match;
-                const existingFlags = wildcardDirectories[key];
+                const { key, path, flags } = match;
+                const existingPath = wildCardKeyToPath.get(key);
+                const existingFlags = existingPath !== undefined ? wildcardDirectories[existingPath] : undefined;
                 if (existingFlags === undefined || existingFlags < flags) {
-                    wildcardDirectories[key] = flags;
+                    wildcardDirectories[existingPath !== undefined ? existingPath : path] = flags;
+                    if (existingPath === undefined) wildCardKeyToPath.set(key, path);
                     if (flags === WatchDirectoryFlags.Recursive) {
                         recursiveKeys.push(key);
                     }
@@ -3797,11 +3812,12 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
         }
 
         // Remove any subpaths under an existing recursively watched directory.
-        for (const key in wildcardDirectories) {
-            if (hasProperty(wildcardDirectories, key)) {
+        for (const path in wildcardDirectories) {
+            if (hasProperty(wildcardDirectories, path)) {
                 for (const recursiveKey of recursiveKeys) {
-                    if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                        delete wildcardDirectories[key];
+                    const key = toCanonicalKey(path, useCaseSensitiveFileNames);
+                    if (key !== recursiveKey && containsPath(recursiveKey, key, basePath, !useCaseSensitiveFileNames)) {
+                        delete wildcardDirectories[path];
                     }
                 }
             }
@@ -3811,7 +3827,12 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
     return wildcardDirectories;
 }
 
-function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: string; flags: WatchDirectoryFlags; } | undefined {
+type CanonicalKey = string & { __canonicalKey: never; };
+function toCanonicalKey(path: string, useCaseSensitiveFileNames: boolean): CanonicalKey {
+    return (useCaseSensitiveFileNames ? path : toFileNameLowerCase(path)) as CanonicalKey;
+}
+
+function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: CanonicalKey; path: string; flags: WatchDirectoryFlags; } | undefined {
     const match = wildcardDirectoryPattern.exec(spec);
     if (match) {
         // We check this with a few `indexOf` calls because 3 `indexOf`/`lastIndexOf` calls is
@@ -3822,15 +3843,18 @@ function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: b
         const starWildcardIndex = spec.indexOf("*");
         const lastDirectorySeperatorIndex = spec.lastIndexOf(directorySeparator);
         return {
-            key: useCaseSensitiveFileNames ? match[0] : toFileNameLowerCase(match[0]),
+            key: toCanonicalKey(match[0], useCaseSensitiveFileNames),
+            path: match[0],
             flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeperatorIndex)
                     || (starWildcardIndex !== -1 && starWildcardIndex < lastDirectorySeperatorIndex)
                 ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None,
         };
     }
     if (isImplicitGlob(spec.substring(spec.lastIndexOf(directorySeparator) + 1))) {
+        const path = removeTrailingDirectorySeparator(spec);
         return {
-            key: removeTrailingDirectorySeparator(useCaseSensitiveFileNames ? spec : toFileNameLowerCase(spec)),
+            key: toCanonicalKey(path, useCaseSensitiveFileNames),
+            path,
             flags: WatchDirectoryFlags.Recursive,
         };
     }
@@ -3849,7 +3873,10 @@ function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<stri
         return false;
     }
     for (const ext of extensionGroup) {
-        if (fileExtensionIs(file, ext)) {
+        // d.ts files match with .ts extension and with case sensitive sorting the file order for same files with ts tsx and dts extension is
+        // d.ts, .ts, .tsx in that order so we need to handle tsx and dts of same same name case here and in remove files with same extensions
+        // So dont match .d.ts files with .ts extension
+        if (fileExtensionIs(file, ext) && (ext !== Extension.Ts || !fileExtensionIs(file, Extension.Dts))) {
             return false;
         }
         const higherPriorityPath = keyMapper(changeExtension(file, ext));

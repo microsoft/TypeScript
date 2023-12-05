@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a.ts]
 1 = 2;
@@ -46,9 +46,6 @@ PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -65,21 +62,18 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 2
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 2
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
 After request
-
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
 
 Before request
 
@@ -95,18 +89,15 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 3
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 3
+      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
 After request
-
-Timeout callback:: count: 0
-Immedidate callback:: count: 0

@@ -1037,3 +1037,66 @@ bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} 
 >event : Symbol(event, Decl(dependentDestructuredVariables.ts, 401, 25))
 >reason : Symbol(CloseEvent.reason, Decl(lib.dom.d.ts, --, --))
 
+// Destructuring tuple types with different arities
+
+function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
+>fz1 : Symbol(fz1, Decl(dependentDestructuredVariables.ts, 401, 99))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 405, 14))
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 405, 16))
+
+    if (y === 2) {
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 405, 16))
+
+        x;  // 1
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 405, 14))
+    }
+    if (y === 4) {
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 405, 16))
+
+        x;  // 3
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 405, 14))
+    }
+    if (y === undefined) {
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 405, 16))
+>undefined : Symbol(undefined)
+
+        x;  // 5
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 405, 14))
+    }
+    if (x === 1) {
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 405, 14))
+
+        y;  // 2
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 405, 16))
+    }
+    if (x === 3) {
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 405, 14))
+
+        y;  // 4
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 405, 16))
+    }
+    if (x === 5) {
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 405, 14))
+
+        y;  // undefined
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 405, 16))
+    }
+}
+
+// Repro from #55661
+
+function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
+>tooNarrow : Symbol(tooNarrow, Decl(dependentDestructuredVariables.ts, 424, 1))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 428, 20))
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 428, 22))
+
+    if (y === undefined) {
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 428, 22))
+>undefined : Symbol(undefined)
+
+        const shouldNotBeOk: never = x;  // Error
+>shouldNotBeOk : Symbol(shouldNotBeOk, Decl(dependentDestructuredVariables.ts, 430, 13))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 428, 20))
+    }
+}
+

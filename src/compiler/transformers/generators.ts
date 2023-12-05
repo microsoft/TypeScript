@@ -2524,7 +2524,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                 labelExpressions = [];
             }
 
-            const expression = factory.createNumericLiteral(Number.MAX_SAFE_INTEGER);
+            const expression = factory.createNumericLiteral(-1);
             if (labelExpressions[label] === undefined) {
                 labelExpressions[label] = [expression];
             }

@@ -41,6 +41,7 @@ import {
     firstDefined,
     firstOrUndefined,
     flatMap,
+    forEach,
     forEachChild,
     forEachChildRecursively,
     forEachReturnStatement,
@@ -131,7 +132,9 @@ import {
     isInString,
     isInterfaceDeclaration,
     isJSDocMemberName,
+    isJSDocPropertyLikeTag,
     isJSDocTag,
+    isJSDocTypeLiteral,
     isJsxClosingElement,
     isJsxElement,
     isJsxFragment,
@@ -160,6 +163,7 @@ import {
     isParameterPropertyDeclaration,
     isPrivateIdentifierClassElementDeclaration,
     isPropertyAccessExpression,
+    isPropertySignature,
     isQualifiedName,
     isReferencedFile,
     isReferenceFileLocation,
@@ -185,7 +189,9 @@ import {
     isVariableStatement,
     isVoidExpression,
     isWriteAccess,
+    JSDocPropertyLikeTag,
     JSDocTag,
+    length,
     map,
     mapDefined,
     MethodDeclaration,
@@ -1009,7 +1015,7 @@ export namespace Core {
             if (!options.implementations && isStringLiteralLike(node)) {
                 if (isModuleSpecifierLike(node)) {
                     const fileIncludeReasons = program.getFileIncludeReasons();
-                    const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedModule?.resolvedFileName;
+                    const referencedFileName = program.getResolvedModule(node.getSourceFile(), node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedModule?.resolvedFileName;
                     const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
                     if (referencedFile) {
                         return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray }];
@@ -1066,7 +1072,7 @@ export namespace Core {
         for (const ref of references) {
             if (isReferencedFile(ref)) {
                 const referencingFile = program.getSourceFileByPath(ref.file)!;
-                const location = getReferencedFileLocation(program.getSourceFileByPath, ref);
+                const location = getReferencedFileLocation(program, ref);
                 if (isReferenceFileLocation(location)) {
                     entries = append(entries, {
                         kind: EntryKind.Span,
@@ -1928,6 +1934,15 @@ export namespace Core {
             return;
         }
 
+        if (
+            isJSDocPropertyLikeTag(parent) && parent.isNameFirst &&
+            parent.typeExpression && isJSDocTypeLiteral(parent.typeExpression.type) &&
+            parent.typeExpression.type.jsDocPropertyTags && length(parent.typeExpression.type.jsDocPropertyTags)
+        ) {
+            getReferencesAtJSDocTypeLiteral(parent.typeExpression.type.jsDocPropertyTags, referenceLocation, search, state);
+            return;
+        }
+
         const relatedSymbol = getRelatedSymbol(search, referenceSymbol, referenceLocation, state);
         if (!relatedSymbol) {
             getReferenceForShorthandProperty(referenceSymbol, search, state);
@@ -1961,6 +1976,17 @@ export namespace Core {
         }
 
         getImportOrExportReferences(referenceLocation, referenceSymbol, search, state);
+    }
+
+    function getReferencesAtJSDocTypeLiteral(jsDocPropertyTags: readonly JSDocPropertyLikeTag[], referenceLocation: Node, search: Search, state: State) {
+        const addRef = state.referenceAdder(search.symbol);
+
+        addReference(referenceLocation, search.symbol, state);
+        forEach(jsDocPropertyTags, propTag => {
+            if (isQualifiedName(propTag.name)) {
+                addRef(propTag.name.left);
+            }
+        });
     }
 
     function getReferencesAtExportSpecifier(
@@ -2446,7 +2472,7 @@ export namespace Core {
                 if (isStringLiteralLike(ref) && ref.text === node.text) {
                     if (type) {
                         const refType = getContextualTypeFromParentOrAncestorTypeNode(ref, checker);
-                        if (type !== checker.getStringType() && type === refType) {
+                        if (type !== checker.getStringType() && (type === refType || isStringLiteralPropertyReference(ref, checker))) {
                             return nodeEntry(ref, EntryKind.StringLiteral);
                         }
                     }
@@ -2462,6 +2488,12 @@ export namespace Core {
             definition: { type: DefinitionKind.String, node },
             references,
         }];
+    }
+
+    function isStringLiteralPropertyReference(node: StringLiteralLike, checker: TypeChecker) {
+        if (isPropertySignature(node.parent)) {
+            return checker.getPropertyOfType(checker.getTypeAtLocation(node.parent.parent), node.text);
+        }
     }
 
     // For certain symbol kinds, we need to include other symbols in the search set.
