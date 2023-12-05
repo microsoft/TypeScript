@@ -186,7 +186,6 @@ function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile,
     if (!moduleSourceFile) return undefined;
     const withoutIndex = endsWith(node.text, "/index") || endsWith(node.text, "/index.js") ? undefined : tryRemoveSuffix(removeFileExtension(moduleSourceFile.fileName), "/index");
     const fileName = withoutIndex === undefined ? moduleSourceFile.fileName : withoutIndex;
-    // const displayName = fileName === removeFileExtension(fileName)
     const kind = withoutIndex === undefined ? ScriptElementKind.moduleElement : ScriptElementKind.directory;
     const indexAfterLastSlash = node.text.lastIndexOf("/") + 1;
     // Span should only be the last component of the path. + 1 to account for the quote character.
