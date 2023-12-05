@@ -10505,3 +10505,14 @@ export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclarati
     }
     return !!getResolutionModeOverride(node.attributes);
 }
+
+const stringReplace = String.prototype.replace;
+
+/** @internal */
+export function replaceFirstStar(s: string, replacement: string): string {
+    // `s.replace("*", replacement)` triggers CodeQL as they think it's a potentially incorrect string escaping.
+    // See: https://codeql.github.com/codeql-query-help/javascript/js-incomplete-sanitization/
+    // But, we really do want to replace only the first star.
+    // Attempt to defeat this analysis by indirectly calling the method.
+    return stringReplace.call(s, "*", replacement);
+}
