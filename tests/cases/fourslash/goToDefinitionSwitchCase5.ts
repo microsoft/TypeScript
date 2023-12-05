@@ -1,5 +1,5 @@
 /// <reference path="fourslash.ts" />
 
-/////*end*/export [|/*start*/default|] {}
+////export [|/*start*/default|] {}
 
-verify.goToDefinition("start", "end");
+verify.baselineGoToDefinition("start");

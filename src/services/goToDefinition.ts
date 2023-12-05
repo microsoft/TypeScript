@@ -71,12 +71,9 @@ import {
     isPropertyName,
     isRightSideOfPropertyAccess,
     isStaticModifier,
-<<<<<<< HEAD
     isSwitchStatement,
-=======
     isTypeAliasDeclaration,
     isTypeReferenceNode,
->>>>>>> main
     isVariableDeclaration,
     KeywordSyntaxKind,
     last,

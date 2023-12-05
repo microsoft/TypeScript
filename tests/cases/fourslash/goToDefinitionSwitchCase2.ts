@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-/////*end*/switch (null) {
+////switch (null) {
 ////  [|/*start*/default|]: break;
 ////}
 
-verify.goToDefinition("start", "end");
+verify.baselineGoToDefinition("start");
