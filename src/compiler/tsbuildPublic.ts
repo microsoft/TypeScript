@@ -759,6 +759,13 @@ function enableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
         host,
         fileName => toPath(state, fileName),
         (...args) => originalGetSourceFile.call(compilerHost, ...args),
+        path => {
+            const existing = state.filesWatched.get(path);
+            if (!!existing) {
+                if (!isFileWatcherWithModifiedTime(existing)) return existing;
+                if (existing.modifiedTime) return existing.modifiedTime;
+            }
+        },
     );
     state.readFileWithCache = readFileWithCache;
     compilerHost.getSourceFile = getSourceFileWithCache!;
@@ -786,6 +793,7 @@ function disableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) 
     host.writeFile = cache.originalWriteFile;
     compilerHost.getSourceFile = cache.originalGetSourceFile;
     state.readFileWithCache = cache.originalReadFileWithCache;
+    if (!state.watch) state.filesWatched.clear();
     extendedConfigCache.clear();
     moduleResolutionCache?.clear();
     typeReferenceDirectiveResolutionCache?.clear();
@@ -1597,7 +1605,7 @@ function isFileWatcherWithModifiedTime(value: FileWatcherWithModifiedTime | Date
 function getModifiedTime<T extends BuilderProgram>(state: SolutionBuilderState<T>, fileName: string): Date {
     const path = toPath(state, fileName);
     const existing = state.filesWatched.get(path);
-    if (state.watch && !!existing) {
+    if (!!existing) {
         if (!isFileWatcherWithModifiedTime(existing)) return existing;
         if (existing.modifiedTime) return existing.modifiedTime;
     }
@@ -1605,10 +1613,8 @@ function getModifiedTime<T extends BuilderProgram>(state: SolutionBuilderState<T
     // This is either Date | FileWatcherWithModifiedTime because we query modified times first and
     // then after complete compilation of the project, watch the files so we dont want to loose these modified times.
     const result = ts_getModifiedTime(state.host, fileName);
-    if (state.watch) {
-        if (existing) (existing as FileWatcherWithModifiedTime).modifiedTime = result;
-        else state.filesWatched.set(path, result);
-    }
+    if (existing) existing.modifiedTime = result;
+    else state.filesWatched.set(path, result);
     return result;
 }
 
